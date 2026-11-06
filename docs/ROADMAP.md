@@ -6,7 +6,7 @@
 - Los nombres que vienen del casino (fichas, La Banca, mesa…) están pendientes de adaptar a la temática medieval (GDD §11).
 
 ## Hito 0 — Cimientos
-- [ ] Proyecto Godot 4.7 (Forward+) con `.gitignore` y `.gitattributes`; git y GitHub funcionando (push y PR)
+- [x] Proyecto Godot 4.7 (Forward+) con `.gitignore` y `.gitattributes`; git y GitHub funcionando (push y PR)
 - [x] Comandos de Godot verificados y anotados en `CLAUDE.md`
 - [x] Estructura de carpetas de `CLAUDE.md`
 - [x] Autoloads tipados: `EventBus`, `RunState`, `Rng` (con semilla)
