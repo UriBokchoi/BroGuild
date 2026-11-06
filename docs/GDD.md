@@ -34,7 +34,7 @@ Cámara en tercera persona sobre el hombro. Correr es gratis; casi todo lo demá
 | Doble salto | Espacio en el aire | 1 | |
 | Dash | Shift | 1 | Ráfaga corta en la dirección de movimiento; también en el aire |
 | Dash-jump | Espacio justo tras el dash | +1 | Ventana corta (con aviso visual) → salto largo que conserva la velocidad del dash |
-| Slide | Ctrl corriendo | — | Gratis; acelera cuesta abajo y frena cuesta arriba; hitbox baja. Dash → slide alarga el dash sin gastar más |
+| Slide | Ctrl corriendo | — | Gratis; acelera cuesta abajo y frena cuesta arriba; hurtbox baja (zona donde recibes daño). Dash → slide alarga el dash sin gastar más |
 | Slide-jump | Espacio en slide | — | Conserva el impulso |
 | Caída rápida | Ctrl en el aire | 1 | Picado al suelo; con mejoras, impacto en área |
 | Salto en pared | Espacio contra pared | 0 / ½ | El primero gratis; encadenados sin tocar suelo, media carga |
