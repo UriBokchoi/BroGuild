@@ -1,6 +1,8 @@
-# ALL IN — Documento de diseño
+# Bro Guild — Documento de diseño
 
-> Título y temática provisionales. Documento vivo: si el diseño cambia, se cambia aquí.
+> Documento vivo: si el diseño cambia, se cambia aquí.
+>
+> **Temática: medieval con humor moderno** (definitiva). Este documento aún conserva nombres de la temática anterior (casino); los que hay que adaptar están en §11. Las tragaperras se quedan.
 
 ## 1. Pitch
 Roguelike de hordas en 3D donde **moverte bien es dinero**: la velocidad alimenta tu racha, la racha multiplica tus fichas y las fichas se apuestan. Partidas de ~10 minutos, caos constante, reinicio instantáneo y el clásico "una más".
@@ -69,7 +71,7 @@ Toda apuesta tiene **anticipación** (giro, luces, sonido que sube), **revelado*
 - **Director de oleadas**: la densidad sube con el tiempo, con picos cada minuto; la curva vive en datos.
 
 ## 7. Estética: sencilla pero llamativa
-Dirección por defecto: **casino-arcade neón**. Fondo oscuro, rejilla emisiva en el suelo, formas simples (primitivas o low-poly) con materiales emisivos y mucho glow. Pega con el tema de apuestas y luce sin necesitar artista.
+Dirección: **medieval con humor moderno**, nada realista; los anacronismos son bienvenidos (p. ej., tragaperras repartidas por un mundo medieval). Formas simples (primitivas o low-poly) que luzcan sin necesitar artista. *Pendiente: concretar la dirección visual (sustituye a la anterior «casino-arcade neón»).*
 - **Color con significado**: cada tipo de enemigo con su color; las rarezas, iguales en cofres, cartas, números y luces.
 - **Juice**: hit-stop en golpes grandes · screen shake por trauma · números de daño (críticos grandes y dorados) · flash al golpear · explosión de fichas al matar · imán de pickups · estela en dash y slide · FOV que se abre con la velocidad y líneas de velocidad · cámara lenta en el jackpot.
 - **Sonido**: cada recompensa sube de tono; la racha sube el pitch de todo; los rodillos hacen tic-tic-tic al frenar.
@@ -89,6 +91,6 @@ WASD mover · Ratón cámara · Espacio saltar · Shift dash · Ctrl slide / ca�
 Multijugador · historia · generación procedural de mapas (de momento, arenas hechas a mano) · consolas.
 
 ## 11. Decisiones abiertas
-- Título y temática definitivos (por defecto: casino-neón).
+- Adaptar a la temática medieval los nombres y elementos que vienen del casino: fichas, bote, La Banca, crupier, mesa, «¿Cobrar o Doblar?», armas iniciales (§6), estética neón y «explosión de fichas» (§7). Las tragaperras se quedan.
 - Distancia de cámara: sobre el hombro o más alejada para ver la horda.
 - Número de ranuras de armas y pasivas.

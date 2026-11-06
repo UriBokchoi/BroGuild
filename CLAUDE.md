@@ -1,4 +1,4 @@
-# CLAUDE.md — ALL IN *(título provisional)*
+# CLAUDE.md — Bro Guild
 
 Roguelike de hordas en 3D, frenético y con apuestas en cada decisión: el bucle de Megabonk con la movilidad de Deadlock.
 Proyecto a largo plazo: se va a ampliar durante meses, así que la arquitectura manda sobre la prisa.
@@ -54,7 +54,8 @@ Objetivo: 60 fps estables con 300+ enemigos. Enemigos con steering simple (sin `
 ## Estilo GDScript
 - Tipado estático siempre: `var speed: float = 0.0`, `func take_damage(amount: float) -> void:`. `class_name` en todo tipo reutilizable.
 - Orden del script (guía de estilo oficial): `class_name`/`extends` → docstring `##` → señales → enums → constantes → `@export` → variables → `@onready` → métodos virtuales (`_ready`, `_physics_process`…) → públicos → privados (`_nombre`).
-- `snake_case` en archivos, funciones y variables; `PascalCase` en clases y nodos; `CONSTANT_CASE` en constantes. Señales en pasado: `died`, `chips_changed`.
+- `snake_case` en archivos, funciones y variables; `PascalCase` en clases y nodos; `CONSTANT_CASE` en constantes. Señales en pasado: `died`, `currency_changed`.
+- Nombra la mecánica, no la temática: `currency`, `streak`, `pot`; nunca nombres de la temática como `chips` o `la_banca` (ver `docs/DECISIONES.md`).
 - Funciones cortas (≈ menos de 40 líneas) y scripts con una sola responsabilidad (≈ menos de 300 líneas). Si crece, divide.
 - Comentarios para el *por qué*, no el *qué*. Docstrings `##` en clases y métodos públicos.
 - Sin código muerto ni `print()` de depuración en los commits. A la segunda vez que copias algo, extráelo.
