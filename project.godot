@@ -17,6 +17,12 @@ config/custom_user_dir_name="bro_guild"
 config/features=PackedStringArray("4.7", "Forward Plus")
 config/icon="res://icon.svg"
 
+[autoload]
+
+EventBus="*res://autoload/event_bus.gd"
+Rng="*res://autoload/rng.gd"
+RunState="*res://autoload/run_state.gd"
+
 [debug]
 
 gdscript/warnings/untyped_declaration=2
