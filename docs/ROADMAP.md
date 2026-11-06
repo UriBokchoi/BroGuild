@@ -7,13 +7,13 @@
 
 ## Hito 0 — Cimientos
 - [ ] Proyecto Godot 4.7 (Forward+) con `.gitignore` y `.gitattributes`; git y GitHub funcionando (push y PR)
-- [ ] Comandos de Godot verificados y anotados en `CLAUDE.md`
-- [ ] Estructura de carpetas de `CLAUDE.md`
-- [ ] Autoloads tipados: `EventBus`, `RunState`, `Rng` (con semilla)
-- [ ] InputMap con todas las acciones del GDD y capas de física con nombre
-- [ ] GUT instalado con un test de ejemplo que pase
-- [ ] Escena de pruebas en gris: suelo, rampas, bordes, paredes y plataformas
-- [ ] `docs/DECISIONES.md` con las primeras decisiones
+- [x] Comandos de Godot verificados y anotados en `CLAUDE.md`
+- [x] Estructura de carpetas de `CLAUDE.md`
+- [x] Autoloads tipados: `EventBus`, `RunState`, `Rng` (con semilla)
+- [x] InputMap con todas las acciones del GDD y capas de física con nombre
+- [x] GUT instalado con un test de ejemplo que pase
+- [x] Escena de pruebas en gris: suelo, rampas, bordes, paredes y plataformas
+- [x] `docs/DECISIONES.md` con las primeras decisiones
 
 ## Hito 1 — Movimiento (si no se siente bien, no se avanza)
 - [ ] Jugador (`CharacterBody3D`) y cámara en tercera persona con ratón; Esc suelta el ratón (aún sin menú de pausa)
