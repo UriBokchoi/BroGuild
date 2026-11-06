@@ -8,5 +8,6 @@
   "log_level": 1,
   "hide_orphans": false,
   "disable_colors": true,
-  "double_strategy": "SCRIPT_ONLY"
+  "double_strategy": "SCRIPT_ONLY",
+  "post_run_script": "res://tests/hooks/post_run.gd"
 }

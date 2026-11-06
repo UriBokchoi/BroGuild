@@ -26,9 +26,9 @@ Proyecto a largo plazo: se va a ampliar durante meses, así que la arquitectura 
 ## Comandos
 Ejecutable de consola de Godot 4.7.2 en esta máquina (Git Bash):
 `G="D:/Descargas/Godot_v4.7.2-stable_win64.exe/Godot_v4.7.2-stable_win64_console.exe"`
-- **Validación completa**: `GODOT="$G" tools/validate.sh` — importación, todos los scripts, smoke test y tests. Sale con ≠ 0 si un paso falla o si su salida contiene ERROR/WARNING.
+- **Validación completa**: `GODOT="$G" tools/validate.sh` — importación (incluidos assets que quedaron mal importados), todos los scripts, escenas, recursos y shaders, smoke test y tests. Sale con ≠ 0 si un paso falla o si su salida contiene ERROR/WARNING (en los tests, los errores esperados con `assert_push_error` no cuentan).
 - Importar recursos: `"$G" --headless --path . --import` (hace falta tras crear un `class_name` nuevo y en un clon recién hecho).
-- Comprobar todos los scripts, con warnings: `"$G" --headless --path . -s res://tools/ci/check_scripts.gd -d --ignore-error-breaks`
+- Comprobar scripts (con warnings), escenas, recursos y shaders: `"$G" --headless --path . -s res://tools/ci/check_project.gd -d --ignore-error-breaks`
 - Smoke test (arranca la escena principal y sale): `"$G" --headless --path . --quit-after 600 -d --ignore-error-breaks`
 - Tests (GUT 9.7.1, configuración en `.gutconfig.json`): `"$G" --headless --path . -s res://addons/gut/gut_cmdln.gd -gconfig=res://.gutconfig.json`. GUT sale con 0 si un test no compila (se lo salta): fíate de `validate.sh`, no solo de esto.
 

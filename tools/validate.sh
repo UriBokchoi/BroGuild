@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # validate.sh — valida el proyecto desde la terminal (Git Bash en Windows, o Linux).
 # Uso:   GODOT="/ruta/Godot_v4.7.2-stable_win64_console.exe" tools/validate.sh [proyecto]
-# Pasos: import -> scripts (todos los .gd) -> smoke (escena principal) -> gut (si existe).
+# Pasos: import -> project (scripts, escenas, recursos y shaders) -> smoke (escena
+#        principal) -> gut (si existe).
 # Falla si un paso sale con código != 0 o si su salida contiene ERROR/WARNING:
 # Godot suele salir con 0 aunque haya errores de script o de shader.
 set -uo pipefail
@@ -9,13 +10,15 @@ set -uo pipefail
 PROJECT_DIR="${1:-$(dirname "$0")/..}"
 STEP_TIMEOUT="${STEP_TIMEOUT:-300}"   # segundos máximos por paso
 SMOKE_FRAMES="${SMOKE_FRAMES:-600}"   # frames del smoke test
-CHECK_SCRIPT="res://tools/ci/check_scripts.gd"
+CHECK_SCRIPT="res://tools/ci/check_project.gd"
 
 # Líneas que hacen fallar un paso (se buscan tras quitar colores ANSI y \r).
 STRICT_PATTERN='ERROR|WARNING|Parse Error'
 # En GUT un test puede provocar ERROR/WARNING a propósito (assert_push_error),
 # así que ahí manda el código de salida de GUT más estos patrones. GUT sale con 0
 # si un test no compila (lo ignora), si falta la caché de clases o si no corre nada.
+# Los errores fuera del cuerpo de un test y los push_warning los convierte en
+# fallo el hook tests/hooks/post_run.gd.
 GUT_PATTERN='SCRIPT ERROR|Parse Error|GUT ERROR|GUT WARNING|leaked at exit|still in use at exit'
 GUT_SUCCESS='All tests passed'
 # Ruido benigno conocido (regex). En Godot 4.7.2 --headless no se ha observado
@@ -64,12 +67,20 @@ run_step() {
 }
 
 run_step import "$STRICT_PATTERN" --import
+# Un asset que no se importa deja su .import con valid=false y Godot no lo
+# reintenta mientras el archivo no cambie: sin esto, la segunda pasada saldría OK.
+invalid_imports="$(grep -rl --include='*.import' --exclude-dir=.godot --exclude-dir=addons '^valid=false' "$PROJECT_DIR")"
+if [[ -n "$invalid_imports" ]]; then
+  echo "    import inválido (valid=false):"
+  sed 's/^/      /' <<< "$invalid_imports"
+  [[ " ${FAILED[*]} " == *" import "* ]] || FAILED+=(import)
+fi
 if [[ -f "$PROJECT_DIR/${CHECK_SCRIPT#res://}" ]]; then
   # -d activa el depurador local: es lo único que imprime los warnings de GDScript.
-  run_step scripts "$STRICT_PATTERN" -s "$CHECK_SCRIPT" -d --ignore-error-breaks
+  run_step project "$STRICT_PATTERN" -s "$CHECK_SCRIPT" -d --ignore-error-breaks
 else
-  echo "==> scripts  FAIL (falta $CHECK_SCRIPT)"
-  FAILED+=(scripts)
+  echo "==> project  FAIL (falta $CHECK_SCRIPT)"
+  FAILED+=(project)
 fi
 run_step smoke "$STRICT_PATTERN" --quit-after "$SMOKE_FRAMES" -d --ignore-error-breaks
 if [[ -d "$PROJECT_DIR/addons/gut" ]]; then
