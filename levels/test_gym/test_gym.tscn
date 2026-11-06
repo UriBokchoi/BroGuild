@@ -1,0 +1,257 @@
+[gd_scene format=3]
+
+[ext_resource type="Material" path="res://levels/test_gym/materials/greybox_floor.tres" id="1_nq23i"]
+[ext_resource type="Material" path="res://levels/test_gym/materials/greybox_wall.tres" id="2_vx7va"]
+[ext_resource type="Material" path="res://levels/test_gym/materials/greybox_ramp.tres" id="3_omi0l"]
+[ext_resource type="Material" path="res://levels/test_gym/materials/greybox_platform.tres" id="4_1r577"]
+[ext_resource type="Material" path="res://levels/test_gym/materials/greybox_marker.tres" id="5_alsl7"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_lgb4e"]
+
+[sub_resource type="Sky" id="Sky_n42hi"]
+sky_material = SubResource("ProceduralSkyMaterial_lgb4e")
+
+[sub_resource type="Environment" id="Environment_qxdai"]
+background_mode = 2
+sky = SubResource("Sky_n42hi")
+ambient_light_source = 3
+
+[node name="TestGym" type="Node3D" unique_id=1248516284]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=898550518]
+environment = SubResource("Environment_qxdai")
+
+[node name="Sun" type="DirectionalLight3D" parent="." unique_id=831423058]
+transform = Transform3D(0.81915206, 0.46984634, -0.32898995, 0, 0.57357645, 0.81915206, 0.57357645, -0.6710101, 0.46984634, 0, 0, 0)
+shadow_enabled = true
+
+[node name="OverviewCamera" type="Camera3D" parent="." unique_id=1289150874]
+transform = Transform3D(1, 0, 0, 0, 0.8637789, 0.503871, 0, -0.503871, 0.8637789, 0, 42, 66)
+current = true
+
+[node name="Geometry" type="Node3D" parent="." unique_id=361505001]
+
+[node name="Floor" type="CSGBox3D" parent="Geometry" unique_id=1523250139]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+use_collision = true
+size = Vector3(100, 1, 100)
+material = ExtResource("1_nq23i")
+
+[node name="Ramps" type="Node3D" parent="Geometry" unique_id=2029571572]
+
+[node name="Terrace3m" type="CSGBox3D" parent="Geometry/Ramps" unique_id=907443389]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -32, 1.5, -43.5)
+use_collision = true
+size = Vector3(30, 3, 7)
+material = ExtResource("2_vx7va")
+
+[node name="Ramp10Deg" type="CSGPolygon3D" parent="Geometry/Ramps" unique_id=1087067910]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -42, 0, -22.986155)
+use_collision = true
+polygon = PackedVector2Array(0, 0, 17.013845, 0, 17.013845, 3)
+depth = 4.0
+material = ExtResource("3_omi0l")
+
+[node name="Ramp20Deg" type="CSGPolygon3D" parent="Geometry/Ramps" unique_id=1580792086]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -36, 0, -31.757568)
+use_collision = true
+polygon = PackedVector2Array(0, 0, 8.242433, 0, 8.242433, 3)
+depth = 4.0
+material = ExtResource("3_omi0l")
+
+[node name="Ramp30Deg" type="CSGPolygon3D" parent="Geometry/Ramps" unique_id=1399549612]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -30, 0, -34.80385)
+use_collision = true
+polygon = PackedVector2Array(0, 0, 5.196152, 0, 5.196152, 3)
+depth = 4.0
+material = ExtResource("3_omi0l")
+
+[node name="Ramp40Deg" type="CSGPolygon3D" parent="Geometry/Ramps" unique_id=1263220327]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -24, 0, -36.42474)
+use_collision = true
+polygon = PackedVector2Array(0, 0, 3.5752609, 0, 3.5752609, 3)
+depth = 4.0
+material = ExtResource("3_omi0l")
+
+[node name="Ramp50Deg" type="CSGPolygon3D" parent="Geometry/Ramps" unique_id=904911957]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -18, 0, -37.4827)
+use_collision = true
+polygon = PackedVector2Array(0, 0, 2.517299, 0, 2.517299, 3)
+depth = 4.0
+material = ExtResource("3_omi0l")
+
+[node name="SlideSlope" type="Node3D" parent="Geometry" unique_id=555646512]
+
+[node name="Slope15Deg" type="CSGPolygon3D" parent="Geometry/SlideSlope" unique_id=555434306]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 46, 0, -10)
+use_collision = true
+polygon = PackedVector2Array(0, 0, 30, 0, 30, 8.038476)
+depth = 6.0
+material = ExtResource("3_omi0l")
+
+[node name="SlopeTop" type="CSGBox3D" parent="Geometry/SlideSlope" unique_id=106848075]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 43, 4.019238, -43.5)
+use_collision = true
+size = Vector3(6, 8.038476, 7)
+material = ExtResource("2_vx7va")
+
+[node name="Ledges" type="Node3D" parent="Geometry" unique_id=1840060475]
+
+[node name="Ledge50cm" type="CSGBox3D" parent="Geometry/Ledges" unique_id=902590345]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -44, 0.25, -12.5)
+use_collision = true
+size = Vector3(3, 0.5, 3)
+material = ExtResource("4_1r577")
+
+[node name="Ledge100cm" type="CSGBox3D" parent="Geometry/Ledges" unique_id=1232837045]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -38, 0.5, -12.5)
+use_collision = true
+size = Vector3(3, 1, 3)
+material = ExtResource("4_1r577")
+
+[node name="Ledge150cm" type="CSGBox3D" parent="Geometry/Ledges" unique_id=1534061858]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -32, 0.75, -12.5)
+use_collision = true
+size = Vector3(3, 1.5, 3)
+material = ExtResource("4_1r577")
+
+[node name="Ledge200cm" type="CSGBox3D" parent="Geometry/Ledges" unique_id=1361612972]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 1, -12.5)
+use_collision = true
+size = Vector3(3, 2, 3)
+material = ExtResource("4_1r577")
+
+[node name="Ledge250cm" type="CSGBox3D" parent="Geometry/Ledges" unique_id=158082627]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 1.25, -12.5)
+use_collision = true
+size = Vector3(3, 2.5, 3)
+material = ExtResource("4_1r577")
+
+[node name="Walls" type="Node3D" parent="Geometry" unique_id=1665376005]
+
+[node name="Chimney3mWest" type="CSGBox3D" parent="Geometry/Walls" unique_id=969617509]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 4, 0)
+use_collision = true
+size = Vector3(1, 8, 12)
+material = ExtResource("2_vx7va")
+
+[node name="Chimney3mEast" type="CSGBox3D" parent="Geometry/Walls" unique_id=1507518980]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24, 4, 0)
+use_collision = true
+size = Vector3(1, 8, 12)
+material = ExtResource("2_vx7va")
+
+[node name="Chimney5mWest" type="CSGBox3D" parent="Geometry/Walls" unique_id=1027706638]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30, 4, 0)
+use_collision = true
+size = Vector3(1, 8, 12)
+material = ExtResource("2_vx7va")
+
+[node name="Chimney5mEast" type="CSGBox3D" parent="Geometry/Walls" unique_id=213450730]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36, 4, 0)
+use_collision = true
+size = Vector3(1, 8, 12)
+material = ExtResource("2_vx7va")
+
+[node name="LongWall6m" type="CSGBox3D" parent="Geometry/Walls" unique_id=1432673049]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 3, 20)
+use_collision = true
+size = Vector3(20, 6, 1)
+material = ExtResource("2_vx7va")
+
+[node name="GapPlatforms" type="Node3D" parent="Geometry" unique_id=1863118438]
+
+[node name="GapStart" type="CSGBox3D" parent="Geometry/GapPlatforms" unique_id=1221176071]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -44, 1.75, 25)
+use_collision = true
+size = Vector3(4, 0.5, 4)
+material = ExtResource("4_1r577")
+
+[node name="AfterGap3m" type="CSGBox3D" parent="Geometry/GapPlatforms" unique_id=208376748]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -37, 1.75, 25)
+use_collision = true
+size = Vector3(4, 0.5, 4)
+material = ExtResource("4_1r577")
+
+[node name="AfterGap5m" type="CSGBox3D" parent="Geometry/GapPlatforms" unique_id=2053953132]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28, 1.75, 25)
+use_collision = true
+size = Vector3(4, 0.5, 4)
+material = ExtResource("4_1r577")
+
+[node name="AfterGap7m" type="CSGBox3D" parent="Geometry/GapPlatforms" unique_id=449576069]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17, 1.75, 25)
+use_collision = true
+size = Vector3(4, 0.5, 4)
+material = ExtResource("4_1r577")
+
+[node name="AfterGap9m" type="CSGBox3D" parent="Geometry/GapPlatforms" unique_id=1184811186]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 1.75, 25)
+use_collision = true
+size = Vector3(4, 0.5, 4)
+material = ExtResource("4_1r577")
+
+[node name="AccessRamp20Deg" type="CSGPolygon3D" parent="Geometry/GapPlatforms" unique_id=604316364]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -46, 0, 17.505045)
+use_collision = true
+polygon = PackedVector2Array(0, 0, 5.494955, 0, 5.494955, 2)
+depth = 4.0
+material = ExtResource("3_omi0l")
+
+[node name="Steps" type="Node3D" parent="Geometry" unique_id=1205271332]
+
+[node name="Step150cm" type="CSGBox3D" parent="Geometry/Steps" unique_id=479365397]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 1.25, -30.5)
+use_collision = true
+size = Vector3(3, 0.5, 3)
+material = ExtResource("4_1r577")
+
+[node name="Step300cm" type="CSGBox3D" parent="Geometry/Steps" unique_id=856660551]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 2.75, -30.5)
+use_collision = true
+size = Vector3(3, 0.5, 3)
+material = ExtResource("4_1r577")
+
+[node name="Step450cm" type="CSGBox3D" parent="Geometry/Steps" unique_id=1719157759]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.25, -30.5)
+use_collision = true
+size = Vector3(3, 0.5, 3)
+material = ExtResource("4_1r577")
+
+[node name="Step600cm" type="CSGBox3D" parent="Geometry/Steps" unique_id=1836343472]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 5.75, -30.5)
+use_collision = true
+size = Vector3(3, 0.5, 3)
+material = ExtResource("4_1r577")
+
+[node name="Step750cm" type="CSGBox3D" parent="Geometry/Steps" unique_id=2075319452]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 7.25, -30.5)
+use_collision = true
+size = Vector3(3, 0.5, 3)
+material = ExtResource("4_1r577")
+
+[node name="Runway60m" type="Node3D" parent="Geometry" unique_id=202666997]
+
+[node name="StartPostNorth" type="CSGBox3D" parent="Geometry/Runway60m" unique_id=1695220648]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30, 1.5, 38)
+use_collision = true
+size = Vector3(0.5, 3, 0.5)
+material = ExtResource("5_alsl7")
+
+[node name="StartPostSouth" type="CSGBox3D" parent="Geometry/Runway60m" unique_id=1053906838]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30, 1.5, 42)
+use_collision = true
+size = Vector3(0.5, 3, 0.5)
+material = ExtResource("5_alsl7")
+
+[node name="FinishPostNorth" type="CSGBox3D" parent="Geometry/Runway60m" unique_id=1491756645]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30, 1.5, 38)
+use_collision = true
+size = Vector3(0.5, 3, 0.5)
+material = ExtResource("5_alsl7")
+
+[node name="FinishPostSouth" type="CSGBox3D" parent="Geometry/Runway60m" unique_id=408476814]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30, 1.5, 42)
+use_collision = true
+size = Vector3(0.5, 3, 0.5)
+material = ExtResource("5_alsl7")

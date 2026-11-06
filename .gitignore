@@ -1,0 +1,14 @@
+# Godot 4+
+.godot/
+/android/
+
+# Exportaciones
+/build/
+
+# Sistema operativo
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# Traducciones compiladas por Godot desde los CSV de data/i18n/
+*.translation
