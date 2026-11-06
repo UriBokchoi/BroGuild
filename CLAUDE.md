@@ -72,6 +72,7 @@ Objetivo: 60 fps estables con 300+ enemigos. Enemigos con steering simple (sin `
 ```
 CLAUDE.md
 docs/        GDD.md, ROADMAP.md, DECISIONES.md
+addons/      solo GUT (tests)
 autoload/    EventBus, RunState, Rng, Audio, Save
 core/        piezas genéricas: state_machine/, stats/, components/, pooling/, weighted_table.gd
 entities/    player/ (+ states/), enemies/, pickups/, interactables/
@@ -81,9 +82,10 @@ ui/          hud/, menus/, widgets/, theme
 vfx/         shaders/, particles/, juice/
 levels/      arenas y escena de pruebas
 assets/      models/, textures/, audio/, fonts/, CREDITS.md
-tests/       tests de lógica pura
+tests/       tests de lógica pura (unit/ replica la ruta del código que prueban)
+tools/       validación por terminal (validate.sh, ci/)
 ```
-Escena, script y recursos propios de una feature van juntos en su carpeta.
+Escena, script y recursos propios de una feature van juntos en su carpeta. El script de un Resource (`class_name MovementData`) va con su feature o sistema; sus instancias de balance (`.tres`), en `data/`.
 
 ## Tests
 - GUT para lógica pura: stats y modificadores, tablas ponderadas, economía y reglas de las apuestas (siempre con semilla fija).
