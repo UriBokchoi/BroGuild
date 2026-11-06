@@ -22,3 +22,19 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
 ## 2026-11-06 · Estructura: `addons/`, `tools/` y dónde van los Resources
 - **Decisión:** a la estructura de `CLAUDE.md` se añaden `addons/` (solo GUT) y `tools/` (validación por terminal). El script que define un Resource (`class_name MovementData`) vive con su feature o sistema (`entities/player/`, `systems/combat/`…); las instancias de balance (`.tres`) viven en `data/`. Las carpetas vacías llevan `.gitkeep` hasta que reciben contenido.
 - **Por qué:** «contenido = datos» pide un único sitio donde ajustar el balance (`data/`), y «lo de una feature va junto» pide que el código no se separe de su escena. Separar clase (código) e instancias (balance) cumple ambas.
+
+## 2026-11-06 · Escena de pruebas: medidas provisionales del greybox
+- **Decisión:** `levels/test_gym/test_gym.tscn` es la escena principal hasta que exista un menú. 1 unidad = 1 m. Piezas (CSG con colisión, capa 1 = mundo), cada una con su medida en el nombre del nodo:
+  - suelo de 100×100 m con rejilla de 1 m (líneas fuertes cada 5 m);
+  - rampas de 10/20/30/40/50° hasta una terraza de 3 m (50° supera el `floor_max_angle` por defecto, 45°);
+  - pendiente de 15° y 30 m para el slide;
+  - bordes de 0,5 a 2,5 m (mantle);
+  - chimeneas de 3 y 5 m de ancho y 8 m de alto, y un muro de 20×6 m (saltos en pared);
+  - plataformas a 2 m con huecos de 3/5/7/9 m;
+  - escalones flotantes cada 1,5 m hasta 7,5 m;
+  - pista de 60 m entre dos pórticos.
+- **Por qué:** el GDD no fija métricas y el jugador aún no existe. Un rango de valores permite calibrar el movimiento del Hito 1 sin rehacer la escena. Colores: suelo gris, rampas azules, paredes marrones, plataformas claras, marcas naranjas.
+
+## 2026-11-06 · Rutas `res://` (no `uid://`) en `project.godot`
+- **Decisión:** escena principal y autoloads se registran con ruta `res://`.
+- **Por qué:** comprobado en 4.7.2: en un clon recién hecho (sin `.godot/`) una escena principal `uid://` aborta y un autoload `uid://` queda a `null` sin error de salida. Contrapartida: si se mueve uno de esos archivos, hay que actualizar la ruta a mano.
