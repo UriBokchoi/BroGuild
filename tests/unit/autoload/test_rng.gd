@@ -46,6 +46,15 @@ func test_using_one_stream_does_not_affect_another() -> void:
 	assert_eq(_sample(RngService.Stream.WAVES), untouched)
 
 
+func test_kept_reference_follows_new_seed() -> void:
+	var kept: RandomNumberGenerator = _rng.stream(RngService.Stream.LOOT)
+	_rng.seed_run(OTHER_SEED)
+	var expected: Array[int] = _sample(RngService.Stream.LOOT)
+	_rng.seed_run(OTHER_SEED)
+	assert_same(_rng.stream(RngService.Stream.LOOT), kept)
+	assert_eq(_draw(kept), expected)
+
+
 func test_each_stream_has_its_own_sequence() -> void:
 	var sequences: Dictionary[String, bool] = {}
 	for id: RngService.Stream in RngService.Stream.values():
@@ -59,7 +68,10 @@ func test_stream_seed_depends_on_name_not_position() -> void:
 
 
 func _sample(id: RngService.Stream) -> Array[int]:
-	var generator: RandomNumberGenerator = _rng.stream(id)
+	return _draw(_rng.stream(id))
+
+
+func _draw(generator: RandomNumberGenerator) -> Array[int]:
 	var values: Array[int] = []
 	for i: int in SAMPLE_SIZE:
 		values.append(generator.randi())

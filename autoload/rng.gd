@@ -22,6 +22,13 @@ var run_seed: int = 0
 var _streams: Dictionary[Stream, RandomNumberGenerator] = {}
 
 
+func _init() -> void:
+	# Los generadores se crean una sola vez y seed_run() solo los vuelve a sembrar:
+	# quien guarde una referencia sigue la semilla de cada partida nueva.
+	for id: Stream in Stream.values():
+		_streams[id] = RandomNumberGenerator.new()
+
+
 func _ready() -> void:
 	# Hasta que empiece una partida, los generadores tienen que ser utilizables.
 	seed_run(make_seed())
@@ -37,11 +44,9 @@ func make_seed() -> int:
 ## Vuelve a sembrar todos los generadores a partir de la semilla de la partida.
 func seed_run(new_seed: int) -> void:
 	run_seed = new_seed
-	_streams.clear()
-	for id: Stream in Stream.values():
-		var generator := RandomNumberGenerator.new()
-		generator.seed = derive_seed(new_seed, id)
-		_streams[id] = generator
+	for id: Stream in _streams:
+		# Asignar la semilla reinicia el estado: misma secuencia que un generador nuevo.
+		_streams[id].seed = derive_seed(new_seed, id)
 
 
 ## Generador del sistema indicado.
