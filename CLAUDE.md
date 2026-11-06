@@ -70,6 +70,7 @@ Objetivo: 60 fps estables con 300+ enemigos. Enemigos con steering simple (sin `
 
 ## Archivos de Godot
 - Tengo el editor de Godot abierto mientras trabajas: antes de editar a mano una escena `.tscn`, avísame para que la guarde y no se pisen los cambios.
+- `project.godot`: el editor lo reescribe al abrir el proyecto y al cambiar cualquier ajuste, así que pisaría una edición hecha por fuera. Antes de tocarlo, pídeme que cierre el editor. Escríbelo con la API (`ProjectSettings.set_setting()` + `save()` desde un script headless con `-s`), no a mano: así queda igual que si lo guardara el editor. Ojo: un `InputEventKey.new()` lleva `device = 16`; el editor usa `-1` («todos»).
 - `.tscn` y `.tres` en formato texto. Si los creas a mano, no inventes UIDs: omítelos y Godot los genera.
 - Los archivos `.uid` se versionan; `.godot/` no (va en `.gitignore`).
 - Mover o renombrar escenas o scripts rompe referencias: avísame antes y, si lo haces tú, mueve también su `.uid` y actualiza todas las rutas.
