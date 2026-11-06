@@ -11,17 +11,23 @@ uniform float line_width : hint_range(0.5, 4.0) = 1.0;
 uniform float blend_sharpness : hint_range(1.0, 16.0) = 4.0;
 uniform float surface_roughness : hint_range(0.0, 1.0) = 0.9;
 
+// En una cara alineada con un eje, una de las coordenadas proyectadas es constante
+// y su derivada es 0: sin este mínimo, 0/0 daría NaN en las caras que caen justo
+// sobre una línea (el suelo en y = 0).
+const float MIN_DERIVATIVE = 1e-6;
+
 varying vec3 world_pos;
 varying vec3 world_normal;
 
 void vertex() {
 	world_pos = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
-	world_normal = normalize((MODEL_MATRIX * vec4(NORMAL, 0.0)).xyz);
+	// La matriz de normales es correcta también con escala no uniforme.
+	world_normal = normalize(MODEL_NORMAL_MATRIX * NORMAL);
 }
 
 // 1.0 sobre una línea de la rejilla, 0.0 fuera. Ancho constante en píxeles.
 float grid_line(vec2 coord) {
-	vec2 dist = abs(fract(coord - 0.5) - 0.5) / fwidth(coord);
+	vec2 dist = abs(fract(coord - 0.5) - 0.5) / max(fwidth(coord), vec2(MIN_DERIVATIVE));
 	return 1.0 - min(min(dist.x, dist.y) / line_width, 1.0);
 }
 
