@@ -30,7 +30,7 @@ Ejecutable de consola de Godot 4.7.2 en esta máquina (Git Bash):
 - Importar recursos: `"$G" --headless --path . --import` (hace falta tras crear un `class_name` nuevo y en un clon recién hecho).
 - Comprobar todos los scripts, con warnings: `"$G" --headless --path . -s res://tools/ci/check_scripts.gd -d --ignore-error-breaks`
 - Smoke test (arranca la escena principal y sale): `"$G" --headless --path . --quit-after 600 -d --ignore-error-breaks`
-- Tests: *(se rellena en el Hito 0 al instalar GUT)*
+- Tests (GUT 9.7.1, configuración en `.gutconfig.json`): `"$G" --headless --path . -s res://addons/gut/gut_cmdln.gd -gconfig=res://.gutconfig.json`. GUT sale con 0 si un test no compila (se lo salta): fíate de `validate.sh`, no solo de esto.
 
 Comprobado en 4.7.2 (detalle en `docs/DECISIONES.md`):
 - Godot sale con 0 aunque haya errores de script o de shader: hay que leer la salida (lo hace `validate.sh`).
@@ -97,6 +97,8 @@ Escena, script y recursos propios de una feature van juntos en su carpeta. El sc
 
 ## Tests
 - GUT para lógica pura: stats y modificadores, tablas ponderadas, economía y reglas de las apuestas (siempre con semilla fija).
+- `tests/unit/` replica la ruta del código (`autoload/rng.gd` → `tests/unit/autoload/test_rng.gd`). Archivos `test_*.gd` que extienden `GutTest`, con el mismo tipado estricto que el resto.
+- Para probar un autoload sin tocar el global, instancia su script: `const RngService := preload("res://autoload/rng.gd")`.
 - El *feel* no se testea: lo pruebo yo jugando.
 
 ## Nunca
