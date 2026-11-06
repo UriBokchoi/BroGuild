@@ -18,18 +18,26 @@ Proyecto a largo plazo: se va a ampliar durante meses, así que la arquitectura 
 - Si un cambio altera el diseño acordado, actualiza `docs/GDD.md` en el mismo commit.
 
 ## Stack
-- Godot 4.7.x estable · renderer Forward+ · 3D · GDScript con tipado estático (sin C#).
+- Godot 4.7.x estable · renderer Forward+ (D3D12 en Windows) · física Jolt · 3D · GDScript con tipado estático (sin C#).
+- Warnings de GDScript (Project Settings): declaración sin tipo = **error**; acceso inseguro a propiedad/método y argumento inseguro = warning, que la validación también rechaza.
 - Addons: solo GUT para tests (o gdUnit4 si GUT no es compatible con nuestra versión). Cualquier otro, pregunta antes.
 - Actualizar a Godot 4.8 cuando sea estable: en su propia rama, nunca de paso.
 
 ## Comandos
-`godot` = ejecutable de Godot 4.7. En el Hito 0 comprueba cuál es en esta máquina y sustitúyelo aquí por la ruta exacta.
-- Importar recursos: `godot --headless --path . --import`
-- Comprobar un script: `godot --headless --path . --check-only --script res://ruta/al_script.gd`
-- Smoke test (arranca la escena principal y sale): `godot --headless --path . --quit-after 600`
+Ejecutable de consola de Godot 4.7.2 en esta máquina (Git Bash):
+`G="D:/Descargas/Godot_v4.7.2-stable_win64.exe/Godot_v4.7.2-stable_win64_console.exe"`
+- **Validación completa**: `GODOT="$G" tools/validate.sh` — importación, todos los scripts, smoke test y tests. Sale con ≠ 0 si un paso falla o si su salida contiene ERROR/WARNING.
+- Importar recursos: `"$G" --headless --path . --import` (hace falta tras crear un `class_name` nuevo y en un clon recién hecho).
+- Comprobar todos los scripts, con warnings: `"$G" --headless --path . -s res://tools/ci/check_scripts.gd -d --ignore-error-breaks`
+- Smoke test (arranca la escena principal y sale): `"$G" --headless --path . --quit-after 600 -d --ignore-error-breaks`
 - Tests: *(se rellena en el Hito 0 al instalar GUT)*
 
-**Validación**: una tarea no está terminada si la importación, el smoke test o los tests dan errores o warnings nuevos, o si VS Code muestra errores de GDScript en «Problemas».
+Comprobado en 4.7.2 (detalle en `docs/DECISIONES.md`):
+- Godot sale con 0 aunque haya errores de script o de shader: hay que leer la salida (lo hace `validate.sh`).
+- Los warnings de GDScript solo se imprimen con `-d`, y `-d` sin `--ignore-error-breaks` se queda en bucle en el depurador ante un error.
+- No uses `--check-only`: da un falso error en cualquier script que use un autoload y no muestra warnings.
+
+**Validación**: una tarea no está terminada si `tools/validate.sh` falla o si VS Code muestra errores de GDScript en «Problemas».
 
 ## Arquitectura (reglas, no sugerencias)
 1. **Cero números mágicos.** Todo valor de balance o feel (velocidades, daños, costes, probabilidades, tiempos, colores) vive en Resources `.tres` dentro de `data/`, o en `@export` si es propio de una escena. En la lógica solo hay nombres.
