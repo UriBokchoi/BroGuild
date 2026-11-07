@@ -40,6 +40,8 @@ Comprobado en 4.7.2 (detalle en `docs/DECISIONES.md`):
 **Validación**: una tarea no está terminada si `tools/validate.sh` falla o si VS Code muestra errores de GDScript en «Problemas».
 
 ## Arquitectura (reglas, no sugerencias)
+**Principio:** el juego va a crecer durante meses. Cada sistema se diseña para que añadir algo nuevo (personajes, armas, mejoras, enemigos, estados de movimiento, stats…) sea crear datos o un archivo nuevo, sin modificar lo que ya funciona. Nada de valores ni listas cerradas en el código.
+
 1. **Cero números mágicos.** Todo valor de balance o feel (velocidades, daños, costes, probabilidades, tiempos, colores) vive en Resources `.tres` dentro de `data/`, o en `@export` si es propio de una escena. En la lógica solo hay nombres.
 2. **Contenido = datos.** Cada concepto tiene su Resource tipado (`WeaponData`, `EnemyData`, `UpgradeData`, `RarityTable`…). Añadir un arma, enemigo o mejora es crear un `.tres`, sin tocar código.
 3. **Composición antes que herencia.** Comportamiento en nodos-componente reutilizables (`HealthComponent`, `HitboxComponent`, `HurtboxComponent`, `StatsComponent`…). Herencia solo para bases claras y poco profundas.
