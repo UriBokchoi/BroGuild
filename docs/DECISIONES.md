@@ -131,3 +131,14 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
 ## 2026-11-08 · Arrays tipados con la propia clase
 - **Decisión:** `State.interrupts` es `Array[Node]`, no `Array[State]`.
 - **Por qué:** en 4.7.2, un array tipado con la propia clase del script (`Array[State]` dentro de `State`) hace que el script se referencie a sí mismo, y Godot avisa al salir de que `state.gd` sigue en uso y hay instancias perdidas. `validate.sh` lo detecta. Se tipa con la clase nativa y se documenta qué contiene.
+
+## 2026-11-08 · Correr, saltar y control aéreo
+- **Decisión:**
+  - **Dirección pedida:** WASD (`Input.get_vector`) girado según el giro horizontal de la cámara (`CameraRig.get_yaw()`). `Player` la deja cada tick en `MovementContext.wish_direction`, así que los estados no leen el Input y se pueden probar sin teclado.
+  - **Suelo:** acelera hacia `wish × run_speed` con `ground_acceleration` y frena con `ground_deceleration` al soltar.
+  - **Aire:** acelera hacia la dirección pedida con `air_acceleration`, apuntando a la mayor de `run_speed` y la velocidad que ya se lleva. Así se puede girar y frenar (pidiendo lo contrario), pero no se pierde de golpe el impulso por encima de la carrera, y tampoco se gana velocidad haciendo zigzag en el aire. Sin dirección, frena con `air_deceleration` (0 de partida: se conserva todo).
+  - **Salto:** `JumpState` da `jump_velocity()` al entrar y pasa al aire en el mismo tick. Entra si hay suelo o queda coyote time: `coyote_time` arranca al dejar el suelo sin saltar y lo gasta el salto. El jump buffer es el `input_buffer_time` de la máquina.
+  - **Modelo:** `BodyFacing` gira el modelo (no el cuerpo físico) hacia la velocidad horizontal a `turn_speed`.
+  - **Valores de partida:** carrera 9 m/s (aceleración 60 m/s², frenada 50 m/s²), aire 30 m/s², coyote 0,12 s y giro 720 °/s. Al integrar por ticks, el salto de 2 m llega a ≈ 2,09 m.
+- **`StatsComponent`** registra sus datos en `_enter_tree` en vez de en `_ready`. Así cualquier nodo los lee en su `_ready` sin depender del orden de los hermanos.
+- **Por qué:** el GDD pide carrera rápida, mucho control aéreo y que el impulso no se pierda de golpe; esa regla del aire deja que el dash y el dash-jump conserven su velocidad sin trucos aparte. Todos los números son stats, así que mejoras y personajes pueden cambiarlos.
