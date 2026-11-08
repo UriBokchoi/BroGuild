@@ -56,7 +56,7 @@ Comprobado en 4.7.2 (detalle en `docs/DECISIONES.md`):
 11. **Sin rutas frágiles.** Prohibido `get_node("../../X")` y `get_parent().get_parent()`. Usa `@export var x: Node3D` o `%NombreUnico`.
 12. **Input por acciones** del InputMap (`move_forward`, `jump`, `dash`, `slide`, `interact`…), nunca teclas directas.
 13. **Capas de física con nombre** en Project Settings, con sus constantes en un único archivo (`core/physics_layers.gd`).
-14. **UI sin literales:** textos con `tr("CLAVE")` (CSV de traducción en `data/i18n/`) y estilos en un `Theme` global.
+14. **UI sin literales:** textos con `tr("CLAVE")` (CSV de traducción en `data/i18n/`) y estilos en un `Theme` global. Excepción: el panel de depuración (`ui/debug/`) muestra nombres internos sin traducir; es una herramienta de desarrollo.
 15. Toda escena se puede ejecutar sola (F6) para probarla.
 
 ## Rendimiento

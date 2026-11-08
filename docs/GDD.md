@@ -63,6 +63,8 @@ Toda apuesta tiene **anticipación** (giro, luces, sonido que sube), **revelado*
 5. **Pactos de la Banca** — de vez en cuando, una oferta: aceptas una maldición para el resto de la partida (más enemigos, menos curación…) a cambio de Suerte o multiplicador. Se puede rechazar.
 6. **¿Cobrar o Doblar?** — al vencer al jefe: *Cobrar* termina la partida y guarda el bote. *Doblar* abre la siguiente mesa, más dura, con el bote ×2; si mueres ahí, te llevas solo la mitad.
 
+**Stats mejorables:** como en Megabonk, cualquier stat del personaje se puede subir o bajar con mejoras, rasgos de personaje y maldiciones: velocidad de carrera, altura de salto, control aéreo, stamina, daño… Una stat nueva es mejorable desde que existe.
+
 **Mejoras con sinergia de movimiento** (ejemplos): el slide deja un rastro de fuego · cada dash suelta una onda que empuja y daña · más daño mientras estás en el aire · la caída rápida explota al aterrizar · cada carga de stamina sin gastar da crítico extra.
 
 **Mejoras que tocan el azar** (ejemplos): Dado trucado (1 reroll gratis por nivel) · Amigo del crupier (las maldiciones de la tragaperras a veces son premio) · Mano caliente (cofres más baratos con racha alta).

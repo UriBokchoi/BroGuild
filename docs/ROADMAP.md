@@ -20,7 +20,7 @@
 - [x] Jugador (`CharacterBody3D`) y cámara en tercera persona con ratón (distancia que crece con el nivel, curva en datos; interpolación de física activada); Esc suelta el ratón (aún sin menú de pausa)
 - [x] Máquina de estados + `data/player/movement.tres` (gana la primera acción; nada se cancela salvo con el dash)
 - [x] Correr, saltar, coyote time, jump buffer y control aéreo
-- [ ] Panel de depuración con F3 (velocidad, estado, suelo/coyote y nivel de la cámara; cada sistema nuevo añade lo suyo)
+- [x] Panel de depuración con F3 (velocidad, estado, suelo/coyote y nivel de la cámara; cada sistema nuevo añade lo suyo), con las stats modificables como haría una mejora
 - [ ] Textos traducibles (CSV en `data/i18n/`, español e inglés) y `Theme` global, antes del primer HUD
 - [ ] Stamina por cargas + HUD mínimo
 - [ ] Dash (suelo y aire), picado (doble Shift en el aire sin dirección) y doble salto

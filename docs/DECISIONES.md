@@ -142,3 +142,15 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - **Valores de partida:** carrera 9 m/s (aceleración 60 m/s², frenada 50 m/s²), aire 30 m/s², coyote 0,12 s y giro 720 °/s. Al integrar por ticks, el salto de 2 m llega a ≈ 2,09 m.
 - **`StatsComponent`** registra sus datos en `_enter_tree` en vez de en `_ready`. Así cualquier nodo los lee en su `_ready` sin depender del orden de los hermanos.
 - **Por qué:** el GDD pide carrera rápida, mucho control aéreo y que el impulso no se pierda de golpe; esa regla del aire deja que el dash y el dash-jump conserven su velocidad sin trucos aparte. Todos los números son stats, así que mejoras y personajes pueden cambiarlos.
+
+## 2026-11-09 · Panel de depuración
+- **Decisión:**
+  - **Panel:** `DebugPanel` (`ui/debug/`) es un `CanvasLayer` que F3 (acción `toggle_debug`) muestra u oculta. Solo existe en builds de depuración y solo se actualiza mientras se ve.
+  - **Secciones:** cada bloque es un `DebugSection`, hijo de `%Sections`, que recibe al jugador en `setup()` y se refresca cada frame. Un sistema nuevo añade su sección sin tocar el panel. De partida hay tres:
+    - movimiento (estado, velocidades, suelo, coyote);
+    - cámara (deslizador de nivel hasta el último punto de la curva);
+    - stats: todas las del jugador con su valor y su base, y botones ±10 % que aplican un `StatModifier` en nombre del panel, como haría una mejora; «reset» los quita.
+  - **Textos:** muestra nombres internos sin traducir (excepción a la regla 14).
+  - **Foco:** sus botones y deslizadores no cogen el foco, para que Espacio siga saltando.
+  - **Accesos nuevos:** `Player.context` es público para leer; `StatsComponent` y `StatBlock` dan `get_stats()` y `get_base()`.
+- **Por qué:** el diseñador quiere que todas las stats sean mejorables, como en Megabonk (GDD §5). La sección de stats lo deja probar ya, antes de que exista el sistema de mejoras (Hito 3), y cualquier stat nueva aparece en el panel sin tocarlo. Un modificador en % sobre una base 0 (p. ej. `air_deceleration`) no cambia nada; para esas stats, las mejoras usarán modificadores planos.
