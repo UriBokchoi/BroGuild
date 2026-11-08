@@ -57,6 +57,10 @@ func get_stats() -> Array[StringName]:
 	return _block.get_stats()
 
 
+func has_stat(stat: StringName) -> bool:
+	return _block.has_stat(stat)
+
+
 ## Ver [method StatBlock.add_modifier].
 func add_modifier(modifier: StatModifier, source: Object) -> void:
 	_block.add_modifier(modifier, source)

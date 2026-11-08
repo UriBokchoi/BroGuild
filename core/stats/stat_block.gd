@@ -60,8 +60,8 @@ func define_from_resource(data: Resource) -> Array[StringName]:
 		var hint_string: String = property["hint_string"]
 		var type: int = property["type"]
 		var base: float = data.get(stat)
-		var limits := _range_limits(hint_string)
-		if define(stat, base, limits[0], limits[1], type == TYPE_INT):
+		var hint := RangeHint.parse(hint_string)
+		if define(stat, base, hint.min_value, hint.max_value, type == TYPE_INT):
 			defined.append(stat)
 	return defined
 
@@ -170,23 +170,6 @@ static func _is_stat_property(property: Dictionary) -> bool:
 		and (type == TYPE_FLOAT or type == TYPE_INT)
 		and (hint == PROPERTY_HINT_NONE or hint == PROPERTY_HINT_RANGE)
 	)
-
-
-## Límites [mínimo, máximo] de un hint de [code]@export_range[/code]
-## ([code]"min,max[,paso][,or_greater][,or_less][,radians_as_degrees][,suffix:…]"[/code]).
-## Sin rango, sin límites.
-static func _range_limits(hint_string: String) -> PackedFloat64Array:
-	var parts := hint_string.split(",", false)
-	if parts.size() < 2:
-		return PackedFloat64Array([-INF, INF])
-	var flags := PackedStringArray()
-	for part: String in parts:
-		flags.append(part.strip_edges())
-	# Con radians_as_degrees el inspector muestra grados, pero la propiedad guarda radianes.
-	var unit := deg_to_rad(1.0) if flags.has("radians_as_degrees") else 1.0
-	var min_value := -INF if flags.has("or_less") else parts[0].to_float() * unit
-	var max_value := INF if flags.has("or_greater") else parts[1].to_float() * unit
-	return PackedFloat64Array([min_value, max_value])
 
 
 ## Estado interno de una stat.
