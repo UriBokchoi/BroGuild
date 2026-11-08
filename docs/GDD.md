@@ -84,7 +84,9 @@ Dirección: **medieval con humor moderno**, nada realista; los anacronismos son 
 - **Assets**: primitivas + shaders propios; si hace falta, packs CC0 (Kenney, Quaternius).
 
 ## 8. Controles
-WASD mover · Ratón cámara · Espacio saltar · Shift dash · Ctrl slide / caída rápida · E interactuar / cobrar · Tab estadísticas · Esc pausa. Todo remapeable. Mando: más adelante.
+WASD mover · Ratón cámara · Espacio saltar · Shift dash · Ctrl slide / caída rápida · E interactuar / cobrar · Tab estadísticas · Esc pausa. Todo remapeable.
+
+**Menú de pausa (Esc):** a la izquierda, Continuar, Opciones, Reintentar y Salir; a la derecha, un panel fijo con todas las stats del personaje, resaltando las que han cambiado mejoras o maldiciones. Mando: más adelante.
 
 ## 9. Partida y progresión
 - **Mesa**: ~10 min. Élite cada ~2 min. Jefe al minuto 10.

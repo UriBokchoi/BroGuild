@@ -37,6 +37,7 @@ Comprobado en 4.7.2 (detalle en `docs/DECISIONES.md`):
 - Los warnings de GDScript solo se imprimen con `-d`, y `-d` sin `--ignore-error-breaks` se queda en bucle en el depurador ante un error.
 - No uses `--check-only`: da un falso error en cualquier script que use un autoload y no muestra warnings.
 - Un array tipado con la propia clase del script (`Array[State]` dentro de `State`) provoca una fuga al salir: tipa con la clase nativa (`Array[Node]`).
+- Un script lanzado con `-s` se compila antes que los autoloads: no puede nombrar clases que usen uno (p. ej. `PauseMenu`); usa `call()`.
 
 **Validación**: una tarea no está terminada si `tools/validate.sh` falla o si VS Code muestra errores de GDScript en «Problemas».
 
@@ -56,7 +57,7 @@ Comprobado en 4.7.2 (detalle en `docs/DECISIONES.md`):
 11. **Sin rutas frágiles.** Prohibido `get_node("../../X")` y `get_parent().get_parent()`. Usa `@export var x: Node3D` o `%NombreUnico`.
 12. **Input por acciones** del InputMap (`move_forward`, `jump`, `dash`, `slide`, `interact`…), nunca teclas directas.
 13. **Capas de física con nombre** en Project Settings, con sus constantes en un único archivo (`core/physics_layers.gd`).
-14. **UI sin literales:** textos con `tr("CLAVE")` (CSV de traducción en `data/i18n/`) y estilos en un `Theme` global. Excepción: el panel de depuración (`ui/debug/`) muestra nombres internos sin traducir; es una herramienta de desarrollo.
+14. **UI sin literales:** textos con `tr("CLAVE")` (CSV de traducción en `data/i18n/strings.csv`; en escenas, la clave como texto del control) y estilos en el `Theme` global (`ui/theme/main_theme.tres`, con variaciones de tipo). Las stats se traducen como `STAT_<NOMBRE>` y sus grupos como `STAT_GROUP_<GRUPO>`: una stat nueva necesita su fila en el CSV (un test lo exige). Excepción: el panel de depuración (`ui/debug/`) muestra nombres internos sin traducir; es una herramienta de desarrollo.
 15. Toda escena se puede ejecutar sola (F6) para probarla.
 
 ## Rendimiento

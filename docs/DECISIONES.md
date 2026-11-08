@@ -154,3 +154,30 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - **Foco:** sus botones y deslizadores no cogen el foco, para que Espacio siga saltando.
   - **Accesos nuevos:** `Player.context` es público para leer; `StatsComponent` y `StatBlock` dan `get_stats()` y `get_base()`.
 - **Por qué:** el diseñador quiere que todas las stats sean mejorables, como en Megabonk (GDD §5). La sección de stats lo deja probar ya, antes de que exista el sistema de mejoras (Hito 3), y cualquier stat nueva aparece en el panel sin tocarlo. Un modificador en % sobre una base 0 (p. ej. `air_deceleration`) no cambia nada; para esas stats, las mejoras usarán modificadores planos.
+
+## 2026-11-09 · Menú de pausa
+- **Decisión:**
+  - **Apertura:** Esc (`pause`) abre `PauseMenu` (`ui/menus/pause/`). Pausa el árbol (`get_tree().paused`), pide el cursor y deja el foco en «Continuar» para manejarlo también con el teclado. Funciona en pausa con `process_mode = ALWAYS`.
+  - **Izquierda:** título y botones Continuar, Opciones (desactivado hasta que tenga función), Reintentar (por ahora recarga la escena; en el Hito 2 pasará por `RunState`) y Salir.
+  - **Derecha:** un panel fijo con `StatsView`: todas las stats del jugador agrupadas como en sus datos, con nombre traducido, unidad (sacada del `@export_range`) y scroll. Las que difieren de su base salen resaltadas, con la base al lado. Encabezados y filas salen solos de los datos: una stat nueva solo necesita su traducción.
+  - **Cierre:** al cerrar se suelta el foco; si no, Espacio pulsaría el botón en vez de saltar. «Continuar» no estaba en el pedido: se añadió porque es lo normal en una pausa (Esc también cierra).
+- **Por qué:** lo pidió el diseñador, con las stats visibles como en Megabonk. `StatsView` es reutilizable para la pantalla de stats (Tab) del Hito 3.
+
+## 2026-11-09 · Ratón con un solo dueño (sustituye a «Captura del ratón»)
+- **Decisión:** `MouseCapture` captura el ratón salvo mientras alguna interfaz pida el cursor con `EventBus.cursor_requested(requester, wants_cursor)`. Lo piden el menú de pausa y el panel de depuración (F3), así que ya no hace falta Esc para pulsar los botones del panel. Se conecta en `_enter_tree` para no perder peticiones y olvida a quien pidió el cursor y ya no existe. Desaparecen «Esc suelta el ratón» y «clic para recapturar».
+- **Por qué:** cada interfaz futura (ruleta de nivel, cofres, tragaperras) solo emite la señal; el modo del ratón se decide en un único sitio.
+
+## 2026-11-09 · Textos traducibles y Theme global
+- **Decisión:**
+  - **Textos:** viven en `data/i18n/strings.csv` (`keys,es,en`).
+    - Godot genera los `.translation` al importar (están en `.gitignore`; un clon nuevo necesita `--import`, que ya hace `validate.sh`). Sin el idioma del sistema, se usa el inglés.
+    - En las escenas, el texto de un control es la clave y Godot lo traduce solo. Las etiquetas de números desactivan la autotraducción.
+    - Las stats se traducen como `STAT_<NOMBRE>` y sus grupos como `STAT_GROUP_<GRUPO>`, por eso los `@export_group` de los datos usan identificadores (`run`, `jump`, `air`, `input`). Un test exige que cada stat del jugador tenga su nombre en todos los idiomas.
+  - **Estilo:** `ui/theme/main_theme.tres` (`gui/theme/custom`) tiene una paleta pizarra oscura con acentos dorados y la fuente por defecto de Godot en negrita (`FontVariation`, sin assets externos). Lleva variaciones de tipo para títulos, encabezados, filas de stats y espaciados de menú (`ScreenMargin`, `MenuList`, `StatList`), y estilos de botón, panel y barra de scroll.
+  - **Panel de depuración:** usa su propio tema compacto (`ui/debug/debug_theme.tres`) y no se traduce.
+  - **Fondo de los menús:** `vfx/shaders/screen_blur.gdshader` difumina y tiñe lo que hay detrás.
+- **Por qué:** era la tarea siguiente del ROADMAP y el menú de pausa es la primera interfaz de verdad; así nace ya traducible y con estilo en un solo sitio.
+- **Comprobado en 4.7.2:**
+  - Los Resources traen sus propios grupos de propiedades (`Resource`), sin stats: el panel solo pone un encabezado cuando el grupo tiene alguna stat.
+  - `String.num(9.0, 2)` devuelve `"9.0"`: `StatFormat` quita los ceros del final.
+  - Un script lanzado con `-s` se compila antes que los autoloads: si nombra una clase que usa uno (p. ej. `PauseMenu` usa `EventBus`), esa clase no compila. En esos scripts hay que usar `call()`.
