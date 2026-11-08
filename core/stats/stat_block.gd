@@ -70,6 +70,19 @@ func has_stat(stat: StringName) -> bool:
 	return _stats.has(stat)
 
 
+## Nombres de todas las stats, en el orden en que se definieron.
+func get_stats() -> Array[StringName]:
+	var stats: Array[StringName] = []
+	stats.assign(_stats.keys())
+	return stats
+
+
+## Valor base de [param stat], sin modificadores. Una stat que no existe es un error y vale 0.
+func get_base(stat: StringName) -> float:
+	var state := _get_state(stat)
+	return state.base if state else 0.0
+
+
 ## Valor final de [param stat]. Una stat que no existe es un error y vale 0.
 func get_value(stat: StringName) -> float:
 	var state := _get_state(stat)

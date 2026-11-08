@@ -47,6 +47,16 @@ func get_value(stat: StringName) -> float:
 	return _block.get_value(stat)
 
 
+## Ver [method StatBlock.get_base].
+func get_base(stat: StringName) -> float:
+	return _block.get_base(stat)
+
+
+## Ver [method StatBlock.get_stats].
+func get_stats() -> Array[StringName]:
+	return _block.get_stats()
+
+
 ## Ver [method StatBlock.add_modifier].
 func add_modifier(modifier: StatModifier, source: Object) -> void:
 	_block.add_modifier(modifier, source)

@@ -32,6 +32,17 @@ func test_runs_forward_up_to_run_speed() -> void:
 	assert_lt(velocity.z, 0.0, "adelante es −Z con la cámara sin girar")
 
 
+func test_run_speed_upgrade_makes_the_player_faster() -> void:
+	var upgrade := StatModifier.create(&"run_speed", StatModifier.Kind.PERCENT, 0.5)
+	_player.stats.add_modifier(upgrade, self)
+	await wait_physics_frames(SETTLE_FRAMES)
+	Input.action_press(InputActions.MOVE_FORWARD)
+	await wait_physics_frames(30)
+	var speed := Vector2(_player.velocity.x, _player.velocity.z).length()
+	assert_almost_eq(speed, _move.run_speed, 0.01)
+	assert_almost_eq(speed, _player.stats.get_base(&"run_speed") * 1.5, 0.01, "+50 %")
+
+
 func test_stops_after_releasing() -> void:
 	await wait_physics_frames(SETTLE_FRAMES)
 	Input.action_press(InputActions.MOVE_FORWARD)

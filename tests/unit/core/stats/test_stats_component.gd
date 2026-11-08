@@ -41,6 +41,13 @@ func test_removing_the_source_restores_the_copy() -> void:
 	assert_eq(resolved.speed, 9.0)
 
 
+func test_lists_its_stats_with_their_base() -> void:
+	_stats.add_modifier(StatModifier.create(&"speed", StatModifier.Kind.FLAT, 2.0), self)
+	assert_has(_stats.get_stats(), &"speed")
+	assert_has(_stats.get_stats(), &"free_int")
+	assert_eq(_stats.get_base(&"speed"), 9.0)
+
+
 func test_stat_changed_arrives_after_the_copy_is_updated() -> void:
 	var resolved := _stats.get_resolved(FixtureData) as FixtureData
 	var seen: Array[float] = []
