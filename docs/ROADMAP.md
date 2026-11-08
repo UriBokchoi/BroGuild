@@ -23,7 +23,7 @@
 - [x] Panel de depuración con F3 (velocidad, estado, suelo/coyote y nivel de la cámara; cada sistema nuevo añade lo suyo), con las stats modificables como haría una mejora
 - [x] Textos traducibles (CSV en `data/i18n/`, español e inglés) y `Theme` global, antes del primer HUD
 - [x] Menú de pausa (Esc): continuar, opciones (aún sin función), reintentar y salir, con un panel fijo de todas las stats del jugador (con scroll)
-- [ ] Stamina por cargas + HUD mínimo
+- [x] Stamina por cargas + HUD mínimo
 - [ ] Dash (suelo y aire), picado (doble Shift en el aire sin dirección) y doble salto
 - [ ] Slide con pendientes y slide-jump
 - [ ] Dash-jump con ventana y aviso visual

@@ -181,3 +181,11 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - Los Resources traen sus propios grupos de propiedades (`Resource`), sin stats: el panel solo pone un encabezado cuando el grupo tiene alguna stat.
   - `String.num(9.0, 2)` devuelve `"9.0"`: `StatFormat` quita los ceros del final.
   - Un script lanzado con `-s` se compila antes que los autoloads: si nombra una clase que usa uno (p. ej. `PauseMenu` usa `EventBus`), esa clase no compila. En esos scripts hay que usar `call()`.
+
+## 2026-11-09 · Stamina por cargas y HUD mínimo
+- **Decisión:**
+  - **Datos:** `StaminaData` (`data/player/stamina.tres`) es la segunda fuente de stats del jugador: `max_charges` (entera) y `recharge_time` por carga. Valores de partida del GDD: 3 cargas, 3 s por carga. Al ser stats, salen solas en el menú de pausa y en F3, y son mejorables (+1 carga con un modificador plano).
+  - **Lógica:** `StaminaPool` es lógica pura con cargas fraccionarias (el ½ del salto en pared) y recarga continua; tiene un margen de 1e-6 para que los errores de coma flotante no impidan gastar una carga recién recargada.
+  - **Componente:** `StaminaComponent` lo actualiza con las stats en cada tick, así que una mejora del máximo se nota al momento. Avisa con su señal `changed` y con `EventBus.player_stamina_changed` para la interfaz. Los estados de movimiento la encuentran en `MovementContext.stamina`; el coste de cada acción será una stat de esa acción.
+  - **HUD:** `ui/hud/hud.tscn` con `StaminaBar`: una barra por carga (variación `ChargeBar` del Theme), la que recarga a medias. Se rehace si cambia el máximo. Escucha desde `_enter_tree`, así que recibe el primer aviso, que se emite en el `_ready` del jugador.
+- **Por qué:** el GDD define la stamina por cargas que se regeneran y pide decidir cuándo gastar la última. La barra a medias deja ver cuánto falta. Separar sus datos de `MovementData` deja cada Resource con un solo tema y demuestra que el jugador admite varias fuentes de stats.
