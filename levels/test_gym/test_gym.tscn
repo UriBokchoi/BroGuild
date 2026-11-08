@@ -5,6 +5,8 @@
 [ext_resource type="Material" path="res://levels/test_gym/materials/greybox_ramp.tres" id="3_omi0l"]
 [ext_resource type="Material" path="res://levels/test_gym/materials/greybox_platform.tres" id="4_1r577"]
 [ext_resource type="Material" path="res://levels/test_gym/materials/greybox_marker.tres" id="5_alsl7"]
+[ext_resource type="Script" path="res://ui/mouse_capture.gd" id="6_mouse"]
+[ext_resource type="PackedScene" path="res://entities/player/player.tscn" id="7_player"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_lgb4e"]
 
@@ -27,7 +29,11 @@ shadow_enabled = true
 
 [node name="OverviewCamera" type="Camera3D" parent="." unique_id=1289150874]
 transform = Transform3D(1, 0, 0, 0, 0.8637789, 0.503871, 0, -0.503871, 0.8637789, 0, 42, 66)
-current = true
+
+[node name="MouseCapture" type="Node" parent="."]
+script = ExtResource("6_mouse")
+
+[node name="Player" parent="." instance=ExtResource("7_player")]
 
 [node name="Geometry" type="Node3D" parent="." unique_id=361505001]
 
