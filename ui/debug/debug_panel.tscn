@@ -4,12 +4,16 @@
 [ext_resource type="Script" path="res://ui/debug/sections/movement_debug_section.gd" id="2_movement"]
 [ext_resource type="Script" path="res://ui/debug/sections/camera_debug_section.gd" id="3_camera"]
 [ext_resource type="Script" path="res://ui/debug/sections/stats_debug_section.gd" id="4_stats"]
+[ext_resource type="Theme" path="res://ui/debug/debug_theme.tres" id="5_theme"]
 
 [node name="DebugPanel" type="CanvasLayer"]
+process_mode = 3
 layer = 100
 script = ExtResource("1_panel")
 
 [node name="Panel" type="PanelContainer" parent="."]
+auto_translate_mode = 2
+theme = ExtResource("5_theme")
 anchors_preset = 9
 anchor_bottom = 1.0
 offset_left = 8.0

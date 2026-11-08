@@ -2,7 +2,8 @@ class_name DebugPanel
 extends CanvasLayer
 ## Panel de depuración: F3 ([constant InputActions.TOGGLE_DEBUG]) lo muestra u oculta. Cada
 ## sistema añade su bloque como un [DebugSection] hijo de [code]%Sections[/code], sin tocar este
-## script. Solo existe en builds de depuración.
+## script. Solo existe en builds de depuración. Mientras se ve pide el cursor, para poder
+## pulsar sus botones; también funciona con el juego en pausa.
 
 ## Jugador que se depura; cada sección toma de él lo que necesita.
 @export var player: Player
@@ -34,6 +35,7 @@ func _set_shown(shown: bool) -> void:
 	visible = shown
 	# Solo se actualiza mientras se ve.
 	set_process(shown)
+	EventBus.cursor_requested.emit(self, shown)
 
 
 func _get_sections() -> Array[DebugSection]:
