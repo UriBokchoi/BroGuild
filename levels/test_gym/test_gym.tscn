@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" path="res://entities/player/player.tscn" id="7_player"]
 [ext_resource type="PackedScene" path="res://ui/debug/debug_panel.tscn" id="8_debug"]
 [ext_resource type="PackedScene" path="res://ui/menus/pause/pause_menu.tscn" id="9_pause"]
+[ext_resource type="PackedScene" path="res://ui/hud/hud.tscn" id="10_hud"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_lgb4e"]
 
@@ -42,6 +43,8 @@ player = NodePath("../Player")
 
 [node name="PauseMenu" parent="." node_paths=PackedStringArray("player") instance=ExtResource("9_pause")]
 player = NodePath("../Player")
+
+[node name="HUD" parent="." instance=ExtResource("10_hud")]
 
 [node name="Geometry" type="Node3D" parent="." unique_id=361505001]
 
