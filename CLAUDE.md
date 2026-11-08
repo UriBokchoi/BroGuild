@@ -11,7 +11,7 @@ Proyecto a largo plazo: se va a ampliar durante meses, así que la arquitectura 
 - Háblame en español, directo y breve. Identificadores de código en inglés; comentarios y documentación en español.
 - **Plan antes que código** si la tarea toca 3+ archivos o crea un sistema nuevo: qué archivos, escenas y Resources vas a crear o cambiar, y cómo lo probaré. Espera mi OK.
 - **Pasos pequeños**: cada commit deja el juego ejecutable.
-- **Ramas**: una por tarea (`feat/…`, `fix/…`, `refactor/…`), creada desde `main` actualizado. Nunca commits directos a `main`.
+- **Ramas**: una por tarea (`feat/…`, `fix/…`, `refactor/…`), creada desde `main` actualizado. Nunca commits directos a `main`. GitHub borra la rama al fusionar su PR. Al cerrar un hito, etiqueta anotada `hito-N` en `main`.
 - **Commits** pequeños, Conventional Commits en español: `feat(movement): añade dash con cargas de stamina`.
 - **Al terminar una tarea**: pasa la validación (ver Comandos), marca la casilla en `docs/ROADMAP.md` y dime **cómo probarlo**: qué escena abrir, qué teclas pulsar y qué debería notar. Push y PR a `main` cuando yo lo diga.
 - El *feel* lo decido yo jugando. Si hay que elegir entre opciones de diseño o algo no está en el GDD, pregunta: no inventes mecánicas.
@@ -40,6 +40,8 @@ Comprobado en 4.7.2 (detalle en `docs/DECISIONES.md`):
 **Validación**: una tarea no está terminada si `tools/validate.sh` falla o si VS Code muestra errores de GDScript en «Problemas».
 
 ## Arquitectura (reglas, no sugerencias)
+**Principio:** el juego va a crecer durante meses. Cada sistema se diseña para que añadir algo nuevo (personajes, armas, mejoras, enemigos, estados de movimiento, stats…) sea crear datos o un archivo nuevo, sin modificar lo que ya funciona. Nada de valores ni listas cerradas en el código.
+
 1. **Cero números mágicos.** Todo valor de balance o feel (velocidades, daños, costes, probabilidades, tiempos, colores) vive en Resources `.tres` dentro de `data/`, o en `@export` si es propio de una escena. En la lógica solo hay nombres.
 2. **Contenido = datos.** Cada concepto tiene su Resource tipado (`WeaponData`, `EnemyData`, `UpgradeData`, `RarityTable`…). Añadir un arma, enemigo o mejora es crear un `.tres`, sin tocar código.
 3. **Composición antes que herencia.** Comportamiento en nodos-componente reutilizables (`HealthComponent`, `HitboxComponent`, `HurtboxComponent`, `StatsComponent`…). Herencia solo para bases claras y poco profundas.
@@ -107,3 +109,4 @@ Escena, script y recursos propios de una feature van juntos en su carpeta. El sc
 - Reescribir un sistema entero para arreglar un bug pequeño.
 - Añadir dependencias, cambiar de versión de Godot o tocar `main` sin preguntar.
 - Dar por terminado algo que no has ejecutado.
+- Borrar algo que no esté guardado en git o que no esté claramente obsoleto (si dudas, pregunta).
