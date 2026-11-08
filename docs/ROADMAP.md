@@ -16,7 +16,7 @@
 - [x] `docs/DECISIONES.md` con las primeras decisiones
 
 ## Hito 1 — Movimiento (si no se siente bien, no se avanza)
-- [ ] `StatBlock` + `StatModifier` (con tests): los parámetros de movimiento se leen como stats, para que mejoras y personajes los modifiquen
+- [x] `StatBlock` + `StatModifier` (con tests): los parámetros de movimiento se leen como stats, para que mejoras y personajes los modifiquen
 - [ ] Jugador (`CharacterBody3D`) y cámara en tercera persona con ratón (distancia que crece con el nivel, curva en datos; interpolación de física activada); Esc suelta el ratón (aún sin menú de pausa)
 - [ ] Máquina de estados + `data/player/movement.tres` (gana la primera acción; nada se cancela salvo con el dash)
 - [ ] Correr, saltar, coyote time, jump buffer y control aéreo

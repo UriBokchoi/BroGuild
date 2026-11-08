@@ -48,7 +48,7 @@ Comprobado en 4.7.2 (detalle en `docs/DECISIONES.md`):
 4. **Llamar hacia abajo, señales hacia arriba.** Un nodo llama a sus hijos; los hijos avisan con señales. Entre sistemas lejanos: `EventBus` (autoload que solo declara señales tipadas).
 5. **Autoloads mínimos:** `EventBus`, `RunState` (partida en curso), `Rng`, `Audio`, `Save`. Nada de lógica de gameplay suelta en ellos.
 6. **Movimiento = máquina de estados.** Un script por estado (`Ground`, `Air`, `Dash`, `Slide`, `WallJump`, `Mantle`…) y parámetros en `data/player/movement.tres`. Nada de `if` gigantes en `player.gd`.
-7. **Stats con modificadores.** Las mejoras nunca tocan variables a mano: añaden `StatModifier` (plano, %, multiplicador) a un `StatBlock`, que calcula el valor final en un único sitio.
+7. **Stats con modificadores.** Las mejoras nunca tocan variables a mano: añaden `StatModifier` (plano, %, multiplicador) a un `StatBlock`, que calcula el valor final en un único sitio. Todo número exportado de un Resource de datos es una stat, y su `@export_range` es también su límite en juego: elige el rango pensando en el juego, no solo en el inspector. El juego lee las copias resueltas de `StatsComponent`, nunca el `.tres` original.
 8. **Todo el azar pasa por `Rng`**, con semilla por partida y un generador por sistema (botín, oleadas, apuestas) para que los bugs sean reproducibles. Tablas ponderadas (`WeightedTable`) y rarezas en datos; la Suerte modifica pesos, nunca `if` repartidos por el código.
 9. **Juice desacoplado.** Screen shake, hit-stop, números de daño, flashes y sonidos reaccionan a señales. El gameplay emite eventos; no llama a efectos.
 10. **Pooling** para enemigos, proyectiles, pickups y números de daño. Nada de `instantiate()`/`queue_free()` por cada bala.
@@ -102,6 +102,7 @@ Escena, script y recursos propios de una feature van juntos en su carpeta. El sc
 - GUT para lógica pura: stats y modificadores, tablas ponderadas, economía y reglas de las apuestas (siempre con semilla fija).
 - `tests/unit/` replica la ruta del código (`autoload/rng.gd` → `tests/unit/autoload/test_rng.gd`). Archivos `test_*.gd` que extienden `GutTest`, con el mismo tipado estricto que el resto.
 - Para probar un autoload sin tocar el global, instancia su script: `const RngService := preload("res://autoload/rng.gd")`.
+- Los datos de prueba van junto a sus tests, sin prefijo `test_` (p. ej. `tests/unit/core/stats/stats_test_data.gd`). Ninguna constante de un test puede empezar por `Test`: GUT la toma por una clase de test interna y avisa (la validación falla).
 - El *feel* no se testea: lo pruebo yo jugando.
 
 ## Nunca
