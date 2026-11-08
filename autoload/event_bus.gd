@@ -13,3 +13,5 @@ signal run_ended
 ## Una interfaz pide ([param wants_cursor] = true) o suelta el cursor del ratón. Mientras alguna
 ## lo pida, el ratón no se captura (lo gestiona MouseCapture).
 signal cursor_requested(requester: Object, wants_cursor: bool)
+## Cambió la stamina del jugador (cargas actuales, que pueden ser fraccionarias, y máximo).
+signal player_stamina_changed(charges: float, max_charges: int)

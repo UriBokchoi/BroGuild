@@ -4,6 +4,7 @@ extends CharacterBody3D
 ## Las mecánicas van en sus estados y componentes, nunca aquí (CLAUDE.md, «Nunca»).
 
 @export var stats: StatsComponent
+@export var stamina: StaminaComponent
 @export var input: PlayerInput
 @export var movement: StateMachine
 ## Estado neutro en el suelo.
@@ -20,6 +21,7 @@ func _ready() -> void:
 	context = MovementContext.new()
 	context.body = self
 	context.move = stats.get_resolved(MovementData) as MovementData
+	context.stamina = stamina
 	context.ground = ground_state
 	context.air = air_state
 	movement.start(context)

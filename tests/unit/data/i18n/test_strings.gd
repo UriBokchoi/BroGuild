@@ -1,9 +1,10 @@
 extends GutTest
 ## data/i18n/strings.csv: cada texto está en todos los idiomas y cada stat del jugador (y su
-## grupo) tiene nombre traducido.
+## grupo) tiene nombre traducido. Las stats salen de las fuentes de la escena del jugador, así
+## que un dato nuevo queda cubierto solo.
 
 const STRINGS_PATH := "res://data/i18n/strings.csv"
-const PLAYER_DATA: Array[String] = ["res://data/player/movement.tres"]
+const PlayerScene := preload("res://entities/player/player.tscn")
 
 var _translations: Dictionary[String, PackedStringArray] = {}
 var _locales := PackedStringArray()
@@ -33,19 +34,24 @@ func test_every_text_is_in_every_language() -> void:
 
 
 func test_every_player_stat_and_group_has_a_name() -> void:
-	for path: String in PLAYER_DATA:
-		var data := load(path) as Resource
-		var group := ""
-		for property: Dictionary in data.get_property_list():
-			var usage: int = property["usage"]
-			var property_name: String = property["name"]
-			if usage & PROPERTY_USAGE_GROUP:
-				group = property_name
-			elif usage & PROPERTY_USAGE_SCRIPT_VARIABLE:
-				# Solo cuentan los grupos con stats: los Resources traen grupos propios sin ellas.
-				if not group.is_empty():
-					_assert_key(StatFormat.group_key(group))
-				_assert_key(StatFormat.name_key(property_name))
+	var player := PlayerScene.instantiate() as Player
+	for source: Resource in player.stats.sources:
+		_assert_stat_names(source)
+	player.free()
+
+
+func _assert_stat_names(data: Resource) -> void:
+	var group := ""
+	for property: Dictionary in data.get_property_list():
+		var usage: int = property["usage"]
+		var property_name: String = property["name"]
+		if usage & PROPERTY_USAGE_GROUP:
+			group = property_name
+		elif usage & PROPERTY_USAGE_SCRIPT_VARIABLE:
+			# Solo cuentan los grupos con stats: los Resources traen grupos propios sin ellas.
+			if not group.is_empty():
+				_assert_key(StatFormat.group_key(group))
+			_assert_key(StatFormat.name_key(property_name))
 
 
 func _assert_key(key: String) -> void:

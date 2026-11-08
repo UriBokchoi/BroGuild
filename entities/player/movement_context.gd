@@ -11,6 +11,8 @@ var move: MovementData
 var ground: State
 ## Estado neutro en el aire, al que vuelven las acciones al terminar.
 var air: State
+## Stamina por cargas que gastan las acciones.
+var stamina: StaminaComponent
 ## Dirección pedida este tick, en el plano XZ del mundo y relativa a la cámara (longitud 0–1).
 var wish_direction: Vector3 = Vector3.ZERO
 ## Segundos que quedan para poder saltar después de dejar el suelo sin saltar (coyote time).

@@ -22,3 +22,6 @@ STAT_AIR_ACCELERATION,Control en el aire,Air control
 STAT_AIR_DECELERATION,Frenada en el aire,Air braking
 STAT_INPUT_BUFFER_TIME,Margen de pulsación,Input buffer
 STAT_ACTION_END_BUFFER_TIME,Margen al acabar una acción,Action end buffer
+STAT_GROUP_STAMINA,Stamina,Stamina
+STAT_MAX_CHARGES,Cargas de stamina,Stamina charges
+STAT_RECHARGE_TIME,Recarga por carga,Recharge per charge
