@@ -1,6 +1,13 @@
 [gd_scene format=3]
 
-[ext_resource type="PackedScene" path="res://entities/player/camera/camera_rig.tscn" id="1_rig"]
+[ext_resource type="Script" path="res://entities/player/player.gd" id="1_player"]
+[ext_resource type="PackedScene" path="res://entities/player/camera/camera_rig.tscn" id="2_rig"]
+[ext_resource type="Script" path="res://core/stats/stats_component.gd" id="3_stats"]
+[ext_resource type="Resource" path="res://data/player/movement.tres" id="4_movement"]
+[ext_resource type="Script" path="res://entities/player/player_input.gd" id="5_input"]
+[ext_resource type="Script" path="res://core/state_machine/state_machine.gd" id="6_machine"]
+[ext_resource type="Script" path="res://entities/player/states/ground_state.gd" id="7_ground"]
+[ext_resource type="Script" path="res://entities/player/states/air_state.gd" id="8_air"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_body"]
 radius = 0.4
@@ -21,9 +28,14 @@ albedo_color = Color(0.12, 0.12, 0.15, 1)
 material = SubResource("StandardMaterial3D_visor")
 size = Vector3(0.5, 0.15, 0.2)
 
-[node name="Player" type="CharacterBody3D"]
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("stats", "movement", "ground_state", "air_state")]
 collision_layer = 2
 collision_mask = 1
+script = ExtResource("1_player")
+stats = NodePath("Stats")
+movement = NodePath("Movement")
+ground_state = NodePath("Movement/Ground")
+air_state = NodePath("Movement/Air")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
@@ -37,5 +49,23 @@ mesh = SubResource("CapsuleMesh_body")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -0.33)
 mesh = SubResource("BoxMesh_visor")
 
-[node name="CameraRig" parent="." node_paths=PackedStringArray("target") instance=ExtResource("1_rig")]
+[node name="Stats" type="Node" parent="."]
+script = ExtResource("3_stats")
+sources = Array[Resource]([ExtResource("4_movement")])
+
+[node name="PlayerInput" type="Node" parent="." node_paths=PackedStringArray("machine")]
+script = ExtResource("5_input")
+machine = NodePath("../Movement")
+
+[node name="Movement" type="Node" parent="." node_paths=PackedStringArray("initial_state")]
+script = ExtResource("6_machine")
+initial_state = NodePath("Air")
+
+[node name="Ground" type="Node" parent="Movement"]
+script = ExtResource("7_ground")
+
+[node name="Air" type="Node" parent="Movement"]
+script = ExtResource("8_air")
+
+[node name="CameraRig" parent="." node_paths=PackedStringArray("target") instance=ExtResource("2_rig")]
 target = NodePath("..")
