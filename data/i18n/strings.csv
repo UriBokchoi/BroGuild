@@ -1,0 +1,24 @@
+keys,es,en
+PAUSE_TITLE,Pausa,Paused
+PAUSE_CONTINUE,Continuar,Resume
+PAUSE_OPTIONS,Opciones,Options
+PAUSE_RETRY,Reintentar,Retry
+PAUSE_QUIT,Salir,Quit
+PAUSE_STATS_TITLE,Estadísticas,Stats
+STAT_BASE,base %s,base %s
+STAT_GROUP_RUN,Carrera,Running
+STAT_GROUP_JUMP,Salto y gravedad,Jump and gravity
+STAT_GROUP_AIR,Aire,Air
+STAT_GROUP_INPUT,Respuesta de los controles,Input response
+STAT_RUN_SPEED,Velocidad de carrera,Run speed
+STAT_GROUND_ACCELERATION,Aceleración,Acceleration
+STAT_GROUND_DECELERATION,Frenada,Braking
+STAT_TURN_SPEED,Velocidad de giro,Turn speed
+STAT_JUMP_HEIGHT,Altura de salto,Jump height
+STAT_JUMP_TIME_TO_APEX,Tiempo hasta la cima del salto,Time to jump apex
+STAT_MAX_FALL_SPEED,Velocidad máxima de caída,Max fall speed
+STAT_COYOTE_TIME,Margen para saltar al caer,Coyote time
+STAT_AIR_ACCELERATION,Control en el aire,Air control
+STAT_AIR_DECELERATION,Frenada en el aire,Air braking
+STAT_INPUT_BUFFER_TIME,Margen de pulsación,Input buffer
+STAT_ACTION_END_BUFFER_TIME,Margen al acabar una acción,Action end buffer
