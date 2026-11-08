@@ -1,0 +1,40 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ui/debug/debug_panel.gd" id="1_panel"]
+[ext_resource type="Script" path="res://ui/debug/sections/movement_debug_section.gd" id="2_movement"]
+[ext_resource type="Script" path="res://ui/debug/sections/camera_debug_section.gd" id="3_camera"]
+[ext_resource type="Script" path="res://ui/debug/sections/stats_debug_section.gd" id="4_stats"]
+
+[node name="DebugPanel" type="CanvasLayer"]
+layer = 100
+script = ExtResource("1_panel")
+
+[node name="Panel" type="PanelContainer" parent="."]
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 440.0
+offset_bottom = -8.0
+grow_vertical = 2
+
+[node name="Scroll" type="ScrollContainer" parent="Panel"]
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="Sections" type="VBoxContainer" parent="Panel/Scroll"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Movement" type="VBoxContainer" parent="Panel/Scroll/Sections"]
+layout_mode = 2
+script = ExtResource("2_movement")
+
+[node name="Camera" type="VBoxContainer" parent="Panel/Scroll/Sections"]
+layout_mode = 2
+script = ExtResource("3_camera")
+
+[node name="Stats" type="VBoxContainer" parent="Panel/Scroll/Sections"]
+layout_mode = 2
+script = ExtResource("4_stats")
