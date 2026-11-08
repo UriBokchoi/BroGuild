@@ -32,16 +32,16 @@ Cámara en tercera persona a una distancia moderada que crece muy poco a poco co
 | Correr | WASD | — | Rápido de base, mucho control aéreo; el momentum no se pierde de golpe |
 | Salto | Espacio | — | Con coyote time y jump buffer |
 | Doble salto | Espacio en el aire | 1 | |
-| Dash | Shift | 1 | Ráfaga corta en la dirección de movimiento; también en el aire |
-| Picado | Shift dos veces en el aire, sin dirección | *por decidir* | Dash hacia abajo |
+| Dash | Shift | 1 | Ráfaga corta en la dirección de movimiento (sin dirección, hacia donde mira la cámara); también en el aire |
+| Picado | Shift dos veces en el aire, sin dirección | +1 | Dash hacia abajo: el primer Shift ya hace un dash y el segundo, dentro de una ventana corta, lo convierte en picado |
 | Dash-jump | Espacio justo tras el dash | +1 | Ventana corta (con aviso visual) → salto largo que conserva la velocidad del dash |
-| Slide | Ctrl corriendo | — | Gratis; acelera cuesta abajo y frena cuesta arriba; hurtbox baja (zona donde recibes daño). Dash → slide alarga el dash sin gastar más |
+| Slide | Ctrl corriendo (mantener) | — | Gratis; acelera cuesta abajo y frena cuesta arriba; hurtbox baja (zona donde recibes daño). Dash → slide alarga el dash sin gastar más |
 | Slide-jump | Espacio en slide | — | Conserva el impulso |
 | Caída rápida | Ctrl en el aire | 1 | Picado al suelo; con mejoras, impacto en área |
 | Salto en pared | Espacio contra pared | 0 / ½ | El primero gratis; encadenados sin tocar suelo, media carga |
 | Mantle | Saltar contra un borde | — | Sube bordes a media altura con un pico de velocidad; con Ctrl sale deslizando |
 
-**Reglas de entrada:** gana la primera acción que pulsas. Una acción empezada no se puede cancelar con otra hasta que termina; la excepción es el dash, que cancela cualquier acción (también otro dash) si quedan cargas.
+**Reglas de entrada:** gana la primera acción que pulsas. Una acción empezada no se puede cancelar con otra hasta que termina; la excepción es el dash, que cancela cualquier acción (también otro dash) si quedan cargas. Lo que pulsas durante una acción se guarda si falta muy poco para que termine (~0,1 s); si no, se pierde. Si Espacio puede hacer varias cosas a la vez, gana mantle > salto en pared > dash-jump > doble salto (orden en datos).
 
 **Valores de partida** (viven en `data/player/movement.tres` y se ajustan jugando): 3 cargas; recarga de una carga cada ~3 s; dash de ~0,2 s.
 

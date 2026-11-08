@@ -11,7 +11,7 @@ Proyecto a largo plazo: se va a ampliar durante meses, así que la arquitectura 
 - Háblame en español, directo y breve. Identificadores de código en inglés; comentarios y documentación en español.
 - **Plan antes que código** si la tarea toca 3+ archivos o crea un sistema nuevo: qué archivos, escenas y Resources vas a crear o cambiar, y cómo lo probaré. Espera mi OK.
 - **Pasos pequeños**: cada commit deja el juego ejecutable.
-- **Ramas**: una por tarea (`feat/…`, `fix/…`, `refactor/…`), creada desde `main` actualizado. Nunca commits directos a `main`.
+- **Ramas**: una por tarea (`feat/…`, `fix/…`, `refactor/…`), creada desde `main` actualizado. Nunca commits directos a `main`. GitHub borra la rama al fusionar su PR. Al cerrar un hito, etiqueta anotada `hito-N` en `main`.
 - **Commits** pequeños, Conventional Commits en español: `feat(movement): añade dash con cargas de stamina`.
 - **Al terminar una tarea**: pasa la validación (ver Comandos), marca la casilla en `docs/ROADMAP.md` y dime **cómo probarlo**: qué escena abrir, qué teclas pulsar y qué debería notar. Push y PR a `main` cuando yo lo diga.
 - El *feel* lo decido yo jugando. Si hay que elegir entre opciones de diseño o algo no está en el GDD, pregunta: no inventes mecánicas.
@@ -109,3 +109,4 @@ Escena, script y recursos propios de una feature van juntos en su carpeta. El sc
 - Reescribir un sistema entero para arreglar un bug pequeño.
 - Añadir dependencias, cambiar de versión de Godot o tocar `main` sin preguntar.
 - Dar por terminado algo que no has ejecutado.
+- Borrar algo que no esté guardado en git o que no esté claramente obsoleto (si dudas, pregunta).

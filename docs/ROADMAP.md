@@ -17,17 +17,17 @@
 
 ## Hito 1 — Movimiento (si no se siente bien, no se avanza)
 - [ ] `StatBlock` + `StatModifier` (con tests): los parámetros de movimiento se leen como stats, para que mejoras y personajes los modifiquen
-- [ ] Jugador (`CharacterBody3D`) y cámara en tercera persona con ratón (distancia que crece con el nivel, curva en datos); Esc suelta el ratón (aún sin menú de pausa)
+- [ ] Jugador (`CharacterBody3D`) y cámara en tercera persona con ratón (distancia que crece con el nivel, curva en datos; interpolación de física activada); Esc suelta el ratón (aún sin menú de pausa)
 - [ ] Máquina de estados + `data/player/movement.tres` (gana la primera acción; nada se cancela salvo con el dash)
 - [ ] Correr, saltar, coyote time, jump buffer y control aéreo
-- [ ] Textos traducibles (CSV en `data/i18n/`) y `Theme` global, antes del primer HUD
+- [ ] Panel de depuración con F3 (velocidad, estado, suelo/coyote y nivel de la cámara; cada sistema nuevo añade lo suyo)
+- [ ] Textos traducibles (CSV en `data/i18n/`, español e inglés) y `Theme` global, antes del primer HUD
 - [ ] Stamina por cargas + HUD mínimo
 - [ ] Dash (suelo y aire), picado (doble Shift en el aire sin dirección) y doble salto
 - [ ] Slide con pendientes y slide-jump
 - [ ] Dash-jump con ventana y aviso visual
 - [ ] Caída rápida, salto en pared y mantle
 - [ ] Sensación de velocidad: FOV dinámico, estela de dash, líneas de velocidad
-- [ ] Panel de depuración (velocidad, estado, stamina)
 
 ## Hito 2 — Combate y hordas
 - [ ] Componentes `HealthComponent`, `HitboxComponent`, `HurtboxComponent`
