@@ -8,6 +8,7 @@
 [ext_resource type="Script" path="res://ui/mouse_capture.gd" id="6_mouse"]
 [ext_resource type="PackedScene" path="res://entities/player/player.tscn" id="7_player"]
 [ext_resource type="PackedScene" path="res://ui/debug/debug_panel.tscn" id="8_debug"]
+[ext_resource type="PackedScene" path="res://ui/menus/pause/pause_menu.tscn" id="9_pause"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_lgb4e"]
 
@@ -37,6 +38,9 @@ script = ExtResource("6_mouse")
 [node name="Player" parent="." instance=ExtResource("7_player")]
 
 [node name="DebugPanel" parent="." node_paths=PackedStringArray("player") instance=ExtResource("8_debug")]
+player = NodePath("../Player")
+
+[node name="PauseMenu" parent="." node_paths=PackedStringArray("player") instance=ExtResource("9_pause")]
 player = NodePath("../Player")
 
 [node name="Geometry" type="Node3D" parent="." unique_id=361505001]
