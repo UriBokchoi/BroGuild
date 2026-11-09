@@ -189,3 +189,28 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - **Componente:** `StaminaComponent` lo actualiza con las stats en cada tick, así que una mejora del máximo se nota al momento. Avisa con su señal `changed` y con `EventBus.player_stamina_changed` para la interfaz. Los estados de movimiento la encuentran en `MovementContext.stamina`; el coste de cada acción será una stat de esa acción.
   - **HUD:** `ui/hud/hud.tscn` con `StaminaBar`: una barra por carga (variación `ChargeBar` del Theme), la que recarga a medias. Se rehace si cambia el máximo. Escucha desde `_enter_tree`, así que recibe el primer aviso, que se emite en el `_ready` del jugador.
 - **Por qué:** el GDD define la stamina por cargas que se regeneran y pide decidir cuándo gastar la última. La barra a medias deja ver cuánto falta. Separar sus datos de `MovementData` deja cada Resource con un solo tema y demuestra que el jugador admite varias fuentes de stats.
+
+## 2026-11-09 · Dash, picado y doble salto
+- **Decisión:**
+  - **Dash** (`DashState`; en la escena: acción `dash`, comprometido, cancela):
+    - va en la dirección pedida o, sin dirección, hacia donde mira la cámara (`MovementContext.view_forward`), a `dash_speed` durante `dash_duration`;
+    - en el aire va recto, sin gravedad;
+    - al terminar, la velocidad horizontal se queda en `dash_exit_speed` como mucho;
+    - gasta `dash_cost`.
+  - **Picado** (`DownDashState`; misma acción con prioridad 10, comprometido, cancela):
+    - entra si estás en el aire, sin dirección y a menos de `down_dash_window` de un dash que empezó en el aire;
+    - va hacia abajo a `down_dash_speed` durante `down_dash_duration`, o hasta tocar suelo;
+    - gasta `down_dash_cost` además del dash.
+    - El contexto guarda un reloj de juego (`elapsed`) y el momento y el lugar del último dash.
+  - **Doble salto** (`DoubleJumpState`; acción `jump`, prioridad 10):
+    - entra en el aire si no queda coyote time (con coyote, Espacio es el salto normal), quedan `air_jumps` y hay stamina;
+    - sube `air_jump_height` con la gravedad del salto;
+    - los saltos en el aire se recuperan al entrar en Suelo.
+  - **Prioridades de la acción `jump`:** Jump 0 y doble salto 10. Quedan libres 20 (dash-jump), 30 (salto en pared) y 40 (mantle), para el orden del GDD.
+  - **Valores de partida:**
+    - dash: 28 m/s durante 0,2 s (≈ 5,6 m) y salida a 12 m/s;
+    - picado: 30 m/s durante 0,2 s, con ventana de 0,3 s;
+    - doble salto: 1 salto de 2 m;
+    - todo cuesta 1 carga.
+- **Por qué:** el GDD define las acciones, sus teclas y su coste; lo que no decía (el dash recto en el aire, la velocidad de salida, la duración y la ventana del picado, la altura del doble salto) queda en datos con valores razonables, para ajustarlo jugando o desde F3. Sin salida limitada, el control aéreo conservaría los 28 m/s del dash hasta aterrizar.
+- **Tests:** con física real, cada `await wait_physics_frames(1)` en bucle avanza unos 2 ticks de GUT. Los tests comprueban en momentos con margen, no en ticks exactos.

@@ -107,6 +107,8 @@ Escena, script y recursos propios de una feature van juntos en su carpeta. El sc
 - `tests/integration/`: tests que instancian escenas (con `add_child_autofree`), con la misma ruta que el código. Comprueban el montaje (capas, referencias, datos asignados), no el *feel*.
 - Para probar un autoload sin tocar el global, instancia su script: `const RngService := preload("res://autoload/rng.gd")`.
 - Los datos de prueba van junto a sus tests, sin prefijo `test_` (p. ej. `tests/unit/core/stats/stats_test_data.gd`). Ninguna constante de un test puede empezar por `Test`: GUT la toma por una clase de test interna y avisa (la validación falla).
+- Con física real, no cuentes ticks exactos: en un bucle, cada `await wait_physics_frames(1)` avanza unos 2 ticks. Comprueba estados en momentos con margen y deja que los resultados no dependan de un tick concreto.
+- Para probar estados de movimiento sin la escena del jugador: `tests/unit/entities/player/states/movement_context_fixture.gd` (contexto con stamina real y máquina con Suelo y Aire).
 - El *feel* no se testea: lo pruebo yo jugando.
 
 ## Nunca

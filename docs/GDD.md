@@ -31,8 +31,8 @@ Cámara en tercera persona a una distancia moderada que crece muy poco a poco co
 |---|---|---|---|
 | Correr | WASD | — | Rápido de base, mucho control aéreo; el momentum no se pierde de golpe |
 | Salto | Espacio | — | Con coyote time y jump buffer |
-| Doble salto | Espacio en el aire | 1 | |
-| Dash | Shift | 1 | Ráfaga corta en la dirección de movimiento (sin dirección, hacia donde mira la cámara); también en el aire |
+| Doble salto | Espacio en el aire | 1 | Se recupera al tocar suelo; con mejoras o personajes, más saltos (triple salto). Con coyote time, Espacio es el salto normal |
+| Dash | Shift | 1 | Ráfaga corta en la dirección de movimiento (sin dirección, hacia donde mira la cámara); también en el aire, donde va recto. Al terminar conservas parte del impulso |
 | Picado | Shift dos veces en el aire, sin dirección | +1 | Dash hacia abajo: el primer Shift ya hace un dash y el segundo, dentro de una ventana corta, lo convierte en picado |
 | Dash-jump | Espacio justo tras el dash | +1 | Ventana corta (con aviso visual) → salto largo que conserva la velocidad del dash |
 | Slide | Ctrl corriendo (mantener) | — | Gratis; acelera cuesta abajo y frena cuesta arriba; hurtbox baja (zona donde recibes daño). Dash → slide alarga el dash sin gastar más |
