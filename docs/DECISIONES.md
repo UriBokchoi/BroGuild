@@ -267,3 +267,26 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
 ## 2026-11-09 · Girar durante el slide
 - **Decisión:** el slide se curva con WASD. Cada tick, `SlideState.steer()` gira la parte horizontal de la velocidad hacia la dirección pedida, como mucho `slide_turn_speed` (180 °/s de partida), sin cambiar su rapidez ni la parte vertical. Sin dirección, sigue recto. Pedir hacia atrás lo da la vuelta poco a poco; la frenada sigue siendo la del slide.
 - **Por qué:** lo pidió el diseñador: moverse mientras desliza, como en Deadlock, y no ir siempre hacia delante. Girar sin perder velocidad mantiene el slide como forma rápida de moverse y de esquivar.
+
+## 2026-11-09 · Plan: movimiento, combate y menús
+- **Decisión:**
+  - **Orden:** el diseñador decide terminar el movimiento y después el combate (Hito 2, en la zona de pruebas), y luego los menús y el flujo de partida (Hito 3). Los mapas de los tres niveles iniciales (el Brosque, la Torre del Mago y la Mazmorra) van después del juice (Hito 6).
+  - **Movimiento pendiente:** cancelar el dash con un slide (solo en el suelo, con la velocidad del dash), salto en pared al estilo Deadlock, caída rápida, mantle y sensación de velocidad.
+  - **Combate:**
+    - personajes iniciales: Guerrero (espada), Mago (bastón de mago) y Pícaro (daga);
+    - armas automáticas con 4 ranuras de armas y 4 de runas, nivel máximo 5 (valores por defecto, en datos);
+    - subir de nivel = elegir 1 de 3;
+    - runas: Fuerza, Amplitud, Prisa, Vigor y Multiplicidad (cantidad de proyectiles, que también afecta a la espada; el nombre es provisional).
+  - **Menús:**
+    - menú principal: Jugar, Archivo y Abandonar;
+    - selección de personaje con panel de info al pasar el ratón y modelo 3D en el centro;
+    - selección de nivel en el lugar del panel de info;
+    - Archivo con desbloqueos por conseguir o derrotar.
+  - **Arquitectura prevista:**
+    - `WeaponData` y `RuneData` con un `StatModifierSet` por nivel;
+    - `EnemyData` con `HealthData`;
+    - `LevelData`;
+    - un catálogo `data/content.tres` del que salen los menús, el Archivo y las opciones al subir de nivel;
+    - `Save` para los desbloqueos;
+    - escena raíz `Game` con el flujo de pantallas.
+- **Por qué:** lo pidió el diseñador. Todo lo nuevo es contenido en datos sobre los sistemas que ya existen (stats con dos capas, conjuntos de modificadores), así que añadir un arma, una runa, un enemigo o un nivel será crear su `.tres`.
