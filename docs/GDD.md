@@ -114,6 +114,7 @@ WASD mover · Ratón cámara · Espacio saltar · Shift dash · Ctrl slide / ca�
 - **Mesa**: ~10 min. Élite cada ~2 min. Jefe al minuto 10.
 - **Monedas**: XP (niveles) · Fichas (en partida, se apuestan) · Bote (sale de la partida y se gasta fuera).
 - **Meta-progresión**: desbloquear personajes (cada uno con un rasgo de movimiento: triple salto, dash más largo, slide más rápido…), armas iniciales y ventajas pequeñas. Nunca más poder bruto que el que da jugar bien.
+- **Personajes**: todos parten de las mismas stats básicas y cada uno cambia unas pocas según su gimmick (p. ej., +1 salto en el aire y −10 % de vida). Esas diferencias son su base: en el menú no salen como mejoras. De momento solo existe el personaje base, sin diferencias.
 - **Reinicio**: de la muerte a una partida nueva en menos de 2 s.
 
 ## 10. Fuera de alcance por ahora

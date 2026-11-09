@@ -238,3 +238,13 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - **Agachado:** `BodyCrouch` agacha el modelo, solo visual, con suavizado y los pies en el suelo, mientras el estado es uno de `crouch_states` (en la escena, el slide). La colisión no cambia; la hurtbox baja llegará con el combate.
   - **Valores de partida:** mínima 6 m/s, máxima 22 m/s, frenada 5 m/s² y tirón 30 m/s². Elegidos para que la rampa de 15° del gimnasio acelere (comprobado: de 9 a 14,6 m/s bajándola) y en llano el slide dure algo más de medio segundo desde la carrera.
 - **Por qué:** el GDD pide un slide gratis que acelere cuesta abajo y frene cuesta arriba, el slide-jump con impulso y que dash → slide alargue el dash. Que el slide-jump use `interrupts` confirma que la regla «nada se cancela salvo con el dash» admite continuaciones diseñadas sin excepciones en la máquina.
+
+## 2026-11-09 · Personajes: stats básicas y diferencias
+- **Decisión:**
+  - Las stats de `data/player/*.tres` son las básicas, comunes a todos los personajes.
+  - Un personaje es un `CharacterData` (`entities/player/characters/`, instancias en `data/characters/`): un `StatModifierSet` (lista de `StatModifier` que se aplican y se quitan juntos) con las claves de traducción de su nombre y su descripción.
+  - `StatBlock` tiene dos capas. Los modificadores de base (`add_base_modifier`) cambian la base con la misma fórmula; las mejoras (`add_modifier`) se calculan encima. `get_base` devuelve la base del personaje, así que el menú solo resalta lo que cambian las mejoras.
+  - `StatsComponent.base_sets` aplica los personajes al entrar en el árbol, justo después de definir las stats; en la escena del jugador, el personaje base.
+  - **Cambiar de personaje:** elegirlo será poner otro `CharacterData` en `base_sets` antes de crear al jugador. Los gimmicks que no sean stats (habilidades propias) se añadirán al `CharacterData` cuando lleguen.
+  - Solo existe el personaje base, sin diferencias: los personajes concretos los decide el diseñador. Un test comprueba que cada personaje de `data/characters/` tiene su nombre y su descripción traducidos y que solo toca stats que existen.
+- **Por qué:** el diseñador quiere unas stats básicas y que cada personaje varíe un poco según su gimmick. Como diferencias sobre una base común, un personaje nuevo es un `.tres` con 2-3 modificadores, y cambiar una stat básica afecta a todos.
