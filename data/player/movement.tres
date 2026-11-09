@@ -31,6 +31,7 @@ slide_min_speed = 6.0
 slide_max_speed = 22.0
 slide_friction = 5.0
 slide_gravity = 30.0
+slide_turn_speed = 3.141592653589793
 air_acceleration = 30.0
 input_buffer_time = 0.12
 action_end_buffer_time = 0.1

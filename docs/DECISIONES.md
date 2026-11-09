@@ -263,3 +263,7 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - **Aviso visual:** `DashJumpCue` enseña un aro dorado en los pies mientras `is_dash_jump_open()`. Solo lee el contexto.
   - **Valores de partida:** ventana 0,15 s, altura 2 m y coste 1 carga. Con el dash a 28 m/s, el salto mide ≈ 21 m (medido en el gimnasio), de sobra para el hueco de 9 m. Se ajusta en los datos.
 - **Por qué:** el GDD pide el dash-jump justo tras el dash, con ventana corta y aviso visual, y que conserve la velocidad del dash. La ventana se mide desde el final del dash para que encaje con la regla de que nada interrumpe al dash.
+
+## 2026-11-09 · Girar durante el slide
+- **Decisión:** el slide se curva con WASD. Cada tick, `SlideState.steer()` gira la parte horizontal de la velocidad hacia la dirección pedida, como mucho `slide_turn_speed` (180 °/s de partida), sin cambiar su rapidez ni la parte vertical. Sin dirección, sigue recto. Pedir hacia atrás lo da la vuelta poco a poco; la frenada sigue siendo la del slide.
+- **Por qué:** lo pidió el diseñador: moverse mientras desliza, como en Deadlock, y no ir siempre hacia delante. Girar sin perder velocidad mantiene el slide como forma rápida de moverse y de esquivar.

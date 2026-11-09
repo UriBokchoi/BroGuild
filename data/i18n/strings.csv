@@ -69,3 +69,4 @@ CHARACTER_BASE_DESCRIPTION,"Las stats básicas, sin gimmick.","The basic stats, 
 STAT_DASH_JUMP_WINDOW,Margen del dash-jump,Dash-jump window
 STAT_DASH_JUMP_HEIGHT,Altura del dash-jump,Dash-jump height
 STAT_DASH_JUMP_COST,Coste del dash-jump,Dash-jump cost
+STAT_SLIDE_TURN_SPEED,Giro en el slide,Slide turn speed

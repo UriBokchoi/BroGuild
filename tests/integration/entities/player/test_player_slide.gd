@@ -30,6 +30,16 @@ func test_slides_on_flat_ground_slowing_down_until_standing_up() -> void:
 	assert_same(_player.movement.current, _player.ground_state, "se levanta al bajar de la mínima")
 
 
+func test_can_steer_while_sliding() -> void:
+	await _run_and_slide()
+	Input.action_release(InputActions.MOVE_FORWARD)
+	Input.action_press(InputActions.MOVE_RIGHT)
+	await wait_physics_frames(10)
+	Input.action_release(InputActions.MOVE_RIGHT)
+	assert_true(_player.movement.current is SlideState, "sigue deslizando")
+	assert_gt(_player.velocity.x, 2.0, "se curva hacia la derecha (+X)")
+
+
 func test_releasing_ctrl_stops_sliding() -> void:
 	await _run_and_slide()
 	Input.action_release(InputActions.SLIDE)

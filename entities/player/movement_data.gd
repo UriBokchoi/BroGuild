@@ -67,6 +67,9 @@ var turn_speed: float = 0.0
 @export_range(0.0, 100.0, 0.5, "or_greater", "suffix:m/s²") var slide_friction: float = 0.0
 ## Tirón de la pendiente: acelera cuesta abajo y frena cuesta arriba, según la inclinación.
 @export_range(0.0, 200.0, 0.5, "or_greater", "suffix:m/s²") var slide_gravity: float = 0.0
+## Lo rápido que el slide gira hacia la dirección que pides (sin perder velocidad).
+@export_range(0.0, 1080.0, 1.0, "or_greater", "radians_as_degrees", "suffix:°/s")
+var slide_turn_speed: float = 0.0
 
 @export_group("air")
 ## Aceleración hacia la dirección pedida en el aire. No frena el impulso que ya llevas por
