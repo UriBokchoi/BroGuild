@@ -80,3 +80,32 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
 ## 2026-11-08 · Versiones: etiquetas por hito y ramas fusionadas
 - **Decisión:** al cerrar un hito, su último commit en `main` lleva una etiqueta anotada `hito-N` (`hito-0` = `880208e`). GitHub borra la rama de un PR al fusionarlo (`delete_branch_on_merge`); `feat/cimientos` se borró a mano por la misma razón.
 - **Por qué:** el diseñador prefiere no borrar nada que no esté guardado. Una rama fusionada es obsoleta: sus commits siguen en `main` y GitHub la puede restaurar desde su PR. Las etiquetas dejan cada versión jugable a mano (`git switch --detach hito-0`).
+
+## 2026-11-08 · Stats: StatBlock, StatModifier y StatsComponent
+- **Decisión:**
+  - Valor final = (base + Σ planos) × (1 + Σ porcentajes) × Π multiplicadores, limitado a [mínimo, máximo] y, si la stat es entera, redondeado al más cercano (x,5 sube). Se recalcula solo al cambiar sus modificadores y se guarda; `stat_changed(stat, value, previous)` solo se emite si el valor cambia.
+  - Todo `float`/`int` con `@export` o `@export_range` de un Resource de datos es una stat, con su valor como base. El `@export_range` es también el límite en juego (`or_greater`/`or_less` lo abren; con `radians_as_degrees` se pasa a radianes). Los `int` son stats enteras; enums, bools y curvas no son stats.
+  - Cada modificador se aplica con su origen (la mejora, el pacto, el rasgo…) y se quita por origen; una vez aplicado es inmutable. Una stat que no existe es un error, para cazar erratas en los `.tres`.
+  - `StatsComponent` junta las stats de los Resources de datos de una entidad y mantiene una copia resuelta de cada uno: el juego lee `move.run_speed` con tipo, y el `.tres` original no cambia nunca.
+- **Por qué:** añadir una stat es añadir un `@export` al Resource, sin registrarla en ningún otro sitio, y mejoras y personajes la modifican por su nombre desde sus `.tres`. Las copias resueltas evitan una lista de constantes que repita los nombres y dan autocompletado y comprobación de tipos. Usar el rango del inspector como límite evita una segunda fuente de verdad e impide, por ejemplo, que una maldición deje una velocidad en negativo.
+
+## 2026-11-08 · Valores de datos solo en el `.tres`
+- **Decisión:** los scripts de Resources de datos (`CameraData`, `MovementData`…) declaran los campos con valor neutro (0, `false` o `null`), y los valores de verdad van en su `.tres` de `data/`. Ese valor neutro no se cambia nunca.
+- **Por qué:** Godot no guarda en el `.tres` las propiedades que coinciden con el valor por defecto del script (comprobado en 4.7.2). Si el script trae valores de balance, el `.tres` sale casi vacío, el valor real queda escondido en el código y cambiar un valor por defecto cambiaría el juego sin tocar `data/`. Con valores neutros, todo lo ajustado es distinto del defecto y siempre queda escrito en el `.tres`.
+
+## 2026-11-08 · Interpolación de física
+- **Decisión:** `physics/common/physics_interpolation = true` y `physics_jitter_fix = 0` (la documentación de Godot pide quitar la corrección de tirones al interpolar). Lo que se mueve en `_process` (cámaras) va con `physics_interpolation_mode = OFF` y sigue `get_global_transform_interpolated()` de su objetivo. Al teletransportar algo (aparecer, reaparecer), `reset_physics_interpolation()`.
+- **Por qué:** la física va a 60 ticks por segundo. Sin interpolar, en monitores de 144 Hz el jugador y la cámara se moverían a saltos.
+
+## 2026-11-08 · Cámara en tercera persona
+- **Decisión:** `CameraRig` (`entities/player/camera/`) es una escena propia con `top_level`. Sigue a su `target` a la altura del pivote, gira con el ratón y se aleja con el nivel: distancia = `base_distance` × `distance_by_level(nivel)`. La curva va del nivel 1 al 100 y, pasado el último punto, se queda en su valor. Un `SpringArm3D` con una esfera de 0,25 m que solo choca con `world` la acerca en vez de atravesar paredes y suelo. Valores de partida en `data/player/camera.tres`: 5 m a nivel 1 y ×1,4 lineal hasta 7 m a nivel 100 (2 cm por nivel); pivote a 1,6 m; FOV 75°; sensibilidad 0,15 °/px; inclinación entre −70° y 35°, empezando en −15°.
+- **Convenciones:** los ángulos de los datos se guardan en radianes con `radians_as_degrees` (el inspector muestra grados, como en los nodos de Godot). La sensibilidad va en grados por píxel y usa `screen_relative`, que no cambia con el escalado de la ventana. Hasta el Hito 2 el nivel se cambia en `CameraRig.level` desde el inspector remoto; luego lo pondrá la progresión.
+- **Por qué:** una escena propia permite reutilizar la cámara y probarla sola. Una curva multiplicadora permite cambiar la distancia base sin rehacer la forma.
+
+## 2026-11-08 · Captura del ratón
+- **Decisión:** `MouseCapture` (`ui/mouse_capture.gd`) va en la escena principal: captura el ratón al empezar, Esc (`pause`) lo suelta y un clic lo vuelve a capturar. El clic no es una acción del InputMap, igual que mirar con el ratón. Es provisional: el menú de pausa se quedará con Esc.
+- **Por qué:** el modo del ratón es de toda la partida (menús, ruleta de nivel, pausa), no del jugador. Además, así los tests que instancian al jugador no capturan el ratón.
+
+## 2026-11-08 · Tests de integración
+- **Decisión:** los tests que instancian escenas van en `tests/integration/`, con la misma ruta que el código (`entities/player/player.tscn` → `tests/integration/entities/player/test_player_scene.gd`). `tests/unit/` queda para lógica pura.
+- **Por qué:** separar lo que depende de escenas deja claro qué se rompe cuando cambia una escena y qué cuando cambia la lógica.

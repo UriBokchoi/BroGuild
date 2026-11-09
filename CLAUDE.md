@@ -18,7 +18,7 @@ Proyecto a largo plazo: se va a ampliar durante meses, así que la arquitectura 
 - Si un cambio altera el diseño acordado, actualiza `docs/GDD.md` en el mismo commit.
 
 ## Stack
-- Godot 4.7.x estable · renderer Forward+ (D3D12 en Windows) · física Jolt · 3D · GDScript con tipado estático (sin C#).
+- Godot 4.7.x estable · renderer Forward+ (D3D12 en Windows) · física Jolt con interpolación (lo que se mueve en `_process`, como las cámaras, va con la interpolación apagada y sigue la posición interpolada de su objetivo; ver `docs/DECISIONES.md`) · 3D · GDScript con tipado estático (sin C#).
 - Warnings de GDScript (Project Settings): declaración sin tipo = **error**; acceso inseguro a propiedad/método y argumento inseguro = warning, que la validación también rechaza.
 - Addons: solo GUT para tests (o gdUnit4 si GUT no es compatible con nuestra versión). Cualquier otro, pregunta antes.
 - Actualizar a Godot 4.8 cuando sea estable: en su propia rama, nunca de paso.
@@ -48,7 +48,7 @@ Comprobado en 4.7.2 (detalle en `docs/DECISIONES.md`):
 4. **Llamar hacia abajo, señales hacia arriba.** Un nodo llama a sus hijos; los hijos avisan con señales. Entre sistemas lejanos: `EventBus` (autoload que solo declara señales tipadas).
 5. **Autoloads mínimos:** `EventBus`, `RunState` (partida en curso), `Rng`, `Audio`, `Save`. Nada de lógica de gameplay suelta en ellos.
 6. **Movimiento = máquina de estados.** Un script por estado (`Ground`, `Air`, `Dash`, `Slide`, `WallJump`, `Mantle`…) y parámetros en `data/player/movement.tres`. Nada de `if` gigantes en `player.gd`.
-7. **Stats con modificadores.** Las mejoras nunca tocan variables a mano: añaden `StatModifier` (plano, %, multiplicador) a un `StatBlock`, que calcula el valor final en un único sitio.
+7. **Stats con modificadores.** Las mejoras nunca tocan variables a mano: añaden `StatModifier` (plano, %, multiplicador) a un `StatBlock`, que calcula el valor final en un único sitio. Todo número exportado de un Resource de datos es una stat, y su `@export_range` es también su límite en juego: elige el rango pensando en el juego, no solo en el inspector. El juego lee las copias resueltas de `StatsComponent`, nunca el `.tres` original.
 8. **Todo el azar pasa por `Rng`**, con semilla por partida y un generador por sistema (botín, oleadas, apuestas) para que los bugs sean reproducibles. Tablas ponderadas (`WeightedTable`) y rarezas en datos; la Suerte modifica pesos, nunca `if` repartidos por el código.
 9. **Juice desacoplado.** Screen shake, hit-stop, números de daño, flashes y sonidos reaccionan a señales. El gameplay emite eventos; no llama a efectos.
 10. **Pooling** para enemigos, proyectiles, pickups y números de daño. Nada de `instantiate()`/`queue_free()` por cada bala.
@@ -74,6 +74,7 @@ Objetivo: 60 fps estables con 300+ enemigos. Enemigos con steering simple (sin `
 - Tengo el editor de Godot abierto mientras trabajas: antes de editar a mano una escena `.tscn`, avísame para que la guarde y no se pisen los cambios.
 - `project.godot`: el editor lo reescribe al abrir el proyecto y al cambiar cualquier ajuste, así que pisaría una edición hecha por fuera. Antes de tocarlo, pídeme que cierre el editor. Escríbelo con la API (`ProjectSettings.set_setting()` + `save()` desde un script headless con `-s`), no a mano: así queda igual que si lo guardara el editor. Ojo: un `InputEventKey.new()` lleva `device = 16`; el editor usa `-1` («todos»).
 - `.tscn` y `.tres` en formato texto. Si los creas a mano, no inventes UIDs: omítelos y Godot los genera.
+- Scripts de Resources de datos: campos con valor neutro (0, `false`, `null`) y los valores de verdad en su `.tres`. Godot no guarda en el `.tres` lo que coincide con el valor por defecto del script.
 - Los archivos `.uid` se versionan; `.godot/` no (va en `.gitignore`).
 - Mover o renombrar escenas o scripts rompe referencias: avísame antes y, si lo haces tú, mueve también su `.uid` y actualiza todas las rutas.
 - No cambies Project Settings globales (resolución, física, render) sin decírmelo.
@@ -93,7 +94,7 @@ ui/          hud/, menus/, widgets/, theme
 vfx/         shaders/, particles/, juice/
 levels/      arenas y escena de pruebas
 assets/      models/, textures/, audio/, fonts/, CREDITS.md
-tests/       tests de lógica pura (unit/ replica la ruta del código que prueban)
+tests/       unit/ (lógica pura) e integration/ (escenas); ambos replican la ruta del código que prueban
 tools/       validación por terminal (validate.sh, ci/)
 ```
 Escena, script y recursos propios de una feature van juntos en su carpeta. El script de un Resource (`class_name MovementData`) va con su feature o sistema; sus instancias de balance (`.tres`), en `data/`.
@@ -101,7 +102,9 @@ Escena, script y recursos propios de una feature van juntos en su carpeta. El sc
 ## Tests
 - GUT para lógica pura: stats y modificadores, tablas ponderadas, economía y reglas de las apuestas (siempre con semilla fija).
 - `tests/unit/` replica la ruta del código (`autoload/rng.gd` → `tests/unit/autoload/test_rng.gd`). Archivos `test_*.gd` que extienden `GutTest`, con el mismo tipado estricto que el resto.
+- `tests/integration/`: tests que instancian escenas (con `add_child_autofree`), con la misma ruta que el código. Comprueban el montaje (capas, referencias, datos asignados), no el *feel*.
 - Para probar un autoload sin tocar el global, instancia su script: `const RngService := preload("res://autoload/rng.gd")`.
+- Los datos de prueba van junto a sus tests, sin prefijo `test_` (p. ej. `tests/unit/core/stats/stats_test_data.gd`). Ninguna constante de un test puede empezar por `Test`: GUT la toma por una clase de test interna y avisa (la validación falla).
 - El *feel* no se testea: lo pruebo yo jugando.
 
 ## Nunca
