@@ -75,6 +75,28 @@ Toda apuesta tiene **anticipación** (giro, luces, sonido que sube), **revelado*
 - **Enemigos**: enjambre cuerpo a cuerpo (rápido, frágil) · tanque lento · tirador a distancia (te obliga a moverte) · élites con afijos (cada ~2 min, sueltan cofre).
 - **Director de oleadas**: la densidad sube con el tiempo, con picos cada minuto; la curva vive en datos.
 
+**Stats del personaje** (como en Megabonk o Vampire Survivors; todas mejorables, §5). Valores de partida en `data/player/`. Las fórmulas son la intención de diseño y se confirman al implementar el combate (Hito 2).
+
+| Grupo | Stat | De partida | Efecto |
+|---|---|---|---|
+| Supervivencia | Vida máxima | 100 | |
+| | Regeneración de vida | 0 /s | Vida por segundo |
+| | Defensa | 0 | Daño recibido × 100 / (100 + defensa): 100 de defensa = mitad de daño, nunca inmune |
+| | Esquiva | 0 % (máx. 90 %) | Probabilidad de evitar un golpe entero |
+| | Robo de vida | 0 % | Parte del daño hecho que te cura |
+| Ataque | Daño | 100 % | Multiplica el daño de todas las armas |
+| | Probabilidad de crítico | 5 % (máx. 100 %) | |
+| | Daño crítico | 150 % | Un crítico hace este % del golpe |
+| | Velocidad de ataque | 100 % | Divide el tiempo entre ataques de cada arma |
+| | Proyectiles extra | 0 | Se suman a los de cada arma |
+| | Velocidad de proyectil, área, duración, retroceso | 100 % | Multiplican lo de cada arma |
+| Progresión | Experiencia ganada, fichas ganadas | 100 % | |
+| | Suerte | 0 | Desplaza los pesos de rareza hacia arriba |
+| | Radio de recogida | 3 m | Distancia a la que se recoge el botín |
+| Movimiento | Velocidad de carrera, saltos y dashes en el aire, stamina… | ver §4 | |
+
+Las mejoras de % («+10 % de daño») multiplican; las de puntos («+5 % de crítico», «+1 proyectil», «+1 salto en el aire») suman.
+
 ## 7. Estética: sencilla pero llamativa
 Dirección: **medieval con humor moderno**, nada realista; los anacronismos son bienvenidos (p. ej., tragaperras repartidas por un mundo medieval). Formas simples (primitivas o low-poly) que luzcan sin necesitar artista. *Pendiente: concretar la dirección visual (sustituye a la anterior «casino-arcade neón»).*
 - **Color con significado**: cada tipo de enemigo con su color; las rarezas, iguales en cofres, cartas, números y luces.

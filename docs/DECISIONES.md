@@ -214,3 +214,15 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
     - todo cuesta 1 carga.
 - **Por qué:** el GDD define las acciones, sus teclas y su coste; lo que no decía (el dash recto en el aire, la velocidad de salida, la duración y la ventana del picado, la altura del doble salto) queda en datos con valores razonables, para ajustarlo jugando o desde F3. Sin salida limitada, el control aéreo conservaría los 28 m/s del dash hasta aterrizar.
 - **Tests:** con física real, cada `await wait_physics_frames(1)` en bucle avanza unos 2 ticks de GUT. Los tests comprueban en momentos con margen, no en ticks exactos.
+
+## 2026-11-09 · Stats de combate y progresión
+- **Decisión:**
+  - Tres Resources de datos nuevos, fuentes de stats del jugador junto a movimiento y stamina:
+    - `HealthData` (`core/components/health/`, genérico para jugador y enemigos): vida máxima, regeneración, defensa, esquiva (como mucho 90 %) y robo de vida;
+    - `OffenseData` (`systems/combat/`): daño, crítico, daño crítico, velocidad de ataque, proyectiles extra, velocidad de proyectil, área, duración y retroceso;
+    - `ProgressionData` (`systems/progression/`): experiencia y fichas ganadas, suerte y radio de recogida.
+  - Instancias en `data/player/{health,offense,progression}.tres`. Las fuentes van en ese orden y luego movimiento y stamina, así que el menú de pausa muestra primero lo de combate.
+  - **Unidades:** los porcentajes se guardan como porcentaje (100 = normal, 5 = 5 %). Así una mejora de «+10 % de daño» es PERCENT 0.1 y «+5 % de crítico», FLAT 5, y el menú los muestra tal cual.
+  - **Valores de partida y fórmulas:** en la tabla «Stats del personaje» del GDD (§6).
+  - **Sin lógica todavía:** no hay sistemas que las usen; vida, armas, experiencia y botín llegan en el Hito 2 y leerán estas stats. Las fórmulas se escriben en código cuando exista lo que las usa, para no dejar constantes de balance sueltas antes de tiempo.
+- **Por qué:** el diseñador quiere las stats típicas de Megabonk o Vampire Survivors (daño, crítico, proyectiles, defensa, vida, multiplicador de experiencia…), mejorables y visibles desde ya. Al ser datos, una stat nueva es un `@export` más y su traducción.

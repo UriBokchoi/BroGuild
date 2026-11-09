@@ -31,7 +31,8 @@
 - [ ] Sensación de velocidad: FOV dinámico, estela de dash, líneas de velocidad
 
 ## Hito 2 — Combate y hordas
-- [ ] Componentes `HealthComponent`, `HitboxComponent`, `HurtboxComponent`
+- [x] Stats de combate y progresión del personaje en datos (vida, regeneración, defensa, esquiva, robo de vida, daño, crítico, velocidad de ataque, proyectiles, área, duración, retroceso, experiencia, fichas, suerte, radio de recogida), visibles en la pausa y en F3
+- [ ] Componentes `HealthComponent`, `HitboxComponent`, `HurtboxComponent` (usan las stats de supervivencia)
 - [ ] Primera arma automática basada en `WeaponData`
 - [ ] Dos enemigos (enjambre y tirador) con `EnemyData` y steering simple
 - [ ] Pooling de enemigos, proyectiles y pickups
