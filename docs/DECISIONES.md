@@ -226,3 +226,15 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - **Valores de partida y fórmulas:** en la tabla «Stats del personaje» del GDD (§6).
   - **Sin lógica todavía:** no hay sistemas que las usen; vida, armas, experiencia y botín llegan en el Hito 2 y leerán estas stats. Las fórmulas se escriben en código cuando exista lo que las usa, para no dejar constantes de balance sueltas antes de tiempo.
 - **Por qué:** el diseñador quiere las stats típicas de Megabonk o Vampire Survivors (daño, crítico, proyectiles, defensa, vida, multiplicador de experiencia…), mejorables y visibles desde ya. Al ser datos, una stat nueva es un `@export` más y su traducción.
+
+## 2026-11-09 · Slide y slide-jump
+- **Decisión:**
+  - **Slide** (`SlideState`; acción `slide`, comprometido):
+    - entra en el suelo a partir de `slide_min_speed` y conserva la velocidad que llevas;
+    - cada tick suma el tirón de la pendiente (`slide_gravity` × la componente de la gravedad sobre el suelo: acelera cuesta abajo, frena cuesta arriba, nada en llano) y frena con `slide_friction`, sin pasar de `slide_max_speed`;
+    - termina al soltar Ctrl (`MovementContext.slide_held`, que pone `Player` cada tick), al bajar de la velocidad mínima o al dejar el suelo (pasa al aire con coyote time).
+  - **Dash → slide:** `DashState.slide` apunta al slide. Si al acabar el dash se mantiene Ctrl y el slide puede entrar, pasa a él sin el recorte de salida: el slide alarga el dash.
+  - **Slide-jump** (`SlideJumpState`; acción `jump`, prioridad 5, `interrupts = [Slide]`): solo entra mientras interrumpe al slide (`interrupts.has(current)`, sin una referencia aparte). Da la velocidad del salto normal y conserva todo el impulso horizontal.
+  - **Agachado:** `BodyCrouch` agacha el modelo, solo visual, con suavizado y los pies en el suelo, mientras el estado es uno de `crouch_states` (en la escena, el slide). La colisión no cambia; la hurtbox baja llegará con el combate.
+  - **Valores de partida:** mínima 6 m/s, máxima 22 m/s, frenada 5 m/s² y tirón 30 m/s². Elegidos para que la rampa de 15° del gimnasio acelere (comprobado: de 9 a 14,6 m/s bajándola) y en llano el slide dure algo más de medio segundo desde la carrera.
+- **Por qué:** el GDD pide un slide gratis que acelere cuesta abajo y frene cuesta arriba, el slide-jump con impulso y que dash → slide alargue el dash. Que el slide-jump use `interrupts` confirma que la regla «nada se cancela salvo con el dash» admite continuaciones diseñadas sin excepciones en la máquina.

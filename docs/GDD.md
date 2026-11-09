@@ -35,7 +35,7 @@ Cámara en tercera persona a una distancia moderada que crece muy poco a poco co
 | Dash | Shift | 1 | Ráfaga corta en la dirección de movimiento (sin dirección, hacia donde mira la cámara); también en el aire, donde va recto. Al terminar conservas parte del impulso. Dashes totales = cargas de stamina; en el aire, como mucho los «dashes en el aire» (1 de partida, mejorable), que se recuperan al tocar suelo |
 | Picado | Shift dos veces en el aire, sin dirección | +1 | Dash hacia abajo: el primer Shift ya hace un dash y el segundo, dentro de una ventana corta, lo convierte en picado |
 | Dash-jump | Espacio justo tras el dash | +1 | Ventana corta (con aviso visual) → salto largo que conserva la velocidad del dash |
-| Slide | Ctrl corriendo (mantener) | — | Gratis; acelera cuesta abajo y frena cuesta arriba; hurtbox baja (zona donde recibes daño). Dash → slide alarga el dash sin gastar más |
+| Slide | Ctrl corriendo (mantener) | — | Gratis; acelera cuesta abajo y frena cuesta arriba (en llano frena poco a poco); hurtbox baja (zona donde recibes daño). Empieza y sigue mientras vayas por encima de una velocidad mínima; termina al soltar Ctrl. Dash → slide alarga el dash sin gastar más (mantén Ctrl al acabar el dash) |
 | Slide-jump | Espacio en slide | — | Conserva el impulso |
 | Caída rápida | Ctrl en el aire | 1 | Picado al suelo; con mejoras, impacto en área |
 | Salto en pared | Espacio contra pared | 0 / ½ | El primero gratis; encadenados sin tocar suelo, media carga |

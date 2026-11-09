@@ -25,7 +25,7 @@
 - [x] Menú de pausa (Esc): continuar, opciones (aún sin función), reintentar y salir, con un panel fijo de todas las stats del jugador (con scroll)
 - [x] Stamina por cargas + HUD mínimo
 - [x] Dash (suelo y aire), picado (doble Shift en el aire sin dirección) y doble salto
-- [ ] Slide con pendientes y slide-jump
+- [x] Slide con pendientes y slide-jump
 - [ ] Dash-jump con ventana y aviso visual
 - [ ] Caída rápida, salto en pared y mantle
 - [ ] Sensación de velocidad: FOV dinámico, estela de dash, líneas de velocidad
