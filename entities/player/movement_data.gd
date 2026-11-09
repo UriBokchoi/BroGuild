@@ -31,6 +31,14 @@ var turn_speed: float = 0.0
 @export_range(0.5, 10.0, 0.05, "or_greater", "suffix:m") var air_jump_height: float = 0.0
 ## Cargas de stamina que gasta cada salto en el aire.
 @export_range(0.0, 3.0, 0.5, "or_greater") var air_jump_cost: float = 0.0
+## Altura del salto en pared.
+@export_range(0.5, 10.0, 0.05, "or_greater", "suffix:m") var wall_jump_height: float = 0.0
+## Velocidad horizontal mínima con la que sales de la pared (si ibas más rápido, la conservas).
+@export_range(0.0, 50.0, 0.5, "or_greater", "suffix:m/s") var wall_jump_speed: float = 0.0
+## Cargas que gasta cada salto en pared encadenado sin tocar suelo (el primero es gratis).
+@export_range(0.0, 3.0, 0.5, "or_greater") var wall_jump_chain_cost: float = 0.0
+## Distancia máxima desde el centro del cuerpo a la pared para poder saltar en ella.
+@export_range(0.4, 3.0, 0.05, "or_greater", "suffix:m") var wall_jump_reach: float = 0.0
 
 @export_group("dash")
 ## Velocidad del dash.
@@ -106,3 +114,8 @@ func air_jump_velocity() -> float:
 ## Velocidad vertical inicial de un dash-jump de [member dash_jump_height].
 func dash_jump_velocity() -> float:
 	return sqrt(2.0 * gravity() * dash_jump_height)
+
+
+## Velocidad vertical inicial de un salto en pared de [member wall_jump_height].
+func wall_jump_velocity() -> float:
+	return sqrt(2.0 * gravity() * wall_jump_height)

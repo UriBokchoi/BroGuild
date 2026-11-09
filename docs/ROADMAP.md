@@ -28,7 +28,7 @@
 - [x] Slide con pendientes y slide-jump
 - [x] Dash-jump con ventana y aviso visual
 - [x] Cancelar el dash con un slide (solo en el suelo), que sigue con la velocidad del dash
-- [ ] Salto en pared al estilo Deadlock (el primero gratis; encadenados sin tocar suelo, media carga)
+- [x] Salto en pared al estilo Deadlock (el primero gratis; encadenados sin tocar suelo, media carga)
 - [ ] Caída rápida (Ctrl en el aire)
 - [ ] Mantle (subir bordes a media altura; con Ctrl sale deslizando)
 - [ ] Sensación de velocidad: FOV dinámico, estela de dash, líneas de velocidad

@@ -70,3 +70,7 @@ STAT_DASH_JUMP_WINDOW,Margen del dash-jump,Dash-jump window
 STAT_DASH_JUMP_HEIGHT,Altura del dash-jump,Dash-jump height
 STAT_DASH_JUMP_COST,Coste del dash-jump,Dash-jump cost
 STAT_SLIDE_TURN_SPEED,Giro en el slide,Slide turn speed
+STAT_WALL_JUMP_HEIGHT,Altura del salto en pared,Wall jump height
+STAT_WALL_JUMP_SPEED,Impulso del salto en pared,Wall jump push
+STAT_WALL_JUMP_CHAIN_COST,Coste de los saltos en pared encadenados,Chained wall jump cost
+STAT_WALL_JUMP_REACH,Alcance del salto en pared,Wall jump reach

@@ -294,3 +294,15 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
 ## 2026-11-09 · El slide corta el dash en el suelo
 - **Decisión:** el nodo Slide lista a Dash en sus `interrupts`, así que Ctrl a mitad de un dash corta el dash si se puede deslizar (en el suelo y con velocidad). El slide sigue con la velocidad del dash, recortada a la máxima del slide. `DashState.exit()` abre la ventana del dash-jump cuando el siguiente estado es el slide, así que dash → slide → Espacio sigue siendo un dash-jump. En el aire no hace nada.
 - **Por qué:** lo pidió el diseñador: cancelar el dash a la mitad con un slide y usar ese impulso, solo en el suelo. Es una continuación diseñada, así que va por `interrupts`, sin excepciones en la máquina; el GDD lo añade a las reglas de entrada.
+
+## 2026-11-09 · Salto en pared
+- **Decisión:**
+  - **Detección:** `WallSensor` lanza 12 rayos horizontales a la altura del centro del cuerpo contra el mundo y devuelve la normal de la pared casi vertical más cercana dentro de `wall_jump_reach` (0,75 m desde el centro). No hace falta estar empujando la pared. `MovementContext.wall_normal()` lo consulta.
+  - **Salto** (`WallJumpState`; acción `jump`, prioridad 30, por encima del dash-jump y del doble salto como pide el GDD):
+    - entra en el aire con una pared al alcance;
+    - sale hacia la dirección pedida, rebotada si apunta a la pared, más la normal de la pared, así que siempre se separa de ella; sin dirección, sale recto hacia fuera;
+    - la velocidad horizontal es la mayor entre la que llevabas y `wall_jump_speed` (10 m/s), y sube `wall_jump_height` (1,8 m);
+    - no gasta saltos en el aire.
+  - **Coste:** el primero es gratis y los encadenados sin tocar suelo cuestan `wall_jump_chain_cost` (½ carga); el suelo reinicia la cadena.
+  - **Comprobado en el gimnasio:** en la chimenea de 3 m se sube de pared a pared (dos saltos, unos 4,5 m de altura).
+- **Por qué:** el GDD y el diseñador piden un salto en pared al estilo de Deadlock: responsivo, hacia donde apuntas y encadenable con stamina. Los rayos alrededor detectan la pared aunque no te estés moviendo contra ella, que es lo que lo hace responsivo.

@@ -25,6 +25,8 @@
 [ext_resource type="Script" path="res://core/stats/stat_modifier_set.gd" id="23_modifier_set"]
 [ext_resource type="Script" path="res://entities/player/states/dash_jump_state.gd" id="24_dash_jump"]
 [ext_resource type="Script" path="res://entities/player/dash_jump_cue.gd" id="25_cue"]
+[ext_resource type="Script" path="res://entities/player/wall_sensor.gd" id="26_wall_sensor"]
+[ext_resource type="Script" path="res://entities/player/states/wall_jump_state.gd" id="27_wall_jump"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_body"]
 radius = 0.4
@@ -54,7 +56,7 @@ material = SubResource("StandardMaterial3D_cue")
 inner_radius = 0.55
 outer_radius = 0.7
 
-[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("stats", "stamina", "input", "movement", "ground_state", "air_state")]
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("stats", "stamina", "input", "movement", "wall_sensor", "ground_state", "air_state")]
 collision_layer = 2
 collision_mask = 1
 script = ExtResource("1_player")
@@ -62,6 +64,7 @@ stats = NodePath("Stats")
 stamina = NodePath("Stamina")
 input = NodePath("PlayerInput")
 movement = NodePath("Movement")
+wall_sensor = NodePath("WallSensor")
 ground_state = NodePath("Movement/Ground")
 air_state = NodePath("Movement/Air")
 
@@ -141,6 +144,15 @@ script = ExtResource("24_dash_jump")
 trigger_action = &"jump"
 priority = 20
 interrupts = [NodePath("../Slide")]
+
+[node name="WallJump" type="Node" parent="Movement"]
+script = ExtResource("27_wall_jump")
+trigger_action = &"jump"
+priority = 30
+
+[node name="WallSensor" type="Node" parent="." node_paths=PackedStringArray("body")]
+script = ExtResource("26_wall_sensor")
+body = NodePath("..")
 
 [node name="DashJumpRing" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, 0)

@@ -8,6 +8,7 @@ extends MovementState
 func enter(_previous: State) -> void:
 	ctx.air_jumps_used = 0
 	ctx.air_dashes_used = 0
+	ctx.wall_jumps_chained = 0
 
 
 func physics_update(delta: float) -> void:
