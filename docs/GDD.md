@@ -34,7 +34,7 @@ Cámara en tercera persona a una distancia moderada que crece muy poco a poco co
 | Doble salto | Espacio en el aire | 1 | Se recupera al tocar suelo; con mejoras o personajes, más saltos (triple salto). Con coyote time, Espacio es el salto normal |
 | Dash | Shift | 1 | Ráfaga corta en la dirección de movimiento (sin dirección, hacia donde mira la cámara); también en el aire, donde va recto. Al terminar conservas parte del impulso. Dashes totales = cargas de stamina; en el aire, como mucho los «dashes en el aire» (1 de partida, mejorable), que se recuperan al tocar suelo |
 | Picado | Shift dos veces en el aire, sin dirección | +1 | Dash hacia abajo: el primer Shift ya hace un dash y el segundo, dentro de una ventana corta, lo convierte en picado |
-| Dash-jump | Espacio justo tras el dash | +1 | Ventana corta (con aviso visual) → salto largo que conserva la velocidad del dash |
+| Dash-jump | Espacio justo tras el dash | +1 | Ventana corta (con aviso visual: un aro dorado en los pies) → salto largo que conserva la velocidad del dash. Solo tras un dash en el suelo (también en dash → slide); pulsado al final del dash, sale al acabar. Sin stamina, Espacio es un salto normal |
 | Slide | Ctrl corriendo (mantener) | — | Gratis; acelera cuesta abajo y frena cuesta arriba (en llano frena poco a poco); hurtbox baja (zona donde recibes daño). Empieza y sigue mientras vayas por encima de una velocidad mínima; termina al soltar Ctrl. Dash → slide alarga el dash sin gastar más (mantén Ctrl al acabar el dash) |
 | Slide-jump | Espacio en slide | — | Conserva el impulso |
 | Caída rápida | Ctrl en el aire | 1 | Picado al suelo; con mejoras, impacto en área |

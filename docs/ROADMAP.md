@@ -26,7 +26,7 @@
 - [x] Stamina por cargas + HUD mínimo
 - [x] Dash (suelo y aire), picado (doble Shift en el aire sin dirección) y doble salto
 - [x] Slide con pendientes y slide-jump
-- [ ] Dash-jump con ventana y aviso visual
+- [x] Dash-jump con ventana y aviso visual
 - [ ] Caída rápida, salto en pared y mantle
 - [ ] Sensación de velocidad: FOV dinámico, estela de dash, líneas de velocidad
 

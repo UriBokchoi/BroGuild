@@ -248,3 +248,18 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - **Cambiar de personaje:** elegirlo será poner otro `CharacterData` en `base_sets` antes de crear al jugador. Los gimmicks que no sean stats (habilidades propias) se añadirán al `CharacterData` cuando lleguen.
   - Solo existe el personaje base, sin diferencias: los personajes concretos los decide el diseñador. Un test comprueba que cada personaje de `data/characters/` tiene su nombre y su descripción traducidos y que solo toca stats que existen.
 - **Por qué:** el diseñador quiere unas stats básicas y que cada personaje varíe un poco según su gimmick. Como diferencias sobre una base común, un personaje nuevo es un `.tres` con 2-3 modificadores, y cambiar una stat básica afecta a todos.
+
+## 2026-11-09 · Dash-jump
+- **Decisión:**
+  - **Ventana:** `DashState` apunta en el contexto la dirección del dash y, al acabar (no si otro dash o el picado lo cancelan), el momento (`dash_end_time`). `MovementContext.is_dash_jump_open()` dice si la ventana está abierta: el dash fue en el suelo y no han pasado más de `dash_jump_window` segundos.
+  - **Estado** (`DashJumpState`; acción `jump`, prioridad 20, `interrupts = [Slide]`):
+    - entra con la ventana abierta y stamina para `dash_jump_cost`;
+    - da la velocidad del dash en su dirección y sube `dash_jump_height`; el control aéreo conserva esa velocidad;
+    - gasta la ventana.
+  - **Casos que salen solos de las reglas:**
+    - pulsar en los últimos 0,1 s del dash lo guarda hasta que acaba;
+    - en dash → slide funciona dentro de la ventana;
+    - sin stamina, entra el salto normal.
+  - **Aviso visual:** `DashJumpCue` enseña un aro dorado en los pies mientras `is_dash_jump_open()`. Solo lee el contexto.
+  - **Valores de partida:** ventana 0,15 s, altura 2 m y coste 1 carga. Con el dash a 28 m/s, el salto mide ≈ 21 m (medido en el gimnasio), de sobra para el hueco de 9 m. Se ajusta en los datos.
+- **Por qué:** el GDD pide el dash-jump justo tras el dash, con ventana corta y aviso visual, y que conserve la velocidad del dash. La ventana se mide desde el final del dash para que encaje con la regla de que nada interrumpe al dash.
