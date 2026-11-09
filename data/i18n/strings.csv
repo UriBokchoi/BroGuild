@@ -38,3 +38,24 @@ STAT_DOWN_DASH_DURATION,Duración del picado,Dive duration
 STAT_DOWN_DASH_WINDOW,Margen para el picado,Dive window
 STAT_DOWN_DASH_COST,Coste del picado,Dive cost
 STAT_AIR_DASHES,Dashes en el aire,Air dashes
+STAT_GROUP_SURVIVAL,Supervivencia,Survival
+STAT_MAX_HEALTH,Vida máxima,Max health
+STAT_HEALTH_REGEN,Regeneración de vida,Health regen
+STAT_ARMOR,Defensa,Armor
+STAT_EVASION,Esquiva,Evasion
+STAT_LIFESTEAL,Robo de vida,Lifesteal
+STAT_GROUP_OFFENSE,Ataque,Offense
+STAT_DAMAGE,Daño,Damage
+STAT_CRIT_CHANCE,Probabilidad de crítico,Crit chance
+STAT_CRIT_DAMAGE,Daño crítico,Crit damage
+STAT_ATTACK_SPEED,Velocidad de ataque,Attack speed
+STAT_PROJECTILE_COUNT,Proyectiles extra,Extra projectiles
+STAT_PROJECTILE_SPEED,Velocidad de proyectil,Projectile speed
+STAT_AREA,Área,Area
+STAT_DURATION,Duración,Duration
+STAT_KNOCKBACK,Retroceso,Knockback
+STAT_GROUP_PROGRESSION,Progresión,Progression
+STAT_XP_GAIN,Experiencia ganada,XP gain
+STAT_CURRENCY_GAIN,Fichas ganadas,Chips gained
+STAT_LUCK,Suerte,Luck
+STAT_PICKUP_RANGE,Radio de recogida,Pickup range

@@ -15,6 +15,9 @@
 [ext_resource type="Script" path="res://entities/player/states/dash_state.gd" id="13_dash"]
 [ext_resource type="Script" path="res://entities/player/states/down_dash_state.gd" id="14_down_dash"]
 [ext_resource type="Script" path="res://entities/player/states/double_jump_state.gd" id="15_double_jump"]
+[ext_resource type="Resource" path="res://data/player/health.tres" id="16_health_data"]
+[ext_resource type="Resource" path="res://data/player/offense.tres" id="17_offense_data"]
+[ext_resource type="Resource" path="res://data/player/progression.tres" id="18_progression_data"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_body"]
 radius = 0.4
@@ -60,7 +63,7 @@ mesh = SubResource("BoxMesh_visor")
 
 [node name="Stats" type="Node" parent="."]
 script = ExtResource("3_stats")
-sources = Array[Resource]([ExtResource("4_movement"), ExtResource("11_stamina_data")])
+sources = Array[Resource]([ExtResource("16_health_data"), ExtResource("17_offense_data"), ExtResource("18_progression_data"), ExtResource("4_movement"), ExtResource("11_stamina_data")])
 
 [node name="Stamina" type="Node" parent="." node_paths=PackedStringArray("stats")]
 script = ExtResource("12_stamina")

@@ -26,6 +26,13 @@ func test_camera_follows_the_player_and_only_collides_with_the_world() -> void:
 	assert_eq(arm.collision_mask, PhysicsLayers.mask(PhysicsLayers.WORLD))
 
 
+func test_has_survival_offense_progression_and_movement_stats() -> void:
+	for type: Script in [HealthData, OffenseData, ProgressionData, MovementData, StaminaData]:
+		assert_not_null(_player.stats.get_resolved(type), "faltan los datos de %s" % type.get_global_name())
+	assert_eq(_player.stats.get_value(&"damage"), 100.0, "el daño empieza en el 100 %")
+	assert_eq(_player.stats.get_value(&"crit_chance"), 5.0)
+
+
 func test_falls_and_lands_on_the_ground() -> void:
 	assert_same(_player.movement.current, _player.air_state, "empieza en el aire")
 	await wait_physics_frames(60)
