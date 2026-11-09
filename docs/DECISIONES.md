@@ -142,3 +142,128 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - **Valores de partida:** carrera 9 m/s (aceleración 60 m/s², frenada 50 m/s²), aire 30 m/s², coyote 0,12 s y giro 720 °/s. Al integrar por ticks, el salto de 2 m llega a ≈ 2,09 m.
 - **`StatsComponent`** registra sus datos en `_enter_tree` en vez de en `_ready`. Así cualquier nodo los lee en su `_ready` sin depender del orden de los hermanos.
 - **Por qué:** el GDD pide carrera rápida, mucho control aéreo y que el impulso no se pierda de golpe; esa regla del aire deja que el dash y el dash-jump conserven su velocidad sin trucos aparte. Todos los números son stats, así que mejoras y personajes pueden cambiarlos.
+
+## 2026-11-09 · Panel de depuración
+- **Decisión:**
+  - **Panel:** `DebugPanel` (`ui/debug/`) es un `CanvasLayer` que F3 (acción `toggle_debug`) muestra u oculta. Solo existe en builds de depuración y solo se actualiza mientras se ve.
+  - **Secciones:** cada bloque es un `DebugSection`, hijo de `%Sections`, que recibe al jugador en `setup()` y se refresca cada frame. Un sistema nuevo añade su sección sin tocar el panel. De partida hay tres:
+    - movimiento (estado, velocidades, suelo, coyote);
+    - cámara (deslizador de nivel hasta el último punto de la curva);
+    - stats: todas las del jugador con su valor y su base, y botones ±10 % que aplican un `StatModifier` en nombre del panel, como haría una mejora; «reset» los quita.
+  - **Textos:** muestra nombres internos sin traducir (excepción a la regla 14).
+  - **Foco:** sus botones y deslizadores no cogen el foco, para que Espacio siga saltando.
+  - **Accesos nuevos:** `Player.context` es público para leer; `StatsComponent` y `StatBlock` dan `get_stats()` y `get_base()`.
+- **Por qué:** el diseñador quiere que todas las stats sean mejorables, como en Megabonk (GDD §5). La sección de stats lo deja probar ya, antes de que exista el sistema de mejoras (Hito 3), y cualquier stat nueva aparece en el panel sin tocarlo. Un modificador en % sobre una base 0 (p. ej. `air_deceleration`) no cambia nada; para esas stats, las mejoras usarán modificadores planos.
+
+## 2026-11-09 · Menú de pausa
+- **Decisión:**
+  - **Apertura:** Esc (`pause`) abre `PauseMenu` (`ui/menus/pause/`). Pausa el árbol (`get_tree().paused`), pide el cursor y deja el foco en «Continuar» para manejarlo también con el teclado. Funciona en pausa con `process_mode = ALWAYS`.
+  - **Izquierda:** título y botones Continuar, Opciones (desactivado hasta que tenga función), Reintentar (por ahora recarga la escena; en el Hito 2 pasará por `RunState`) y Salir.
+  - **Derecha:** un panel fijo con `StatsView`: todas las stats del jugador agrupadas como en sus datos, con nombre traducido, unidad (sacada del `@export_range`) y scroll. Las que difieren de su base salen resaltadas, con la base al lado. Encabezados y filas salen solos de los datos: una stat nueva solo necesita su traducción.
+  - **Cierre:** al cerrar se suelta el foco; si no, Espacio pulsaría el botón en vez de saltar. «Continuar» no estaba en el pedido: se añadió porque es lo normal en una pausa (Esc también cierra).
+- **Por qué:** lo pidió el diseñador, con las stats visibles como en Megabonk. `StatsView` es reutilizable para la pantalla de stats (Tab) del Hito 3.
+
+## 2026-11-09 · Ratón con un solo dueño (sustituye a «Captura del ratón»)
+- **Decisión:** `MouseCapture` captura el ratón salvo mientras alguna interfaz pida el cursor con `EventBus.cursor_requested(requester, wants_cursor)`. Lo piden el menú de pausa y el panel de depuración (F3), así que ya no hace falta Esc para pulsar los botones del panel. Se conecta en `_enter_tree` para no perder peticiones y olvida a quien pidió el cursor y ya no existe. Desaparecen «Esc suelta el ratón» y «clic para recapturar».
+- **Por qué:** cada interfaz futura (ruleta de nivel, cofres, tragaperras) solo emite la señal; el modo del ratón se decide en un único sitio.
+
+## 2026-11-09 · Textos traducibles y Theme global
+- **Decisión:**
+  - **Textos:** viven en `data/i18n/strings.csv` (`keys,es,en`).
+    - Godot genera los `.translation` al importar (están en `.gitignore`; un clon nuevo necesita `--import`, que ya hace `validate.sh`). Sin el idioma del sistema, se usa el inglés.
+    - En las escenas, el texto de un control es la clave y Godot lo traduce solo. Las etiquetas de números desactivan la autotraducción.
+    - Las stats se traducen como `STAT_<NOMBRE>` y sus grupos como `STAT_GROUP_<GRUPO>`, por eso los `@export_group` de los datos usan identificadores (`run`, `jump`, `air`, `input`). Un test exige que cada stat del jugador tenga su nombre en todos los idiomas.
+  - **Estilo:** `ui/theme/main_theme.tres` (`gui/theme/custom`) tiene una paleta pizarra oscura con acentos dorados y la fuente por defecto de Godot en negrita (`FontVariation`, sin assets externos). Lleva variaciones de tipo para títulos, encabezados, filas de stats y espaciados de menú (`ScreenMargin`, `MenuList`, `StatList`), y estilos de botón, panel y barra de scroll.
+  - **Panel de depuración:** usa su propio tema compacto (`ui/debug/debug_theme.tres`) y no se traduce.
+  - **Fondo de los menús:** `vfx/shaders/screen_blur.gdshader` difumina y tiñe lo que hay detrás.
+- **Por qué:** era la tarea siguiente del ROADMAP y el menú de pausa es la primera interfaz de verdad; así nace ya traducible y con estilo en un solo sitio.
+- **Comprobado en 4.7.2:**
+  - Los Resources traen sus propios grupos de propiedades (`Resource`), sin stats: el panel solo pone un encabezado cuando el grupo tiene alguna stat.
+  - `String.num(9.0, 2)` devuelve `"9.0"`: `StatFormat` quita los ceros del final.
+  - Un script lanzado con `-s` se compila antes que los autoloads: si nombra una clase que usa uno (p. ej. `PauseMenu` usa `EventBus`), esa clase no compila. En esos scripts hay que usar `call()`.
+
+## 2026-11-09 · Stamina por cargas y HUD mínimo
+- **Decisión:**
+  - **Datos:** `StaminaData` (`data/player/stamina.tres`) es la segunda fuente de stats del jugador: `max_charges` (entera) y `recharge_time` por carga. Valores de partida del GDD: 3 cargas, 3 s por carga. Al ser stats, salen solas en el menú de pausa y en F3, y son mejorables (+1 carga con un modificador plano).
+  - **Lógica:** `StaminaPool` es lógica pura con cargas fraccionarias (el ½ del salto en pared) y recarga continua; tiene un margen de 1e-6 para que los errores de coma flotante no impidan gastar una carga recién recargada.
+  - **Componente:** `StaminaComponent` lo actualiza con las stats en cada tick, así que una mejora del máximo se nota al momento. Avisa con su señal `changed` y con `EventBus.player_stamina_changed` para la interfaz. Los estados de movimiento la encuentran en `MovementContext.stamina`; el coste de cada acción será una stat de esa acción.
+  - **HUD:** `ui/hud/hud.tscn` con `StaminaBar`: una barra por carga (variación `ChargeBar` del Theme), la que recarga a medias. Se rehace si cambia el máximo. Escucha desde `_enter_tree`, así que recibe el primer aviso, que se emite en el `_ready` del jugador.
+- **Por qué:** el GDD define la stamina por cargas que se regeneran y pide decidir cuándo gastar la última. La barra a medias deja ver cuánto falta. Separar sus datos de `MovementData` deja cada Resource con un solo tema y demuestra que el jugador admite varias fuentes de stats.
+
+## 2026-11-09 · Dash, picado y doble salto
+- **Decisión:**
+  - **Dash** (`DashState`; en la escena: acción `dash`, comprometido, cancela):
+    - va en la dirección pedida o, sin dirección, hacia donde mira la cámara (`MovementContext.view_forward`), a `dash_speed` durante `dash_duration`;
+    - en el aire va recto, sin gravedad;
+    - al terminar, la velocidad horizontal se queda en `dash_exit_speed` como mucho;
+    - gasta `dash_cost`.
+  - **Picado** (`DownDashState`; misma acción con prioridad 10, comprometido, cancela):
+    - entra si estás en el aire, sin dirección y a menos de `down_dash_window` de un dash que empezó en el aire;
+    - va hacia abajo a `down_dash_speed` durante `down_dash_duration`, o hasta tocar suelo;
+    - gasta `down_dash_cost` además del dash.
+    - El contexto guarda un reloj de juego (`elapsed`) y el momento y el lugar del último dash.
+  - **Doble salto** (`DoubleJumpState`; acción `jump`, prioridad 10):
+    - entra en el aire si no queda coyote time (con coyote, Espacio es el salto normal), quedan `air_jumps` y hay stamina;
+    - sube `air_jump_height` con la gravedad del salto;
+    - los saltos en el aire se recuperan al entrar en Suelo.
+  - **Prioridades de la acción `jump`:** Jump 0 y doble salto 10. Quedan libres 20 (dash-jump), 30 (salto en pared) y 40 (mantle), para el orden del GDD.
+  - **Valores de partida:**
+    - dash: 28 m/s durante 0,2 s (≈ 5,6 m) y salida a 12 m/s; 1 dash en el aire por salto (`air_dashes`, añadido a petición del diseñador: los dashes totales los limita la stamina y los del aire, esta stat; el picado no cuenta);
+    - picado: 30 m/s durante 0,2 s, con ventana de 0,3 s;
+    - doble salto: 1 salto de 2 m;
+    - todo cuesta 1 carga.
+- **Por qué:** el GDD define las acciones, sus teclas y su coste; lo que no decía (el dash recto en el aire, la velocidad de salida, la duración y la ventana del picado, la altura del doble salto) queda en datos con valores razonables, para ajustarlo jugando o desde F3. Sin salida limitada, el control aéreo conservaría los 28 m/s del dash hasta aterrizar.
+- **Tests:** con física real, cada `await wait_physics_frames(1)` en bucle avanza unos 2 ticks de GUT. Los tests comprueban en momentos con margen, no en ticks exactos.
+
+## 2026-11-09 · Stats de combate y progresión
+- **Decisión:**
+  - Tres Resources de datos nuevos, fuentes de stats del jugador junto a movimiento y stamina:
+    - `HealthData` (`core/components/health/`, genérico para jugador y enemigos): vida máxima, regeneración, defensa, esquiva (como mucho 90 %) y robo de vida;
+    - `OffenseData` (`systems/combat/`): daño, crítico, daño crítico, velocidad de ataque, proyectiles extra, velocidad de proyectil, área, duración y retroceso;
+    - `ProgressionData` (`systems/progression/`): experiencia y fichas ganadas, suerte y radio de recogida.
+  - Instancias en `data/player/{health,offense,progression}.tres`. Las fuentes van en ese orden y luego movimiento y stamina, así que el menú de pausa muestra primero lo de combate.
+  - **Unidades:** los porcentajes se guardan como porcentaje (100 = normal, 5 = 5 %). Así una mejora de «+10 % de daño» es PERCENT 0.1 y «+5 % de crítico», FLAT 5, y el menú los muestra tal cual.
+  - **Valores de partida y fórmulas:** en la tabla «Stats del personaje» del GDD (§6).
+  - **Sin lógica todavía:** no hay sistemas que las usen; vida, armas, experiencia y botín llegan en el Hito 2 y leerán estas stats. Las fórmulas se escriben en código cuando exista lo que las usa, para no dejar constantes de balance sueltas antes de tiempo.
+- **Por qué:** el diseñador quiere las stats típicas de Megabonk o Vampire Survivors (daño, crítico, proyectiles, defensa, vida, multiplicador de experiencia…), mejorables y visibles desde ya. Al ser datos, una stat nueva es un `@export` más y su traducción.
+
+## 2026-11-09 · Slide y slide-jump
+- **Decisión:**
+  - **Slide** (`SlideState`; acción `slide`, comprometido):
+    - entra en el suelo a partir de `slide_min_speed` y conserva la velocidad que llevas;
+    - cada tick suma el tirón de la pendiente (`slide_gravity` × la componente de la gravedad sobre el suelo: acelera cuesta abajo, frena cuesta arriba, nada en llano) y frena con `slide_friction`, sin pasar de `slide_max_speed`;
+    - termina al soltar Ctrl (`MovementContext.slide_held`, que pone `Player` cada tick), al bajar de la velocidad mínima o al dejar el suelo (pasa al aire con coyote time).
+  - **Dash → slide:** `DashState.slide` apunta al slide. Si al acabar el dash se mantiene Ctrl y el slide puede entrar, pasa a él sin el recorte de salida: el slide alarga el dash.
+  - **Slide-jump** (`SlideJumpState`; acción `jump`, prioridad 5, `interrupts = [Slide]`): solo entra mientras interrumpe al slide (`interrupts.has(current)`, sin una referencia aparte). Da la velocidad del salto normal y conserva todo el impulso horizontal.
+  - **Agachado:** `BodyCrouch` agacha el modelo, solo visual, con suavizado y los pies en el suelo, mientras el estado es uno de `crouch_states` (en la escena, el slide). La colisión no cambia; la hurtbox baja llegará con el combate.
+  - **Valores de partida:** mínima 6 m/s, máxima 22 m/s, frenada 5 m/s² y tirón 30 m/s². Elegidos para que la rampa de 15° del gimnasio acelere (comprobado: de 9 a 14,6 m/s bajándola) y en llano el slide dure algo más de medio segundo desde la carrera.
+- **Por qué:** el GDD pide un slide gratis que acelere cuesta abajo y frene cuesta arriba, el slide-jump con impulso y que dash → slide alargue el dash. Que el slide-jump use `interrupts` confirma que la regla «nada se cancela salvo con el dash» admite continuaciones diseñadas sin excepciones en la máquina.
+
+## 2026-11-09 · Personajes: stats básicas y diferencias
+- **Decisión:**
+  - Las stats de `data/player/*.tres` son las básicas, comunes a todos los personajes.
+  - Un personaje es un `CharacterData` (`entities/player/characters/`, instancias en `data/characters/`): un `StatModifierSet` (lista de `StatModifier` que se aplican y se quitan juntos) con las claves de traducción de su nombre y su descripción.
+  - `StatBlock` tiene dos capas. Los modificadores de base (`add_base_modifier`) cambian la base con la misma fórmula; las mejoras (`add_modifier`) se calculan encima. `get_base` devuelve la base del personaje, así que el menú solo resalta lo que cambian las mejoras.
+  - `StatsComponent.base_sets` aplica los personajes al entrar en el árbol, justo después de definir las stats; en la escena del jugador, el personaje base.
+  - **Cambiar de personaje:** elegirlo será poner otro `CharacterData` en `base_sets` antes de crear al jugador. Los gimmicks que no sean stats (habilidades propias) se añadirán al `CharacterData` cuando lleguen.
+  - Solo existe el personaje base, sin diferencias: los personajes concretos los decide el diseñador. Un test comprueba que cada personaje de `data/characters/` tiene su nombre y su descripción traducidos y que solo toca stats que existen.
+- **Por qué:** el diseñador quiere unas stats básicas y que cada personaje varíe un poco según su gimmick. Como diferencias sobre una base común, un personaje nuevo es un `.tres` con 2-3 modificadores, y cambiar una stat básica afecta a todos.
+
+## 2026-11-09 · Dash-jump
+- **Decisión:**
+  - **Ventana:** `DashState` apunta en el contexto la dirección del dash y, al acabar (no si otro dash o el picado lo cancelan), el momento (`dash_end_time`). `MovementContext.is_dash_jump_open()` dice si la ventana está abierta: el dash fue en el suelo y no han pasado más de `dash_jump_window` segundos.
+  - **Estado** (`DashJumpState`; acción `jump`, prioridad 20, `interrupts = [Slide]`):
+    - entra con la ventana abierta y stamina para `dash_jump_cost`;
+    - da la velocidad del dash en su dirección y sube `dash_jump_height`; el control aéreo conserva esa velocidad;
+    - gasta la ventana.
+  - **Casos que salen solos de las reglas:**
+    - pulsar en los últimos 0,1 s del dash lo guarda hasta que acaba;
+    - en dash → slide funciona dentro de la ventana;
+    - sin stamina, entra el salto normal.
+  - **Aviso visual:** `DashJumpCue` enseña un aro dorado en los pies mientras `is_dash_jump_open()`. Solo lee el contexto.
+  - **Valores de partida:** ventana 0,15 s, altura 2 m y coste 1 carga. Con el dash a 28 m/s, el salto mide ≈ 21 m (medido en el gimnasio), de sobra para el hueco de 9 m. Se ajusta en los datos.
+- **Por qué:** el GDD pide el dash-jump justo tras el dash, con ventana corta y aviso visual, y que conserve la velocidad del dash. La ventana se mide desde el final del dash para que encaje con la regla de que nada interrumpe al dash.
+
+## 2026-11-09 · Girar durante el slide
+- **Decisión:** el slide se curva con WASD. Cada tick, `SlideState.steer()` gira la parte horizontal de la velocidad hacia la dirección pedida, como mucho `slide_turn_speed` (180 °/s de partida), sin cambiar su rapidez ni la parte vertical. Sin dirección, sigue recto. Pedir hacia atrás lo da la vuelta poco a poco; la frenada sigue siendo la del slide.
+- **Por qué:** lo pidió el diseñador: moverse mientras desliza, como en Deadlock, y no ir siempre hacia delante. Girar sin perder velocidad mantiene el slide como forma rápida de moverse y de esquivar.

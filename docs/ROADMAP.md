@@ -20,17 +20,20 @@
 - [x] Jugador (`CharacterBody3D`) y cámara en tercera persona con ratón (distancia que crece con el nivel, curva en datos; interpolación de física activada); Esc suelta el ratón (aún sin menú de pausa)
 - [x] Máquina de estados + `data/player/movement.tres` (gana la primera acción; nada se cancela salvo con el dash)
 - [x] Correr, saltar, coyote time, jump buffer y control aéreo
-- [ ] Panel de depuración con F3 (velocidad, estado, suelo/coyote y nivel de la cámara; cada sistema nuevo añade lo suyo)
-- [ ] Textos traducibles (CSV en `data/i18n/`, español e inglés) y `Theme` global, antes del primer HUD
-- [ ] Stamina por cargas + HUD mínimo
-- [ ] Dash (suelo y aire), picado (doble Shift en el aire sin dirección) y doble salto
-- [ ] Slide con pendientes y slide-jump
-- [ ] Dash-jump con ventana y aviso visual
+- [x] Panel de depuración con F3 (velocidad, estado, suelo/coyote y nivel de la cámara; cada sistema nuevo añade lo suyo), con las stats modificables como haría una mejora
+- [x] Textos traducibles (CSV en `data/i18n/`, español e inglés) y `Theme` global, antes del primer HUD
+- [x] Menú de pausa (Esc): continuar, opciones (aún sin función), reintentar y salir, con un panel fijo de todas las stats del jugador (con scroll)
+- [x] Stamina por cargas + HUD mínimo
+- [x] Dash (suelo y aire), picado (doble Shift en el aire sin dirección) y doble salto
+- [x] Slide con pendientes y slide-jump
+- [x] Dash-jump con ventana y aviso visual
 - [ ] Caída rápida, salto en pared y mantle
 - [ ] Sensación de velocidad: FOV dinámico, estela de dash, líneas de velocidad
 
 ## Hito 2 — Combate y hordas
-- [ ] Componentes `HealthComponent`, `HitboxComponent`, `HurtboxComponent`
+- [x] Stats de combate y progresión del personaje en datos (vida, regeneración, defensa, esquiva, robo de vida, daño, crítico, velocidad de ataque, proyectiles, área, duración, retroceso, experiencia, fichas, suerte, radio de recogida), visibles en la pausa y en F3
+- [x] Personajes en datos: stats básicas comunes y cada personaje con sus diferencias (`data/characters/`; de momento solo el personaje base)
+- [ ] Componentes `HealthComponent`, `HitboxComponent`, `HurtboxComponent` (usan las stats de supervivencia)
 - [ ] Primera arma automática basada en `WeaponData`
 - [ ] Dos enemigos (enjambre y tirador) con `EnemyData` y steering simple
 - [ ] Pooling de enemigos, proyectiles y pickups

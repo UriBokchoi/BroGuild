@@ -68,6 +68,29 @@ func test_remove_modifiers_from_only_removes_that_source() -> void:
 	assert_eq(_block.get_value(SPEED), 11.0)
 
 
+func test_lists_stats_in_definition_order_and_keeps_their_base() -> void:
+	_block.define(SPEED, 10.0)
+	_block.define(&"jumps", 1.0)
+	_add(SPEED, PERCENT, 0.5)
+	var expected: Array[StringName] = [SPEED, &"jumps"]
+	assert_eq(_block.get_stats(), expected)
+	assert_eq(_block.get_base(SPEED), 10.0, "la base no cambia con los modificadores")
+	assert_eq(_block.get_value(SPEED), 15.0)
+
+
+func test_base_modifiers_change_the_base_and_upgrades_apply_on_top() -> void:
+	_block.define(SPEED, 10.0)
+	var character := RefCounted.new()
+	_block.add_base_modifier(StatModifier.create(SPEED, PERCENT, 0.2), character)
+	assert_eq(_block.get_base(SPEED), 12.0, "el personaje cambia la base")
+	assert_eq(_block.get_value(SPEED), 12.0, "sin mejoras, el valor es la base")
+	_add(SPEED, PERCENT, 0.5)
+	assert_eq(_block.get_value(SPEED), 18.0, "la mejora se calcula sobre la base: 12 × 1,5")
+	_block.remove_modifiers_from(character)
+	assert_eq(_block.get_base(SPEED), 10.0)
+	assert_eq(_block.get_value(SPEED), 15.0)
+
+
 func test_stat_changed_reports_new_and_previous_value() -> void:
 	_block.define(SPEED, 10.0)
 	watch_signals(_block)

@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="ProgressionData" format=3]
+
+[ext_resource type="Script" path="res://systems/progression/progression_data.gd" id="1_jatqs"]
+
+[resource]
+script = ExtResource("1_jatqs")
+xp_gain = 100.0
+currency_gain = 100.0
+pickup_range = 3.0

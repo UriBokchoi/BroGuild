@@ -14,6 +14,20 @@ func before_each() -> void:
 	add_child_autofree(_stats)
 
 
+func test_base_sets_change_the_base_like_a_character() -> void:
+	var character := StatModifierSet.new()
+	character.stat_modifiers.append(StatModifier.create(&"speed", StatModifier.Kind.PERCENT, 0.5))
+	character.stat_modifiers.append(StatModifier.create(&"free_int", StatModifier.Kind.FLAT, 1.0))
+	var stats := StatsComponent.new()
+	stats.sources.append(FixtureData.new())
+	stats.base_sets.append(character)
+	add_child_autofree(stats)
+	var resolved := stats.get_resolved(FixtureData) as FixtureData
+	assert_eq(resolved.speed, 13.5, "9 × 1,5")
+	assert_eq(resolved.free_int, 4)
+	assert_eq(stats.get_base(&"speed"), 13.5, "es su base, no una mejora")
+
+
 func test_resolved_copy_starts_with_base_values() -> void:
 	var resolved := _stats.get_resolved(FixtureData) as FixtureData
 	assert_not_same(resolved, _data, "es una copia, no el Resource de datos")
@@ -39,6 +53,13 @@ func test_removing_the_source_restores_the_copy() -> void:
 	_stats.remove_modifiers_from(self)
 	var resolved := _stats.get_resolved(FixtureData) as FixtureData
 	assert_eq(resolved.speed, 9.0)
+
+
+func test_lists_its_stats_with_their_base() -> void:
+	_stats.add_modifier(StatModifier.create(&"speed", StatModifier.Kind.FLAT, 2.0), self)
+	assert_has(_stats.get_stats(), &"speed")
+	assert_has(_stats.get_stats(), &"free_int")
+	assert_eq(_stats.get_base(&"speed"), 9.0)
 
 
 func test_stat_changed_arrives_after_the_copy_is_updated() -> void:

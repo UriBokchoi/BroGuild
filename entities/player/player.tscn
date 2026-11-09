@@ -10,6 +10,21 @@
 [ext_resource type="Script" path="res://entities/player/states/air_state.gd" id="8_air"]
 [ext_resource type="Script" path="res://entities/player/states/jump_state.gd" id="9_jump"]
 [ext_resource type="Script" path="res://entities/player/body_facing.gd" id="10_facing"]
+[ext_resource type="Resource" path="res://data/player/stamina.tres" id="11_stamina_data"]
+[ext_resource type="Script" path="res://entities/player/stamina/stamina_component.gd" id="12_stamina"]
+[ext_resource type="Script" path="res://entities/player/states/dash_state.gd" id="13_dash"]
+[ext_resource type="Script" path="res://entities/player/states/down_dash_state.gd" id="14_down_dash"]
+[ext_resource type="Script" path="res://entities/player/states/double_jump_state.gd" id="15_double_jump"]
+[ext_resource type="Resource" path="res://data/player/health.tres" id="16_health_data"]
+[ext_resource type="Resource" path="res://data/player/offense.tres" id="17_offense_data"]
+[ext_resource type="Resource" path="res://data/player/progression.tres" id="18_progression_data"]
+[ext_resource type="Script" path="res://entities/player/states/slide_state.gd" id="19_slide"]
+[ext_resource type="Script" path="res://entities/player/states/slide_jump_state.gd" id="20_slide_jump"]
+[ext_resource type="Script" path="res://entities/player/body_crouch.gd" id="21_crouch"]
+[ext_resource type="Resource" path="res://data/characters/base.tres" id="22_character"]
+[ext_resource type="Script" path="res://core/stats/stat_modifier_set.gd" id="23_modifier_set"]
+[ext_resource type="Script" path="res://entities/player/states/dash_jump_state.gd" id="24_dash_jump"]
+[ext_resource type="Script" path="res://entities/player/dash_jump_cue.gd" id="25_cue"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_body"]
 radius = 0.4
@@ -30,11 +45,21 @@ albedo_color = Color(0.12, 0.12, 0.15, 1)
 material = SubResource("StandardMaterial3D_visor")
 size = Vector3(0.5, 0.15, 0.2)
 
-[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("stats", "input", "movement", "ground_state", "air_state")]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cue"]
+shading_mode = 0
+albedo_color = Color(0.91, 0.69, 0.29, 1)
+
+[sub_resource type="TorusMesh" id="TorusMesh_cue"]
+material = SubResource("StandardMaterial3D_cue")
+inner_radius = 0.55
+outer_radius = 0.7
+
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("stats", "stamina", "input", "movement", "ground_state", "air_state")]
 collision_layer = 2
 collision_mask = 1
 script = ExtResource("1_player")
 stats = NodePath("Stats")
+stamina = NodePath("Stamina")
 input = NodePath("PlayerInput")
 movement = NodePath("Movement")
 ground_state = NodePath("Movement/Ground")
@@ -54,7 +79,12 @@ mesh = SubResource("BoxMesh_visor")
 
 [node name="Stats" type="Node" parent="."]
 script = ExtResource("3_stats")
-sources = Array[Resource]([ExtResource("4_movement")])
+sources = Array[Resource]([ExtResource("16_health_data"), ExtResource("17_offense_data"), ExtResource("18_progression_data"), ExtResource("4_movement"), ExtResource("11_stamina_data")])
+base_sets = Array[ExtResource("23_modifier_set")]([ExtResource("22_character")])
+
+[node name="Stamina" type="Node" parent="." node_paths=PackedStringArray("stats")]
+script = ExtResource("12_stamina")
+stats = NodePath("../Stats")
 
 [node name="PlayerInput" type="Node" parent="." node_paths=PackedStringArray("machine", "camera")]
 script = ExtResource("5_input")
@@ -74,6 +104,57 @@ script = ExtResource("8_air")
 [node name="Jump" type="Node" parent="Movement"]
 script = ExtResource("9_jump")
 trigger_action = &"jump"
+
+[node name="DoubleJump" type="Node" parent="Movement"]
+script = ExtResource("15_double_jump")
+trigger_action = &"jump"
+priority = 10
+
+[node name="Dash" type="Node" parent="Movement" node_paths=PackedStringArray("slide")]
+script = ExtResource("13_dash")
+trigger_action = &"dash"
+committed = true
+cancels_committed = true
+slide = NodePath("../Slide")
+
+[node name="DownDash" type="Node" parent="Movement"]
+script = ExtResource("14_down_dash")
+trigger_action = &"dash"
+priority = 10
+committed = true
+cancels_committed = true
+
+[node name="Slide" type="Node" parent="Movement"]
+script = ExtResource("19_slide")
+trigger_action = &"slide"
+committed = true
+
+[node name="SlideJump" type="Node" parent="Movement" node_paths=PackedStringArray("interrupts")]
+script = ExtResource("20_slide_jump")
+trigger_action = &"jump"
+priority = 5
+interrupts = [NodePath("../Slide")]
+
+[node name="DashJump" type="Node" parent="Movement" node_paths=PackedStringArray("interrupts")]
+script = ExtResource("24_dash_jump")
+trigger_action = &"jump"
+priority = 20
+interrupts = [NodePath("../Slide")]
+
+[node name="DashJumpRing" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, 0)
+mesh = SubResource("TorusMesh_cue")
+
+[node name="DashJumpCue" type="Node" parent="." node_paths=PackedStringArray("player", "visual")]
+script = ExtResource("25_cue")
+player = NodePath("..")
+visual = NodePath("../DashJumpRing")
+
+[node name="BodyCrouch" type="Node" parent="." node_paths=PackedStringArray("machine", "visual", "crouch_states")]
+script = ExtResource("21_crouch")
+machine = NodePath("../Movement")
+visual = NodePath("../Body")
+crouch_states = [NodePath("../Movement/Slide")]
 
 [node name="BodyFacing" type="Node" parent="." node_paths=PackedStringArray("body", "visual", "stats")]
 script = ExtResource("10_facing")

@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="OffenseData" format=3]
+
+[ext_resource type="Script" path="res://systems/combat/offense_data.gd" id="1_vpqvf"]
+
+[resource]
+script = ExtResource("1_vpqvf")
+damage = 100.0
+crit_chance = 5.0
+crit_damage = 150.0
+attack_speed = 100.0
+projectile_speed = 100.0
+area = 100.0
+duration = 100.0
+knockback = 100.0

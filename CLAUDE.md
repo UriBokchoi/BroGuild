@@ -37,6 +37,7 @@ Comprobado en 4.7.2 (detalle en `docs/DECISIONES.md`):
 - Los warnings de GDScript solo se imprimen con `-d`, y `-d` sin `--ignore-error-breaks` se queda en bucle en el depurador ante un error.
 - No uses `--check-only`: da un falso error en cualquier script que use un autoload y no muestra warnings.
 - Un array tipado con la propia clase del script (`Array[State]` dentro de `State`) provoca una fuga al salir: tipa con la clase nativa (`Array[Node]`).
+- Un script lanzado con `-s` se compila antes que los autoloads: no puede nombrar clases que usen uno (p. ej. `PauseMenu`); usa `call()`.
 
 **Validación**: una tarea no está terminada si `tools/validate.sh` falla o si VS Code muestra errores de GDScript en «Problemas».
 
@@ -49,14 +50,14 @@ Comprobado en 4.7.2 (detalle en `docs/DECISIONES.md`):
 4. **Llamar hacia abajo, señales hacia arriba.** Un nodo llama a sus hijos; los hijos avisan con señales. Entre sistemas lejanos: `EventBus` (autoload que solo declara señales tipadas).
 5. **Autoloads mínimos:** `EventBus`, `RunState` (partida en curso), `Rng`, `Audio`, `Save`. Nada de lógica de gameplay suelta en ellos.
 6. **Movimiento = máquina de estados.** Un script por estado (`Ground`, `Air`, `Dash`, `Slide`, `WallJump`, `Mantle`…) y parámetros en `data/player/movement.tres`. Nada de `if` gigantes en `player.gd`. Cada estado declara en el inspector su acción, prioridad y si es comprometido o cancela; las reglas de entrada (gana la primera, solo el dash cancela, buffer) están solo en `StateMachine`.
-7. **Stats con modificadores.** Las mejoras nunca tocan variables a mano: añaden `StatModifier` (plano, %, multiplicador) a un `StatBlock`, que calcula el valor final en un único sitio. Todo número exportado de un Resource de datos es una stat, y su `@export_range` es también su límite en juego: elige el rango pensando en el juego, no solo en el inspector. El juego lee las copias resueltas de `StatsComponent`, nunca el `.tres` original.
+7. **Stats con modificadores.** Las mejoras nunca tocan variables a mano: añaden `StatModifier` (plano, %, multiplicador) a un `StatBlock`, que calcula el valor final en un único sitio. Todo número exportado de un Resource de datos es una stat, y su `@export_range` es también su límite en juego: elige el rango pensando en el juego, no solo en el inspector. El juego lee las copias resueltas de `StatsComponent`, nunca el `.tres` original. Las stats de `data/player/` son las básicas de todos; un personaje (`data/characters/*.tres`, `CharacterData`) solo lista sus diferencias, que cambian la base (`base_sets`) y no cuentan como mejora.
 8. **Todo el azar pasa por `Rng`**, con semilla por partida y un generador por sistema (botín, oleadas, apuestas) para que los bugs sean reproducibles. Tablas ponderadas (`WeightedTable`) y rarezas en datos; la Suerte modifica pesos, nunca `if` repartidos por el código.
 9. **Juice desacoplado.** Screen shake, hit-stop, números de daño, flashes y sonidos reaccionan a señales. El gameplay emite eventos; no llama a efectos.
 10. **Pooling** para enemigos, proyectiles, pickups y números de daño. Nada de `instantiate()`/`queue_free()` por cada bala.
 11. **Sin rutas frágiles.** Prohibido `get_node("../../X")` y `get_parent().get_parent()`. Usa `@export var x: Node3D` o `%NombreUnico`.
 12. **Input por acciones** del InputMap (`move_forward`, `jump`, `dash`, `slide`, `interact`…), nunca teclas directas.
 13. **Capas de física con nombre** en Project Settings, con sus constantes en un único archivo (`core/physics_layers.gd`).
-14. **UI sin literales:** textos con `tr("CLAVE")` (CSV de traducción en `data/i18n/`) y estilos en un `Theme` global.
+14. **UI sin literales:** textos con `tr("CLAVE")` (CSV de traducción en `data/i18n/strings.csv`; en escenas, la clave como texto del control) y estilos en el `Theme` global (`ui/theme/main_theme.tres`, con variaciones de tipo). Las stats se traducen como `STAT_<NOMBRE>` y sus grupos como `STAT_GROUP_<GRUPO>`: una stat nueva necesita su fila en el CSV (un test lo exige). Excepción: el panel de depuración (`ui/debug/`) muestra nombres internos sin traducir; es una herramienta de desarrollo.
 15. Toda escena se puede ejecutar sola (F6) para probarla.
 
 ## Rendimiento
@@ -90,7 +91,7 @@ autoload/    EventBus, RunState, Rng, Audio, Save
 core/        piezas genéricas: state_machine/, stats/, components/, pooling/, weighted_table.gd
 entities/    player/ (+ states/), enemies/, pickups/, interactables/
 systems/     combat/, gamble/, upgrades/, spawning/, progression/
-data/        .tres de balance: player/, weapons/, enemies/, upgrades/, rarities/, i18n/
+data/        .tres de balance: player/ (stats básicas), characters/, weapons/, enemies/, upgrades/, rarities/, i18n/
 ui/          hud/, menus/, widgets/, theme
 vfx/         shaders/, particles/, juice/
 levels/      arenas y escena de pruebas
@@ -106,6 +107,8 @@ Escena, script y recursos propios de una feature van juntos en su carpeta. El sc
 - `tests/integration/`: tests que instancian escenas (con `add_child_autofree`), con la misma ruta que el código. Comprueban el montaje (capas, referencias, datos asignados), no el *feel*.
 - Para probar un autoload sin tocar el global, instancia su script: `const RngService := preload("res://autoload/rng.gd")`.
 - Los datos de prueba van junto a sus tests, sin prefijo `test_` (p. ej. `tests/unit/core/stats/stats_test_data.gd`). Ninguna constante de un test puede empezar por `Test`: GUT la toma por una clase de test interna y avisa (la validación falla).
+- Con física real, no cuentes ticks exactos: en un bucle, cada `await wait_physics_frames(1)` avanza unos 2 ticks. Comprueba estados en momentos con margen y deja que los resultados no dependan de un tick concreto.
+- Para probar estados de movimiento sin la escena del jugador: `tests/unit/entities/player/states/movement_context_fixture.gd` (contexto con stamina real y máquina con Suelo y Aire).
 - El *feel* no se testea: lo pruebo yo jugando.
 
 ## Nunca

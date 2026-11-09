@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="StaminaData" format=3]
+
+[ext_resource type="Script" path="res://entities/player/stamina/stamina_data.gd" id="1_bde3s"]
+
+[resource]
+script = ExtResource("1_bde3s")
+max_charges = 3
+recharge_time = 3.0

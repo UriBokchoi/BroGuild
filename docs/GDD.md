@@ -31,11 +31,11 @@ Cámara en tercera persona a una distancia moderada que crece muy poco a poco co
 |---|---|---|---|
 | Correr | WASD | — | Rápido de base, mucho control aéreo; el momentum no se pierde de golpe |
 | Salto | Espacio | — | Con coyote time y jump buffer |
-| Doble salto | Espacio en el aire | 1 | |
-| Dash | Shift | 1 | Ráfaga corta en la dirección de movimiento (sin dirección, hacia donde mira la cámara); también en el aire |
+| Doble salto | Espacio en el aire | 1 | Se recupera al tocar suelo; con mejoras o personajes, más saltos (triple salto). Con coyote time, Espacio es el salto normal |
+| Dash | Shift | 1 | Ráfaga corta en la dirección de movimiento (sin dirección, hacia donde mira la cámara); también en el aire, donde va recto. Al terminar conservas parte del impulso. Dashes totales = cargas de stamina; en el aire, como mucho los «dashes en el aire» (1 de partida, mejorable), que se recuperan al tocar suelo |
 | Picado | Shift dos veces en el aire, sin dirección | +1 | Dash hacia abajo: el primer Shift ya hace un dash y el segundo, dentro de una ventana corta, lo convierte en picado |
-| Dash-jump | Espacio justo tras el dash | +1 | Ventana corta (con aviso visual) → salto largo que conserva la velocidad del dash |
-| Slide | Ctrl corriendo (mantener) | — | Gratis; acelera cuesta abajo y frena cuesta arriba; hurtbox baja (zona donde recibes daño). Dash → slide alarga el dash sin gastar más |
+| Dash-jump | Espacio justo tras el dash | +1 | Ventana corta (con aviso visual: un aro dorado en los pies) → salto largo que conserva la velocidad del dash. Solo tras un dash en el suelo (también en dash → slide); pulsado al final del dash, sale al acabar. Sin stamina, Espacio es un salto normal |
+| Slide | Ctrl corriendo (mantener) | — | Gratis; acelera cuesta abajo y frena cuesta arriba (en llano frena poco a poco); hurtbox baja (zona donde recibes daño). Empieza y sigue mientras vayas por encima de una velocidad mínima; termina al soltar Ctrl. Con WASD se curva hacia donde pides sin perder velocidad (como en Deadlock). Dash → slide alarga el dash sin gastar más (mantén Ctrl al acabar el dash) |
 | Slide-jump | Espacio en slide | — | Conserva el impulso |
 | Caída rápida | Ctrl en el aire | 1 | Picado al suelo; con mejoras, impacto en área |
 | Salto en pared | Espacio contra pared | 0 / ½ | El primero gratis; encadenados sin tocar suelo, media carga |
@@ -63,6 +63,8 @@ Toda apuesta tiene **anticipación** (giro, luces, sonido que sube), **revelado*
 5. **Pactos de la Banca** — de vez en cuando, una oferta: aceptas una maldición para el resto de la partida (más enemigos, menos curación…) a cambio de Suerte o multiplicador. Se puede rechazar.
 6. **¿Cobrar o Doblar?** — al vencer al jefe: *Cobrar* termina la partida y guarda el bote. *Doblar* abre la siguiente mesa, más dura, con el bote ×2; si mueres ahí, te llevas solo la mitad.
 
+**Stats mejorables:** como en Megabonk, cualquier stat del personaje se puede subir o bajar con mejoras, rasgos de personaje y maldiciones: velocidad de carrera, altura de salto, control aéreo, stamina, daño… Una stat nueva es mejorable desde que existe.
+
 **Mejoras con sinergia de movimiento** (ejemplos): el slide deja un rastro de fuego · cada dash suelta una onda que empuja y daña · más daño mientras estás en el aire · la caída rápida explota al aterrizar · cada carga de stamina sin gastar da crítico extra.
 
 **Mejoras que tocan el azar** (ejemplos): Dado trucado (1 reroll gratis por nivel) · Amigo del crupier (las maldiciones de la tragaperras a veces son premio) · Mano caliente (cofres más baratos con racha alta).
@@ -73,6 +75,28 @@ Toda apuesta tiene **anticipación** (giro, luces, sonido que sube), **revelado*
 - **Enemigos**: enjambre cuerpo a cuerpo (rápido, frágil) · tanque lento · tirador a distancia (te obliga a moverte) · élites con afijos (cada ~2 min, sueltan cofre).
 - **Director de oleadas**: la densidad sube con el tiempo, con picos cada minuto; la curva vive en datos.
 
+**Stats del personaje** (como en Megabonk o Vampire Survivors; todas mejorables, §5). Valores de partida en `data/player/`. Las fórmulas son la intención de diseño y se confirman al implementar el combate (Hito 2).
+
+| Grupo | Stat | De partida | Efecto |
+|---|---|---|---|
+| Supervivencia | Vida máxima | 100 | |
+| | Regeneración de vida | 0 /s | Vida por segundo |
+| | Defensa | 0 | Daño recibido × 100 / (100 + defensa): 100 de defensa = mitad de daño, nunca inmune |
+| | Esquiva | 0 % (máx. 90 %) | Probabilidad de evitar un golpe entero |
+| | Robo de vida | 0 % | Parte del daño hecho que te cura |
+| Ataque | Daño | 100 % | Multiplica el daño de todas las armas |
+| | Probabilidad de crítico | 5 % (máx. 100 %) | |
+| | Daño crítico | 150 % | Un crítico hace este % del golpe |
+| | Velocidad de ataque | 100 % | Divide el tiempo entre ataques de cada arma |
+| | Proyectiles extra | 0 | Se suman a los de cada arma |
+| | Velocidad de proyectil, área, duración, retroceso | 100 % | Multiplican lo de cada arma |
+| Progresión | Experiencia ganada, fichas ganadas | 100 % | |
+| | Suerte | 0 | Desplaza los pesos de rareza hacia arriba |
+| | Radio de recogida | 3 m | Distancia a la que se recoge el botín |
+| Movimiento | Velocidad de carrera, saltos y dashes en el aire, stamina… | ver §4 | |
+
+Las mejoras de % («+10 % de daño») multiplican; las de puntos («+5 % de crítico», «+1 proyectil», «+1 salto en el aire») suman.
+
 ## 7. Estética: sencilla pero llamativa
 Dirección: **medieval con humor moderno**, nada realista; los anacronismos son bienvenidos (p. ej., tragaperras repartidas por un mundo medieval). Formas simples (primitivas o low-poly) que luzcan sin necesitar artista. *Pendiente: concretar la dirección visual (sustituye a la anterior «casino-arcade neón»).*
 - **Color con significado**: cada tipo de enemigo con su color; las rarezas, iguales en cofres, cartas, números y luces.
@@ -82,12 +106,15 @@ Dirección: **medieval con humor moderno**, nada realista; los anacronismos son 
 - **Assets**: primitivas + shaders propios; si hace falta, packs CC0 (Kenney, Quaternius).
 
 ## 8. Controles
-WASD mover · Ratón cámara · Espacio saltar · Shift dash · Ctrl slide / caída rápida · E interactuar / cobrar · Tab estadísticas · Esc pausa. Todo remapeable. Mando: más adelante.
+WASD mover · Ratón cámara · Espacio saltar · Shift dash · Ctrl slide / caída rápida · E interactuar / cobrar · Tab estadísticas · Esc pausa. Todo remapeable.
+
+**Menú de pausa (Esc):** a la izquierda, Continuar, Opciones, Reintentar y Salir; a la derecha, un panel fijo con todas las stats del personaje, resaltando las que han cambiado mejoras o maldiciones. Mando: más adelante.
 
 ## 9. Partida y progresión
 - **Mesa**: ~10 min. Élite cada ~2 min. Jefe al minuto 10.
 - **Monedas**: XP (niveles) · Fichas (en partida, se apuestan) · Bote (sale de la partida y se gasta fuera).
 - **Meta-progresión**: desbloquear personajes (cada uno con un rasgo de movimiento: triple salto, dash más largo, slide más rápido…), armas iniciales y ventajas pequeñas. Nunca más poder bruto que el que da jugar bien.
+- **Personajes**: todos parten de las mismas stats básicas y cada uno cambia unas pocas según su gimmick (p. ej., +1 salto en el aire y −10 % de vida). Esas diferencias son su base: en el menú no salen como mejoras. De momento solo existe el personaje base, sin diferencias.
 - **Reinicio**: de la muerte a una partida nueva en menos de 2 s.
 
 ## 10. Fuera de alcance por ahora

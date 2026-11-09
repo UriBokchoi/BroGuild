@@ -6,6 +6,10 @@ extends RefCounted
 ## Valor final: [code](base + Σ FLAT) × (1 + Σ PERCENT) × Π MULTIPLIER[/code], limitado a
 ## [mínimo, máximo] y redondeado al entero más cercano si la stat es entera. Se recalcula al
 ## cambiar sus modificadores y se guarda, así que leerlo cada frame no cuesta nada.
+##
+## Dos capas: los modificadores de base ([method add_base_modifier], el personaje) cambian la
+## base con esa misma fórmula; los normales ([method add_modifier], mejoras y maldiciones) se
+## aplican después, sobre esa base.
 
 ## Cambió el valor final de una stat. No se emite si un cambio la deja igual.
 signal stat_changed(stat: StringName, value: float, previous: float)
@@ -41,7 +45,7 @@ func define(
 	state.min_value = min_value
 	state.max_value = max_value
 	state.is_integer = is_integer
-	state.value = _calculate(state)
+	_recalculate(state)
 	_stats[stat] = state
 	return true
 
@@ -60,14 +64,28 @@ func define_from_resource(data: Resource) -> Array[StringName]:
 		var hint_string: String = property["hint_string"]
 		var type: int = property["type"]
 		var base: float = data.get(stat)
-		var limits := _range_limits(hint_string)
-		if define(stat, base, limits[0], limits[1], type == TYPE_INT):
+		var hint := RangeHint.parse(hint_string)
+		if define(stat, base, hint.min_value, hint.max_value, type == TYPE_INT):
 			defined.append(stat)
 	return defined
 
 
 func has_stat(stat: StringName) -> bool:
 	return _stats.has(stat)
+
+
+## Nombres de todas las stats, en el orden en que se definieron.
+func get_stats() -> Array[StringName]:
+	var stats: Array[StringName] = []
+	stats.assign(_stats.keys())
+	return stats
+
+
+## Valor base de [param stat]: el de sus datos con los modificadores de base (el personaje), sin
+## mejoras. Una stat que no existe es un error y vale 0.
+func get_base(stat: StringName) -> float:
+	var state := _get_state(stat)
+	return state.base_value if state else 0.0
 
 
 ## Valor final de [param stat]. Una stat que no existe es un error y vale 0.
@@ -81,21 +99,17 @@ func get_int(stat: StringName) -> int:
 	return roundi(get_value(stat))
 
 
-## Aplica [param modifier] en nombre de [param source] (la mejora, el pacto, el rasgo…),
-## que sirve para quitarlo después con [method remove_modifiers_from]. Aplicar el mismo
-## modificador varias veces lo acumula.
+## Aplica [param modifier] en nombre de [param source] (la mejora, el pacto…), que sirve para
+## quitarlo después con [method remove_modifiers_from]. Aplicar el mismo modificador varias
+## veces lo acumula.
 func add_modifier(modifier: StatModifier, source: Object) -> void:
-	if modifier == null or source == null:
-		push_error("StatBlock: add_modifier necesita un modificador y su origen.")
-		return
-	var state := _get_state(modifier.stat)
-	if state == null:
-		return
-	var applied := AppliedModifier.new()
-	applied.modifier = modifier
-	applied.source = source
-	state.applied.append(applied)
-	_refresh(modifier.stat, state)
+	_apply(modifier, source, false)
+
+
+## Como [method add_modifier], pero cambia la base de la stat (el personaje y su gimmick): la
+## base que se muestra ya lo incluye y las mejoras se calculan sobre ella.
+func add_base_modifier(modifier: StatModifier, source: Object) -> void:
+	_apply(modifier, source, true)
 
 
 ## Quita todos los modificadores que aplicó [param source].
@@ -114,6 +128,21 @@ func remove_modifiers_from(source: Object) -> void:
 		_refresh(stat, _stats[stat])
 
 
+func _apply(modifier: StatModifier, source: Object, base_layer: bool) -> void:
+	if modifier == null or source == null:
+		push_error("StatBlock: un modificador necesita su origen.")
+		return
+	var state := _get_state(modifier.stat)
+	if state == null:
+		return
+	var applied := AppliedModifier.new()
+	applied.modifier = modifier
+	applied.source = source
+	applied.base_layer = base_layer
+	state.applied.append(applied)
+	_refresh(modifier.stat, state)
+
+
 func _get_state(stat: StringName) -> StatState:
 	var state: StatState = _stats.get(stat)
 	if state == null:
@@ -123,16 +152,24 @@ func _get_state(stat: StringName) -> StatState:
 
 func _refresh(stat: StringName, state: StatState) -> void:
 	var previous := state.value
-	state.value = _calculate(state)
+	_recalculate(state)
 	if state.value != previous:
 		stat_changed.emit(stat, state.value, previous)
 
 
-static func _calculate(state: StatState) -> float:
+static func _recalculate(state: StatState) -> void:
+	state.base_value = _combine(state, state.base, true)
+	state.value = _combine(state, state.base_value, false)
+
+
+## Aplica a [param start] los modificadores de una capa (la de base o la de mejoras).
+static func _combine(state: StatState, start: float, base_layer: bool) -> float:
 	var flat := 0.0
 	var percent := 0.0
 	var multiplier := 1.0
 	for applied: AppliedModifier in state.applied:
+		if applied.base_layer != base_layer:
+			continue
 		match applied.modifier.kind:
 			StatModifier.Kind.FLAT:
 				flat += applied.modifier.value
@@ -142,9 +179,7 @@ static func _calculate(state: StatState) -> float:
 				multiplier *= applied.modifier.value
 			_:
 				push_error("StatBlock: tipo de modificador sin cálculo: %d." % applied.modifier.kind)
-	var value := clampf(
-		(state.base + flat) * (1.0 + percent) * multiplier, state.min_value, state.max_value
-	)
+	var value := clampf((start + flat) * (1.0 + percent) * multiplier, state.min_value, state.max_value)
 	return roundf(value) if state.is_integer else value
 
 
@@ -159,26 +194,12 @@ static func _is_stat_property(property: Dictionary) -> bool:
 	)
 
 
-## Límites [mínimo, máximo] de un hint de [code]@export_range[/code]
-## ([code]"min,max[,paso][,or_greater][,or_less][,radians_as_degrees][,suffix:…]"[/code]).
-## Sin rango, sin límites.
-static func _range_limits(hint_string: String) -> PackedFloat64Array:
-	var parts := hint_string.split(",", false)
-	if parts.size() < 2:
-		return PackedFloat64Array([-INF, INF])
-	var flags := PackedStringArray()
-	for part: String in parts:
-		flags.append(part.strip_edges())
-	# Con radians_as_degrees el inspector muestra grados, pero la propiedad guarda radianes.
-	var unit := deg_to_rad(1.0) if flags.has("radians_as_degrees") else 1.0
-	var min_value := -INF if flags.has("or_less") else parts[0].to_float() * unit
-	var max_value := INF if flags.has("or_greater") else parts[1].to_float() * unit
-	return PackedFloat64Array([min_value, max_value])
-
-
 ## Estado interno de una stat.
 class StatState:
+	## Valor de los datos.
 	var base: float = 0.0
+	## Base con los modificadores de base (el personaje).
+	var base_value: float = 0.0
 	var min_value: float = -INF
 	var max_value: float = INF
 	var is_integer: bool = false
@@ -186,7 +207,9 @@ class StatState:
 	var applied: Array[AppliedModifier] = []
 
 
-## Modificador aplicado y quién lo aplicó.
+## Modificador aplicado, quién lo aplicó y en qué capa.
 class AppliedModifier:
 	var modifier: StatModifier
 	var source: Object
+	## Cambia la base (el personaje) en vez de aplicarse encima (las mejoras).
+	var base_layer: bool = false
