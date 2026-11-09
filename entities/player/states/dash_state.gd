@@ -5,7 +5,9 @@ extends MovementState
 ## [code]air_dashes[/code] (se recuperan al tocar suelo). En la escena es comprometido y cancela
 ## cualquier acción (también otro dash). Al terminar, la velocidad horizontal se queda en
 ## [code]dash_exit_speed[/code] como mucho; pero si se mantiene Ctrl en el suelo, pasa a
-## [member slide] con toda la velocidad del dash (el slide alarga el dash, sin gastar más).
+## [member slide] con toda la velocidad del dash (el slide alarga el dash, sin gastar más). El
+## slide también puede cortarlo a mitad en el suelo (en la escena, lo lista en sus
+## [code]interrupts[/code]); en los dos casos se abre la ventana del dash-jump.
 
 ## Estado de slide al que pasa al terminar si se mantiene Ctrl. Vacío: no hay dash → slide.
 @export var slide: State
@@ -48,6 +50,12 @@ func physics_update(delta: float) -> void:
 	var horizontal := Vector3(velocity.x, 0.0, velocity.z).limit_length(ctx.move.dash_exit_speed)
 	ctx.body.velocity = Vector3(horizontal.x, velocity.y, horizontal.z)
 	settle()
+
+
+func exit(next: State) -> void:
+	# Cortado por el slide cuenta como acabado: dash → slide → dash-jump sigue funcionando.
+	if next == slide:
+		ctx.dash_end_time = ctx.elapsed
 
 
 func time_left() -> float:

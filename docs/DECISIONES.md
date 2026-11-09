@@ -290,3 +290,7 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
     - `Save` para los desbloqueos;
     - escena raíz `Game` con el flujo de pantallas.
 - **Por qué:** lo pidió el diseñador. Todo lo nuevo es contenido en datos sobre los sistemas que ya existen (stats con dos capas, conjuntos de modificadores), así que añadir un arma, una runa, un enemigo o un nivel será crear su `.tres`.
+
+## 2026-11-09 · El slide corta el dash en el suelo
+- **Decisión:** el nodo Slide lista a Dash en sus `interrupts`, así que Ctrl a mitad de un dash corta el dash si se puede deslizar (en el suelo y con velocidad). El slide sigue con la velocidad del dash, recortada a la máxima del slide. `DashState.exit()` abre la ventana del dash-jump cuando el siguiente estado es el slide, así que dash → slide → Espacio sigue siendo un dash-jump. En el aire no hace nada.
+- **Por qué:** lo pidió el diseñador: cancelar el dash a la mitad con un slide y usar ese impulso, solo en el suelo. Es una continuación diseñada, así que va por `interrupts`, sin excepciones en la máquina; el GDD lo añade a las reglas de entrada.

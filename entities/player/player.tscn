@@ -124,10 +124,11 @@ priority = 10
 committed = true
 cancels_committed = true
 
-[node name="Slide" type="Node" parent="Movement"]
+[node name="Slide" type="Node" parent="Movement" node_paths=PackedStringArray("interrupts")]
 script = ExtResource("19_slide")
 trigger_action = &"slide"
 committed = true
+interrupts = [NodePath("../Dash")]
 
 [node name="SlideJump" type="Node" parent="Movement" node_paths=PackedStringArray("interrupts")]
 script = ExtResource("20_slide_jump")
