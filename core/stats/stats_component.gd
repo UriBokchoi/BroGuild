@@ -13,9 +13,12 @@ extends Node
 ## Cambió una stat. Cuando llega, la copia resuelta ya tiene el valor nuevo.
 signal stat_changed(stat: StringName, value: float, previous: float)
 
-## Resources de datos de la entidad (su MovementData, etc.). Nunca se modifican: el juego lee
-## las copias resueltas. Cada stat debe venir de un solo Resource.
+## Resources de datos de la entidad (su MovementData, etc.): las stats básicas. Nunca se
+## modifican: el juego lee las copias resueltas. Cada stat debe venir de un solo Resource.
 @export var sources: Array[Resource] = []
+## Conjuntos que cambian la base de las stats, como el personaje y su gimmick (ver
+## [method add_base_set]). Se aplican nada más definir las stats.
+@export var base_sets: Array[StatModifierSet] = []
 
 var _block := StatBlock.new()
 var _resolved: Array[Resource] = []
@@ -31,6 +34,18 @@ func _enter_tree() -> void:
 	_block.stat_changed.connect(_on_block_stat_changed)
 	for source: Resource in sources:
 		_register(source)
+	for modifier_set: StatModifierSet in base_sets:
+		add_base_set(modifier_set)
+
+
+## Aplica [param modifier_set] a la base de las stats (un personaje): el menú lo cuenta como base
+## y las mejoras se calculan encima. Se quita con [method remove_modifiers_from] y el conjunto.
+func add_base_set(modifier_set: StatModifierSet) -> void:
+	if modifier_set == null:
+		push_error("StatsComponent: hay un hueco vacío en 'base_sets'.")
+		return
+	for modifier: StatModifier in modifier_set.stat_modifiers:
+		_block.add_base_modifier(modifier, modifier_set)
 
 
 ## Copia resuelta del Resource de datos de tipo [param type] (o de un subtipo).

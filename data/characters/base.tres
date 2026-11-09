@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="CharacterData" format=3]
+
+[ext_resource type="Script" path="res://entities/player/characters/character_data.gd" id="1_uwyxc"]
+[ext_resource type="Script" path="res://core/stats/stat_modifier.gd" id="2_yhkkq"]
+
+[resource]
+script = ExtResource("1_uwyxc")
+name_key = &"CHARACTER_BASE_NAME"
+description_key = &"CHARACTER_BASE_DESCRIPTION"

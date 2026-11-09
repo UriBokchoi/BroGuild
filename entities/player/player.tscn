@@ -21,6 +21,8 @@
 [ext_resource type="Script" path="res://entities/player/states/slide_state.gd" id="19_slide"]
 [ext_resource type="Script" path="res://entities/player/states/slide_jump_state.gd" id="20_slide_jump"]
 [ext_resource type="Script" path="res://entities/player/body_crouch.gd" id="21_crouch"]
+[ext_resource type="Resource" path="res://data/characters/base.tres" id="22_character"]
+[ext_resource type="Script" path="res://core/stats/stat_modifier_set.gd" id="23_modifier_set"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_body"]
 radius = 0.4
@@ -67,6 +69,7 @@ mesh = SubResource("BoxMesh_visor")
 [node name="Stats" type="Node" parent="."]
 script = ExtResource("3_stats")
 sources = Array[Resource]([ExtResource("16_health_data"), ExtResource("17_offense_data"), ExtResource("18_progression_data"), ExtResource("4_movement"), ExtResource("11_stamina_data")])
+base_sets = Array[ExtResource("23_modifier_set")]([ExtResource("22_character")])
 
 [node name="Stamina" type="Node" parent="." node_paths=PackedStringArray("stats")]
 script = ExtResource("12_stamina")

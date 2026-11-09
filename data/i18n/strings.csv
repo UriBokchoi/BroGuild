@@ -64,3 +64,5 @@ STAT_SLIDE_MIN_SPEED,Velocidad mínima del slide,Slide min speed
 STAT_SLIDE_MAX_SPEED,Velocidad máxima del slide,Slide max speed
 STAT_SLIDE_FRICTION,Frenada del slide,Slide friction
 STAT_SLIDE_GRAVITY,Tirón de la pendiente,Slope pull
+CHARACTER_BASE_NAME,Personaje base,Base character
+CHARACTER_BASE_DESCRIPTION,"Las stats básicas, sin gimmick.","The basic stats, no gimmick."

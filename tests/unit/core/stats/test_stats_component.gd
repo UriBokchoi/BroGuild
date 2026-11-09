@@ -14,6 +14,20 @@ func before_each() -> void:
 	add_child_autofree(_stats)
 
 
+func test_base_sets_change_the_base_like_a_character() -> void:
+	var character := StatModifierSet.new()
+	character.stat_modifiers.append(StatModifier.create(&"speed", StatModifier.Kind.PERCENT, 0.5))
+	character.stat_modifiers.append(StatModifier.create(&"free_int", StatModifier.Kind.FLAT, 1.0))
+	var stats := StatsComponent.new()
+	stats.sources.append(FixtureData.new())
+	stats.base_sets.append(character)
+	add_child_autofree(stats)
+	var resolved := stats.get_resolved(FixtureData) as FixtureData
+	assert_eq(resolved.speed, 13.5, "9 × 1,5")
+	assert_eq(resolved.free_int, 4)
+	assert_eq(stats.get_base(&"speed"), 13.5, "es su base, no una mejora")
+
+
 func test_resolved_copy_starts_with_base_values() -> void:
 	var resolved := _stats.get_resolved(FixtureData) as FixtureData
 	assert_not_same(resolved, _data, "es una copia, no el Resource de datos")
