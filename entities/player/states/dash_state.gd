@@ -1,15 +1,19 @@
 class_name DashState
 extends MovementState
 ## Dash: ráfaga corta en la dirección pedida (sin dirección, hacia donde mira la cámara), en el
-## suelo o en el aire, donde va recto, sin gravedad. Gasta stamina. En la escena es comprometido
-## y cancela cualquier acción (también otro dash). Al terminar, la velocidad horizontal se queda
-## en [code]dash_exit_speed[/code] como mucho.
+## suelo o en el aire, donde va recto, sin gravedad. Gasta stamina y, en el aire, uno de los
+## [code]air_dashes[/code] (se recuperan al tocar suelo). En la escena es comprometido y cancela
+## cualquier acción (también otro dash). Al terminar, la velocidad horizontal se queda en
+## [code]dash_exit_speed[/code] como mucho.
 
 var _direction: Vector3 = Vector3.FORWARD
 var _time_left: float = 0.0
 
 
 func can_enter() -> bool:
+	var in_air := not ctx.body.is_on_floor()
+	if in_air and ctx.air_dashes_used >= ctx.move.air_dashes:
+		return false
 	return ctx.stamina.can_spend(ctx.move.dash_cost)
 
 
@@ -20,6 +24,8 @@ func enter(_previous: State) -> void:
 	_time_left = ctx.move.dash_duration
 	ctx.last_dash_time = ctx.elapsed
 	ctx.last_dash_in_air = not ctx.body.is_on_floor()
+	if ctx.last_dash_in_air:
+		ctx.air_dashes_used += 1
 	_apply_velocity()
 
 

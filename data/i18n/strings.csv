@@ -37,3 +37,4 @@ STAT_DOWN_DASH_SPEED,Velocidad del picado,Dive speed
 STAT_DOWN_DASH_DURATION,Duración del picado,Dive duration
 STAT_DOWN_DASH_WINDOW,Margen para el picado,Dive window
 STAT_DOWN_DASH_COST,Coste del picado,Dive cost
+STAT_AIR_DASHES,Dashes en el aire,Air dashes

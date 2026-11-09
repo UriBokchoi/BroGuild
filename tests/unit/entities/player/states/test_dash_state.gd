@@ -18,6 +18,7 @@ func before_each() -> void:
 	move.dash_duration = 0.2
 	move.dash_exit_speed = EXIT_SPEED
 	move.dash_cost = 1.0
+	move.air_dashes = 1
 	_context = ContextFixture.create(self, move)
 	_dash = DashState.new()
 	_machine = ContextFixture.start_machine(self, _context, [_dash])
@@ -27,6 +28,20 @@ func test_needs_stamina() -> void:
 	assert_true(_dash.can_enter())
 	_context.stamina.spend(3.0)
 	assert_false(_dash.can_enter(), "sin cargas no hay dash")
+
+
+func test_in_the_air_it_is_limited_by_air_dashes() -> void:
+	_machine.transition_to(_dash)
+	assert_eq(_context.air_dashes_used, 1, "el cuerpo de prueba siempre está en el aire")
+	assert_false(_dash.can_enter(), "ya gastó su dash en el aire")
+	_context.move.air_dashes = 2
+	assert_true(_dash.can_enter(), "con una mejora, otro más")
+
+
+func test_landing_gives_the_air_dashes_back() -> void:
+	_context.air_dashes_used = 1
+	_machine.transition_to(_context.ground)
+	assert_eq(_context.air_dashes_used, 0)
 
 
 func test_dashes_where_you_ask_and_spends_a_charge() -> void:

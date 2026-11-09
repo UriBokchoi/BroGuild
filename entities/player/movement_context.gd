@@ -23,6 +23,8 @@ var view_forward: Vector3 = Vector3.FORWARD
 var coyote_left: float = 0.0
 ## Saltos en el aire gastados desde que se dejó el suelo.
 var air_jumps_used: int = 0
+## Dashes empezados en el aire desde que se dejó el suelo.
+var air_dashes_used: int = 0
 ## Momento ([member elapsed]) del último dash, para el picado.
 var last_dash_time: float = -INF
 ## Si el último dash empezó en el aire.

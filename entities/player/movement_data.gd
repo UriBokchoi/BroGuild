@@ -41,6 +41,8 @@ var turn_speed: float = 0.0
 @export_range(0.0, 100.0, 0.5, "or_greater", "suffix:m/s") var dash_exit_speed: float = 0.0
 ## Cargas de stamina que gasta el dash.
 @export_range(0.0, 3.0, 0.5, "or_greater") var dash_cost: float = 0.0
+## Dashes en el aire antes de tocar suelo (el picado no cuenta: convierte el último dash).
+@export_range(0, 10, 1, "or_greater") var air_dashes: int = 0
 ## Velocidad del picado (dash hacia abajo).
 @export_range(0.0, 100.0, 0.5, "or_greater", "suffix:m/s") var down_dash_speed: float = 0.0
 ## Segundos que dura el picado (antes, si tocas suelo).

@@ -208,7 +208,7 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
     - los saltos en el aire se recuperan al entrar en Suelo.
   - **Prioridades de la acción `jump`:** Jump 0 y doble salto 10. Quedan libres 20 (dash-jump), 30 (salto en pared) y 40 (mantle), para el orden del GDD.
   - **Valores de partida:**
-    - dash: 28 m/s durante 0,2 s (≈ 5,6 m) y salida a 12 m/s;
+    - dash: 28 m/s durante 0,2 s (≈ 5,6 m) y salida a 12 m/s; 1 dash en el aire por salto (`air_dashes`, añadido a petición del diseñador: los dashes totales los limita la stamina y los del aire, esta stat; el picado no cuenta);
     - picado: 30 m/s durante 0,2 s, con ventana de 0,3 s;
     - doble salto: 1 salto de 2 m;
     - todo cuesta 1 carga.

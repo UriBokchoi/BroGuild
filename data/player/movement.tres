@@ -19,6 +19,7 @@ dash_speed = 28.0
 dash_duration = 0.2
 dash_exit_speed = 12.0
 dash_cost = 1.0
+air_dashes = 1
 down_dash_speed = 30.0
 down_dash_duration = 0.2
 down_dash_window = 0.3
