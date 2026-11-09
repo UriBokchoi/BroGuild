@@ -7,8 +7,8 @@ extends Node
 ## var move := stats.get_resolved(MovementData) as MovementData
 ## velocity = direction * move.run_speed
 ## [/codeblock]
-## Las stats existen desde el [code]_ready[/code] de este nodo: su dueño las lee desde su
-## propio [code]_ready[/code] (que va después) o más tarde.
+## Las stats existen desde que el nodo entra en el árbol, antes de cualquier
+## [code]_ready[/code]: cualquier nodo de la escena puede leerlas en el suyo, esté donde esté.
 
 ## Cambió una stat. Cuando llega, la copia resuelta ya tiene el valor nuevo.
 signal stat_changed(stat: StringName, value: float, previous: float)
@@ -20,9 +20,14 @@ signal stat_changed(stat: StringName, value: float, previous: float)
 var _block := StatBlock.new()
 var _resolved: Array[Resource] = []
 var _resolved_by_stat: Dictionary[StringName, Resource] = {}
+var _registered: bool = false
 
 
-func _ready() -> void:
+func _enter_tree() -> void:
+	# En _enter_tree y no en _ready: así el orden de los nodos hermanos no importa.
+	if _registered:
+		return
+	_registered = true
 	_block.stat_changed.connect(_on_block_stat_changed)
 	for source: Resource in sources:
 		_register(source)

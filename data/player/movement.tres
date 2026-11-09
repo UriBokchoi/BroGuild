@@ -4,8 +4,14 @@
 
 [resource]
 script = ExtResource("1_n2jko")
+run_speed = 9.0
+ground_acceleration = 60.0
+ground_deceleration = 50.0
+turn_speed = 12.566370614359172
 jump_height = 2.0
 jump_time_to_apex = 0.35
 max_fall_speed = 40.0
+coyote_time = 0.12
+air_acceleration = 30.0
 input_buffer_time = 0.12
 action_end_buffer_time = 0.1

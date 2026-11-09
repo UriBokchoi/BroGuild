@@ -8,6 +8,8 @@
 [ext_resource type="Script" path="res://core/state_machine/state_machine.gd" id="6_machine"]
 [ext_resource type="Script" path="res://entities/player/states/ground_state.gd" id="7_ground"]
 [ext_resource type="Script" path="res://entities/player/states/air_state.gd" id="8_air"]
+[ext_resource type="Script" path="res://entities/player/states/jump_state.gd" id="9_jump"]
+[ext_resource type="Script" path="res://entities/player/body_facing.gd" id="10_facing"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_body"]
 radius = 0.4
@@ -28,11 +30,12 @@ albedo_color = Color(0.12, 0.12, 0.15, 1)
 material = SubResource("StandardMaterial3D_visor")
 size = Vector3(0.5, 0.15, 0.2)
 
-[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("stats", "movement", "ground_state", "air_state")]
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("stats", "input", "movement", "ground_state", "air_state")]
 collision_layer = 2
 collision_mask = 1
 script = ExtResource("1_player")
 stats = NodePath("Stats")
+input = NodePath("PlayerInput")
 movement = NodePath("Movement")
 ground_state = NodePath("Movement/Ground")
 air_state = NodePath("Movement/Air")
@@ -53,9 +56,10 @@ mesh = SubResource("BoxMesh_visor")
 script = ExtResource("3_stats")
 sources = Array[Resource]([ExtResource("4_movement")])
 
-[node name="PlayerInput" type="Node" parent="." node_paths=PackedStringArray("machine")]
+[node name="PlayerInput" type="Node" parent="." node_paths=PackedStringArray("machine", "camera")]
 script = ExtResource("5_input")
 machine = NodePath("../Movement")
+camera = NodePath("../CameraRig")
 
 [node name="Movement" type="Node" parent="." node_paths=PackedStringArray("initial_state")]
 script = ExtResource("6_machine")
@@ -66,6 +70,16 @@ script = ExtResource("7_ground")
 
 [node name="Air" type="Node" parent="Movement"]
 script = ExtResource("8_air")
+
+[node name="Jump" type="Node" parent="Movement"]
+script = ExtResource("9_jump")
+trigger_action = &"jump"
+
+[node name="BodyFacing" type="Node" parent="." node_paths=PackedStringArray("body", "visual", "stats")]
+script = ExtResource("10_facing")
+body = NodePath("..")
+visual = NodePath("../Body")
+stats = NodePath("../Stats")
 
 [node name="CameraRig" parent="." node_paths=PackedStringArray("target") instance=ExtResource("2_rig")]
 target = NodePath("..")

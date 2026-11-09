@@ -59,6 +59,11 @@ func rotate_view(pixels: Vector2) -> void:
 	_apply_rotation()
 
 
+## Giro horizontal de la cámara en radianes: define el «adelante» del movimiento.
+func get_yaw() -> float:
+	return _yaw
+
+
 func _apply_rotation() -> void:
 	rotation = Vector3(_pitch, _yaw, 0.0)
 
