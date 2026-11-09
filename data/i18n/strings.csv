@@ -25,3 +25,15 @@ STAT_ACTION_END_BUFFER_TIME,Margen al acabar una acción,Action end buffer
 STAT_GROUP_STAMINA,Stamina,Stamina
 STAT_MAX_CHARGES,Cargas de stamina,Stamina charges
 STAT_RECHARGE_TIME,Recarga por carga,Recharge per charge
+STAT_AIR_JUMPS,Saltos en el aire,Air jumps
+STAT_AIR_JUMP_HEIGHT,Altura del doble salto,Double jump height
+STAT_AIR_JUMP_COST,Coste del doble salto,Double jump cost
+STAT_GROUP_DASH,Dash,Dash
+STAT_DASH_SPEED,Velocidad del dash,Dash speed
+STAT_DASH_DURATION,Duración del dash,Dash duration
+STAT_DASH_EXIT_SPEED,Velocidad al salir del dash,Dash exit speed
+STAT_DASH_COST,Coste del dash,Dash cost
+STAT_DOWN_DASH_SPEED,Velocidad del picado,Dive speed
+STAT_DOWN_DASH_DURATION,Duración del picado,Dive duration
+STAT_DOWN_DASH_WINDOW,Margen para el picado,Dive window
+STAT_DOWN_DASH_COST,Coste del picado,Dive cost

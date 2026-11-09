@@ -1,7 +1,12 @@
 class_name GroundState
 extends MovementState
 ## En el suelo sin ninguna acción en curso: corre hacia la dirección pedida y frena al soltar.
-## Si deja de haber suelo sin haber saltado, pasa al aire con coyote time.
+## Si deja de haber suelo sin haber saltado, pasa al aire con coyote time. Tocar suelo devuelve
+## los saltos en el aire.
+
+
+func enter(_previous: State) -> void:
+	ctx.air_jumps_used = 0
 
 
 func physics_update(delta: float) -> void:

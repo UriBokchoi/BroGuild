@@ -12,6 +12,9 @@
 [ext_resource type="Script" path="res://entities/player/body_facing.gd" id="10_facing"]
 [ext_resource type="Resource" path="res://data/player/stamina.tres" id="11_stamina_data"]
 [ext_resource type="Script" path="res://entities/player/stamina/stamina_component.gd" id="12_stamina"]
+[ext_resource type="Script" path="res://entities/player/states/dash_state.gd" id="13_dash"]
+[ext_resource type="Script" path="res://entities/player/states/down_dash_state.gd" id="14_down_dash"]
+[ext_resource type="Script" path="res://entities/player/states/double_jump_state.gd" id="15_double_jump"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_body"]
 radius = 0.4
@@ -81,6 +84,24 @@ script = ExtResource("8_air")
 [node name="Jump" type="Node" parent="Movement"]
 script = ExtResource("9_jump")
 trigger_action = &"jump"
+
+[node name="DoubleJump" type="Node" parent="Movement"]
+script = ExtResource("15_double_jump")
+trigger_action = &"jump"
+priority = 10
+
+[node name="Dash" type="Node" parent="Movement"]
+script = ExtResource("13_dash")
+trigger_action = &"dash"
+committed = true
+cancels_committed = true
+
+[node name="DownDash" type="Node" parent="Movement"]
+script = ExtResource("14_down_dash")
+trigger_action = &"dash"
+priority = 10
+committed = true
+cancels_committed = true
 
 [node name="BodyFacing" type="Node" parent="." node_paths=PackedStringArray("body", "visual", "stats")]
 script = ExtResource("10_facing")

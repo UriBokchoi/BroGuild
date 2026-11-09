@@ -22,3 +22,8 @@ func move_direction() -> Vector3:
 		InputActions.MOVE_FORWARD, InputActions.MOVE_BACK
 	)
 	return Vector3(stick.x, 0.0, stick.y).rotated(Vector3.UP, camera.get_yaw())
+
+
+## Hacia dónde mira la cámara en el plano XZ del mundo (longitud 1).
+func view_forward() -> Vector3:
+	return Vector3.FORWARD.rotated(Vector3.UP, camera.get_yaw())

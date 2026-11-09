@@ -25,6 +25,30 @@ var turn_speed: float = 0.0
 @export_range(1.0, 100.0, 0.5, "or_greater", "suffix:m/s") var max_fall_speed: float = 0.0
 ## Segundos tras dejar el suelo (sin saltar) en los que todavía puedes saltar.
 @export_range(0.0, 0.5, 0.01, "or_greater", "suffix:s") var coyote_time: float = 0.0
+## Saltos en el aire antes de tocar suelo (1 = doble salto, 2 = triple salto…).
+@export_range(0, 5, 1, "or_greater") var air_jumps: int = 0
+## Altura de cada salto en el aire.
+@export_range(0.5, 10.0, 0.05, "or_greater", "suffix:m") var air_jump_height: float = 0.0
+## Cargas de stamina que gasta cada salto en el aire.
+@export_range(0.0, 3.0, 0.5, "or_greater") var air_jump_cost: float = 0.0
+
+@export_group("dash")
+## Velocidad del dash.
+@export_range(0.0, 100.0, 0.5, "or_greater", "suffix:m/s") var dash_speed: float = 0.0
+## Segundos que dura el dash.
+@export_range(0.05, 1.0, 0.01, "or_greater", "suffix:s") var dash_duration: float = 0.0
+## Velocidad horizontal máxima con la que sales del dash (lo que sobra se pierde al terminar).
+@export_range(0.0, 100.0, 0.5, "or_greater", "suffix:m/s") var dash_exit_speed: float = 0.0
+## Cargas de stamina que gasta el dash.
+@export_range(0.0, 3.0, 0.5, "or_greater") var dash_cost: float = 0.0
+## Velocidad del picado (dash hacia abajo).
+@export_range(0.0, 100.0, 0.5, "or_greater", "suffix:m/s") var down_dash_speed: float = 0.0
+## Segundos que dura el picado (antes, si tocas suelo).
+@export_range(0.05, 1.0, 0.01, "or_greater", "suffix:s") var down_dash_duration: float = 0.0
+## Segundos tras el primer Shift en los que el segundo, sin dirección, hace el picado.
+@export_range(0.05, 1.0, 0.01, "or_greater", "suffix:s") var down_dash_window: float = 0.0
+## Cargas de stamina que gasta el picado (además del dash del primer Shift).
+@export_range(0.0, 3.0, 0.5, "or_greater") var down_dash_cost: float = 0.0
 
 @export_group("air")
 ## Aceleración hacia la dirección pedida en el aire. No frena el impulso que ya llevas por
@@ -50,3 +74,9 @@ func gravity() -> float:
 ## Velocidad vertical inicial de un salto de [member jump_height].
 func jump_velocity() -> float:
 	return 2.0 * jump_height / jump_time_to_apex
+
+
+## Velocidad vertical inicial de un salto en el aire de [member air_jump_height], con la misma
+## gravedad que el salto normal.
+func air_jump_velocity() -> float:
+	return sqrt(2.0 * gravity() * air_jump_height)
