@@ -109,3 +109,25 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
 ## 2026-11-08 · Tests de integración
 - **Decisión:** los tests que instancian escenas van en `tests/integration/`, con la misma ruta que el código (`entities/player/player.tscn` → `tests/integration/entities/player/test_player_scene.gd`). `tests/unit/` queda para lógica pura.
 - **Por qué:** separar lo que depende de escenas deja claro qué se rompe cuando cambia una escena y qué cuando cambia la lógica.
+
+## 2026-11-08 · Máquina de estados y reglas de las acciones
+- **Decisión:**
+  - `StateMachine` y `State` (`core/state_machine/`) son genéricos, para el jugador y para futuras IAs. Cada estado es un nodo hijo con su script y declara en el inspector cómo participa en las acciones: `trigger_action`, `priority`, `committed`, `cancels_committed` e `interrupts`.
+  - La máquina guarda las acciones pedidas (`request`) en orden y aplica las reglas del GDD:
+    - gana la primera que puede ejecutarse, y como mucho entra una por tick;
+    - entre estados de la misma acción entra el de mayor prioridad que pueda;
+    - un estado comprometido solo lo cancelan los estados que cancelan (el dash) o los que lo listan en `interrupts` (el slide-jump al slide);
+    - lo pulsado durante un estado comprometido se guarda si le quedan `committed_end_buffer` segundos o menos y si no, se descarta;
+    - lo que todavía no puede entrar espera `buffer_time` segundos (el jump buffer).
+  - Los dos tiempos salen de `movement.tres` (`input_buffer_time` 0,12 s y `action_end_buffer_time` 0,1 s), y `Player` los pasa a la máquina en cada tick.
+  - Se puede volver a entrar en el estado activo (dash sobre dash). Los estados no cambian de estado en `enter`/`exit`, solo en `physics_update`.
+- **Jugador:**
+  - `player.gd` solo monta el `MovementContext` (cuerpo, stats resueltas y estados neutros Suelo/Aire), avanza la máquina y llama a `move_and_slide()`, el único sitio donde se hace.
+  - `PlayerInput` reenvía las pulsaciones de las acciones que activan algún estado, así que un estado nuevo con su acción no obliga a tocarlo.
+  - Los estados heredan de `MovementState` (contexto tipado, `settle()` para volver a Suelo o Aire, `apply_gravity()`).
+- **Gravedad:** sale del salto. Con `jump_height` y `jump_time_to_apex`, la gravedad es 2h/t² y la velocidad de salto 2h/t, con un tope de caída `max_fall_speed`. Valores de partida: 2 m en 0,35 s (≈ 32,7 m/s² y 11,4 m/s) y caída máxima de 40 m/s.
+- **Por qué:** las reglas viven en un solo sitio y cada mecánica solo declara sus datos. Un estado nuevo (un gancho, por ejemplo) es un nodo con su script, sin tocar los demás. Definir el salto por altura y tiempo permite ajustar el feel con dos números que se entienden; la gravedad cuadra sola.
+
+## 2026-11-08 · Arrays tipados con la propia clase
+- **Decisión:** `State.interrupts` es `Array[Node]`, no `Array[State]`.
+- **Por qué:** en 4.7.2, un array tipado con la propia clase del script (`Array[State]` dentro de `State`) hace que el script se referencie a sí mismo, y Godot avisa al salir de que `state.gd` sigue en uso y hay instancias perdidas. `validate.sh` lo detecta. Se tipa con la clase nativa y se documenta qué contiene.

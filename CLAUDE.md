@@ -36,6 +36,7 @@ Comprobado en 4.7.2 (detalle en `docs/DECISIONES.md`):
 - Godot sale con 0 aunque haya errores de script o de shader: hay que leer la salida (lo hace `validate.sh`).
 - Los warnings de GDScript solo se imprimen con `-d`, y `-d` sin `--ignore-error-breaks` se queda en bucle en el depurador ante un error.
 - No uses `--check-only`: da un falso error en cualquier script que use un autoload y no muestra warnings.
+- Un array tipado con la propia clase del script (`Array[State]` dentro de `State`) provoca una fuga al salir: tipa con la clase nativa (`Array[Node]`).
 
 **Validación**: una tarea no está terminada si `tools/validate.sh` falla o si VS Code muestra errores de GDScript en «Problemas».
 
@@ -47,7 +48,7 @@ Comprobado en 4.7.2 (detalle en `docs/DECISIONES.md`):
 3. **Composición antes que herencia.** Comportamiento en nodos-componente reutilizables (`HealthComponent`, `HitboxComponent`, `HurtboxComponent`, `StatsComponent`…). Herencia solo para bases claras y poco profundas.
 4. **Llamar hacia abajo, señales hacia arriba.** Un nodo llama a sus hijos; los hijos avisan con señales. Entre sistemas lejanos: `EventBus` (autoload que solo declara señales tipadas).
 5. **Autoloads mínimos:** `EventBus`, `RunState` (partida en curso), `Rng`, `Audio`, `Save`. Nada de lógica de gameplay suelta en ellos.
-6. **Movimiento = máquina de estados.** Un script por estado (`Ground`, `Air`, `Dash`, `Slide`, `WallJump`, `Mantle`…) y parámetros en `data/player/movement.tres`. Nada de `if` gigantes en `player.gd`.
+6. **Movimiento = máquina de estados.** Un script por estado (`Ground`, `Air`, `Dash`, `Slide`, `WallJump`, `Mantle`…) y parámetros en `data/player/movement.tres`. Nada de `if` gigantes en `player.gd`. Cada estado declara en el inspector su acción, prioridad y si es comprometido o cancela; las reglas de entrada (gana la primera, solo el dash cancela, buffer) están solo en `StateMachine`.
 7. **Stats con modificadores.** Las mejoras nunca tocan variables a mano: añaden `StatModifier` (plano, %, multiplicador) a un `StatBlock`, que calcula el valor final en un único sitio. Todo número exportado de un Resource de datos es una stat, y su `@export_range` es también su límite en juego: elige el rango pensando en el juego, no solo en el inspector. El juego lee las copias resueltas de `StatsComponent`, nunca el `.tres` original.
 8. **Todo el azar pasa por `Rng`**, con semilla por partida y un generador por sistema (botín, oleadas, apuestas) para que los bugs sean reproducibles. Tablas ponderadas (`WeightedTable`) y rarezas en datos; la Suerte modifica pesos, nunca `if` repartidos por el código.
 9. **Juice desacoplado.** Screen shake, hit-stop, números de daño, flashes y sonidos reaccionan a señales. El gameplay emite eventos; no llama a efectos.
