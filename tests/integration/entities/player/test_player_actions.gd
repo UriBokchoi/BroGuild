@@ -76,6 +76,47 @@ func test_landing_gives_the_double_jump_back() -> void:
 	assert_eq(_player.context.air_jumps_used, 0)
 
 
+func test_jump_at_the_end_of_a_ground_dash_is_a_long_dash_jump() -> void:
+	await wait_physics_frames(SETTLE_FRAMES)
+	var max_charges := _player.stamina.get_max_charges()
+	_player.movement.request(InputActions.DASH)
+	# En los últimos 0,1 s del dash: la pulsación se guarda y sale al acabar.
+	await wait_physics_frames(9)
+	_player.movement.request(InputActions.JUMP)
+	await wait_physics_frames(6)
+	assert_true(_player.movement.current is AirState, "en el aire")
+	assert_gt(_player.velocity.y, 0.0, "subiendo")
+	assert_almost_eq(_horizontal_speed(), _move.dash_speed, 1.0, "con la velocidad del dash")
+	# Gastó dash + dash-jump; desde entonces ha recargado unos ticks (menos de 0,2 cargas).
+	var left := max_charges - _move.dash_cost - _move.dash_jump_cost
+	assert_between(_player.stamina.get_charges(), left, left + 0.2)
+
+
+func test_jump_after_the_window_is_a_normal_jump() -> void:
+	await wait_physics_frames(SETTLE_FRAMES)
+	_player.movement.request(InputActions.DASH)
+	await wait_physics_frames(40)
+	_player.movement.request(InputActions.JUMP)
+	await wait_physics_frames(2)
+	assert_gt(_player.velocity.y, 0.0, "salta")
+	assert_lt(_horizontal_speed(), _move.dash_exit_speed, "sin la velocidad del dash")
+
+
+func test_ring_shows_only_while_the_dash_jump_window_is_open() -> void:
+	var ring := _player.get_node(^"DashJumpRing") as Node3D
+	await wait_physics_frames(SETTLE_FRAMES)
+	assert_false(ring.visible)
+	_player.movement.request(InputActions.DASH)
+	await wait_physics_frames(14)
+	assert_true(ring.visible, "justo al acabar el dash")
+	await wait_physics_frames(30)
+	assert_false(ring.visible, "pasada la ventana")
+
+
+func _horizontal_speed() -> float:
+	return Vector2(_player.velocity.x, _player.velocity.z).length()
+
+
 func _add_ground() -> void:
 	var ground := StaticBody3D.new()
 	ground.collision_layer = PhysicsLayers.mask(PhysicsLayers.WORLD)

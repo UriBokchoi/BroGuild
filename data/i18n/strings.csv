@@ -66,3 +66,6 @@ STAT_SLIDE_FRICTION,Frenada del slide,Slide friction
 STAT_SLIDE_GRAVITY,Tirón de la pendiente,Slope pull
 CHARACTER_BASE_NAME,Personaje base,Base character
 CHARACTER_BASE_DESCRIPTION,"Las stats básicas, sin gimmick.","The basic stats, no gimmick."
+STAT_DASH_JUMP_WINDOW,Margen del dash-jump,Dash-jump window
+STAT_DASH_JUMP_HEIGHT,Altura del dash-jump,Dash-jump height
+STAT_DASH_JUMP_COST,Coste del dash-jump,Dash-jump cost

@@ -31,3 +31,12 @@ var air_dashes_used: int = 0
 var last_dash_time: float = -INF
 ## Si el último dash empezó en el aire.
 var last_dash_in_air: bool = false
+## Dirección del último dash (la que recupera el dash-jump).
+var last_dash_direction: Vector3 = Vector3.FORWARD
+## Momento ([member elapsed]) en que acabó el último dash; abre la ventana del dash-jump.
+var dash_end_time: float = -INF
+
+
+## ¿Está abierta la ventana del dash-jump (justo después de un dash hecho en el suelo)?
+func is_dash_jump_open() -> bool:
+	return not last_dash_in_air and elapsed - dash_end_time <= move.dash_jump_window

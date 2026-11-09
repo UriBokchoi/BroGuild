@@ -43,6 +43,12 @@ var turn_speed: float = 0.0
 @export_range(0.0, 3.0, 0.5, "or_greater") var dash_cost: float = 0.0
 ## Dashes en el aire antes de tocar suelo (el picado no cuenta: convierte el último dash).
 @export_range(0, 10, 1, "or_greater") var air_dashes: int = 0
+## Segundos tras acabar un dash en el suelo en los que Espacio hace el dash-jump.
+@export_range(0.0, 1.0, 0.01, "or_greater", "suffix:s") var dash_jump_window: float = 0.0
+## Altura del dash-jump (su velocidad horizontal es la del dash).
+@export_range(0.5, 10.0, 0.05, "or_greater", "suffix:m") var dash_jump_height: float = 0.0
+## Cargas de stamina que gasta el dash-jump (además del dash).
+@export_range(0.0, 3.0, 0.5, "or_greater") var dash_jump_cost: float = 0.0
 ## Velocidad del picado (dash hacia abajo).
 @export_range(0.0, 100.0, 0.5, "or_greater", "suffix:m/s") var down_dash_speed: float = 0.0
 ## Segundos que dura el picado (antes, si tocas suelo).
@@ -92,3 +98,8 @@ func jump_velocity() -> float:
 ## gravedad que el salto normal.
 func air_jump_velocity() -> float:
 	return sqrt(2.0 * gravity() * air_jump_height)
+
+
+## Velocidad vertical inicial de un dash-jump de [member dash_jump_height].
+func dash_jump_velocity() -> float:
+	return sqrt(2.0 * gravity() * dash_jump_height)

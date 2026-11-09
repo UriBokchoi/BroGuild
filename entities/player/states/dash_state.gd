@@ -28,6 +28,7 @@ func enter(_previous: State) -> void:
 	_time_left = ctx.move.dash_duration
 	ctx.last_dash_time = ctx.elapsed
 	ctx.last_dash_in_air = not ctx.body.is_on_floor()
+	ctx.last_dash_direction = _direction
 	if ctx.last_dash_in_air:
 		ctx.air_dashes_used += 1
 	_apply_velocity()
@@ -38,6 +39,8 @@ func physics_update(delta: float) -> void:
 	if _time_left > 0.0:
 		_apply_velocity()
 		return
+	# Al acabar (no si otro dash o el picado lo cancelan) se abre la ventana del dash-jump.
+	ctx.dash_end_time = ctx.elapsed
 	if slide and ctx.slide_held and slide.can_enter():
 		machine.transition_to(slide)
 		return

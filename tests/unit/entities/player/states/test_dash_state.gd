@@ -73,6 +73,16 @@ func test_remembers_when_and_where_it_started_for_the_dive() -> void:
 	assert_true(_context.last_dash_in_air)
 
 
+func test_ending_opens_the_dash_jump_window_and_remembers_the_direction() -> void:
+	_context.wish_direction = Vector3.LEFT
+	_machine.transition_to(_dash)
+	assert_eq(_context.last_dash_direction, Vector3.LEFT)
+	_context.elapsed = 3.0
+	for _tick: int in 13:
+		_machine.physics_update(TICK)
+	assert_eq(_context.dash_end_time, 3.0, "la ventana empieza al acabar el dash")
+
+
 func test_ends_after_its_duration_keeping_at_most_the_exit_speed() -> void:
 	_context.wish_direction = Vector3.RIGHT
 	_machine.transition_to(_dash)

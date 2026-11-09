@@ -23,6 +23,8 @@
 [ext_resource type="Script" path="res://entities/player/body_crouch.gd" id="21_crouch"]
 [ext_resource type="Resource" path="res://data/characters/base.tres" id="22_character"]
 [ext_resource type="Script" path="res://core/stats/stat_modifier_set.gd" id="23_modifier_set"]
+[ext_resource type="Script" path="res://entities/player/states/dash_jump_state.gd" id="24_dash_jump"]
+[ext_resource type="Script" path="res://entities/player/dash_jump_cue.gd" id="25_cue"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_body"]
 radius = 0.4
@@ -42,6 +44,15 @@ albedo_color = Color(0.12, 0.12, 0.15, 1)
 [sub_resource type="BoxMesh" id="BoxMesh_visor"]
 material = SubResource("StandardMaterial3D_visor")
 size = Vector3(0.5, 0.15, 0.2)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cue"]
+shading_mode = 0
+albedo_color = Color(0.91, 0.69, 0.29, 1)
+
+[sub_resource type="TorusMesh" id="TorusMesh_cue"]
+material = SubResource("StandardMaterial3D_cue")
+inner_radius = 0.55
+outer_radius = 0.7
 
 [node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("stats", "stamina", "input", "movement", "ground_state", "air_state")]
 collision_layer = 2
@@ -123,6 +134,21 @@ script = ExtResource("20_slide_jump")
 trigger_action = &"jump"
 priority = 5
 interrupts = [NodePath("../Slide")]
+
+[node name="DashJump" type="Node" parent="Movement" node_paths=PackedStringArray("interrupts")]
+script = ExtResource("24_dash_jump")
+trigger_action = &"jump"
+priority = 20
+interrupts = [NodePath("../Slide")]
+
+[node name="DashJumpRing" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, 0)
+mesh = SubResource("TorusMesh_cue")
+
+[node name="DashJumpCue" type="Node" parent="." node_paths=PackedStringArray("player", "visual")]
+script = ExtResource("25_cue")
+player = NodePath("..")
+visual = NodePath("../DashJumpRing")
 
 [node name="BodyCrouch" type="Node" parent="." node_paths=PackedStringArray("machine", "visual", "crouch_states")]
 script = ExtResource("21_crouch")
