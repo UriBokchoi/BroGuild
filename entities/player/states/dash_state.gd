@@ -4,7 +4,11 @@ extends MovementState
 ## suelo o en el aire, donde va recto, sin gravedad. Gasta stamina y, en el aire, uno de los
 ## [code]air_dashes[/code] (se recuperan al tocar suelo). En la escena es comprometido y cancela
 ## cualquier acción (también otro dash). Al terminar, la velocidad horizontal se queda en
-## [code]dash_exit_speed[/code] como mucho.
+## [code]dash_exit_speed[/code] como mucho; pero si se mantiene Ctrl en el suelo, pasa a
+## [member slide] con toda la velocidad del dash (el slide alarga el dash, sin gastar más).
+
+## Estado de slide al que pasa al terminar si se mantiene Ctrl. Vacío: no hay dash → slide.
+@export var slide: State
 
 var _direction: Vector3 = Vector3.FORWARD
 var _time_left: float = 0.0
@@ -33,6 +37,9 @@ func physics_update(delta: float) -> void:
 	_time_left -= delta
 	if _time_left > 0.0:
 		_apply_velocity()
+		return
+	if slide and ctx.slide_held and slide.can_enter():
+		machine.transition_to(slide)
 		return
 	var velocity := ctx.body.velocity
 	var horizontal := Vector3(velocity.x, 0.0, velocity.z).limit_length(ctx.move.dash_exit_speed)

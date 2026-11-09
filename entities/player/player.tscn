@@ -18,6 +18,9 @@
 [ext_resource type="Resource" path="res://data/player/health.tres" id="16_health_data"]
 [ext_resource type="Resource" path="res://data/player/offense.tres" id="17_offense_data"]
 [ext_resource type="Resource" path="res://data/player/progression.tres" id="18_progression_data"]
+[ext_resource type="Script" path="res://entities/player/states/slide_state.gd" id="19_slide"]
+[ext_resource type="Script" path="res://entities/player/states/slide_jump_state.gd" id="20_slide_jump"]
+[ext_resource type="Script" path="res://entities/player/body_crouch.gd" id="21_crouch"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_body"]
 radius = 0.4
@@ -93,11 +96,12 @@ script = ExtResource("15_double_jump")
 trigger_action = &"jump"
 priority = 10
 
-[node name="Dash" type="Node" parent="Movement"]
+[node name="Dash" type="Node" parent="Movement" node_paths=PackedStringArray("slide")]
 script = ExtResource("13_dash")
 trigger_action = &"dash"
 committed = true
 cancels_committed = true
+slide = NodePath("../Slide")
 
 [node name="DownDash" type="Node" parent="Movement"]
 script = ExtResource("14_down_dash")
@@ -105,6 +109,23 @@ trigger_action = &"dash"
 priority = 10
 committed = true
 cancels_committed = true
+
+[node name="Slide" type="Node" parent="Movement"]
+script = ExtResource("19_slide")
+trigger_action = &"slide"
+committed = true
+
+[node name="SlideJump" type="Node" parent="Movement" node_paths=PackedStringArray("interrupts")]
+script = ExtResource("20_slide_jump")
+trigger_action = &"jump"
+priority = 5
+interrupts = [NodePath("../Slide")]
+
+[node name="BodyCrouch" type="Node" parent="." node_paths=PackedStringArray("machine", "visual", "crouch_states")]
+script = ExtResource("21_crouch")
+machine = NodePath("../Movement")
+visual = NodePath("../Body")
+crouch_states = [NodePath("../Movement/Slide")]
 
 [node name="BodyFacing" type="Node" parent="." node_paths=PackedStringArray("body", "visual", "stats")]
 script = ExtResource("10_facing")

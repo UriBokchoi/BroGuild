@@ -19,6 +19,8 @@ var elapsed: float = 0.0
 var wish_direction: Vector3 = Vector3.ZERO
 ## Hacia dónde mira la cámara en el plano XZ (longitud 1): la dirección por defecto del dash.
 var view_forward: Vector3 = Vector3.FORWARD
+## Si se mantiene pulsada la acción de slide (Ctrl) este tick.
+var slide_held: bool = false
 ## Segundos que quedan para poder saltar después de dejar el suelo sin saltar (coyote time).
 var coyote_left: float = 0.0
 ## Saltos en el aire gastados desde que se dejó el suelo.

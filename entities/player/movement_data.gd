@@ -52,6 +52,16 @@ var turn_speed: float = 0.0
 ## Cargas de stamina que gasta el picado (además del dash del primer Shift).
 @export_range(0.0, 3.0, 0.5, "or_greater") var down_dash_cost: float = 0.0
 
+@export_group("slide")
+## Velocidad horizontal mínima para empezar a deslizar y seguir deslizando.
+@export_range(0.0, 30.0, 0.1, "or_greater", "suffix:m/s") var slide_min_speed: float = 0.0
+## Velocidad máxima deslizando.
+@export_range(0.0, 100.0, 0.5, "or_greater", "suffix:m/s") var slide_max_speed: float = 0.0
+## Frenada deslizando (en llano es lo único que actúa).
+@export_range(0.0, 100.0, 0.5, "or_greater", "suffix:m/s²") var slide_friction: float = 0.0
+## Tirón de la pendiente: acelera cuesta abajo y frena cuesta arriba, según la inclinación.
+@export_range(0.0, 200.0, 0.5, "or_greater", "suffix:m/s²") var slide_gravity: float = 0.0
+
 @export_group("air")
 ## Aceleración hacia la dirección pedida en el aire. No frena el impulso que ya llevas por
 ## encima de la velocidad de carrera.

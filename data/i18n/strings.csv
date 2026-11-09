@@ -59,3 +59,8 @@ STAT_XP_GAIN,Experiencia ganada,XP gain
 STAT_CURRENCY_GAIN,Fichas ganadas,Chips gained
 STAT_LUCK,Suerte,Luck
 STAT_PICKUP_RANGE,Radio de recogida,Pickup range
+STAT_GROUP_SLIDE,Slide,Slide
+STAT_SLIDE_MIN_SPEED,Velocidad mínima del slide,Slide min speed
+STAT_SLIDE_MAX_SPEED,Velocidad máxima del slide,Slide max speed
+STAT_SLIDE_FRICTION,Frenada del slide,Slide friction
+STAT_SLIDE_GRAVITY,Tirón de la pendiente,Slope pull

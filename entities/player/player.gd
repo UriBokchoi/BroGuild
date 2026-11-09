@@ -31,6 +31,7 @@ func _physics_process(delta: float) -> void:
 	context.elapsed += delta
 	context.wish_direction = input.move_direction()
 	context.view_forward = input.view_forward()
+	context.slide_held = input.is_held(InputActions.SLIDE)
 	# Cada tick, por si una mejora acaba de cambiar estas stats.
 	movement.buffer_time = context.move.input_buffer_time
 	movement.committed_end_buffer = context.move.action_end_buffer_time
