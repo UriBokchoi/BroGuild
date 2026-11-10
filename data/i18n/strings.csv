@@ -76,3 +76,9 @@ STAT_WALL_JUMP_CHAIN_COST,Coste de los saltos en pared encadenados,Chained wall 
 STAT_WALL_JUMP_REACH,Alcance del salto en pared,Wall jump reach
 STAT_FAST_FALL_SPEED,Velocidad de la caída rápida,Fast fall speed
 STAT_FAST_FALL_COST,Coste de la caída rápida,Fast fall cost
+STAT_GROUP_MANTLE,Mantle,Mantle
+STAT_MANTLE_MIN_HEIGHT,Altura mínima del mantle,Mantle min height
+STAT_MANTLE_MAX_HEIGHT,Altura máxima del mantle,Mantle max height
+STAT_MANTLE_REACH,Alcance del mantle,Mantle reach
+STAT_MANTLE_CLIMB_SPEED,Velocidad de subida del mantle,Mantle climb speed
+STAT_MANTLE_EXIT_SPEED,Impulso al salir del mantle,Mantle exit boost

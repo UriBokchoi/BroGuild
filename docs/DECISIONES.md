@@ -310,3 +310,18 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
 ## 2026-11-10 · Caída rápida
 - **Decisión:** `FastFallState` (acción `slide`, prioridad 10, comprometida) entra en el aire si hay stamina para `fast_fall_cost` (1 carga). Fija la velocidad recta hacia abajo a `fast_fall_speed` (45 m/s, más que la caída máxima normal), sin impulso horizontal, hasta tocar suelo. Al aterrizar emite `slammed(impact_speed)` para la futura mejora de impacto en área y el juice; la caída no llama a efectos. Comparte Ctrl con el slide sin conflicto: el slide solo entra en el suelo y la caída rápida solo en el aire. Sin stamina, Ctrl en el aire queda en el buffer y, si aterrizas corriendo enseguida, empiezas a deslizar.
 - **Por qué:** el GDD la define como «picado al suelo». Recta, sin impulso horizontal, deja apuntar dónde caes, que es lo que importará para el impacto en área. Es distinta del picado (doble Shift), que es una ráfaga corta hacia abajo.
+
+## 2026-11-10 · Mantle
+- **Decisión:**
+  - **Detección:** `LedgeSensor` busca un borde en tres pasos:
+    1. un rayo hacia delante, justo por encima de `mantle_min_height`, encuentra una pared de cara al cuerpo dentro de `mantle_reach`;
+    2. un rayo hacia abajo desde `mantle_max_height`, un poco dentro del borde, encuentra su parte de arriba (si el borde es más alto, el rayo nace dentro del bloque y no da: no hay mantle);
+    3. una consulta con la cápsula del cuerpo comprueba que cabe encima, pasado el filo.
+    - La dirección es la pedida o, sin dirección, la de la cámara.
+  - **Estado** (`MantleState`; acción `jump`, prioridad 40, la más alta como pide el GDD; comprometido):
+    - sube en vertical a `mantle_climb_speed` hasta pasar el borde;
+    - luego avanza hacia dentro con la gravedad puesta (para acabar pisándolo) y sale a `mantle_exit_speed`;
+    - con Ctrl mantenido pasa al slide; tiene un tiempo máximo por si algo lo atasca.
+    - Gratis. Funciona en el suelo y en el aire.
+  - **Valores de partida:** de 0,3 a 2,6 m, alcance 0,8 m, subida y salida a 12 m/s. Comprobado en los cinco bordes del gimnasio (0,5 a 2,5 m).
+- **Por qué:** el GDD lo define como subir bordes a media altura con un pico de velocidad y salir deslizando con Ctrl. Con la detección por rayos y la comprobación de la cápsula, un borde nuevo del mapa funciona sin marcarlo a mano.

@@ -39,7 +39,7 @@ Cámara en tercera persona a una distancia moderada que crece muy poco a poco co
 | Slide-jump | Espacio en slide | — | Conserva el impulso |
 | Caída rápida | Ctrl en el aire | 1 | Picado recto al suelo hasta tocarlo (más rápido que la caída normal); con mejoras, impacto en área |
 | Salto en pared | Espacio en el aire junto a una pared | 0 / ½ | Al estilo de Deadlock: te impulsa hacia arriba y hacia donde pides, separándote de la pared (si pides hacia la pared, rebota); si ibas más rápido, conservas tu velocidad. El primero gratis; encadenados sin tocar suelo, media carga |
-| Mantle | Saltar contra un borde | — | Sube bordes a media altura con un pico de velocidad; con Ctrl sale deslizando |
+| Mantle | Saltar contra un borde | — | Sube bordes a media altura (de 0,3 a 2,6 m sobre los pies, en datos) con un pico de velocidad; con Ctrl sale deslizando. Funciona en el suelo y en el aire, hacia donde pides o, sin dirección, hacia la cámara |
 
 **Reglas de entrada:** gana la primera acción que pulsas. Una acción empezada no se puede cancelar con otra hasta que termina; la excepción es el dash, que cancela cualquier acción (también otro dash) si quedan cargas. A su vez, el slide puede cortar un dash en el suelo para seguir deslizando con su impulso. Lo que pulsas durante una acción se guarda si falta muy poco para que termine (~0,1 s); si no, se pierde. Si Espacio puede hacer varias cosas a la vez, gana mantle > salto en pared > dash-jump > doble salto (orden en datos).
 

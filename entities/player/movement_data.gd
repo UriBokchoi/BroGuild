@@ -79,6 +79,18 @@ var turn_speed: float = 0.0
 @export_range(0.0, 1080.0, 1.0, "or_greater", "radians_as_degrees", "suffix:°/s")
 var slide_turn_speed: float = 0.0
 
+@export_group("mantle")
+## Altura mínima de un borde, sobre los pies, para subirlo con el mantle.
+@export_range(0.0, 5.0, 0.05, "or_greater", "suffix:m") var mantle_min_height: float = 0.0
+## Altura máxima de un borde, sobre los pies, para subirlo con el mantle.
+@export_range(0.0, 10.0, 0.05, "or_greater", "suffix:m") var mantle_max_height: float = 0.0
+## Distancia máxima desde el centro del cuerpo a la pared del borde.
+@export_range(0.4, 3.0, 0.05, "or_greater", "suffix:m") var mantle_reach: float = 0.0
+## Velocidad con la que sube hasta pasar el borde.
+@export_range(1.0, 50.0, 0.5, "or_greater", "suffix:m/s") var mantle_climb_speed: float = 0.0
+## Pico de velocidad con el que sale hacia dentro del borde.
+@export_range(1.0, 50.0, 0.5, "or_greater", "suffix:m/s") var mantle_exit_speed: float = 0.0
+
 @export_group("air")
 ## Aceleración hacia la dirección pedida en el aire. No frena el impulso que ya llevas por
 ## encima de la velocidad de carrera.

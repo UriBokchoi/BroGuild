@@ -30,7 +30,7 @@
 - [x] Cancelar el dash con un slide (solo en el suelo), que sigue con la velocidad del dash
 - [x] Salto en pared al estilo Deadlock (el primero gratis; encadenados sin tocar suelo, media carga)
 - [x] Caída rápida (Ctrl en el aire)
-- [ ] Mantle (subir bordes a media altura; con Ctrl sale deslizando)
+- [x] Mantle (subir bordes a media altura; con Ctrl sale deslizando)
 - [ ] Sensación de velocidad: FOV dinámico, estela de dash, líneas de velocidad
 
 ## Hito 2 — Combate en la zona de pruebas

@@ -28,6 +28,8 @@
 [ext_resource type="Script" path="res://entities/player/wall_sensor.gd" id="26_wall_sensor"]
 [ext_resource type="Script" path="res://entities/player/states/wall_jump_state.gd" id="27_wall_jump"]
 [ext_resource type="Script" path="res://entities/player/states/fast_fall_state.gd" id="28_fast_fall"]
+[ext_resource type="Script" path="res://entities/player/ledge_sensor.gd" id="29_ledge_sensor"]
+[ext_resource type="Script" path="res://entities/player/states/mantle_state.gd" id="30_mantle"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_body"]
 radius = 0.4
@@ -57,7 +59,7 @@ material = SubResource("StandardMaterial3D_cue")
 inner_radius = 0.55
 outer_radius = 0.7
 
-[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("stats", "stamina", "input", "movement", "wall_sensor", "ground_state", "air_state")]
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("stats", "stamina", "input", "movement", "wall_sensor", "ledge_sensor", "ground_state", "air_state")]
 collision_layer = 2
 collision_mask = 1
 script = ExtResource("1_player")
@@ -66,6 +68,7 @@ stamina = NodePath("Stamina")
 input = NodePath("PlayerInput")
 movement = NodePath("Movement")
 wall_sensor = NodePath("WallSensor")
+ledge_sensor = NodePath("LedgeSensor")
 ground_state = NodePath("Movement/Ground")
 air_state = NodePath("Movement/Air")
 
@@ -156,6 +159,18 @@ script = ExtResource("28_fast_fall")
 trigger_action = &"slide"
 priority = 10
 committed = true
+
+[node name="Mantle" type="Node" parent="Movement" node_paths=PackedStringArray("slide")]
+script = ExtResource("30_mantle")
+trigger_action = &"jump"
+priority = 40
+committed = true
+slide = NodePath("../Slide")
+
+[node name="LedgeSensor" type="Node" parent="." node_paths=PackedStringArray("body", "body_shape")]
+script = ExtResource("29_ledge_sensor")
+body = NodePath("..")
+body_shape = NodePath("../CollisionShape3D")
 
 [node name="WallSensor" type="Node" parent="." node_paths=PackedStringArray("body")]
 script = ExtResource("26_wall_sensor")
