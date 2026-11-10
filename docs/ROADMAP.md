@@ -32,6 +32,7 @@
 - [x] Caída rápida (Ctrl en el aire)
 - [x] Mantle (subir bordes a media altura; con Ctrl sale deslizando)
 - [x] Sensación de velocidad: FOV dinámico, estela de dash, líneas de velocidad
+- [x] Toque Deadlock: arranque progresivo, sprint tras unos segundos, velocidad mínima para el dash en el suelo, caída rápida con doble Ctrl (sustituye al picado de doble Shift) y slides encadenados al aterrizar con Ctrl
 
 ## Hito 2 — Combate en la zona de pruebas
 - [x] Stats de combate y progresión del personaje en datos (vida, regeneración, defensa, esquiva, robo de vida, daño, crítico, velocidad de ataque, proyectiles, área, duración, retroceso, experiencia, fichas, suerte, radio de recogida), visibles en la pausa y en F3
