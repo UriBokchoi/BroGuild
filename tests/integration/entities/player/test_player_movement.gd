@@ -37,10 +37,28 @@ func test_run_speed_upgrade_makes_the_player_faster() -> void:
 	_player.stats.add_modifier(upgrade, self)
 	await wait_physics_frames(SETTLE_FRAMES)
 	Input.action_press(InputActions.MOVE_FORWARD)
-	await wait_physics_frames(30)
+	await wait_physics_frames(45)
 	var speed := Vector2(_player.velocity.x, _player.velocity.z).length()
 	assert_almost_eq(speed, _move.run_speed, 0.01)
 	assert_almost_eq(speed, _player.stats.get_base(&"run_speed") * 1.5, 0.01, "+50 %")
+
+
+func test_starting_to_move_is_not_instant() -> void:
+	await wait_physics_frames(SETTLE_FRAMES)
+	Input.action_press(InputActions.MOVE_FORWARD)
+	await wait_physics_frames(3)
+	var speed := Vector2(_player.velocity.x, _player.velocity.z).length()
+	assert_gt(speed, 0.0, "ya arranca")
+	assert_lt(speed, _move.run_speed * 0.6, "pero acelera poco a poco")
+
+
+func test_moving_for_a_while_starts_sprinting() -> void:
+	await wait_physics_frames(SETTLE_FRAMES)
+	Input.action_press(InputActions.MOVE_FORWARD)
+	await wait_physics_frames(150)
+	assert_true(_player.context.is_sprinting(), "tras unos segundos moviéndose")
+	var speed := Vector2(_player.velocity.x, _player.velocity.z).length()
+	assert_almost_eq(speed, _move.sprint_speed, 0.01, "va más rápido que caminando")
 
 
 func test_stops_after_releasing() -> void:

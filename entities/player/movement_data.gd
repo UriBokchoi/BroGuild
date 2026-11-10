@@ -6,9 +6,13 @@ extends Resource
 ## modifican con [StatModifier] por su nombre.
 
 @export_group("run")
-## Velocidad de carrera en el suelo.
+## Velocidad normal en el suelo (caminando).
 @export_range(0.0, 30.0, 0.1, "or_greater", "suffix:m/s") var run_speed: float = 0.0
-## Aceleración hacia la velocidad de carrera mientras pides una dirección.
+## Velocidad en sprint: la que alcanzas tras [member sprint_delay] segundos moviéndote.
+@export_range(0.0, 40.0, 0.1, "or_greater", "suffix:m/s") var sprint_speed: float = 0.0
+## Segundos moviéndote sin soltar la dirección hasta entrar en sprint.
+@export_range(0.0, 10.0, 0.1, "or_greater", "suffix:s") var sprint_delay: float = 0.0
+## Aceleración hacia la velocidad de carrera (o de sprint) mientras pides una dirección.
 @export_range(0.0, 200.0, 0.5, "or_greater", "suffix:m/s²") var ground_acceleration: float = 0.0
 ## Frenada en el suelo cuando sueltas la dirección.
 @export_range(0.0, 200.0, 0.5, "or_greater", "suffix:m/s²") var ground_deceleration: float = 0.0
@@ -49,7 +53,9 @@ var turn_speed: float = 0.0
 @export_range(0.0, 100.0, 0.5, "or_greater", "suffix:m/s") var dash_exit_speed: float = 0.0
 ## Cargas de stamina que gasta el dash.
 @export_range(0.0, 3.0, 0.5, "or_greater") var dash_cost: float = 0.0
-## Dashes en el aire antes de tocar suelo (el picado no cuenta: convierte el último dash).
+## Velocidad horizontal mínima para hacer un dash en el suelo (parado o arrancando, no hay dash).
+@export_range(0.0, 40.0, 0.1, "or_greater", "suffix:m/s") var dash_min_speed: float = 0.0
+## Dashes en el aire antes de tocar suelo.
 @export_range(0, 10, 1, "or_greater") var air_dashes: int = 0
 ## Segundos tras acabar un dash en el suelo en los que Espacio hace el dash-jump.
 @export_range(0.0, 1.0, 0.01, "or_greater", "suffix:s") var dash_jump_window: float = 0.0
@@ -57,14 +63,6 @@ var turn_speed: float = 0.0
 @export_range(0.5, 10.0, 0.05, "or_greater", "suffix:m") var dash_jump_height: float = 0.0
 ## Cargas de stamina que gasta el dash-jump (además del dash).
 @export_range(0.0, 3.0, 0.5, "or_greater") var dash_jump_cost: float = 0.0
-## Velocidad del picado (dash hacia abajo).
-@export_range(0.0, 100.0, 0.5, "or_greater", "suffix:m/s") var down_dash_speed: float = 0.0
-## Segundos que dura el picado (antes, si tocas suelo).
-@export_range(0.05, 1.0, 0.01, "or_greater", "suffix:s") var down_dash_duration: float = 0.0
-## Segundos tras el primer Shift en los que el segundo, sin dirección, hace el picado.
-@export_range(0.05, 1.0, 0.01, "or_greater", "suffix:s") var down_dash_window: float = 0.0
-## Cargas de stamina que gasta el picado (además del dash del primer Shift).
-@export_range(0.0, 3.0, 0.5, "or_greater") var down_dash_cost: float = 0.0
 
 @export_group("slide")
 ## Velocidad horizontal mínima para empezar a deslizar y seguir deslizando.
@@ -97,10 +95,12 @@ var slide_turn_speed: float = 0.0
 @export_range(0.0, 200.0, 0.5, "or_greater", "suffix:m/s²") var air_acceleration: float = 0.0
 ## Frenada en el aire cuando no pides dirección (0 = conservas todo el impulso).
 @export_range(0.0, 200.0, 0.5, "or_greater", "suffix:m/s²") var air_deceleration: float = 0.0
-## Velocidad de la caída rápida (Ctrl en el aire), recta hacia abajo.
+## Velocidad de la caída rápida (Ctrl dos veces en el aire), recta hacia abajo.
 @export_range(1.0, 200.0, 0.5, "or_greater", "suffix:m/s") var fast_fall_speed: float = 0.0
 ## Cargas de stamina que gasta la caída rápida.
 @export_range(0.0, 3.0, 0.5, "or_greater") var fast_fall_cost: float = 0.0
+## Segundos máximos entre los dos Ctrl de la caída rápida.
+@export_range(0.05, 1.0, 0.01, "or_greater", "suffix:s") var fast_fall_double_tap_window: float = 0.0
 
 @export_group("input")
 ## Segundos que espera una acción pulsada que aún no puede hacerse (el jump buffer).

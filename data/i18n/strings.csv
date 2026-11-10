@@ -33,10 +33,6 @@ STAT_DASH_SPEED,Velocidad del dash,Dash speed
 STAT_DASH_DURATION,Duración del dash,Dash duration
 STAT_DASH_EXIT_SPEED,Velocidad al salir del dash,Dash exit speed
 STAT_DASH_COST,Coste del dash,Dash cost
-STAT_DOWN_DASH_SPEED,Velocidad del picado,Dive speed
-STAT_DOWN_DASH_DURATION,Duración del picado,Dive duration
-STAT_DOWN_DASH_WINDOW,Margen para el picado,Dive window
-STAT_DOWN_DASH_COST,Coste del picado,Dive cost
 STAT_AIR_DASHES,Dashes en el aire,Air dashes
 STAT_GROUP_SURVIVAL,Supervivencia,Survival
 STAT_MAX_HEALTH,Vida máxima,Max health
@@ -82,3 +78,7 @@ STAT_MANTLE_MAX_HEIGHT,Altura máxima del mantle,Mantle max height
 STAT_MANTLE_REACH,Alcance del mantle,Mantle reach
 STAT_MANTLE_CLIMB_SPEED,Velocidad de subida del mantle,Mantle climb speed
 STAT_MANTLE_EXIT_SPEED,Impulso al salir del mantle,Mantle exit boost
+STAT_SPRINT_SPEED,Velocidad de sprint,Sprint speed
+STAT_SPRINT_DELAY,Tiempo hasta el sprint,Time to sprint
+STAT_DASH_MIN_SPEED,Velocidad mínima para el dash,Dash min speed
+STAT_FAST_FALL_DOUBLE_TAP_WINDOW,Margen del doble Ctrl,Double Ctrl window

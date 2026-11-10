@@ -21,14 +21,14 @@ var wish_direction: Vector3 = Vector3.ZERO
 var view_forward: Vector3 = Vector3.FORWARD
 ## Si se mantiene pulsada la acción de slide (Ctrl) este tick.
 var slide_held: bool = false
+## Segundos seguidos pidiendo dirección (lleva al sprint).
+var sprint_time: float = 0.0
 ## Segundos que quedan para poder saltar después de dejar el suelo sin saltar (coyote time).
 var coyote_left: float = 0.0
 ## Saltos en el aire gastados desde que se dejó el suelo.
 var air_jumps_used: int = 0
 ## Dashes empezados en el aire desde que se dejó el suelo.
 var air_dashes_used: int = 0
-## Momento ([member elapsed]) del último dash, para el picado.
-var last_dash_time: float = -INF
 ## Si el último dash empezó en el aire.
 var last_dash_in_air: bool = false
 ## Dirección del último dash (la que recupera el dash-jump).
@@ -41,6 +41,34 @@ var wall_jumps_chained: int = 0
 var wall_sensor: WallSensor
 ## Sensor de bordes a los que subir (para el mantle). Sin sensor, nunca hay borde.
 var ledge_sensor: LedgeSensor
+
+## Momento ([member elapsed]) de la última pulsación de cada acción y de la anterior (dobles
+## pulsaciones).
+var _last_press: Dictionary[StringName, float] = {}
+var _previous_press: Dictionary[StringName, float] = {}
+
+
+## ¿Lleva el tiempo suficiente moviéndose para ir en sprint?
+func is_sprinting() -> bool:
+	return sprint_time >= move.sprint_delay
+
+
+## Velocidad objetivo en el suelo: la de sprint o la normal.
+func ground_speed() -> float:
+	return move.sprint_speed if is_sprinting() else move.run_speed
+
+
+## Apunta que se acaba de pulsar [param action] (para detectar dobles pulsaciones).
+func record_press(action: StringName) -> void:
+	_previous_press[action] = _last_press.get(action, -INF)
+	_last_press[action] = elapsed
+
+
+## ¿Las dos últimas pulsaciones de [param action] están a menos de [param window] segundos?
+func is_double_tap(action: StringName, window: float) -> bool:
+	var last: float = _last_press.get(action, -INF)
+	var previous: float = _previous_press.get(action, -INF)
+	return last - previous <= window
 
 
 ## ¿Está abierta la ventana del dash-jump (justo después de un dash hecho en el suelo)?

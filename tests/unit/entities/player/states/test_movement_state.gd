@@ -17,6 +17,8 @@ func before_each() -> void:
 	move.jump_time_to_apex = 0.5
 	move.max_fall_speed = 10.0
 	move.run_speed = RUN_SPEED
+	move.sprint_speed = RUN_SPEED + 3.0
+	move.sprint_delay = 2.0
 	move.air_acceleration = AIR_ACCELERATION
 	_body = autofree(CharacterBody3D.new())
 	_context = MovementContext.new()
@@ -64,3 +66,33 @@ func test_without_input_only_air_deceleration_slows_down() -> void:
 	_context.move.air_deceleration = 6.0
 	_state.apply_air_control(TICK)
 	assert_almost_eq(_body.velocity.x, 15.0 - 6.0 * TICK, 1e-6)
+
+
+func test_sprint_comes_after_moving_for_the_delay() -> void:
+	_context.wish_direction = Vector3.FORWARD
+	_state.track_sprint(1.0)
+	assert_false(_context.is_sprinting())
+	assert_eq(_context.ground_speed(), RUN_SPEED)
+	_state.track_sprint(1.0)
+	assert_true(_context.is_sprinting(), "2 s moviéndose")
+	assert_eq(_context.ground_speed(), RUN_SPEED + 3.0)
+
+
+func test_letting_go_of_the_direction_ends_the_sprint() -> void:
+	_context.wish_direction = Vector3.FORWARD
+	_state.track_sprint(3.0)
+	_context.wish_direction = Vector3.ZERO
+	_state.track_sprint(TICK)
+	assert_false(_context.is_sprinting())
+
+
+func test_double_tap_needs_both_presses_inside_the_window() -> void:
+	_context.elapsed = 1.0
+	_context.record_press(&"slide")
+	assert_false(_context.is_double_tap(&"slide", 0.3), "una sola pulsación")
+	_context.elapsed = 1.2
+	_context.record_press(&"slide")
+	assert_true(_context.is_double_tap(&"slide", 0.3))
+	_context.elapsed = 2.0
+	_context.record_press(&"slide")
+	assert_false(_context.is_double_tap(&"slide", 0.3), "demasiado separadas")

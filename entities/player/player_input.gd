@@ -4,6 +4,9 @@ extends Node
 ## da la dirección pedida relativa a la cámara. Solo escucha las acciones que activan algún
 ## estado, así que un estado nuevo con su acción funciona sin tocar este script.
 
+## Se pulsó [param action] (antes de pedírsela a la máquina; sirve para dobles pulsaciones).
+signal action_pressed(action: StringName)
+
 @export var machine: StateMachine
 ## Cámara cuyo giro define el «adelante» del movimiento.
 @export var camera: CameraRig
@@ -12,6 +15,7 @@ extends Node
 func _unhandled_input(event: InputEvent) -> void:
 	for action: StringName in machine.get_trigger_actions():
 		if event.is_action_pressed(action):
+			action_pressed.emit(action)
 			machine.request(action)
 
 

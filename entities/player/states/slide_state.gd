@@ -12,6 +12,11 @@ func can_enter() -> bool:
 	return ctx.body.is_on_floor() and horizontal_speed() >= ctx.move.slide_min_speed
 
 
+func enter(_previous: State) -> void:
+	# Deslizar también es tocar suelo (p. ej. al encadenar slide → salto → slide).
+	touch_ground()
+
+
 func physics_update(delta: float) -> void:
 	if not ctx.body.is_on_floor():
 		ctx.coyote_left = ctx.move.coyote_time
