@@ -43,3 +43,22 @@ func test_horizontal_motion_turns_by_sensitivity() -> void:
 	_rig.rotate_view(Vector2(10.0, 0.0))
 	var expected := TARGET_YAW - deg_to_rad(_rig.data.mouse_sensitivity) * 10.0
 	assert_almost_eq(_rig.rotation.y, expected, 1e-6)
+
+
+func test_fov_opens_when_the_target_goes_fast() -> void:
+	var body := CharacterBody3D.new()
+	add_child_autofree(body)
+	body.velocity = Vector3(28.0, 0.0, 0.0)
+	var rig := RigScene.instantiate() as CameraRig
+	rig.target = body
+	add_child_autofree(rig)
+	var camera := rig.get_node(^"%Camera3D") as Camera3D
+	await wait_process_frames(90)
+	assert_almost_eq(camera.fov, rig.data.fov_at(28.0), 0.5, "se abre hasta el FOV de esa velocidad")
+	assert_gt(camera.fov, rig.data.fov + 5.0)
+
+
+func test_fov_stays_with_a_target_that_does_not_move() -> void:
+	var camera := _rig.get_node(^"%Camera3D") as Camera3D
+	await wait_process_frames(10)
+	assert_almost_eq(camera.fov, _rig.data.fov, 1e-3)

@@ -31,6 +31,14 @@ var turn_speed: float = 0.0
 @export_range(0.5, 10.0, 0.05, "or_greater", "suffix:m") var air_jump_height: float = 0.0
 ## Cargas de stamina que gasta cada salto en el aire.
 @export_range(0.0, 3.0, 0.5, "or_greater") var air_jump_cost: float = 0.0
+## Altura del salto en pared.
+@export_range(0.5, 10.0, 0.05, "or_greater", "suffix:m") var wall_jump_height: float = 0.0
+## Velocidad horizontal mínima con la que sales de la pared (si ibas más rápido, la conservas).
+@export_range(0.0, 50.0, 0.5, "or_greater", "suffix:m/s") var wall_jump_speed: float = 0.0
+## Cargas que gasta cada salto en pared encadenado sin tocar suelo (el primero es gratis).
+@export_range(0.0, 3.0, 0.5, "or_greater") var wall_jump_chain_cost: float = 0.0
+## Distancia máxima desde el centro del cuerpo a la pared para poder saltar en ella.
+@export_range(0.4, 3.0, 0.05, "or_greater", "suffix:m") var wall_jump_reach: float = 0.0
 
 @export_group("dash")
 ## Velocidad del dash.
@@ -71,12 +79,28 @@ var turn_speed: float = 0.0
 @export_range(0.0, 1080.0, 1.0, "or_greater", "radians_as_degrees", "suffix:°/s")
 var slide_turn_speed: float = 0.0
 
+@export_group("mantle")
+## Altura mínima de un borde, sobre los pies, para subirlo con el mantle.
+@export_range(0.0, 5.0, 0.05, "or_greater", "suffix:m") var mantle_min_height: float = 0.0
+## Altura máxima de un borde, sobre los pies, para subirlo con el mantle.
+@export_range(0.0, 10.0, 0.05, "or_greater", "suffix:m") var mantle_max_height: float = 0.0
+## Distancia máxima desde el centro del cuerpo a la pared del borde.
+@export_range(0.4, 3.0, 0.05, "or_greater", "suffix:m") var mantle_reach: float = 0.0
+## Velocidad con la que sube hasta pasar el borde.
+@export_range(1.0, 50.0, 0.5, "or_greater", "suffix:m/s") var mantle_climb_speed: float = 0.0
+## Pico de velocidad con el que sale hacia dentro del borde.
+@export_range(1.0, 50.0, 0.5, "or_greater", "suffix:m/s") var mantle_exit_speed: float = 0.0
+
 @export_group("air")
 ## Aceleración hacia la dirección pedida en el aire. No frena el impulso que ya llevas por
 ## encima de la velocidad de carrera.
 @export_range(0.0, 200.0, 0.5, "or_greater", "suffix:m/s²") var air_acceleration: float = 0.0
 ## Frenada en el aire cuando no pides dirección (0 = conservas todo el impulso).
 @export_range(0.0, 200.0, 0.5, "or_greater", "suffix:m/s²") var air_deceleration: float = 0.0
+## Velocidad de la caída rápida (Ctrl en el aire), recta hacia abajo.
+@export_range(1.0, 200.0, 0.5, "or_greater", "suffix:m/s") var fast_fall_speed: float = 0.0
+## Cargas de stamina que gasta la caída rápida.
+@export_range(0.0, 3.0, 0.5, "or_greater") var fast_fall_cost: float = 0.0
 
 @export_group("input")
 ## Segundos que espera una acción pulsada que aún no puede hacerse (el jump buffer).
@@ -106,3 +130,8 @@ func air_jump_velocity() -> float:
 ## Velocidad vertical inicial de un dash-jump de [member dash_jump_height].
 func dash_jump_velocity() -> float:
 	return sqrt(2.0 * gravity() * dash_jump_height)
+
+
+## Velocidad vertical inicial de un salto en pared de [member wall_jump_height].
+func wall_jump_velocity() -> float:
+	return sqrt(2.0 * gravity() * wall_jump_height)

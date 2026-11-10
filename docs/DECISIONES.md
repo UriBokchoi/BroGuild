@@ -267,3 +267,69 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
 ## 2026-11-09 · Girar durante el slide
 - **Decisión:** el slide se curva con WASD. Cada tick, `SlideState.steer()` gira la parte horizontal de la velocidad hacia la dirección pedida, como mucho `slide_turn_speed` (180 °/s de partida), sin cambiar su rapidez ni la parte vertical. Sin dirección, sigue recto. Pedir hacia atrás lo da la vuelta poco a poco; la frenada sigue siendo la del slide.
 - **Por qué:** lo pidió el diseñador: moverse mientras desliza, como en Deadlock, y no ir siempre hacia delante. Girar sin perder velocidad mantiene el slide como forma rápida de moverse y de esquivar.
+
+## 2026-11-09 · Plan: movimiento, combate y menús
+- **Decisión:**
+  - **Orden:** el diseñador decide terminar el movimiento y después el combate (Hito 2, en la zona de pruebas), y luego los menús y el flujo de partida (Hito 3). Los mapas de los tres niveles iniciales (el Brosque, la Torre del Mago y la Mazmorra) van después del juice (Hito 6).
+  - **Movimiento pendiente:** cancelar el dash con un slide (solo en el suelo, con la velocidad del dash), salto en pared al estilo Deadlock, caída rápida, mantle y sensación de velocidad.
+  - **Combate:**
+    - personajes iniciales: Guerrero (espada), Mago (bastón de mago) y Pícaro (daga);
+    - armas automáticas con 4 ranuras de armas y 4 de runas, nivel máximo 5 (valores por defecto, en datos);
+    - subir de nivel = elegir 1 de 3;
+    - runas: Fuerza, Amplitud, Prisa, Vigor y Multiplicidad (cantidad de proyectiles, que también afecta a la espada; el nombre es provisional).
+  - **Menús:**
+    - menú principal: Jugar, Archivo y Abandonar;
+    - selección de personaje con panel de info al pasar el ratón y modelo 3D en el centro;
+    - selección de nivel en el lugar del panel de info;
+    - Archivo con desbloqueos por conseguir o derrotar.
+  - **Arquitectura prevista:**
+    - `WeaponData` y `RuneData` con un `StatModifierSet` por nivel;
+    - `EnemyData` con `HealthData`;
+    - `LevelData`;
+    - un catálogo `data/content.tres` del que salen los menús, el Archivo y las opciones al subir de nivel;
+    - `Save` para los desbloqueos;
+    - escena raíz `Game` con el flujo de pantallas.
+- **Por qué:** lo pidió el diseñador. Todo lo nuevo es contenido en datos sobre los sistemas que ya existen (stats con dos capas, conjuntos de modificadores), así que añadir un arma, una runa, un enemigo o un nivel será crear su `.tres`.
+
+## 2026-11-09 · El slide corta el dash en el suelo
+- **Decisión:** el nodo Slide lista a Dash en sus `interrupts`, así que Ctrl a mitad de un dash corta el dash si se puede deslizar (en el suelo y con velocidad). El slide sigue con la velocidad del dash, recortada a la máxima del slide. `DashState.exit()` abre la ventana del dash-jump cuando el siguiente estado es el slide, así que dash → slide → Espacio sigue siendo un dash-jump. En el aire no hace nada.
+- **Por qué:** lo pidió el diseñador: cancelar el dash a la mitad con un slide y usar ese impulso, solo en el suelo. Es una continuación diseñada, así que va por `interrupts`, sin excepciones en la máquina; el GDD lo añade a las reglas de entrada.
+
+## 2026-11-09 · Salto en pared
+- **Decisión:**
+  - **Detección:** `WallSensor` lanza 12 rayos horizontales a la altura del centro del cuerpo contra el mundo y devuelve la normal de la pared casi vertical más cercana dentro de `wall_jump_reach` (0,75 m desde el centro). No hace falta estar empujando la pared. `MovementContext.wall_normal()` lo consulta.
+  - **Salto** (`WallJumpState`; acción `jump`, prioridad 30, por encima del dash-jump y del doble salto como pide el GDD):
+    - entra en el aire con una pared al alcance;
+    - sale hacia la dirección pedida, rebotada si apunta a la pared, más la normal de la pared, así que siempre se separa de ella; sin dirección, sale recto hacia fuera;
+    - la velocidad horizontal es la mayor entre la que llevabas y `wall_jump_speed` (10 m/s), y sube `wall_jump_height` (1,8 m);
+    - no gasta saltos en el aire.
+  - **Coste:** el primero es gratis y los encadenados sin tocar suelo cuestan `wall_jump_chain_cost` (½ carga); el suelo reinicia la cadena.
+  - **Comprobado en el gimnasio:** en la chimenea de 3 m se sube de pared a pared (dos saltos, unos 4,5 m de altura).
+- **Por qué:** el GDD y el diseñador piden un salto en pared al estilo de Deadlock: responsivo, hacia donde apuntas y encadenable con stamina. Los rayos alrededor detectan la pared aunque no te estés moviendo contra ella, que es lo que lo hace responsivo.
+
+## 2026-11-10 · Caída rápida
+- **Decisión:** `FastFallState` (acción `slide`, prioridad 10, comprometida) entra en el aire si hay stamina para `fast_fall_cost` (1 carga). Fija la velocidad recta hacia abajo a `fast_fall_speed` (45 m/s, más que la caída máxima normal), sin impulso horizontal, hasta tocar suelo. Al aterrizar emite `slammed(impact_speed)` para la futura mejora de impacto en área y el juice; la caída no llama a efectos. Comparte Ctrl con el slide sin conflicto: el slide solo entra en el suelo y la caída rápida solo en el aire. Sin stamina, Ctrl en el aire queda en el buffer y, si aterrizas corriendo enseguida, empiezas a deslizar.
+- **Por qué:** el GDD la define como «picado al suelo». Recta, sin impulso horizontal, deja apuntar dónde caes, que es lo que importará para el impacto en área. Es distinta del picado (doble Shift), que es una ráfaga corta hacia abajo.
+
+## 2026-11-10 · Mantle
+- **Decisión:**
+  - **Detección:** `LedgeSensor` busca un borde en tres pasos:
+    1. un rayo hacia delante, justo por encima de `mantle_min_height`, encuentra una pared de cara al cuerpo dentro de `mantle_reach`;
+    2. un rayo hacia abajo desde `mantle_max_height`, un poco dentro del borde, encuentra su parte de arriba (si el borde es más alto, el rayo nace dentro del bloque y no da: no hay mantle);
+    3. una consulta con la cápsula del cuerpo comprueba que cabe encima, pasado el filo.
+    - La dirección es la pedida o, sin dirección, la de la cámara.
+  - **Estado** (`MantleState`; acción `jump`, prioridad 40, la más alta como pide el GDD; comprometido):
+    - sube en vertical a `mantle_climb_speed` hasta pasar el borde;
+    - luego avanza hacia dentro con la gravedad puesta (para acabar pisándolo) y sale a `mantle_exit_speed`;
+    - con Ctrl mantenido pasa al slide; tiene un tiempo máximo por si algo lo atasca.
+    - Gratis. Funciona en el suelo y en el aire.
+  - **Valores de partida:** de 0,3 a 2,6 m, alcance 0,8 m, subida y salida a 12 m/s. Comprobado en los cinco bordes del gimnasio (0,5 a 2,5 m).
+- **Por qué:** el GDD lo define como subir bordes a media altura con un pico de velocidad y salir deslizando con Ctrl. Con la detección por rayos y la comprobación de la cápsula, un borde nuevo del mapa funciona sin marcarlo a mano.
+
+## 2026-11-10 · Sensación de velocidad
+- **Decisión:**
+  - **FOV dinámico:** `CameraData.fov_by_speed` (curva: velocidad horizontal en m/s → grados que se suman) y `fov_smoothing`. `CameraRig` abre el FOV con la velocidad de su objetivo si es un `CharacterBody3D`, suavizado. De partida: sin cambio hasta la carrera (9 m/s) y +14° a la velocidad del dash (28 m/s).
+  - **Estela:** `SpeedTrail` (un `GPUParticles3D`) emite puntos dorados suaves en el mundo mientras el estado es uno de `trail_states` (en la escena: dash, dash-jump, picado y slide). Escucha `state_changed`.
+  - **Líneas de velocidad:** `SpeedLines` (`vfx/speed_lines/`, una capa de pantalla con el shader `speed_lines.gdshader`) dibuja rayas radiales finas en los bordes. Aparecen a partir de 15 m/s y están a tope a 28 m/s, suavizadas; por debajo de una intensidad mínima ni se dibujan.
+  - Las tres son solo visuales: leen la velocidad o el estado y no cambian el movimiento (juice desacoplado).
+- **Por qué:** el ROADMAP pide FOV dinámico, estela de dash y líneas de velocidad para que moverse rápido se note. Ajustadas mirando capturas: las primeras líneas tapaban demasiado y la estela eran cuadrados, así que pasaron a ser finas, solo en los bordes, y puntos difuminados.

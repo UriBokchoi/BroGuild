@@ -65,6 +65,31 @@ func test_dash_holding_ctrl_keeps_sliding_at_dash_speed() -> void:
 	assert_gt(_speed(), _move.dash_exit_speed, "sin el recorte de salida del dash")
 
 
+func test_ctrl_in_the_middle_of_a_ground_dash_cuts_it_into_a_slide() -> void:
+	await wait_physics_frames(SETTLE_FRAMES)
+	_player.movement.request(InputActions.DASH)
+	await wait_physics_frames(3)
+	assert_true(_player.movement.current is DashState, "a mitad del dash")
+	Input.action_press(InputActions.SLIDE)
+	_player.movement.request(InputActions.SLIDE)
+	await wait_physics_frames(2)
+	assert_true(_player.movement.current is SlideState, "el slide corta el dash")
+	assert_gt(_speed(), _move.dash_exit_speed, "con el impulso del dash")
+	assert_true(_player.context.is_dash_jump_open(), "cortarlo abre la ventana del dash-jump")
+
+
+func test_ctrl_does_not_cut_an_air_dash() -> void:
+	await wait_physics_frames(SETTLE_FRAMES)
+	_player.movement.request(InputActions.JUMP)
+	await wait_physics_frames(8)
+	_player.movement.request(InputActions.DASH)
+	await wait_physics_frames(2)
+	Input.action_press(InputActions.SLIDE)
+	_player.movement.request(InputActions.SLIDE)
+	await wait_physics_frames(2)
+	assert_true(_player.movement.current is DashState, "en el aire, el slide no entra")
+
+
 ## Corre hacia delante a toda velocidad y empieza a deslizar manteniendo Ctrl.
 func _run_and_slide() -> void:
 	await wait_physics_frames(SETTLE_FRAMES)

@@ -35,8 +35,30 @@ var last_dash_in_air: bool = false
 var last_dash_direction: Vector3 = Vector3.FORWARD
 ## Momento ([member elapsed]) en que acabó el último dash; abre la ventana del dash-jump.
 var dash_end_time: float = -INF
+## Saltos en pared encadenados desde que se dejó el suelo (el primero es gratis).
+var wall_jumps_chained: int = 0
+## Sensor de paredes cercanas (para el salto en pared). Sin sensor, nunca hay pared.
+var wall_sensor: WallSensor
+## Sensor de bordes a los que subir (para el mantle). Sin sensor, nunca hay borde.
+var ledge_sensor: LedgeSensor
 
 
 ## ¿Está abierta la ventana del dash-jump (justo después de un dash hecho en el suelo)?
 func is_dash_jump_open() -> bool:
 	return not last_dash_in_air and elapsed - dash_end_time <= move.dash_jump_window
+
+
+## Normal de la pared más cercana al alcance del salto en pared; cero si no hay ninguna.
+func wall_normal() -> Vector3:
+	if wall_sensor == null:
+		return Vector3.ZERO
+	return wall_sensor.find_wall(move.wall_jump_reach)
+
+
+## Borde al que subir hacia [param direction] con el alcance y las alturas del mantle; null si no hay.
+func find_ledge(direction: Vector3) -> LedgeSensor.Ledge:
+	if ledge_sensor == null:
+		return null
+	return ledge_sensor.find_ledge(
+		direction, move.mantle_reach, move.mantle_min_height, move.mantle_max_height
+	)

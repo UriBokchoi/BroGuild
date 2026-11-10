@@ -113,6 +113,21 @@ func test_ring_shows_only_while_the_dash_jump_window_is_open() -> void:
 	assert_false(ring.visible, "pasada la ventana")
 
 
+func test_ctrl_in_the_air_is_a_fast_fall_that_slams_on_landing() -> void:
+	var fast_fall := _player.get_node(^"Movement/FastFall") as FastFallState
+	watch_signals(fast_fall)
+	# Desde 8 m: a 45 m/s tarda unos 10 ticks en llegar, margen para medir la velocidad.
+	_player.global_position = Vector3(0.0, 8.0, 0.0)
+	await wait_physics_frames(2)
+	_player.movement.request(InputActions.SLIDE)
+	await wait_physics_frames(2)
+	assert_same(_player.movement.current, fast_fall, "Ctrl en el aire")
+	assert_almost_eq(_player.velocity.y, -_move.fast_fall_speed, 0.01)
+	await wait_physics_frames(20)
+	assert_same(_player.movement.current, _player.ground_state, "aterriza enseguida")
+	assert_signal_emitted(fast_fall, "slammed")
+
+
 func _horizontal_speed() -> float:
 	return Vector2(_player.velocity.x, _player.velocity.z).length()
 

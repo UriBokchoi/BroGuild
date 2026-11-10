@@ -35,13 +35,13 @@ Cámara en tercera persona a una distancia moderada que crece muy poco a poco co
 | Dash | Shift | 1 | Ráfaga corta en la dirección de movimiento (sin dirección, hacia donde mira la cámara); también en el aire, donde va recto. Al terminar conservas parte del impulso. Dashes totales = cargas de stamina; en el aire, como mucho los «dashes en el aire» (1 de partida, mejorable), que se recuperan al tocar suelo |
 | Picado | Shift dos veces en el aire, sin dirección | +1 | Dash hacia abajo: el primer Shift ya hace un dash y el segundo, dentro de una ventana corta, lo convierte en picado |
 | Dash-jump | Espacio justo tras el dash | +1 | Ventana corta (con aviso visual: un aro dorado en los pies) → salto largo que conserva la velocidad del dash. Solo tras un dash en el suelo (también en dash → slide); pulsado al final del dash, sale al acabar. Sin stamina, Espacio es un salto normal |
-| Slide | Ctrl corriendo (mantener) | — | Gratis; acelera cuesta abajo y frena cuesta arriba (en llano frena poco a poco); hurtbox baja (zona donde recibes daño). Empieza y sigue mientras vayas por encima de una velocidad mínima; termina al soltar Ctrl. Con WASD se curva hacia donde pides sin perder velocidad (como en Deadlock). Dash → slide alarga el dash sin gastar más (mantén Ctrl al acabar el dash) |
+| Slide | Ctrl corriendo (mantener) | — | Gratis; acelera cuesta abajo y frena cuesta arriba (en llano frena poco a poco); hurtbox baja (zona donde recibes daño). Empieza y sigue mientras vayas por encima de una velocidad mínima; termina al soltar Ctrl. Con WASD se curva hacia donde pides sin perder velocidad (como en Deadlock). Dash → slide alarga el dash sin gastar más: Ctrl en mitad de un dash en el suelo lo corta y sigue deslizando con la velocidad del dash (o mantén Ctrl al acabarlo) |
 | Slide-jump | Espacio en slide | — | Conserva el impulso |
-| Caída rápida | Ctrl en el aire | 1 | Picado al suelo; con mejoras, impacto en área |
-| Salto en pared | Espacio contra pared | 0 / ½ | El primero gratis; encadenados sin tocar suelo, media carga |
-| Mantle | Saltar contra un borde | — | Sube bordes a media altura con un pico de velocidad; con Ctrl sale deslizando |
+| Caída rápida | Ctrl en el aire | 1 | Picado recto al suelo hasta tocarlo (más rápido que la caída normal); con mejoras, impacto en área |
+| Salto en pared | Espacio en el aire junto a una pared | 0 / ½ | Al estilo de Deadlock: te impulsa hacia arriba y hacia donde pides, separándote de la pared (si pides hacia la pared, rebota); si ibas más rápido, conservas tu velocidad. El primero gratis; encadenados sin tocar suelo, media carga |
+| Mantle | Saltar contra un borde | — | Sube bordes a media altura (de 0,3 a 2,6 m sobre los pies, en datos) con un pico de velocidad; con Ctrl sale deslizando. Funciona en el suelo y en el aire, hacia donde pides o, sin dirección, hacia la cámara |
 
-**Reglas de entrada:** gana la primera acción que pulsas. Una acción empezada no se puede cancelar con otra hasta que termina; la excepción es el dash, que cancela cualquier acción (también otro dash) si quedan cargas. Lo que pulsas durante una acción se guarda si falta muy poco para que termine (~0,1 s); si no, se pierde. Si Espacio puede hacer varias cosas a la vez, gana mantle > salto en pared > dash-jump > doble salto (orden en datos).
+**Reglas de entrada:** gana la primera acción que pulsas. Una acción empezada no se puede cancelar con otra hasta que termina; la excepción es el dash, que cancela cualquier acción (también otro dash) si quedan cargas. A su vez, el slide puede cortar un dash en el suelo para seguir deslizando con su impulso. Lo que pulsas durante una acción se guarda si falta muy poco para que termine (~0,1 s); si no, se pierde. Si Espacio puede hacer varias cosas a la vez, gana mantle > salto en pared > dash-jump > doble salto (orden en datos).
 
 **Valores de partida** (viven en `data/player/movement.tres` y se ajustan jugando): 3 cargas; recarga de una carga cada ~3 s; dash de ~0,2 s.
 
@@ -70,8 +70,13 @@ Toda apuesta tiene **anticipación** (giro, luces, sonido que sube), **revelado*
 **Mejoras que tocan el azar** (ejemplos): Dado trucado (1 reroll gratis por nivel) · Amigo del crupier (las maldiciones de la tragaperras a veces son premio) · Mano caliente (cofres más baratos con racha alta).
 
 ## 6. Combate
-- **Armas automáticas**: disparan solas al objetivo más cercano o al grupo más denso; tú te centras en moverte. Ranuras de partida: 4 armas + 4 pasivas (en datos).
-- **Armas iniciales (temática casino)**: Fichas arrojadizas (proyectil) · Dados explosivos (área) · Ruleta orbital (orbitan a tu alrededor) · Cartas cortantes (perforan).
+- **Armas automáticas** (como en Megabonk o Vampire Survivors): atacan solas al objetivo más cercano o al grupo más denso; tú te centras en moverte. Ranuras de partida: 4 armas + 4 runas, cada una hasta nivel 5 (en datos; por defecto, a confirmar jugando).
+- **Armas iniciales**:
+  - **Espada** (cuerpo a cuerpo): la cantidad de proyectiles también le afecta (más tajos).
+  - **Bastón de mago**: proyectiles que explotan al contacto, con daño en área.
+  - **Daga**: proyectil rápido que da a un solo enemigo. Sus mejoras pueden subir su **rebote**: el golpe salta con todo su daño al enemigo más cercano, hasta una distancia máxima.
+- **Runas** (pasivas): suben stats principales con cada nivel: Fuerza (daño) · Amplitud (área) · Prisa (velocidad de ataque) · Vigor (vida máxima) · Multiplicidad (cantidad de proyectiles, también para armas cuerpo a cuerpo).
+- **Subir de nivel**: eliges 1 de 3 opciones (arma o runa nueva, o subir una que ya tengas). La ruleta de apuestas (§5) se monta encima de esta elección.
 - **Enemigos**: enjambre cuerpo a cuerpo (rápido, frágil) · tanque lento · tirador a distancia (te obliga a moverte) · élites con afijos (cada ~2 min, sueltan cofre).
 - **Director de oleadas**: la densidad sube con el tiempo, con picos cada minuto; la curva vive en datos.
 
@@ -114,12 +119,16 @@ WASD mover · Ratón cámara · Espacio saltar · Shift dash · Ctrl slide / ca�
 - **Mesa**: ~10 min. Élite cada ~2 min. Jefe al minuto 10.
 - **Monedas**: XP (niveles) · Fichas (en partida, se apuestan) · Bote (sale de la partida y se gasta fuera).
 - **Meta-progresión**: desbloquear personajes (cada uno con un rasgo de movimiento: triple salto, dash más largo, slide más rápido…), armas iniciales y ventajas pequeñas. Nunca más poder bruto que el que da jugar bien.
-- **Personajes**: todos parten de las mismas stats básicas y cada uno cambia unas pocas según su gimmick (p. ej., +1 salto en el aire y −10 % de vida). Esas diferencias son su base: en el menú no salen como mejoras. De momento solo existe el personaje base, sin diferencias.
+- **Personajes**: todos parten de las mismas stats básicas y cada uno cambia unas pocas según su gimmick (p. ej., +1 salto en el aire y −10 % de vida). Esas diferencias son su base: en el menú no salen como mejoras. Cada uno tiene un arma principal y una habilidad pasiva. Iniciales: **Guerrero** (espada), **Mago** (bastón de mago) y **Pícaro** (daga); sus diferencias de stats y sus pasivas, por definir.
+- **Menús**: al iniciar, menú principal con Jugar, Archivo y Abandonar (cierra el juego).
+  - *Jugar* → selección de personaje: lista a la izquierda, su modelo 3D en el centro y, al pasar el ratón, un panel a la derecha con nombre, stats, arma principal y habilidad pasiva. Al elegir, ese panel se cambia por la selección de nivel.
+  - *Niveles*: el Brosque (bosque bro), la Torre del Mago y la Mazmorra. Hasta que existan sus mapas, se juega en la zona de pruebas.
+  - *Archivo*: personajes, armas, runas y enemigos. Cada entrada se desbloquea al conseguirla o al derrotar a ese enemigo; mientras tanto sale como «???».
 - **Reinicio**: de la muerte a una partida nueva en menos de 2 s.
 
 ## 10. Fuera de alcance por ahora
 Multijugador · historia · generación procedural de mapas (de momento, arenas hechas a mano) · consolas.
 
 ## 11. Decisiones abiertas
-- Adaptar a la temática medieval los nombres y elementos que vienen del casino: fichas, bote, La Banca, crupier, mesa, «¿Cobrar o Doblar?», armas iniciales (§6), estética neón y «explosión de fichas» (§7). Las tragaperras se quedan.
-- Número de ranuras de armas y pasivas.
+- Adaptar a la temática medieval los nombres y elementos que vienen del casino: fichas, bote, La Banca, crupier, mesa, «¿Cobrar o Doblar?», estética neón y «explosión de fichas» (§7). Las tragaperras se quedan.
+- Diferencias de stats y habilidad pasiva de Guerrero, Mago y Pícaro.

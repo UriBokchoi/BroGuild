@@ -16,6 +16,10 @@ extends Resource
 @export_range(0.0, 3.0, 0.05, "or_greater", "suffix:m") var pivot_height: float = 0.0
 ## Campo de visión vertical.
 @export_range(30.0, 120.0, 0.1, "suffix:°") var fov: float = 0.0
+## Grados que se suman al FOV según la velocidad horizontal del objetivo (eje X: m/s).
+@export var fov_by_speed: Curve
+## Rapidez con la que el FOV sigue a la velocidad (más alto, más inmediato).
+@export_range(0.0, 60.0, 0.5, "or_greater", "suffix:1/s") var fov_smoothing: float = 0.0
 
 @export_group("control")
 ## Grados que gira la cámara por cada píxel que se mueve el ratón.
@@ -33,3 +37,10 @@ func distance_at(level: int) -> float:
 	if distance_by_level == null:
 		return base_distance
 	return base_distance * distance_by_level.sample(level)
+
+
+## FOV para una velocidad horizontal de [param speed] m/s.
+func fov_at(speed: float) -> float:
+	if fov_by_speed == null:
+		return fov
+	return fov + fov_by_speed.sample(speed)

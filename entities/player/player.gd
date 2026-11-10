@@ -7,6 +7,10 @@ extends CharacterBody3D
 @export var stamina: StaminaComponent
 @export var input: PlayerInput
 @export var movement: StateMachine
+## Sensor de paredes para el salto en pared.
+@export var wall_sensor: WallSensor
+## Sensor de bordes para el mantle.
+@export var ledge_sensor: LedgeSensor
 ## Estado neutro en el suelo.
 @export var ground_state: State
 ## Estado neutro en el aire.
@@ -22,6 +26,8 @@ func _ready() -> void:
 	context.body = self
 	context.move = stats.get_resolved(MovementData) as MovementData
 	context.stamina = stamina
+	context.wall_sensor = wall_sensor
+	context.ledge_sensor = ledge_sensor
 	context.ground = ground_state
 	context.air = air_state
 	movement.start(context)
