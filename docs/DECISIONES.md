@@ -325,3 +325,11 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
     - Gratis. Funciona en el suelo y en el aire.
   - **Valores de partida:** de 0,3 a 2,6 m, alcance 0,8 m, subida y salida a 12 m/s. Comprobado en los cinco bordes del gimnasio (0,5 a 2,5 m).
 - **Por qué:** el GDD lo define como subir bordes a media altura con un pico de velocidad y salir deslizando con Ctrl. Con la detección por rayos y la comprobación de la cápsula, un borde nuevo del mapa funciona sin marcarlo a mano.
+
+## 2026-11-10 · Sensación de velocidad
+- **Decisión:**
+  - **FOV dinámico:** `CameraData.fov_by_speed` (curva: velocidad horizontal en m/s → grados que se suman) y `fov_smoothing`. `CameraRig` abre el FOV con la velocidad de su objetivo si es un `CharacterBody3D`, suavizado. De partida: sin cambio hasta la carrera (9 m/s) y +14° a la velocidad del dash (28 m/s).
+  - **Estela:** `SpeedTrail` (un `GPUParticles3D`) emite puntos dorados suaves en el mundo mientras el estado es uno de `trail_states` (en la escena: dash, dash-jump, picado y slide). Escucha `state_changed`.
+  - **Líneas de velocidad:** `SpeedLines` (`vfx/speed_lines/`, una capa de pantalla con el shader `speed_lines.gdshader`) dibuja rayas radiales finas en los bordes. Aparecen a partir de 15 m/s y están a tope a 28 m/s, suavizadas; por debajo de una intensidad mínima ni se dibujan.
+  - Las tres son solo visuales: leen la velocidad o el estado y no cambian el movimiento (juice desacoplado).
+- **Por qué:** el ROADMAP pide FOV dinámico, estela de dash y líneas de velocidad para que moverse rápido se note. Ajustadas mirando capturas: las primeras líneas tapaban demasiado y la estela eran cuadrados, así que pasaron a ser finas, solo en los bordes, y puntos difuminados.

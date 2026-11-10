@@ -27,6 +27,19 @@ func test_without_curve_uses_base_distance() -> void:
 	assert_eq(_data.distance_at(50), 5.0)
 
 
+func test_fov_opens_with_speed_following_its_curve() -> void:
+	_data.fov = 75.0
+	_data.fov_by_speed = _linear_curve(Vector2(10.0, 0.0), Vector2(30.0, 20.0))
+	assert_almost_eq(_data.fov_at(10.0), 75.0, 1e-6)
+	assert_almost_eq(_data.fov_at(20.0), 85.0, 1e-4)
+	assert_almost_eq(_data.fov_at(30.0), 95.0, 1e-4)
+
+
+func test_without_fov_curve_the_fov_does_not_change() -> void:
+	_data.fov = 75.0
+	assert_eq(_data.fov_at(40.0), 75.0)
+
+
 ## Curva lineal entre dos puntos (x: nivel, y: multiplicador).
 static func _linear_curve(from: Vector2, to: Vector2) -> Curve:
 	var curve := Curve.new()

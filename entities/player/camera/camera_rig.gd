@@ -40,8 +40,9 @@ func _ready() -> void:
 	_follow_target()
 
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	_follow_target()
+	_update_fov(delta)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -70,6 +71,14 @@ func _apply_rotation() -> void:
 
 func _apply_distance() -> void:
 	_spring_arm.spring_length = data.distance_at(level)
+
+
+## Abre el FOV con la velocidad horizontal del objetivo (si es un cuerpo que se mueve), suavizado.
+func _update_fov(delta: float) -> void:
+	var body := target as CharacterBody3D
+	var speed := Vector2(body.velocity.x, body.velocity.z).length() if body else 0.0
+	var weight := 1.0 - exp(-data.fov_smoothing * delta)
+	_camera.fov = lerpf(_camera.fov, data.fov_at(speed), weight)
 
 
 func _follow_target() -> void:

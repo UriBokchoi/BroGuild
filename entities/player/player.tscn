@@ -30,6 +30,8 @@
 [ext_resource type="Script" path="res://entities/player/states/fast_fall_state.gd" id="28_fast_fall"]
 [ext_resource type="Script" path="res://entities/player/ledge_sensor.gd" id="29_ledge_sensor"]
 [ext_resource type="Script" path="res://entities/player/states/mantle_state.gd" id="30_mantle"]
+[ext_resource type="Script" path="res://entities/player/speed_trail.gd" id="31_trail"]
+[ext_resource type="PackedScene" path="res://vfx/speed_lines/speed_lines.tscn" id="32_speed_lines"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_body"]
 radius = 0.4
@@ -53,6 +55,40 @@ size = Vector3(0.5, 0.15, 0.2)
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cue"]
 shading_mode = 0
 albedo_color = Color(0.91, 0.69, 0.29, 1)
+
+[sub_resource type="Gradient" id="Gradient_trail"]
+colors = PackedColorArray(1, 0.82, 0.4, 0.85, 1, 0.82, 0.4, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_trail"]
+gradient = SubResource("Gradient_trail")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_trail"]
+emission_shape = 1
+emission_sphere_radius = 0.35
+gravity = Vector3(0, 0, 0)
+scale_min = 0.5
+scale_max = 1.0
+color_ramp = SubResource("GradientTexture1D_trail")
+
+[sub_resource type="Gradient" id="Gradient_dot"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_dot"]
+gradient = SubResource("Gradient_dot")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_trail"]
+transparency = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_texture = SubResource("GradientTexture2D_dot")
+billboard_mode = 3
+
+[sub_resource type="QuadMesh" id="QuadMesh_trail"]
+material = SubResource("StandardMaterial3D_trail")
+size = Vector2(0.35, 0.35)
 
 [sub_resource type="TorusMesh" id="TorusMesh_cue"]
 material = SubResource("StandardMaterial3D_cue")
@@ -166,6 +202,20 @@ trigger_action = &"jump"
 priority = 40
 committed = true
 slide = NodePath("../Slide")
+
+[node name="SpeedTrail" type="GPUParticles3D" parent="." node_paths=PackedStringArray("machine", "trail_states")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+emitting = false
+amount = 48
+lifetime = 0.35
+process_material = SubResource("ParticleProcessMaterial_trail")
+draw_pass_1 = SubResource("QuadMesh_trail")
+script = ExtResource("31_trail")
+machine = NodePath("../Movement")
+trail_states = [NodePath("../Movement/Dash"), NodePath("../Movement/DashJump"), NodePath("../Movement/DownDash"), NodePath("../Movement/Slide")]
+
+[node name="SpeedLines" parent="." node_paths=PackedStringArray("body") instance=ExtResource("32_speed_lines")]
+body = NodePath("..")
 
 [node name="LedgeSensor" type="Node" parent="." node_paths=PackedStringArray("body", "body_shape")]
 script = ExtResource("29_ledge_sensor")

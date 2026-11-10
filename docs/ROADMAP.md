@@ -31,7 +31,7 @@
 - [x] Salto en pared al estilo Deadlock (el primero gratis; encadenados sin tocar suelo, media carga)
 - [x] Caída rápida (Ctrl en el aire)
 - [x] Mantle (subir bordes a media altura; con Ctrl sale deslizando)
-- [ ] Sensación de velocidad: FOV dinámico, estela de dash, líneas de velocidad
+- [x] Sensación de velocidad: FOV dinámico, estela de dash, líneas de velocidad
 
 ## Hito 2 — Combate en la zona de pruebas
 - [x] Stats de combate y progresión del personaje en datos (vida, regeneración, defensa, esquiva, robo de vida, daño, crítico, velocidad de ataque, proyectiles, área, duración, retroceso, experiencia, fichas, suerte, radio de recogida), visibles en la pausa y en F3
