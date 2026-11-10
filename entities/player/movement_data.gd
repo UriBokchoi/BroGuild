@@ -85,6 +85,10 @@ var slide_turn_speed: float = 0.0
 @export_range(0.0, 200.0, 0.5, "or_greater", "suffix:m/s²") var air_acceleration: float = 0.0
 ## Frenada en el aire cuando no pides dirección (0 = conservas todo el impulso).
 @export_range(0.0, 200.0, 0.5, "or_greater", "suffix:m/s²") var air_deceleration: float = 0.0
+## Velocidad de la caída rápida (Ctrl en el aire), recta hacia abajo.
+@export_range(1.0, 200.0, 0.5, "or_greater", "suffix:m/s") var fast_fall_speed: float = 0.0
+## Cargas de stamina que gasta la caída rápida.
+@export_range(0.0, 3.0, 0.5, "or_greater") var fast_fall_cost: float = 0.0
 
 @export_group("input")
 ## Segundos que espera una acción pulsada que aún no puede hacerse (el jump buffer).

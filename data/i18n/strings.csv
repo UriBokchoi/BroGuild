@@ -74,3 +74,5 @@ STAT_WALL_JUMP_HEIGHT,Altura del salto en pared,Wall jump height
 STAT_WALL_JUMP_SPEED,Impulso del salto en pared,Wall jump push
 STAT_WALL_JUMP_CHAIN_COST,Coste de los saltos en pared encadenados,Chained wall jump cost
 STAT_WALL_JUMP_REACH,Alcance del salto en pared,Wall jump reach
+STAT_FAST_FALL_SPEED,Velocidad de la caída rápida,Fast fall speed
+STAT_FAST_FALL_COST,Coste de la caída rápida,Fast fall cost

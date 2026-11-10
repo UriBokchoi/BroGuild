@@ -27,6 +27,7 @@
 [ext_resource type="Script" path="res://entities/player/dash_jump_cue.gd" id="25_cue"]
 [ext_resource type="Script" path="res://entities/player/wall_sensor.gd" id="26_wall_sensor"]
 [ext_resource type="Script" path="res://entities/player/states/wall_jump_state.gd" id="27_wall_jump"]
+[ext_resource type="Script" path="res://entities/player/states/fast_fall_state.gd" id="28_fast_fall"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_body"]
 radius = 0.4
@@ -149,6 +150,12 @@ interrupts = [NodePath("../Slide")]
 script = ExtResource("27_wall_jump")
 trigger_action = &"jump"
 priority = 30
+
+[node name="FastFall" type="Node" parent="Movement"]
+script = ExtResource("28_fast_fall")
+trigger_action = &"slide"
+priority = 10
+committed = true
 
 [node name="WallSensor" type="Node" parent="." node_paths=PackedStringArray("body")]
 script = ExtResource("26_wall_sensor")

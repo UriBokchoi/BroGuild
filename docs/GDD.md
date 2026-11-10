@@ -37,7 +37,7 @@ Cámara en tercera persona a una distancia moderada que crece muy poco a poco co
 | Dash-jump | Espacio justo tras el dash | +1 | Ventana corta (con aviso visual: un aro dorado en los pies) → salto largo que conserva la velocidad del dash. Solo tras un dash en el suelo (también en dash → slide); pulsado al final del dash, sale al acabar. Sin stamina, Espacio es un salto normal |
 | Slide | Ctrl corriendo (mantener) | — | Gratis; acelera cuesta abajo y frena cuesta arriba (en llano frena poco a poco); hurtbox baja (zona donde recibes daño). Empieza y sigue mientras vayas por encima de una velocidad mínima; termina al soltar Ctrl. Con WASD se curva hacia donde pides sin perder velocidad (como en Deadlock). Dash → slide alarga el dash sin gastar más: Ctrl en mitad de un dash en el suelo lo corta y sigue deslizando con la velocidad del dash (o mantén Ctrl al acabarlo) |
 | Slide-jump | Espacio en slide | — | Conserva el impulso |
-| Caída rápida | Ctrl en el aire | 1 | Picado al suelo; con mejoras, impacto en área |
+| Caída rápida | Ctrl en el aire | 1 | Picado recto al suelo hasta tocarlo (más rápido que la caída normal); con mejoras, impacto en área |
 | Salto en pared | Espacio en el aire junto a una pared | 0 / ½ | Al estilo de Deadlock: te impulsa hacia arriba y hacia donde pides, separándote de la pared (si pides hacia la pared, rebota); si ibas más rápido, conservas tu velocidad. El primero gratis; encadenados sin tocar suelo, media carga |
 | Mantle | Saltar contra un borde | — | Sube bordes a media altura con un pico de velocidad; con Ctrl sale deslizando |
 

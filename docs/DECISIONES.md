@@ -306,3 +306,7 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - **Coste:** el primero es gratis y los encadenados sin tocar suelo cuestan `wall_jump_chain_cost` (½ carga); el suelo reinicia la cadena.
   - **Comprobado en el gimnasio:** en la chimenea de 3 m se sube de pared a pared (dos saltos, unos 4,5 m de altura).
 - **Por qué:** el GDD y el diseñador piden un salto en pared al estilo de Deadlock: responsivo, hacia donde apuntas y encadenable con stamina. Los rayos alrededor detectan la pared aunque no te estés moviendo contra ella, que es lo que lo hace responsivo.
+
+## 2026-11-10 · Caída rápida
+- **Decisión:** `FastFallState` (acción `slide`, prioridad 10, comprometida) entra en el aire si hay stamina para `fast_fall_cost` (1 carga). Fija la velocidad recta hacia abajo a `fast_fall_speed` (45 m/s, más que la caída máxima normal), sin impulso horizontal, hasta tocar suelo. Al aterrizar emite `slammed(impact_speed)` para la futura mejora de impacto en área y el juice; la caída no llama a efectos. Comparte Ctrl con el slide sin conflicto: el slide solo entra en el suelo y la caída rápida solo en el aire. Sin stamina, Ctrl en el aire queda en el buffer y, si aterrizas corriendo enseguida, empiezas a deslizar.
+- **Por qué:** el GDD la define como «picado al suelo». Recta, sin impulso horizontal, deja apuntar dónde caes, que es lo que importará para el impacto en área. Es distinta del picado (doble Shift), que es una ráfaga corta hacia abajo.

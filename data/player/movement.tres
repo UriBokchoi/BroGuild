@@ -37,5 +37,7 @@ slide_friction = 5.0
 slide_gravity = 30.0
 slide_turn_speed = 3.141592653589793
 air_acceleration = 30.0
+fast_fall_speed = 45.0
+fast_fall_cost = 1.0
 input_buffer_time = 0.12
 action_end_buffer_time = 0.1
