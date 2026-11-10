@@ -1,8 +1,8 @@
 class_name DashState
 extends MovementState
 ## Dash: ráfaga corta en la dirección pedida (sin dirección, hacia donde mira la cámara), en el
-## suelo o en el aire, donde va recto, sin gravedad. Gasta stamina y, en el aire, uno de los
-## [code]air_dashes[/code] (se recuperan al tocar suelo). En la escena es comprometido y cancela
+## suelo (yendo al menos a [code]dash_min_speed[/code]) o en el aire, donde va recto, sin gravedad.
+## Gasta stamina y, en el aire, uno de los [code]air_dashes[/code] (se recuperan al tocar suelo). En la escena es comprometido y cancela
 ## cualquier acción (también otro dash). Al terminar, la velocidad horizontal se queda en
 ## [code]dash_exit_speed[/code] como mucho; pero si se mantiene Ctrl en el suelo, pasa a
 ## [member slide] con toda la velocidad del dash (el slide alarga el dash, sin gastar más). El
@@ -20,6 +20,9 @@ func can_enter() -> bool:
 	var in_air := not ctx.body.is_on_floor()
 	if in_air and ctx.air_dashes_used >= ctx.move.air_dashes:
 		return false
+	# En el suelo hace falta ir moviéndose: parado o arrancando no hay dash.
+	if not in_air and horizontal_speed() < ctx.move.dash_min_speed:
+		return false
 	return ctx.stamina.can_spend(ctx.move.dash_cost)
 
 
@@ -28,7 +31,6 @@ func enter(_previous: State) -> void:
 	var wish := ctx.wish_direction
 	_direction = wish.normalized() if wish != Vector3.ZERO else ctx.view_forward
 	_time_left = ctx.move.dash_duration
-	ctx.last_dash_time = ctx.elapsed
 	ctx.last_dash_in_air = not ctx.body.is_on_floor()
 	ctx.last_dash_direction = _direction
 	if ctx.last_dash_in_air:

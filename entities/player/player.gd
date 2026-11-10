@@ -30,6 +30,7 @@ func _ready() -> void:
 	context.ledge_sensor = ledge_sensor
 	context.ground = ground_state
 	context.air = air_state
+	input.action_pressed.connect(context.record_press)
 	movement.start(context)
 
 

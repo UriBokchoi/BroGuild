@@ -29,15 +29,14 @@ Cámara en tercera persona a una distancia moderada que crece muy poco a poco co
 
 | Acción | Input | Stamina | Notas |
 |---|---|---|---|
-| Correr | WASD | — | Rápido de base, mucho control aéreo; el momentum no se pierde de golpe |
+| Correr | WASD | — | Como en Deadlock: arrancas acelerando poco a poco y, tras unos segundos moviéndote sin soltar la dirección, pasas a **sprint**, algo más rápido. Mucho control aéreo; el momentum no se pierde de golpe |
 | Salto | Espacio | — | Con coyote time y jump buffer |
 | Doble salto | Espacio en el aire | 1 | Se recupera al tocar suelo; con mejoras o personajes, más saltos (triple salto). Con coyote time, Espacio es el salto normal |
-| Dash | Shift | 1 | Ráfaga corta en la dirección de movimiento (sin dirección, hacia donde mira la cámara); también en el aire, donde va recto. Al terminar conservas parte del impulso. Dashes totales = cargas de stamina; en el aire, como mucho los «dashes en el aire» (1 de partida, mejorable), que se recuperan al tocar suelo |
-| Picado | Shift dos veces en el aire, sin dirección | +1 | Dash hacia abajo: el primer Shift ya hace un dash y el segundo, dentro de una ventana corta, lo convierte en picado |
+| Dash | Shift | 1 | Ráfaga corta en la dirección de movimiento (sin dirección, hacia donde mira la cámara); también en el aire, donde va recto. En el suelo necesitas ir a una velocidad mínima (parado no hay dash). Al terminar conservas parte del impulso. Dashes totales = cargas de stamina; en el aire, como mucho los «dashes en el aire» (1 de partida, mejorable), que se recuperan al tocar suelo |
 | Dash-jump | Espacio justo tras el dash | +1 | Ventana corta (con aviso visual: un aro dorado en los pies) → salto largo que conserva la velocidad del dash. Solo tras un dash en el suelo (también en dash → slide); pulsado al final del dash, sale al acabar. Sin stamina, Espacio es un salto normal |
-| Slide | Ctrl corriendo (mantener) | — | Gratis; acelera cuesta abajo y frena cuesta arriba (en llano frena poco a poco); hurtbox baja (zona donde recibes daño). Empieza y sigue mientras vayas por encima de una velocidad mínima; termina al soltar Ctrl. Con WASD se curva hacia donde pides sin perder velocidad (como en Deadlock). Dash → slide alarga el dash sin gastar más: Ctrl en mitad de un dash en el suelo lo corta y sigue deslizando con la velocidad del dash (o mantén Ctrl al acabarlo) |
+| Slide | Ctrl corriendo (mantener) | — | Gratis; acelera cuesta abajo y frena cuesta arriba (en llano frena poco a poco); hurtbox baja (zona donde recibes daño). Empieza y sigue mientras vayas por encima de una velocidad mínima; termina al soltar Ctrl. Con WASD se curva hacia donde pides sin perder velocidad (como en Deadlock). Dash → slide alarga el dash sin gastar más: Ctrl en mitad de un dash en el suelo lo corta y sigue deslizando con la velocidad del dash (o mantén Ctrl al acabarlo). Si aterrizas con Ctrl mantenido y con velocidad, sigues deslizando sin perder impulso: dash → slide → slide-jump → slide |
 | Slide-jump | Espacio en slide | — | Conserva el impulso |
-| Caída rápida | Ctrl en el aire | 1 | Picado recto al suelo hasta tocarlo (más rápido que la caída normal); con mejoras, impacto en área |
+| Caída rápida | Ctrl dos veces en el aire | 1 | El «dash hacia abajo»: picado recto al suelo hasta tocarlo (más rápido que la caída normal); con mejoras, impacto en área. Un solo Ctrl en el aire no hace nada (si aterrizas corriendo enseguida, empiezas a deslizar) |
 | Salto en pared | Espacio en el aire junto a una pared | 0 / ½ | Al estilo de Deadlock: te impulsa hacia arriba y hacia donde pides, separándote de la pared (si pides hacia la pared, rebota); si ibas más rápido, conservas tu velocidad. El primero gratis; encadenados sin tocar suelo, media carga |
 | Mantle | Saltar contra un borde | — | Sube bordes a media altura (de 0,3 a 2,6 m sobre los pies, en datos) con un pico de velocidad; con Ctrl sale deslizando. Funciona en el suelo y en el aire, hacia donde pides o, sin dirección, hacia la cámara |
 
@@ -111,7 +110,7 @@ Dirección: **medieval con humor moderno**, nada realista; los anacronismos son 
 - **Assets**: primitivas + shaders propios; si hace falta, packs CC0 (Kenney, Quaternius).
 
 ## 8. Controles
-WASD mover · Ratón cámara · Espacio saltar · Shift dash · Ctrl slide / caída rápida · E interactuar / cobrar · Tab estadísticas · Esc pausa. Todo remapeable.
+WASD mover · Ratón cámara · Espacio saltar · Shift dash · Ctrl slide (doble Ctrl en el aire: caída rápida) · E interactuar / cobrar · Tab estadísticas · Esc pausa. Todo remapeable.
 
 **Menú de pausa (Esc):** a la izquierda, Continuar, Opciones, Reintentar y Salir; a la derecha, un panel fijo con todas las stats del personaje, resaltando las que han cambiado mejoras o maldiciones. Mando: más adelante.
 

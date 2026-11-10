@@ -10,6 +10,7 @@ var _on_floor: Label
 var _coyote: Label
 var _stamina: Label
 var _air_jumps: Label
+var _sprint: Label
 
 
 func setup(player: Player) -> void:
@@ -22,6 +23,7 @@ func setup(player: Player) -> void:
 	_coyote = add_value_row("coyote_left")
 	_stamina = add_value_row("stamina")
 	_air_jumps = add_value_row("air_jumps_used")
+	_sprint = add_value_row("sprint")
 
 
 func refresh() -> void:
@@ -33,3 +35,4 @@ func refresh() -> void:
 	_coyote.text = "%.2f s" % _player.context.coyote_left
 	_stamina.text = "%.2f / %d" % [_player.stamina.get_charges(), _player.stamina.get_max_charges()]
 	_air_jumps.text = "%d / %d" % [_player.context.air_jumps_used, _player.context.move.air_jumps]
+	_sprint.text = "%s (%.1f s)" % [_player.context.is_sprinting(), _player.context.sprint_time]

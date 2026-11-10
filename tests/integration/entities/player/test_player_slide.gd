@@ -56,8 +56,23 @@ func test_slide_jump_keeps_the_momentum() -> void:
 	assert_almost_eq(_speed(), slide_speed, 1.0, "sin perder el impulso del slide")
 
 
+func test_landing_with_ctrl_held_keeps_sliding() -> void:
+	await _run_and_slide()
+	_player.movement.request(InputActions.JUMP)
+	await wait_physics_frames(3)
+	assert_true(_player.movement.current is AirState, "slide-jump")
+	# Ctrl sigue mantenido: al tocar suelo, sigue deslizando con el impulso.
+	for _frame: int in 60:
+		await wait_physics_frames(1)
+		if _player.is_on_floor():
+			break
+	await wait_physics_frames(2)
+	assert_true(_player.movement.current is SlideState, "encadena el slide al aterrizar")
+	assert_gt(_speed(), _move.slide_min_speed)
+
+
 func test_dash_holding_ctrl_keeps_sliding_at_dash_speed() -> void:
-	await wait_physics_frames(SETTLE_FRAMES)
+	await _run_forward()
 	Input.action_press(InputActions.SLIDE)
 	_player.movement.request(InputActions.DASH)
 	await wait_physics_frames(16)
@@ -66,7 +81,7 @@ func test_dash_holding_ctrl_keeps_sliding_at_dash_speed() -> void:
 
 
 func test_ctrl_in_the_middle_of_a_ground_dash_cuts_it_into_a_slide() -> void:
-	await wait_physics_frames(SETTLE_FRAMES)
+	await _run_forward()
 	_player.movement.request(InputActions.DASH)
 	await wait_physics_frames(3)
 	assert_true(_player.movement.current is DashState, "a mitad del dash")
@@ -90,11 +105,16 @@ func test_ctrl_does_not_cut_an_air_dash() -> void:
 	assert_true(_player.movement.current is DashState, "en el aire, el slide no entra")
 
 
-## Corre hacia delante a toda velocidad y empieza a deslizar manteniendo Ctrl.
-func _run_and_slide() -> void:
+## Corre hacia delante (sin soltar la dirección) hasta pasar la velocidad mínima del dash.
+func _run_forward() -> void:
 	await wait_physics_frames(SETTLE_FRAMES)
 	Input.action_press(InputActions.MOVE_FORWARD)
 	await wait_physics_frames(20)
+
+
+## Corre hacia delante y empieza a deslizar manteniendo Ctrl.
+func _run_and_slide() -> void:
+	await _run_forward()
 	Input.action_press(InputActions.SLIDE)
 	_player.movement.request(InputActions.SLIDE)
 	await wait_physics_frames(5)

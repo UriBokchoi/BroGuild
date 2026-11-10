@@ -333,3 +333,18 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - **Líneas de velocidad:** `SpeedLines` (`vfx/speed_lines/`, una capa de pantalla con el shader `speed_lines.gdshader`) dibuja rayas radiales finas en los bordes. Aparecen a partir de 15 m/s y están a tope a 28 m/s, suavizadas; por debajo de una intensidad mínima ni se dibujan.
   - Las tres son solo visuales: leen la velocidad o el estado y no cambian el movimiento (juice desacoplado).
 - **Por qué:** el ROADMAP pide FOV dinámico, estela de dash y líneas de velocidad para que moverse rápido se note. Ajustadas mirando capturas: las primeras líneas tapaban demasiado y la estela eran cuadrados, así que pasaron a ser finas, solo en los bordes, y puntos difuminados.
+
+## 2026-11-10 · Toque Deadlock: arranque, sprint, dash, caída rápida y slides encadenados
+- **Decisión:**
+  - **Arranque progresivo:** `ground_acceleration` baja de 60 a 25 m/s² (unos 0,35 s hasta los 9 m/s).
+  - **Sprint:** `MovementState.track_sprint()` (en Suelo y Aire) cuenta los segundos seguidos pidiendo dirección y soltarla lo reinicia; las acciones no lo cortan. Tras `sprint_delay` (2 s), `MovementContext.ground_speed()` pasa de `run_speed` (9 m/s) a `sprint_speed` (11,5 m/s). El suelo acelera hacia esa velocidad y el control aéreo la respeta.
+  - **Dash:** en el suelo exige ir al menos a `dash_min_speed` (3 m/s, por debajo de caminar), así que parado o arrancando no hay dash. En el aire no se exige, para no quitar el dash tras un salto vertical.
+  - **Caída rápida con doble Ctrl:**
+    - `PlayerInput` avisa de cada pulsación (`action_pressed`) y el contexto apunta la última y la anterior de cada acción (`record_press`, `is_double_tap`);
+    - `FastFallState` entra si las dos últimas pulsaciones de Ctrl están a menos de `fast_fall_double_tap_window` (0,3 s), así que un solo Ctrl en el aire ya no hace nada;
+    - el picado de doble Shift (`DownDashState` y sus stats) se quita por obsoleto: había dos «dash hacia abajo» y el diseñador quiere el de doble Ctrl. Ahora doble Shift en el aire son dos dashes normales, limitados por `air_dashes`. El código antiguo queda en git.
+  - **Slides encadenados:**
+    - `AirState.slide`: al aterrizar con Ctrl mantenido y velocidad suficiente, pasa a slide en vez de a Suelo, sin perder el impulso;
+    - el slide también cuenta como tocar suelo (`touch_ground()`: devuelve saltos y dashes en el aire y reinicia la cadena de saltos en pared);
+    - comprobado en el gimnasio: sprint 11,5 → dash 28 → slide 22 → slide-jump 20,3 → aterriza deslizando a 20,3 m/s.
+- **Por qué:** el diseñador quiere que se sienta como Deadlock: arranque con peso, sprint al mantener el movimiento, dash que pide ir lanzado, el dash hacia abajo en la tecla de agacharse y poder encadenar slides conservando el impulso.

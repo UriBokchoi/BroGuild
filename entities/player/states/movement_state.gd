@@ -23,14 +23,31 @@ func apply_gravity(delta: float) -> void:
 
 
 ## Control en el aire: acelera hacia la dirección pedida sin frenar el impulso que ya se lleva
-## por encima de la velocidad de carrera. Sin dirección, frena con [code]air_deceleration[/code].
+## por encima de la velocidad de carrera (o de sprint). Sin dirección, frena con
+## [code]air_deceleration[/code].
 func apply_air_control(delta: float) -> void:
 	var wish := ctx.wish_direction
 	if wish == Vector3.ZERO:
 		accelerate_horizontal(Vector3.ZERO, ctx.move.air_deceleration, delta)
 		return
-	var speed := maxf(ctx.move.run_speed, horizontal_speed())
+	var speed := maxf(ctx.ground_speed(), horizontal_speed())
 	accelerate_horizontal(wish * speed, ctx.move.air_acceleration, delta)
+
+
+## Tocar suelo (de pie o deslizando) devuelve los saltos y dashes en el aire y reinicia la cadena
+## de saltos en pared.
+func touch_ground() -> void:
+	ctx.air_jumps_used = 0
+	ctx.air_dashes_used = 0
+	ctx.wall_jumps_chained = 0
+
+
+## Cuenta el tiempo seguido pidiendo dirección, que lleva al sprint; soltarla lo reinicia.
+func track_sprint(delta: float) -> void:
+	if ctx.wish_direction == Vector3.ZERO:
+		ctx.sprint_time = 0.0
+	else:
+		ctx.sprint_time += delta
 
 
 ## Lleva la velocidad horizontal hacia [param target] a [param rate] m/s², sin tocar la vertical.

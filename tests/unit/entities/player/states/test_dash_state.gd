@@ -66,11 +66,14 @@ func test_flies_straight_while_it_lasts() -> void:
 	assert_almost_eq(_dash.time_left(), 0.2 - TICK, 1e-6)
 
 
-func test_remembers_when_and_where_it_started_for_the_dive() -> void:
-	_context.elapsed = 4.0
+func test_remembers_it_started_in_the_air() -> void:
 	_machine.transition_to(_dash)
-	assert_eq(_context.last_dash_time, 4.0)
-	assert_true(_context.last_dash_in_air)
+	assert_true(_context.last_dash_in_air, "el cuerpo de prueba siempre está en el aire")
+
+
+func test_minimum_speed_only_applies_on_the_ground() -> void:
+	_context.move.dash_min_speed = 5.0
+	assert_true(_dash.can_enter(), "en el aire, parado, sí hay dash")
 
 
 func test_ending_opens_the_dash_jump_window_and_remembers_the_direction() -> void:
