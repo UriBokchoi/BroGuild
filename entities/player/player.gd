@@ -1,10 +1,12 @@
 class_name Player
 extends CharacterBody3D
 ## Jugador: monta el contexto de movimiento, avanza la máquina de estados y mueve el cuerpo.
-## Las mecánicas van en sus estados y componentes, nunca aquí (CLAUDE.md, «Nunca»).
+## Avisa a la interfaz de su vida y de su muerte (al morir se queda quieto). Las mecánicas van en
+## sus estados y componentes, nunca aquí (CLAUDE.md, «Nunca»).
 
 @export var stats: StatsComponent
 @export var stamina: StaminaComponent
+@export var health: HealthComponent
 @export var input: PlayerInput
 @export var movement: StateMachine
 ## Sensor de paredes para el salto en pared.
@@ -32,6 +34,10 @@ func _ready() -> void:
 	context.air = air_state
 	input.action_pressed.connect(context.record_press)
 	movement.start(context)
+	health.health_changed.connect(EventBus.player_health_changed.emit)
+	health.died.connect(_on_died)
+	# La vida avisó en su _ready, antes de esta conexión: se repite para la interfaz.
+	EventBus.player_health_changed.emit(health.get_current(), health.get_maximum())
 
 
 func _physics_process(delta: float) -> void:
@@ -44,3 +50,10 @@ func _physics_process(delta: float) -> void:
 	movement.committed_end_buffer = context.move.action_end_buffer_time
 	movement.physics_update(delta)
 	move_and_slide()
+
+
+## Muerto, se queda quieto. La pantalla de resultados y el reinicio llegarán con su tarea.
+func _on_died() -> void:
+	set_physics_process(false)
+	velocity = Vector3.ZERO
+	EventBus.player_died.emit()

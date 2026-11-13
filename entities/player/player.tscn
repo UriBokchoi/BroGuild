@@ -31,9 +31,17 @@
 [ext_resource type="Script" path="res://entities/player/states/mantle_state.gd" id="30_mantle"]
 [ext_resource type="Script" path="res://entities/player/speed_trail.gd" id="31_trail"]
 [ext_resource type="PackedScene" path="res://vfx/speed_lines/speed_lines.tscn" id="32_speed_lines"]
+[ext_resource type="Script" path="res://core/components/health/health_component.gd" id="33_health"]
+[ext_resource type="Resource" path="res://data/combat/rules.tres" id="34_rules"]
+[ext_resource type="Script" path="res://core/components/hurtbox_component.gd" id="35_hurtbox"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_body"]
 radius = 0.4
+height = 1.8
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hurtbox"]
+resource_local_to_scene = true
+radius = 0.45
 height = 1.8
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_body"]
@@ -94,12 +102,13 @@ material = SubResource("StandardMaterial3D_cue")
 inner_radius = 0.55
 outer_radius = 0.7
 
-[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("stats", "stamina", "input", "movement", "wall_sensor", "ledge_sensor", "ground_state", "air_state")]
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("stats", "stamina", "health", "input", "movement", "wall_sensor", "ledge_sensor", "ground_state", "air_state")]
 collision_layer = 2
 collision_mask = 1
 script = ExtResource("1_player")
 stats = NodePath("Stats")
 stamina = NodePath("Stamina")
+health = NodePath("Health")
 input = NodePath("PlayerInput")
 movement = NodePath("Movement")
 wall_sensor = NodePath("WallSensor")
@@ -123,6 +132,21 @@ mesh = SubResource("BoxMesh_visor")
 script = ExtResource("3_stats")
 sources = Array[Resource]([ExtResource("16_health_data"), ExtResource("17_offense_data"), ExtResource("18_progression_data"), ExtResource("4_movement"), ExtResource("11_stamina_data")])
 base_sets = Array[ExtResource("23_modifier_set")]([ExtResource("22_character")])
+
+[node name="Health" type="Node" parent="." node_paths=PackedStringArray("stats")]
+script = ExtResource("33_health")
+stats = NodePath("../Stats")
+rules = ExtResource("34_rules")
+
+[node name="Hurtbox" type="Area3D" parent="." node_paths=PackedStringArray("health")]
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("35_hurtbox")
+health = NodePath("../Health")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hurtbox"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+shape = SubResource("CapsuleShape3D_hurtbox")
 
 [node name="Stamina" type="Node" parent="." node_paths=PackedStringArray("stats")]
 script = ExtResource("12_stamina")
@@ -228,10 +252,11 @@ script = ExtResource("25_cue")
 player = NodePath("..")
 visual = NodePath("../DashJumpRing")
 
-[node name="BodyCrouch" type="Node" parent="." node_paths=PackedStringArray("machine", "visual", "crouch_states")]
+[node name="BodyCrouch" type="Node" parent="." node_paths=PackedStringArray("machine", "visual", "hurtbox_shape", "crouch_states")]
 script = ExtResource("21_crouch")
 machine = NodePath("../Movement")
 visual = NodePath("../Body")
+hurtbox_shape = NodePath("../Hurtbox/CollisionShape3D")
 crouch_states = [NodePath("../Movement/Slide")]
 
 [node name="BodyFacing" type="Node" parent="." node_paths=PackedStringArray("body", "visual", "stats")]
