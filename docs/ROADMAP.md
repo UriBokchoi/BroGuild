@@ -38,7 +38,8 @@
 - [x] Stats de combate y progresión del personaje en datos (vida, regeneración, defensa, esquiva, robo de vida, daño, crítico, velocidad de ataque, proyectiles, área, duración, retroceso, experiencia, fichas, suerte, radio de recogida), visibles en la pausa y en F3
 - [x] Personajes en datos: stats básicas comunes y cada personaje con sus diferencias (`data/characters/`; de momento solo el personaje base)
 - [x] Vida, daño y muerte: `HealthComponent`, `HitboxComponent`, `HurtboxComponent` con las fórmulas del GDD (defensa, esquiva, crítico); hurtbox baja en el slide
-- [ ] Armas: `WeaponData` (stats del arma y mejoras por nivel) y base de arma automática (cadencia y objetivo); la espada (cuerpo a cuerpo)
+- [x] Armas: `WeaponData` (stats del arma y mejoras por nivel) y base de arma automática (cadencia y objetivo); la espada (cuerpo a cuerpo)
+- [x] Zona de práctica de combate en el gimnasio: teletransporte de ida y vuelta, muñecos (cuentan como enemigos, no mueren ni se mueven, muestran su DPS) y armería para equipar, quitar y cambiar de nivel las armas; números de daño (blancos, críticos amarillos y más grandes)
 - [ ] Enemigo cuerpo a cuerpo con `EnemyData`, steering simple y pooling; barra de vida en el HUD
 - [ ] Director de oleadas en la zona de pruebas (curva en datos) y escena de estrés con 300 y 500 enemigos y fps medidos (se repite al cerrar cada hito)
 - [ ] Experiencia: gemas atraídas por el radio de recogida, niveles con curva en datos (la cámara ya se aleja con el nivel)
@@ -69,7 +70,7 @@
 ## Hito 5 — Juice y look
 - [ ] Entorno según la dirección visual del GDD (luz, glow y tonemapping)
 - [ ] Materiales con color propio por tipo de enemigo y rareza
-- [ ] Hit-stop, screen shake, flash y números de daño
+- [ ] Hit-stop, screen shake y flash (los números de daño llegaron en el Hito 2)
 - [ ] Partículas: muertes, fichas, cofres, impactos
 - [ ] Sonidos con tono creciente y UI animada
 - [ ] Rendimiento: 300+ enemigos a 60 fps

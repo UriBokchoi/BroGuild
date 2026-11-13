@@ -367,3 +367,40 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - **HUD:** barra de vida roja encima de la de stamina, centradas abajo; escucha `EventBus.player_health_changed`.
   - **Gimnasio:** un pad rojo (`DamagePad`, 10 de daño cada 0,5 s) para probar el daño sin enemigos.
 - **Por qué:** el ROADMAP pide vida, daño y muerte con las fórmulas del GDD y la hurtbox baja en el slide. Con componentes compartidos, los enemigos, armas y trampas que vengan solo combinan hitbox, hurtbox y vida.
+
+## 2026-11-13 · Armas automáticas, espada y zona de práctica de combate
+- **Decisión:**
+  - **Datos del arma** (`systems/combat/weapons/`):
+    - `WeaponStats` son las stats propias del arma: daño, tiempo entre ataques, proyectiles, pausa entre golpes, área, duración y alcance. Son stats de verdad (`StatsComponent` propio de cada arma), así que sus mejoras son modificadores.
+    - `WeaponData` (`data/weapons/*.tres`) lleva id estable, nombre, descripción, escena, stats de nivel 1 y un `StatModifierSet` por nivel a partir del 2. El nivel máximo es uno más que los conjuntos (la espada llega a 5).
+  - **Arma automática:**
+    - `Weapon` (base abstracta) ataca sola cuando acaba su espera y hay un objetivo a su alcance. Cada ataque son N golpes (proyectiles del arma + los del personaje) separados por la pausa entre golpes; el golpe i va al i-ésimo enemigo más cercano.
+    - Combina sus stats con `OffenseData`: la velocidad de ataque divide la espera, el área y la duración multiplican, y el daño % y el crítico van en el golpe (`HitboxComponent`).
+    - `TargetFinder` hace una consulta de física (esfera sobre `enemy_hurtbox`), así que cualquier cosa con esa hurtbox es un objetivo.
+    - `WeaponInventory` (en el jugador) crea, quita y lista armas. Al morir, el jugador lo desactiva.
+  - **Espada:**
+    - Cada golpe es un `SwordSlash`: un arco dibujado con shader (media luna que barre y se desvanece) y una hitbox que golpea una vez a cada enemigo.
+    - Los tajos alternan lado e inclinación, salen de un pool y se escalan al alcance × área (el área también alarga su alcance).
+    - Valores de partida: 20 de daño cada 1,1 s, 2,8 m, 1 tajo. Por nivel: +6 daño, +1 tajo, +25 % área, +10 daño y −20 % de espera.
+  - **Golpes:**
+    - `HealthComponent.damaged` informa de lo que valía el golpe tras la defensa, aunque pase de la vida que quedaba, que es lo que muestran los números. `take_damage()` devuelve la vida quitada de verdad.
+    - Nuevo `immortal`: avisa de los golpes sin perder vida.
+    - `HitboxComponent` solo golpea con `monitoring` activo y tiene `reset_hits()` para cada ataque nuevo.
+  - **Números de daño** (`vfx/juice/damage_numbers/`):
+    - Los enemigos avisan de cada golpe por `EventBus.enemy_damaged`, con un `DamageReporter` sobre la cabeza.
+    - `DamageNumbers`, en el nivel, saca `Label3D` de un `NodePool` (`core/pooling/`): saltan en arco con un «pop» de escala y se desvanecen.
+    - Blancos los normales; amarillos y ×1,5 los críticos. Siempre del mismo tamaño en pantalla y por encima de todo.
+    - Estilo en `data/vfx/damage_numbers.tres`. El azar es del flujo cosmético. Con demasiados en pantalla, los nuevos no salen.
+  - **Muñeco de práctica** (`entities/enemies/target_dummy/`):
+    - Capas de enemigo, vida inmortal, `DamageReporter` y `DpsMeter`. El DPS se mide desde el primer golpe; tras 3 s sin golpes se cierra con el intervalo medio, sin contar la espera.
+    - `HitWobble` (juice) lo inclina con un muelle, alejándolo de quien golpea.
+  - **Interacción:**
+    - `Interactable` (área en la capa `interactable`, con su texto) e `Interactor` (área del jugador): elige el más cercano, avisa al HUD por `EventBus.interaction_prompt_changed` y lo activa con E.
+    - El HUD muestra la tecla dibujada y el texto encima de la vida.
+  - **Zona de práctica** (`levels/test_gym/zones/combat_range.tscn`, a 200 m del gimnasio):
+    - cinco muñecos (uno solo, un grupo de tres y uno lejos);
+    - la armería: su panel (`ui/menus/armory/`) lista todo `data/weapons` (`ResourceDir.load_all`), equipa, quita y sube o baja de nivel, y muestra las stats del arma con la vista de stats de la pausa. Pausa el juego y Esc lo cierra sin abrir la pausa;
+    - un recogedor de caídas.
+    - `Teleporter` (pisar = ir a su destino) une las dos zonas. El destino de la vuelta lo pone el gimnasio.
+  - **Herramientas:** el generador de temas pasa a `tools/gen_themes.gd`; solo existía fuera del repositorio.
+- **Por qué:** el ROADMAP pedía la base de armas y la espada. El diseñador quería además probar el combate con calma: una zona aparte del movimiento, muñecos con DPS, números de daño con efecto (blancos y críticos amarillos, como en Megabonk) y una forma de cambiar de armas. Todo queda en datos y componentes, así que un arma nueva aparece sola en la armería, y cualquier enemigo con `DamageReporter` saca números.

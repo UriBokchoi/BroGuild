@@ -29,6 +29,7 @@ Ejecutable de consola de Godot 4.7.2 en esta máquina (Git Bash):
 - **Validación completa**: `GODOT="$G" tools/validate.sh` — importación (incluidos assets que quedaron mal importados), todos los scripts, escenas, recursos y shaders, smoke test y tests. Sale con ≠ 0 si un paso falla o si su salida contiene ERROR/WARNING (en los tests, los errores esperados con `assert_push_error` no cuentan).
 - Importar recursos: `"$G" --headless --path . --import` (hace falta tras crear un `class_name` nuevo y en un clon recién hecho).
 - Comprobar scripts (con warnings), escenas, recursos y shaders: `"$G" --headless --path . -s res://tools/ci/check_project.gd -d --ignore-error-breaks`
+- Regenerar los temas (`ui/theme/main_theme.tres` y el de depuración; no se editan a mano): `"$G" --headless --path . -s res://tools/gen_themes.gd`
 - Smoke test (arranca la escena principal y sale): `"$G" --headless --path . --quit-after 600 -d --ignore-error-breaks`
 - Tests (GUT 9.7.1, configuración en `.gutconfig.json`): `"$G" --headless --path . -s res://addons/gut/gut_cmdln.gd -gconfig=res://.gutconfig.json`. GUT sale con 0 si un test no compila (se lo salta): fíate de `validate.sh`, no solo de esto.
 
@@ -76,6 +77,7 @@ Objetivo: 60 fps estables con 300+ enemigos. Enemigos con steering simple (sin `
 - Tengo el editor de Godot abierto mientras trabajas: antes de editar a mano una escena `.tscn`, avísame para que la guarde y no se pisen los cambios.
 - `project.godot`: el editor lo reescribe al abrir el proyecto y al cambiar cualquier ajuste, así que pisaría una edición hecha por fuera. Antes de tocarlo, pídeme que cierre el editor. Escríbelo con la API (`ProjectSettings.set_setting()` + `save()` desde un script headless con `-s`), no a mano: así queda igual que si lo guardara el editor. Ojo: un `InputEventKey.new()` lleva `device = 16`; el editor usa `-1` («todos»).
 - `.tscn` y `.tres` en formato texto. Si los creas a mano, no inventes UIDs: omítelos y Godot los genera.
+- En el texto, `Transform3D(a, b, c, d, e, f, g, h, i, x, y, z)` lleva la base **por filas** (`a b c` es la primera fila), no por columnas: un giro de 90° en Y que lleva −Z a −X es `Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, …)`. Compruébalo en una captura o con un script.
 - Scripts de Resources de datos: campos con valor neutro (0, `false`, `null`) y los valores de verdad en su `.tres`. Godot no guarda en el `.tres` lo que coincide con el valor por defecto del script.
 - Los archivos `.uid` se versionan; `.godot/` no (va en `.gitignore`).
 - Mover o renombrar escenas o scripts rompe referencias: avísame antes y, si lo haces tú, mueve también su `.uid` y actualiza todas las rutas.
@@ -97,7 +99,7 @@ vfx/         shaders/, particles/, juice/
 levels/      arenas y escena de pruebas
 assets/      models/, textures/, audio/, fonts/, CREDITS.md
 tests/       unit/ (lógica pura) e integration/ (escenas); ambos replican la ruta del código que prueban
-tools/       validación por terminal (validate.sh, ci/)
+tools/       validación por terminal (validate.sh, ci/) y generadores (gen_themes.gd)
 ```
 Escena, script y recursos propios de una feature van juntos en su carpeta. El script de un Resource (`class_name MovementData`) va con su feature o sistema; sus instancias de balance (`.tres`), en `data/`.
 
