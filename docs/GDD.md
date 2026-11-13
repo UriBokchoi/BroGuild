@@ -79,13 +79,13 @@ Toda apuesta tiene **anticipación** (giro, luces, sonido que sube), **revelado*
 - **Enemigos**: enjambre cuerpo a cuerpo (rápido, frágil) · tanque lento · tirador a distancia (te obliga a moverte) · élites con afijos (cada ~2 min, sueltan cofre).
 - **Director de oleadas**: la densidad sube con el tiempo, con picos cada minuto; la curva vive en datos.
 
-**Stats del personaje** (como en Megabonk o Vampire Survivors; todas mejorables, §5). Valores de partida en `data/player/`. Las fórmulas son la intención de diseño y se confirman al implementar el combate (Hito 2).
+**Stats del personaje** (como en Megabonk o Vampire Survivors; todas mejorables, §5). Valores de partida en `data/player/`. Ya funcionan vida, regeneración, defensa, esquiva, daño y crítico; el resto de fórmulas son la intención de diseño y se confirman al implementar armas y enemigos (Hito 2). Al recibir un golpe, primero se tira la esquiva y luego la defensa reduce lo que entra.
 
 | Grupo | Stat | De partida | Efecto |
 |---|---|---|---|
 | Supervivencia | Vida máxima | 100 | |
 | | Regeneración de vida | 0 /s | Vida por segundo |
-| | Defensa | 0 | Daño recibido × 100 / (100 + defensa): 100 de defensa = mitad de daño, nunca inmune |
+| | Defensa | 0 | Daño recibido × 100 / (100 + defensa): 100 de defensa = mitad de daño, nunca inmune (ese 100 está en `data/combat/rules.tres`) |
 | | Esquiva | 0 % (máx. 90 %) | Probabilidad de evitar un golpe entero |
 | | Robo de vida | 0 % | Parte del daño hecho que te cura |
 | Ataque | Daño | 100 % | Multiplica el daño de todas las armas |
