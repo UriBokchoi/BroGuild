@@ -1,12 +1,13 @@
 class_name Player
 extends CharacterBody3D
 ## Jugador: monta el contexto de movimiento, avanza la máquina de estados y mueve el cuerpo.
-## Avisa a la interfaz de su vida y de su muerte (al morir se queda quieto). Las mecánicas van en
-## sus estados y componentes, nunca aquí (CLAUDE.md, «Nunca»).
+## Avisa a la interfaz de su vida y de su muerte (al morir se queda quieto y sus armas paran). Las
+## mecánicas van en sus estados y componentes, nunca aquí (CLAUDE.md, «Nunca»).
 
 @export var stats: StatsComponent
 @export var stamina: StaminaComponent
 @export var health: HealthComponent
+@export var weapons: WeaponInventory
 @export var input: PlayerInput
 @export var movement: StateMachine
 ## Sensor de paredes para el salto en pared.
@@ -52,8 +53,18 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 
 
-## Muerto, se queda quieto. La pantalla de resultados y el reinicio llegarán con su tarea.
+## Lleva al jugador a [param feet] (la posición de sus pies) parado y sin el arrastre de la
+## interpolación, como si apareciera ahí (teletransportes).
+func teleport_to(feet: Vector3) -> void:
+	global_position = feet
+	velocity = Vector3.ZERO
+	reset_physics_interpolation()
+
+
+## Muerto, se queda quieto y sus armas paran. La pantalla de resultados y el reinicio llegarán con
+## su tarea.
 func _on_died() -> void:
 	set_physics_process(false)
 	velocity = Vector3.ZERO
+	weapons.process_mode = Node.PROCESS_MODE_DISABLED
 	EventBus.player_died.emit()

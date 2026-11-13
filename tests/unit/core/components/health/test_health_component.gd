@@ -73,6 +73,24 @@ func test_regenerates_up_to_the_max() -> void:
 	assert_eq(_health.get_current(), 100.0, "no pasa del máximo")
 
 
+func test_overkill_reports_the_whole_hit_but_removes_what_was_left() -> void:
+	_health.take_damage(DamageInfo.create(80.0))
+	watch_signals(_health)
+	assert_eq(_health.take_damage(DamageInfo.create(50.0)), 20.0, "quita lo que quedaba")
+	var amount: float = get_signal_parameters(_health, "damaged")[0]
+	assert_eq(amount, 50.0, "el golpe valía 50")
+
+
+func test_immortal_counts_hits_without_losing_health() -> void:
+	_health.immortal = true
+	watch_signals(_health)
+	assert_eq(_health.take_damage(DamageInfo.create(500.0)), 0.0)
+	assert_eq(_health.get_current(), 100.0)
+	assert_false(_health.is_dead())
+	assert_signal_emitted(_health, "damaged")
+	assert_signal_not_emitted(_health, "died")
+
+
 func test_raising_max_health_heals_the_difference() -> void:
 	_health.take_damage(DamageInfo.create(50.0))
 	_stats.add_modifier(StatModifier.create(&"max_health", StatModifier.Kind.FLAT, 20.0), self)

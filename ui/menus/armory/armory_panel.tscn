@@ -1,0 +1,102 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ui/menus/armory/armory_panel.gd" id="1_panel"]
+[ext_resource type="Shader" path="res://vfx/shaders/screen_blur.gdshader" id="2_blur"]
+[ext_resource type="Script" path="res://ui/stats/stats_view.gd" id="3_stats"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_blur"]
+shader = ExtResource("2_blur")
+shader_parameter/blur_lod = 2.5
+shader_parameter/tint = Color(0.05, 0.06, 0.09, 0.55)
+
+[node name="ArmoryPanel" type="CanvasLayer"]
+process_mode = 3
+layer = 40
+script = ExtResource("1_panel")
+
+[node name="Blur" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_blur")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Margin" type="MarginContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"ScreenMargin"
+
+[node name="Panel" type="PanelContainer" parent="Margin"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Content" type="VBoxContainer" parent="Margin/Panel"]
+layout_mode = 2
+theme_type_variation = &"MenuList"
+
+[node name="Header" type="HBoxContainer" parent="Margin/Panel/Content"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="Margin/Panel/Content/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"HeaderLabel"
+text = "ARMORY_TITLE"
+
+[node name="Close" type="Button" parent="Margin/Panel/Content/Header"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+focus_mode = 0
+theme_type_variation = &"SmallButton"
+text = "ARMORY_CLOSE"
+
+[node name="Body" type="HBoxContainer" parent="Margin/Panel/Content"]
+layout_mode = 2
+theme_type_variation = &"ArmoryBody"
+
+[node name="WeaponsScroll" type="ScrollContainer" parent="Margin/Panel/Content/Body"]
+custom_minimum_size = Vector2(500, 380)
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="WeaponList" type="VBoxContainer" parent="Margin/Panel/Content/Body/WeaponsScroll"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"StatList"
+
+[node name="StatsColumn" type="VBoxContainer" parent="Margin/Panel/Content/Body"]
+custom_minimum_size = Vector2(340, 0)
+layout_mode = 2
+theme_type_variation = &"StatList"
+
+[node name="SelectedName" type="Label" parent="Margin/Panel/Content/Body/StatsColumn"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"StatGroupLabel"
+
+[node name="EquipHint" type="Label" parent="Margin/Panel/Content/Body/StatsColumn"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(340, 0)
+layout_mode = 2
+theme_type_variation = &"StatBaseLabel"
+text = "ARMORY_EQUIP_HINT"
+autowrap_mode = 3
+
+[node name="StatsScroll" type="ScrollContainer" parent="Margin/Panel/Content/Body/StatsColumn"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="StatsView" type="VBoxContainer" parent="Margin/Panel/Content/Body/StatsColumn/StatsScroll"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"StatList"
+script = ExtResource("3_stats")

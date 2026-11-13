@@ -1,0 +1,9 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://systems/combat/weapons/sword/sword.gd" id="1_sword"]
+[ext_resource type="PackedScene" path="res://systems/combat/weapons/sword/sword_slash.tscn" id="2_slash"]
+
+[node name="Sword" type="Node3D"]
+script = ExtResource("1_sword")
+target_mask = 16
+slash_scene = ExtResource("2_slash")

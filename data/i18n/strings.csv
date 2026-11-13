@@ -82,3 +82,24 @@ STAT_SPRINT_SPEED,Velocidad de sprint,Sprint speed
 STAT_SPRINT_DELAY,Tiempo hasta el sprint,Time to sprint
 STAT_DASH_MIN_SPEED,Velocidad mínima para el dash,Dash min speed
 STAT_FAST_FALL_DOUBLE_TAP_WINDOW,Margen del doble Ctrl,Double Ctrl window
+STAT_GROUP_WEAPON,Arma,Weapon
+STAT_COOLDOWN,Tiempo entre ataques,Cooldown
+STAT_PROJECTILES,Proyectiles,Projectiles
+STAT_BURST_INTERVAL,Pausa entre golpes,Gap between hits
+STAT_REACH,Alcance,Reach
+WEAPON_SWORD_NAME,Espada,Sword
+WEAPON_SWORD_DESCRIPTION,"Tajos en arco al enemigo más cercano. Cada proyectil extra es otro tajo.","Arcing slashes at the nearest enemy. Each extra projectile is another slash."
+DUMMY_DPS,DPS %d,DPS %d
+DUMMY_TOTAL,Total %d,Total %d
+INTERACT_ARMORY,Abrir la armería,Open the armory
+ARMORY_TITLE,Armería,Armory
+ARMORY_CLOSE,Cerrar,Close
+ARMORY_EQUIP,Equipar,Equip
+ARMORY_REMOVE,Quitar,Remove
+ARMORY_LEVEL,Nv. %d/%d,Lv. %d/%d
+ARMORY_NOT_EQUIPPED,Sin equipar,Not equipped
+ARMORY_LEVEL_DOWN,Nivel −,Level −
+ARMORY_LEVEL_UP,Nivel +,Level +
+ARMORY_EQUIP_HINT,"Equipa un arma para ver sus stats (las suyas, sin las del personaje).","Equip a weapon to see its stats (its own, without the character's)."
+TELEPORT_TO_COMBAT,Zona de combate,Combat zone
+TELEPORT_TO_MOVEMENT,Zona de movimiento,Movement zone
