@@ -6,14 +6,16 @@
 [ext_resource type="PackedScene" path="res://entities/interactables/armory/armory.tscn" id="4_armory"]
 [ext_resource type="PackedScene" path="res://entities/interactables/teleporter/teleporter.tscn" id="5_teleporter"]
 [ext_resource type="Script" path="res://entities/interactables/teleporter/teleporter.gd" id="6_teleporter_script"]
+[ext_resource type="PackedScene" path="res://entities/interactables/summoner/summoner.tscn" id="7_summoner"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_fall"]
 size = Vector3(400, 4, 400)
 
-[node name="CombatRange" type="Node3D" node_paths=PackedStringArray("exit_teleporter", "arrival")]
+[node name="CombatRange" type="Node3D" node_paths=PackedStringArray("exit_teleporter", "arrival", "summoner")]
 script = ExtResource("1_range")
 exit_teleporter = NodePath("ExitTeleporter")
 arrival = NodePath("Arrival")
+summoner = NodePath("Summoner")
 
 [node name="Floor" type="CSGBox3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
@@ -58,3 +60,6 @@ transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -5.5, 0, -11.5)
 
 [node name="Far" parent="Dummies" instance=ExtResource("3_dummy")]
 transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 9, 0, -12)
+
+[node name="Summoner" parent="." instance=ExtResource("7_summoner")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, 6)

@@ -91,6 +91,14 @@ func test_immortal_counts_hits_without_losing_health() -> void:
 	assert_signal_not_emitted(_health, "died")
 
 
+func test_reset_brings_it_back_full() -> void:
+	_health.take_damage(DamageInfo.create(500.0))
+	_health.reset()
+	assert_false(_health.is_dead())
+	assert_eq(_health.get_current(), 100.0)
+	assert_eq(_health.take_damage(DamageInfo.create(10.0)), 10.0, "vuelve a recibir daño")
+
+
 func test_raising_max_health_heals_the_difference() -> void:
 	_health.take_damage(DamageInfo.create(50.0))
 	_stats.add_modifier(StatModifier.create(&"max_health", StatModifier.Kind.FLAT, 20.0), self)
