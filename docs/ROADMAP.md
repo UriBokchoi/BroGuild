@@ -40,7 +40,7 @@
 - [x] Vida, daño y muerte: `HealthComponent`, `HitboxComponent`, `HurtboxComponent` con las fórmulas del GDD (defensa, esquiva, crítico); hurtbox baja en el slide
 - [x] Armas: `WeaponData` (stats del arma y mejoras por nivel) y base de arma automática (cadencia y objetivo); la espada (cuerpo a cuerpo)
 - [x] Zona de práctica de combate en el gimnasio: teletransporte de ida y vuelta, muñecos (cuentan como enemigos, no mueren ni se mueven, muestran su DPS) y armería para equipar, quitar y cambiar de nivel las armas; números de daño (blancos, críticos amarillos y más grandes)
-- [ ] Enemigo cuerpo a cuerpo con `EnemyData`, steering simple y pooling; barra de vida en el HUD
+- [x] Enemigo cuerpo a cuerpo con `EnemyData`, steering simple y pooling; barra de vida en el HUD (la del jugador, hecha con «Vida, daño y muerte»); invocador de enemigos en la zona de práctica
 - [ ] Director de oleadas en la zona de pruebas (curva en datos) y escena de estrés con 300 y 500 enemigos y fps medidos (se repite al cerrar cada hito)
 - [ ] Experiencia: gemas atraídas por el radio de recogida, niveles con curva en datos (la cámara ya se aleja con el nivel)
 - [ ] Subir de nivel: elegir 1 de 3 entre armas y runas nuevas o mejorarlas; 4 ranuras de armas y 4 de runas, nivel máximo 5

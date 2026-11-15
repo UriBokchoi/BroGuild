@@ -404,3 +404,22 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
     - `Teleporter` (pisar = ir a su destino) une las dos zonas. El destino de la vuelta lo pone el gimnasio.
   - **Herramientas:** el generador de temas pasa a `tools/gen_themes.gd`; solo existía fuera del repositorio.
 - **Por qué:** el ROADMAP pedía la base de armas y la espada. El diseñador quería además probar el combate con calma: una zona aparte del movimiento, muñecos con DPS, números de daño con efecto (blancos y críticos amarillos, como en Megabonk) y una forma de cambiar de armas. Todo queda en datos y componentes, así que un arma nueva aparece sola en la armería, y cualquier enemigo con `DamageReporter` saca números.
+
+## 2026-11-15 · Enemigo cuerpo a cuerpo, enjambre y pooling
+- **Decisión:**
+  - **Datos:** `EnemyData` (`data/enemies/*.tres`) lleva id estable, nombre, descripción, escena y sus fuentes de stats: un `HealthData` y un `EnemyStats` con velocidad, aceleración, daño y ritmo de contacto, y radio y fuerza de separación. Son stats de verdad, así que los afijos de élite serán modificadores.
+  - **Primer enemigo:** el «enjambre cuerpo a cuerpo» del GDD, con id `swarmer` y nombre provisional «Esbirro». Tiene 30 de vida, va a 6 m/s y hace 8 de daño al tocar cada 0,8 s.
+  - **`Enemy`** (base de las escenas de enemigo):
+    - Persigue y se separa con `EnemySteering` (funciones puras en el plano XZ). Choca solo con el mundo y cae con la gravedad del mundo.
+    - Hace daño con una `HitboxComponent` de contacto que repite mientras toca.
+    - Al morir deja de recibir y de hacer daño, avisa por `EventBus.enemy_died` (para experiencia, botín y Archivo), encoge 0,15 s y desaparece.
+    - No tiene `_physics_process` propio.
+  - **`EnemySwarm`** (`systems/spawning/`):
+    - Un `NodePool` por tipo de enemigo. Al desactivarse, el enemigo queda con `process_mode` desactivado, lo que también lo saca de la física.
+    - Mueve a todos los enemigos en un único bucle. Cada tick rellena un `SpatialHash` (`core/`, rejilla XZ) y cada enemigo solo mira las celdas cercanas para separarse, sin comparar todos con todos.
+    - Retira a los que caen por debajo de `kill_height`.
+    - Quien decida cuándo y dónde salen (el director, el invocador) solo llama a `spawn()`.
+  - **`HealthComponent.reset()`** devuelve la vida llena a un enemigo reutilizado.
+  - **Práctica:** un `Summoner` en la zona de combate saca con E un anillo de 12 esbirros a 10 m de quien lo usa. El `EnemySwarm` vive en el nivel y la zona se lo pasa al invocador.
+  - **Pendiente:** el jugador y los enemigos se atraviesan (el jugador solo choca con el mundo), igual que con los muñecos. No hay retroceso ni destello al golpear (Hito 5).
+- **Por qué:** el ROADMAP pide un enemigo cuerpo a cuerpo con datos, steering simple y pooling, y CLAUDE.md pide 300+ enemigos sin navegación por enemigo. El bucle único y el hash espacial son la base para medirlo en la escena de estrés del director de oleadas.
