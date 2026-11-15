@@ -111,6 +111,7 @@ STAT_CONTACT_INTERVAL,Tiempo entre golpes al tocar,Time between contact hits
 STAT_GROUP_STEERING,Movimiento en grupo,Group movement
 STAT_SEPARATION_RADIUS,Distancia de separación,Separation distance
 STAT_SEPARATION_WEIGHT,Fuerza de separación,Separation strength
+STAT_CLIMB_SPEED,Velocidad al trepar,Climb speed
 ENEMY_SWARMER_NAME,Esbirro,Minion
 ENEMY_SWARMER_DESCRIPTION,"Rápido y frágil; llega en enjambre.","Fast and frail; comes in swarms."
 INTERACT_SUMMON,Invocar esbirros,Summon minions

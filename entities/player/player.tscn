@@ -109,7 +109,7 @@ outer_radius = 0.7
 
 [node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("stats", "stamina", "health", "weapons", "input", "movement", "wall_sensor", "ledge_sensor", "ground_state", "air_state")]
 collision_layer = 2
-collision_mask = 1
+collision_mask = 5
 script = ExtResource("1_player")
 stats = NodePath("Stats")
 stamina = NodePath("Stamina")

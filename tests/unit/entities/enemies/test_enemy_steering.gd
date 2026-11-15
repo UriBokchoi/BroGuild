@@ -23,6 +23,11 @@ func test_separation_ignores_neighbors_out_of_radius() -> void:
 	assert_eq(push, Vector3.ZERO)
 
 
+func test_a_neighbor_stacked_above_does_not_push() -> void:
+	var push := EnemySteering.separation(Vector3.ZERO, PackedVector3Array([Vector3(0.1, 1.3, 0.0)]), 1.1, Vector3.RIGHT)
+	assert_eq(push, Vector3.ZERO, "las pilas aguantan")
+
+
 func test_overlapping_neighbor_pushes_towards_the_fallback() -> void:
 	var push := EnemySteering.separation(Vector3.ZERO, PackedVector3Array([Vector3.ZERO]), 1.0, Vector3.RIGHT)
 	assert_eq(push, Vector3.RIGHT)

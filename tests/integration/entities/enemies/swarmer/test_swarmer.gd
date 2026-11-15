@@ -1,6 +1,6 @@
 extends GutTest
-## Esbirro contra el jugador, con física real: lo persigue y le hace daño al tocarlo; las armas
-## del jugador lo matan. Capas de enemigo.
+## Esbirro contra el jugador, con física real: lo persigue, choca con él sin atravesarlo y le hace
+## daño al tocarlo; las armas del jugador lo matan. Capas de enemigo.
 
 const PlayerScene := preload("res://entities/player/player.tscn")
 const SWARMER := preload("res://data/enemies/swarmer.tres")
@@ -22,10 +22,17 @@ func before_each() -> void:
 func test_uses_the_enemy_layers() -> void:
 	var enemy := _swarm.spawn(SWARMER, Vector3(5.0, 0.0, 0.0))
 	assert_eq(enemy.collision_layer, PhysicsLayers.mask(PhysicsLayers.ENEMY))
-	assert_eq(enemy.collision_mask, PhysicsLayers.mask(PhysicsLayers.WORLD))
+	assert_eq(enemy.collision_mask, PhysicsLayers.mask(PhysicsLayers.WORLD, PhysicsLayers.PLAYER, PhysicsLayers.ENEMY))
 	assert_eq(enemy.hurtbox.collision_layer, PhysicsLayers.mask(PhysicsLayers.ENEMY_HURTBOX))
 	assert_eq(enemy.contact_hitbox.collision_layer, PhysicsLayers.mask(PhysicsLayers.ENEMY_HITBOX))
 	assert_eq(enemy.contact_hitbox.collision_mask, PhysicsLayers.mask(PhysicsLayers.PLAYER_HURTBOX))
+
+
+func test_bumps_into_the_player_instead_of_going_through() -> void:
+	var enemy := _swarm.spawn(SWARMER, Vector3(3.0, 0.0, 0.0))
+	await wait_physics_frames(60)
+	var flat := Vector2(enemy.global_position.x - _player.global_position.x, enemy.global_position.z - _player.global_position.z)
+	assert_gt(flat.length(), 0.7, "los cuerpos no se meten uno en otro")
 
 
 func test_touching_the_player_hurts_it() -> void:

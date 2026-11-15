@@ -14,9 +14,9 @@ func before_each() -> void:
 	add_child_autofree(_player)
 
 
-func test_body_is_the_player_and_collides_with_the_world() -> void:
+func test_body_is_the_player_and_collides_with_the_world_and_enemies() -> void:
 	assert_eq(_player.collision_layer, PhysicsLayers.mask(PhysicsLayers.PLAYER))
-	assert_eq(_player.collision_mask, PhysicsLayers.mask(PhysicsLayers.WORLD))
+	assert_eq(_player.collision_mask, PhysicsLayers.mask(PhysicsLayers.WORLD, PhysicsLayers.ENEMY))
 
 
 func test_camera_follows_the_player_and_only_collides_with_the_world() -> void:

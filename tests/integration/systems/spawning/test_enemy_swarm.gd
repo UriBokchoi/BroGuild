@@ -1,6 +1,7 @@
 extends GutTest
 ## EnemySwarm con física real y el esbirro: saca enemigos del pool, los lleva hacia el objetivo
-## separados entre sí, los guarda al morir para reutilizarlos y retira a los que caen del mapa.
+## chocando entre sí (pueden quedar apilados), los guarda al morir para reutilizarlos y retira a los
+## que caen del mapa.
 
 const SWARMER := preload("res://data/enemies/swarmer.tres")
 
@@ -38,6 +39,13 @@ func test_enemies_spread_instead_of_stacking() -> void:
 	var second := _swarm.spawn(SWARMER, Vector3.ZERO)
 	await wait_physics_frames(30)
 	assert_gt(first.global_position.distance_to(second.global_position), 0.5)
+
+
+func test_an_enemy_can_stand_on_top_of_another() -> void:
+	var below := _swarm.spawn(SWARMER, Vector3.ZERO)
+	var above := _swarm.spawn(SWARMER, Vector3(0.0, 2.0, 0.0))
+	await wait_physics_frames(40)
+	assert_gt(above.global_position.y, below.global_position.y + 1.0, "apilado encima")
 
 
 func test_dead_enemies_vanish_and_are_reused_full() -> void:

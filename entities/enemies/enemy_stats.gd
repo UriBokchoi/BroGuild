@@ -19,3 +19,5 @@ extends Resource
 @export_range(0.1, 10.0, 0.05, "or_greater", "suffix:m") var separation_radius: float = 0.0
 ## Fuerza de la separación respecto a su velocidad (0 = se amontonan).
 @export_range(0.0, 10.0, 0.05, "or_greater") var separation_weight: float = 0.0
+## Velocidad con la que trepa encima de otro enemigo que le tapa el paso (0 = no trepa ni se apila).
+@export_range(0.0, 20.0, 0.1, "or_greater", "suffix:m/s") var climb_speed: float = 0.0
