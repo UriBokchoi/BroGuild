@@ -18,6 +18,8 @@ contact_interval = 0.8
 separation_radius = 1.1
 separation_weight = 0.3
 climb_speed = 3.5
+climb_height = 1.5
+approach_spread = 25.0
 
 [resource]
 script = ExtResource("1_data")

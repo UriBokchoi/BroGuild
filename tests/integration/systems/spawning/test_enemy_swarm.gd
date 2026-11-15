@@ -30,8 +30,8 @@ func test_chases_the_target() -> void:
 	_target.position = Vector3(0.0, 0.0, 0.0)
 	var enemy := _swarm.spawn(SWARMER, Vector3(8.0, 0.0, 0.0))
 	await wait_physics_frames(30)
-	assert_lt(enemy.global_position.x, 7.0, "se acerca")
-	assert_almost_eq(enemy.global_position.z, 0.0, 0.2, "en línea recta")
+	var flat := Vector2(enemy.global_position.x, enemy.global_position.z)
+	assert_lt(flat.length(), 7.0, "se acerca (con su desvío)")
 
 
 func test_enemies_spread_instead_of_stacking() -> void:
@@ -46,6 +46,19 @@ func test_an_enemy_can_stand_on_top_of_another() -> void:
 	var above := _swarm.spawn(SWARMER, Vector3(0.0, 2.0, 0.0))
 	await wait_physics_frames(40)
 	assert_gt(above.global_position.y, below.global_position.y + 1.0, "apilado encima")
+
+
+func test_a_crowd_piles_up_around_the_target_without_flying_off() -> void:
+	_swarm.target = _target
+	for index: int in 24:
+		var angle := TAU * index / 24.0
+		_swarm.spawn(SWARMER, Vector3(cos(angle), 0.0, sin(angle)) * 6.0)
+	await wait_physics_frames(150)
+	var highest := 0.0
+	for enemy: Enemy in _swarm.get_active():
+		highest = maxf(highest, enemy.global_position.y)
+	assert_gt(highest, 1.0, "se suben unos encima de otros")
+	assert_lt(highest, 10.0, "no hacen torres hasta el cielo")
 
 
 func test_dead_enemies_vanish_and_are_reused_full() -> void:

@@ -9,7 +9,7 @@
 [ext_resource type="Script" path="res://entities/enemies/damage_reporter.gd" id="7_reporter"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_body"]
-friction = 0.3
+friction = 0.0
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_body"]
 radius = 0.4

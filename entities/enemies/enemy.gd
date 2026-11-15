@@ -27,12 +27,17 @@ signal despawned(enemy: Enemy)
 
 ## Tipo de enemigo.
 var data: EnemyData
+## Azar del desvío de aproximación. Si no se asigna antes de entrar en el árbol, el flujo de
+## enemigos de [code]Rng[/code].
+var rng: RandomNumberGenerator
 
 var _stats: EnemyStats
 var _rest_scale: Vector3 = Vector3.ONE
 var _dying_left: float = 0.0
 ## Hacia dónde apartarse si otro enemigo está justo al lado (distinto para cada uno).
 var _fallback: Vector3 = Vector3.RIGHT
+## Desvío con el que se acerca al objetivo en esta vida, en radianes.
+var _approach_angle: float = 0.0
 
 
 ## Prepara el enemigo antes de añadirlo al árbol.
@@ -45,6 +50,8 @@ func _ready() -> void:
 	_stats = stats.get_resolved(EnemyStats) as EnemyStats
 	_rest_scale = visual.scale
 	_fallback = Vector3.RIGHT.rotated(Vector3.UP, float(get_instance_id() % 360))
+	if rng == null:
+		rng = Rng.stream(Rng.Stream.ENEMIES)
 	health.died.connect(_on_died)
 	deactivate()
 
@@ -65,6 +72,7 @@ func spawn(feet: Vector3) -> void:
 	hurtbox.monitorable = true
 	visual.scale = _rest_scale
 	_dying_left = 0.0
+	_approach_angle = deg_to_rad(rng.randf_range(-_stats.approach_spread, _stats.approach_spread))
 	reset_physics_interpolation()
 
 
@@ -78,35 +86,53 @@ func is_alive() -> bool:
 	return visible and not health.is_dead()
 
 
-## Distancia a la que mira a sus vecinos para separarse.
+## ¿Está apoyado (ni sube ni cae)? Solo así sirve de apoyo para que otro trepe encima.
+func is_settled() -> bool:
+	return is_alive() and absf(linear_velocity.y) < EnemySteering.SETTLED_SPEED
+
+
+## Distancia a la que mira a sus vecinos para separarse y para trepar.
 func separation_radius() -> float:
 	return _stats.separation_radius
 
 
 ## Un tick: acelera hacia [param target] (si [param has_target]) separándose de [param neighbors]
-## (posiciones de otros enemigos cercanos), o sigue encogiendo si está muriendo. Solo cambia la
-## velocidad horizontal: la vertical es de la física (gravedad, pilas).
-func physics_step(delta: float, target: Vector3, has_target: bool, neighbors: PackedVector3Array) -> void:
+## (posiciones de otros enemigos cercanos) y trepando sobre [param footholds] (los de ellos que
+## están apoyados) si se atasca, o sigue encogiendo si está muriendo. Cambia la velocidad
+## horizontal; la vertical es de la física (gravedad, pilas), salvo cuando trepa.
+func physics_step(
+	delta: float,
+	target: Vector3,
+	has_target: bool,
+	neighbors: PackedVector3Array,
+	footholds: PackedVector3Array,
+) -> void:
 	if health.is_dead():
 		_shrink(delta)
 		return
-	var chase := EnemySteering.seek(global_position, target, _stats.move_speed) if has_target else Vector3.ZERO
+	var chase := Vector3.ZERO
+	if has_target:
+		chase = EnemySteering.approach(global_position, target, _stats.move_speed, _approach_angle)
 	var push := EnemySteering.separation(global_position, neighbors, _stats.separation_radius, _fallback)
 	var desired := (chase + push * _stats.separation_weight * _stats.move_speed).limit_length(_stats.move_speed)
 	var current := Vector3(linear_velocity.x, 0.0, linear_velocity.z)
 	var vertical := linear_velocity.y
-	if _is_stuck_behind(current, chase, neighbors):
+	if _is_stuck_behind(current, chase, target, footholds):
 		vertical = maxf(vertical, _stats.climb_speed)
 	var horizontal := current.move_toward(desired, _stats.acceleration * delta)
 	linear_velocity = Vector3(horizontal.x, vertical, horizontal.z)
 	_face(horizontal, delta)
 
 
-## ¿Quiere avanzar pero va frenado porque otro enemigo le tapa el paso? Entonces trepa encima de él.
-func _is_stuck_behind(current: Vector3, chase: Vector3, neighbors: PackedVector3Array) -> bool:
+## ¿Quiere avanzar pero va frenado porque un enemigo apoyado le tapa el paso, y aún no está más alto
+## de lo que necesita para llegar al objetivo? Entonces trepa encima.
+func _is_stuck_behind(current: Vector3, chase: Vector3, target: Vector3, footholds: PackedVector3Array) -> bool:
 	if chase.is_zero_approx() or current.length() > _stats.move_speed * EnemySteering.STUCK_SPEED:
 		return false
-	return EnemySteering.blocked_ahead(global_position, chase.normalized(), neighbors, _stats.separation_radius)
+	if global_position.y > target.y + _stats.climb_height:
+		return false
+	var reach := _stats.separation_radius
+	return EnemySteering.blocked_ahead(global_position, chase.normalized(), target, footholds, reach)
 
 
 func _face(direction: Vector3, delta: float) -> void:

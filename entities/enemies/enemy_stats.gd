@@ -21,3 +21,8 @@ extends Resource
 @export_range(0.0, 10.0, 0.05, "or_greater") var separation_weight: float = 0.0
 ## Velocidad con la que trepa encima de otro enemigo que le tapa el paso (0 = no trepa ni se apila).
 @export_range(0.0, 20.0, 0.1, "or_greater", "suffix:m/s") var climb_speed: float = 0.0
+## Altura sobre los pies del objetivo hasta la que trepa: alrededor del jugador forman un montículo;
+## si el jugador está en alto, se apilan para alcanzarlo.
+@export_range(0.0, 20.0, 0.1, "or_greater", "suffix:m") var climb_height: float = 0.0
+## Desvío máximo con el que se acerca al objetivo; cada enemigo saca el suyo al aparecer.
+@export_range(0.0, 90.0, 1.0, "suffix:°") var approach_spread: float = 0.0
