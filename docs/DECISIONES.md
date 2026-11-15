@@ -421,5 +421,29 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
     - Quien decida cuándo y dónde salen (el director, el invocador) solo llama a `spawn()`.
   - **`HealthComponent.reset()`** devuelve la vida llena a un enemigo reutilizado.
   - **Práctica:** un `Summoner` en la zona de combate saca con E un anillo de 12 esbirros a 10 m de quien lo usa. El `EnemySwarm` vive en el nivel y la zona se lo pasa al invocador.
-  - **Pendiente:** el jugador y los enemigos se atraviesan (el jugador solo choca con el mundo), igual que con los muñecos. No hay retroceso ni destello al golpear (Hito 5).
+  - **Sin retroceso ni destello** al golpear (Hito 5). Los choques y el apilado, en la entrada siguiente.
 - **Por qué:** el ROADMAP pide un enemigo cuerpo a cuerpo con datos, steering simple y pooling, y CLAUDE.md pide 300+ enemigos sin navegación por enemigo. El bucle único y el hash espacial son la base para medirlo en la escena de estrés del director de oleadas.
+
+## 2026-11-16 · Enemigos físicos que chocan y se apilan
+- **Decisión:**
+  - **Cuerpos:**
+    - `Enemy` pasa de `CharacterBody3D` a `RigidBody3D` sin rotación, sin dormir y sin fricción. Choca con el mundo, con el jugador y con otros enemigos.
+    - El jugador choca también con la capa `enemy`: no los atraviesa y puede quedarse de pie encima. Sus sensores de pared y de borde siguen mirando solo el mundo, así que no hay salto en pared ni mantle sobre enemigos.
+    - Entre ellos no se hacen daño, porque su hitbox de contacto solo mira la hurtbox del jugador.
+  - **Movimiento:** el enjambre solo fija la velocidad horizontal de cada enemigo; la gravedad, los empujones y las pilas los resuelve Jolt. Cada enemigo se acerca con su propio desvío (`approach_spread`, al azar del flujo `ENEMIES` al aparecer), que desaparece al llegar, para que la horda no vaya en rayos perfectos.
+  - **Trepar** (`climb_speed`, `climb_height`): un enemigo trepa (sube a `climb_speed`) si cumple todo esto:
+    - quiere avanzar y va frenado;
+    - tiene delante, a su alcance, un enemigo apoyado (que ni sube ni cae);
+    - ese enemigo está más cerca del objetivo que él;
+    - sus pies están por debajo de los del objetivo + `climb_height`.
+  - **Cómo se llegó ahí, probando con 40 esbirros:**
+    - sin trepar, un corro cerrado se atasca como un arco de piedra;
+    - sin la regla de «más cerca del objetivo», dos vecinos trepan uno sobre otro sin parar;
+    - sin la de «apoyado», la horda entera sube de una pieza;
+    - con fricción, el que trepa arrastra a sus vecinos hacia arriba;
+    - sin `climb_height`, levantan una torre de 20 m encima del jugador.
+  - **Resultado:** con todo eso forman un montículo estable (media de 2,5 m) y, si el jugador está en alto, se apilan para llegar a él.
+  - **Separación:** solo cuenta vecinos a su altura (distancia en 3D), para no deshacer las pilas. El enjambre apunta al principio de cada tick qué enemigos están apoyados, en un segundo `SpatialHash`, para que el resultado no dependa del orden del bucle.
+  - **Esbirro:** separación 0,3; trepa a 3,5 m/s hasta 1,5 m sobre el objetivo; desvío de 25°.
+  - **Visto en las pruebas:** la horda empuja un poco al jugador (unos 0,5 m/s con 40 encima): el cuerpo del jugador sale de los solapes.
+- **Por qué:** el diseñador pidió que los enemigos choquen con él y entre ellos sin hacerse daño y que se puedan acumular, mirando Megabonk. Allí los enemigos se apilan en una masa que avanza hacia el jugador. Con cuerpos físicos el apilado sale de la física y el retroceso de las armas será un impulso.

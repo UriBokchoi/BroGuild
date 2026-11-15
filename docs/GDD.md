@@ -77,6 +77,7 @@ Toda apuesta tiene **anticipación** (giro, luces, sonido que sube), **revelado*
 - **Runas** (pasivas): suben stats principales con cada nivel: Fuerza (daño) · Amplitud (área) · Prisa (velocidad de ataque) · Vigor (vida máxima) · Multiplicidad (cantidad de proyectiles, también para armas cuerpo a cuerpo).
 - **Subir de nivel**: eliges 1 de 3 opciones (arma o runa nueva, o subir una que ya tengas). La ruleta de apuestas (§5) se monta encima de esta elección.
 - **Enemigos**: enjambre cuerpo a cuerpo (rápido, frágil) · tanque lento · tirador a distancia (te obliga a moverte) · élites con afijos (cada ~2 min, sueltan cofre).
+- **Cuerpos de los enemigos** (como en Megabonk): chocan con el mundo, con el jugador y entre ellos, y no se hacen daño entre ellos. El jugador no los atraviesa: le bloquean, le dañan al tocarle y puede saltar y quedarse de pie encima. Cuando se atascan, los de atrás trepan sobre los de delante: alrededor del jugador forman un montículo y, si está en alto, se apilan para alcanzarlo.
 - **Director de oleadas**: la densidad sube con el tiempo, con picos cada minuto; la curva vive en datos.
 
 **Stats del personaje** (como en Megabonk o Vampire Survivors; todas mejorables, §5). Valores de partida en `data/player/`. Ya funcionan vida, regeneración, defensa, esquiva, daño y crítico; el resto de fórmulas son la intención de diseño y se confirman al implementar armas y enemigos (Hito 2). Al recibir un golpe, primero se tira la esquiva y luego la defensa reduce lo que entra.
