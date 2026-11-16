@@ -100,6 +100,16 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
   - `summoner/`: el invocador de enemigos de práctica;
   - `wave_bell/`: la campana que arranca y para el director de oleadas.
 
+### Botín y progresión — `entities/pickups/` y `systems/progression/`
+- **Recogibles:**
+  - `PickupData` (en `data/pickups/`) lleva escena, recompensa (p. ej. `experience`) y vuelo hacia quien recoge.
+  - `Pickup` es el nodo: tipo, valor y si ya vuela. Su giro y su balanceo van en el shader, sin `_process` por nodo.
+  - `xp_gem/`: la gema de experiencia.
+- **`PickupField`** (en el nivel): suelta recogibles en el suelo desde un pool por tipo. Cuando quien recoge está dentro de su `pickup_range`, vuelan acelerando hacia él; al llegar, avisan por `EventBus.pickup_collected`. Todos van en un bucle y sin física.
+- **`LootDropper`** (en el nivel): escucha `enemy_died` y suelta la gema con la `xp_reward` del enemigo. Las fichas, los cofres y las probabilidades de botín irán aquí.
+- **`ExperienceComponent`** (en el jugador): suma la experiencia recogida × `xp_gain` y sube de nivel con la curva de `ExperienceData` (`data/progression/experience.tres`). El jugador aleja la cámara con el nivel.
+- **Stats de progresión:** `ProgressionData` (experiencia y fichas ganadas, suerte, radio de recogida).
+
 ### Juice y efectos — `vfx/`
 - **`juice/`**, efectos que solo escuchan señales:
   - `damage_numbers/`: números de daño con pool y estilo en `data/vfx/damage_numbers.tres`;
@@ -109,7 +119,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 - **Shaders propios de una feature:** van con ella (tajo de la espada, teletransporte, líneas de velocidad).
 
 ### UI — `ui/`
-- **`hud/`:** vida, stamina y aviso de interacción. Escuchan el `EventBus`.
+- **`hud/`:** vida, stamina, experiencia y nivel (arriba) y aviso de interacción. Escuchan el `EventBus`.
 - **`menus/pause/`:** menú de pausa con todas las stats del jugador.
 - **`menus/armory/`:** panel de la armería.
 - **`stats/`:** `StatsView`, la lista de stats de cualquier `StatsComponent` (la usan la pausa y la armería), y `StatFormat`.
@@ -120,7 +130,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 ### Niveles — `levels/`
 - **`test_gym/test_gym.tscn`:** escena principal de pruebas. Zona de movimiento con rampas, bordes, paredes, huecos y escalones, más el pad de daño (`props/`).
 - **`test_gym/zones/combat_range.tscn`:** zona de combate a 200 m del gimnasio. Muñecos, armería, invocador, campana de oleadas, plataforma escalonada, teletransportes y recogedor de caídas. Las oleadas paran al volver.
-- **En la raíz del gimnasio viven** `EnemySwarm`, `WaveDirector`, `DamageNumbers`, HUD, pausa y panel de depuración.
+- **En la raíz del gimnasio viven** `EnemySwarm`, `WaveDirector`, `PickupField`, `LootDropper`, `DamageNumbers`, HUD, pausa y panel de depuración.
 - **`stress/stress_test.tscn`:** prueba de rendimiento (herramienta, sin traducir). Mantiene 300 y luego 500 esbirros sobre un jugador inmortal con la espada, mide frames y física y sale. Comando en CLAUDE.md.
 
 ## Señales del `EventBus`
@@ -133,7 +143,10 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 | `player_health_changed` | `Player` | `HealthBar` |
 | `player_died` | `Player` | (nadie aún: pantalla de resultados) |
 | `enemy_damaged` | `DamageReporter` | `DamageNumbers` |
-| `enemy_died` | `Enemy` | (nadie aún: experiencia, Archivo) |
+| `enemy_died` (el propio enemigo) | `Enemy` | `LootDropper` (y más adelante el Archivo) |
+| `pickup_collected` | `PickupField` | `ExperienceComponent` (la recompensa `experience`) |
+| `player_xp_changed` | `Player` | `XpBar` |
+| `player_leveled_up` | `Player` | (nadie aún: elegir 1 de 3) |
 | `interaction_prompt_changed` | `Interactor` | `InteractionPrompt` |
 
 ## Capas de física (`core/physics_layers.gd`)
@@ -147,7 +160,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 | 5 `enemy_hurtbox` | Donde los enemigos reciben daño | Armas del jugador (hitbox y búsqueda de objetivos) |
 | 6 `player_hitbox` | Tajos y proyectiles del jugador | — (ellos miran la 5) |
 | 7 `enemy_hitbox` | Contacto de enemigos y trampas | — (miran la 4) |
-| 8 `pickup` | Botín (aún no hay) | — |
+| 8 `pickup` | — (los recogibles no usan física: los mueve `PickupField`) | — |
 | 9 `interactable` | Armería, invocador… | `Interactor` del jugador |
 
 ## Recetas: cómo añadir…
