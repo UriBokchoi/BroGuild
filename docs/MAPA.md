@@ -21,13 +21,13 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 | Carpeta | Qué va ahí |
 |---|---|
 | `autoload/` | Los únicos singletons: `EventBus` (solo señales), `Rng` (todo el azar, un generador por sistema) y `RunState` (partida en curso). Sin lógica de gameplay. |
-| `core/` | Piezas genéricas que no saben de este juego: stats, máquina de estados, componentes de combate, pool, rejilla espacial, carga de carpetas de datos, nombres de acciones y capas. |
+| `core/` | Piezas genéricas que no saben de este juego: stats, máquina de estados, componentes de combate, pool (`NodePool`), rejilla espacial (`SpatialHash`, con marcas y tope de resultados), carga de carpetas de datos (`ResourceDir`), nombres de acciones y capas. |
 | `entities/` | Lo que existe en el mundo: el jugador, los enemigos y los interactuables. |
 | `systems/` | Reglas y sistemas que reparten trabajo entre entidades: combate (fórmulas y armas), progresión, aparición de enemigos. Vacías, para más adelante: `gamble/` y `upgrades/`. |
 | `data/` | Los `.tres` de balance y la traducción. Nada de código. |
 | `ui/` | HUD, menús, panel de depuración, vista de stats, tema global y dueño del ratón. |
 | `vfx/` | Efectos visuales: juice que reacciona a señales, shaders compartidos y líneas de velocidad. |
-| `levels/` | Escenas jugables. De momento, el gimnasio de pruebas con su zona de combate. |
+| `levels/` | Escenas jugables: el gimnasio de pruebas con su zona de combate y la prueba de estrés. |
 | `tools/` | Validación por terminal (`validate.sh`, `ci/`) y generadores (`gen_themes.gd`). |
 | `tests/` | GUT: `unit/` y `integration/`, con la misma ruta que el código. `hooks/` es el script de fin de ejecución. |
 | `docs/` | GDD, ROADMAP, DECISIONES y este mapa. |
@@ -63,10 +63,11 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 
 ### Combate — `core/components/` y `systems/combat/`
 - **Golpe:** una `HitboxComponent` toca una `HurtboxComponent`, que pasa el golpe a su `HealthComponent`.
+  - La hitbox apunta con señales lo que toca y solo se procesa mientras toca algo.
   - `DamageCalc.attack()` aplica el daño % y el crítico del atacante (`OffenseData`).
   - La vida tira la esquiva y aplica la defensa (`CombatRules`, `data/combat/rules.tres`).
   - Cada golpe es un `DamageInfo`.
-- **`HealthComponent`:** muere una sola vez, puede ser inmortal (el muñeco) y `reset()` la rellena (enemigos reutilizados).
+- **`HealthComponent`:** muere una sola vez, puede ser inmortal (el muñeco) y `reset()` la rellena (enemigos reutilizados). Solo se procesa si regenera.
 - **Armas** (`systems/combat/weapons/`):
   - `WeaponData` lleva el `.tres` del arma con sus `WeaponStats` y un conjunto de mejoras por nivel.
   - `Weapon` es la base: ataca sola por cadencia al más cercano desde `aim_height` y combina sus stats con las del personaje.
@@ -80,7 +81,12 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
   - Es un `RigidBody3D` sin rotación que choca con el mundo, con el jugador y con otros enemigos.
   - Fija su velocidad horizontal con `EnemySteering`: perseguir con desvío, separarse y decidir si trepa.
   - Daña al tocar, avisa de su muerte y encoge.
-- **`EnemySwarm`** (en el nivel) saca enemigos de un `NodePool` por tipo y los mueve en un único bucle. Usa dos `SpatialHash`: vecinos y apoyos para trepar.
+- **`EnemySwarm`** (en el nivel) saca enemigos de un `NodePool` por tipo y los mueve en un único bucle.
+  - Usa un `SpatialHash` con los vivos, marcando los apoyados para trepar, y una sola consulta de hasta `max_neighbors` vecinos.
+  - Cada enemigo recalcula su rumbo cada `steering_slices` ticks; la física lo mueve en todos.
+- **Oleadas:**
+  - `WaveData` (en `data/waves/`): curva de enemigos por segundo según los minutos, picos, máximo a la vez, distancias de aparición y `WaveEnemy` con pesos y minuto de entrada.
+  - `WaveDirector` (en el nivel) los saca alrededor del jugador, en el suelo (un rayo por intento).
 - **`DamageReporter`** avisa de cada golpe con la posición de la cabeza (para los números).
 - **Tipos y escenas actuales:**
   - `swarmer/`: el esbirro, primer enemigo;
@@ -91,7 +97,8 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 - **Interactuables actuales:**
   - `teleporter/`: `Teleporter`, pisar y aparecer en su destino; también es el recogedor de caídas;
   - `armory/`: la armería de práctica;
-  - `summoner/`: el invocador de enemigos de práctica.
+  - `summoner/`: el invocador de enemigos de práctica;
+  - `wave_bell/`: la campana que arranca y para el director de oleadas.
 
 ### Juice y efectos — `vfx/`
 - **`juice/`**, efectos que solo escuchan señales:
@@ -110,10 +117,11 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 - **`theme/`:** el tema global, generado por `tools/gen_themes.gd`.
 - **`mouse_capture.gd`:** único dueño del modo del ratón.
 
-### Niveles — `levels/test_gym/`
-- **`test_gym.tscn`:** escena principal de pruebas. Zona de movimiento con rampas, bordes, paredes, huecos y escalones, más el pad de daño (`props/`).
-- **`zones/combat_range.tscn`:** zona de combate a 200 m del gimnasio. Muñecos, armería, invocador, plataforma escalonada, teletransportes y recogedor de caídas.
-- **En la raíz del nivel viven** `EnemySwarm`, `DamageNumbers`, HUD, pausa y panel de depuración.
+### Niveles — `levels/`
+- **`test_gym/test_gym.tscn`:** escena principal de pruebas. Zona de movimiento con rampas, bordes, paredes, huecos y escalones, más el pad de daño (`props/`).
+- **`test_gym/zones/combat_range.tscn`:** zona de combate a 200 m del gimnasio. Muñecos, armería, invocador, campana de oleadas, plataforma escalonada, teletransportes y recogedor de caídas. Las oleadas paran al volver.
+- **En la raíz del gimnasio viven** `EnemySwarm`, `WaveDirector`, `DamageNumbers`, HUD, pausa y panel de depuración.
+- **`stress/stress_test.tscn`:** prueba de rendimiento (herramienta, sin traducir). Mantiene 300 y luego 500 esbirros sobre un jugador inmortal con la espada, mide frames y física y sale. Comando en CLAUDE.md.
 
 ## Señales del `EventBus`
 
