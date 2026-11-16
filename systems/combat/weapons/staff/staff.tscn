@@ -1,0 +1,10 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://systems/combat/weapons/projectile_weapon.gd" id="1_weapon"]
+[ext_resource type="PackedScene" path="res://systems/combat/weapons/staff/staff_orb.tscn" id="2_orb"]
+
+[node name="Staff" type="Node3D"]
+script = ExtResource("1_weapon")
+target_mask = 16
+aim_height = 1.2
+projectile_scene = ExtResource("2_orb")

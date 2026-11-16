@@ -1,0 +1,70 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3]
+
+[ext_resource type="Script" path="res://systems/combat/weapons/weapon_data.gd" id="1_data"]
+[ext_resource type="Script" path="res://systems/combat/weapons/dagger/dagger_stats.gd" id="2_stats"]
+[ext_resource type="Script" path="res://core/stats/stat_modifier_set.gd" id="3_set"]
+[ext_resource type="Script" path="res://core/stats/stat_modifier.gd" id="4_modifier"]
+[ext_resource type="PackedScene" path="res://systems/combat/weapons/dagger/dagger.tscn" id="5_scene"]
+
+[sub_resource type="Resource" id="Resource_stats"]
+script = ExtResource("2_stats")
+damage = 12.0
+cooldown = 0.8
+projectiles = 1
+burst_interval = 0.1
+area = 100.0
+duration = 1.2
+reach = 16.0
+projectile_speed = 30.0
+bounce_range = 6.0
+
+[sub_resource type="Resource" id="Resource_level2_bounces"]
+script = ExtResource("4_modifier")
+stat = &"bounces"
+value = 1.0
+
+[sub_resource type="Resource" id="Resource_level2"]
+script = ExtResource("3_set")
+stat_modifiers = Array[ExtResource("4_modifier")]([SubResource("Resource_level2_bounces")])
+
+[sub_resource type="Resource" id="Resource_level3_damage"]
+script = ExtResource("4_modifier")
+stat = &"damage"
+value = 5.0
+
+[sub_resource type="Resource" id="Resource_level3"]
+script = ExtResource("3_set")
+stat_modifiers = Array[ExtResource("4_modifier")]([SubResource("Resource_level3_damage")])
+
+[sub_resource type="Resource" id="Resource_level4_projectiles"]
+script = ExtResource("4_modifier")
+stat = &"projectiles"
+value = 1.0
+
+[sub_resource type="Resource" id="Resource_level4"]
+script = ExtResource("3_set")
+stat_modifiers = Array[ExtResource("4_modifier")]([SubResource("Resource_level4_projectiles")])
+
+[sub_resource type="Resource" id="Resource_level5_bounces"]
+script = ExtResource("4_modifier")
+stat = &"bounces"
+value = 1.0
+
+[sub_resource type="Resource" id="Resource_level5_cooldown"]
+script = ExtResource("4_modifier")
+stat = &"cooldown"
+kind = 1
+value = -0.2
+
+[sub_resource type="Resource" id="Resource_level5"]
+script = ExtResource("3_set")
+stat_modifiers = Array[ExtResource("4_modifier")]([SubResource("Resource_level5_bounces"), SubResource("Resource_level5_cooldown")])
+
+[resource]
+script = ExtResource("1_data")
+id = &"dagger"
+name_key = &"WEAPON_DAGGER_NAME"
+description_key = &"WEAPON_DAGGER_DESCRIPTION"
+scene = ExtResource("5_scene")
+stats = SubResource("Resource_stats")
+levels = Array[ExtResource("3_set")]([SubResource("Resource_level2"), SubResource("Resource_level3"), SubResource("Resource_level4"), SubResource("Resource_level5")])
