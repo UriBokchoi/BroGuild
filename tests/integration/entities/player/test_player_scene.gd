@@ -67,6 +67,17 @@ func test_weapons_use_the_player_stats() -> void:
 	assert_same(_player.weapons.wielder_stats, _player.stats)
 
 
+func test_collected_experience_levels_up_and_moves_the_camera_back() -> void:
+	watch_signals(EventBus)
+	var needed := _player.experience.needed()
+	EventBus.pickup_collected.emit(&"experience", needed)
+	assert_eq(_player.experience.get_level(), 2)
+	assert_signal_emitted_with_parameters(EventBus, "player_leveled_up", [2])
+	assert_signal_emitted(EventBus, "player_xp_changed")
+	var rig := _player.get_node(^"CameraRig") as CameraRig
+	assert_eq(rig.level, 2, "la cámara se aleja con el nivel")
+
+
 func test_interactor_only_detects_interactables() -> void:
 	var interactor := _player.get_node(^"Interactor") as Interactor
 	assert_eq(interactor.collision_layer, 0)

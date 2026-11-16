@@ -18,6 +18,9 @@
 [ext_resource type="Script" path="res://systems/spawning/enemy_swarm.gd" id="16_swarm"]
 [ext_resource type="Script" path="res://systems/spawning/wave_director.gd" id="17_director"]
 [ext_resource type="Resource" path="res://data/waves/test_gym.tres" id="18_waves"]
+[ext_resource type="Script" path="res://systems/progression/pickup_field.gd" id="19_pickups"]
+[ext_resource type="Script" path="res://systems/progression/loot_dropper.gd" id="20_loot"]
+[ext_resource type="Resource" path="res://data/pickups/xp_gem.tres" id="21_xp_gem"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_lgb4e"]
 
@@ -72,6 +75,16 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, -2.5)
 [node name="EnemySwarm" type="Node3D" parent="." node_paths=PackedStringArray("target")]
 script = ExtResource("16_swarm")
 target = NodePath("../Player")
+
+[node name="PickupField" type="Node3D" parent="." node_paths=PackedStringArray("collector", "collector_stats")]
+script = ExtResource("19_pickups")
+collector = NodePath("../Player")
+collector_stats = NodePath("../Player/Stats")
+
+[node name="LootDropper" type="Node" parent="." node_paths=PackedStringArray("field")]
+script = ExtResource("20_loot")
+field = NodePath("../PickupField")
+xp_gem = ExtResource("21_xp_gem")
 
 [node name="WaveDirector" type="Node" parent="." node_paths=PackedStringArray("swarm", "target")]
 script = ExtResource("17_director")

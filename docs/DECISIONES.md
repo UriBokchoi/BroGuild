@@ -488,3 +488,20 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
     - **500 enemigos:** 17,5 ms por frame (57 fps); el 1 % más lento, 34,8 ms; física, 15,3 ms.
   - **Queda para cuando haga falta:** dibujar los enemigos con `MultiMesh`, menos ticks de steering y ajustar Jolt.
 - **Por qué:** el ROADMAP pide el director con la curva en datos y una escena de estrés con fps medidos, y CLAUDE.md pide 60 fps con 300+ enemigos. Medir antes de optimizar señaló el bucle en GDScript, no el render ni la física.
+
+## 2026-11-16 · Experiencia: gemas, recogida y niveles
+- **Decisión:**
+  - **Botín:**
+    - `LootDropper` escucha `EventBus.enemy_died`, que ahora pasa el propio enemigo para leer sus stats ya resueltas, y suelta una gema con su `xp_reward` (stat nueva de `EnemyStats`; el esbirro da 1).
+    - Las fichas, los cofres y las probabilidades de botín irán en el mismo sitio.
+  - **Recogibles:**
+    - `PickupData` (`data/pickups/xp_gem.tres`) lleva su escena, su recompensa (`experience`) y su vuelo: empieza a 4 m/s, acelera a 40 m/s², se recoge a 0,6 m y vuela al pecho.
+    - `PickupField` los deja en el suelo (un rayo), con un pool por tipo. Los mueve en un único bucle, sin física: entran en vuelo cuando quien recoge está dentro de su `pickup_range` (3 m) y ya no se sueltan. Al llegar avisa por `EventBus.pickup_collected(reward, amount)`.
+    - El giro y el balanceo de la gema van en su shader, con un desfase por posición, para que cientos no cuesten un `_process` cada uno.
+  - **Niveles:**
+    - `ExperienceComponent` (en el jugador) suma lo recogido de su recompensa × `xp_gain` y sube de nivel con la curva de `ExperienceData` (`data/progression/experience.tres`). Puede subir varios de golpe y pasa lo que sobra; nivel máximo 100.
+    - Curva de partida, experiencia para pasar de nivel: 5 en el nivel 1, 15 en el 5, 30 en el 10, 70 en el 20, 250 en el 50 y 700 en el 99.
+    - El jugador aleja la cámara con el nivel (`CameraRig.level`, que ya existía) y avisa por `EventBus` (`player_xp_changed`, `player_leveled_up`).
+  - **HUD:** barra de experiencia a todo lo ancho arriba, con el nivel a la izquierda (color de experiencia `4fb6ff`). El tiempo de partida llegará con la tarea de resultados.
+  - **Capa `pickup`:** sigue sin usarse; los recogibles no necesitan física.
+- **Por qué:** el ROADMAP pide gemas atraídas por el radio de recogida y niveles con curva en datos. Con un único campo sin física, cientos de gemas apenas cuestan, y la recompensa como nombre deja añadir fichas o curas sin tocar el campo.

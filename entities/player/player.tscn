@@ -36,6 +36,8 @@
 [ext_resource type="Script" path="res://core/components/hurtbox_component.gd" id="35_hurtbox"]
 [ext_resource type="Script" path="res://systems/combat/weapons/weapon_inventory.gd" id="36_weapons"]
 [ext_resource type="Script" path="res://entities/player/interactor.gd" id="37_interactor"]
+[ext_resource type="Script" path="res://systems/progression/experience_component.gd" id="38_experience"]
+[ext_resource type="Resource" path="res://data/progression/experience.tres" id="39_experience_data"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_interactor"]
 radius = 0.6
@@ -107,14 +109,16 @@ material = SubResource("StandardMaterial3D_cue")
 inner_radius = 0.55
 outer_radius = 0.7
 
-[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("stats", "stamina", "health", "weapons", "input", "movement", "wall_sensor", "ledge_sensor", "ground_state", "air_state")]
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("stats", "stamina", "health", "experience", "weapons", "camera", "input", "movement", "wall_sensor", "ledge_sensor", "ground_state", "air_state")]
 collision_layer = 2
 collision_mask = 5
 script = ExtResource("1_player")
 stats = NodePath("Stats")
 stamina = NodePath("Stamina")
 health = NodePath("Health")
+experience = NodePath("Experience")
 weapons = NodePath("Weapons")
+camera = NodePath("CameraRig")
 input = NodePath("PlayerInput")
 movement = NodePath("Movement")
 wall_sensor = NodePath("WallSensor")
@@ -153,6 +157,11 @@ health = NodePath("../Health")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Hurtbox"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
 shape = SubResource("CapsuleShape3D_hurtbox")
+
+[node name="Experience" type="Node" parent="." node_paths=PackedStringArray("stats")]
+script = ExtResource("38_experience")
+data = ExtResource("39_experience_data")
+stats = NodePath("../Stats")
 
 [node name="Weapons" type="Node3D" parent="." node_paths=PackedStringArray("wielder_stats")]
 script = ExtResource("36_weapons")

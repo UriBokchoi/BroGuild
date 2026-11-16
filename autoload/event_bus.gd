@@ -24,5 +24,11 @@ signal player_died
 signal enemy_damaged(position: Vector3, amount: float, info: DamageInfo)
 ## Cambió lo que el jugador puede hacer con «interactuar» (clave de traducción; vacía = nada).
 signal interaction_prompt_changed(prompt_key: StringName)
-## Murió un enemigo de tipo [param data] en [param position] (botín, experiencia, Archivo…).
-signal enemy_died(data: EnemyData, position: Vector3)
+## Murió [param enemy] (aún en su sitio, con su tipo y sus stats): botín, experiencia, Archivo…
+signal enemy_died(enemy: Enemy)
+## Se recogió un recogible que da [param reward] (p. ej. [code]experience[/code]) por [param amount].
+signal pickup_collected(reward: StringName, amount: float)
+## Cambió la experiencia del jugador ([param current] de [param needed]) o su nivel.
+signal player_xp_changed(current: float, needed: float, level: int)
+## El jugador subió al nivel [param level].
+signal player_leveled_up(level: int)

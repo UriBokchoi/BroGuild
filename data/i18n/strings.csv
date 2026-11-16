@@ -121,3 +121,6 @@ SUMMONER_TITLE,Invocador,Summoner
 INTERACT_WAVES_START,Empezar oleadas,Start waves
 INTERACT_WAVES_STOP,Parar oleadas,Stop waves
 WAVE_BELL_TITLE,Campana de oleadas,Wave bell
+STAT_GROUP_LOOT,Botín,Loot
+STAT_XP_REWARD,Experiencia que suelta,Experience dropped
+HUD_LEVEL,Nv. %d,Lv. %d

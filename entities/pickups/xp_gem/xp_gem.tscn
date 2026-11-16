@@ -1,0 +1,21 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://entities/pickups/pickup.gd" id="1_pickup"]
+[ext_resource type="Shader" path="res://entities/pickups/xp_gem/xp_gem.gdshader" id="2_shader"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gem"]
+shader = ExtResource("2_shader")
+
+[sub_resource type="SphereMesh" id="SphereMesh_gem"]
+material = SubResource("ShaderMaterial_gem")
+radius = 0.16
+height = 0.4
+radial_segments = 6
+rings = 2
+
+[node name="XpGem" type="Node3D"]
+script = ExtResource("1_pickup")
+
+[node name="Visual" type="MeshInstance3D" parent="."]
+cast_shadow = 0
+mesh = SubResource("SphereMesh_gem")

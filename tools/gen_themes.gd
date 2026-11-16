@@ -13,6 +13,7 @@ const SLATE_LIGHT := Color("2b313e")
 const SLATE_HOVER := Color("394152")
 const MODIFIED := Color("7cc7ff")
 const HEALTH := Color("c94a4a")
+const EXPERIENCE := Color("4fb6ff")
 
 
 func _initialize() -> void:
@@ -111,6 +112,12 @@ func _add_hud(theme: Theme) -> void:
 	theme.set_stylebox(&"panel", &"KeyCap", _box(SLATE_LIGHT, 6, Vector2(10, 1), GOLD, 2, 4))
 	_label_variation(theme, &"KeyCapLabel", 20, GOLD)
 	_label_variation(theme, &"PromptLabel", 20, INK)
+	# Experiencia y nivel, arriba.
+	theme.set_type_variation(&"XpBar", &"ProgressBar")
+	theme.set_stylebox(&"background", &"XpBar", _box(Color(SLATE, 0.85), 6, Vector2(0, 0), Color(EXPERIENCE, 0.35), 2, 2))
+	theme.set_stylebox(&"fill", &"XpBar", _box(EXPERIENCE, 6, Vector2(0, 0), Color.TRANSPARENT, 0, 0))
+	_separation(theme, &"XpRow", &"HBoxContainer", 12)
+	_label_variation(theme, &"LevelLabel", 22, EXPERIENCE)
 
 
 func _add_scrollbar(theme: Theme) -> void:
