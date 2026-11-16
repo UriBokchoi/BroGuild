@@ -1,0 +1,23 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://entities/pickups/pickup.gd" id="1_pickup"]
+[ext_resource type="Shader" path="res://entities/pickups/gold_coin/gold_coin.gdshader" id="2_shader"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_coin"]
+shader = ExtResource("2_shader")
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_coin"]
+material = SubResource("ShaderMaterial_coin")
+top_radius = 0.18
+bottom_radius = 0.18
+height = 0.05
+radial_segments = 12
+rings = 1
+
+[node name="GoldCoin" type="Node3D"]
+script = ExtResource("1_pickup")
+float_height = 0.9
+
+[node name="Visual" type="MeshInstance3D" parent="."]
+cast_shadow = 0
+mesh = SubResource("CylinderMesh_coin")

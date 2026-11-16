@@ -127,6 +127,12 @@ func _add_hud(theme: Theme) -> void:
 	theme.set_stylebox(&"fill", &"XpBar", _box(EXPERIENCE, 6, Vector2(0, 0), Color.TRANSPARENT, 0, 0))
 	_separation(theme, &"XpRow", &"HBoxContainer", 12)
 	_label_variation(theme, &"LevelLabel", 22, EXPERIENCE)
+	# Oro, debajo de la experiencia: una moneda dibujada y la cantidad.
+	_separation(theme, &"HudTop", &"VBoxContainer", 6)
+	_separation(theme, &"GoldRow", &"HBoxContainer", 8)
+	theme.set_type_variation(&"CoinIcon", &"PanelContainer")
+	theme.set_stylebox(&"panel", &"CoinIcon", _box(GOLD, 9, Vector2(0, 0), GOLD_DARK, 2, 3))
+	_label_variation(theme, &"GoldLabel", 22, GOLD)
 
 
 func _add_scrollbar(theme: Theme) -> void:

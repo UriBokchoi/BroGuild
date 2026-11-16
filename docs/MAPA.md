@@ -122,13 +122,15 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 
 ### Botín y progresión — `entities/pickups/` y `systems/progression/`
 - **Recogibles:**
-  - `PickupData` (en `data/pickups/`) lleva escena, recompensa (p. ej. `experience`) y vuelo hacia quien recoge.
+  - `PickupData` (en `data/pickups/`) lleva escena, recompensa (p. ej. `experience`, `gold`) y vuelo hacia quien recoge (`auto_collect`: vuela nada más salir, esté donde esté).
   - `Pickup` es el nodo: tipo, valor y si ya vuela. Su giro y su balanceo van en el shader, sin `_process` por nodo.
   - `xp_gem/`: la gema de experiencia.
-- **`PickupField`** (en el nivel): suelta recogibles en el suelo desde un pool por tipo. Cuando quien recoge está dentro de su `pickup_range`, vuelan acelerando hacia él; al llegar, avisan por `EventBus.pickup_collected`. Todos van en un bucle y sin física.
-- **`LootDropper`** (en el nivel): escucha `enemy_died` y suelta la gema con la `xp_reward` del enemigo. Las fichas, los cofres y las probabilidades de botín irán aquí.
+  - `gold_coin/`: la moneda de oro (de recogida automática).
+- **`PickupField`** (en el nivel): suelta recogibles en el suelo desde un pool por tipo. Cuando quien recoge está dentro de su `pickup_range` (o nada más salir, si son `auto_collect`), vuelan acelerando hacia él; al llegar, avisan por `EventBus.pickup_collected`. Todos van en un bucle y sin física.
+- **`LootDropper`** (en el nivel): escucha `enemy_died` y suelta la gema con la `xp_reward` y la moneda con el `gold_reward` del enemigo. Los cofres y las probabilidades de botín irán aquí.
 - **`ExperienceComponent`** (en el jugador): suma la experiencia recogida × `xp_gain` y sube de nivel con la curva de `ExperienceData` (`data/progression/experience.tres`). El jugador aleja la cámara con el nivel.
-- **Stats de progresión:** `ProgressionData` (experiencia y fichas ganadas, suerte, radio de recogida).
+- **`WalletComponent`** (en el jugador): el oro de la partida (antes «fichas» en el GDD). Suma el recogido × `currency_gain` y lo gasta con `spend()`.
+- **Stats de progresión:** `ProgressionData` (experiencia y oro ganados, suerte, radio de recogida).
 
 ### Juice y efectos — `vfx/`
 - **`juice/`**, efectos que solo escuchan señales:
@@ -139,7 +141,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 - **Shaders propios de una feature:** van con ella (tajo de la espada, teletransporte, líneas de velocidad).
 
 ### UI — `ui/`
-- **`hud/`:** vida, stamina, experiencia y nivel (arriba) y aviso de interacción. Escuchan el `EventBus`.
+- **`hud/`:** vida, stamina, experiencia y nivel (arriba), oro (debajo, `GoldCounter`) y aviso de interacción. Escuchan el `EventBus`.
 - **`menus/pause/`:** menú de pausa con todas las stats del jugador.
 - **`menus/armory/`:** panel de la armería.
 - **`menus/level_up/`:** elección al subir de nivel (`LevelUpPanel` y sus `LevelUpCard`).
@@ -165,8 +167,9 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 | `player_died` | `Player` | (nadie aún: pantalla de resultados) |
 | `enemy_damaged` | `DamageReporter` | `DamageNumbers` |
 | `enemy_died` (el propio enemigo) | `Enemy` | `LootDropper` (y más adelante el Archivo) |
-| `pickup_collected` | `PickupField` | `ExperienceComponent` (la recompensa `experience`) |
+| `pickup_collected` | `PickupField` | `ExperienceComponent` (la recompensa `experience`), `WalletComponent` (`gold`) |
 | `player_xp_changed` | `Player` | `XpBar` |
+| `player_gold_changed` | `Player` | `GoldCounter` |
 | `player_leveled_up` | `Player` | `LevelUpController` |
 | `interaction_prompt_changed` | `Interactor` | `InteractionPrompt` |
 
@@ -203,7 +206,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 - **Un estado de movimiento:** crea un script en `entities/player/movement/states/` que herede de `MovementState` y añade un nodo hijo de `Movement` en `player.tscn` con su acción, prioridad y reglas.
 - **Un personaje:** crea un `.tres` `CharacterData` en `data/characters/` con sus diferencias de stats.
 - **Un interactuable:** crea una escena con un `Interactable` (capa 9, `prompt_key`) y conecta su `interacted`.
-- **Un recogible** (fichas, cura…):
+- **Un recogible** (cura, imán…):
   1. Crea un `.tres` `PickupData` en `data/pickups/` con su escena (raíz `Pickup`) y su `reward`.
   2. Haz que el sistema que lo usa escuche `EventBus.pickup_collected` con esa recompensa.
   3. Suéltalo con `PickupField.drop()`, normalmente desde `LootDropper`.

@@ -5,7 +5,7 @@
 > **Temática: medieval con humor moderno** (definitiva). Este documento aún conserva nombres de la temática anterior (casino); los que hay que adaptar están en §11. Las tragaperras se quedan.
 
 ## 1. Pitch
-Roguelike de hordas en 3D donde **moverte bien es dinero**: la velocidad alimenta tu racha, la racha multiplica tus fichas y las fichas se apuestan. Partidas de ~10 minutos, caos constante, reinicio instantáneo y el clásico "una más".
+Roguelike de hordas en 3D donde **moverte bien es dinero**: la velocidad alimenta tu racha, la racha multiplica tu oro y el oro se apuesta. Partidas de ~10 minutos, caos constante, reinicio instantáneo y el clásico "una más".
 
 Referencias: **Megabonk** (bucle de hordas, builds rotas, cofres) y **Deadlock** (movilidad con stamina, dash-jump, slide).
 
@@ -19,7 +19,7 @@ Si una idea no sirve al menos a uno, se descarta.
 ## 3. Bucle
 | Escala | Qué haces |
 |---|---|
-| Segundos | Moverte (dash, slide, saltos); las armas disparan solas; recoges XP y fichas |
+| Segundos | Moverte (dash, slide, saltos); las armas disparan solas; recoges XP y el oro vuela solo hacia ti |
 | Minutos | Subes de nivel (ruleta), abres cofres, juegas a la tragaperras, aceptas o rechazas pactos, cobras tu racha |
 | Partida | Sobrevives 10 min → jefe **La Banca** → **¿Cobrar o Doblar?** |
 | Entre partidas | Gastas el bote en desbloqueos y vuelves a entrar |
@@ -54,11 +54,11 @@ Toda apuesta tiene **anticipación** (giro, luces, sonido que sube), **revelado*
 **Rarezas** (mismo color en todo el juego): Común (gris) · Poco común (verde) · Rara (azul) · Épica (morado) · Legendaria (dorado). Pesos de partida 60/25/10/4/1; la **Suerte** desplaza peso hacia arriba.
 
 1. **Ruleta de nivel** — al subir de nivel, 3 cartas giran como rodillos y caen en una rareza; eliges una.
-   - *Reroll:* cuesta fichas y el coste sube con cada uso en la partida.
+   - *Reroll:* cuesta oro y el coste sube con cada uso en la partida.
    - *Doble o nada:* tras elegir, puedes apostar la carta: ~50 % sube una rareza, ~50 % la pierdes. La Suerte mejora las probabilidades.
-2. **Cofres** — repartidos por la arena y soltados por élites. Abrirlos cuesta fichas (coste creciente). Revelado tipo "case opening": la luz recorre las rarezas antes de pararse.
-3. **Tragaperras** — máquinas en la arena. Pagas y giran 3 rodillos: premio (fichas ×N, mejora, cura), nada o **maldición** (oleada de élites, −vida máxima temporal). Tres iguales = jackpot con cámara lenta.
-4. **Racha y bote** — matar encadenado y moverte rápido sube la racha (×1 → ×2 → ×3 → ×5), que multiplica fichas, XP y Suerte. Lo ganado con racha va a un **bote** que hay que **cobrar** (mantener E un segundo quedando vulnerable, o en una tragaperras). Si te golpean con el bote lleno, pierdes la mitad y bajas un nivel. Quedarte quieto la enfría.
+2. **Cofres** — repartidos por la arena y soltados por élites. Abrirlos cuesta oro (coste creciente). Revelado tipo "case opening": la luz recorre las rarezas antes de pararse.
+3. **Tragaperras** — máquinas en la arena. Pagas y giran 3 rodillos: premio (oro ×N, mejora, cura), nada o **maldición** (oleada de élites, −vida máxima temporal). Tres iguales = jackpot con cámara lenta.
+4. **Racha y bote** — matar encadenado y moverte rápido sube la racha (×1 → ×2 → ×3 → ×5), que multiplica oro, XP y Suerte. Lo ganado con racha va a un **bote** que hay que **cobrar** (mantener E un segundo quedando vulnerable, o en una tragaperras). Si te golpean con el bote lleno, pierdes la mitad y bajas un nivel. Quedarte quieto la enfría.
 5. **Pactos de la Banca** — de vez en cuando, una oferta: aceptas una maldición para el resto de la partida (más enemigos, menos curación…) a cambio de Suerte o multiplicador. Se puede rechazar.
 6. **¿Cobrar o Doblar?** — al vencer al jefe: *Cobrar* termina la partida y guarda el bote. *Doblar* abre la siguiente mesa, más dura, con el bote ×2; si mueres ahí, te llevas solo la mitad.
 
@@ -95,7 +95,7 @@ Toda apuesta tiene **anticipación** (giro, luces, sonido que sube), **revelado*
 | | Velocidad de ataque | 100 % | Divide el tiempo entre ataques de cada arma |
 | | Proyectiles extra | 0 | Se suman a los de cada arma |
 | | Velocidad de proyectil, área, duración, retroceso | 100 % | Multiplican lo de cada arma |
-| Progresión | Experiencia ganada, fichas ganadas | 100 % | |
+| Progresión | Experiencia ganada, oro ganado | 100 % | |
 | | Suerte | 0 | Desplaza los pesos de rareza hacia arriba |
 | | Radio de recogida | 3 m | Distancia a la que se recoge el botín |
 | Movimiento | Velocidad de carrera, saltos y dashes en el aire, stamina… | ver §4 | |
@@ -105,7 +105,7 @@ Las mejoras de % («+10 % de daño») multiplican; las de puntos («+5 % de crí
 ## 7. Estética: sencilla pero llamativa
 Dirección: **medieval con humor moderno**, nada realista; los anacronismos son bienvenidos (p. ej., tragaperras repartidas por un mundo medieval). Formas simples (primitivas o low-poly) que luzcan sin necesitar artista. *Pendiente: concretar la dirección visual (sustituye a la anterior «casino-arcade neón»).*
 - **Color con significado**: cada tipo de enemigo con su color; las rarezas, iguales en cofres, cartas, números y luces.
-- **Juice**: hit-stop en golpes grandes · screen shake por trauma · números de daño (críticos grandes y dorados) · flash al golpear · explosión de fichas al matar · imán de pickups · estela en dash y slide · FOV que se abre con la velocidad y líneas de velocidad · cámara lenta en el jackpot.
+- **Juice**: hit-stop en golpes grandes · screen shake por trauma · números de daño (críticos grandes y dorados) · flash al golpear · explosión de monedas al matar · imán de pickups · estela en dash y slide · FOV que se abre con la velocidad y líneas de velocidad · cámara lenta en el jackpot.
 - **Sonido**: cada recompensa sube de tono; la racha sube el pitch de todo; los rodillos hacen tic-tic-tic al frenar.
 - **UI**: tipografía gruesa, animada con tweens, legible en mitad del caos.
 - **Assets**: primitivas + shaders propios; si hace falta, packs CC0 (Kenney, Quaternius).
@@ -117,7 +117,7 @@ WASD mover · Ratón cámara · Espacio saltar · Shift dash · Ctrl slide (dobl
 
 ## 9. Partida y progresión
 - **Mesa**: ~10 min. Élite cada ~2 min. Jefe al minuto 10.
-- **Monedas**: XP (niveles) · Fichas (en partida, se apuestan) · Bote (sale de la partida y se gasta fuera).
+- **Monedas**: XP (niveles) · Oro (en partida, se apuesta; lo suelta cada enemigo y llega solo al matarlo) · Bote (sale de la partida y se gasta fuera).
 - **Meta-progresión**: desbloquear personajes (cada uno con un rasgo de movimiento: triple salto, dash más largo, slide más rápido…), armas iniciales y ventajas pequeñas. Nunca más poder bruto que el que da jugar bien.
 - **Personajes**: todos parten de las mismas stats básicas y cada uno cambia unas pocas según su gimmick (p. ej., +1 salto en el aire y −10 % de vida). Esas diferencias son su base: en el menú no salen como mejoras. Cada uno tiene un arma principal y una habilidad pasiva. Iniciales: **Guerrero** (espada), **Mago** (bastón de mago) y **Pícaro** (daga); sus diferencias de stats y sus pasivas, por definir.
 - **Menús**: al iniciar, menú principal con Jugar, Archivo y Abandonar (cierra el juego).
@@ -130,5 +130,5 @@ WASD mover · Ratón cámara · Espacio saltar · Shift dash · Ctrl slide (dobl
 Multijugador · historia · generación procedural de mapas (de momento, arenas hechas a mano) · consolas.
 
 ## 11. Decisiones abiertas
-- Adaptar a la temática medieval los nombres y elementos que vienen del casino: fichas, bote, La Banca, crupier, mesa, «¿Cobrar o Doblar?», estética neón y «explosión de fichas» (§7). Las tragaperras se quedan.
+- Adaptar a la temática medieval los nombres y elementos que vienen del casino: bote, La Banca, crupier, mesa, «¿Cobrar o Doblar?» y estética neón (§7). Las tragaperras se quedan. Las fichas ya son oro.
 - Diferencias de stats y habilidad pasiva de Guerrero, Mago y Pícaro.

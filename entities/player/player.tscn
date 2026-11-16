@@ -39,6 +39,7 @@
 [ext_resource type="Script" path="res://systems/progression/experience_component.gd" id="38_experience"]
 [ext_resource type="Resource" path="res://data/progression/experience.tres" id="39_experience_data"]
 [ext_resource type="Script" path="res://systems/upgrades/runes/rune_inventory.gd" id="40_runes"]
+[ext_resource type="Script" path="res://systems/progression/wallet_component.gd" id="41_wallet"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_interactor"]
 radius = 0.6
@@ -110,7 +111,7 @@ material = SubResource("StandardMaterial3D_cue")
 inner_radius = 0.55
 outer_radius = 0.7
 
-[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("stats", "stamina", "health", "experience", "weapons", "runes", "camera", "input", "movement", "wall_sensor", "ledge_sensor", "ground_state", "air_state")]
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("stats", "stamina", "health", "experience", "wallet", "weapons", "runes", "camera", "input", "movement", "wall_sensor", "ledge_sensor", "ground_state", "air_state")]
 collision_layer = 2
 collision_mask = 5
 script = ExtResource("1_player")
@@ -118,6 +119,7 @@ stats = NodePath("Stats")
 stamina = NodePath("Stamina")
 health = NodePath("Health")
 experience = NodePath("Experience")
+wallet = NodePath("Wallet")
 weapons = NodePath("Weapons")
 runes = NodePath("Runes")
 camera = NodePath("CameraRig")
@@ -163,6 +165,10 @@ shape = SubResource("CapsuleShape3D_hurtbox")
 [node name="Experience" type="Node" parent="." node_paths=PackedStringArray("stats")]
 script = ExtResource("38_experience")
 data = ExtResource("39_experience_data")
+stats = NodePath("../Stats")
+
+[node name="Wallet" type="Node" parent="." node_paths=PackedStringArray("stats")]
+script = ExtResource("41_wallet")
 stats = NodePath("../Stats")
 
 [node name="Runes" type="Node" parent="." node_paths=PackedStringArray("stats")]

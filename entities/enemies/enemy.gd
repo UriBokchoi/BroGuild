@@ -116,6 +116,11 @@ func xp_reward() -> float:
 	return _stats.xp_reward
 
 
+## Oro que suelta al morir (con sus modificadores).
+func gold_reward() -> float:
+	return _stats.gold_reward
+
+
 ## Distancia a la que mira a sus vecinos para separarse y para trepar.
 func separation_radius() -> float:
 	return _stats.separation_radius

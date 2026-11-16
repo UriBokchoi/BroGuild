@@ -3,7 +3,7 @@
 - La tarea actual es la **primera casilla sin marcar**. Claude la marca `[x]` al terminarla.
 - Cada hito acaba con algo jugable. **Hecho** = validación sin errores + lo he probado y me convence.
 - Si una tarea es grande, se parte aquí en subtareas antes de empezarla.
-- Los nombres que vienen del casino (fichas, La Banca, mesa…) están pendientes de adaptar a la temática medieval (GDD §11).
+- Los nombres que vienen del casino (bote, La Banca, mesa…) están pendientes de adaptar a la temática medieval (GDD §11). Las fichas ya son oro.
 
 ## Hito 0 — Cimientos
 - [x] Proyecto Godot 4.7 (Forward+) con `.gitignore` y `.gitattributes`; git y GitHub funcionando (push y PR)
@@ -47,6 +47,10 @@
 - [x] Runas: `RuneData` (modificadores por nivel) y las 5 iniciales: Fuerza (daño), Amplitud (área), Prisa (velocidad de ataque), Vigor (vida) y Multiplicidad (cantidad de proyectiles); también en la armería de práctica. Se hizo antes que «Subir de nivel», para que la elección tenga opciones
 - [x] Bastón de mago (proyectiles que explotan al contacto con daño en área) y daga (proyectil rápido a un objetivo; sus mejoras pueden subir su rebote, que da todo el daño al enemigo más cercano dentro de una distancia máxima)
 - [x] Segundo enemigo: el tirador, que se queda a distancia y dispara bolas de fuego lentas. Los enemigos pueden llevar armas desde sus datos (`EnemyData.weapons`), con el mismo sistema que las del jugador
+- [x] Oro (antes «fichas»): cada enemigo lo suelta y vuela solo hacia el jugador al matarlo, sin pasar por encima; contador en el HUD
+- [ ] Gemas de experiencia por niveles: las que están juntas se funden en una de otro color con su valor sumado
+- [ ] Élites: cada enemigo tiene un % de salir élite (más grande, pega más, más vida y suelta más experiencia y oro)
+- [ ] Dificultad: ronda normal de 10 minutos; enemigos más fuertes con el tiempo y, desde el minuto 10, muy duros (hace falta buena build para aguantar); curva de experiencia del jugador ajustada a esa duración
 - [ ] Muerte, resultados y reinicio rápido; HUD de experiencia, nivel y tiempo
 - [ ] Personajes iniciales: Guerrero (espada), Mago (bastón) y Pícaro (daga), cada uno con sus diferencias de stats y su habilidad pasiva
 
@@ -71,7 +75,7 @@
 - [ ] Entorno según la dirección visual del GDD (luz, glow y tonemapping)
 - [ ] Materiales con color propio por tipo de enemigo y rareza
 - [ ] Hit-stop, screen shake y flash (los números de daño llegaron en el Hito 2)
-- [ ] Partículas: muertes, fichas, cofres, impactos
+- [ ] Partículas: muertes, monedas, cofres, impactos
 - [ ] Sonidos con tono creciente y UI animada
 - [ ] Rendimiento: 300+ enemigos a 60 fps
 

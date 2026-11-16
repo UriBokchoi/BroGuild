@@ -5,11 +5,12 @@ extends GutTest
 const PICKUPS_DIR := "res://data/pickups"
 
 
-func test_there_is_an_xp_gem() -> void:
+func test_there_are_an_xp_gem_and_a_gold_coin() -> void:
 	var ids: Array[StringName] = []
 	for pickup: Resource in ResourceDir.load_all(PICKUPS_DIR, PickupData):
 		ids.append((pickup as PickupData).id)
 	assert_has(ids, &"xp_gem")
+	assert_has(ids, &"gold_coin")
 
 
 func test_each_pickup_is_complete() -> void:

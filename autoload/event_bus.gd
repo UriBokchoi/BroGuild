@@ -32,3 +32,5 @@ signal pickup_collected(reward: StringName, amount: float)
 signal player_xp_changed(current: float, needed: float, level: int)
 ## El jugador subió al nivel [param level].
 signal player_leveled_up(level: int)
+## Cambió el oro del jugador.
+signal player_gold_changed(gold: float)

@@ -605,3 +605,14 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
     - El de tiradores saca 6 a 14 m.
     - Se borró la clave `SUMMONER_TITLE`, que quedó sin uso.
 - **Por qué:** el GDD pide un tirador que obligue a moverse. Reutilizar `Weapon` y `Projectile` evita un segundo sistema de disparo. Además, cualquier enemigo (un élite, un jefe) puede llevar cualquier arma con solo datos.
+
+## 2026-11-16 · Oro
+- **Decisión:**
+  - **Las «fichas» del GDD pasan a ser oro.** El diseñador pidió oro, y así se cierra una de las adaptaciones medievales pendientes (§11). El GDD, el MAPA y la traducción de `currency_gain` («Oro ganado») ya lo llaman así. El resto de nombres de casino siguen pendientes.
+  - **Se cobra solo al matar:**
+    - Cada enemigo suelta una moneda con su `EnemyStats.gold_reward`: 1 el esbirro, 2 el tirador.
+    - La moneda (`data/pickups/gold_coin.tres`) es `auto_collect`: vuela hacia el jugador nada más salir, esté donde esté, sin tener que pasar por encima ni depender del radio de recogida. Arranca a 3 m/s y acelera a 60 m/s²: unos 0,8 s desde 20 m.
+    - Es una moneda dorada de pie que gira (en el shader, como la gema).
+  - **`WalletComponent`** (nodo `Wallet` del jugador): suma el oro × `currency_gain` y avisa por `EventBus.player_gold_changed`. Ya tiene `spend()` para los cofres, el reroll y las tragaperras del Hito 4. Guarda decimales, porque el multiplicador los da, y el HUD muestra el entero.
+  - **HUD:** `GoldCounter` va debajo de la barra de experiencia, con una moneda dibujada (`CoinIcon`) y la cantidad en dorado.
+- **Por qué:** el diseñador quiere el oro sin recogerlo a mano, solo matando. Reutiliza el `PickupField` (pool, vuelo y aviso por el `EventBus`), así que la moneda se ve llegar sin un sistema nuevo.

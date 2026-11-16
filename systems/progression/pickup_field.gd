@@ -1,8 +1,9 @@
 class_name PickupField
 extends Node3D
-## Recogibles en el suelo (gemas de experiencia…). Los saca de un pool por tipo ([method drop]) y los
-## deja en el suelo. Cuando [member collector] (el jugador) está a menos de su radio de recogida (su
-## stat [code]pickup_range[/code]), vuelan hacia él acelerando y, al llegar, se recogen: avisa por
+## Recogibles en el suelo (gemas de experiencia, oro…). Los saca de un pool por tipo ([method drop])
+## y los deja en el suelo. Cuando [member collector] (el jugador) está a menos de su radio de
+## recogida (su stat [code]pickup_range[/code]), o nada más salir si son de recogida automática
+## ([member PickupData.auto_collect]), vuelan hacia él acelerando y, al llegar, se recogen: avisa por
 ## [code]EventBus.pickup_collected[/code] y vuelven al pool. Todos se mueven en un único bucle; no
 ## usan física.
 
@@ -47,6 +48,9 @@ func _physics_process(delta: float) -> void:
 func drop(pickup_data: PickupData, at: Vector3, amount: float) -> Pickup:
 	var pickup := _pool_for(pickup_data).acquire() as Pickup
 	pickup.activate(_ground_below(at), amount)
+	if pickup_data.auto_collect:
+		pickup.attracted = true
+		pickup.speed = pickup_data.start_speed
 	_active.append(pickup)
 	return pickup
 
