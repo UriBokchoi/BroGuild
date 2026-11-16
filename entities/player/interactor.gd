@@ -1,13 +1,15 @@
 class_name Interactor
 extends Area3D
 ## Zona alrededor del jugador que detecta [Interactable]: elige el más cercano, avisa de qué se
-## puede hacer ([code]EventBus.interaction_prompt_changed[/code], para el HUD) y lo activa al pulsar
-## «interactuar». Su máscara de física es [code]interactable[/code].
+## puede hacer ([code]EventBus.interaction_prompt_changed[/code], para el HUD; también si su texto
+## cambia mientras está cerca) y lo activa al pulsar «interactuar». Su máscara de física es
+## [code]interactable[/code].
 
 ## Quien interactúa (el jugador): es lo que recibe el [Interactable].
 @export var body: Node3D
 
 var _focus: Interactable
+var _shown_prompt: StringName = &""
 
 
 func _ready() -> void:
@@ -16,10 +18,11 @@ func _ready() -> void:
 
 
 func _physics_process(_delta: float) -> void:
-	var nearest := _find_nearest()
-	if nearest != _focus:
-		_focus = nearest
-		EventBus.interaction_prompt_changed.emit(_focus.prompt_key if _focus else &"")
+	_focus = _find_nearest()
+	var prompt := _focus.prompt_key if _focus else &""
+	if prompt != _shown_prompt:
+		_shown_prompt = prompt
+		EventBus.interaction_prompt_changed.emit(prompt)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -29,8 +32,9 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _exit_tree() -> void:
-	if _focus:
-		_focus = null
+	_focus = null
+	if not _shown_prompt.is_empty():
+		_shown_prompt = &""
 		EventBus.interaction_prompt_changed.emit(&"")
 
 

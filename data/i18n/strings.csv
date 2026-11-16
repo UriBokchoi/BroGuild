@@ -118,3 +118,6 @@ ENEMY_SWARMER_NAME,Esbirro,Minion
 ENEMY_SWARMER_DESCRIPTION,"Rápido y frágil; llega en enjambre.","Fast and frail; comes in swarms."
 INTERACT_SUMMON,Invocar esbirros,Summon minions
 SUMMONER_TITLE,Invocador,Summoner
+INTERACT_WAVES_START,Empezar oleadas,Start waves
+INTERACT_WAVES_STOP,Parar oleadas,Stop waves
+WAVE_BELL_TITLE,Campana de oleadas,Wave bell

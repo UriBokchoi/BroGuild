@@ -1,0 +1,72 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://levels/stress/stress_test.gd" id="1_stress"]
+[ext_resource type="Material" path="res://levels/test_gym/materials/greybox_floor.tres" id="2_floor"]
+[ext_resource type="PackedScene" path="res://entities/player/player.tscn" id="3_player"]
+[ext_resource type="Script" path="res://systems/spawning/enemy_swarm.gd" id="4_swarm"]
+[ext_resource type="Resource" path="res://data/enemies/swarmer.tres" id="5_swarmer"]
+[ext_resource type="Resource" path="res://data/weapons/sword.tres" id="6_sword"]
+[ext_resource type="Script" path="res://vfx/juice/damage_numbers/damage_numbers.gd" id="7_numbers"]
+[ext_resource type="Resource" path="res://data/vfx/damage_numbers.tres" id="8_number_style"]
+[ext_resource type="PackedScene" path="res://ui/hud/hud.tscn" id="9_hud"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_sky"]
+
+[sub_resource type="Sky" id="Sky_sky"]
+sky_material = SubResource("ProceduralSkyMaterial_sky")
+
+[sub_resource type="Environment" id="Environment_env"]
+background_mode = 2
+sky = SubResource("Sky_sky")
+ambient_light_source = 3
+
+[node name="StressTest" type="Node3D" node_paths=PackedStringArray("player", "swarm", "results_label")]
+script = ExtResource("1_stress")
+player = NodePath("Player")
+swarm = NodePath("EnemySwarm")
+enemy = ExtResource("5_swarmer")
+weapon = ExtResource("6_sword")
+results_label = NodePath("Results/Margin/Label")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_env")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.81915206, 0.46984634, -0.32898995, 0, 0.57357645, 0.81915206, 0.57357645, -0.6710101, 0.46984634, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Floor" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+use_collision = true
+size = Vector3(160, 1, 160)
+material = ExtResource("2_floor")
+
+[node name="Player" parent="." instance=ExtResource("3_player")]
+
+[node name="EnemySwarm" type="Node3D" parent="." node_paths=PackedStringArray("target")]
+script = ExtResource("4_swarm")
+target = NodePath("../Player")
+
+[node name="DamageNumbers" type="Node3D" parent="."]
+script = ExtResource("7_numbers")
+style = ExtResource("8_number_style")
+
+[node name="HUD" parent="." instance=ExtResource("9_hud")]
+
+[node name="Results" type="CanvasLayer" parent="."]
+layer = 20
+
+[node name="Margin" type="MarginContainer" parent="Results"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_type_variation = &"ScreenMargin"
+
+[node name="Label" type="Label" parent="Results/Margin"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_type_variation = &"StatNameLabel"
