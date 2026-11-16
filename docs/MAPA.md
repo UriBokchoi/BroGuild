@@ -96,8 +96,8 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
   - Cada enemigo recalcula su rumbo cada `steering_slices` ticks; la física lo mueve en todos.
   - Tiene el `ProjectilePool` de los enemigos (`projectile_limit` en vuelo a la vez); `clear()` retira enemigos y proyectiles.
 - **Oleadas:**
-  - `WaveData` (en `data/waves/`): curva de enemigos por segundo según los minutos, picos, máximo a la vez, distancias de aparición, `WaveEnemy` con pesos y minuto de entrada, y probabilidad de élite por minuto.
-  - `WaveDirector` (en el nivel) los saca alrededor del jugador, en el suelo (un rayo por intento).
+  - `WaveData` (en `data/waves/`) es la dificultad de una ronda: curva de enemigos por segundo según los minutos, picos, máximo a la vez, distancias de aparición, `WaveEnemy` con pesos y minuto de entrada, probabilidad de élite por minuto, duración de la ronda (`round_minutes`) y escalado (`StatScaling`: una stat de enemigo o de arma y su curva de multiplicador por minuto). `data/waves/test_gym.tres` es la ronda normal.
+  - `WaveDirector` (en el nivel) los saca alrededor del jugador, en el suelo (un rayo por intento), con el escalado de su minuto (`boost`) y, a veces, élites. Es el reloj de la ronda: avisa cada segundo por `run_clock_changed`.
 - **`DamageReporter`** avisa de cada golpe con la posición de la cabeza (para los números).
 - **Tipos y escenas actuales:**
   - `swarmer/`: el esbirro, rápido y frágil, ataca al tocar;
@@ -143,7 +143,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 - **Shaders propios de una feature:** van con ella (tajo de la espada, teletransporte, líneas de velocidad).
 
 ### UI — `ui/`
-- **`hud/`:** vida, stamina, experiencia y nivel (arriba), oro (debajo, `GoldCounter`) y aviso de interacción. Escuchan el `EventBus`.
+- **`hud/`:** vida, stamina, experiencia y nivel (arriba), oro (`GoldCounter`) y reloj de la ronda (`RunClock`, en rojo en la prórroga) debajo, y aviso de interacción. Escuchan el `EventBus`.
 - **`menus/pause/`:** menú de pausa con todas las stats del jugador.
 - **`menus/armory/`:** panel de la armería.
 - **`menus/level_up/`:** elección al subir de nivel (`LevelUpPanel` y sus `LevelUpCard`).
@@ -172,6 +172,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 | `pickup_collected` | `PickupField` | `ExperienceComponent` (la recompensa `experience`), `WalletComponent` (`gold`) |
 | `player_xp_changed` | `Player` | `XpBar` |
 | `player_gold_changed` | `Player` | `GoldCounter` |
+| `run_clock_changed` (segundos, prórroga; negativo = sin ronda) | `WaveDirector` | `RunClock` |
 | `player_leveled_up` | `Player` | `LevelUpController` |
 | `interaction_prompt_changed` | `Interactor` | `InteractionPrompt` |
 

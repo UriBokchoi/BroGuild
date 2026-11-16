@@ -50,8 +50,8 @@
 - [x] Oro (antes «fichas»): cada enemigo lo suelta y vuela solo hacia el jugador al matarlo, sin pasar por encima; contador en el HUD
 - [x] Gemas de experiencia por niveles: las que están juntas se funden en una de otro color con su valor sumado
 - [x] Élites: cada enemigo tiene un % de salir élite (más grande, pega más, más vida y suelta más experiencia y oro)
-- [ ] Dificultad: ronda normal de 10 minutos; enemigos más fuertes con el tiempo y, desde el minuto 10, muy duros (hace falta buena build para aguantar); curva de experiencia del jugador ajustada a esa duración
-- [ ] Muerte, resultados y reinicio rápido; HUD de experiencia, nivel y tiempo
+- [x] Dificultad: ronda normal de 10 minutos; enemigos más fuertes con el tiempo y, desde el minuto 10, muy duros (hace falta buena build para aguantar); curva de experiencia del jugador ajustada a esa duración; reloj de la ronda en el HUD
+- [ ] Muerte, resultados y reinicio rápido (el HUD de experiencia, nivel, oro y tiempo ya está)
 - [ ] Personajes iniciales: Guerrero (espada), Mago (bastón) y Pícaro (daga), cada uno con sus diferencias de stats y su habilidad pasiva
 
 ## Hito 3 — Menús y flujo de partida

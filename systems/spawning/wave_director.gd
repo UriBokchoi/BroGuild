@@ -3,8 +3,10 @@ extends Node
 ## Director de oleadas: mientras está en marcha, saca enemigos en un [EnemySwarm] alrededor de
 ## [member target] al ritmo de su [WaveData] (que sube con el tiempo y tiene picos), sin pasar del
 ## máximo a la vez. Cada enemigo aparece en el suelo, a una distancia al azar entre la mínima y la
-## máxima de los datos; si ahí no hay suelo (fuera del mapa), prueba otro punto. Cada uno puede
-## salir élite con la probabilidad de ese minuto ([method WaveData.elite_chance_at]).
+## máxima de los datos; si ahí no hay suelo (fuera del mapa), prueba otro punto. Cada uno sale con
+## las stats de su minuto ([method WaveData.scaling_at]) y puede salir élite con la probabilidad de
+## ese minuto ([method WaveData.elite_chance_at]). Mientras está en marcha, es el reloj de la ronda:
+## avisa del tiempo cada segundo por [code]EventBus.run_clock_changed[/code].
 
 signal started
 signal stopped
@@ -42,7 +44,10 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	if not _running or target == null:
 		return
+	var previous := _elapsed
 	_elapsed += delta
+	if floori(_elapsed) != floori(previous):
+		_announce_clock()
 	_pending += data.rate_at(_elapsed) * delta
 	while _pending >= 1.0:
 		if swarm.active_count() >= data.max_alive:
@@ -60,6 +65,7 @@ func start() -> void:
 	_pending = 0.0
 	_running = true
 	started.emit()
+	_announce_clock()
 
 
 ## Para. Con [param clear_enemies], retira también a los enemigos en juego.
@@ -68,6 +74,7 @@ func stop(clear_enemies: bool = true) -> void:
 	if clear_enemies:
 		swarm.clear()
 	stopped.emit()
+	EventBus.run_clock_changed.emit(-1.0, false)
 
 
 func is_running() -> bool:
@@ -87,9 +94,15 @@ func _spawn_one() -> bool:
 	if not feet.is_finite():
 		return false
 	var spawned := swarm.spawn(enemy, feet)
+	spawned.boost(data.scaling_at(_elapsed))
 	if rng.randf() * 100.0 < data.elite_chance_at(_elapsed):
 		spawned.promote(data.elite)
 	return true
+
+
+## Avisa al HUD del tiempo de la ronda (una vez por segundo).
+func _announce_clock() -> void:
+	EventBus.run_clock_changed.emit(_elapsed, data.is_overtime(_elapsed))
 
 
 ## Un punto en el suelo a la distancia de los datos, o [code]Vector3.INF[/code] si no lo encuentra.

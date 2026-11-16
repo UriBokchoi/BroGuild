@@ -5,6 +5,7 @@
 [ext_resource type="Script" path="res://ui/hud/interaction_prompt.gd" id="3_prompt"]
 [ext_resource type="Script" path="res://ui/hud/xp_bar.gd" id="4_xp"]
 [ext_resource type="Script" path="res://ui/hud/gold_counter.gd" id="5_gold"]
+[ext_resource type="Script" path="res://ui/hud/run_clock.gd" id="6_clock"]
 
 [node name="HUD" type="CanvasLayer"]
 layer = 10
@@ -47,25 +48,43 @@ theme_type_variation = &"XpBar"
 step = 0.0
 show_percentage = false
 
-[node name="GoldCounter" type="HBoxContainer" parent="Margin/Top"]
+[node name="InfoRow" type="HBoxContainer" parent="Margin/Top"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="GoldCounter" type="HBoxContainer" parent="Margin/Top/InfoRow"]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 3
 mouse_filter = 2
 theme_type_variation = &"GoldRow"
 script = ExtResource("5_gold")
 
-[node name="CoinIcon" type="PanelContainer" parent="Margin/Top/GoldCounter"]
+[node name="CoinIcon" type="PanelContainer" parent="Margin/Top/InfoRow/GoldCounter"]
 custom_minimum_size = Vector2(18, 18)
 layout_mode = 2
 size_flags_vertical = 4
 mouse_filter = 2
 theme_type_variation = &"CoinIcon"
 
-[node name="GoldLabel" type="Label" parent="Margin/Top/GoldCounter"]
+[node name="GoldLabel" type="Label" parent="Margin/Top/InfoRow/GoldCounter"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"GoldLabel"
 text = "0"
+
+[node name="RunClock" type="Label" parent="Margin/Top/InfoRow"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"ClockLabel"
+text = "0:00"
+horizontal_alignment = 1
+script = ExtResource("6_clock")
+
+[node name="Spacer" type="Control" parent="Margin/Top/InfoRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
 
 [node name="Column" type="VBoxContainer" parent="Margin"]
 layout_mode = 2

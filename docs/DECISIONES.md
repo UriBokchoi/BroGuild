@@ -659,3 +659,38 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
     - La masa sube al cubo del tamaño: un élite empuja a los pequeños y no al revés.
   - **Brillo:** `elite_glow.gdshader`, un borde de luz aditivo que late, puesto como `material_overlay` en las mallas del modelo. No hace falta un material por enemigo.
 - **Por qué:** el diseñador pidió un % de élites más grandes, que peguen más y suelten más experiencia. Hacerlo con modificadores de stats deja cualquier combinación en datos. Los afijos y el cofre del GDD (Hito 7) se montarán encima de `EliteData`.
+
+## 2026-11-16 · Dificultad: ronda normal de 10 minutos
+- **Decisión:**
+  - **Por qué se reajusta:** el diseñador notó que el escalado iba muy rápido, tanto del jugador como de los enemigos. Una ronda normal debe durar como mucho 10 minutos, y a partir de ahí deben salir enemigos muy fuertes que exijan una buena build para aguantar un poco.
+  - **`WaveData` es la dificultad de una ronda.** `data/waves/test_gym.tres` es la normal; otras dificultades serán otros `.tres`. Añade:
+    - **`round_minutes`** (10): la duración de la ronda. Pasada, es la **prórroga**: las curvas se disparan y el reloj del HUD se pone en rojo. Cuando exista el jefe (Hito 8), saldrá aquí.
+    - **`stat_scaling`**: lista de `StatScaling` (una stat y una curva de multiplicador según los minutos). El `WaveDirector` saca cada enemigo con los multiplicadores de su minuto (`Enemy.boost`, como los élites). Sirve para cualquier stat de enemigo o de sus armas: un test lo exige.
+  - **Curvas de la ronda normal:**
+
+    | Minuto | Enemigos por segundo | Vida × | Daño × (contacto y armas) | Élites |
+    |---|---|---|---|---|
+    | 0 | 0,8 | 1 | 1 | 1 % |
+    | 5 | 2,5 | 2,2 | 1,3 | 3 % |
+    | 10 | 5 | 5 | 1,7 | 5 % |
+    | 11 | 8 | 12 | 3 | 15 % |
+    | 13 | 10 | 30 | 6 | 30 % |
+    | 15 | 12 | 60 | 10 | 33 % |
+
+    - Los picos de cada minuto pasan de ×3 a ×2,5.
+    - Antes, el ritmo llegaba a 7 por segundo en el minuto 10 y los enemigos no se hacían más fuertes.
+  - **Experiencia del jugador:**
+    - Cada nivel pide 5 más que el anterior (6 para pasar del 1 al 2, 51 del 10 al 11, 151 del 30 al 31).
+    - Antes subía más despacio: pedía 30 en el nivel 10 y 70 en el 20.
+  - **Simulación** (script de prueba con los datos, matando el 90 %; un tirador vale 2 y un élite ×5):
+
+    | Minuto | 1 | 3 | 6 | 8 | 10 |
+    |---|---|---|---|---|---|
+    | Nivel | 5 | 11 | 19 | 25 | 30 |
+
+    Una build completa (4 armas y 4 runas al máximo) son unas 40 elecciones. Al minuto 10 vas a tres cuartos, así que lo que elijas importa.
+  - **Reloj de la ronda** (`RunClock`, arriba en el centro, minutos:segundos):
+    - El `WaveDirector` lo avisa cada segundo por `EventBus.run_clock_changed`. Con segundos negativos, no hay ronda y se oculta.
+    - En la prórroga se pone rojo.
+    - Se adelanta de la tarea «Muerte, resultados y reinicio», porque es lo que deja ver la dificultad.
+- **Por qué:** todo vive en curvas de datos, así que las dificultades y los ajustes de playtest son cambiar puntos de una curva. El escalado reutiliza el mismo `boost` que los élites, sin un sistema nuevo.

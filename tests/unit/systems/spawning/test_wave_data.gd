@@ -1,6 +1,7 @@
 extends GutTest
 ## WaveData: enemigos por segundo según la curva, con picos al final de cada intervalo, y elección
-## de enemigo por pesos solo entre los ya disponibles.
+## de enemigo por pesos solo entre los ya disponibles, multiplicadores de stats según el minuto y
+## final de la ronda.
 
 var _data: WaveData
 var _early: EnemyData
@@ -55,6 +56,42 @@ func test_weights_decide_how_often() -> void:
 func test_nothing_to_pick_gives_null() -> void:
 	_data.enemies = []
 	assert_null(_data.pick_enemy(0.0, _rng))
+
+
+func test_scaling_multiplies_each_stat_by_its_curve() -> void:
+	_data.stat_scaling = [_scaling(&"max_health", 2.0, 6.0), _scaling(&"damage", 1.0, 3.0)]
+	var modifiers := _data.scaling_at(5.0 * 60.0)
+	assert_eq(modifiers.stat_modifiers.size(), 2)
+	var health := modifiers.stat_modifiers[0]
+	assert_eq(health.stat, &"max_health")
+	assert_eq(health.kind, StatModifier.Kind.MULTIPLIER)
+	assert_almost_eq(health.value, 4.0, 0.01, "a medio camino de 2 a 6")
+	assert_almost_eq(modifiers.stat_modifiers[1].value, 2.0, 0.01)
+
+
+func test_no_scaling_gives_null() -> void:
+	assert_null(_data.scaling_at(300.0))
+
+
+func test_overtime_after_the_round() -> void:
+	assert_false(_data.is_overtime(9999.0), "sin duración, nunca")
+	_data.round_minutes = 10.0
+	assert_false(_data.is_overtime(599.0))
+	assert_true(_data.is_overtime(600.0))
+
+
+## De [param from] en el minuto 0 a [param to] en el 10, en línea recta.
+func _scaling(stat: StringName, from: float, to: float) -> StatScaling:
+	var curve := Curve.new()
+	curve.max_value = 100.0
+	curve.max_domain = 10.0
+	var slope := (to - from) / 10.0
+	curve.add_point(Vector2(0.0, from), 0.0, slope, Curve.TANGENT_LINEAR, Curve.TANGENT_LINEAR)
+	curve.add_point(Vector2(10.0, to), slope, 0.0, Curve.TANGENT_LINEAR, Curve.TANGENT_LINEAR)
+	var scaling := StatScaling.new()
+	scaling.stat = stat
+	scaling.multiplier = curve
+	return scaling
 
 
 func _entry(enemy: EnemyData, weight: float, from_minute: float) -> WaveEnemy:
