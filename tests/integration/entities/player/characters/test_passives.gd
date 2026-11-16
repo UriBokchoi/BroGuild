@@ -23,11 +23,7 @@ func after_each() -> void:
 
 func test_endurance_adds_damage_per_enemy_nearby() -> void:
 	var base := _player.stats.get_value(&"damage")
-	var passive := _add_passive(EndurancePassive.new()) as EndurancePassive
-	passive.enemy_mask = PhysicsLayers.mask(PhysicsLayers.ENEMY_HURTBOX)
-	passive.radius = 5.0
-	passive.damage_per_enemy = 0.02
-	passive.max_enemies = 15
+	var passive := _add_passive(_endurance()) as EndurancePassive
 	_add_dummy(Vector3(2.0, 0.0, 0.0))
 	_add_dummy(Vector3(-2.0, 0.0, 0.0))
 	_add_dummy(Vector3(30.0, 0.0, 0.0))
@@ -38,21 +34,19 @@ func test_endurance_adds_damage_per_enemy_nearby() -> void:
 
 func test_endurance_bonus_goes_away_with_the_passive() -> void:
 	var base := _player.stats.get_value(&"damage")
-	var passive := _add_passive(EndurancePassive.new()) as EndurancePassive
-	passive.enemy_mask = PhysicsLayers.mask(PhysicsLayers.ENEMY_HURTBOX)
-	passive.radius = 5.0
-	passive.damage_per_enemy = 0.02
-	passive.max_enemies = 15
+	var passive := _add_passive(_endurance())
 	_add_dummy(Vector3(2.0, 0.0, 0.0))
 	await wait_physics_frames(10)
+	assert_gt(_player.stats.get_value(&"damage"), base)
 	passive.free()
 	assert_eq(_player.stats.get_value(&"damage"), base)
 
 
 func test_arcane_echo_doubles_every_nth_attack() -> void:
 	var staff := _player.weapons.add(STAFF)
-	var passive := _add_passive(ArcaneEchoPassive.new()) as ArcaneEchoPassive
+	var passive := ArcaneEchoPassive.new()
 	passive.every = 1
+	_add_passive(passive)
 	_add_dummy(Vector3(0.0, 0.0, -6.0))
 	watch_signals(staff)
 	await wait_physics_frames(30)
@@ -61,17 +55,14 @@ func test_arcane_echo_doubles_every_nth_attack() -> void:
 
 func test_lethal_adds_crit_per_level() -> void:
 	var base := _player.stats.get_value(&"crit_chance")
-	var passive := _add_passive(LethalPassive.new()) as LethalPassive
-	passive.crit_per_level = 1.0
 	_player.set_character(ROGUE)
-	var with_rogue := _player.stats.get_value(&"crit_chance")
-	assert_gt(with_rogue, base, "el Pícaro ya tiene más crítico")
-	passive.free()
 	var lethal := _player.passive as LethalPassive
-	var crit_before := _player.stats.get_value(&"crit_chance")
+	assert_not_null(lethal, "el Pícaro lleva Letal")
+	var at_level_1 := _player.stats.get_value(&"crit_chance")
+	assert_gt(at_level_1, base, "el Pícaro ya tiene más crítico")
 	_player.experience.add(_player.experience.needed() + _player.experience.data.needed_for(2))
 	assert_eq(_player.experience.get_level(), 3)
-	assert_almost_eq(_player.stats.get_value(&"crit_chance"), crit_before + 2.0 * lethal.crit_per_level, 0.001)
+	assert_almost_eq(_player.stats.get_value(&"crit_chance"), at_level_1 + 2.0 * lethal.crit_per_level, 0.001)
 
 
 func test_glide_caps_the_fall_while_holding_jump() -> void:
@@ -83,6 +74,16 @@ func test_glide_caps_the_fall_while_holding_jump() -> void:
 	Input.action_release(InputActions.JUMP)
 	await wait_physics_frames(30)
 	assert_lt(_player.velocity.y, -6.0, "suelta el salto y cae")
+
+
+## Aguante como el del Guerrero (configurado antes de activarse).
+func _endurance() -> EndurancePassive:
+	var passive := EndurancePassive.new()
+	passive.enemy_mask = PhysicsLayers.mask(PhysicsLayers.ENEMY_HURTBOX)
+	passive.radius = 5.0
+	passive.damage_per_enemy = 0.02
+	passive.max_enemies = 15
+	return passive
 
 
 func _add_passive(passive: CharacterPassive) -> CharacterPassive:

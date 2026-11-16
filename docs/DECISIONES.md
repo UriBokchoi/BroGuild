@@ -724,3 +724,28 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - «Has muerto»
 - **Cómo se añaden:** son claves `DEATH_LINE_*` en la lista `death_lines` de `results_panel.tscn`. Una frase nueva es su clave en la lista y su traducción; un test exige que todas estén traducidas. El título se parte en varias líneas si no cabe (hasta 900 px de ancho).
 - **Por qué:** da personalidad a la muerte, que se va a ver muchas veces («una más»).
+
+## 2026-11-16 · Personajes iniciales: Guerrero, Mago y Pícaro
+- **Decisión** (propuesta aprobada por el diseñador; el Pícaro, con sus cambios):
+
+  | | Guerrero | Mago | Pícaro |
+  |---|---|---|---|
+  | Arma inicial | Espada | Bastón | Daga |
+  | Stats | +30 vida, +5 defensa, −5 % velocidad (carrera y sprint) | −20 vida, +15 % área, +10 % experiencia | −10 vida, +10 % velocidad, +10 % crítico, +1 carga de stamina |
+  | Movimiento | `dash_duration` +30 % (dash más largo) | Planea: `glide_fall_speed` 3 m/s | `air_jumps` +1 |
+  | Pasiva | Aguante: +2 % de daño por enemigo a ≤ 5 m, hasta 15 (+30 %), contado cada 0,25 s | Eco arcano: cada 4.º ataque de cada arma suma tantos golpes como tiene | Letal: +1 % de crítico por nivel |
+
+  - **El Pícaro:** el diseñador pidió más stamina y que la pasiva fuera de crítico, en lugar de «golpe bajo tras el dash».
+  - **`CharacterData`** añade color, arma inicial, pasiva (escena) y los textos de la pasiva. Las diferencias siguen siendo la base de las stats.
+  - **Pasivas:**
+    - `CharacterPassive` es un nodo que el jugador añade al elegir el personaje. Sus modificadores llevan la pasiva como fuente y se quitan al irse.
+    - Los números viven en la escena de cada pasiva (`entities/player/characters/passives/`).
+    - El Eco arcano usa dos cosas nuevas del arma: la señal `attack_started` y `add_shots()`.
+  - **Planeo:** `MovementData.glide_fall_speed` (0 = no planea) limita la caída mientras se mantiene el salto (`MovementContext.jump_held`). Es una stat: una mejora podría dar planeo a cualquiera.
+  - **Elegir personaje:**
+    - `Player.set_character()` cambia base, arma inicial y pasiva en el momento, con la vida llena.
+    - `RunState.character` guarda la elección: reintentar sigue con el mismo personaje.
+    - Sin elección, el jugador usa su `character`. En el gimnasio es el Guerrero; la escena del jugador sola va sin personaje, para que los tests no hereden armas.
+    - En la zona de combate hay tres pedestales (`CharacterPedestal`) con la figura y el color de cada uno.
+  - **Se borra `data/characters/base.tres`:** ya no tiene sentido; la base son las stats de `data/player/`.
+- **Por qué:** cierra la decisión abierta del GDD (§11). Todo va en datos y escenas: un personaje nuevo es un `.tres`, y una pasiva nueva, un script corto con su escena.
