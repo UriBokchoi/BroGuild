@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ExperienceData" format=3]
+
+[ext_resource type="Script" path="res://systems/progression/experience_data.gd" id="1_data"]
+
+[sub_resource type="Curve" id="Curve_xp"]
+_limits = [0.0, 1000.0, 1.0, 100.0]
+_data = [Vector2(1, 5), 0.0, 2.5, 1, 1, Vector2(5, 15), 2.5, 3.0, 1, 1, Vector2(10, 30), 3.0, 4.0, 1, 1, Vector2(20, 70), 4.0, 6.0, 1, 1, Vector2(50, 250), 6.0, 9.0, 1, 1, Vector2(100, 700), 9.0, 0.0, 1, 1]
+point_count = 6
+
+[resource]
+script = ExtResource("1_data")
+xp_to_next = SubResource("Curve_xp")
+max_level = 100

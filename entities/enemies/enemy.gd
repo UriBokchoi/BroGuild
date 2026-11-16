@@ -91,6 +91,11 @@ func is_settled() -> bool:
 	return is_alive() and absf(linear_velocity.y) < EnemySteering.SETTLED_SPEED
 
 
+## Experiencia que suelta al morir (con los modificadores que tenga, p. ej. de élite).
+func xp_reward() -> float:
+	return _stats.xp_reward
+
+
 ## Distancia a la que mira a sus vecinos para separarse y para trepar.
 func separation_radius() -> float:
 	return _stats.separation_radius
@@ -157,5 +162,5 @@ func _on_died() -> void:
 	hurtbox.set_deferred(&"monitorable", false)
 	contact_hitbox.set_deferred(&"monitoring", false)
 	_dying_left = death_time
-	EventBus.enemy_died.emit(data, global_position)
+	EventBus.enemy_died.emit(self)
 	died.emit(self)

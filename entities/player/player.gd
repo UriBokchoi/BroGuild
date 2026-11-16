@@ -1,13 +1,17 @@
 class_name Player
 extends CharacterBody3D
 ## Jugador: monta el contexto de movimiento, avanza la máquina de estados y mueve el cuerpo.
-## Avisa a la interfaz de su vida y de su muerte (al morir se queda quieto y sus armas paran). Las
-## mecánicas van en sus estados y componentes, nunca aquí (CLAUDE.md, «Nunca»).
+## Avisa a la interfaz de su vida, su experiencia y su muerte (al morir se queda quieto y sus armas
+## paran); al subir de nivel aleja la cámara. Las mecánicas van en sus estados y componentes, nunca
+## aquí (CLAUDE.md, «Nunca»).
 
 @export var stats: StatsComponent
 @export var stamina: StaminaComponent
 @export var health: HealthComponent
+@export var experience: ExperienceComponent
 @export var weapons: WeaponInventory
+## Cámara que se aleja con el nivel.
+@export var camera: CameraRig
 @export var input: PlayerInput
 @export var movement: StateMachine
 ## Sensor de paredes para el salto en pared.
@@ -37,8 +41,11 @@ func _ready() -> void:
 	movement.start(context)
 	health.health_changed.connect(EventBus.player_health_changed.emit)
 	health.died.connect(_on_died)
-	# La vida avisó en su _ready, antes de esta conexión: se repite para la interfaz.
+	experience.xp_changed.connect(EventBus.player_xp_changed.emit)
+	experience.leveled_up.connect(_on_leveled_up)
+	# Vida y experiencia avisaron en su _ready, antes de estas conexiones: se repite para la interfaz.
 	EventBus.player_health_changed.emit(health.get_current(), health.get_maximum())
+	EventBus.player_xp_changed.emit(experience.get_xp(), experience.needed(), experience.get_level())
 
 
 func _physics_process(delta: float) -> void:
@@ -59,6 +66,11 @@ func teleport_to(feet: Vector3) -> void:
 	global_position = feet
 	velocity = Vector3.ZERO
 	reset_physics_interpolation()
+
+
+func _on_leveled_up(level: int) -> void:
+	camera.level = level
+	EventBus.player_leveled_up.emit(level)
 
 
 ## Muerto, se queda quieto y sus armas paran. La pantalla de resultados y el reinicio llegarán con

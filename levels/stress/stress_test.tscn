@@ -9,6 +9,9 @@
 [ext_resource type="Script" path="res://vfx/juice/damage_numbers/damage_numbers.gd" id="7_numbers"]
 [ext_resource type="Resource" path="res://data/vfx/damage_numbers.tres" id="8_number_style"]
 [ext_resource type="PackedScene" path="res://ui/hud/hud.tscn" id="9_hud"]
+[ext_resource type="Script" path="res://systems/progression/pickup_field.gd" id="10_pickups"]
+[ext_resource type="Script" path="res://systems/progression/loot_dropper.gd" id="11_loot"]
+[ext_resource type="Resource" path="res://data/pickups/xp_gem.tres" id="12_xp_gem"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_sky"]
 
@@ -50,6 +53,16 @@ target = NodePath("../Player")
 [node name="DamageNumbers" type="Node3D" parent="."]
 script = ExtResource("7_numbers")
 style = ExtResource("8_number_style")
+
+[node name="PickupField" type="Node3D" parent="." node_paths=PackedStringArray("collector", "collector_stats")]
+script = ExtResource("10_pickups")
+collector = NodePath("../Player")
+collector_stats = NodePath("../Player/Stats")
+
+[node name="LootDropper" type="Node" parent="." node_paths=PackedStringArray("field")]
+script = ExtResource("11_loot")
+field = NodePath("../PickupField")
+xp_gem = ExtResource("12_xp_gem")
 
 [node name="HUD" parent="." instance=ExtResource("9_hud")]
 

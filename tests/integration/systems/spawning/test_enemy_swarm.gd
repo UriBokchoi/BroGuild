@@ -65,7 +65,7 @@ func test_dead_enemies_vanish_and_are_reused_full() -> void:
 	var enemy := _swarm.spawn(SWARMER, Vector3.ZERO)
 	watch_signals(EventBus)
 	enemy.health.take_damage(DamageInfo.create(1000.0))
-	assert_signal_emitted_with_parameters(EventBus, "enemy_died", [SWARMER, Vector3.ZERO])
+	assert_signal_emitted_with_parameters(EventBus, "enemy_died", [enemy])
 	await wait_physics_frames(20)
 	assert_eq(_swarm.active_count(), 0, "terminó de morir")
 	assert_false(enemy.visible)

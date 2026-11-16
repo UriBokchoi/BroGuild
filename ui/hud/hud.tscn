@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://ui/hud/stamina_bar.gd" id="1_stamina"]
 [ext_resource type="Script" path="res://ui/hud/health_bar.gd" id="2_health"]
 [ext_resource type="Script" path="res://ui/hud/interaction_prompt.gd" id="3_prompt"]
+[ext_resource type="Script" path="res://ui/hud/xp_bar.gd" id="4_xp"]
 
 [node name="HUD" type="CanvasLayer"]
 layer = 10
@@ -15,6 +16,30 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 theme_type_variation = &"ScreenMargin"
+
+[node name="XpBar" type="HBoxContainer" parent="Margin"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 0
+mouse_filter = 2
+theme_type_variation = &"XpRow"
+script = ExtResource("4_xp")
+
+[node name="LevelLabel" type="Label" parent="Margin/XpBar"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"LevelLabel"
+
+[node name="XpProgress" type="ProgressBar" parent="Margin/XpBar"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 12)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+mouse_filter = 2
+theme_type_variation = &"XpBar"
+step = 0.0
+show_percentage = false
 
 [node name="Column" type="VBoxContainer" parent="Margin"]
 layout_mode = 2
