@@ -15,6 +15,8 @@ signal level_changed(level: int)
 
 ## Capas de física de los objetivos que busca ([code]enemy_hurtbox[/code] en las del jugador).
 @export_flags_3d_physics var target_mask: int = 0
+## Altura sobre los pies desde la que busca objetivos y apunta (el pecho de quien la lleva).
+@export_range(0.0, 3.0, 0.05, "suffix:m") var aim_height: float = 0.0
 
 ## Datos del arma.
 var data: WeaponData
@@ -106,6 +108,11 @@ func reach() -> float:
 	return _weapon.reach
 
 
+## Punto desde el que busca objetivos y apunta: [member aim_height] sobre los pies.
+func aim_origin() -> Vector3:
+	return global_position + Vector3.UP * aim_height
+
+
 ## Lanza un golpe a [param target]; [param index] es su número dentro del ataque (desde 0).
 @abstract func _fire(target: Node3D, index: int) -> void
 
@@ -141,7 +148,7 @@ func _fire_at(targets: Array[Node3D]) -> void:
 
 func _find_targets() -> Array[Node3D]:
 	var space := get_world_3d().direct_space_state
-	return _finder.nearest(space, global_position, reach(), projectile_count())
+	return _finder.nearest(space, aim_origin(), reach(), projectile_count())
 
 
 static func _percent(value: float) -> float:

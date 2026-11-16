@@ -21,3 +21,12 @@ func receive(info: DamageInfo) -> float:
 	var amount := health.take_damage(info)
 	hurt.emit(info, amount)
 	return amount
+
+
+## Centro de la zona (el de su primera forma de colisión), adonde apuntan las armas.
+func get_center() -> Vector3:
+	for child: Node in get_children():
+		var shape := child as CollisionShape3D
+		if shape:
+			return shape.global_position
+	return global_position

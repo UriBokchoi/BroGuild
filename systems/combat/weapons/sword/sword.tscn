@@ -6,4 +6,5 @@
 [node name="Sword" type="Node3D"]
 script = ExtResource("1_sword")
 target_mask = 16
+aim_height = 0.9
 slash_scene = ExtResource("2_slash")

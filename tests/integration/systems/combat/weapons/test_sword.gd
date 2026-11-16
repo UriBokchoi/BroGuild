@@ -72,6 +72,16 @@ func test_slashes_a_dummy_in_reach() -> void:
 	assert_eq(amount, 20.0)
 
 
+func test_aims_up_at_a_dummy_above() -> void:
+	# Por encima de la altura del tajo plano (la de una pila de enemigos).
+	var dummy := _add_dummy(Vector3(0.0, 2.2, -1.2))
+	var health := dummy.get_node(^"Health") as HealthComponent
+	watch_signals(health)
+	_inventory.add(SWORD)
+	await wait_physics_frames(15)
+	assert_signal_emitted(health, "damaged", "el tajo se inclina hacia él")
+
+
 func test_ignores_dummies_out_of_reach() -> void:
 	_add_dummy(Vector3(0.0, 0.0, -10.0))
 	var sword := _inventory.add(SWORD)
