@@ -505,3 +505,26 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - **HUD:** barra de experiencia a todo lo ancho arriba, con el nivel a la izquierda (color de experiencia `4fb6ff`). El tiempo de partida llegará con la tarea de resultados.
   - **Capa `pickup`:** sigue sin usarse; los recogibles no necesitan física.
 - **Por qué:** el ROADMAP pide gemas atraídas por el radio de recogida y niveles con curva en datos. Con un único campo sin física, cientos de gemas apenas cuestan, y la recompensa como nombre deja añadir fichas o curas sin tocar el campo.
+
+## 2026-11-16 · Runas y base común de objetos
+- **Decisión:**
+  - **Base común:** `ItemData` (abstracta, `systems/upgrades/`) es la base de lo que el jugador lleva y sube de nivel. `WeaponData` pasa a heredar de ella; sus `.tres` no cambian.
+  - **Runas** (`RuneData`, `data/runes/`):
+    - un `StatModifierSet` por nivel, acumulativos, sobre las stats del jugador;
+    - el nivel máximo es cuántos conjuntos haya;
+    - si todos los niveles dan lo mismo, el `.tres` repite el mismo conjunto.
+  - **`RuneInventory`** (nodo `Runes` del jugador) aplica los niveles 1..n con el conjunto de cada nivel como origen y los quita al bajar o quitar la runa.
+  - **Las cinco iniciales:**
+
+    | Runa | Por nivel | Nivel máximo |
+    |---|---|---|
+    | Fuerza | +10 % de daño | 5 |
+    | Amplitud | +10 % de área | 5 |
+    | Prisa | +8 % de velocidad de ataque | 5 |
+    | Vigor | +20 de vida máxima | 5 |
+    | Multiplicidad | +1 proyectil | 3 |
+
+    Multiplicidad se queda en 3 porque cinco tajos extra harían la espada desmedida; está en datos.
+  - **Armería de práctica:** muestra armas y runas en dos secciones con la misma fila (`ArmoryRow` trabaja con `ItemData`). Para una runa, el panel de la derecha muestra todas las stats del jugador, con lo que cambian sus runas resaltado.
+  - **Orden del ROADMAP:** las runas se hicieron antes que «Subir de nivel», para que la elección de 1 de 3 tenga opciones.
+- **Por qué:** el GDD define las runas como pasivas que suben stats principales con cada nivel. Con modificadores en datos, añadir una runa es un `.tres`, y la base común deja tratar igual a armas y runas en la elección, el Archivo y la armería.

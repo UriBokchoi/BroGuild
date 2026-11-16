@@ -96,9 +96,15 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 - `Interactable` es el área con un texto y la señal `interacted`; la detecta el `Interactor` del jugador.
 - **Interactuables actuales:**
   - `teleporter/`: `Teleporter`, pisar y aparecer en su destino; también es el recogedor de caídas;
-  - `armory/`: la armería de práctica;
+  - `armory/`: la armería de práctica (armas y runas);
   - `summoner/`: el invocador de enemigos de práctica;
   - `wave_bell/`: la campana que arranca y para el director de oleadas.
+
+### Objetos y runas — `systems/upgrades/`
+- **`ItemData`** es la base de lo que el jugador lleva y sube de nivel: armas (`WeaponData`) y runas (`RuneData`). Lleva id, nombre, descripción y `max_level()`. La usan la armería y la usarán la elección al subir de nivel y el Archivo.
+- **Runas** (`runes/`):
+  - `RuneData` (en `data/runes/`) lleva un `StatModifierSet` por nivel, acumulativos, sobre las stats del jugador; el nivel máximo es cuántos haya.
+  - `RuneInventory` (en el jugador) aplica y quita esos modificadores al subir, bajar o quitar una runa.
 
 ### Botín y progresión — `entities/pickups/` y `systems/progression/`
 - **Recogibles:**
@@ -171,6 +177,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
   3. Traduce su nombre y descripción.
 
   Aparece sola en la armería.
+- **Una runa:** crea un `.tres` `RuneData` en `data/runes/` con un `StatModifierSet` por nivel (sobre stats que el jugador tenga) y traduce su nombre y descripción. Aparece sola en la armería.
 - **Un enemigo:**
   1. Crea un `.tres` `EnemyData` en `data/enemies/`.
   2. Si no reutiliza la escena de otro, crea la suya en `entities/enemies/<enemigo>/`, con raíz `Enemy`, como `swarmer.tscn`.
