@@ -10,6 +10,7 @@ extends CharacterBody3D
 @export var health: HealthComponent
 @export var experience: ExperienceComponent
 @export var weapons: WeaponInventory
+@export var runes: RuneInventory
 ## Cámara que se aleja con el nivel.
 @export var camera: CameraRig
 @export var input: PlayerInput

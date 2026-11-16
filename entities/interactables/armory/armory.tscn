@@ -52,6 +52,7 @@ script = ExtResource("1_armory")
 interactable = NodePath("Interactable")
 panel = NodePath("ArmoryPanel")
 weapons_dir = "res://data/weapons"
+runes_dir = "res://data/runes"
 
 [node name="Visual" type="Node3D" parent="."]
 

@@ -1,12 +1,12 @@
 class_name ArmoryPanel
 extends CanvasLayer
-## Panel de la armería de práctica: lista todas las armas del juego para equiparlas, quitarlas y
-## subirlas o bajarlas de nivel, y a la derecha muestra las stats propias del arma por la que pasa
-## el ratón (sin las del personaje). Pausa el juego y pide el cursor mientras está abierto; se
-## cierra con Esc, con «interactuar» o con su botón.
+## Panel de la armería de práctica: lista todas las armas y runas del juego para equiparlas,
+## quitarlas y subirlas o bajarlas de nivel. A la derecha muestra las stats del objeto por el que
+## pasa el ratón: las propias de un arma (sin las del personaje) o, para una runa, todas las del
+## jugador con lo que cambian sus runas resaltado. Pausa el juego y pide el cursor mientras está
+## abierto; se cierra con Esc, con «interactuar» o con su botón.
 
-var _inventory: WeaponInventory
-var _catalog: Array[WeaponData] = []
+var _player: Player
 var _rows: Array[ArmoryRow] = []
 
 @onready var _list: VBoxContainer = %WeaponList
@@ -35,13 +35,14 @@ func _exit_tree() -> void:
 		_set_open(false)
 
 
-## Abre el panel con las armas de [param catalog] para el inventario [param inventory].
-func open(inventory: WeaponInventory, catalog: Array[WeaponData]) -> void:
-	_inventory = inventory
-	_catalog = catalog
-	_build_rows()
-	if not _catalog.is_empty():
-		_select(_catalog[0])
+## Abre el panel para [param player] con las armas de [param weapons] y las runas de [param runes].
+func open(player: Player, weapons: Array[WeaponData], runes: Array[RuneData]) -> void:
+	_player = player
+	_clear_list()
+	_add_section(&"ARMORY_WEAPONS", weapons)
+	_add_section(&"ARMORY_RUNES", runes)
+	if not _rows.is_empty():
+		_select(_rows[0].data)
 	_set_open(true)
 
 
@@ -54,7 +55,7 @@ func is_open() -> bool:
 	return visible
 
 
-## Filas del panel, una por arma (para tests).
+## Filas del panel, una por objeto (para tests).
 func get_rows() -> Array[ArmoryRow]:
 	return _rows.duplicate()
 
@@ -65,46 +66,78 @@ func _set_open(open_panel: bool) -> void:
 	EventBus.cursor_requested.emit(self, open_panel)
 
 
-func _build_rows() -> void:
-	for row: ArmoryRow in _rows:
-		row.free()
+func _clear_list() -> void:
+	for child: Node in _list.get_children():
+		child.free()
 	_rows.clear()
-	for index: int in _catalog.size():
-		var row := ArmoryRow.new(_catalog[index], index % 2 == 1)
+
+
+func _add_section(title_key: StringName, items: Array) -> void:
+	if items.is_empty():
+		return
+	var title := Label.new()
+	title.theme_type_variation = &"StatGroupLabel"
+	title.text = title_key
+	_list.add_child(title)
+	for index: int in items.size():
+		var row := ArmoryRow.new(items[index] as ItemData, index % 2 == 1)
 		row.equip_toggled.connect(_on_equip_toggled)
 		row.level_stepped.connect(_on_level_stepped)
 		row.hovered.connect(_select)
 		_list.add_child(row)
 		_rows.append(row)
-		row.refresh(_inventory.get_weapon(row.data))
+		row.refresh(_level_of(row.data))
 
 
-func _on_equip_toggled(data: WeaponData) -> void:
-	if _inventory.has(data):
-		_inventory.remove(data)
-	else:
-		_inventory.add(data)
+func _on_equip_toggled(data: ItemData) -> void:
+	var equipped := _level_of(data) > 0
+	if data is WeaponData:
+		if equipped:
+			_player.weapons.remove(data as WeaponData)
+		else:
+			_player.weapons.add(data as WeaponData)
+	elif data is RuneData:
+		_player.runes.set_level(data as RuneData, 0 if equipped else 1)
 	_refresh(data)
 
 
-func _on_level_stepped(data: WeaponData, step: int) -> void:
-	var weapon := _inventory.get_weapon(data)
-	if weapon:
-		weapon.set_level(weapon.level + step)
+func _on_level_stepped(data: ItemData, step: int) -> void:
+	var level := _level_of(data)
+	if level == 0:
+		return
+	if data is WeaponData:
+		_player.weapons.get_weapon(data as WeaponData).set_level(level + step)
+	elif data is RuneData:
+		_player.runes.set_level(data as RuneData, level + step)
 	_refresh(data)
 
 
-func _refresh(data: WeaponData) -> void:
+## Nivel que tiene el jugador de [param data] (0 si no lo lleva).
+func _level_of(data: ItemData) -> int:
+	if data is WeaponData:
+		var weapon := _player.weapons.get_weapon(data as WeaponData)
+		return weapon.level if weapon else 0
+	if data is RuneData:
+		return _player.runes.get_level(data as RuneData)
+	return 0
+
+
+func _refresh(data: ItemData) -> void:
 	for row: ArmoryRow in _rows:
 		if row.data == data:
-			row.refresh(_inventory.get_weapon(data))
+			row.refresh(_level_of(data))
 	_select(data)
 
 
-func _select(data: WeaponData) -> void:
+func _select(data: ItemData) -> void:
 	_selected_name.text = data.name_key
-	var weapon := _inventory.get_weapon(data)
-	_equip_hint.visible = weapon == null
-	_stats_view.visible = weapon != null
-	if weapon:
-		_stats_view.show_stats(weapon.stats)
+	var stats: StatsComponent = null
+	if data is WeaponData:
+		var weapon := _player.weapons.get_weapon(data as WeaponData)
+		stats = weapon.stats if weapon else null
+	elif data is RuneData:
+		stats = _player.stats
+	_equip_hint.visible = stats == null
+	_stats_view.visible = stats != null
+	if stats:
+		_stats_view.show_stats(stats)

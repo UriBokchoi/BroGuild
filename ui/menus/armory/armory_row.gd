@@ -1,15 +1,15 @@
 class_name ArmoryRow
 extends PanelContainer
-## Fila de un arma en el panel de la armería: nombre y nivel, descripción y, debajo a la derecha,
-## botones para bajar y subir de nivel y para equiparla o quitarla. Solo avisa; el panel hace los
-## cambios.
+## Fila de un objeto (arma o runa) en el panel de la armería: nombre y nivel, descripción y, debajo
+## a la derecha, botones para bajar y subir de nivel y para equiparlo o quitarlo. Solo avisa; el
+## panel hace los cambios.
 
-signal equip_toggled(data: WeaponData)
-signal level_stepped(data: WeaponData, step: int)
+signal equip_toggled(data: ItemData)
+signal level_stepped(data: ItemData, step: int)
 ## El ratón pasó por encima (para ver sus stats).
-signal hovered(data: WeaponData)
+signal hovered(data: ItemData)
 
-var data: WeaponData
+var data: ItemData
 
 var _level: Label
 var _level_down: Button
@@ -17,8 +17,8 @@ var _level_up: Button
 var _equip: Button
 
 
-func _init(weapon_data: WeaponData, alternate: bool) -> void:
-	data = weapon_data
+func _init(item: ItemData, alternate: bool) -> void:
+	data = item
 	theme_type_variation = &"StatRowAlt" if alternate else &"StatRow"
 	mouse_filter = Control.MOUSE_FILTER_PASS
 	var layout := VBoxContainer.new()
@@ -41,15 +41,15 @@ func _init(weapon_data: WeaponData, alternate: bool) -> void:
 	mouse_entered.connect(_emit_hovered)
 
 
-## Muestra el estado de [param weapon] (la que lleva el jugador de este tipo, o [code]null[/code]).
-func refresh(weapon: Weapon) -> void:
-	var equipped := weapon != null
+## Muestra el nivel que tiene el jugador (0 = no lo lleva).
+func refresh(level: int) -> void:
+	var equipped := level > 0
 	if equipped:
-		_level.text = tr(&"ARMORY_LEVEL") % [weapon.level, data.max_level()]
+		_level.text = tr(&"ARMORY_LEVEL") % [level, data.max_level()]
 	else:
 		_level.text = tr(&"ARMORY_NOT_EQUIPPED")
-	_level_down.disabled = not equipped or weapon.level <= 1
-	_level_up.disabled = not equipped or weapon.level >= data.max_level()
+	_level_down.disabled = not equipped or level <= 1
+	_level_up.disabled = not equipped or level >= data.max_level()
 	_equip.text = &"ARMORY_REMOVE" if equipped else &"ARMORY_EQUIP"
 
 

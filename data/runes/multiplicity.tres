@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="RuneData" format=3]
+
+[ext_resource type="Script" path="res://systems/upgrades/runes/rune_data.gd" id="1_rune"]
+[ext_resource type="Script" path="res://core/stats/stat_modifier_set.gd" id="2_set"]
+[ext_resource type="Script" path="res://core/stats/stat_modifier.gd" id="3_modifier"]
+
+[sub_resource type="Resource" id="Resource_modifier"]
+script = ExtResource("3_modifier")
+stat = &"projectile_count"
+value = 1.0
+
+[sub_resource type="Resource" id="Resource_level"]
+script = ExtResource("2_set")
+stat_modifiers = Array[ExtResource("3_modifier")]([SubResource("Resource_modifier")])
+
+[resource]
+script = ExtResource("1_rune")
+id = &"multiplicity"
+name_key = &"RUNE_MULTIPLICITY_NAME"
+description_key = &"RUNE_MULTIPLICITY_DESCRIPTION"
+levels = Array[ExtResource("2_set")]([SubResource("Resource_level"), SubResource("Resource_level"), SubResource("Resource_level")])
