@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="DamageNumberStyle" format=3]
+
+[ext_resource type="Script" path="res://vfx/juice/damage_numbers/damage_number_style.gd" id="1_style"]
+
+[sub_resource type="FontVariation" id="FontVariation_numbers"]
+variation_embolden = 1.0
+
+[resource]
+script = ExtResource("1_style")
+normal_color = Color(1, 1, 1, 1)
+critical_color = Color(1, 0.82, 0.2, 1)
+outline_color = Color(0.08, 0.06, 0.1, 0.95)
+font = SubResource("FontVariation_numbers")
+font_size = 64
+outline_size = 18
+pixel_size = 0.0012
+critical_scale = 1.5
+lifetime = 0.8
+launch_speed = 5.0
+spread_speed = 2.2
+gravity = 15.0
+spawn_jitter = 0.25
+pop_scale = 1.9
+pop_time = 0.16
+fade_start = 0.55

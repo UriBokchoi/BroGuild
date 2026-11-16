@@ -3,9 +3,10 @@ extends Area3D
 ## Zona que hace daño a las [HurtboxComponent] que toca; su máscara de física dice a quién
 ## ([code]enemy_hurtbox[/code] para el jugador y sus armas, [code]player_hurtbox[/code] para enemigos
 ## y trampas). Con [member rehit_interval] > 0 repite el golpe a cada objetivo mientras lo toque
-## (daño por contacto); con 0, golpea una sola vez a cada uno (un proyectil).
+## (daño por contacto); con 0, golpea una sola vez a cada uno (un proyectil, un tajo). Solo golpea
+## con [member Area3D.monitoring] activado: un ataque la activa mientras dura.
 
-## Golpeó a [param hurtbox]; [param amount] es el daño que hizo de verdad.
+## Golpeó a [param hurtbox]; [param amount] es la vida que quitó de verdad.
 signal hit(hurtbox: HurtboxComponent, amount: float)
 
 ## Daño de cada golpe antes de las stats del atacante.
@@ -24,7 +25,6 @@ var _last_hit_at: Dictionary[int, float] = {}
 
 
 func _ready() -> void:
-	monitoring = true
 	monitorable = false
 	if rng == null:
 		rng = Rng.stream(Rng.Stream.COMBAT)
@@ -32,10 +32,17 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	_clock += delta
+	if not monitoring:
+		return
 	for area: Area3D in get_overlapping_areas():
 		var hurtbox := area as HurtboxComponent
 		if hurtbox and _can_hit(hurtbox):
 			_hit(hurtbox)
+
+
+## Olvida a quién ha golpeado: el siguiente ataque vuelve a poder dar a todos.
+func reset_hits() -> void:
+	_last_hit_at.clear()
 
 
 func _can_hit(hurtbox: HurtboxComponent) -> bool:

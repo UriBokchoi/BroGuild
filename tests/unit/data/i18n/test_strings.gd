@@ -1,6 +1,6 @@
 extends GutTest
-## data/i18n/strings.csv: cada texto está en todos los idiomas y cada stat del jugador (y su
-## grupo) tiene nombre traducido. Las stats salen de las fuentes de la escena del jugador, así
+## data/i18n/strings.csv: cada texto está en todos los idiomas y cada stat del jugador y de las armas
+## (y su grupo) tiene nombre traducido. Las stats del jugador salen de las fuentes de su escena, así
 ## que un dato nuevo queda cubierto solo.
 
 const STRINGS_PATH := "res://data/i18n/strings.csv"
@@ -38,6 +38,10 @@ func test_every_player_stat_and_group_has_a_name() -> void:
 	for source: Resource in player.stats.sources:
 		_assert_stat_names(source)
 	player.free()
+
+
+func test_every_weapon_stat_and_group_has_a_name() -> void:
+	_assert_stat_names(WeaponStats.new())
 
 
 func _assert_stat_names(data: Resource) -> void:

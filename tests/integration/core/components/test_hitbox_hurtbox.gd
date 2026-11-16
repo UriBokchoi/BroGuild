@@ -50,6 +50,21 @@ func test_hitbox_ignores_layers_outside_its_mask() -> void:
 	assert_eq(_health.get_current(), MAX_HEALTH)
 
 
+func test_hitbox_without_monitoring_does_not_hit() -> void:
+	var hitbox := _add_hitbox(10.0, 0.0)
+	hitbox.monitoring = false
+	await wait_physics_frames(20)
+	assert_eq(_health.get_current(), MAX_HEALTH)
+
+
+func test_reset_hits_lets_a_new_attack_hit_again() -> void:
+	var hitbox := _add_hitbox(10.0, 0.0)
+	await wait_physics_frames(20)
+	hitbox.reset_hits()
+	await wait_physics_frames(4)
+	assert_eq(_health.get_current(), MAX_HEALTH - 20.0, "un golpe por ataque")
+
+
 func _add_hitbox(damage: float, rehit: float) -> HitboxComponent:
 	var hitbox := HitboxComponent.new()
 	hitbox.collision_layer = 0

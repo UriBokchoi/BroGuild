@@ -63,6 +63,29 @@ func test_dying_stops_the_player_and_tells_everyone() -> void:
 	assert_eq(_player.velocity, Vector3.ZERO)
 
 
+func test_weapons_use_the_player_stats() -> void:
+	assert_same(_player.weapons.wielder_stats, _player.stats)
+
+
+func test_interactor_only_detects_interactables() -> void:
+	var interactor := _player.get_node(^"Interactor") as Interactor
+	assert_eq(interactor.collision_layer, 0)
+	assert_eq(interactor.collision_mask, PhysicsLayers.mask(PhysicsLayers.INTERACTABLE))
+	assert_same(interactor.body, _player)
+
+
+func test_teleport_places_the_player_stopped() -> void:
+	_player.velocity = Vector3(5.0, 0.0, 5.0)
+	_player.teleport_to(Vector3(3.0, 0.0, 4.0))
+	assert_eq(_player.global_position, Vector3(3.0, 0.0, 4.0))
+	assert_eq(_player.velocity, Vector3.ZERO)
+
+
+func test_dying_stops_the_weapons() -> void:
+	_player.health.take_damage(DamageInfo.create(1000.0))
+	assert_eq(_player.weapons.process_mode, Node.PROCESS_MODE_DISABLED)
+
+
 func test_hurtbox_lowers_while_sliding() -> void:
 	await wait_physics_frames(60)
 	var shape := _player.get_node(^"Hurtbox/CollisionShape3D") as CollisionShape3D

@@ -1,0 +1,60 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://levels/test_gym/zones/combat_range.gd" id="1_range"]
+[ext_resource type="Material" path="res://levels/test_gym/materials/greybox_floor.tres" id="2_floor"]
+[ext_resource type="PackedScene" path="res://entities/enemies/target_dummy/target_dummy.tscn" id="3_dummy"]
+[ext_resource type="PackedScene" path="res://entities/interactables/armory/armory.tscn" id="4_armory"]
+[ext_resource type="PackedScene" path="res://entities/interactables/teleporter/teleporter.tscn" id="5_teleporter"]
+[ext_resource type="Script" path="res://entities/interactables/teleporter/teleporter.gd" id="6_teleporter_script"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_fall"]
+size = Vector3(400, 4, 400)
+
+[node name="CombatRange" type="Node3D" node_paths=PackedStringArray("exit_teleporter", "arrival")]
+script = ExtResource("1_range")
+exit_teleporter = NodePath("ExitTeleporter")
+arrival = NodePath("Arrival")
+
+[node name="Floor" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+use_collision = true
+size = Vector3(50, 1, 50)
+material = ExtResource("2_floor")
+
+[node name="Arrival" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 10)
+
+[node name="ExitTeleporter" parent="." instance=ExtResource("5_teleporter")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 15)
+label_key = &"TELEPORT_TO_MOVEMENT"
+
+[node name="FallCatcher" type="Area3D" parent="." node_paths=PackedStringArray("destination")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -20, 0)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("6_teleporter_script")
+destination = NodePath("../Arrival")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="FallCatcher"]
+shape = SubResource("BoxShape3D_fall")
+
+[node name="Armory" parent="." instance=ExtResource("4_armory")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 8, 0, 6)
+
+[node name="Dummies" type="Node3D" parent="."]
+
+[node name="Solo" parent="Dummies" instance=ExtResource("3_dummy")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, -6)
+
+[node name="ClusterA" parent="Dummies" instance=ExtResource("3_dummy")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -8, 0, -10)
+
+[node name="ClusterB" parent="Dummies" instance=ExtResource("3_dummy")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -10.5, 0, -11.5)
+
+[node name="ClusterC" parent="Dummies" instance=ExtResource("3_dummy")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -5.5, 0, -11.5)
+
+[node name="Far" parent="Dummies" instance=ExtResource("3_dummy")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 9, 0, -12)

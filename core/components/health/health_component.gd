@@ -7,7 +7,8 @@ extends Node
 
 ## Cambió la vida actual o la máxima.
 signal health_changed(current: float, maximum: float)
-## Recibió [param amount] de daño, ya reducido por la defensa.
+## Recibió un golpe de [param amount] de daño, ya reducido por la defensa. Es lo que valía el golpe
+## (lo que muestran los números de daño): puede pasar de la vida que quedaba.
 signal damaged(amount: float, info: DamageInfo)
 ## Esquivó el golpe entero.
 signal evaded(info: DamageInfo)
@@ -15,6 +16,8 @@ signal died
 
 @export var stats: StatsComponent
 @export var rules: CombatRules
+## Recibe los golpes y avisa de ellos, pero la vida no baja ni muere (el muñeco de práctica).
+@export var immortal: bool = false
 
 ## Azar de la esquiva. Si no se asigna antes de entrar en el árbol, el flujo de combate de [code]Rng[/code].
 var rng: RandomNumberGenerator
@@ -50,21 +53,24 @@ func is_dead() -> bool:
 	return _dead
 
 
-## Recibe un golpe. Devuelve el daño que hizo de verdad (0 si lo esquiva o ya estaba muerto).
+## Recibe un golpe. Devuelve la vida que quitó de verdad (0 si lo esquiva, si ya estaba muerto o si
+## es inmortal).
 func take_damage(info: DamageInfo) -> float:
 	if _dead:
 		return 0.0
 	if DamageCalc.evades(_data.evasion, rng):
 		evaded.emit(info)
 		return 0.0
-	var amount := minf(DamageCalc.after_armor(info.amount, _data.armor, rules), _current)
-	_current -= amount
+	var amount := DamageCalc.after_armor(info.amount, _data.armor, rules)
+	var removed := 0.0 if immortal else minf(amount, _current)
+	_current -= removed
 	damaged.emit(amount, info)
-	health_changed.emit(_current, _data.max_health)
+	if removed > 0.0:
+		health_changed.emit(_current, _data.max_health)
 	if _current <= 0.0:
 		_dead = true
 		died.emit()
-	return amount
+	return removed
 
 
 ## Cura [param amount] sin pasar de la vida máxima. Muerto no cura.

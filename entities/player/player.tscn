@@ -34,6 +34,11 @@
 [ext_resource type="Script" path="res://core/components/health/health_component.gd" id="33_health"]
 [ext_resource type="Resource" path="res://data/combat/rules.tres" id="34_rules"]
 [ext_resource type="Script" path="res://core/components/hurtbox_component.gd" id="35_hurtbox"]
+[ext_resource type="Script" path="res://systems/combat/weapons/weapon_inventory.gd" id="36_weapons"]
+[ext_resource type="Script" path="res://entities/player/interactor.gd" id="37_interactor"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_interactor"]
+radius = 0.6
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_body"]
 radius = 0.4
@@ -102,13 +107,14 @@ material = SubResource("StandardMaterial3D_cue")
 inner_radius = 0.55
 outer_radius = 0.7
 
-[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("stats", "stamina", "health", "input", "movement", "wall_sensor", "ledge_sensor", "ground_state", "air_state")]
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("stats", "stamina", "health", "weapons", "input", "movement", "wall_sensor", "ledge_sensor", "ground_state", "air_state")]
 collision_layer = 2
 collision_mask = 1
 script = ExtResource("1_player")
 stats = NodePath("Stats")
 stamina = NodePath("Stamina")
 health = NodePath("Health")
+weapons = NodePath("Weapons")
 input = NodePath("PlayerInput")
 movement = NodePath("Movement")
 wall_sensor = NodePath("WallSensor")
@@ -147,6 +153,21 @@ health = NodePath("../Health")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Hurtbox"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
 shape = SubResource("CapsuleShape3D_hurtbox")
+
+[node name="Weapons" type="Node3D" parent="." node_paths=PackedStringArray("wielder_stats")]
+script = ExtResource("36_weapons")
+wielder_stats = NodePath("../Stats")
+
+[node name="Interactor" type="Area3D" parent="." node_paths=PackedStringArray("body")]
+collision_layer = 0
+collision_mask = 256
+monitorable = false
+script = ExtResource("37_interactor")
+body = NodePath("..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Interactor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+shape = SubResource("SphereShape3D_interactor")
 
 [node name="Stamina" type="Node" parent="." node_paths=PackedStringArray("stats")]
 script = ExtResource("12_stamina")

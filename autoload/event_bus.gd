@@ -19,3 +19,8 @@ signal player_stamina_changed(charges: float, max_charges: int)
 signal player_health_changed(current: float, maximum: float)
 ## El jugador ha muerto.
 signal player_died
+## Un enemigo recibió un golpe de [param amount] (tras su defensa) en [param position], el punto
+## donde mostrar los efectos (encima de su cabeza).
+signal enemy_damaged(position: Vector3, amount: float, info: DamageInfo)
+## Cambió lo que el jugador puede hacer con «interactuar» (clave de traducción; vacía = nada).
+signal interaction_prompt_changed(prompt_key: StringName)
