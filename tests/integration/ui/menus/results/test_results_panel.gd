@@ -1,6 +1,7 @@
 extends GutTest
 ## Pantalla de resultados: al morir el jugador y tras su espera, pausa y muestra lo apuntado por el
-## RunRecorder, con el foco en «Reintentar» (que lleva su tecla); Esc no la cierra.
+## RunRecorder bajo una frase de muerte al azar, con el foco en «Reintentar» (que lleva su tecla);
+## Esc no la cierra.
 
 const PanelScene := preload("res://ui/menus/results/results_panel.tscn")
 
@@ -66,3 +67,19 @@ func test_escape_does_not_close_it() -> void:
 	escape.pressed = true
 	_panel._input(escape)
 	assert_true(_panel.is_open())
+
+
+func test_shows_a_random_death_line() -> void:
+	assert_gt(_panel.death_lines.size(), 1, "varias frases")
+	var seen: Dictionary[String, bool] = {}
+	for _death: int in 30:
+		_panel.open()
+		var title := (_panel.get_node(^"%Title") as Label).text
+		assert_has(_panel.death_lines, StringName(title), "una de su lista")
+		seen[title] = true
+	assert_gt(seen.size(), 1, "no siempre la misma")
+
+
+func test_every_death_line_is_translated() -> void:
+	for line: StringName in _panel.death_lines:
+		assert_ne(TranslationServer.translate(line), line, "«%s» sin traducir" % line)

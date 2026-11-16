@@ -712,3 +712,15 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
     - Cuando exista el flujo de partida (Hito 3), pasará por `RunState` con semilla nueva.
   - **Muerto, no se sube de nivel:** el `LevelUpController` ignora las subidas de un jugador muerto. Si no, las gemas que aún volaban abrirían las cartas encima de los resultados.
 - **Por qué:** el GDD pide reinicio instantáneo («una más») y ver cómo te ha ido. Apuntar con un nodo que solo escucha deja los resultados desacoplados del gameplay, y servirá para el bote, el Archivo y el resumen de partida del Hito 8.
+
+## 2026-11-16 · Frases de muerte
+- **Decisión:** en los resultados, en vez de «Has caído», sale al azar una frase de muerte gamer (flujo `COSMETIC` de `Rng`). Las frases las propuso el diseñador:
+  - «GG bro»
+  - «Just git gud»
+  - «¿Skill issue?»
+  - «El 99 % se rinde justo antes de conseguirlo»
+  - «A la próxima inténtalo al menos»
+  - «Mi primo pequeño lo haría mejor»
+  - «Has muerto»
+- **Cómo se añaden:** son claves `DEATH_LINE_*` en la lista `death_lines` de `results_panel.tscn`. Una frase nueva es su clave en la lista y su traducción; un test exige que todas estén traducidas. El título se parte en varias líneas si no cabe (hasta 900 px de ancho).
+- **Por qué:** da personalidad a la muerte, que se va a ver muchas veces («una más»).

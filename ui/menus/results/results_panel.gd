@@ -3,15 +3,22 @@ extends CanvasLayer
 ## Pantalla de resultados: al morir el jugador ([code]EventBus.player_died[/code]) y pasados
 ## [member delay] segundos, pausa el juego, pide el cursor y muestra lo que pasó en la partida
 ## (según su [RunRecorder]): tiempo, nivel, enemigos y élites derrotados, oro ganado y daño
-## infligido. «Reintentar» (o su tecla, [code]retry[/code]) empieza otra partida al momento
-## recargando el nivel; «Salir» cierra el juego. Esc no la cierra. Funciona con el juego en pausa
-## ([code]process_mode = ALWAYS[/code] en la escena).
+## infligido. Arriba, una frase de muerte al azar. «Reintentar» (o su tecla, [code]retry[/code])
+## empieza otra partida al momento recargando el nivel; «Salir» cierra el juego. Esc no la cierra.
+## Funciona con el juego en pausa ([code]process_mode = ALWAYS[/code] en la escena).
 
 ## Quién apuntó la partida.
 @export var recorder: RunRecorder
 ## Segundos entre la muerte y los resultados (para ver caer al jugador).
 @export_range(0.0, 5.0, 0.05, "suffix:s") var delay: float = 1.0
+## Frases de muerte (claves de traducción): sale una al azar en cada muerte.
+@export var death_lines: Array[StringName] = []
 
+## Azar de la frase. Si no se asigna antes de entrar en el árbol, el flujo cosmético de
+## [code]Rng[/code].
+var rng: RandomNumberGenerator
+
+@onready var _title: Label = %Title
 @onready var _rows: GridContainer = %Rows
 @onready var _retry: Button = %Retry
 @onready var _quit: Button = %Quit
@@ -19,6 +26,8 @@ extends CanvasLayer
 
 func _ready() -> void:
 	visible = false
+	if rng == null:
+		rng = Rng.stream(Rng.Stream.COSMETIC)
 	_retry.pressed.connect(retry)
 	_quit.pressed.connect(_quit_game)
 	EventBus.player_died.connect(_on_player_died)
@@ -41,8 +50,11 @@ func _exit_tree() -> void:
 		_set_open(false)
 
 
-## Muestra los resultados de la partida, pausa el juego y deja el foco en «Reintentar».
+## Muestra los resultados de la partida con una frase de muerte al azar, pausa el juego y deja el
+## foco en «Reintentar».
 func open() -> void:
+	if not death_lines.is_empty():
+		_title.text = String(death_lines[rng.randi_range(0, death_lines.size() - 1)])
 	_fill(recorder.stats if recorder else RunStats.new())
 	_retry.text = tr(&"RESULTS_RETRY") % InteractionPrompt.key_text(InputActions.RETRY)
 	_set_open(true)

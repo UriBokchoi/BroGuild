@@ -100,7 +100,8 @@ func _add_layouts(theme: Theme) -> void:
 	_separation(theme, &"ArmoryBody", &"HBoxContainer", 28)
 	_separation(theme, &"ArmoryRowLayout", &"VBoxContainer", 6)
 	_separation(theme, &"ArmoryRowButtons", &"HBoxContainer", 8)
-	# Resultados: filas de nombre y valor, y botones lado a lado.
+	# Resultados: la frase de muerte, filas de nombre y valor, y botones lado a lado.
+	_label_variation(theme, &"DeathLineLabel", 56, GOLD)
 	theme.set_type_variation(&"ResultsGrid", &"GridContainer")
 	theme.set_constant(&"h_separation", &"ResultsGrid", 48)
 	theme.set_constant(&"v_separation", &"ResultsGrid", 10)
