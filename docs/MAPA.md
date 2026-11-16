@@ -73,7 +73,12 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
   - `Weapon` es la base: ataca sola por cadencia al más cercano desde `aim_height` y combina sus stats con las del personaje.
   - `TargetFinder` hace una consulta de física y apunta al centro de la hurtbox.
   - `WeaponInventory` es el nodo del jugador que crea y quita armas.
+  - **Proyectiles:**
+    - `ProjectileWeapon` dispara desde un pool un `Projectile` por golpe, hacia el centro del objetivo; sus stats son `ProjectileStats` (velocidad de proyectil), de los que heredan `StaffStats` y `DaggerStats`.
+    - `Projectile` (base abstracta) vuela recto y traza un rayo por tick (no atraviesa nada, sin `Area3D`). Golpea con `DamageCalc` + hurtbox, igual que las hitbox. Cada proyectil decide en `_impact` qué hace al dar.
 - **Espada** (`sword/`): `Sword` crea `SwordSlash`, un arco con shader y hitbox, desde un pool, inclinado hacia el objetivo.
+- **Bastón** (`staff/`): `StaffOrb` explota al tocar enemigo o pared y daña a todos en `explosion_radius` × área, con su explosión en shader.
+- **Daga** (`dagger/`): `DaggerBlade` da a uno y, si le quedan `bounces`, salta al más cercano dentro de `bounce_range` con todo su daño.
 
 ### Enemigos — `entities/enemies/` y `systems/spawning/`
 - **Tipos:** `EnemyData` (en `data/enemies/`) lleva escena y fuentes de stats: `HealthData` y `EnemyStats` (velocidad, contacto, separación y trepar).

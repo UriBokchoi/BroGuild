@@ -546,3 +546,22 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
     - Esc no la salta: si abriera la pausa, al cerrarla el juego seguiría con las cartas delante.
   - **`ItemData`** gana `kind_key()` y `level_modifiers(level)` para describir cualquier objeto igual.
 - **Por qué:** el GDD pide elegir 1 de 3 entre armas y runas nuevas o mejorarlas, con 4 ranuras de cada y nivel máximo 5. La ruleta, el reroll y el doble o nada del Hito 4 se montan encima de esta elección y del mismo flujo de azar.
+
+## 2026-11-16 · Bastón de mago, daga y proyectiles
+- **Decisión:**
+  - **Proyectiles:**
+    - `ProjectileWeapon` (base de las armas que disparan) saca un `Projectile` de un pool por golpe, desde `aim_height` hacia el centro de la hurtbox del objetivo.
+    - El `Projectile` vuela recto y en cada tick traza un rayo del tramo que recorre (capas `enemy_hurtbox` y `world`). Así no atraviesa nada aunque vaya a 30 m/s ni necesita un `Area3D` por bala.
+    - Golpea con el mismo `DamageCalc` y la misma hurtbox que las hitbox, y su vida es la duración del arma.
+  - **Stats:** `ProjectileStats` añade la velocidad de proyectil (la multiplica la del personaje). `StaffStats` añade `explosion_radius`; `DaggerStats`, `bounces` y `bounce_range`. Todos son stats mejorables.
+  - **Bastón** (`data/weapons/staff.tres`):
+    - El orbe va a 12 m/s y explota al tocar a un enemigo o una pared. Hace 18 de daño a todos los que hay a 2 m × área, cada uno con su tirada de crítico.
+    - La explosión es una esfera con shader de 0,3 s.
+    - Cada 1,5 s. Mejoras por nivel: +6 daño, +0,5 m de radio, +1 orbe, y +10 daño con −20 % de espera.
+  - **Daga** (`data/weapons/dagger.tres`):
+    - Va a 30 m/s y hace 12 de daño a uno solo.
+    - Si le quedan rebotes, salta al enemigo más cercano que aún no haya tocado, a menos de 6 m, con todo su daño.
+    - Cada 0,8 s. Mejoras por nivel: +1 rebote, +5 daño, +1 daga, y +1 rebote con −20 % de espera.
+    - Las mejoras de rebote son fijas por nivel. La «probabilidad de mejorar el rebote» que pidió el diseñador llegará con las rarezas y la ruleta del Hito 4.
+  - **Armería y subir de nivel:** las dos armas aparecen solas, porque salen de `data/weapons/`.
+- **Por qué:** el GDD define el bastón (explosión en área al contacto) y la daga (rápida, a un objetivo, con rebote). Con el rayo por tick y el pool, cientos de proyectiles salen baratos y precisos, y un arma nueva de proyectiles solo necesita su escena de proyectil.
