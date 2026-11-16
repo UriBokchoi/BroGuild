@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="LevelUpData" format=3]
+
+[ext_resource type="Script" path="res://systems/upgrades/level_up/level_up_data.gd" id="1_data"]
+
+[resource]
+script = ExtResource("1_data")
+choices = 3
+weapon_slots = 4
+rune_slots = 4
+weapons_dir = "res://data/weapons"
+runes_dir = "res://data/runes"
