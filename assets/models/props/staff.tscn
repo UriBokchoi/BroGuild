@@ -1,0 +1,65 @@
+[gd_scene format=3]
+
+[ext_resource type="Material" path="res://assets/models/props/materials/wood.tres" id="1_wood"]
+[ext_resource type="Material" path="res://assets/models/props/materials/gold.tres" id="2_gold"]
+[ext_resource type="Material" path="res://assets/models/props/materials/arcane_gem.tres" id="3_gem"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_shaft"]
+material = ExtResource("1_wood")
+top_radius = 0.028
+bottom_radius = 0.036
+height = 1.5
+radial_segments = 10
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_foot"]
+material = ExtResource("2_gold")
+top_radius = 0.042
+bottom_radius = 0.042
+height = 0.06
+radial_segments = 10
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_collar"]
+material = ExtResource("2_gold")
+top_radius = 0.07
+bottom_radius = 0.035
+height = 0.08
+radial_segments = 12
+rings = 1
+
+[sub_resource type="SphereMesh" id="SphereMesh_gem"]
+material = ExtResource("3_gem")
+radius = 0.1
+height = 0.2
+radial_segments = 16
+rings = 8
+
+[sub_resource type="TorusMesh" id="TorusMesh_ring"]
+material = ExtResource("2_gold")
+inner_radius = 0.12
+outer_radius = 0.145
+rings = 24
+ring_segments = 6
+
+[node name="Staff" type="Node3D"]
+
+[node name="Shaft" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
+mesh = SubResource("CylinderMesh_shaft")
+
+[node name="Foot" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+mesh = SubResource("CylinderMesh_foot")
+
+[node name="Collar" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.03, 0)
+mesh = SubResource("CylinderMesh_collar")
+
+[node name="Gem" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.16, 0)
+mesh = SubResource("SphereMesh_gem")
+
+[node name="Ring" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 1.16, 0)
+mesh = SubResource("TorusMesh_ring")

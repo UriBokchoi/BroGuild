@@ -4,6 +4,8 @@
 [ext_resource type="Script" path="res://core/stats/stat_modifier.gd" id="2_modifier"]
 [ext_resource type="Resource" path="res://data/weapons/dagger.tres" id="3_weapon"]
 [ext_resource type="PackedScene" path="res://entities/player/characters/passives/lethal.tscn" id="4_passive"]
+[ext_resource type="Script" path="res://entities/player/characters/model/model_attachment.gd" id="5_attachment"]
+[ext_resource type="PackedScene" path="res://assets/models/props/dagger.tscn" id="6_dagger"]
 
 [sub_resource type="Resource" id="Resource_health"]
 script = ExtResource("2_modifier")
@@ -37,6 +39,18 @@ script = ExtResource("2_modifier")
 stat = &"air_jumps"
 value = 1.0
 
+[sub_resource type="Resource" id="Resource_dagger_right"]
+script = ExtResource("5_attachment")
+scene = ExtResource("6_dagger")
+socket = &"HandRight"
+transform = Transform3D(1.35, 0, 0, 0, 1.106, 0.775, 0, -0.775, 1.106, 0, 0, 0)
+
+[sub_resource type="Resource" id="Resource_dagger_left"]
+script = ExtResource("5_attachment")
+scene = ExtResource("6_dagger")
+socket = &"HandLeft"
+transform = Transform3D(1.35, 0, 0, 0, 1.106, 0.775, 0, -0.775, 1.106, 0, 0, 0)
+
 [resource]
 script = ExtResource("1_data")
 stat_modifiers = Array[ExtResource("2_modifier")]([SubResource("Resource_health"), SubResource("Resource_run"), SubResource("Resource_sprint"), SubResource("Resource_crit"), SubResource("Resource_stamina"), SubResource("Resource_air_jumps")])
@@ -47,3 +61,4 @@ starting_weapon = ExtResource("3_weapon")
 passive = ExtResource("4_passive")
 passive_name_key = &"PASSIVE_LETHAL_NAME"
 passive_description_key = &"PASSIVE_LETHAL_DESCRIPTION"
+attachments = Array[ExtResource("5_attachment")]([SubResource("Resource_dagger_right"), SubResource("Resource_dagger_left")])

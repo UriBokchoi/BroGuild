@@ -4,6 +4,9 @@
 [ext_resource type="Script" path="res://core/stats/stat_modifier.gd" id="2_modifier"]
 [ext_resource type="Resource" path="res://data/weapons/sword.tres" id="3_weapon"]
 [ext_resource type="PackedScene" path="res://entities/player/characters/passives/endurance.tscn" id="4_passive"]
+[ext_resource type="Script" path="res://entities/player/characters/model/model_attachment.gd" id="5_attachment"]
+[ext_resource type="PackedScene" path="res://assets/models/props/sword.tscn" id="6_sword"]
+[ext_resource type="PackedScene" path="res://assets/models/props/shield.tscn" id="7_shield"]
 
 [sub_resource type="Resource" id="Resource_health"]
 script = ExtResource("2_modifier")
@@ -33,6 +36,18 @@ stat = &"dash_duration"
 kind = 1
 value = 0.3
 
+[sub_resource type="Resource" id="Resource_sword"]
+script = ExtResource("5_attachment")
+scene = ExtResource("6_sword")
+socket = &"HandRight"
+transform = Transform3D(1.15, 0, 0, 0, 0.996, 0.575, 0, -0.575, 0.996, 0, 0, 0)
+
+[sub_resource type="Resource" id="Resource_shield"]
+script = ExtResource("5_attachment")
+scene = ExtResource("7_shield")
+socket = &"HandLeft"
+transform = Transform3D(0.906, 0, 0.423, 0, 1, 0, -0.423, 0, 0.906, 0, 0, -0.15)
+
 [resource]
 script = ExtResource("1_data")
 stat_modifiers = Array[ExtResource("2_modifier")]([SubResource("Resource_health"), SubResource("Resource_armor"), SubResource("Resource_run"), SubResource("Resource_sprint"), SubResource("Resource_dash")])
@@ -43,3 +58,4 @@ starting_weapon = ExtResource("3_weapon")
 passive = ExtResource("4_passive")
 passive_name_key = &"PASSIVE_ENDURANCE_NAME"
 passive_description_key = &"PASSIVE_ENDURANCE_DESCRIPTION"
+attachments = Array[ExtResource("5_attachment")]([SubResource("Resource_sword"), SubResource("Resource_shield")])

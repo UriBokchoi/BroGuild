@@ -1,0 +1,54 @@
+[gd_scene format=3]
+
+[ext_resource type="Material" path="res://assets/models/props/materials/wood.tres" id="1_wood"]
+[ext_resource type="Material" path="res://assets/models/props/materials/steel.tres" id="2_steel"]
+[ext_resource type="Material" path="res://assets/models/props/materials/gold.tres" id="3_gold"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_face"]
+material = ExtResource("1_wood")
+top_radius = 0.34
+bottom_radius = 0.34
+height = 0.05
+radial_segments = 24
+rings = 1
+
+[sub_resource type="TorusMesh" id="TorusMesh_rim"]
+material = ExtResource("2_steel")
+inner_radius = 0.32
+outer_radius = 0.37
+rings = 32
+ring_segments = 8
+
+[sub_resource type="BoxMesh" id="BoxMesh_band"]
+material = ExtResource("2_steel")
+size = Vector3(0.06, 0.62, 0.012)
+
+[sub_resource type="SphereMesh" id="SphereMesh_boss"]
+material = ExtResource("3_gold")
+radius = 0.09
+height = 0.07
+radial_segments = 16
+rings = 4
+is_hemisphere = true
+
+[node name="Shield" type="Node3D"]
+
+[node name="Face" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0, 0)
+mesh = SubResource("CylinderMesh_face")
+
+[node name="Rim" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0, 0)
+mesh = SubResource("TorusMesh_rim")
+
+[node name="BandVertical" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.028)
+mesh = SubResource("BoxMesh_band")
+
+[node name="BandHorizontal" type="MeshInstance3D" parent="."]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0, 0, -0.028)
+mesh = SubResource("BoxMesh_band")
+
+[node name="Boss" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0, -0.03)
+mesh = SubResource("SphereMesh_boss")

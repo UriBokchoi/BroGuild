@@ -55,6 +55,9 @@
 - [x] Personajes iniciales: Guerrero (espada), Mago (bastón) y Pícaro (daga), cada uno con sus diferencias de stats, su rasgo de movimiento y su habilidad pasiva (Aguante, Eco arcano y Letal); pedestales en la zona de combate para cambiar de personaje
 
 ## Hito 3 — Menús y flujo de partida
+- [x] Aspecto de cada personaje: su color y sus piezas en el modelo (Guerrero: espada y escudo; Mago: bastón y sombrero; Pícaro: dos dagas), en el jugador y en los pedestales. Las piezas son assets reutilizables (`assets/models/props/`)
+- [ ] HUD de armas y runas: ranuras con su icono y su nivel; al empezar, 2 de cada abiertas y 2 bloqueadas (se desbloquearán más adelante)
+- [ ] Opciones básicas (desde la pausa): volumen, resolución, pantalla completa y VSync, guardadas entre partidas
 - [ ] Escena raíz `Game` con el flujo de pantallas; `RunState` guarda personaje, nivel y semilla; «Salir» de la pausa vuelve al menú
 - [ ] Menú principal: Jugar, Archivo y Abandonar (cierra el juego)
 - [ ] Selección de personaje: lista a la izquierda, modelo 3D en el centro, a la derecha (al pasar el ratón) nombre, stats, arma principal y habilidad pasiva
@@ -95,7 +98,7 @@
 - [ ] ¿Cobrar o Doblar? y mesas siguientes
 - [ ] Resumen de partida
 - [ ] Desbloqueos (personajes, armas, ventajas) y condiciones para conseguirlos
-- [ ] Opciones (sensibilidad, volumen, remapeo)
+- [ ] Más opciones (sensibilidad, remapeo)
 
 ## Backlog (sin orden)
 - Raíles/ziplines y plataformas de salto

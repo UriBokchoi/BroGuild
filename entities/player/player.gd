@@ -1,11 +1,13 @@
 class_name Player
 extends CharacterBody3D
 ## Jugador: monta el contexto de movimiento, avanza la máquina de estados y mueve el cuerpo.
-## Lleva un personaje ([CharacterData]: su base de stats, su arma inicial y su pasiva). Avisa a la
-## interfaz de su vida, su experiencia, su oro y su muerte (al morir se queda quieto y sus armas
-## paran); al subir de nivel aleja la cámara. Las mecánicas van en sus estados y componentes, nunca
-## aquí (CLAUDE.md, «Nunca»).
+## Lleva un personaje ([CharacterData]: su base de stats, su arma inicial, su pasiva y su aspecto).
+## Avisa a la interfaz de su vida, su experiencia, su oro y su muerte (al morir se queda quieto y sus
+## armas paran); al subir de nivel aleja la cámara. Las mecánicas van en sus estados y componentes,
+## nunca aquí (CLAUDE.md, «Nunca»).
 
+## Modelo que viste con el color y las piezas de su personaje.
+@export var model: CharacterModel
 @export var stats: StatsComponent
 @export var stamina: StaminaComponent
 @export var health: HealthComponent
@@ -69,8 +71,8 @@ func _ready() -> void:
 		_equip(character)
 
 
-## Cambia de personaje en el momento: su base de stats, su arma inicial (quita la del anterior) y su
-## pasiva, con la vida llena. La elección se guarda en [code]RunState[/code]: reintentar sigue con
+## Cambia de personaje en el momento: su base de stats, su aspecto, su arma inicial (quita la del
+## anterior) y su pasiva, con la vida llena. La elección se guarda en [code]RunState[/code]: reintentar sigue con
 ## él.
 func set_character(data: CharacterData) -> void:
 	if data == null or data == character:
@@ -106,8 +108,9 @@ func teleport_to(feet: Vector3) -> void:
 	reset_physics_interpolation()
 
 
-## Le da el arma inicial y la pasiva de [param data].
+## Le da el aspecto, el arma inicial y la pasiva de [param data].
 func _equip(data: CharacterData) -> void:
+	model.dress(data)
 	if data.starting_weapon:
 		weapons.add(data.starting_weapon)
 	if data.passive:

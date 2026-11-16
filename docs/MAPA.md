@@ -31,7 +31,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 | `tools/` | Validación por terminal (`validate.sh`, `ci/`) y generadores (`gen_themes.gd`). |
 | `tests/` | GUT: `unit/` y `integration/`, con la misma ruta que el código. `hooks/` es el script de fin de ejecución. |
 | `docs/` | GDD, ROADMAP, DECISIONES y este mapa. |
-| `assets/` | Modelos, texturas, audio y fuentes (aún vacíos) y `CREDITS.md`. |
+| `assets/` | Assets reutilizables y `CREDITS.md`. `models/props/`: piezas hechas con mallas básicas (espada, escudo, bastón, sombrero de mago, daga) con sus materiales en `materials/`; las llevan los personajes y pueden servir para otras cosas (iconos, el Archivo, botín). Texturas, audio y fuentes, aún vacíos. |
 
 ## Sistemas
 
@@ -56,7 +56,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 | `feedback/` | Lo que el cuerpo muestra: `BodyCrouch` (agacha el modelo y baja la hurtbox en el slide), `BodyFacing` (gira el modelo), `DashJumpCue` (aro de la ventana del dash-jump) y `SpeedTrail` (estela). |
 | `stamina/` | Cargas de stamina: `StaminaPool` (lógica pura), `StaminaComponent` (nodo que recarga y avisa por EventBus) y `StaminaData`. |
 | `camera/` | `CameraRig` (tercera persona, se mueve en `_process` siguiendo la posición interpolada) y `CameraData`. |
-| `characters/` | `CharacterData`: las diferencias de un personaje sobre las stats básicas (su base), su color, su arma inicial y su pasiva. `passives/`: `CharacterPassive` (base: un nodo que el jugador añade al elegir el personaje; sus modificadores se van con él) y las de los iniciales: `EndurancePassive` (Aguante, Guerrero), `ArcaneEchoPassive` (Eco arcano, Mago) y `LethalPassive` (Letal, Pícaro), cada una con su escena y sus números. |
+| `characters/` | `CharacterData`: las diferencias de un personaje sobre las stats básicas (su base), su color, su arma inicial, su pasiva y las piezas de su modelo. `model/`: `CharacterModel` (cuerpo que toma el color del personaje y puntos de anclaje: manos, cabeza y espalda; lo usan el jugador y los pedestales) y `ModelAttachment` (qué pieza, en qué punto y cómo colocada). `passives/`: `CharacterPassive` (base: un nodo que el jugador añade al elegir el personaje; sus modificadores se van con él) y las de los iniciales: `EndurancePassive` (Aguante, Guerrero), `ArcaneEchoPassive` (Eco arcano, Mago) y `LethalPassive` (Letal, Pícaro), cada una con su escena y sus números. |
 | `player_input.gd` | Convierte el InputMap en acciones de la máquina y en la dirección pedida, relativa a la cámara. |
 | `interactor.gd` | Zona que encuentra el `Interactable` más cercano y lo activa con E. |
 | Nodos `Health`, `Hurtbox` y `Weapons` | Vida, zona donde recibe daño y `WeaponInventory` con sus armas. |
@@ -110,7 +110,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
   - `teleporter/`: `Teleporter`, pisar y aparecer en su destino; también es el recogedor de caídas;
   - `armory/`: la armería de práctica (armas y runas);
   - `summoner/`: el invocador de enemigos de práctica (uno por tipo, y uno de élites; su cartel muestra el nombre del enemigo);
-  - `character_pedestal/`: pedestal con la figura de un personaje; al interactuar, el jugador pasa a ser él (hasta la selección de personaje del Hito 3);
+  - `character_pedestal/`: pedestal con el modelo vestido de un personaje; al interactuar, el jugador pasa a ser él (hasta la selección de personaje del Hito 3);
   - `wave_bell/`: la campana que arranca y para el director de oleadas.
 
 ### Objetos y runas — `systems/upgrades/`
@@ -213,7 +213,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
   5. Para que salga en las oleadas, añádelo como `WaveEnemy` en el `WaveData`; para probarlo, pon otro invocador en la zona de combate.
 - **Una stat:** añade un `@export_range` en el Resource de datos que toque (`MovementData`, `OffenseData`, `WeaponStats`, `EnemyStats`…), pon su valor en el `.tres` y su fila `STAT_<NOMBRE>` en `data/i18n/strings.csv`. Un test exige la traducción.
 - **Un estado de movimiento:** crea un script en `entities/player/movement/states/` que herede de `MovementState` y añade un nodo hijo de `Movement` en `player.tscn` con su acción, prioridad y reglas.
-- **Un personaje:** crea un `.tres` `CharacterData` en `data/characters/` con sus diferencias de stats, color, arma inicial y pasiva (y sus textos). Una pasiva nueva es un script que herede de `CharacterPassive` (`_activated()`, y `_set_bonus()` para su modificador) con su escena en `entities/player/characters/passives/`. Para probarlo, pon otro pedestal en la zona de combate.
+- **Un personaje:** crea un `.tres` `CharacterData` en `data/characters/` con sus diferencias de stats, color, arma inicial, pasiva y piezas del modelo (`attachments`: escena de `assets/models/props/`, punto y colocación) y sus textos. Una pasiva nueva es un script que herede de `CharacterPassive` (`_activated()`, y `_set_bonus()` para su modificador) con su escena en `entities/player/characters/passives/`. Para probarlo, pon otro pedestal en la zona de combate.
 - **Un interactuable:** crea una escena con un `Interactable` (capa 9, `prompt_key`) y conecta su `interacted`.
 - **Un recogible** (cura, imán…):
   1. Crea un `.tres` `PickupData` en `data/pickups/` con su escena (raíz `Pickup`) y su `reward`.

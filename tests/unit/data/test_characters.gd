@@ -1,11 +1,13 @@
 extends GutTest
 ## Personajes de data/characters: están el Guerrero, el Mago y el Pícaro; cada uno es un
 ## CharacterData con nombre, descripción y pasiva traducidos, un arma inicial, una pasiva que es un
-## CharacterPassive, y sus diferencias apuntan a stats que el jugador tiene.
+## CharacterPassive, sus diferencias apuntan a stats que el jugador tiene y sus piezas van a puntos
+## del modelo que existen.
 
 const CHARACTERS_DIR := "res://data/characters"
 const STRINGS_PATH := "res://data/i18n/strings.csv"
 const PlayerScene := preload("res://entities/player/player.tscn")
+const ModelScene := preload("res://entities/player/characters/model/character_model.tscn")
 
 var _keys := PackedStringArray()
 var _characters: Array[CharacterData] = []
@@ -49,3 +51,14 @@ func test_every_character_changes_existing_stats() -> void:
 		for modifier: StatModifier in character.stat_modifiers:
 			var label := character.resource_path.get_file()
 			assert_true(player.stats.has_stat(modifier.stat), "%s: «%s» no es una stat" % [label, modifier.stat])
+
+
+func test_every_piece_goes_to_an_existing_socket() -> void:
+	var model := ModelScene.instantiate() as CharacterModel
+	add_child_autofree(model)
+	for character: CharacterData in _characters:
+		var label := character.resource_path.get_file()
+		assert_false(character.attachments.is_empty(), "%s: sin piezas" % label)
+		for attachment: ModelAttachment in character.attachments:
+			assert_not_null(attachment.scene, "%s: pieza sin escena" % label)
+			assert_true(model.sockets.has_node(NodePath(String(attachment.socket))), "%s: no hay punto «%s»" % [label, attachment.socket])
