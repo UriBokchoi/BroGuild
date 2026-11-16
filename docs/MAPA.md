@@ -179,6 +179,10 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 - **Un estado de movimiento:** crea un script en `entities/player/movement/states/` que herede de `MovementState` y añade un nodo hijo de `Movement` en `player.tscn` con su acción, prioridad y reglas.
 - **Un personaje:** crea un `.tres` `CharacterData` en `data/characters/` con sus diferencias de stats.
 - **Un interactuable:** crea una escena con un `Interactable` (capa 9, `prompt_key`) y conecta su `interacted`.
+- **Un recogible** (fichas, cura…):
+  1. Crea un `.tres` `PickupData` en `data/pickups/` con su escena (raíz `Pickup`) y su `reward`.
+  2. Haz que el sistema que lo usa escuche `EventBus.pickup_collected` con esa recompensa.
+  3. Suéltalo con `PickupField.drop()`, normalmente desde `LootDropper`.
 - **Un efecto de juice:** escucha una señal (del componente o del `EventBus`) y no cambies el gameplay. Si hay muchos a la vez, usa `NodePool`.
 - **Un texto de interfaz:** pon la clave en `data/i18n/strings.csv` (es y en) y la clave como texto del control, o `tr()`.
 - **Una sección de depuración:** crea un `DebugSection` como hijo de las secciones del panel.
