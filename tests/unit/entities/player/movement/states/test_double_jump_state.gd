@@ -2,7 +2,7 @@ extends GutTest
 ## DoubleJumpState: en el aire, sin coyote time, con saltos en el aire y stamina; tocar suelo
 ## devuelve los saltos.
 
-const ContextFixture := preload("res://tests/unit/entities/player/states/movement_context_fixture.gd")
+const ContextFixture := preload("res://tests/unit/entities/player/movement/states/movement_context_fixture.gd")
 
 var _context: MovementContext
 var _machine: StateMachine

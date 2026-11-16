@@ -83,6 +83,13 @@ func heal(amount: float) -> void:
 		health_changed.emit(_current, _data.max_health)
 
 
+## Vuelve a la vida máxima, vivo (un enemigo que sale otra vez del pool).
+func reset() -> void:
+	_dead = false
+	_current = _data.max_health
+	health_changed.emit(_current, _data.max_health)
+
+
 func _on_stat_changed(stat: StringName, value: float, previous: float) -> void:
 	if stat != &"max_health":
 		return

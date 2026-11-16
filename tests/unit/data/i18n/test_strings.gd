@@ -40,6 +40,10 @@ func test_every_player_stat_and_group_has_a_name() -> void:
 	player.free()
 
 
+func test_every_enemy_stat_and_group_has_a_name() -> void:
+	_assert_stat_names(EnemyStats.new())
+
+
 func test_every_weapon_stat_and_group_has_a_name() -> void:
 	_assert_stat_names(WeaponStats.new())
 

@@ -2,7 +2,7 @@ extends GutTest
 ## FastFallState: solo en el aire, con Ctrl dos veces seguidas y con stamina; cae recto a su
 ## velocidad.
 
-const ContextFixture := preload("res://tests/unit/entities/player/states/movement_context_fixture.gd")
+const ContextFixture := preload("res://tests/unit/entities/player/movement/states/movement_context_fixture.gd")
 const FALL_SPEED := 45.0
 const WINDOW := 0.3
 

@@ -2,7 +2,7 @@ extends GutTest
 ## DashState: gasta stamina, va en la dirección pedida (o hacia la cámara) a dash_speed y sin
 ## gravedad, y al terminar deja la velocidad horizontal en dash_exit_speed como mucho.
 
-const ContextFixture := preload("res://tests/unit/entities/player/states/movement_context_fixture.gd")
+const ContextFixture := preload("res://tests/unit/entities/player/movement/states/movement_context_fixture.gd")
 const TICK := 1.0 / 60.0
 const DASH_SPEED := 30.0
 const EXIT_SPEED := 10.0

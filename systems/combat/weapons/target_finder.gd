@@ -21,7 +21,7 @@ func _init(target_mask: int) -> void:
 
 
 ## Hasta [param count] objetivos dentro de [param radius] alrededor de [param origin], del más
-## cercano al más lejano.
+## cercano al más lejano (en 3D: un enemigo en lo alto de una pila está más lejos).
 func nearest(space: PhysicsDirectSpaceState3D, origin: Vector3, radius: float, count: int) -> Array[Node3D]:
 	_sphere.radius = radius
 	_query.transform = Transform3D(Basis.IDENTITY, origin)
@@ -32,5 +32,12 @@ func nearest(space: PhysicsDirectSpaceState3D, origin: Vector3, radius: float, c
 		if target and not found.has(target):
 			found.append(target)
 	found.sort_custom(func(a: Node3D, b: Node3D) -> bool:
-		return origin.distance_squared_to(a.global_position) < origin.distance_squared_to(b.global_position))
+		return origin.distance_squared_to(aim_point(a)) < origin.distance_squared_to(aim_point(b)))
 	return found.slice(0, count)
+
+
+## Punto al que apuntar en [param target]: el centro de su hurtbox (no sus pies), o su posición si
+## no es una hurtbox.
+static func aim_point(target: Node3D) -> Vector3:
+	var hurtbox := target as HurtboxComponent
+	return hurtbox.get_center() if hurtbox else target.global_position

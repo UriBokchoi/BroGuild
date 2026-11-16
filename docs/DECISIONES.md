@@ -404,3 +404,56 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
     - `Teleporter` (pisar = ir a su destino) une las dos zonas. El destino de la vuelta lo pone el gimnasio.
   - **Herramientas:** el generador de temas pasa a `tools/gen_themes.gd`; solo existía fuera del repositorio.
 - **Por qué:** el ROADMAP pedía la base de armas y la espada. El diseñador quería además probar el combate con calma: una zona aparte del movimiento, muñecos con DPS, números de daño con efecto (blancos y críticos amarillos, como en Megabonk) y una forma de cambiar de armas. Todo queda en datos y componentes, así que un arma nueva aparece sola en la armería, y cualquier enemigo con `DamageReporter` saca números.
+
+## 2026-11-15 · Enemigo cuerpo a cuerpo, enjambre y pooling
+- **Decisión:**
+  - **Datos:** `EnemyData` (`data/enemies/*.tres`) lleva id estable, nombre, descripción, escena y sus fuentes de stats: un `HealthData` y un `EnemyStats` con velocidad, aceleración, daño y ritmo de contacto, y radio y fuerza de separación. Son stats de verdad, así que los afijos de élite serán modificadores.
+  - **Primer enemigo:** el «enjambre cuerpo a cuerpo» del GDD, con id `swarmer` y nombre provisional «Esbirro». Tiene 30 de vida, va a 6 m/s y hace 8 de daño al tocar cada 0,8 s.
+  - **`Enemy`** (base de las escenas de enemigo):
+    - Persigue y se separa con `EnemySteering` (funciones puras en el plano XZ). Choca solo con el mundo y cae con la gravedad del mundo.
+    - Hace daño con una `HitboxComponent` de contacto que repite mientras toca.
+    - Al morir deja de recibir y de hacer daño, avisa por `EventBus.enemy_died` (para experiencia, botín y Archivo), encoge 0,15 s y desaparece.
+    - No tiene `_physics_process` propio.
+  - **`EnemySwarm`** (`systems/spawning/`):
+    - Un `NodePool` por tipo de enemigo. Al desactivarse, el enemigo queda con `process_mode` desactivado, lo que también lo saca de la física.
+    - Mueve a todos los enemigos en un único bucle. Cada tick rellena un `SpatialHash` (`core/`, rejilla XZ) y cada enemigo solo mira las celdas cercanas para separarse, sin comparar todos con todos.
+    - Retira a los que caen por debajo de `kill_height`.
+    - Quien decida cuándo y dónde salen (el director, el invocador) solo llama a `spawn()`.
+  - **`HealthComponent.reset()`** devuelve la vida llena a un enemigo reutilizado.
+  - **Práctica:** un `Summoner` en la zona de combate saca con E un anillo de 12 esbirros a 10 m de quien lo usa. El `EnemySwarm` vive en el nivel y la zona se lo pasa al invocador.
+  - **Sin retroceso ni destello** al golpear (Hito 5). Los choques y el apilado, en la entrada siguiente.
+- **Por qué:** el ROADMAP pide un enemigo cuerpo a cuerpo con datos, steering simple y pooling, y CLAUDE.md pide 300+ enemigos sin navegación por enemigo. El bucle único y el hash espacial son la base para medirlo en la escena de estrés del director de oleadas.
+
+## 2026-11-16 · Enemigos físicos que chocan y se apilan
+- **Decisión:**
+  - **Cuerpos:**
+    - `Enemy` pasa de `CharacterBody3D` a `RigidBody3D` sin rotación, sin dormir y sin fricción. Choca con el mundo, con el jugador y con otros enemigos.
+    - El jugador choca también con la capa `enemy`: no los atraviesa y puede quedarse de pie encima. Sus sensores de pared y de borde siguen mirando solo el mundo, así que no hay salto en pared ni mantle sobre enemigos.
+    - Entre ellos no se hacen daño, porque su hitbox de contacto solo mira la hurtbox del jugador.
+  - **Movimiento:** el enjambre solo fija la velocidad horizontal de cada enemigo; la gravedad, los empujones y las pilas los resuelve Jolt. Cada enemigo se acerca con su propio desvío (`approach_spread`, al azar del flujo `ENEMIES` al aparecer), que desaparece al llegar, para que la horda no vaya en rayos perfectos.
+  - **Trepar** (`climb_speed`, `climb_height`): un enemigo trepa (sube a `climb_speed`) si cumple todo esto:
+    - quiere avanzar y va frenado;
+    - tiene delante, a su alcance, un enemigo apoyado (que ni sube ni cae);
+    - ese enemigo está más cerca del objetivo que él;
+    - sus pies están por debajo de los del objetivo + `climb_height`.
+  - **Cómo se llegó ahí, probando con 40 esbirros:**
+    - sin trepar, un corro cerrado se atasca como un arco de piedra;
+    - sin la regla de «más cerca del objetivo», dos vecinos trepan uno sobre otro sin parar;
+    - sin la de «apoyado», la horda entera sube de una pieza;
+    - con fricción, el que trepa arrastra a sus vecinos hacia arriba;
+    - sin `climb_height`, levantan una torre de 20 m encima del jugador.
+  - **Resultado:** con todo eso forman un montículo estable (media de 2,5 m) y, si el jugador está en alto, se apilan para llegar a él.
+  - **Separación:** solo cuenta vecinos a su altura (distancia en 3D), para no deshacer las pilas. El enjambre apunta al principio de cada tick qué enemigos están apoyados, en un segundo `SpatialHash`, para que el resultado no dependa del orden del bucle.
+  - **Esbirro:** separación 0,3; trepa a 3,5 m/s hasta 1,5 m sobre el objetivo; desvío de 25°.
+  - **Visto en las pruebas:** la horda empuja un poco al jugador (unos 0,5 m/s con 40 encima): el cuerpo del jugador sale de los solapes.
+- **Por qué:** el diseñador pidió que los enemigos choquen con él y entre ellos sin hacerse daño y que se puedan acumular, mirando Megabonk. Allí los enemigos se apilan en una masa que avanza hacia el jugador. Con cuerpos físicos el apilado sale de la física y el retroceso de las armas será un impulso.
+
+## 2026-11-16 · Organización del jugador y mapa del código
+- **Decisión:**
+  - **Movimiento del jugador:** `movement_context.gd`, `movement_data.gd`, `wall_sensor.gd`, `ledge_sensor.gd` y `states/` pasan a `entities/player/movement/`.
+  - **Lo que muestra el cuerpo:** `body_crouch.gd`, `body_facing.gd`, `dash_jump_cue.gd` y `speed_trail.gd` pasan a `entities/player/feedback/`.
+  - **Líneas de velocidad:** el shader pasa de `vfx/shaders/` a `vfx/speed_lines/`, junto a su escena. En `vfx/shaders/` quedan solo los shaders compartidos.
+  - **Tests:** se movieron igual, porque replican las rutas.
+  - **Rutas antiguas:** las entradas anteriores de este documento citan las de entonces.
+  - **Mapa:** nuevo `docs/MAPA.md`, con para qué sirve cada carpeta y sistema, las señales del `EventBus`, las capas de física y recetas para añadir contenido. CLAUDE.md lo enlaza y pide actualizarlo al crear, mover o quitar un sistema.
+- **Por qué:** el diseñador pidió ordenar los archivos y dejar escrita la intención de cada cosa. En `entities/player/` había doce scripts sueltos de tres temas distintos.

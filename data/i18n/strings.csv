@@ -103,3 +103,18 @@ ARMORY_LEVEL_UP,Nivel +,Level +
 ARMORY_EQUIP_HINT,"Equipa un arma para ver sus stats (las suyas, sin las del personaje).","Equip a weapon to see its stats (its own, without the character's)."
 TELEPORT_TO_COMBAT,Zona de combate,Combat zone
 TELEPORT_TO_MOVEMENT,Zona de movimiento,Movement zone
+STAT_GROUP_ENEMY,Enemigo,Enemy
+STAT_MOVE_SPEED,Velocidad,Speed
+STAT_ACCELERATION,Aceleración,Acceleration
+STAT_CONTACT_DAMAGE,Daño al tocar,Contact damage
+STAT_CONTACT_INTERVAL,Tiempo entre golpes al tocar,Time between contact hits
+STAT_GROUP_STEERING,Movimiento en grupo,Group movement
+STAT_SEPARATION_RADIUS,Distancia de separación,Separation distance
+STAT_SEPARATION_WEIGHT,Fuerza de separación,Separation strength
+STAT_CLIMB_SPEED,Velocidad al trepar,Climb speed
+STAT_CLIMB_HEIGHT,Altura a la que trepa sobre el objetivo,Climb height above the target
+STAT_APPROACH_SPREAD,Desvío al acercarse,Approach spread
+ENEMY_SWARMER_NAME,Esbirro,Minion
+ENEMY_SWARMER_DESCRIPTION,"Rápido y frágil; llega en enjambre.","Fast and frail; comes in swarms."
+INTERACT_SUMMON,Invocar esbirros,Summon minions
+SUMMONER_TITLE,Invocador,Summoner

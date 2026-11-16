@@ -1,23 +1,32 @@
 extends GutTest
-## Zona de combate del gimnasio: la vuelta lleva adonde diga quien la coloca, el recogedor de
-## caídas devuelve a la llegada y los muñecos cuentan como enemigos.
+## Zona de combate del gimnasio: la vuelta lleva adonde diga quien la coloca, el invocador saca los
+## enemigos en el enjambre del nivel, el recogedor de caídas devuelve a la llegada y los muñecos
+## cuentan como enemigos.
 
 const RangeScene := preload("res://levels/test_gym/zones/combat_range.tscn")
 
 var _range: CombatRange
 var _exit: Marker3D
+var _swarm: EnemySwarm
 
 
 func before_each() -> void:
 	_exit = Marker3D.new()
 	add_child_autofree(_exit)
+	_swarm = EnemySwarm.new()
+	add_child_autofree(_swarm)
 	_range = RangeScene.instantiate() as CombatRange
 	_range.exit_destination = _exit
+	_range.swarm = _swarm
 	add_child_autofree(_range)
 
 
 func test_exit_goes_where_the_level_says() -> void:
 	assert_same(_range.exit_teleporter.destination, _exit)
+
+
+func test_summoner_uses_the_level_swarm() -> void:
+	assert_same(_range.summoner.swarm, _swarm)
 
 
 func test_falling_returns_to_the_arrival() -> void:

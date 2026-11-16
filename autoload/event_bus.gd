@@ -24,3 +24,5 @@ signal player_died
 signal enemy_damaged(position: Vector3, amount: float, info: DamageInfo)
 ## Cambió lo que el jugador puede hacer con «interactuar» (clave de traducción; vacía = nada).
 signal interaction_prompt_changed(prompt_key: StringName)
+## Murió un enemigo de tipo [param data] en [param position] (botín, experiencia, Archivo…).
+signal enemy_died(data: EnemyData, position: Vector3)

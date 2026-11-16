@@ -36,9 +36,9 @@ func _process(_delta: float) -> void:
 	visual.set_instance_shader_parameter(&"progress", clampf(time / _duration, 0.0, 1.0))
 
 
-## Lanza el tajo hacia [param direction] (plano XZ, normalizada) con [param reach] metros de
-## alcance. [param attacker] son las stats de quien golpea (daño % y crítico); [param mirrored]
-## barre al revés.
+## Lanza el tajo hacia [param direction] (normalizada; puede ir inclinada hacia arriba o abajo, pero
+## no vertical) con [param reach] metros de alcance. [param attacker] son las stats de quien golpea
+## (daño % y crítico); [param mirrored] barre al revés.
 func swing(
 	direction: Vector3,
 	reach: float,

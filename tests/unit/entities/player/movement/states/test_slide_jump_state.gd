@@ -1,7 +1,7 @@
 extends GutTest
 ## SlideJumpState: solo durante el slide (lo que interrumpe) y sin perder el impulso horizontal.
 
-const ContextFixture := preload("res://tests/unit/entities/player/states/movement_context_fixture.gd")
+const ContextFixture := preload("res://tests/unit/entities/player/movement/states/movement_context_fixture.gd")
 
 var _context: MovementContext
 var _machine: StateMachine
