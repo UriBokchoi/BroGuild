@@ -1,8 +1,10 @@
 extends GutTest
 ## WaveDirector con física real: en marcha saca enemigos en el suelo a la distancia de sus datos,
-## sin pasar del máximo; parado no saca ninguno y puede retirar a los que hay.
+## sin pasar del máximo y con la probabilidad de élite de sus datos; parado no saca ninguno y puede
+## retirar a los que hay.
 
 const SWARMER := preload("res://data/enemies/swarmer.tres")
+const ELITE := preload("res://data/enemies/elite.tres")
 
 var _target: Node3D
 var _swarm: EnemySwarm
@@ -54,6 +56,24 @@ func test_stop_clears_the_enemies() -> void:
 	assert_eq(_swarm.active_count(), 0, "parado no saca más")
 
 
+func test_elites_follow_the_data_chance() -> void:
+	_director.data.elite = ELITE
+	_director.data.elite_chance = _flat_curve(100.0)
+	_director.start()
+	await wait_physics_frames(3)
+	assert_gt(_swarm.active_count(), 0)
+	for enemy: Enemy in _swarm.get_active():
+		assert_true(enemy.is_elite(), "100 %: todos élites")
+
+
+func test_no_elite_chance_no_elites() -> void:
+	_director.data.elite = ELITE
+	_director.start()
+	await wait_physics_frames(3)
+	for enemy: Enemy in _swarm.get_active():
+		assert_false(enemy.is_elite(), "sin curva, ninguno")
+
+
 func test_without_ground_nobody_spawns() -> void:
 	_target.position = Vector3(500.0, 0.0, 500.0)
 	_director.start()
@@ -88,3 +108,11 @@ func _add_ground() -> void:
 	shape.position = Vector3(0.0, -0.5, 0.0)
 	ground.add_child(shape)
 	add_child_autofree(ground)
+
+
+func _flat_curve(value: float) -> Curve:
+	var curve := Curve.new()
+	curve.max_value = 100.0
+	curve.add_point(Vector2(0.0, value))
+	curve.add_point(Vector2(1.0, value))
+	return curve

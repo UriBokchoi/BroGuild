@@ -89,12 +89,14 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
   - Es un `RigidBody3D` sin rotación que choca con el mundo, con el jugador y con otros enemigos.
   - Fija su velocidad horizontal con `EnemySteering`: perseguir con desvío, separarse y decidir si trepa. Con `keep_distance` se queda a esa distancia (`keep_range`) mirando al objetivo.
   - Daña al tocar y con sus armas, si tiene: las crea al prepararse, esperan un poco al aparecer (`first_attack_delay`) y paran al morir (sus disparos en vuelo siguen). Avisa de su muerte y encoge.
+  - Mejoras de una vida (se quitan al volver a salir del pool): `boost(StatModifierSet)` aplica modificadores a sus stats y a las de sus armas (cada uno adonde exista su stat) y le llena la vida; `promote(EliteData)` lo hace élite.
+- **Élites** (`elite/`): `EliteData` (en `data/enemies/elite.tres`) lleva sus mejoras, su tamaño (cuerpo, zonas de golpe, modelo y masa) y su brillo (`elite_glow`, un `material_overlay`). Cualquier enemigo puede salir élite: lo decide quien lo saca (`WaveData.elite_chance`, el invocador de élites).
 - **`EnemySwarm`** (en el nivel) saca enemigos de un `NodePool` por tipo y los mueve en un único bucle.
   - Usa un `SpatialHash` con los vivos, marcando los apoyados para trepar, y una sola consulta de hasta `max_neighbors` vecinos.
   - Cada enemigo recalcula su rumbo cada `steering_slices` ticks; la física lo mueve en todos.
   - Tiene el `ProjectilePool` de los enemigos (`projectile_limit` en vuelo a la vez); `clear()` retira enemigos y proyectiles.
 - **Oleadas:**
-  - `WaveData` (en `data/waves/`): curva de enemigos por segundo según los minutos, picos, máximo a la vez, distancias de aparición y `WaveEnemy` con pesos y minuto de entrada.
+  - `WaveData` (en `data/waves/`): curva de enemigos por segundo según los minutos, picos, máximo a la vez, distancias de aparición, `WaveEnemy` con pesos y minuto de entrada, y probabilidad de élite por minuto.
   - `WaveDirector` (en el nivel) los saca alrededor del jugador, en el suelo (un rayo por intento).
 - **`DamageReporter`** avisa de cada golpe con la posición de la cabeza (para los números).
 - **Tipos y escenas actuales:**
@@ -107,7 +109,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 - **Interactuables actuales:**
   - `teleporter/`: `Teleporter`, pisar y aparecer en su destino; también es el recogedor de caídas;
   - `armory/`: la armería de práctica (armas y runas);
-  - `summoner/`: el invocador de enemigos de práctica (uno por tipo; su cartel muestra el nombre del enemigo);
+  - `summoner/`: el invocador de enemigos de práctica (uno por tipo, y uno de élites; su cartel muestra el nombre del enemigo);
   - `wave_bell/`: la campana que arranca y para el director de oleadas.
 
 ### Objetos y runas — `systems/upgrades/`
@@ -152,7 +154,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 
 ### Niveles — `levels/`
 - **`test_gym/test_gym.tscn`:** escena principal de pruebas. Zona de movimiento con rampas, bordes, paredes, huecos y escalones, más el pad de daño (`props/`).
-- **`test_gym/zones/combat_range.tscn`:** zona de combate a 200 m del gimnasio. Muñecos, armería, invocadores (esbirros y tiradores), campana de oleadas, plataforma escalonada, teletransportes y recogedor de caídas. Las oleadas paran al volver.
+- **`test_gym/zones/combat_range.tscn`:** zona de combate a 200 m del gimnasio. Muñecos, armería, invocadores (esbirros, tiradores y esbirros élite), campana de oleadas, plataforma escalonada, teletransportes y recogedor de caídas. Las oleadas paran al volver.
 - **En la raíz del gimnasio viven** `EnemySwarm`, `WaveDirector`, `PickupField`, `LootDropper`, `LevelUpController` y `LevelUpPanel`, `DamageNumbers`, HUD, pausa y panel de depuración.
 - **`stress/stress_test.tscn`:** prueba de rendimiento (herramienta, sin traducir). Mantiene 300 y luego 500 esbirros sobre un jugador inmortal con la espada, mide frames y física y sale. Comando en CLAUDE.md.
 

@@ -37,9 +37,20 @@ var weapons: WeaponInventory
 ## Azar del desvío de aproximación. Si no se asigna antes de entrar en el árbol, el flujo de
 ## enemigos de [code]Rng[/code].
 var rng: RandomNumberGenerator
+## Si es élite en esta vida, cómo ([method promote]); si no, [code]null[/code].
+var elite: EliteData
 
 var _stats: EnemyStats
 var _rest_scale: Vector3 = Vector3.ONE
+var _rest_mass: float = 1.0
+## Tamaño de esta vida respecto al normal (ver [member EliteData.size]).
+var _size: float = 1.0
+## Formas de colisión y marcadores que crecen con el tamaño, con su transform normal.
+var _sized: Dictionary[Node3D, Transform3D] = {}
+## Mallas del modelo (para el brillo de élite).
+var _meshes: Array[GeometryInstance3D] = []
+## Mejoras de esta vida ([method boost]); se quitan al volver a salir.
+var _boosts: Array[StatModifierSet] = []
 var _dying_left: float = 0.0
 ## Hacia dónde apartarse si otro enemigo está justo al lado (distinto para cada uno).
 var _fallback: Vector3 = Vector3.RIGHT
@@ -65,6 +76,16 @@ func setup(enemy_data: EnemyData, projectiles: ProjectilePool = null) -> void:
 func _ready() -> void:
 	_stats = stats.get_resolved(EnemyStats) as EnemyStats
 	_rest_scale = visual.scale
+	_rest_mass = mass
+	for shape: Node in find_children("*", "CollisionShape3D", true, false):
+		_sized[shape as Node3D] = (shape as Node3D).transform
+	for child: Node in get_children():
+		# Marcadores como el de los números de daño: suben con el tamaño.
+		var marker := child as Node3D
+		if marker and marker != visual and marker != weapons and not marker is CollisionObject3D and not marker is CollisionShape3D:
+			_sized[marker] = marker.transform
+	for mesh: Node in visual.find_children("*", "GeometryInstance3D", true, false):
+		_meshes.append(mesh as GeometryInstance3D)
 	_fallback = Vector3.RIGHT.rotated(Vector3.UP, float(get_instance_id() % 360))
 	if rng == null:
 		rng = Rng.stream(Rng.Stream.ENEMIES)
@@ -72,7 +93,8 @@ func _ready() -> void:
 	deactivate()
 
 
-## Lo pone en juego en [param feet], quieto y con la vida llena.
+## Lo pone en juego en [param feet], quieto, normal (sin las mejoras de su vida anterior) y con la
+## vida llena. Quien lo saca puede mejorarlo después con [method boost] o [method promote].
 func spawn(feet: Vector3) -> void:
 	# Primero vuelve a la física; luego se coloca, para que el cuerpo aparezca ahí.
 	process_mode = Node.PROCESS_MODE_INHERIT
@@ -80,19 +102,44 @@ func spawn(feet: Vector3) -> void:
 	global_position = feet
 	linear_velocity = Vector3.ZERO
 	angular_velocity = Vector3.ZERO
-	health.reset()
-	contact_hitbox.base_damage = _stats.contact_damage
-	contact_hitbox.rehit_interval = _stats.contact_interval
+	_clear_boosts()
 	contact_hitbox.reset_hits()
 	contact_hitbox.monitoring = true
 	hurtbox.monitorable = true
-	visual.scale = _rest_scale
 	_dying_left = 0.0
 	_approach_angle = deg_to_rad(rng.randf_range(-_stats.approach_spread, _stats.approach_spread))
 	if weapons:
 		for weapon: Weapon in weapons.get_weapons():
 			weapon.rearm(weapon.cooldown() * rng.randf_range(first_attack_delay.x, first_attack_delay.y))
 	reset_physics_interpolation()
+
+
+## Lo mejora hasta que vuelva al pool: aplica [param modifiers] a sus stats y a las de sus armas
+## (cada modificador adonde exista su stat) y le llena la vida. Lo usan los élites y el escalado de
+## la dificultad.
+func boost(modifiers: StatModifierSet) -> void:
+	if modifiers == null:
+		return
+	_boosts.append(modifiers)
+	for modifier: StatModifier in modifiers.stat_modifiers:
+		for target_stats: StatsComponent in _all_stats():
+			if target_stats.has_stat(modifier.stat):
+				target_stats.add_modifier(modifier, modifiers)
+	_refresh()
+
+
+## Lo hace élite hasta que vuelva al pool: con las mejoras de [param elite_data], más grande y con
+## su brillo.
+func promote(elite_data: EliteData) -> void:
+	elite = elite_data
+	boost(elite_data.stat_modifiers)
+	_resize(elite_data.size)
+	for mesh: GeometryInstance3D in _meshes:
+		mesh.material_overlay = elite_data.overlay
+
+
+func is_elite() -> bool:
+	return elite != null
 
 
 ## Lo saca del juego: invisible y fuera de la física hasta el siguiente [method spawn].
@@ -185,10 +232,49 @@ func _face(direction: Vector3, delta: float) -> void:
 func _shrink(delta: float) -> void:
 	_dying_left -= delta
 	if _dying_left > 0.0:
-		visual.scale = _rest_scale * (_dying_left / death_time)
+		visual.scale = _rest_scale * _size * (_dying_left / death_time)
 		return
 	deactivate()
 	despawned.emit(self)
+
+
+## Stats suyas y de sus armas: adonde van las mejoras.
+func _all_stats() -> Array[StatsComponent]:
+	var all: Array[StatsComponent] = [stats]
+	if weapons:
+		for weapon: Weapon in weapons.get_weapons():
+			all.append(weapon.stats)
+	return all
+
+
+## Quita las mejoras de su vida anterior y vuelve a su tamaño y aspecto normales.
+func _clear_boosts() -> void:
+	for modifiers: StatModifierSet in _boosts:
+		for target_stats: StatsComponent in _all_stats():
+			target_stats.remove_modifiers_from(modifiers)
+	_boosts.clear()
+	elite = null
+	_resize(1.0)
+	for mesh: GeometryInstance3D in _meshes:
+		mesh.material_overlay = null
+	_refresh()
+
+
+## Vida llena y daño al tocar con sus stats de ahora.
+func _refresh() -> void:
+	health.reset()
+	contact_hitbox.base_damage = _stats.contact_damage
+	contact_hitbox.rehit_interval = _stats.contact_interval
+
+
+## Cambia su tamaño a [param factor] veces el normal: formas de colisión, marcadores, modelo y masa.
+func _resize(factor: float) -> void:
+	_size = factor
+	for node: Node3D in _sized:
+		var rest := _sized[node]
+		node.transform = Transform3D(rest.basis.scaled(Vector3.ONE * factor), rest.origin * factor)
+	visual.scale = _rest_scale * factor
+	mass = _rest_mass * factor * factor * factor
 
 
 ## Sus armas dejan de atacar.

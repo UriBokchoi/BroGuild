@@ -3,7 +3,8 @@ extends Node
 ## Director de oleadas: mientras está en marcha, saca enemigos en un [EnemySwarm] alrededor de
 ## [member target] al ritmo de su [WaveData] (que sube con el tiempo y tiene picos), sin pasar del
 ## máximo a la vez. Cada enemigo aparece en el suelo, a una distancia al azar entre la mínima y la
-## máxima de los datos; si ahí no hay suelo (fuera del mapa), prueba otro punto.
+## máxima de los datos; si ahí no hay suelo (fuera del mapa), prueba otro punto. Cada uno puede
+## salir élite con la probabilidad de ese minuto ([method WaveData.elite_chance_at]).
 
 signal started
 signal stopped
@@ -85,7 +86,9 @@ func _spawn_one() -> bool:
 	var feet := _find_spawn_point()
 	if not feet.is_finite():
 		return false
-	swarm.spawn(enemy, feet)
+	var spawned := swarm.spawn(enemy, feet)
+	if rng.randf() * 100.0 < data.elite_chance_at(_elapsed):
+		spawned.promote(data.elite)
 	return true
 
 
