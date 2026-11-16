@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://systems/spawning/wave_data.gd" id="1_data"]
 [ext_resource type="Script" path="res://systems/spawning/wave_enemy.gd" id="2_entry"]
 [ext_resource type="Resource" path="res://data/enemies/swarmer.tres" id="3_swarmer"]
+[ext_resource type="Resource" path="res://data/enemies/shooter.tres" id="4_shooter"]
 
 [sub_resource type="Curve" id="Curve_rate"]
 _limits = [0.0, 20.0, 0.0, 20.0]
@@ -14,6 +15,12 @@ script = ExtResource("2_entry")
 enemy = ExtResource("3_swarmer")
 weight = 1.0
 
+[sub_resource type="Resource" id="Resource_shooter"]
+script = ExtResource("2_entry")
+enemy = ExtResource("4_shooter")
+weight = 0.12
+from_minute = 0.5
+
 [resource]
 script = ExtResource("1_data")
 spawn_rate = SubResource("Curve_rate")
@@ -23,4 +30,4 @@ peak_multiplier = 3.0
 max_alive = 250
 min_spawn_distance = 16.0
 max_spawn_distance = 24.0
-enemies = Array[ExtResource("2_entry")]([SubResource("Resource_swarmer")])
+enemies = Array[ExtResource("2_entry")]([SubResource("Resource_swarmer"), SubResource("Resource_shooter")])

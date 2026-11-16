@@ -18,11 +18,6 @@ var _blast_radius: float = 0.0
 var _blast_age: float = -1.0
 
 
-func _ready() -> void:
-	super()
-	set_process(false)
-
-
 func _process(delta: float) -> void:
 	_blast_age += delta
 	var progress := clampf(_blast_age / blast_time, 0.0, 1.0)

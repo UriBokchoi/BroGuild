@@ -26,6 +26,9 @@ extends Resource
 @export_range(0.0, 20.0, 0.1, "or_greater", "suffix:m") var climb_height: float = 0.0
 ## Desvío máximo con el que se acerca al objetivo; cada enemigo saca el suyo al aparecer.
 @export_range(0.0, 90.0, 1.0, "suffix:°") var approach_spread: float = 0.0
+## Distancia a la que se queda del objetivo (un tirador): más lejos se acerca, más cerca se aleja y
+## siempre lo mira. 0 = va hasta él.
+@export_range(0.0, 50.0, 0.5, "or_greater", "suffix:m") var keep_distance: float = 0.0
 
 @export_group("loot")
 ## Experiencia que suelta al morir.

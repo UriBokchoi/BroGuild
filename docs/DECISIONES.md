@@ -565,3 +565,40 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
     - Las mejoras de rebote son fijas por nivel. La «probabilidad de mejorar el rebote» que pidió el diseñador llegará con las rarezas y la ruleta del Hito 4.
   - **Armería y subir de nivel:** las dos armas aparecen solas, porque salen de `data/weapons/`.
 - **Por qué:** el GDD define el bastón (explosión en área al contacto) y la daga (rápida, a un objetivo, con rebote). Con el rayo por tick y el pool, cientos de proyectiles salen baratos y precisos, y un arma nueva de proyectiles solo necesita su escena de proyectil.
+
+## 2026-11-16 · Tirador a distancia y armas de enemigos
+- **Decisión:**
+  - **Los enemigos llevan armas como el jugador:**
+    - `EnemyData.weapons` es una lista de `WeaponData`. El enemigo crea su `WeaponInventory` al prepararse, con sus propias stats como las de quien la lleva.
+    - Sin `OffenseData`, el arma usa solo las suyas (`StatsComponent.find_resolved`, que no da error si falta). Un élite podrá llevar `OffenseData` para pegar más fuerte.
+    - La escena del arma dice a quién busca (`target_mask = player_hurtbox`) y la del proyectil a quién da (`hit_mask = world + player_hurtbox`). Los disparos de enemigos atraviesan a los otros enemigos.
+    - Las armas de enemigos viven en `data/enemies/weapons/`, una subcarpeta que no leen la armería ni la subida de nivel. Un test lo comprueba y exige que solo apunten al jugador.
+  - **Ciclo del arma:**
+    - `Weapon.disarm()` para el arma y corta el ataque a medias. `ProjectileWeapon` además retira sus proyectiles en vuelo.
+    - `rearm(espera)` la vuelve a poner en marcha.
+    - Al aparecer, el enemigo espera entre 0,5 y 1 vez la cadencia del arma (`first_attack_delay`, al azar). Así no dispara nada más salir y los que salen juntos no van sincronizados.
+    - **Al morir el tirador, sus disparos en vuelo desaparecen.** Es una regla clara que premia matarlo, y evita que un proyectil se quede congelado en el pool del enemigo muerto.
+  - **Búsqueda espaciada:** sin objetivo, un arma vuelve a buscar cada `search_interval` en vez de en cada tick: 0,25 s en el tirador y 0 (cada tick) en las del jugador. Con decenas de tiradores fuera de alcance se ahorran consultas de física.
+  - **Guardar la distancia:**
+    - `EnemyStats.keep_distance` (0 = va hasta el objetivo). Con ella, `EnemySteering.keep_range` se acerca si está lejos, se aleja si está cerca y frena en ±2 m (`RANGE_FADE`) para no temblar en el borde.
+    - Mantiene su desvío de aproximación, así que se reparten alrededor, y mira siempre al objetivo, también al retroceder.
+    - Con `climb_speed` 0 ya no trepa nunca. Antes, un enemigo atascado mientras caía se quedaba flotando.
+  - **El tirador:**
+
+    | Qué | Valores |
+    |---|---|
+    | Datos | `data/enemies/shooter.tres` |
+    | Vida y movimiento | 20 de vida, 4 m/s, no trepa |
+    | Distancia | se queda a 11 m |
+    | Contacto | 4 de daño |
+    | Experiencia | suelta 2 |
+    | Arma | `shooter_gun`: bola de fuego de 10 de daño cada 2,5 s, a 11 m/s, alcance 18 m, vida 2,5 s |
+
+    - Su bola va lenta y apunta adonde estás al disparar, sin adelantarse: quieto te da y moviéndote la esquivas. Seis tiradores matan en unos 6 s a un jugador quieto.
+    - Aspecto: cuerpo azul, un ojo naranja y visera. La bola es naranja con halo.
+  - **Oleadas:** el tirador sale desde el minuto 0,5 con peso 0,12 frente al 1 del esbirro (uno de cada nueve, más o menos).
+  - **Zona de combate:**
+    - Hay un invocador por tipo (`CombatRange.summoners`). El cartel de cada invocador muestra el nombre de su enemigo.
+    - El de tiradores saca 6 a 14 m.
+    - Se borró la clave `SUMMONER_TITLE`, que quedó sin uso.
+- **Por qué:** el GDD pide un tirador que obligue a moverse. Reutilizar `Weapon` y `Projectile` evita un segundo sistema de disparo. Además, cualquier enemigo (un élite, un jefe) puede llevar cualquier arma con solo datos.

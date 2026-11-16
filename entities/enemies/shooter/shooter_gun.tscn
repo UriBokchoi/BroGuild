@@ -1,0 +1,12 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://systems/combat/weapons/projectile_weapon.gd" id="1_weapon"]
+[ext_resource type="PackedScene" path="res://entities/enemies/shooter/shooter_bolt.tscn" id="2_bolt"]
+
+[node name="ShooterGun" type="Node3D"]
+script = ExtResource("1_weapon")
+target_mask = 8
+aim_height = 1.15
+search_interval = 0.25
+projectile_scene = ExtResource("2_bolt")
+prewarm_projectiles = 2

@@ -70,22 +70,24 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 - **`HealthComponent`:** muere una sola vez, puede ser inmortal (el muñeco) y `reset()` la rellena (enemigos reutilizados). Solo se procesa si regenera.
 - **Armas** (`systems/combat/weapons/`):
   - `WeaponData` lleva el `.tres` del arma con sus `WeaponStats` y un conjunto de mejoras por nivel.
-  - `Weapon` es la base: ataca sola por cadencia al más cercano desde `aim_height` y combina sus stats con las del personaje.
+  - `Weapon` es la base: ataca sola por cadencia al más cercano desde `aim_height` y combina sus stats con las del personaje (si las tiene: un enemigo no). `disarm()` la para y retira lo que tenga en juego; `rearm(espera)` la vuelve a poner en marcha. Sin objetivo, busca cada `search_interval`.
   - `TargetFinder` hace una consulta de física y apunta al centro de la hurtbox.
-  - `WeaponInventory` es el nodo del jugador que crea y quita armas.
+  - `WeaponInventory` es el nodo que crea y quita armas: lo lleva el jugador y lo crea el enemigo que tiene armas.
+  - **Las mismas armas sirven a los dos bandos:** la escena dice a quién busca (`target_mask`) y a quién da su proyectil (`hit_mask`). Las de los enemigos viven en `data/enemies/weapons/`, fuera de la armería y de la subida de nivel.
   - **Proyectiles:**
-    - `ProjectileWeapon` dispara desde un pool un `Projectile` por golpe, hacia el centro del objetivo; sus stats son `ProjectileStats` (velocidad de proyectil), de los que heredan `StaffStats` y `DaggerStats`.
+    - `ProjectileWeapon` dispara desde un pool un `Projectile` por golpe, hacia el centro del objetivo; sus stats son `ProjectileStats` (velocidad de proyectil), de los que heredan `StaffStats` y `DaggerStats`. Al desarmarla, sus proyectiles en vuelo desaparecen.
     - `Projectile` (base abstracta) vuela recto y traza un rayo por tick (no atraviesa nada, sin `Area3D`). Golpea con `DamageCalc` + hurtbox, igual que las hitbox. Cada proyectil decide en `_impact` qué hace al dar.
+    - `Bolt` (`bolt.gd`): el proyectil más simple, da al primero que toca y termina (el disparo del tirador).
 - **Espada** (`sword/`): `Sword` crea `SwordSlash`, un arco con shader y hitbox, desde un pool, inclinado hacia el objetivo.
 - **Bastón** (`staff/`): `StaffOrb` explota al tocar enemigo o pared y daña a todos en `explosion_radius` × área, con su explosión en shader.
 - **Daga** (`dagger/`): `DaggerBlade` da a uno y, si le quedan `bounces`, salta al más cercano dentro de `bounce_range` con todo su daño.
 
 ### Enemigos — `entities/enemies/` y `systems/spawning/`
-- **Tipos:** `EnemyData` (en `data/enemies/`) lleva escena y fuentes de stats: `HealthData` y `EnemyStats` (velocidad, contacto, separación y trepar).
+- **Tipos:** `EnemyData` (en `data/enemies/`) lleva escena, fuentes de stats (`HealthData` y `EnemyStats`: velocidad, contacto, separación, trepar y distancia que guarda) y armas (`weapons`, opcional).
 - **`Enemy`** (base de las escenas):
   - Es un `RigidBody3D` sin rotación que choca con el mundo, con el jugador y con otros enemigos.
-  - Fija su velocidad horizontal con `EnemySteering`: perseguir con desvío, separarse y decidir si trepa.
-  - Daña al tocar, avisa de su muerte y encoge.
+  - Fija su velocidad horizontal con `EnemySteering`: perseguir con desvío, separarse y decidir si trepa. Con `keep_distance` se queda a esa distancia (`keep_range`) mirando al objetivo.
+  - Daña al tocar y con sus armas, si tiene: las crea al prepararse, esperan un poco al aparecer (`first_attack_delay`) y paran al morir, y entonces sus disparos en vuelo desaparecen. Avisa de su muerte y encoge.
 - **`EnemySwarm`** (en el nivel) saca enemigos de un `NodePool` por tipo y los mueve en un único bucle.
   - Usa un `SpatialHash` con los vivos, marcando los apoyados para trepar, y una sola consulta de hasta `max_neighbors` vecinos.
   - Cada enemigo recalcula su rumbo cada `steering_slices` ticks; la física lo mueve en todos.
@@ -94,7 +96,8 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
   - `WaveDirector` (en el nivel) los saca alrededor del jugador, en el suelo (un rayo por intento).
 - **`DamageReporter`** avisa de cada golpe con la posición de la cabeza (para los números).
 - **Tipos y escenas actuales:**
-  - `swarmer/`: el esbirro, primer enemigo;
+  - `swarmer/`: el esbirro, rápido y frágil, ataca al tocar;
+  - `shooter/`: el tirador, se queda a distancia y dispara bolas de fuego lentas (su arma y su proyectil van en la misma carpeta);
   - `target_dummy/`: muñeco de práctica inmortal con `DpsMeter`.
 
 ### Interacción — `entities/interactables/`
@@ -102,7 +105,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 - **Interactuables actuales:**
   - `teleporter/`: `Teleporter`, pisar y aparecer en su destino; también es el recogedor de caídas;
   - `armory/`: la armería de práctica (armas y runas);
-  - `summoner/`: el invocador de enemigos de práctica;
+  - `summoner/`: el invocador de enemigos de práctica (uno por tipo; su cartel muestra el nombre del enemigo);
   - `wave_bell/`: la campana que arranca y para el director de oleadas.
 
 ### Objetos y runas — `systems/upgrades/`
@@ -145,7 +148,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 
 ### Niveles — `levels/`
 - **`test_gym/test_gym.tscn`:** escena principal de pruebas. Zona de movimiento con rampas, bordes, paredes, huecos y escalones, más el pad de daño (`props/`).
-- **`test_gym/zones/combat_range.tscn`:** zona de combate a 200 m del gimnasio. Muñecos, armería, invocador, campana de oleadas, plataforma escalonada, teletransportes y recogedor de caídas. Las oleadas paran al volver.
+- **`test_gym/zones/combat_range.tscn`:** zona de combate a 200 m del gimnasio. Muñecos, armería, invocadores (esbirros y tiradores), campana de oleadas, plataforma escalonada, teletransportes y recogedor de caídas. Las oleadas paran al volver.
 - **En la raíz del gimnasio viven** `EnemySwarm`, `WaveDirector`, `PickupField`, `LootDropper`, `LevelUpController` y `LevelUpPanel`, `DamageNumbers`, HUD, pausa y panel de depuración.
 - **`stress/stress_test.tscn`:** prueba de rendimiento (herramienta, sin traducir). Mantiene 300 y luego 500 esbirros sobre un jugador inmortal con la espada, mide frames y física y sale. Comando en CLAUDE.md.
 
@@ -172,9 +175,9 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 | 1 `world` | Geometría, mesas y pedestales | Jugador, enemigos, cámara, sensores |
 | 2 `player` | Cuerpo del jugador | Enemigos, teletransportes |
 | 3 `enemy` | Cuerpos de enemigos y muñecos | Jugador, enemigos |
-| 4 `player_hurtbox` | Donde el jugador recibe daño | Hitbox de enemigos y trampas |
-| 5 `enemy_hurtbox` | Donde los enemigos reciben daño | Armas del jugador (hitbox y búsqueda de objetivos) |
-| 6 `player_hitbox` | Tajos y proyectiles del jugador | — (ellos miran la 5) |
+| 4 `player_hurtbox` | Donde el jugador recibe daño | Hitbox de enemigos y trampas, armas y proyectiles de enemigos |
+| 5 `enemy_hurtbox` | Donde los enemigos reciben daño | Armas del jugador (hitbox, proyectiles y búsqueda de objetivos) |
+| 6 `player_hitbox` | Tajos del jugador | — (ellos miran la 5) |
 | 7 `enemy_hitbox` | Contacto de enemigos y trampas | — (miran la 4) |
 | 8 `pickup` | — (los recogibles no usan física: los mueve `PickupField`) | — |
 | 9 `interactable` | Armería, invocador… | `Interactor` del jugador |
@@ -191,7 +194,9 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 - **Un enemigo:**
   1. Crea un `.tres` `EnemyData` en `data/enemies/`.
   2. Si no reutiliza la escena de otro, crea la suya en `entities/enemies/<enemigo>/`, con raíz `Enemy`, como `swarmer.tscn`.
-  3. Traduce su nombre y descripción.
+  3. Si ataca a distancia, dale `keep_distance` y un arma en `weapons`: un `WeaponData` en `data/enemies/weapons/` cuya escena busque `player_hurtbox` (como `shooter_gun.tscn`).
+  4. Traduce su nombre y descripción (y los de su arma).
+  5. Para que salga en las oleadas, añádelo como `WaveEnemy` en el `WaveData`; para probarlo, pon otro invocador en la zona de combate.
 - **Una stat:** añade un `@export_range` en el Resource de datos que toque (`MovementData`, `OffenseData`, `WeaponStats`, `EnemyStats`…), pon su valor en el `.tres` y su fila `STAT_<NOMBRE>` en `data/i18n/strings.csv`. Un test exige la traducción.
 - **Un estado de movimiento:** crea un script en `entities/player/movement/states/` que herede de `MovementState` y añade un nodo hijo de `Movement` en `player.tscn` con su acción, prioridad y reglas.
 - **Un personaje:** crea un `.tres` `CharacterData` en `data/characters/` con sus diferencias de stats.

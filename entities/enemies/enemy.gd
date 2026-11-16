@@ -2,8 +2,10 @@ class_name Enemy
 extends RigidBody3D
 ## Enemigo: un cuerpo físico sin rotación que choca con el mundo, con el jugador y con otros
 ## enemigos. Se empujan y, con la presión de la horda, se apilan unos encima de otros, como en
-## Megabonk. Persigue al objetivo separándose un poco de los que tiene al lado ([EnemySteering]),
-## hace daño al tocar (su hitbox de contacto) y, al morir, encoge y desaparece. No se mueve solo:
+## Megabonk. Persigue al objetivo separándose un poco de los que tiene al lado ([EnemySteering]), o
+## se queda a su distancia si es de los que disparan ([member EnemyStats.keep_distance]). Hace daño
+## al tocar (su hitbox de contacto) y con sus armas, si tiene ([member EnemyData.weapons]); al
+## morir, sus armas paran, sus disparos en vuelo desaparecen y él encoge y desaparece. No se mueve solo:
 ## un [EnemySwarm] lo saca de su pool con [method spawn], fija su velocidad horizontal con
 ## [method physics_step] cada tick (la física pone la gravedad y los choques) y lo guarda cuando
 ## avisa con [signal despawned]. Sus stats salen de su [EnemyData] ([method setup]).
@@ -24,9 +26,14 @@ signal despawned(enemy: Enemy)
 @export_range(0.0, 2.0, 0.01, "suffix:s") var death_time: float = 0.15
 ## Rapidez con la que gira hacia donde va.
 @export_range(0.1, 60.0, 0.1, "suffix:1/s") var turn_speed: float = 12.0
+## Al aparecer, sus armas esperan antes del primer ataque esta parte de su espera normal, al azar
+## entre x e y: así no disparan nada más salir ni todos los que salen juntos a la vez.
+@export var first_attack_delay: Vector2 = Vector2(0.5, 1.0)
 
 ## Tipo de enemigo.
 var data: EnemyData
+## Sus armas ([member EnemyData.weapons]), o [code]null[/code] si solo ataca al tocar.
+var weapons: WeaponInventory
 ## Azar del desvío de aproximación. Si no se asigna antes de entrar en el árbol, el flujo de
 ## enemigos de [code]Rng[/code].
 var rng: RandomNumberGenerator
@@ -44,6 +51,12 @@ var _approach_angle: float = 0.0
 func setup(enemy_data: EnemyData) -> void:
 	data = enemy_data
 	stats.sources.assign(enemy_data.stat_sources)
+	if not enemy_data.weapons.is_empty():
+		weapons = WeaponInventory.new()
+		weapons.name = "Weapons"
+		weapons.wielder_stats = stats
+		weapons.starting_weapons.assign(enemy_data.weapons)
+		add_child(weapons)
 
 
 func _ready() -> void:
@@ -73,11 +86,15 @@ func spawn(feet: Vector3) -> void:
 	visual.scale = _rest_scale
 	_dying_left = 0.0
 	_approach_angle = deg_to_rad(rng.randf_range(-_stats.approach_spread, _stats.approach_spread))
+	if weapons:
+		for weapon: Weapon in weapons.get_weapons():
+			weapon.rearm(weapon.cooldown() * rng.randf_range(first_attack_delay.x, first_attack_delay.y))
 	reset_physics_interpolation()
 
 
 ## Lo saca del juego: invisible y fuera de la física hasta el siguiente [method spawn].
 func deactivate() -> void:
+	_disarm()
 	visible = false
 	process_mode = Node.PROCESS_MODE_DISABLED
 
@@ -116,7 +133,12 @@ func physics_step(
 		_shrink(delta)
 		return
 	var chase := Vector3.ZERO
-	if has_target:
+	var keeps_range := _stats.keep_distance > 0.0
+	if has_target and keeps_range:
+		chase = EnemySteering.keep_range(
+			global_position, target, _stats.move_speed, _approach_angle, _stats.keep_distance
+		)
+	elif has_target:
 		chase = EnemySteering.approach(global_position, target, _stats.move_speed, _approach_angle)
 	var push := EnemySteering.separation(global_position, neighbors, _stats.separation_radius, _fallback)
 	var desired := (chase + push * _stats.separation_weight * _stats.move_speed).limit_length(_stats.move_speed)
@@ -126,13 +148,16 @@ func physics_step(
 		vertical = maxf(vertical, _stats.climb_speed)
 	var horizontal := current.move_toward(desired, _stats.acceleration * delta)
 	linear_velocity = Vector3(horizontal.x, vertical, horizontal.z)
-	_face(horizontal, delta)
+	# Uno que guarda la distancia mira siempre a su objetivo (también al retroceder).
+	_face(target - global_position if has_target and keeps_range else horizontal, delta)
 
 
 ## ¿Quiere avanzar pero va frenado porque un enemigo apoyado le tapa el paso, y aún no está más alto
-## de lo que necesita para llegar al objetivo? Entonces trepa encima.
+## de lo que necesita para llegar al objetivo? Entonces trepa encima (si trepa).
 func _is_stuck_behind(current: Vector3, chase: Vector3, target: Vector3, footholds: PackedVector3Array) -> bool:
-	if chase.is_zero_approx() or current.length() > _stats.move_speed * EnemySteering.STUCK_SPEED:
+	if _stats.climb_speed <= 0.0 or chase.is_zero_approx():
+		return false
+	if current.length() > _stats.move_speed * EnemySteering.STUCK_SPEED:
 		return false
 	if global_position.y > target.y + _stats.climb_height:
 		return false
@@ -141,6 +166,7 @@ func _is_stuck_behind(current: Vector3, chase: Vector3, target: Vector3, foothol
 
 
 func _face(direction: Vector3, delta: float) -> void:
+	direction.y = 0.0
 	if direction.length_squared() < 0.01:
 		return
 	# Con rotation.y = θ, −Z apunta a (−sen θ, −cos θ).
@@ -157,10 +183,18 @@ func _shrink(delta: float) -> void:
 	despawned.emit(self)
 
 
+## Sus armas dejan de atacar y sus disparos en vuelo desaparecen.
+func _disarm() -> void:
+	if weapons:
+		for weapon: Weapon in weapons.get_weapons():
+			weapon.disarm()
+
+
 func _on_died() -> void:
 	# Ya no recibe ni hace daño; desaparece al terminar de encoger.
 	hurtbox.set_deferred(&"monitorable", false)
 	contact_hitbox.set_deferred(&"monitoring", false)
+	_disarm()
 	_dying_left = death_time
 	EventBus.enemy_died.emit(self)
 	died.emit(self)

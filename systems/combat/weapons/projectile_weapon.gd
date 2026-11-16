@@ -10,6 +10,8 @@ extends Weapon
 @export_range(0, 64, 1) var prewarm_projectiles: int = 4
 
 var _projectiles: NodePool
+## Proyectiles en vuelo (o explotando).
+var _flying: Array[Projectile] = []
 
 
 func _ready() -> void:
@@ -28,10 +30,22 @@ func _fire(target: Node3D, _index: int) -> void:
 	var origin := aim_origin()
 	var direction := (TargetFinder.aim_point(target) - origin).normalized()
 	var projectile := _projectiles.acquire() as Projectile
+	_flying.append(projectile)
 	projectile.launch(self, origin, direction)
+
+
+## Sus proyectiles en juego desaparecen: si muere quien la lleva, sus disparos no llegan.
+func _disarmed() -> void:
+	for projectile: Projectile in _flying.duplicate():
+		projectile.recall()
 
 
 func _create_projectile() -> Node:
 	var projectile := projectile_scene.instantiate() as Projectile
-	projectile.finished.connect(_projectiles.release.bind(projectile))
+	projectile.finished.connect(_on_projectile_finished.bind(projectile))
 	return projectile
+
+
+func _on_projectile_finished(projectile: Projectile) -> void:
+	_flying.erase(projectile)
+	_projectiles.release(projectile)

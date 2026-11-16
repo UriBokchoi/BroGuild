@@ -1,6 +1,6 @@
 class_name CombatRange
 extends Node3D
-## Zona de práctica de combate del gimnasio: muñecos, armería, invocador de enemigos, campana de
+## Zona de práctica de combate del gimnasio: muñecos, armería, invocadores de enemigos, campana de
 ## oleadas, plataforma escalonada, plataforma de vuelta y un recogedor de caídas que devuelve a la
 ## llegada ([member arrival]). Quien coloca la zona dice adónde lleva la vuelta
 ## ([member exit_destination]), dónde viven los enemigos ([member swarm]) y qué director de oleadas
@@ -12,8 +12,8 @@ extends Node3D
 @export var exit_destination: Node3D
 ## Punto de llegada a esta zona.
 @export var arrival: Node3D
-## Invocador de enemigos de práctica.
-@export var summoner: Summoner
+## Invocadores de enemigos de práctica (uno por tipo).
+@export var summoners: Array[Summoner] = []
 ## Campana que empieza y para las oleadas.
 @export var wave_bell: WaveBell
 ## Enemigos del nivel, donde salen los invocados.
@@ -25,7 +25,8 @@ extends Node3D
 func _ready() -> void:
 	exit_teleporter.destination = exit_destination
 	exit_teleporter.teleported.connect(_on_player_left)
-	summoner.swarm = swarm
+	for summoner: Summoner in summoners:
+		summoner.swarm = swarm
 	if director:
 		wave_bell.use_director(director)
 

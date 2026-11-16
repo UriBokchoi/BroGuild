@@ -9,7 +9,8 @@ extends Node3D
 
 signal finished
 
-## Capas que detiene: las hurtbox de los enemigos y el mundo.
+## Capas que detiene: las hurtbox de sus objetivos ([code]enemy_hurtbox[/code] o
+## [code]player_hurtbox[/code]) y el mundo.
 @export_flags_3d_physics var hit_mask: int = 0
 
 ## Arma que lo lanzó (su daño, sus stats y las de quien la lleva).
@@ -94,6 +95,11 @@ func renew_life() -> void:
 	_life = weapon.duration()
 
 
+## Lo retira antes de tiempo (su arma dejó de atacar): termina sin hacer nada más.
+func recall() -> void:
+	_finish()
+
+
 ## Termina: se oculta y vuelve al pool.
 func _finish() -> void:
 	_stop()
@@ -114,9 +120,10 @@ func _launched() -> void:
 	pass
 
 
-## Deja de volar (para explotar o terminar).
+## Deja de volar y de animarse, y se oculta.
 func _stop() -> void:
 	set_physics_process(false)
+	set_process(false)
 	visible = false
 
 

@@ -16,6 +16,9 @@ const SETTLED_SPEED: float = 0.5
 ## Distancia al objetivo a partir de la que el ángulo de aproximación empieza a desaparecer, para
 ## que al final vayan derechos a él.
 const APPROACH_FADE: float = 4.0
+## Margen alrededor de la distancia que guarda un enemigo a distancia: dentro, frena poco a poco
+## (así no tiembla en el borde) y fuera va a toda velocidad.
+const RANGE_FADE: float = 2.0
 
 
 ## Velocidad de [param speed] hacia [param to] en el plano XZ (cero si ya está encima).
@@ -32,6 +35,13 @@ static func approach(from: Vector3, to: Vector3, speed: float, angle: float) -> 
 	var flat := Vector2(to.x - from.x, to.z - from.z).length()
 	var fade := clampf(flat / APPROACH_FADE, 0.0, 1.0)
 	return seek(from, to, speed).rotated(Vector3.UP, angle * fade)
+
+
+## Como [method approach], pero se queda a [param distance] de [param to] (en el plano XZ): más lejos
+## se acerca y más cerca se aleja, frenando en [constant RANGE_FADE] alrededor de esa distancia.
+static func keep_range(from: Vector3, to: Vector3, speed: float, angle: float, distance: float) -> Vector3:
+	var factor := clampf((_flat_distance(from, to) - distance) / RANGE_FADE, -1.0, 1.0)
+	return approach(from, to, speed, angle) * factor
 
 
 ## Empuje en el plano XZ para alejarse de [param neighbors] que estén a menos de [param radius]

@@ -77,3 +77,9 @@ func test_stat_changed_arrives_after_the_copy_is_updated() -> void:
 func test_missing_data_type_is_an_error() -> void:
 	assert_null(_stats.get_resolved(StatModifier))
 	assert_push_error("no hay datos")
+
+
+func test_optional_data_type_is_null_without_error() -> void:
+	assert_null(_stats.find_resolved(StatModifier))
+	assert_not_null(_stats.find_resolved(FixtureData))
+	assert_push_error_count(0)
