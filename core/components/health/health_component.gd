@@ -33,11 +33,13 @@ func _ready() -> void:
 		rng = Rng.stream(Rng.Stream.COMBAT)
 	_current = _data.max_health
 	stats.stat_changed.connect(_on_stat_changed)
+	# Solo procesa si regenera: hay cientos de enemigos sin regeneración.
+	set_physics_process(_data.health_regen > 0.0)
 	health_changed.emit(_current, _data.max_health)
 
 
 func _physics_process(delta: float) -> void:
-	if _data.health_regen > 0.0 and _current < _data.max_health:
+	if _current < _data.max_health:
 		heal(_data.health_regen * delta)
 
 
@@ -91,6 +93,8 @@ func reset() -> void:
 
 
 func _on_stat_changed(stat: StringName, value: float, previous: float) -> void:
+	if stat == &"health_regen":
+		set_physics_process(value > 0.0)
 	if stat != &"max_health":
 		return
 	# Subir la vida máxima cura la diferencia; bajarla solo recorta la actual.

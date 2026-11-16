@@ -457,3 +457,34 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - **Rutas antiguas:** las entradas anteriores de este documento citan las de entonces.
   - **Mapa:** nuevo `docs/MAPA.md`, con para qué sirve cada carpeta y sistema, las señales del `EventBus`, las capas de física y recetas para añadir contenido. CLAUDE.md lo enlaza y pide actualizarlo al crear, mover o quitar un sistema.
 - **Por qué:** el diseñador pidió ordenar los archivos y dejar escrita la intención de cada cosa. En `entities/player/` había doce scripts sueltos de tres temas distintos.
+
+## 2026-11-16 · Director de oleadas, prueba de estrés y rendimiento del enjambre
+- **Decisión:**
+  - **Oleadas:**
+    - `WaveData` (`data/waves/test_gym.tres`) lleva:
+      - una curva de enemigos por segundo según los minutos (0,6 al empezar, 1,5 a los 2 min, 3,5 a los 5, 7 a los 10 y 12 a los 20);
+      - un pico ×3 los últimos 10 s de cada minuto;
+      - 250 enemigos a la vez como mucho;
+      - aparición a 16–24 m;
+      - `WaveEnemy` con peso y minuto de entrada.
+    - `WaveDirector` acumula la fracción de enemigos de cada tick y los saca en el suelo (un rayo hacia abajo por intento, en un punto al azar del flujo `WAVES`). En el máximo no acumula.
+    - En la zona de práctica, la **campana** (`WaveBell`) arranca o para el director; parar retira a los enemigos. Al volver por la plataforma, las oleadas paran.
+    - El `Interactor` vuelve a avisar si el texto del interactuable enfocado cambia (la campana).
+  - **Prueba de estrés** (`levels/stress/stress_test.tscn`):
+    - Mantiene 300 y luego 500 esbirros sobre un jugador quieto, inmortal y con la espada.
+    - Calienta 5 s y mide 8 s por fase, sin V-Sync y con semilla fija.
+    - Escribe la media por frame, el 1 % más lento y el tiempo de física, y sale.
+  - **Rendimiento:** la primera medición dio 300 enemigos a 22 fps y 500 a 7 fps (con ventana). Un banco headless mostró que el cuello de botella era el bucle del enjambre en GDScript: 14 ms por tick con 300; Jolt, unos 6 ms. Cambios:
+    1. `SpatialHash` sin diccionarios: se reconstruye cada tick ordenando por celdas en arrays empaquetados. Con marcas por elemento, tope de resultados, exclusión por índice y celdas que crecen si todo está muy disperso.
+    2. Una sola consulta de vecinos por enemigo; los apoyados para trepar van marcados, sin un segundo hash.
+    3. Como mucho 8 vecinos por enemigo (`max_neighbors`).
+    4. El rumbo de cada enemigo se recalcula cada 3 ticks (`steering_slices`), repartidos, con el delta multiplicado.
+    5. `HitboxComponent` apunta con `area_entered`/`area_exited` lo que toca y solo se procesa mientras toca algo. Su reloj de golpes repetidos son los ticks de física del motor.
+    6. `HealthComponent` solo se procesa si regenera.
+    - El bucle pasó a 3 ms con 300 y 5 ms con 500.
+    - Bajar las iteraciones del solver de Jolt en caliente no cambió nada medible, así que no se toca la configuración de física.
+  - **Medición tras los cambios** (RX 6800 XT, con ventana):
+    - **300 enemigos:** 7,7 ms por frame (130 fps); el 1 % más lento, 17,9 ms; física, 10 ms por frame.
+    - **500 enemigos:** 17,5 ms por frame (57 fps); el 1 % más lento, 34,8 ms; física, 15,3 ms.
+  - **Queda para cuando haga falta:** dibujar los enemigos con `MultiMesh`, menos ticks de steering y ajustar Jolt.
+- **Por qué:** el ROADMAP pide el director con la curva en datos y una escena de estrés con fps medidos, y CLAUDE.md pide 60 fps con 300+ enemigos. Medir antes de optimizar señaló el bucle en GDScript, no el render ni la física.

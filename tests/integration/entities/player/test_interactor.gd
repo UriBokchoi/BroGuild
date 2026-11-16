@@ -54,6 +54,15 @@ func test_leaving_clears_the_prompt() -> void:
 	assert_signal_emitted_with_parameters(EventBus, "interaction_prompt_changed", [&""])
 
 
+func test_a_prompt_that_changes_while_near_is_shown_again() -> void:
+	var interactable := _add_interactable(Vector3(0.8, 0.0, 0.0), &"START")
+	await wait_physics_frames(6)
+	watch_signals(EventBus)
+	interactable.prompt_key = &"STOP"
+	await wait_physics_frames(3)
+	assert_signal_emitted_with_parameters(EventBus, "interaction_prompt_changed", [&"STOP"])
+
+
 func _add_interactable(at: Vector3, prompt: StringName) -> Interactable:
 	var interactable := Interactable.new()
 	interactable.collision_layer = INTERACTABLE_LAYER

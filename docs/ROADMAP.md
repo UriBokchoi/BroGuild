@@ -41,7 +41,7 @@
 - [x] Armas: `WeaponData` (stats del arma y mejoras por nivel) y base de arma automática (cadencia y objetivo); la espada (cuerpo a cuerpo)
 - [x] Zona de práctica de combate en el gimnasio: teletransporte de ida y vuelta, muñecos (cuentan como enemigos, no mueren ni se mueven, muestran su DPS) y armería para equipar, quitar y cambiar de nivel las armas; números de daño (blancos, críticos amarillos y más grandes)
 - [x] Enemigo cuerpo a cuerpo con `EnemyData`, steering simple y pooling; barra de vida en el HUD (la del jugador, hecha con «Vida, daño y muerte»); invocador de enemigos en la zona de práctica
-- [ ] Director de oleadas en la zona de pruebas (curva en datos) y escena de estrés con 300 y 500 enemigos y fps medidos (se repite al cerrar cada hito)
+- [x] Director de oleadas en la zona de pruebas (curva en datos) y escena de estrés con 300 y 500 enemigos y fps medidos (se repite al cerrar cada hito). Primera medición: 300 a 130 fps y 500 a 57 fps (RX 6800 XT, ver DECISIONES)
 - [ ] Experiencia: gemas atraídas por el radio de recogida, niveles con curva en datos (la cámara ya se aleja con el nivel)
 - [ ] Subir de nivel: elegir 1 de 3 entre armas y runas nuevas o mejorarlas; 4 ranuras de armas y 4 de runas, nivel máximo 5
 - [ ] Runas: `RuneData` (modificadores por nivel) y las 5 iniciales: Fuerza (daño), Amplitud (área), Prisa (velocidad de ataque), Vigor (vida) y Multiplicidad (cantidad de proyectiles)

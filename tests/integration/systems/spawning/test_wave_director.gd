@@ -1,0 +1,90 @@
+extends GutTest
+## WaveDirector con física real: en marcha saca enemigos en el suelo a la distancia de sus datos,
+## sin pasar del máximo; parado no saca ninguno y puede retirar a los que hay.
+
+const SWARMER := preload("res://data/enemies/swarmer.tres")
+
+var _target: Node3D
+var _swarm: EnemySwarm
+var _director: WaveDirector
+
+
+func before_each() -> void:
+	_add_ground()
+	_target = Node3D.new()
+	add_child_autofree(_target)
+	_swarm = EnemySwarm.new()
+	add_child_autofree(_swarm)
+	_director = WaveDirector.new()
+	_director.data = _wave_data(60.0, 5)
+	_director.swarm = _swarm
+	_director.target = _target
+	_director.rng = RandomNumberGenerator.new()
+	_director.rng.seed = 3
+	add_child_autofree(_director)
+
+
+func test_does_nothing_until_started() -> void:
+	await wait_physics_frames(10)
+	assert_eq(_swarm.active_count(), 0)
+
+
+func test_spawns_on_the_ground_at_the_data_distance() -> void:
+	_director.start()
+	await wait_physics_frames(3)
+	assert_gt(_swarm.active_count(), 0)
+	for enemy: Enemy in _swarm.get_active():
+		var flat := Vector2(enemy.global_position.x, enemy.global_position.z).length()
+		assert_between(flat, 9.9, 15.1, "entre la distancia mínima y la máxima")
+
+
+func test_never_goes_over_the_max_alive() -> void:
+	_director.start()
+	await wait_physics_frames(30)
+	assert_eq(_swarm.active_count(), 5)
+
+
+func test_stop_clears_the_enemies() -> void:
+	_director.start()
+	await wait_physics_frames(5)
+	_director.stop()
+	assert_false(_director.is_running())
+	assert_eq(_swarm.active_count(), 0)
+	await wait_physics_frames(5)
+	assert_eq(_swarm.active_count(), 0, "parado no saca más")
+
+
+func test_without_ground_nobody_spawns() -> void:
+	_target.position = Vector3(500.0, 0.0, 500.0)
+	_director.start()
+	await wait_physics_frames(10)
+	assert_eq(_swarm.active_count(), 0)
+
+
+func _wave_data(rate: float, max_alive: int) -> WaveData:
+	var data := WaveData.new()
+	var curve := Curve.new()
+	curve.max_value = 100.0
+	curve.add_point(Vector2(0.0, rate))
+	curve.add_point(Vector2(1.0, rate))
+	data.spawn_rate = curve
+	data.max_alive = max_alive
+	data.min_spawn_distance = 10.0
+	data.max_spawn_distance = 15.0
+	var entry := WaveEnemy.new()
+	entry.enemy = SWARMER
+	entry.weight = 1.0
+	data.enemies = [entry]
+	return data
+
+
+func _add_ground() -> void:
+	var ground := StaticBody3D.new()
+	ground.collision_layer = PhysicsLayers.mask(PhysicsLayers.WORLD)
+	var box := BoxShape3D.new()
+	box.size = Vector3(80.0, 1.0, 80.0)
+	var shape := CollisionShape3D.new()
+	shape.shape = box
+	shape.position = Vector3(0.0, -0.5, 0.0)
+	ground.add_child(shape)
+	add_child_autofree(ground)

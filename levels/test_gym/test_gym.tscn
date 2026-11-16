@@ -16,6 +16,8 @@
 [ext_resource type="Script" path="res://vfx/juice/damage_numbers/damage_numbers.gd" id="14_damage_numbers"]
 [ext_resource type="Resource" path="res://data/vfx/damage_numbers.tres" id="15_number_style"]
 [ext_resource type="Script" path="res://systems/spawning/enemy_swarm.gd" id="16_swarm"]
+[ext_resource type="Script" path="res://systems/spawning/wave_director.gd" id="17_director"]
+[ext_resource type="Resource" path="res://data/waves/test_gym.tres" id="18_waves"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_lgb4e"]
 
@@ -71,10 +73,17 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, -2.5)
 script = ExtResource("16_swarm")
 target = NodePath("../Player")
 
-[node name="CombatRange" parent="." node_paths=PackedStringArray("exit_destination", "swarm") instance=ExtResource("13_combat_range")]
+[node name="WaveDirector" type="Node" parent="." node_paths=PackedStringArray("swarm", "target")]
+script = ExtResource("17_director")
+data = ExtResource("18_waves")
+swarm = NodePath("../EnemySwarm")
+target = NodePath("../Player")
+
+[node name="CombatRange" parent="." node_paths=PackedStringArray("exit_destination", "swarm", "director") instance=ExtResource("13_combat_range")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 200, 0, 0)
 exit_destination = NodePath("../MovementArrival")
 swarm = NodePath("../EnemySwarm")
+director = NodePath("../WaveDirector")
 
 [node name="Geometry" type="Node3D" parent="." unique_id=361505001]
 
