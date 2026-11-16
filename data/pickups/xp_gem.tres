@@ -2,6 +2,30 @@
 
 [ext_resource type="Script" path="res://entities/pickups/pickup_data.gd" id="1_data"]
 [ext_resource type="PackedScene" path="res://entities/pickups/xp_gem/xp_gem.tscn" id="2_scene"]
+[ext_resource type="Script" path="res://entities/pickups/pickup_tier.gd" id="3_tier"]
+
+[sub_resource type="Resource" id="Resource_blue"]
+script = ExtResource("3_tier")
+color = Color(0.3, 0.75, 1, 1)
+scale = 1.0
+
+[sub_resource type="Resource" id="Resource_green"]
+script = ExtResource("3_tier")
+min_amount = 5.0
+color = Color(0.35, 1, 0.45, 1)
+scale = 1.25
+
+[sub_resource type="Resource" id="Resource_red"]
+script = ExtResource("3_tier")
+min_amount = 25.0
+color = Color(1, 0.3, 0.3, 1)
+scale = 1.5
+
+[sub_resource type="Resource" id="Resource_purple"]
+script = ExtResource("3_tier")
+min_amount = 100.0
+color = Color(0.8, 0.4, 1, 1)
+scale = 1.8
 
 [resource]
 script = ExtResource("1_data")
@@ -12,3 +36,6 @@ start_speed = 4.0
 acceleration = 40.0
 collect_radius = 0.6
 target_height = 0.9
+merge_radius = 2.5
+merge_count = 5
+tiers = Array[ExtResource("3_tier")]([SubResource("Resource_blue"), SubResource("Resource_green"), SubResource("Resource_red"), SubResource("Resource_purple")])
