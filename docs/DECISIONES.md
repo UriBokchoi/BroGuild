@@ -528,3 +528,21 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - **Armería de práctica:** muestra armas y runas en dos secciones con la misma fila (`ArmoryRow` trabaja con `ItemData`). Para una runa, el panel de la derecha muestra todas las stats del jugador, con lo que cambian sus runas resaltado.
   - **Orden del ROADMAP:** las runas se hicieron antes que «Subir de nivel», para que la elección de 1 de 3 tenga opciones.
 - **Por qué:** el GDD define las runas como pasivas que suben stats principales con cada nivel. Con modificadores en datos, añadir una runa es un `.tres`, y la base común deja tratar igual a armas y runas en la elección, el Archivo y la armería.
+
+## 2026-11-16 · Subir de nivel: elegir 1 de 3
+- **Decisión:**
+  - **Datos:** `LevelUpData` (`data/progression/level_up.tres`): 3 opciones, 4 ranuras de armas y 4 de runas, y las carpetas de las que salen (más adelante, solo lo desbloqueado).
+  - **Qué se ofrece** (`LevelUpOffer`, lógica pura):
+    - lo que ya lleva y no está al máximo, un nivel más;
+    - lo nuevo, solo si queda ranura de su tipo;
+    - opciones distintas, todas con el mismo peso por ahora (las rarezas son del Hito 4).
+    - El azar es el del flujo `GAMBLE`, reproducible con semilla.
+  - **Flujo** (`LevelUpController`):
+    - escucha `player_leveled_up` y cuenta las elecciones pendientes; si se suben varios niveles de golpe, elección tras elección (la siguiente se abre diferida, fuera de la señal de la carta pulsada);
+    - si no queda nada que ofrecer, no pregunta;
+    - aplica la elegida: añadir el arma o subirla, o poner la runa a su nivel.
+  - **Interfaz** (`LevelUpPanel`):
+    - pausa, pide el cursor y muestra una carta por opción: tipo, nombre, «Nuevo» o «Nv. a → b», descripción y lo que mejora (`ModifierFormat`, p. ej. «+10 % Daño»);
+    - Esc no la salta: si abriera la pausa, al cerrarla el juego seguiría con las cartas delante.
+  - **`ItemData`** gana `kind_key()` y `level_modifiers(level)` para describir cualquier objeto igual.
+- **Por qué:** el GDD pide elegir 1 de 3 entre armas y runas nuevas o mejorarlas, con 4 ranuras de cada y nivel máximo 5. La ruleta, el reroll y el doble o nada del Hito 4 se montan encima de esta elección y del mismo flujo de azar.

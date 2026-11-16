@@ -101,10 +101,14 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
   - `wave_bell/`: la campana que arranca y para el director de oleadas.
 
 ### Objetos y runas — `systems/upgrades/`
-- **`ItemData`** es la base de lo que el jugador lleva y sube de nivel: armas (`WeaponData`) y runas (`RuneData`). Lleva id, nombre, descripción y `max_level()`. La usan la armería y la usarán la elección al subir de nivel y el Archivo.
+- **`ItemData`** es la base de lo que el jugador lleva y sube de nivel: armas (`WeaponData`) y runas (`RuneData`). Lleva id, nombre, descripción, `max_level()`, `kind_key()` (arma o runa) y `level_modifiers(level)` (lo que mejora cada nivel). La usan la armería y la elección al subir de nivel, y la usará el Archivo.
 - **Runas** (`runes/`):
   - `RuneData` (en `data/runes/`) lleva un `StatModifierSet` por nivel, acumulativos, sobre las stats del jugador; el nivel máximo es cuántos haya.
   - `RuneInventory` (en el jugador) aplica y quita esos modificadores al subir, bajar o quitar una runa.
+- **Subir de nivel** (`level_up/`):
+  - `LevelUpData` (`data/progression/level_up.tres`): número de opciones, ranuras de armas y de runas, y carpetas de las que salen.
+  - `LevelUpOffer` (lógica pura, con el azar inyectado) elige las opciones: subir lo que lleva sin pasar del máximo, o algo nuevo si queda ranura de su tipo.
+  - `LevelUpController` (en el nivel) escucha `player_leveled_up`, abre `LevelUpPanel` (pausa y cartas, en `ui/menus/level_up/`) y aplica la elegida a las armas o runas del jugador. Usa el flujo `GAMBLE` de `Rng`: la ruleta del Hito 4 irá encima.
 
 ### Botín y progresión — `entities/pickups/` y `systems/progression/`
 - **Recogibles:**
@@ -128,7 +132,8 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 - **`hud/`:** vida, stamina, experiencia y nivel (arriba) y aviso de interacción. Escuchan el `EventBus`.
 - **`menus/pause/`:** menú de pausa con todas las stats del jugador.
 - **`menus/armory/`:** panel de la armería.
-- **`stats/`:** `StatsView`, la lista de stats de cualquier `StatsComponent` (la usan la pausa y la armería), y `StatFormat`.
+- **`menus/level_up/`:** elección al subir de nivel (`LevelUpPanel` y sus `LevelUpCard`).
+- **`stats/`:** `StatsView`, la lista de stats de cualquier `StatsComponent` (la usan la pausa y la armería); `StatFormat`, el formato de un valor; y `ModifierFormat`, que describe un modificador («+10 % Daño»).
 - **`debug/`:** panel F3 con secciones (`DebugSection`); no se traduce.
 - **`theme/`:** el tema global, generado por `tools/gen_themes.gd`.
 - **`mouse_capture.gd`:** único dueño del modo del ratón.
@@ -136,7 +141,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 ### Niveles — `levels/`
 - **`test_gym/test_gym.tscn`:** escena principal de pruebas. Zona de movimiento con rampas, bordes, paredes, huecos y escalones, más el pad de daño (`props/`).
 - **`test_gym/zones/combat_range.tscn`:** zona de combate a 200 m del gimnasio. Muñecos, armería, invocador, campana de oleadas, plataforma escalonada, teletransportes y recogedor de caídas. Las oleadas paran al volver.
-- **En la raíz del gimnasio viven** `EnemySwarm`, `WaveDirector`, `PickupField`, `LootDropper`, `DamageNumbers`, HUD, pausa y panel de depuración.
+- **En la raíz del gimnasio viven** `EnemySwarm`, `WaveDirector`, `PickupField`, `LootDropper`, `LevelUpController` y `LevelUpPanel`, `DamageNumbers`, HUD, pausa y panel de depuración.
 - **`stress/stress_test.tscn`:** prueba de rendimiento (herramienta, sin traducir). Mantiene 300 y luego 500 esbirros sobre un jugador inmortal con la espada, mide frames y física y sale. Comando en CLAUDE.md.
 
 ## Señales del `EventBus`
@@ -152,7 +157,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 | `enemy_died` (el propio enemigo) | `Enemy` | `LootDropper` (y más adelante el Archivo) |
 | `pickup_collected` | `PickupField` | `ExperienceComponent` (la recompensa `experience`) |
 | `player_xp_changed` | `Player` | `XpBar` |
-| `player_leveled_up` | `Player` | (nadie aún: elegir 1 de 3) |
+| `player_leveled_up` | `Player` | `LevelUpController` |
 | `interaction_prompt_changed` | `Interactor` | `InteractionPrompt` |
 
 ## Capas de física (`core/physics_layers.gd`)
