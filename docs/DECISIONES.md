@@ -447,3 +447,13 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - **Esbirro:** separación 0,3; trepa a 3,5 m/s hasta 1,5 m sobre el objetivo; desvío de 25°.
   - **Visto en las pruebas:** la horda empuja un poco al jugador (unos 0,5 m/s con 40 encima): el cuerpo del jugador sale de los solapes.
 - **Por qué:** el diseñador pidió que los enemigos choquen con él y entre ellos sin hacerse daño y que se puedan acumular, mirando Megabonk. Allí los enemigos se apilan en una masa que avanza hacia el jugador. Con cuerpos físicos el apilado sale de la física y el retroceso de las armas será un impulso.
+
+## 2026-11-16 · Organización del jugador y mapa del código
+- **Decisión:**
+  - **Movimiento del jugador:** `movement_context.gd`, `movement_data.gd`, `wall_sensor.gd`, `ledge_sensor.gd` y `states/` pasan a `entities/player/movement/`.
+  - **Lo que muestra el cuerpo:** `body_crouch.gd`, `body_facing.gd`, `dash_jump_cue.gd` y `speed_trail.gd` pasan a `entities/player/feedback/`.
+  - **Líneas de velocidad:** el shader pasa de `vfx/shaders/` a `vfx/speed_lines/`, junto a su escena. En `vfx/shaders/` quedan solo los shaders compartidos.
+  - **Tests:** se movieron igual, porque replican las rutas.
+  - **Rutas antiguas:** las entradas anteriores de este documento citan las de entonces.
+  - **Mapa:** nuevo `docs/MAPA.md`, con para qué sirve cada carpeta y sistema, las señales del `EventBus`, las capas de física y recetas para añadir contenido. CLAUDE.md lo enlaza y pide actualizarlo al crear, mover o quitar un sistema.
+- **Por qué:** el diseñador pidió ordenar los archivos y dejar escrita la intención de cada cosa. En `entities/player/` había doce scripts sueltos de tres temas distintos.

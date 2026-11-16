@@ -2,7 +2,7 @@ extends GutTest
 ## SlideState: tirón de la pendiente y qué pasa sin suelo (el resto, con física real, en los tests
 ## de integración del jugador).
 
-const ContextFixture := preload("res://tests/unit/entities/player/states/movement_context_fixture.gd")
+const ContextFixture := preload("res://tests/unit/entities/player/movement/states/movement_context_fixture.gd")
 const SLOPE := deg_to_rad(15.0)
 const SLIDE_GRAVITY := 30.0
 

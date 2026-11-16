@@ -2,7 +2,7 @@ extends GutTest
 ## DashJumpState: solo justo después de un dash en el suelo, con stamina; salta recuperando la
 ## velocidad del dash y gasta la ventana.
 
-const ContextFixture := preload("res://tests/unit/entities/player/states/movement_context_fixture.gd")
+const ContextFixture := preload("res://tests/unit/entities/player/movement/states/movement_context_fixture.gd")
 const DASH_SPEED := 25.0
 const WINDOW := 0.15
 

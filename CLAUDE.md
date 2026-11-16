@@ -6,6 +6,7 @@ Proyecto a largo plazo: se va a ampliar durante meses, así que la arquitectura 
 - Diseño: `docs/GDD.md` — léelo antes de tocar gameplay.
 - Plan: `docs/ROADMAP.md` — la tarea actual es la primera casilla sin marcar.
 - Decisiones de arquitectura: `docs/DECISIONES.md` (créalo si no existe; fecha, decisión y por qué).
+- Mapa del código: `docs/MAPA.md` — para qué sirve cada carpeta y sistema, cómo se conectan (señales, capas) y cómo añadir contenido. Léelo para orientarte y actualízalo en el mismo commit cuando crees, muevas o quites un sistema o una carpeta.
 
 ## Cómo trabajamos
 - Háblame en español, directo y breve. Identificadores de código en inglés; comentarios y documentación en español.
@@ -91,7 +92,7 @@ docs/        GDD.md, ROADMAP.md, DECISIONES.md
 addons/      solo GUT (tests)
 autoload/    EventBus, RunState, Rng, Audio, Save
 core/        piezas genéricas: state_machine/, stats/, components/, pooling/, weighted_table.gd
-entities/    player/ (+ states/), enemies/, pickups/, interactables/
+entities/    player/ (movement/ con states/, feedback/, camera/, stamina/, characters/), enemies/, pickups/, interactables/
 systems/     combat/, gamble/, upgrades/, spawning/, progression/
 data/        .tres de balance: player/ (stats básicas), characters/, weapons/, enemies/, upgrades/, rarities/, i18n/
 ui/          hud/, menus/, widgets/, theme
@@ -110,7 +111,7 @@ Escena, script y recursos propios de una feature van juntos en su carpeta. El sc
 - Para probar un autoload sin tocar el global, instancia su script: `const RngService := preload("res://autoload/rng.gd")`.
 - Los datos de prueba van junto a sus tests, sin prefijo `test_` (p. ej. `tests/unit/core/stats/stats_test_data.gd`). Ninguna constante de un test puede empezar por `Test`: GUT la toma por una clase de test interna y avisa (la validación falla).
 - Con física real, no cuentes ticks exactos: en un bucle, cada `await wait_physics_frames(1)` avanza unos 2 ticks. Comprueba estados en momentos con margen y deja que los resultados no dependan de un tick concreto.
-- Para probar estados de movimiento sin la escena del jugador: `tests/unit/entities/player/states/movement_context_fixture.gd` (contexto con stamina real y máquina con Suelo y Aire).
+- Para probar estados de movimiento sin la escena del jugador: `tests/unit/entities/player/movement/states/movement_context_fixture.gd` (contexto con stamina real y máquina con Suelo y Aire).
 - El *feel* no se testea: lo pruebo yo jugando.
 
 ## Nunca
