@@ -19,24 +19,30 @@ signal hit(hurtbox: HurtboxComponent, amount: float)
 ## Azar del crítico. Si no se asigna antes de entrar en el árbol, el flujo de combate de [code]Rng[/code].
 var rng: RandomNumberGenerator
 
-var _clock: float = 0.0
-## Último golpe a cada objetivo (por id de instancia, para no retener nodos ya liberados).
+## Último golpe a cada objetivo (por id de instancia, para no retener nodos ya liberados), en
+## segundos de física (ver [method _now]).
 var _last_hit_at: Dictionary[int, float] = {}
+## Hurtbox que toca ahora, según las señales de entrada y salida. Solo se procesa mientras toca
+## alguna: cientos de enemigos llevan una hitbox de contacto que casi nunca toca nada.
+var _touching: Array[HurtboxComponent] = []
 
 
 func _ready() -> void:
 	monitorable = false
+	area_entered.connect(_on_area_entered)
+	area_exited.connect(_on_area_exited)
+	set_physics_process(false)
 	if rng == null:
 		rng = Rng.stream(Rng.Stream.COMBAT)
 
 
-func _physics_process(delta: float) -> void:
-	_clock += delta
+func _physics_process(_delta: float) -> void:
 	if not monitoring:
+		_touching.clear()
+		set_physics_process(false)
 		return
-	for area: Area3D in get_overlapping_areas():
-		var hurtbox := area as HurtboxComponent
-		if hurtbox and _can_hit(hurtbox):
+	for hurtbox: HurtboxComponent in _touching:
+		if _can_hit(hurtbox):
 			_hit(hurtbox)
 
 
@@ -49,11 +55,31 @@ func _can_hit(hurtbox: HurtboxComponent) -> bool:
 	var id := hurtbox.get_instance_id()
 	if not _last_hit_at.has(id):
 		return true
-	return rehit_interval > 0.0 and _clock - _last_hit_at[id] >= rehit_interval
+	return rehit_interval > 0.0 and _now() - _last_hit_at[id] >= rehit_interval
+
+
+func _on_area_entered(area: Area3D) -> void:
+	var hurtbox := area as HurtboxComponent
+	if hurtbox and not _touching.has(hurtbox):
+		_touching.append(hurtbox)
+		set_physics_process(true)
+
+
+func _on_area_exited(area: Area3D) -> void:
+	var hurtbox := area as HurtboxComponent
+	if hurtbox:
+		_touching.erase(hurtbox)
+		set_physics_process(not _touching.is_empty())
+
+
+## Segundos de física desde que arrancó el juego: el reloj de los golpes repetidos, que no depende de
+## si esta hitbox se procesa o no.
+static func _now() -> float:
+	return float(Engine.get_physics_frames()) / Engine.physics_ticks_per_second
 
 
 func _hit(hurtbox: HurtboxComponent) -> void:
-	_last_hit_at[hurtbox.get_instance_id()] = _clock
+	_last_hit_at[hurtbox.get_instance_id()] = _now()
 	var offense: OffenseData = null
 	if attacker_stats:
 		offense = attacker_stats.get_resolved(OffenseData) as OffenseData

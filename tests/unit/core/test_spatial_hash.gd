@@ -40,3 +40,31 @@ func test_clear_empties_it() -> void:
 	_hash.clear()
 	assert_eq(_hash.size(), 0)
 	assert_eq(_hash.items_near(Vector3.ZERO, 100.0).size(), 0)
+
+
+func test_tags_and_positions_are_read_by_index() -> void:
+	var tagged := RefCounted.new()
+	var index := _hash.insert(tagged, Vector3(0.5, 0.0, 0.5), 7)
+	assert_eq(_hash.tag_at(index), 7)
+	assert_eq(_hash.position_at(index), Vector3(0.5, 0.0, 0.5))
+	assert_same(_hash.item_at(index), tagged)
+	assert_has(_hash.indices_near(Vector3.ZERO, 1.0), index)
+
+
+func test_limit_stops_after_enough_results() -> void:
+	for i: int in 10:
+		_hash.insert(RefCounted.new(), Vector3(0.1 * i, 0.0, 0.0))
+	assert_eq(_hash.indices_near(Vector3.ZERO, 2.0, -1, 4).size(), 4)
+
+
+func test_excludes_by_index() -> void:
+	var first := _hash.indices_near(Vector3.ZERO, 0.5)
+	assert_eq(first.size(), 1)
+	assert_eq(_hash.indices_near(Vector3.ZERO, 0.5, first[0]).size(), 0)
+
+
+func test_very_spread_items_still_work_with_bigger_cells() -> void:
+	var far := RefCounted.new()
+	_hash.insert(far, Vector3(5000.0, 0.0, -5000.0))
+	assert_has(_hash.items_near(Vector3(4999.5, 0.0, -5000.0), 1.0), far)
+	assert_has(_hash.items_near(Vector3.ZERO, 0.5), _a, "lo cercano sigue encontrándose")
