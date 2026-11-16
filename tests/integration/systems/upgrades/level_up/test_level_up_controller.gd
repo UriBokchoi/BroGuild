@@ -1,7 +1,7 @@
 extends GutTest
 ## Elección al subir de nivel con el jugador de verdad: al subir, se pausa y salen las cartas; la
 ## elegida se aplica; varios niveles de golpe dan varias elecciones; Esc no la salta; sin nada que
-## ofrecer no pregunta.
+## ofrecer, o muerto, no pregunta.
 
 const PlayerScene := preload("res://entities/player/player.tscn")
 const PanelScene := preload("res://ui/menus/level_up/level_up_panel.tscn")
@@ -79,4 +79,11 @@ func test_nothing_to_offer_asks_nothing() -> void:
 		_player.runes.set_level(item as RuneData, (item as RuneData).max_level())
 	EventBus.player_leveled_up.emit(2)
 	assert_false(_panel.is_open())
+	assert_eq(_controller.pending(), 0)
+
+
+func test_a_dead_player_chooses_nothing() -> void:
+	_player.health.take_damage(DamageInfo.create(100000.0))
+	EventBus.player_leveled_up.emit(2)
+	assert_false(_panel.is_open(), "las gemas que aún volaban no abren las cartas")
 	assert_eq(_controller.pending(), 0)

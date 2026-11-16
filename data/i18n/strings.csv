@@ -4,6 +4,15 @@ PAUSE_CONTINUE,Continuar,Resume
 PAUSE_OPTIONS,Opciones,Options
 PAUSE_RETRY,Reintentar,Retry
 PAUSE_QUIT,Salir,Quit
+RESULTS_TITLE,Has caído,You fell
+RESULTS_TIME,Tiempo,Time
+RESULTS_LEVEL,Nivel,Level
+RESULTS_KILLS,Enemigos derrotados,Enemies defeated
+RESULTS_ELITE_KILLS,Élites derrotados,Elites defeated
+RESULTS_GOLD,Oro ganado,Gold earned
+RESULTS_DAMAGE,Daño infligido,Damage dealt
+RESULTS_RETRY,Reintentar (%s),Retry (%s)
+RESULTS_QUIT,Salir,Quit
 PAUSE_STATS_TITLE,Estadísticas,Stats
 STAT_BASE,base %s,base %s
 STAT_GROUP_RUN,Carrera,Running

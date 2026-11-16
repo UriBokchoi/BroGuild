@@ -19,6 +19,8 @@ const SHOW_STATS: StringName = &"show_stats"
 const PAUSE: StringName = &"pause"
 ## Muestra u oculta el panel de depuración (solo en builds de depuración).
 const TOGGLE_DEBUG: StringName = &"toggle_debug"
+## Reintentar en la pantalla de resultados (reinicio rápido).
+const RETRY: StringName = &"retry"
 
 ## Todas las acciones propias del juego (sin las ui_* de Godot).
 const ALL: Array[StringName] = [
@@ -33,4 +35,5 @@ const ALL: Array[StringName] = [
 	SHOW_STATS,
 	PAUSE,
 	TOGGLE_DEBUG,
+	RETRY,
 ]

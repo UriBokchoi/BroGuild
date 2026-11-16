@@ -111,7 +111,7 @@ Dirección: **medieval con humor moderno**, nada realista; los anacronismos son 
 - **Assets**: primitivas + shaders propios; si hace falta, packs CC0 (Kenney, Quaternius).
 
 ## 8. Controles
-WASD mover · Ratón cámara · Espacio saltar · Shift dash · Ctrl slide (doble Ctrl en el aire: caída rápida) · E interactuar / cobrar · Tab estadísticas · Esc pausa. Todo remapeable.
+WASD mover · Ratón cámara · Espacio saltar · Shift dash · Ctrl slide (doble Ctrl en el aire: caída rápida) · E interactuar / cobrar · Tab estadísticas · Esc pausa · R reintentar (en los resultados). Todo remapeable.
 
 **Menú de pausa (Esc):** a la izquierda, Continuar, Opciones, Reintentar y Salir; a la derecha, un panel fijo con todas las stats del personaje, resaltando las que han cambiado mejoras o maldiciones. Mando: más adelante.
 
