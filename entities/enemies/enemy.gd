@@ -5,7 +5,7 @@ extends RigidBody3D
 ## Megabonk. Persigue al objetivo separándose un poco de los que tiene al lado ([EnemySteering]), o
 ## se queda a su distancia si es de los que disparan ([member EnemyStats.keep_distance]). Hace daño
 ## al tocar (su hitbox de contacto) y con sus armas, si tiene ([member EnemyData.weapons]); al
-## morir, sus armas paran, sus disparos en vuelo desaparecen y él encoge y desaparece. No se mueve solo:
+## morir, sus armas paran (sus disparos en vuelo siguen) y él encoge y desaparece. No se mueve solo:
 ## un [EnemySwarm] lo saca de su pool con [method spawn], fija su velocidad horizontal con
 ## [method physics_step] cada tick (la física pone la gravedad y los choques) y lo guarda cuando
 ## avisa con [signal despawned]. Sus stats salen de su [EnemyData] ([method setup]).
@@ -47,14 +47,17 @@ var _fallback: Vector3 = Vector3.RIGHT
 var _approach_angle: float = 0.0
 
 
-## Prepara el enemigo antes de añadirlo al árbol.
-func setup(enemy_data: EnemyData) -> void:
+## Prepara el enemigo antes de añadirlo al árbol. Sus armas disparan desde [param projectiles] (el
+## pool compartido de los enemigos: así sus disparos sobreviven a su muerte); sin él, cada arma
+## tiene el suyo.
+func setup(enemy_data: EnemyData, projectiles: ProjectilePool = null) -> void:
 	data = enemy_data
 	stats.sources.assign(enemy_data.stat_sources)
 	if not enemy_data.weapons.is_empty():
 		weapons = WeaponInventory.new()
 		weapons.name = "Weapons"
 		weapons.wielder_stats = stats
+		weapons.projectile_pool = projectiles
 		weapons.starting_weapons.assign(enemy_data.weapons)
 		add_child(weapons)
 
@@ -183,7 +186,7 @@ func _shrink(delta: float) -> void:
 	despawned.emit(self)
 
 
-## Sus armas dejan de atacar y sus disparos en vuelo desaparecen.
+## Sus armas dejan de atacar.
 func _disarm() -> void:
 	if weapons:
 		for weapon: Weapon in weapons.get_weapons():

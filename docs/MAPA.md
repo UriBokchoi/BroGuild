@@ -75,7 +75,8 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
   - `WeaponInventory` es el nodo que crea y quita armas: lo lleva el jugador y lo crea el enemigo que tiene armas.
   - **Las mismas armas sirven a los dos bandos:** la escena dice a quién busca (`target_mask`) y a quién da su proyectil (`hit_mask`). Las de los enemigos viven en `data/enemies/weapons/`, fuera de la armería y de la subida de nivel.
   - **Proyectiles:**
-    - `ProjectileWeapon` dispara desde un pool un `Projectile` por golpe, hacia el centro del objetivo; sus stats son `ProjectileStats` (velocidad de proyectil), de los que heredan `StaffStats` y `DaggerStats`. Al desarmarla, sus proyectiles en vuelo desaparecen.
+    - `ProjectileWeapon` dispara desde un pool un `Projectile` por golpe, hacia el centro del objetivo; sus stats son `ProjectileStats` (velocidad de proyectil), de los que heredan `StaffStats` y `DaggerStats`. Las del jugador tienen su propio pool (al desarmarlas, sus proyectiles desaparecen); las de los enemigos usan el `ProjectilePool` compartido.
+    - `ProjectilePool`: proyectiles de muchas armas, un pool por escena y un máximo en vuelo (si se llena, el disparo no sale). Lo crea el `EnemySwarm`: así los disparos de un enemigo siguen volando aunque muera.
     - `Projectile` (base abstracta) vuela recto y traza un rayo por tick (no atraviesa nada, sin `Area3D`). Golpea con `DamageCalc` + hurtbox, igual que las hitbox. Cada proyectil decide en `_impact` qué hace al dar.
     - `Bolt` (`bolt.gd`): el proyectil más simple, da al primero que toca y termina (el disparo del tirador).
 - **Espada** (`sword/`): `Sword` crea `SwordSlash`, un arco con shader y hitbox, desde un pool, inclinado hacia el objetivo.
@@ -87,10 +88,11 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 - **`Enemy`** (base de las escenas):
   - Es un `RigidBody3D` sin rotación que choca con el mundo, con el jugador y con otros enemigos.
   - Fija su velocidad horizontal con `EnemySteering`: perseguir con desvío, separarse y decidir si trepa. Con `keep_distance` se queda a esa distancia (`keep_range`) mirando al objetivo.
-  - Daña al tocar y con sus armas, si tiene: las crea al prepararse, esperan un poco al aparecer (`first_attack_delay`) y paran al morir, y entonces sus disparos en vuelo desaparecen. Avisa de su muerte y encoge.
+  - Daña al tocar y con sus armas, si tiene: las crea al prepararse, esperan un poco al aparecer (`first_attack_delay`) y paran al morir (sus disparos en vuelo siguen). Avisa de su muerte y encoge.
 - **`EnemySwarm`** (en el nivel) saca enemigos de un `NodePool` por tipo y los mueve en un único bucle.
   - Usa un `SpatialHash` con los vivos, marcando los apoyados para trepar, y una sola consulta de hasta `max_neighbors` vecinos.
   - Cada enemigo recalcula su rumbo cada `steering_slices` ticks; la física lo mueve en todos.
+  - Tiene el `ProjectilePool` de los enemigos (`projectile_limit` en vuelo a la vez); `clear()` retira enemigos y proyectiles.
 - **Oleadas:**
   - `WaveData` (en `data/waves/`): curva de enemigos por segundo según los minutos, picos, máximo a la vez, distancias de aparición y `WaveEnemy` con pesos y minuto de entrada.
   - `WaveDirector` (en el nivel) los saca alrededor del jugador, en el suelo (un rayo por intento).

@@ -12,6 +12,10 @@ signal weapon_removed(data: WeaponData)
 ## Armas con las que empieza.
 @export var starting_weapons: Array[WeaponData] = []
 
+## Pool compartido para los proyectiles de sus armas (ver [member ProjectileWeapon.shared_pool]):
+## lo usan los enemigos. Vacío: cada arma tiene el suyo.
+var projectile_pool: ProjectilePool
+
 var _weapons: Array[Weapon] = []
 
 
@@ -30,6 +34,9 @@ func add(weapon_data: WeaponData) -> Weapon:
 		push_error("WeaponInventory: la escena de '%s' no es un Weapon." % weapon_data.id)
 		return null
 	weapon.setup(weapon_data, wielder_stats)
+	var shooter := weapon as ProjectileWeapon
+	if shooter:
+		shooter.shared_pool = projectile_pool
 	add_child(weapon)
 	_weapons.append(weapon)
 	weapon_added.emit(weapon)

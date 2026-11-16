@@ -574,10 +574,13 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
     - La escena del arma dice a quién busca (`target_mask = player_hurtbox`) y la del proyectil a quién da (`hit_mask = world + player_hurtbox`). Los disparos de enemigos atraviesan a los otros enemigos.
     - Las armas de enemigos viven en `data/enemies/weapons/`, una subcarpeta que no leen la armería ni la subida de nivel. Un test lo comprueba y exige que solo apunten al jugador.
   - **Ciclo del arma:**
-    - `Weapon.disarm()` para el arma y corta el ataque a medias. `ProjectileWeapon` además retira sus proyectiles en vuelo.
-    - `rearm(espera)` la vuelve a poner en marcha.
+    - `Weapon.disarm()` para el arma y corta el ataque a medias. `rearm(espera)` la vuelve a poner en marcha. El enemigo la desarma al morir.
     - Al aparecer, el enemigo espera entre 0,5 y 1 vez la cadencia del arma (`first_attack_delay`, al azar). Así no dispara nada más salir y los que salen juntos no van sincronizados.
-    - **Al morir el tirador, sus disparos en vuelo desaparecen.** Es una regla clara que premia matarlo, y evita que un proyectil se quede congelado en el pool del enemigo muerto.
+  - **Proyectiles de enemigos** (lo pidió el diseñador al probarlo):
+    - **Siguen volando aunque muera el tirador.** Por eso no viven en el arma, que se apaga con el enemigo, sino en un `ProjectilePool` compartido del `EnemySwarm`, que el enemigo reparte a sus armas (`ProjectileWeapon.shared_pool`).
+    - **Máximo a la vez:** `EnemySwarm.projectile_limit`, 80. Con el máximo alcanzado, los disparos nuevos no salen; los que ya vuelan no desaparecen de golpe.
+    - Desaparecen al chocar con el mundo (suelo, paredes) y tras una distancia larga: viven 4 s a 11 m/s, unos 44 m. Atraviesan a los enemigos.
+    - Las armas del jugador siguen con su propio pool. Al desarmarlas, sus proyectiles desaparecen.
   - **Búsqueda espaciada:** sin objetivo, un arma vuelve a buscar cada `search_interval` en vez de en cada tick: 0,25 s en el tirador y 0 (cada tick) en las del jugador. Con decenas de tiradores fuera de alcance se ahorran consultas de física.
   - **Guardar la distancia:**
     - `EnemyStats.keep_distance` (0 = va hasta el objetivo). Con ella, `EnemySteering.keep_range` se acerca si está lejos, se aleja si está cerca y frena en ±2 m (`RANGE_FADE`) para no temblar en el borde.
@@ -592,7 +595,7 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
     | Distancia | se queda a 11 m |
     | Contacto | 4 de daño |
     | Experiencia | suelta 2 |
-    | Arma | `shooter_gun`: bola de fuego de 10 de daño cada 2,5 s, a 11 m/s, alcance 18 m, vida 2,5 s |
+    | Arma | `shooter_gun`: bola de fuego de 10 de daño cada 2,5 s, a 11 m/s, alcance 18 m, vida 4 s (unos 44 m) |
 
     - Su bola va lenta y apunta adonde estás al disparar, sin adelantarse: quieto te da y moviéndote la esquivas. Seis tiradores matan en unos 6 s a un jugador quieto.
     - Aspecto: cuerpo azul, un ojo naranja y visera. La bola es naranja con halo.
