@@ -749,3 +749,14 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
     - En la zona de combate hay tres pedestales (`CharacterPedestal`) con la figura y el color de cada uno.
   - **Se borra `data/characters/base.tres`:** ya no tiene sentido; la base son las stats de `data/player/`.
 - **Por qué:** cierra la decisión abierta del GDD (§11). Todo va en datos y escenas: un personaje nuevo es un `.tres`, y una pasiva nueva, un script corto con su escena.
+
+## 2026-11-16 · Cierre del Hito 2: prueba de estrés
+- **Medición** (`levels/stress/stress_test.tscn`, RX 6800 XT; dos pasadas de cada uno, el mismo día y en las mismas condiciones):
+
+  | | 300 enemigos | 500 enemigos |
+  |---|---|---|
+  | `main` (antes de las ramas del Hito 2) | 9,0 ms (111 fps), física 10,8 ms | 16,7–18,3 ms (55–60 fps), física 15,2–15,6 ms |
+  | Con todo el Hito 2 | 8,6–9,7 ms (103–117 fps), física 10,8–11,6 ms | 17,2–18,6 ms (54–58 fps), física 15,8–16,6 ms |
+
+- **Lectura:** sin pérdida apreciable; la diferencia entre pasadas (±10 %) es mayor que entre versiones. Los 130 fps de la primera medición salieron con el equipo en otro estado, así que solo vale comparar mediciones del mismo día.
+- **Ajuste:** un enemigo que vuelve del pool solo rehace formas y materiales si fue élite. Así no se reescriben las formas de colisión en cada aparición.

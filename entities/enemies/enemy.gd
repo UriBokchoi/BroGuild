@@ -253,10 +253,14 @@ func _clear_boosts() -> void:
 		for target_stats: StatsComponent in _all_stats():
 			target_stats.remove_modifiers_from(modifiers)
 	_boosts.clear()
-	elite = null
-	_resize(1.0)
-	for mesh: GeometryInstance3D in _meshes:
-		mesh.material_overlay = null
+	# Solo si fue élite: rehacer formas y materiales en cada aparición cuesta con cientos de enemigos.
+	if elite:
+		elite = null
+		_resize(1.0)
+		for mesh: GeometryInstance3D in _meshes:
+			mesh.material_overlay = null
+	else:
+		visual.scale = _rest_scale
 	_refresh()
 
 
