@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="CombatRules" format=3]
+
+[ext_resource type="Script" path="res://systems/combat/combat_rules.gd" id="1_78xbq"]
+
+[resource]
+script = ExtResource("1_78xbq")
+armor_for_half_damage = 100.0

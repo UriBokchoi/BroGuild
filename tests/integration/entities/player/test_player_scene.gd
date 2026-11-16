@@ -1,5 +1,5 @@
 extends GutTest
-## Escena del jugador: montaje (capas, cámara, máquina de estados) y caída hasta el suelo.
+## Escena del jugador: montaje (capas, cámara, máquina de estados, vida) y caída hasta el suelo.
 
 const PlayerScene := preload("res://entities/player/player.tscn")
 const SPAWN_HEIGHT := 2.0
@@ -39,6 +39,40 @@ func test_falls_and_lands_on_the_ground() -> void:
 	assert_true(_player.is_on_floor(), "ha aterrizado")
 	assert_same(_player.movement.current, _player.ground_state)
 	assert_almost_eq(_player.global_position.y, 0.0, 0.05)
+
+
+func test_hurtbox_only_receives_damage_on_its_layer() -> void:
+	var hurtbox := _player.get_node(^"Hurtbox") as HurtboxComponent
+	assert_eq(hurtbox.collision_layer, PhysicsLayers.mask(PhysicsLayers.PLAYER_HURTBOX))
+	assert_eq(hurtbox.collision_mask, 0, "no detecta nada; las hitbox la detectan a ella")
+	assert_same(hurtbox.health, _player.health)
+
+
+func test_starts_with_full_health_and_tells_the_hud() -> void:
+	assert_eq(_player.health.get_current(), 100.0)
+	watch_signals(EventBus)
+	_player.health.take_damage(DamageInfo.create(25.0))
+	assert_signal_emitted_with_parameters(EventBus, "player_health_changed", [75.0, 100.0])
+
+
+func test_dying_stops_the_player_and_tells_everyone() -> void:
+	watch_signals(EventBus)
+	_player.health.take_damage(DamageInfo.create(1000.0))
+	assert_signal_emitted(EventBus, "player_died")
+	assert_false(_player.is_physics_processing(), "se queda quieto")
+	assert_eq(_player.velocity, Vector3.ZERO)
+
+
+func test_hurtbox_lowers_while_sliding() -> void:
+	await wait_physics_frames(60)
+	var shape := _player.get_node(^"Hurtbox/CollisionShape3D") as CollisionShape3D
+	var capsule := shape.shape as CapsuleShape3D
+	var standing := capsule.height
+	_player.movement.transition_to(_player.get_node(^"Movement/Slide") as State)
+	assert_lt(capsule.height, standing, "agachado en el slide")
+	assert_lt(shape.position.y, standing / 2.0, "baja con la cápsula")
+	_player.movement.transition_to(_player.ground_state)
+	assert_eq(capsule.height, standing, "de pie al salir")
 
 
 func _add_ground() -> void:

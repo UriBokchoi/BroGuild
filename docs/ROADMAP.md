@@ -37,7 +37,7 @@
 ## Hito 2 — Combate en la zona de pruebas
 - [x] Stats de combate y progresión del personaje en datos (vida, regeneración, defensa, esquiva, robo de vida, daño, crítico, velocidad de ataque, proyectiles, área, duración, retroceso, experiencia, fichas, suerte, radio de recogida), visibles en la pausa y en F3
 - [x] Personajes en datos: stats básicas comunes y cada personaje con sus diferencias (`data/characters/`; de momento solo el personaje base)
-- [ ] Vida, daño y muerte: `HealthComponent`, `HitboxComponent`, `HurtboxComponent` con las fórmulas del GDD (defensa, esquiva, crítico); hurtbox baja en el slide
+- [x] Vida, daño y muerte: `HealthComponent`, `HitboxComponent`, `HurtboxComponent` con las fórmulas del GDD (defensa, esquiva, crítico); hurtbox baja en el slide
 - [ ] Armas: `WeaponData` (stats del arma y mejoras por nivel) y base de arma automática (cadencia y objetivo); la espada (cuerpo a cuerpo)
 - [ ] Enemigo cuerpo a cuerpo con `EnemyData`, steering simple y pooling; barra de vida en el HUD
 - [ ] Director de oleadas en la zona de pruebas (curva en datos) y escena de estrés con 300 y 500 enemigos y fps medidos (se repite al cerrar cada hito)

@@ -348,3 +348,22 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
     - el slide también cuenta como tocar suelo (`touch_ground()`: devuelve saltos y dashes en el aire y reinicia la cadena de saltos en pared);
     - comprobado en el gimnasio: sprint 11,5 → dash 28 → slide 22 → slide-jump 20,3 → aterriza deslizando a 20,3 m/s.
 - **Por qué:** el diseñador quiere que se sienta como Deadlock: arranque con peso, sprint al mantener el movimiento, dash que pide ir lanzado, el dash hacia abajo en la tecla de agacharse y poder encadenar slides conservando el impulso.
+
+## 2026-11-13 · Vida, daño y muerte
+- **Decisión:**
+  - **Fórmulas** (`systems/combat/`):
+    - `DamageCalc` es estático y sin estado: `attack()` aplica el daño % y tira el crítico del atacante; `evades()` tira la esquiva; `after_armor()` aplica la defensa.
+    - La constante de la defensa (`armor_for_half_damage`, 100) vive en `CombatRules` (`data/combat/rules.tres`), no en el código.
+    - Cada golpe es un `DamageInfo` (cantidad, si es crítico y quién lo hizo), para que los números de daño, el robo de vida o los afijos lo lean sin cambiar la firma.
+  - **Componentes** (`core/components/`), iguales para jugador y enemigos:
+    - `HealthComponent` lee `HealthData` de su `StatsComponent`. Recibe golpes: primero esquiva y luego defensa; nunca baja de 0; muere una sola vez (`died`) y muerto no recibe daño ni cura. Regenera en `_physics_process`. Subir la vida máxima cura la diferencia; bajarla solo recorta.
+    - `HurtboxComponent` (un `Area3D` que se deja detectar y no detecta) pasa el golpe a su vida.
+    - `HitboxComponent` (un `Area3D` que detecta) consulta en cada tick las hurtbox que toca y les pega con las stats de ataque de quien la lleva (`attacker_stats`, opcional). `rehit_interval` a 0 pega una vez a cada objetivo; con un valor, repite mientras toque (daño de contacto).
+    - El azar sale del flujo `COMBAT` de `Rng`, y los tests le ponen su propio generador con semilla.
+  - **Jugador:**
+    - Hurtbox en la capa `player_hurtbox`.
+    - `BodyCrouch` baja también su cápsula en el slide, al momento y no suavizada como el modelo, porque es lógica de juego. La forma es `resource_local_to_scene` para que cada instancia baje la suya.
+    - Al morir se para (sin procesar física ni velocidad) y avisa por `EventBus.player_died`. La pantalla de resultados llegará con su tarea; de momento se reinicia con Esc → Reintentar.
+  - **HUD:** barra de vida roja encima de la de stamina, centradas abajo; escucha `EventBus.player_health_changed`.
+  - **Gimnasio:** un pad rojo (`DamagePad`, 10 de daño cada 0,5 s) para probar el daño sin enemigos.
+- **Por qué:** el ROADMAP pide vida, daño y muerte con las fórmulas del GDD y la hurtbox baja en el slide. Con componentes compartidos, los enemigos, armas y trampas que vengan solo combinan hitbox, hurtbox y vida.

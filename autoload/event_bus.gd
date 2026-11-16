@@ -15,3 +15,7 @@ signal run_ended
 signal cursor_requested(requester: Object, wants_cursor: bool)
 ## Cambió la stamina del jugador (cargas actuales, que pueden ser fraccionarias, y máximo).
 signal player_stamina_changed(charges: float, max_charges: int)
+## Cambió la vida del jugador (actual y máxima).
+signal player_health_changed(current: float, maximum: float)
+## El jugador ha muerto.
+signal player_died
