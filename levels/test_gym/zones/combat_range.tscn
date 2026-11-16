@@ -12,6 +12,10 @@
 [ext_resource type="Resource" path="res://data/enemies/shooter.tres" id="10_shooter"]
 [ext_resource type="Resource" path="res://data/enemies/swarmer.tres" id="11_swarmer"]
 [ext_resource type="Resource" path="res://data/enemies/elite.tres" id="12_elite"]
+[ext_resource type="PackedScene" path="res://entities/interactables/character_pedestal/character_pedestal.tscn" id="13_pedestal"]
+[ext_resource type="Resource" path="res://data/characters/warrior.tres" id="14_warrior"]
+[ext_resource type="Resource" path="res://data/characters/mage.tres" id="15_mage"]
+[ext_resource type="Resource" path="res://data/characters/rogue.tres" id="16_rogue"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_fall"]
 size = Vector3(400, 4, 400)
@@ -98,3 +102,17 @@ material = ExtResource("8_platform")
 
 [node name="WaveBell" parent="." instance=ExtResource("9_bell")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13, 0, 4)
+
+[node name="Characters" type="Node3D" parent="."]
+
+[node name="Warrior" parent="Characters" instance=ExtResource("13_pedestal")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 0, 1)
+character = ExtResource("14_warrior")
+
+[node name="Mage" parent="Characters" instance=ExtResource("13_pedestal")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 0, 5)
+character = ExtResource("15_mage")
+
+[node name="Rogue" parent="Characters" instance=ExtResource("13_pedestal")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 0, 9)
+character = ExtResource("16_rogue")

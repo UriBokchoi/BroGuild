@@ -75,8 +75,6 @@ STAT_SLIDE_MIN_SPEED,Velocidad mínima del slide,Slide min speed
 STAT_SLIDE_MAX_SPEED,Velocidad máxima del slide,Slide max speed
 STAT_SLIDE_FRICTION,Frenada del slide,Slide friction
 STAT_SLIDE_GRAVITY,Tirón de la pendiente,Slope pull
-CHARACTER_BASE_NAME,Personaje base,Base character
-CHARACTER_BASE_DESCRIPTION,"Las stats básicas, sin gimmick.","The basic stats, no gimmick."
 STAT_DASH_JUMP_WINDOW,Margen del dash-jump,Dash-jump window
 STAT_DASH_JUMP_HEIGHT,Altura del dash-jump,Dash-jump height
 STAT_DASH_JUMP_COST,Coste del dash-jump,Dash-jump cost
@@ -86,6 +84,7 @@ STAT_WALL_JUMP_SPEED,Impulso del salto en pared,Wall jump push
 STAT_WALL_JUMP_CHAIN_COST,Coste de los saltos en pared encadenados,Chained wall jump cost
 STAT_WALL_JUMP_REACH,Alcance del salto en pared,Wall jump reach
 STAT_FAST_FALL_SPEED,Velocidad de la caída rápida,Fast fall speed
+STAT_GLIDE_FALL_SPEED,Caída máxima al planear,Max glide fall speed
 STAT_FAST_FALL_COST,Coste de la caída rápida,Fast fall cost
 STAT_GROUP_MANTLE,Mantle,Mantle
 STAT_MANTLE_MIN_HEIGHT,Altura mínima del mantle,Mantle min height
@@ -173,3 +172,16 @@ STAT_EXPLOSION_RADIUS,Radio de explosión,Explosion radius
 STAT_GROUP_DAGGER,Daga,Dagger
 STAT_BOUNCES,Rebotes,Bounces
 STAT_BOUNCE_RANGE,Distancia de rebote,Bounce range
+CHARACTER_WARRIOR_NAME,Guerrero,Warrior
+CHARACTER_WARRIOR_DESCRIPTION,"Aguanta en primera línea: más vida y defensa, algo más lento y con un dash más largo.","Holds the front line: more health and armor, a bit slower, with a longer dash."
+CHARACTER_MAGE_NAME,Mago,Mage
+CHARACTER_MAGE_DESCRIPTION,"Frágil pero arrollador: más área y experiencia, y planea manteniendo el salto.","Frail but overwhelming: more area and experience, and glides while holding jump."
+CHARACTER_ROGUE_NAME,Pícaro,Rogue
+CHARACTER_ROGUE_DESCRIPTION,"Rápido y escurridizo: más velocidad, crítico y stamina, y un salto más en el aire.","Fast and slippery: more speed, crit and stamina, and an extra air jump."
+PASSIVE_ENDURANCE_NAME,Aguante,Endurance
+PASSIVE_ENDURANCE_DESCRIPTION,"+2 % de daño por cada enemigo a menos de 5 m (hasta +30 %).","+2% damage for each enemy within 5 m (up to +30%)."
+PASSIVE_ARCANE_ECHO_NAME,Eco arcano,Arcane echo
+PASSIVE_ARCANE_ECHO_DESCRIPTION,"Cada 4.º ataque de cada arma sale dos veces.","Every 4th attack of each weapon fires twice."
+PASSIVE_LETHAL_NAME,Letal,Lethal
+PASSIVE_LETHAL_DESCRIPTION,"+1 % de probabilidad de crítico por cada nivel.","+1% crit chance per level."
+INTERACT_CHOOSE_CHARACTER,Jugar con este personaje,Play as this character

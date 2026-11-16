@@ -4,6 +4,9 @@ extends Node
 
 ## true entre start_run() y end_run().
 var is_running: bool = false
+## Personaje elegido. Vacío: el que traiga el jugador por defecto. Sobrevive a recargar el nivel
+## (reintentar sigue con el mismo personaje).
+var character: CharacterData
 
 
 ## Empieza una partida nueva. Si ya había una, la termina antes (reinicio).

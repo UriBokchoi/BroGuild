@@ -1,0 +1,39 @@
+[gd_resource type="Resource" script_class="CharacterData" format=3]
+
+[ext_resource type="Script" path="res://entities/player/characters/character_data.gd" id="1_data"]
+[ext_resource type="Script" path="res://core/stats/stat_modifier.gd" id="2_modifier"]
+[ext_resource type="Resource" path="res://data/weapons/staff.tres" id="3_weapon"]
+[ext_resource type="PackedScene" path="res://entities/player/characters/passives/arcane_echo.tscn" id="4_passive"]
+
+[sub_resource type="Resource" id="Resource_health"]
+script = ExtResource("2_modifier")
+stat = &"max_health"
+value = -20.0
+
+[sub_resource type="Resource" id="Resource_area"]
+script = ExtResource("2_modifier")
+stat = &"area"
+kind = 1
+value = 0.15
+
+[sub_resource type="Resource" id="Resource_xp"]
+script = ExtResource("2_modifier")
+stat = &"xp_gain"
+kind = 1
+value = 0.1
+
+[sub_resource type="Resource" id="Resource_glide"]
+script = ExtResource("2_modifier")
+stat = &"glide_fall_speed"
+value = 3.0
+
+[resource]
+script = ExtResource("1_data")
+stat_modifiers = Array[ExtResource("2_modifier")]([SubResource("Resource_health"), SubResource("Resource_area"), SubResource("Resource_xp"), SubResource("Resource_glide")])
+name_key = &"CHARACTER_MAGE_NAME"
+description_key = &"CHARACTER_MAGE_DESCRIPTION"
+color = Color(0.58, 0.42, 1, 1)
+starting_weapon = ExtResource("3_weapon")
+passive = ExtResource("4_passive")
+passive_name_key = &"PASSIVE_ARCANE_ECHO_NAME"
+passive_description_key = &"PASSIVE_ARCANE_ECHO_DESCRIPTION"

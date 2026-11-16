@@ -1,0 +1,7 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://entities/player/characters/passives/arcane_echo_passive.gd" id="1_passive"]
+
+[node name="ArcaneEcho" type="Node"]
+script = ExtResource("1_passive")
+every = 4

@@ -1,0 +1,71 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://entities/interactables/character_pedestal/character_pedestal.gd" id="1_pedestal"]
+[ext_resource type="Script" path="res://entities/interactables/interactable.gd" id="2_interactable"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_stone"]
+albedo_color = Color(0.36, 0.37, 0.42, 1)
+roughness = 0.9
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_pedestal"]
+material = SubResource("StandardMaterial3D_stone")
+top_radius = 0.6
+bottom_radius = 0.7
+height = 0.4
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_figure"]
+radius = 0.3
+height = 1.2
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_pedestal"]
+height = 0.4
+radius = 0.7
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_reach"]
+radius = 1.8
+
+[sub_resource type="FontVariation" id="FontVariation_label"]
+variation_embolden = 0.8
+
+[node name="CharacterPedestal" type="Node3D" node_paths=PackedStringArray("interactable", "label", "figure")]
+script = ExtResource("1_pedestal")
+interactable = NodePath("Interactable")
+label = NodePath("Label")
+figure = NodePath("Visual/Figure")
+
+[node name="Visual" type="Node3D" parent="."]
+
+[node name="Pedestal" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
+mesh = SubResource("CylinderMesh_pedestal")
+
+[node name="Figure" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("CapsuleMesh_figure")
+
+[node name="Body" type="StaticBody3D" parent="."]
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
+shape = SubResource("CylinderShape3D_pedestal")
+
+[node name="Interactable" type="Area3D" parent="."]
+collision_layer = 256
+collision_mask = 0
+script = ExtResource("2_interactable")
+prompt_key = &"INTERACT_CHOOSE_CHARACTER"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Interactable"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+shape = SubResource("SphereShape3D_reach")
+
+[node name="Label" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.1, 0)
+pixel_size = 0.008
+billboard = 1
+outline_modulate = Color(0.05, 0.06, 0.1, 0.9)
+text = "CHARACTER_WARRIOR_NAME"
+font = SubResource("FontVariation_label")
+font_size = 64
+outline_size = 16

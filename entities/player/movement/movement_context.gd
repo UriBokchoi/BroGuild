@@ -21,6 +21,8 @@ var wish_direction: Vector3 = Vector3.ZERO
 var view_forward: Vector3 = Vector3.FORWARD
 ## Si se mantiene pulsada la acción de slide (Ctrl) este tick.
 var slide_held: bool = false
+## Si se mantiene pulsado el salto este tick (para planear).
+var jump_held: bool = false
 ## Segundos seguidos pidiendo dirección (lleva al sprint).
 var sprint_time: float = 0.0
 ## Segundos que quedan para poder saltar después de dejar el suelo sin saltar (coyote time).

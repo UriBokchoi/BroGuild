@@ -1,0 +1,7 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://entities/player/characters/passives/lethal_passive.gd" id="1_passive"]
+
+[node name="Lethal" type="Node"]
+script = ExtResource("1_passive")
+crit_per_level = 1.0
