@@ -28,3 +28,5 @@ extends StatModifierSet
 @export_group("model")
 ## Piezas que lleva encima su modelo ([CharacterModel]): espada y escudo, bastón y sombrero…
 @export var attachments: Array[ModelAttachment] = []
+## Si da un mortal hacia delante en el doble salto (el Pícaro).
+@export var air_jump_flip: bool = false

@@ -851,3 +851,10 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - Proyectiles y rebotes van en enteros y nunca suman menos de 1.
 - **Por qué:** lo pidió el diseñador (colores y que las raras toquen varias cosas). Todo va en datos: un arma nueva solo lista sus stats mejorables, y una rareza nueva es un `.tres`.
 - **Pendiente:** la Suerte desplazará los pesos de las rarezas. Con 20 niveles, Multiplicidad (+1 proyectil por mejora) puede quedar muy fuerte; habrá que mirarlo jugando.
+
+## 2026-11-17 · Ritmo algo más lento y enemigos más duros
+- **Decisión** (lo pidió el diseñador):
+  - Todo se mueve un 15 % más despacio: carrera 9 → 7,6 m/s, sprint 11,5 → 9,8, dash 28 → 24, slide y salto en pared en proporción. Esbirro 6 → 5,1 m/s, tirador 4 → 3,4 y sus bolas 11 → 9,4 m/s (con más duración, para que lleguen igual de lejos).
+  - Los enemigos tienen un 50 % más de vida: esbirro 30 → 45, tirador 20 → 30.
+  - Salen al mismo ritmo, porque las curvas de aparición no cambian.
+- **Además:** cada personaje regenera un poco de vida de base (0,8 / 0,4 / 0,5 por segundo) y el Pícaro da un mortal en el doble salto (`BodyFlip`, solo visual).

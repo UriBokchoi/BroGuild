@@ -67,3 +67,4 @@ passive = ExtResource("4_passive")
 passive_name_key = &"PASSIVE_LETHAL_NAME"
 passive_description_key = &"PASSIVE_LETHAL_DESCRIPTION"
 attachments = Array[ExtResource("5_attachment")]([SubResource("Resource_dagger_right"), SubResource("Resource_dagger_left")])
+air_jump_flip = true

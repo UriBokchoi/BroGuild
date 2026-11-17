@@ -133,7 +133,7 @@ WASD mover · Ratón cámara · Espacio saltar · Shift dash · Ctrl slide (dobl
   |---|---|---|---|
   | Arma inicial | Espada | Bastón de mago | Daga |
   | Stats | +30 vida, +5 defensa, −5 % velocidad | −20 vida, +15 % área, +10 % experiencia | −10 vida, +10 % velocidad, +10 % crítico, +1 carga de stamina |
-  | Movimiento | Dash un 30 % más largo | Planea manteniendo el salto (cae como mucho a 3 m/s) | +1 salto en el aire |
+  | Movimiento | Dash un 30 % más largo | Planea manteniendo el salto (cae como mucho a 3 m/s) | +1 salto en el aire, con un mortal hacia delante |
   | Regeneración | 0,8 de vida/s | 0,4 de vida/s | 0,5 de vida/s |
   | Pasiva | **Aguante**: +2 % de daño por cada enemigo a menos de 5 m (hasta +30 %) | **Eco arcano**: cada 4.º ataque de cada arma sale dos veces | **Letal**: +1 % de probabilidad de crítico por cada nivel |
 
