@@ -21,32 +21,31 @@ explosion_radius = 2.2
 [sub_resource type="Resource" id="Upgrade_damage"]
 script = ExtResource("90_upgrade")
 stat = &"damage"
-value = 3.5
+value = 5.0
 
 [sub_resource type="Resource" id="Upgrade_projectiles"]
 script = ExtResource("90_upgrade")
 stat = &"projectiles"
 value = 1.0
 whole_numbers = true
-weight = 0.5
 
 [sub_resource type="Resource" id="Upgrade_explosion_radius"]
 script = ExtResource("90_upgrade")
 stat = &"explosion_radius"
 kind = 1
-value = 0.1
+value = 0.12
 
 [sub_resource type="Resource" id="Upgrade_projectile_speed"]
 script = ExtResource("90_upgrade")
 stat = &"projectile_speed"
 kind = 1
-value = 0.12
+value = 0.15
 
 [sub_resource type="Resource" id="Upgrade_cooldown"]
 script = ExtResource("90_upgrade")
 stat = &"cooldown"
 kind = 2
-value = 0.94
+value = 0.92
 
 [resource]
 script = ExtResource("1_data")

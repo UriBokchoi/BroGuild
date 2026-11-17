@@ -11,4 +11,4 @@ name_key = &"RARITY_LEGENDARY"
 color = Color(1, 0.82, 0.25, 1)
 min_stats = 2
 max_stats = 3
-power = 1.75
+power = 1.8

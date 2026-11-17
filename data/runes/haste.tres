@@ -8,7 +8,7 @@
 script = ExtResource("90_upgrade")
 stat = &"attack_speed"
 kind = 1
-value = 0.05
+value = 0.08
 
 [resource]
 script = ExtResource("1_rune")

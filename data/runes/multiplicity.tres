@@ -16,5 +16,5 @@ id = &"multiplicity"
 icon = ExtResource("99_icon")
 name_key = &"RUNE_MULTIPLICITY_NAME"
 description_key = &"RUNE_MULTIPLICITY_DESCRIPTION"
-level_cap = 3
+level_cap = 20
 upgrade_stats = Array[ExtResource("90_upgrade")]([SubResource("Upgrade_projectile_count")])

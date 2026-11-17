@@ -28,7 +28,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 | `ui/` | HUD, menús, panel de depuración, vista de stats, tema global y dueño del ratón. |
 | `vfx/` | Efectos visuales: juice que reacciona a señales, shaders compartidos (desenfoque, rejilla y columna de luz) y líneas de velocidad. |
 | `levels/` | Escenas jugables: `common/` (`RunSystems`, los sistemas de partida que usa cada nivel, y `layout/`, los mapas generados: `LevelLayout`, `LayoutData`, `LayoutPiece`, `ForestBuilder`, `ForestData`), el Brosque (`brosque/`), el gimnasio de pruebas con su zona de combate y la prueba de estrés. |
-| `tools/` | Validación por terminal (`validate.sh`, `ci/`) y generadores (`gen_themes.gd`). |
+| `tools/` | Validación por terminal (`validate.sh`, `ci/`), generadores (`gen_themes.gd`) y la simulación de equilibrio (`sim_balance.gd`: daño por segundo de cada personaje contra una horda y contra un jefe, al empezar y con una build de mitad de partida). |
 | `tests/` | GUT: `unit/` y `integration/`, con la misma ruta que el código. `hooks/` es el script de fin de ejecución. |
 | `docs/` | GDD, ROADMAP, DECISIONES y este mapa. |
 | `assets/` | Assets reutilizables y `CREDITS.md`. `models/props/`: piezas hechas con mallas básicas (espada, escudo, bastón, sombrero de mago, daga) con sus materiales en `materials/`; las llevan los personajes y pueden servir para otras cosas (el Archivo, botín). `textures/icons/`: iconos SVG de armas, runas, objetos pasivos y de la interfaz (candado). Audio y fuentes, aún vacíos. |
@@ -144,7 +144,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
   - `boss_altar/` y `boss_key/`: el altar y las llaves del jefe (ver «Jefe»).
 
 ### Objetos y runas — `systems/upgrades/`
-- **`ItemData`** es la base de lo que el jugador lleva y sube de nivel: armas (`WeaponData`) y runas (`RuneData`). Lleva id, nombre, descripción, icono, `kind_key()` (arma o runa), su nivel máximo (`level_cap`: 10 las armas y 20 las runas, salvo Multiplicidad, 3) y las stats que pueden mejorar sus subidas (`upgrade_stats`: `UpgradeStat`, stat, tipo, mejora de una carta común y peso al elegirla; los enteros se redondean y los multiplicadores escalan lo que se alejan de 1).
+- **`ItemData`** es la base de lo que el jugador lleva y sube de nivel: armas (`WeaponData`) y runas (`RuneData`). Lleva id, nombre, descripción, icono, `kind_key()` (arma o runa), su nivel máximo (`level_cap`: 10 las armas y 20 las runas) y las stats que pueden mejorar sus subidas (`upgrade_stats`: `UpgradeStat`, stat, tipo y mejora base: la de una carta rara, que la común multiplica por 0,6; los enteros se redondean y los multiplicadores escalan lo que se alejan de 1).
 - **Mejoras con rareza:** cada subida de nivel es una `ItemUpgrade` (un `StatModifierSet` con su `Rarity`) tirada con `ItemData.roll_upgrade`. La `Rarity` (`data/rarities/`, en la tabla `rarities.tres`: común gris, rara verde, improbable azul, de leyenda amarilla y mítica roja) decide cuánto sale (peso), cuántas stats distintas toca (`min_stats`/`max_stats`; 0 = todas) y cuánto más fuerte es (`power`). Con Suerte, las altas salen más (`luck_scaling`; la leen `LevelUpController` y `UpgradeEffect` de las stats del jugador). `default_upgrade()` es la estándar (todas sus stats como una común): la usan la armería, las herramientas y las runas al conseguirlas.
 - **Runas** (`runes/`):
   - `RuneData` (en `data/runes/`): al conseguirla da su mejora estándar y cada subida, una tirada.

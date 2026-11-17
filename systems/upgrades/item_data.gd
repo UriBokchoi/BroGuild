@@ -30,16 +30,14 @@ func max_level() -> int:
 @abstract func kind_key() -> StringName
 
 
-## Mejora tirada con [param rarity]: toca al azar (según su [member UpgradeStat.weight]) tantas de
-## sus [member upgrade_stats] como diga la rareza, sin repetir, cada una con su fuerza.
+## Mejora tirada con [param rarity]: toca al azar tantas de sus [member upgrade_stats] como diga la
+## rareza, cada una con su fuerza.
 func roll_upgrade(rarity: Rarity, rng: RandomNumberGenerator) -> ItemUpgrade:
 	var upgrade := ItemUpgrade.new()
 	upgrade.rarity = rarity
-	var pool: Array[UpgradeStat] = []
-	pool.assign(upgrade_stats.filter(func(upgrade_stat: UpgradeStat) -> bool: return upgrade_stat.weight > 0.0))
+	var pool := upgrade_stats.duplicate()
 	for _stat: int in rarity.roll_count(pool.size(), rng):
-		var chosen := _pick(pool, rng)
-		pool.erase(chosen)
+		var chosen: UpgradeStat = pool.pop_at(rng.randi_range(0, pool.size() - 1))
 		upgrade.stat_modifiers.append(chosen.modifier(rarity.power))
 	return upgrade
 
@@ -51,16 +49,3 @@ func default_upgrade() -> ItemUpgrade:
 	for upgrade_stat: UpgradeStat in upgrade_stats:
 		upgrade.stat_modifiers.append(upgrade_stat.modifier(1.0))
 	return upgrade
-
-
-## Una de [param pool] al azar según su peso.
-static func _pick(pool: Array[UpgradeStat], rng: RandomNumberGenerator) -> UpgradeStat:
-	var total := 0.0
-	for upgrade_stat: UpgradeStat in pool:
-		total += upgrade_stat.weight
-	var roll := rng.randf() * total
-	for upgrade_stat: UpgradeStat in pool:
-		roll -= upgrade_stat.weight
-		if roll < 0.0:
-			return upgrade_stat
-	return pool.back()

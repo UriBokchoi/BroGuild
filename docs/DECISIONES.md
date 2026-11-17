@@ -977,3 +977,27 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
 ## 2026-11-18 · Ent-renador: las tarjetas justas y menos daño
 - **Decisión:** en el Brosque hay exactamente las tarjetas que pide el jefe (3; un test lo exige). El Ent-renador hace menos daño: al tocar, 16 (antes 22); la onda del Burpee, ×1,3 (antes ×1,6); las embestidas, ×1,25 (antes ×1,5).
 - **Por qué:** lo pidió el diseñador jugando: sobraban tarjetas y el jefe pegaba demasiado.
+
+## 2026-11-18 · Equilibrio, segunda vuelta: las comunes mejoran poco
+- **Corrección del diseñador:** sin topes nuevos (armas hasta 10 y runas hasta 20, también Multiplicidad: se podrán ampliar) y sin cambiar lo a menudo que sale cada mejora. El problema eran las cartas comunes, demasiado buenas.
+- **Decisión:**
+  - Se deshacen el tope 3 de Multiplicidad y el peso de las mejoras (`UpgradeStat.weight`).
+  - La rareza pesa más: la mejora base de cada stat es la de una carta rara, y cada rareza la multiplica así: común ×0,6, rara ×1, improbable ×1,4, de leyenda ×1,8 y mítica ×2,4 (antes 1 / 1,25 / 1,5 / 2 / 2,5).
+  - Las mejoras base vuelven a valores parecidos a los originales:
+    - Fuerza y Amplitud, +10 %; Prisa, +8 %;
+    - espada: +5 de daño, +8 % de área y ×0,92 de recarga;
+    - bastón: +5 de daño, +12 % de radio, +15 % de velocidad de proyectil y ×0,92;
+    - daga: +4 de daño, +12 % de velocidad de proyectil y ×0,92.
+  - Los enteros (proyectiles, rebotes) siguen dando como poco 1.
+  - Daño de base: espada 18 (antes 20) y daga 17 (antes 15).
+- **Resultado** (`tools/sim_balance.gd`, % de la media en su escenario):
+
+  | | Horda, build | Jefe, build | Media |
+  |---|---|---|---|
+  | Guerrero | 111 % | 97 % | 104 % |
+  | Mago | 132 % | 66 % | 99 % |
+  | Pícaro | 57 % | 136 % | 97 % |
+
+  Cada uno tiene su papel: el Mago, la horda; el Pícaro, el jefe; y el Guerrero, bueno en los dos.
+- **Para personajes nuevos:** la simulación toma todos los de `data/characters/`. Un personaje nuevo debería quedar cerca del 100 % en la media de los dos escenarios, fuerte en su papel y flojo en el otro. Se pasa al tocar armas, runas, rarezas o personajes.
+- **Pendiente:** con Multiplicidad hasta 20, una build que la suba mucho se dispara (cada proyectil es un golpe entero). Si al jugar se nota, el siguiente paso es que la carta común de enteros no siempre dé 1.

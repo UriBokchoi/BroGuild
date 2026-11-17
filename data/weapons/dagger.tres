@@ -8,7 +8,7 @@
 
 [sub_resource type="Resource" id="Resource_stats"]
 script = ExtResource("2_stats")
-damage = 15.0
+damage = 17.0
 cooldown = 0.7
 projectiles = 1
 burst_interval = 0.1
@@ -22,14 +22,13 @@ bounces = 2
 [sub_resource type="Resource" id="Upgrade_damage"]
 script = ExtResource("90_upgrade")
 stat = &"damage"
-value = 2.5
+value = 4.0
 
 [sub_resource type="Resource" id="Upgrade_projectiles"]
 script = ExtResource("90_upgrade")
 stat = &"projectiles"
 value = 1.0
 whole_numbers = true
-weight = 0.5
 
 [sub_resource type="Resource" id="Upgrade_bounces"]
 script = ExtResource("90_upgrade")
@@ -41,13 +40,13 @@ whole_numbers = true
 script = ExtResource("90_upgrade")
 stat = &"projectile_speed"
 kind = 1
-value = 0.1
+value = 0.12
 
 [sub_resource type="Resource" id="Upgrade_cooldown"]
 script = ExtResource("90_upgrade")
 stat = &"cooldown"
 kind = 2
-value = 0.94
+value = 0.92
 
 [resource]
 script = ExtResource("1_data")

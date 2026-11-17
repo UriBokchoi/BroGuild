@@ -11,4 +11,4 @@ name_key = &"RARITY_RARE"
 color = Color(0.35, 0.85, 0.4, 1)
 min_stats = 1
 max_stats = 2
-power = 1.25
+power = 1.0
