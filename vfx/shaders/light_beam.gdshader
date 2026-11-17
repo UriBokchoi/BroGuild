@@ -1,6 +1,7 @@
 shader_type spatial;
-// Columna de luz del teletransporte: se desvanece hacia arriba, con franjas que suben y bordes
-// suaves (más opaca donde la superficie se ve de canto). Va en un CylinderMesh abierto y centrado.
+// Columna de luz (teletransporte, altar y llaves del jefe): se desvanece hacia arriba, con franjas
+// que suben y bordes suaves (más opaca donde la superficie se ve de canto). Va en un CylinderMesh
+// abierto y centrado.
 render_mode unshaded, blend_add, depth_draw_never, cull_disabled, shadows_disabled;
 
 uniform vec4 color : source_color = vec4(0.4, 0.8, 1.0, 1.0);

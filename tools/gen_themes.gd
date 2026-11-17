@@ -15,6 +15,8 @@ const MODIFIED := Color("7cc7ff")
 const HEALTH := Color("c94a4a")
 const EXPERIENCE := Color("4fb6ff")
 const DIFFICULTY := Color("e0806e")
+const BOSS := Color("e0602f")
+const BOSS_KEY := Color("3fd6b8")
 const TOGGLE_ON := preload("res://assets/textures/icons/ui/toggle_on.svg")
 const TOGGLE_OFF := preload("res://assets/textures/icons/ui/toggle_off.svg")
 
@@ -180,6 +182,7 @@ func _add_hud(theme: Theme) -> void:
 	_label_variation(theme, &"IntroTitleLabel", 56, GOLD)
 	_label_variation(theme, &"IntroLineLabel", 26, INK)
 	_add_loadout(theme)
+	_add_boss(theme)
 
 
 ## Ranuras de armas y runas, debajo del oro: llenas, vacías y cerradas; el nivel en una esquina.
@@ -289,3 +292,21 @@ func _add_chests(theme: Theme) -> void:
 	theme.set_type_variation(&"PassiveBar", &"HFlowContainer")
 	theme.set_constant(&"h_separation", &"PassiveBar", 6)
 	theme.set_constant(&"v_separation", &"PassiveBar", 6)
+
+
+## Jefe: arriba en el centro (bajo el reloj), su nombre, su barra de vida y lo que grita; debajo
+## del oro, las llaves que lleva el jugador. La victoria, en la pantalla de resultados.
+func _add_boss(theme: Theme) -> void:
+	theme.set_type_variation(&"BossBarFrame", &"PanelContainer")
+	var frame := StyleBoxEmpty.new()
+	frame.content_margin_top = 84
+	theme.set_stylebox(&"panel", &"BossBarFrame", frame)
+	_separation(theme, &"BossColumn", &"VBoxContainer", 4)
+	_label_variation(theme, &"BossNameLabel", 26, INK)
+	theme.set_type_variation(&"BossHealthBar", &"ProgressBar")
+	theme.set_stylebox(&"background", &"BossHealthBar", _box(Color(SLATE, 0.85), 6, Vector2.ZERO, Color(BOSS, 0.5), 2, 2))
+	theme.set_stylebox(&"fill", &"BossHealthBar", _box(BOSS, 6, Vector2.ZERO, Color.TRANSPARENT, 0, 0))
+	_label_variation(theme, &"BossShoutLabel", 24, GOLD)
+	_label_variation(theme, &"BossKeyLabel", 22, INK)
+	_label_variation(theme, &"BossKeyReadyLabel", 22, BOSS_KEY)
+	_label_variation(theme, &"VictoryLabel", 64, BOSS_KEY)

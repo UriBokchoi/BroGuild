@@ -11,6 +11,16 @@
 [ext_resource type="Material" path="res://levels/brosque/materials/bark.tres" id="9_bark"]
 [ext_resource type="Material" path="res://levels/brosque/materials/foliage.tres" id="10_foliage"]
 [ext_resource type="PackedScene" path="res://entities/interactables/chest/chest.tscn" id="11_chest"]
+[ext_resource type="PackedScene" path="res://entities/interactables/boss_altar/boss_altar.tscn" id="12_altar"]
+
+[sub_resource type="Resource" id="Piece_altar"]
+script = ExtResource("2_piece")
+scene = ExtResource("12_altar")
+count = 1
+footprint = 6.0
+avoid_clearing = true
+ring = Vector2(24, 28)
+face_center = true
 
 [sub_resource type="Resource" id="Piece_high"]
 script = ExtResource("2_piece")
@@ -95,6 +105,6 @@ clearing_radius = 18.0
 spawn_radius = 6.0
 gap = 3.0
 attempts = 60
-pieces = Array[ExtResource("2_piece")]([SubResource("Piece_high"), SubResource("Piece_low"), SubResource("Piece_slots_ground"), SubResource("Piece_chest_ground"), SubResource("Piece_dumbbell"), SubResource("Piece_bench")])
+pieces = Array[ExtResource("2_piece")]([SubResource("Piece_altar"), SubResource("Piece_high"), SubResource("Piece_low"), SubResource("Piece_slots_ground"), SubResource("Piece_chest_ground"), SubResource("Piece_dumbbell"), SubResource("Piece_bench")])
 top_pieces = Array[ExtResource("2_piece")]([SubResource("Piece_slots_top"), SubResource("Piece_chest_top")])
 forest = SubResource("Forest_brosque")

@@ -55,13 +55,7 @@ func is_overtime(seconds: float) -> bool:
 ## Mejoras con las que sale un enemigo con dificultad [param difficulty] (un multiplicador por cada
 ## [member stat_scaling]), o [code]null[/code] si no hay escalado.
 func scaling_at(difficulty: float) -> StatModifierSet:
-	if stat_scaling.is_empty():
-		return null
-	var modifiers := StatModifierSet.new()
-	for scaling: StatScaling in stat_scaling:
-		var factor := scaling.multiplier_at(difficulty)
-		modifiers.stat_modifiers.append(StatModifier.create(scaling.stat, StatModifier.Kind.MULTIPLIER, factor))
-	return modifiers
+	return scaling_for(stat_scaling, difficulty)
 
 
 ## Probabilidad (%) de que un enemigo que sale con dificultad [param difficulty] sea élite.
@@ -104,3 +98,15 @@ func pick_enemy(difficulty: float, rng: RandomNumberGenerator) -> EnemyData:
 		if roll < 0.0:
 			return entry.enemy
 	return null
+
+
+## Mejoras de [param scalings] con dificultad [param difficulty]: un multiplicador por cada uno, o
+## [code]null[/code] si no hay ninguno. Lo usan las oleadas y los jefes ([BossData]).
+static func scaling_for(scalings: Array[StatScaling], difficulty: float) -> StatModifierSet:
+	if scalings.is_empty():
+		return null
+	var modifiers := StatModifierSet.new()
+	for scaling: StatScaling in scalings:
+		var factor := scaling.multiplier_at(difficulty)
+		modifiers.stat_modifiers.append(StatModifier.create(scaling.stat, StatModifier.Kind.MULTIPLIER, factor))
+	return modifiers

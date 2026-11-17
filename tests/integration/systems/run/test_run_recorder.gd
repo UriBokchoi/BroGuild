@@ -1,6 +1,7 @@
 extends GutTest
 ## RunRecorder: apunta enemigos y élites derrotados, daño, oro ganado (no gastado), nivel y tiempo
-## (el del reloj de la ronda si la hay), y deja de apuntar al morir el jugador.
+## (el del reloj de la ronda si la hay), y deja de apuntar al morir el jugador o al vencer al jefe
+## (apuntando la victoria y su premio por rapidez).
 
 const SWARMER := preload("res://data/enemies/swarmer.tres")
 const ELITE := preload("res://data/enemies/elite.tres")
@@ -68,3 +69,11 @@ func test_stops_when_the_player_dies() -> void:
 
 func _kill(enemy: Enemy) -> void:
 	enemy.health.take_damage(DamageInfo.create(100000.0))
+
+
+func test_beating_the_boss_records_the_win_and_stops() -> void:
+	EventBus.boss_defeated.emit(&"BROSQUE_VICTORY", 75.0, 1.8)
+	assert_true(_recorder.stats.won)
+	assert_almost_eq(_recorder.stats.boss_bonus, 1.8, 0.001)
+	assert_almost_eq(_recorder.stats.seconds, 75.0, 0.001, "lo que duró de verdad")
+	assert_true(_recorder.is_stopped())

@@ -30,10 +30,7 @@ func break_open() -> void:
 	_broken = true
 	interactable.enabled = false
 	EventBus.breakable_broken.emit(data, global_position)
-	var pop := create_tween()
-	pop.tween_property(visual, ^"scale", visual.scale * pop_scale, pop_time * 0.5)
-	pop.tween_property(visual, ^"scale", Vector3.ZERO, pop_time * 0.5)
-	pop.tween_callback(queue_free)
+	PopOut.play(self, visual, pop_scale, pop_time)
 
 
 func is_broken() -> bool:

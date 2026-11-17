@@ -1,7 +1,8 @@
 extends GutTest
 ## Pantalla de resultados: al morir el jugador y tras su espera, pausa y muestra lo apuntado por el
 ## RunRecorder bajo una frase de muerte al azar, con el foco en «Reintentar» (que lleva su tecla);
-## Esc no la cierra. Reintentar y Salir van por el flujo del juego (RunFlow).
+## Esc no la cierra. Al vencer al jefe, tras su espera, la victoria con su premio por rapidez.
+## Reintentar y Salir van por el flujo del juego (RunFlow).
 
 const PanelScene := preload("res://ui/menus/results/results_panel.tscn")
 
@@ -96,3 +97,25 @@ func test_retry_and_quit_go_through_the_game_flow() -> void:
 	EventBus.retry_requested.disconnect(on_retry)
 	EventBus.main_menu_requested.disconnect(on_menu)
 	assert_eq(asked, [&"retry", &"menu"] as Array[StringName])
+
+
+func test_beating_the_boss_shows_the_victory() -> void:
+	_panel.victory_delay = 0.1
+	EventBus.boss_defeated.emit(&"BROSQUE_VICTORY", 90.0, 2.5)
+	assert_false(_panel.is_open(), "espera a ver caer al jefe")
+	# Temporizador que corre en pausa: el panel pausa el árbol al abrirse.
+	await get_tree().create_timer(0.3, true).timeout
+	assert_true(_panel.is_victory())
+	assert_eq((_panel.get_node(^"%Title") as Label).text, "BROSQUE_VICTORY")
+	assert_eq(_panel.get_rows()["RESULTS_BOSS_BONUS"], tr(&"RESULTS_BOSS_BONUS_VALUE") % StatFormat.number(2.5))
+	EventBus.player_died.emit()
+	# Sin pausa, para que una muerte (si contara) abriera sus resultados.
+	get_tree().paused = false
+	await get_tree().create_timer(_panel.delay + 0.2, true).timeout
+	assert_true(_panel.is_victory(), "morir después no la cambia")
+
+
+func test_a_death_has_no_boss_bonus() -> void:
+	_panel.open()
+	assert_false(_panel.is_victory())
+	assert_false(_panel.get_rows().has("RESULTS_BOSS_BONUS"))

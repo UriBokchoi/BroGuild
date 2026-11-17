@@ -66,3 +66,20 @@ signal player_slots_changed(weapon_slots: int, rune_slots: int)
 ## Pasó un segundo de la ronda: van [param seconds] y si ya pasó su duración ([param overtime]). Con
 ## [param seconds] negativo, no hay ronda en marcha.
 signal run_clock_changed(seconds: float, overtime: bool)
+## El jugador cogió una llave del jefe (en el Brosque, una tarjeta de socio).
+signal boss_key_collected
+## Cambió cuántas llaves del jefe lleva el jugador ([param keys]) de las que hacen falta
+## ([param needed]) para invocarlo antes de tiempo.
+signal boss_keys_changed(keys: int, needed: int)
+## Un altar pide sacar al jefe en [param at]: con [param forced], aunque falten llaves (se acabó la
+## ronda).
+signal boss_summon_requested(at: Vector3, forced: bool)
+## Salió el jefe del nivel ([param name_key]: su nombre).
+signal boss_spawned(name_key: StringName)
+## Cambió la vida del jefe (actual y máxima).
+signal boss_health_changed(current: float, maximum: float)
+## El jefe gritó [param text_key] (clave de traducción).
+signal boss_shouted(text_key: StringName)
+## Vencieron al jefe: se pasa el nivel. [param victory_key] es el título de la victoria,
+## [param seconds] lo que duró la partida y [param bonus] el multiplicador del premio por rapidez.
+signal boss_defeated(victory_key: StringName, seconds: float, bonus: float)

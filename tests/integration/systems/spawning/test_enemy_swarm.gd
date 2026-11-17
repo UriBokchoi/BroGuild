@@ -88,6 +88,15 @@ func test_clear_retires_everyone() -> void:
 	assert_eq(_swarm.active_count(), 0)
 
 
+func test_clear_can_let_the_dying_finish() -> void:
+	var dying := _swarm.spawn(SWARMER, Vector3(0.0, 0.0, 0.0))
+	var alive := _swarm.spawn(SWARMER, Vector3(3.0, 0.0, 0.0))
+	dying.health.take_damage(DamageInfo.create(dying.health.get_maximum() * 10.0))
+	_swarm.clear(true)
+	assert_eq(_swarm.get_active(), [dying] as Array[Enemy], "el que muere termina de encoger (el jefe vencido)")
+	assert_false(alive.visible)
+
+
 func _add_ground() -> void:
 	var ground := StaticBody3D.new()
 	ground.collision_layer = PhysicsLayers.mask(PhysicsLayers.WORLD)

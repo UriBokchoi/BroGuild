@@ -895,3 +895,33 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - En el Brosque hay 7: cinco en el suelo y dos encima de las mesetas que no tienen tragaperras.
 - **Por qué:** lo pide el GDD (§5.2 y §6) y es la segunda apuesta de la partida. No se usa el robo de vida porque aún no está implementado.
 - **Coste:** cada cofre cuenta los abiertos escuchando `chest_opened`. Un cofre que aparezca a mitad de partida (por ejemplo, soltado por un élite) empezaría a contar desde 0: habrá que pasarle la cuenta cuando lleguen.
+
+## 2026-11-17 · Jefe del Brosque: el Ent-renador
+- **Decisión:**
+  - **El jefe es un enemigo más:** `Boss` hereda de `Enemy` y sale del mismo `EnemySwarm` y su pool. Sus ataques son nodos hijos (`BossAttack`: salto con onda, embestidas, refuerzos), con sus números en `@export` de la escena del jefe. Un jefe nuevo es una escena con sus ataques, un `EnemyData` y un `BossData`; un ataque nuevo es un script que hereda de `BossAttack`.
+    - Recalcula su rumbo en cada tick (`Enemy.steer_every_tick`); los demás, cada tres.
+    - La bomba no le hace nada (`Enemy.is_boss()`): quita una parte de la vida máxima y mataría al jefe de golpe.
+  - **El encuentro** (`BossEncounter`, en `RunSystems`) lleva lo del nivel: cuenta las llaves, saca al jefe, pasa al HUD su vida y sus gritos, pone sus refuerzos por el director (`WaveDirector.spawn_around`, con el escalado del momento) y da la victoria. Cada nivel elige su `BossData` en `RunSystems.boss`, como sus oleadas.
+  - **Escalado:** el jefe sale con la dificultad del momento, con sus propias curvas en `BossData`. Vida ×1 con dificultad 0, ×1,6 con 5, ×2,6 con 10, ×5 con 15 y ×9 con 20, sobre una base de 5.000. Daño ×1, ×1,7 y ×3 con 0, 10 y 20. Las curvas de las oleadas se disparan en la prórroga (vida ×12 con 11): con ellas, el jefe del minuto 10 sería imposible.
+  - **El altar** es una pieza del mapa generado. Va la primera (siempre cabe), entre 24 y 28 m del centro, al borde del claro, y mirando hacia él: `LayoutPiece.ring` y `face_center`. Ahí la pelea es en terreno abierto. El altar pide el jefe al usarlo y, forzado, al empezar la prórroga: «al minuto 10 el altar se activa solo». El encuentro decide si hay llaves suficientes.
+  - **Las llaves** (tarjetas de socio en el Brosque): las reparte un `BreakableScatter`, 5 a más de 25 m del centro (`min_center_distance`) y a 25 m entre sí, para que haya que explorar. Hacen falta 3. Las tarjetas y el altar listo tienen una columna de luz que se ve desde lejos. El shader de la columna pasa a `vfx/shaders/light_beam.gdshader`, porque ahora lo usan tres escenas.
+  - **Ataques del Ent-renador** (cada 3,5 s, cada 2,2 s con rabia):
+    - **Burpee:** un aro marca adonde salta, hasta 20 m. Al caer, la onda llega a 13 m en 0,9 s con 1,6 × su daño al tocar. Solo daña a lo que está a menos de 1,3 m del suelo de la onda y en su borde: se esquiva saltando o alejándose.
+    - **Series:** tres embestidas de 16 m a 20 m/s, con una franja de aviso y 1,5 × daño al tocar mientras embiste.
+    - **Bro-tes:** 4 refuerzos, o 6 con rabia.
+    - La rabia empieza por debajo del 50 % de su vida: +35 % de velocidad y +20 % de daño al tocar, sin rellenarle la vida.
+  - **Premio:** oro × `early_bonus` según los minutos al vencerlo. Es ×3 en el 0, ×2,5 en el 4, ×1,7 en el 7 y ×1 desde el 10, sobre 150 de oro; llega como un recogible y cuenta el % de oro. Además, un objeto de un `ItemPool` solo con improbable, de leyenda y mítica.
+    - Lo que sale de un cofre se sacó a `ItemPool` para tirar igual en los dos sitios.
+    - El panel del cofre revela cualquier objeto por la señal nueva `item_revealed`; `chest_opened` queda para contar los cofres abiertos.
+  - **Victoria:** al caer el jefe paran las oleadas y se retiran los demás enemigos. El jefe termina de caer: `EnemySwarm.clear(keep_dying)`.
+    - Llega el premio y se avisa con `boss_defeated`. El `RunRecorder` deja de apuntar y la pantalla de resultados muestra la victoria a los 4 s, para ver caer al jefe y el revelado.
+    - Lo primero que pasa, muerte o victoria, manda.
+- **Por qué:**
+  - Lo pide el GDD (§9) y el diseñador aprobó el Ent-renador.
+  - Reutilizar `Enemy` da gratis el pool, el combate, los números de daño, el botín y el Archivo.
+  - Los ataques como nodos dejan cada jefe en su escena, sin `if` por jefe.
+- **Pendiente:**
+  - Los números son una primera propuesta que hay que probar jugando. Lo primero: la vida del jefe frente al daño de una build del minuto 5 al 10.
+  - El premio aún no sirve de mucho, porque la partida termina al vencerlo. Pesará cuando lleguen el bote y «¿Cobrar o Doblar?» (Hitos 7 y 8).
+  - El salto confía en la física: aterriza cuando deja de caer o, si algo lo frena, pasado el doble de su tiempo en el aire.
+  - Los refuerzos no cuentan para el máximo de enemigos a la vez.

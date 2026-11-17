@@ -29,6 +29,9 @@ signal despawned(enemy: Enemy)
 ## Al aparecer, sus armas esperan antes del primer ataque esta parte de su espera normal, al azar
 ## entre x e y: así no disparan nada más salir ni todos los que salen juntos a la vez.
 @export var first_attack_delay: Vector2 = Vector2(0.5, 1.0)
+## Recalcula su rumbo en cada tick (un jefe, que ataca con precisión); los demás lo hacen repartidos
+## entre ticks ([member EnemySwarm.steering_slices]).
+@export var steer_every_tick: bool = false
 
 ## Tipo de enemigo.
 var data: EnemyData
@@ -120,11 +123,7 @@ func spawn(feet: Vector3) -> void:
 func boost(modifiers: StatModifierSet) -> void:
 	if modifiers == null:
 		return
-	_boosts.append(modifiers)
-	for modifier: StatModifier in modifiers.stat_modifiers:
-		for target_stats: StatsComponent in _all_stats():
-			if target_stats.has_stat(modifier.stat):
-				target_stats.add_modifier(modifier, modifiers)
+	_add_modifiers(modifiers)
 	_refresh()
 
 
@@ -140,6 +139,11 @@ func promote(elite_data: EliteData) -> void:
 
 func is_elite() -> bool:
 	return elite != null
+
+
+## ¿Es un jefe? (Ver [Boss]: no lo saca el director ni lo mata una bomba de golpe.)
+func is_boss() -> bool:
+	return false
 
 
 ## Lo saca del juego: invisible y fuera de la física hasta el siguiente [method spawn].
@@ -236,6 +240,16 @@ func _shrink(delta: float) -> void:
 		return
 	deactivate()
 	despawned.emit(self)
+
+
+## Aplica [param modifiers] hasta que vuelva al pool, a sus stats y a las de sus armas (cada uno
+## adonde exista su stat), sin tocar su vida (ver [method boost]).
+func _add_modifiers(modifiers: StatModifierSet) -> void:
+	_boosts.append(modifiers)
+	for modifier: StatModifier in modifiers.stat_modifiers:
+		for target_stats: StatsComponent in _all_stats():
+			if target_stats.has_stat(modifier.stat):
+				target_stats.add_modifier(modifier, modifiers)
 
 
 ## Stats suyas y de sus armas: adonde van las mejoras.

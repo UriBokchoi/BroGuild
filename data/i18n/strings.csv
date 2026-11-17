@@ -18,6 +18,8 @@ SELECT_PASSIVE,Habilidad pasiva,Passive ability
 BROSQUE_INTRO_WELCOME,Bienvenido al Brosque,Welcome to the Brorest
 BROSQUE_INTRO_NO_PAIN,"No pain, no gain","No pain, no gain"
 BROSQUE_INTRO_LEG_DAY,Hoy toca pierna,It's leg day
+BROSQUE_INTRO_KEYS,Junta tarjetas de socio para invocar al Ent-renador,Collect membership cards to summon the Ent Trainer
+BROSQUE_VICTORY,¡Brosque superado!,Brorest cleared!
 PAUSE_TITLE,Pausa,Paused
 PAUSE_CONTINUE,Continuar,Resume
 PAUSE_OPTIONS,Opciones,Options
@@ -36,6 +38,8 @@ RESULTS_KILLS,Enemigos derrotados,Enemies defeated
 RESULTS_ELITE_KILLS,Élites derrotados,Elites defeated
 RESULTS_GOLD,Oro ganado,Gold earned
 RESULTS_DAMAGE,Daño infligido,Damage dealt
+RESULTS_BOSS_BONUS,Premio por rapidez,Speed bonus
+RESULTS_BOSS_BONUS_VALUE,×%s,×%s
 RESULTS_RETRY,Reintentar (%s),Retry (%s)
 RESULTS_QUIT,Salir al menú,Main menu
 PAUSE_STATS_TITLE,Estadísticas,Stats
@@ -44,6 +48,10 @@ SLOT_MACHINE_SIGN,TRAGAPERRAS,SLOTS
 SLOT_NOT_ENOUGH_GOLD,Te falta oro: cuesta %d,Not enough gold: it costs %d
 SLOT_NOTHING,Nada… a la próxima,Nothing… next time
 INTERACT_CHEST,"Abrir el cofre (%d de oro)","Open the chest (%d gold)"
+INTERACT_BOSS_KEY,Coger la tarjeta de socio,Grab the membership card
+BOSS_ALTAR_LOCKED,Faltan tarjetas de socio (%d de %d),Membership cards missing (%d of %d)
+BOSS_ALTAR_READY,Invocar al Ent-renador,Summon the Ent Trainer
+HUD_BOSS_KEYS,%d/%d,%d/%d
 CHEST_NOT_ENOUGH_GOLD,Te falta oro: cuesta %d,Not enough gold: it costs %d
 SLOT_WIN_GOLD,¡+%d de oro!,+%d gold!
 SLOT_JACKPOT_GOLD,¡JACKPOT! +%d de oro,JACKPOT! +%d gold
@@ -187,6 +195,18 @@ ENEMY_SWARMER_NAME,Esbirro,Minion
 ENEMY_SWARMER_DESCRIPTION,"Rápido y frágil; llega en enjambre.","Fast and frail; comes in swarms."
 ENEMY_SHOOTER_NAME,Tirador,Shooter
 ENEMY_SHOOTER_DESCRIPTION,"Se queda a distancia y dispara bolas de fuego lentas; no te quedes quieto.","Keeps its distance and shoots slow fireballs; don't stand still."
+ENEMY_SAPLING_NAME,Bro-te,Sprout Bro
+ENEMY_SAPLING_DESCRIPTION,"Los alumnos del Ent-renador: pequeños, rápidos y con muchas ganas.","The Ent Trainer's students: small, fast and very eager."
+ENEMY_ENT_TRAINER_NAME,El Ent-renador,The Ent Trainer
+ENEMY_ENT_TRAINER_DESCRIPTION,"Jefe del Brosque: un árbol centenario con silbato y cinta en la frente. Nunca se salta el día de pierna.","Boss of the Brorest: an ancient tree with a whistle and a headband. Never skips leg day."
+ENT_TRAINER_ARRIVES,¡Llega el Ent-renador!,The Ent Trainer is here!
+ENT_TRAINER_ARRIVES_LINE,Hora de entrenar,Workout time
+ENT_TRAINER_SHOUT_BURPEE,"¡Burpees, ya!","Burpees, now!"
+ENT_TRAINER_SHOUT_ONE_MORE,¡Una más!,One more rep!
+ENT_TRAINER_SHOUT_SETS,¡Tres series!,Three sets!
+ENT_TRAINER_SHOUT_NO_EXCUSES,¡Sin excusas!,No excuses!
+ENT_TRAINER_SHOUT_SPROUTS,"¡Bro-tes, a calentar!","Sprouts, warm up!"
+ENT_TRAINER_SHOUT_ENRAGE,"¡Si no duele, no crece!","If it doesn't hurt, it doesn't grow!"
 ENEMY_ELITE_NAME,%s élite,Elite %s
 INTERACT_SUMMON,Invocar enemigos,Summon enemies
 INTERACT_WAVES_START,Empezar oleadas,Start waves

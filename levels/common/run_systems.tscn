@@ -30,11 +30,13 @@
 [ext_resource type="Resource" path="res://data/slots/frailty_curse.tres" id="28_frailty"]
 [ext_resource type="Script" path="res://vfx/juice/slow_motion.gd" id="29_slow_motion"]
 [ext_resource type="Resource" path="res://data/rarities/rarities.tres" id="30_rarities"]
+[ext_resource type="Script" path="res://systems/boss/boss_encounter.gd" id="31_encounter"]
 
-[node name="RunSystems" type="Node3D" node_paths=PackedStringArray("player", "director")]
+[node name="RunSystems" type="Node3D" node_paths=PackedStringArray("player", "director", "encounter")]
 script = ExtResource("1_run")
 player = NodePath("Player")
 director = NodePath("WaveDirector")
+encounter = NodePath("BossEncounter")
 
 [node name="MouseCapture" type="Node" parent="."]
 script = ExtResource("2_mouse")
@@ -135,3 +137,10 @@ director = NodePath("../../WaveDirector")
 
 [node name="SlowMotion" type="Node" parent="."]
 script = ExtResource("29_slow_motion")
+
+[node name="BossEncounter" type="Node" parent="." node_paths=PackedStringArray("director", "swarm", "player_stats", "items")]
+script = ExtResource("31_encounter")
+director = NodePath("../WaveDirector")
+swarm = NodePath("../EnemySwarm")
+player_stats = NodePath("../Player/Stats")
+items = NodePath("../Player/Items")

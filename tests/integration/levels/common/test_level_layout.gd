@@ -1,7 +1,8 @@
 extends GutTest
 ## Mapa generado (con los datos del Brosque): las piezas no se pisan, quedan dentro del cuadrado y
 ## las mesetas fuera del claro; las tragaperras de arriba van encima de una meseta; ningún árbol
-## suelto pisa una pieza; con la misma semilla sale el mismo mapa y con otra, otro.
+## suelto pisa una pieza; el altar del jefe queda al borde del claro mirándolo; con la misma semilla
+## sale el mismo mapa y con otra, otro.
 
 const DATA := preload("res://data/layouts/brosque.tres")
 
@@ -26,6 +27,20 @@ func test_plateaus_avoid_the_clearing_and_carry_the_top_slot_machines() -> void:
 		elif piece.scene_file_path.contains("plateau"):
 			assert_gt(Vector2(piece.position.x, piece.position.z).length(), DATA.clearing_radius)
 	assert_eq(tops.size(), DATA.top_pieces[0].count, "una en cada meseta elegida")
+
+
+func test_the_altar_stands_at_the_edge_of_the_clearing_facing_it() -> void:
+	var layout := _make_layout(6)
+	var altars := layout.get_pieces().filter(func(piece: Node3D) -> bool: return piece is BossAltar)
+	assert_eq(altars.size(), 1)
+	var altar := altars[0] as Node3D
+	var ring := Vector2.ZERO
+	for piece: LayoutPiece in DATA.pieces:
+		if piece.face_center:
+			ring = piece.ring
+	assert_between(Vector2(altar.position.x, altar.position.z).length(), ring.x, ring.y, "al borde del claro")
+	var to_center := -Vector3(altar.position.x, 0.0, altar.position.z).normalized()
+	assert_gt((-altar.basis.z).dot(to_center), 0.99, "mira al claro")
 
 
 func test_trees_never_stand_on_a_piece() -> void:

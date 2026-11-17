@@ -6,7 +6,8 @@ extends Node3D
 ## y dónde salen (el director de oleadas, el invocador de práctica) solo llama a [method spawn].
 ##
 ## Rendimiento: el rumbo de cada enemigo (perseguir, separarse, trepar) se recalcula cada
-## [member steering_slices] ticks, repartidos entre ticks; la física los mueve en todos.
+## [member steering_slices] ticks, repartidos entre ticks; la física los mueve en todos. Los que lo
+## piden ([member Enemy.steer_every_tick], un jefe) lo recalculan en todos.
 
 signal enemy_spawned(enemy: Enemy)
 signal enemy_despawned(enemy: Enemy)
@@ -65,7 +66,8 @@ func _physics_process(delta: float) -> void:
 		if not enemy.is_alive():
 			enemy.physics_step(delta, goal, has_target, PackedVector3Array(), PackedVector3Array())
 			continue
-		if index % steering_slices != slice:
+		var every_tick := enemy.steer_every_tick
+		if not every_tick and index % steering_slices != slice:
 			continue
 		var neighbors := PackedVector3Array()
 		var footholds := PackedVector3Array()
@@ -74,7 +76,7 @@ func _physics_process(delta: float) -> void:
 			neighbors.append(spot)
 			if _hash.tag_at(near) == SETTLED_TAG:
 				footholds.append(spot)
-		enemy.physics_step(slice_delta, goal, has_target, neighbors, footholds)
+		enemy.physics_step(delta if every_tick else slice_delta, goal, has_target, neighbors, footholds)
 
 
 ## Apunta dónde está cada enemigo vivo y si está apoyado, como estaban al empezar el tick (así el
@@ -99,10 +101,14 @@ func spawn(enemy_data: EnemyData, feet: Vector3) -> Enemy:
 	return enemy
 
 
-## Retira a todos los enemigos en juego y sus proyectiles.
-func clear() -> void:
+## Retira a todos los enemigos en juego y sus proyectiles. Con [param keep_dying], los que están
+## muriendo terminan de encoger (el jefe vencido).
+func clear(keep_dying: bool = false) -> void:
 	for index: int in range(_active.size() - 1, -1, -1):
-		_retire(_active[index])
+		var enemy := _active[index]
+		if keep_dying and not enemy.is_alive():
+			continue
+		_retire(enemy)
 	projectiles.clear()
 
 

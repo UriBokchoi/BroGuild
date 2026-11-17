@@ -1,0 +1,57 @@
+[gd_resource type="Resource" script_class="BossData" format=3]
+
+[ext_resource type="Script" path="res://systems/boss/boss_data.gd" id="1_boss"]
+[ext_resource type="Resource" path="res://data/enemies/ent_trainer.tres" id="2_enemy"]
+[ext_resource type="Script" path="res://systems/spawning/stat_scaling.gd" id="3_scaling"]
+[ext_resource type="Script" path="res://systems/items/item_pool.gd" id="4_pool"]
+[ext_resource type="Script" path="res://core/weighted_table.gd" id="5_table"]
+[ext_resource type="Script" path="res://core/weighted_entry.gd" id="6_entry"]
+[ext_resource type="Resource" path="res://data/rarities/improbable.tres" id="7_improbable"]
+[ext_resource type="Resource" path="res://data/rarities/legendary.tres" id="8_legendary"]
+[ext_resource type="Resource" path="res://data/rarities/mythic.tres" id="9_mythic"]
+
+[sub_resource type="Curve" id="Curve_health"]
+_limits = [0.0, 20.0, 0.0, 20.0]
+_data = [Vector2(0, 1), 0.0, 0.12, 1, 1, Vector2(5, 1.6), 0.12, 0.2, 1, 1, Vector2(10, 2.6), 0.2, 0.48, 1, 1, Vector2(15, 5), 0.48, 0.8, 1, 1, Vector2(20, 9), 0.8, 0.0, 1, 1]
+point_count = 5
+
+[sub_resource type="Curve" id="Curve_damage"]
+_limits = [0.0, 10.0, 0.0, 20.0]
+_data = [Vector2(0, 1), 0.0, 0.07, 1, 1, Vector2(10, 1.7), 0.07, 0.13, 1, 1, Vector2(20, 3), 0.13, 0.0, 1, 1]
+point_count = 3
+
+[sub_resource type="Resource" id="Resource_scale_health"]
+script = ExtResource("3_scaling")
+stat = &"max_health"
+multiplier = SubResource("Curve_health")
+
+[sub_resource type="Resource" id="Resource_scale_contact"]
+script = ExtResource("3_scaling")
+stat = &"contact_damage"
+multiplier = SubResource("Curve_damage")
+
+[sub_resource type="Curve" id="Curve_bonus"]
+_limits = [0.0, 5.0, 0.0, 20.0]
+_data = [Vector2(0, 3), 0.0, -0.125, 1, 1, Vector2(4, 2.5), -0.125, -0.2666667, 1, 1, Vector2(7, 1.7), -0.2666667, -0.2333333, 1, 1, Vector2(10, 1), -0.2333333, 0.0, 1, 1, Vector2(20, 1), 0.0, 0.0, 1, 1]
+point_count = 5
+
+[sub_resource type="Resource" id="Resource_high_rarities"]
+script = ExtResource("5_table")
+entries = Array[ExtResource("6_entry")]([ExtResource("7_improbable"), ExtResource("8_legendary"), ExtResource("9_mythic")])
+
+[sub_resource type="Resource" id="Resource_reward_items"]
+script = ExtResource("4_pool")
+rarities = SubResource("Resource_high_rarities")
+items_dir = "res://data/items"
+
+[resource]
+script = ExtResource("1_boss")
+enemy = ExtResource("2_enemy")
+keys_needed = 3
+arrival_keys = Array[StringName]([&"ENT_TRAINER_ARRIVES", &"ENT_TRAINER_ARRIVES_LINE"])
+victory_key = &"BROSQUE_VICTORY"
+stat_scaling = Array[ExtResource("3_scaling")]([SubResource("Resource_scale_health"), SubResource("Resource_scale_contact")])
+reward_gold = 150.0
+early_bonus = SubResource("Curve_bonus")
+reward_items = SubResource("Resource_reward_items")
+reveal_time = 1.6

@@ -1,0 +1,107 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://entities/interactables/boss_key/boss_key.gd" id="1_key"]
+[ext_resource type="Script" path="res://entities/interactables/interactable.gd" id="2_interactable"]
+[ext_resource type="Script" path="res://vfx/juice/spin_bob.gd" id="3_spin"]
+[ext_resource type="Shader" path="res://vfx/shaders/light_beam.gdshader" id="4_beam"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_card"]
+albedo_color = Color(0.1, 0.72, 0.62, 1)
+emission_enabled = true
+emission = Color(0.1, 0.72, 0.62, 1)
+emission_energy_multiplier = 0.4
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_stripe"]
+albedo_color = Color(0.06, 0.06, 0.08, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_chip"]
+albedo_color = Color(1, 0.8, 0.25, 1)
+metallic = 0.7
+roughness = 0.3
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_photo"]
+albedo_color = Color(0.95, 0.93, 0.88, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_card"]
+material = SubResource("StandardMaterial3D_card")
+size = Vector3(0.62, 0.4, 0.04)
+
+[sub_resource type="BoxMesh" id="BoxMesh_stripe"]
+material = SubResource("StandardMaterial3D_stripe")
+size = Vector3(0.62, 0.07, 0.046)
+
+[sub_resource type="BoxMesh" id="BoxMesh_chip"]
+material = SubResource("StandardMaterial3D_chip")
+size = Vector3(0.12, 0.09, 0.05)
+
+[sub_resource type="BoxMesh" id="BoxMesh_photo"]
+material = SubResource("StandardMaterial3D_photo")
+size = Vector3(0.14, 0.17, 0.046)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_beam"]
+render_priority = 0
+shader = ExtResource("4_beam")
+shader_parameter/color = Color(0.2, 0.95, 0.8, 1)
+shader_parameter/intensity = 0.8
+shader_parameter/height = 10.0
+shader_parameter/stripe_count = 8.0
+shader_parameter/stripe_speed = 0.6
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_beam"]
+material = SubResource("ShaderMaterial_beam")
+top_radius = 0.3
+bottom_radius = 0.3
+height = 10.0
+radial_segments = 16
+rings = 1
+cap_top = false
+cap_bottom = false
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_reach"]
+radius = 1.6
+
+[node name="BossKey" type="Node3D" node_paths=PackedStringArray("interactable", "visual")]
+script = ExtResource("1_key")
+interactable = NodePath("Interactable")
+visual = NodePath("Visual")
+
+[node name="Visual" type="Node3D" parent="."]
+
+[node name="Card" type="Node3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="Body" type="MeshInstance3D" parent="Visual/Card"]
+mesh = SubResource("BoxMesh_card")
+
+[node name="Stripe" type="MeshInstance3D" parent="Visual/Card"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
+mesh = SubResource("BoxMesh_stripe")
+
+[node name="Chip" type="MeshInstance3D" parent="Visual/Card"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.18, -0.05, 0)
+mesh = SubResource("BoxMesh_chip")
+
+[node name="Photo" type="MeshInstance3D" parent="Visual/Card"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.17, -0.06, 0)
+mesh = SubResource("BoxMesh_photo")
+
+[node name="Beam" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+cast_shadow = 0
+mesh = SubResource("CylinderMesh_beam")
+
+[node name="SpinBob" type="Node" parent="." node_paths=PackedStringArray("target")]
+script = ExtResource("3_spin")
+target = NodePath("../Visual/Card")
+spin_speed = 2.2
+bob_height = 0.12
+
+[node name="Interactable" type="Area3D" parent="."]
+collision_layer = 256
+collision_mask = 0
+script = ExtResource("2_interactable")
+prompt_key = &"INTERACT_BOSS_KEY"
+
+[node name="Shape" type="CollisionShape3D" parent="Interactable"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("SphereShape3D_reach")

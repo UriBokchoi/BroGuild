@@ -1,13 +1,14 @@
 extends GutTest
 ## Efectos de los recogibles especiales: la comida cura una parte de la vida máxima, el imán atrae
 ## toda la experiencia del mapa y la bomba quita su parte de vida a los enemigos cercanos (no a los
-## lejanos), la bebida energética mejora stats un rato (otra lata no lo acumula), la mejora gratis
+## lejanos ni a los jefes), la bebida energética mejora stats un rato (otra lata no lo acumula), la mejora gratis
 ## sube lo que se lleva sin pasar del máximo y la oleada de élites los saca. Solo reaccionan a
 ## su recompensa.
 
 const PlayerScene := preload("res://entities/player/player.tscn")
 const XP_GEM := preload("res://data/pickups/xp_gem.tres")
 const SWARMER := preload("res://data/enemies/swarmer.tres")
+const ENT_TRAINER := preload("res://data/enemies/ent_trainer.tres")
 const ENERGY_BUFF := preload("res://data/pickups/energy_drink_buff.tres")
 
 
@@ -61,6 +62,7 @@ func test_the_bomb_hits_only_nearby_enemies() -> void:
 	add_child_autofree(swarm)
 	var near := swarm.spawn(SWARMER, Vector3(5.0, 0.0, 0.0))
 	var far := swarm.spawn(SWARMER, Vector3(40.0, 0.0, 0.0))
+	var boss := swarm.spawn(ENT_TRAINER, Vector3(-5.0, 0.0, 0.0))
 	var bomb := BombEffect.new()
 	bomb.reward = &"bomb"
 	bomb.swarm = swarm
@@ -70,6 +72,7 @@ func test_the_bomb_hits_only_nearby_enemies() -> void:
 	bomb.apply(1.0)
 	assert_true(near.health.is_dead(), "a 5 m, toda su vida")
 	assert_false(far.health.is_dead(), "a 40 m, fuera de su alcance")
+	assert_eq(boss.health.get_current(), boss.health.get_maximum(), "al jefe no le hace nada")
 
 
 func test_the_energy_drink_boosts_stats_for_a_while() -> void:

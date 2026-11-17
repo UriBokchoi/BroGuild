@@ -4,7 +4,7 @@ extends Resource
 ## enemigo que saca un multiplicador de [member stat] igual al valor de [member multiplier] con la
 ## dificultad de ese momento (sube 1 por minuto y más con objetos; ver [WaveData]). La stat puede
 ## ser del enemigo ([code]max_health[/code], [code]contact_damage[/code]…) o de sus armas
-## ([code]damage[/code]). Vive dentro de un [WaveData].
+## ([code]damage[/code]). Vive dentro de un [WaveData] o de un [BossData] (el jefe lleva sus curvas).
 
 ## Nombre de la stat.
 @export var stat: StringName = &""

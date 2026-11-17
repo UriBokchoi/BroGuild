@@ -1,23 +1,35 @@
 class_name ResultsPanel
 extends CanvasLayer
-## Pantalla de resultados: al morir el jugador ([code]EventBus.player_died[/code]) y pasados
-## [member delay] segundos, pausa el juego, pide el cursor y muestra lo que pasó en la partida
-## (según su [RunRecorder]): tiempo, nivel, enemigos y élites derrotados, oro ganado y daño
-## infligido. Arriba, una frase de muerte al azar. «Reintentar» (o su tecla, [code]retry[/code])
-## empieza otra partida al momento; «Salir» vuelve al menú principal ([RunFlow]). Esc no la cierra.
-## Funciona con el juego en pausa ([code]process_mode = ALWAYS[/code] en la escena).
+## Pantalla de resultados al acabar la partida: al morir el jugador ([code]EventBus.player_died[/code])
+## o al vencer al jefe y pasar el nivel ([code]EventBus.boss_defeated[/code]), tras su espera, pausa
+## el juego, pide el cursor y muestra lo que pasó en la partida (según su [RunRecorder]): tiempo,
+## nivel, enemigos y élites derrotados, oro ganado y daño infligido (y, en la victoria, el premio
+## por rapidez). Arriba, una frase de muerte al azar o el título de la victoria. Lo primero que pasa
+## manda: si el jugador muere tras vencer al jefe (o al revés), no cambia. «Reintentar» (o su tecla,
+## [code]retry[/code]) empieza otra partida al momento; «Salir» vuelve al menú principal
+## ([RunFlow]). Esc no la cierra. Funciona con el juego en pausa ([code]process_mode = ALWAYS[/code]
+## en la escena).
 
 ## Quién apuntó la partida.
 @export var recorder: RunRecorder
 ## Segundos entre la muerte y los resultados (para ver caer al jugador).
 @export_range(0.0, 5.0, 0.05, "suffix:s") var delay: float = 1.0
+## Segundos entre vencer al jefe y la victoria (para verlo caer y ver el premio).
+@export_range(0.0, 10.0, 0.05, "suffix:s") var victory_delay: float = 4.0
 ## Frases de muerte (claves de traducción): sale una al azar en cada muerte.
 @export var death_lines: Array[StringName] = []
+## Color del fondo en la victoria (en la muerte, el de la escena).
+@export var victory_tint: Color = Color(0.03, 0.1, 0.09, 0.6)
 
 ## Azar de la frase. Si no se asigna antes de entrar en el árbol, el flujo cosmético de
 ## [code]Rng[/code].
 var rng: RandomNumberGenerator
 
+## Ya acabó la partida (murió el jugador o cayó el jefe): lo siguiente no cambia los resultados.
+var _ended: bool = false
+var _death_tint: Color = Color.BLACK
+
+@onready var _blur: ColorRect = %Blur
 @onready var _title: Label = %Title
 @onready var _rows: GridContainer = %Rows
 @onready var _retry: Button = %Retry
@@ -28,9 +40,11 @@ func _ready() -> void:
 	visible = false
 	if rng == null:
 		rng = Rng.stream(Rng.Stream.COSMETIC)
+	_death_tint = _tint_material().get_shader_parameter(&"tint")
 	_retry.pressed.connect(retry)
 	_quit.pressed.connect(_to_main_menu)
 	EventBus.player_died.connect(_on_player_died)
+	EventBus.boss_defeated.connect(_on_boss_defeated)
 
 
 func _input(event: InputEvent) -> void:
@@ -50,19 +64,27 @@ func _exit_tree() -> void:
 		_set_open(false)
 
 
-## Muestra los resultados de la partida con una frase de muerte al azar, pausa el juego y deja el
-## foco en «Reintentar».
+## Muestra los resultados de una muerte con una frase al azar, pausa el juego y deja el foco en
+## «Reintentar».
 func open() -> void:
+	var title := _title.text
 	if not death_lines.is_empty():
-		_title.text = String(death_lines[rng.randi_range(0, death_lines.size() - 1)])
-	_fill(recorder.stats if recorder else RunStats.new())
-	_retry.text = tr(&"RESULTS_RETRY") % InteractionPrompt.key_text(InputActions.RETRY)
-	_set_open(true)
-	_retry.grab_focus()
+		title = String(death_lines[rng.randi_range(0, death_lines.size() - 1)])
+	_show(title, &"DeathLineLabel", _death_tint)
+
+
+## Muestra los resultados de una victoria con el título [param title_key] (clave de traducción).
+func open_victory(title_key: StringName) -> void:
+	_show(String(title_key), &"VictoryLabel", victory_tint)
 
 
 func is_open() -> bool:
 	return visible
+
+
+## ¿Muestra una victoria?
+func is_victory() -> bool:
+	return visible and _title.theme_type_variation == &"VictoryLabel"
 
 
 ## Empieza otra partida en el mismo nivel (reinicio rápido).
@@ -80,10 +102,22 @@ func get_rows() -> Dictionary[String, String]:
 	return rows
 
 
+func _show(title: String, style: StringName, tint: Color) -> void:
+	_title.text = title
+	_title.theme_type_variation = style
+	_tint_material().set_shader_parameter(&"tint", tint)
+	_fill(recorder.stats if recorder else RunStats.new())
+	_retry.text = tr(&"RESULTS_RETRY") % InteractionPrompt.key_text(InputActions.RETRY)
+	_set_open(true)
+	_retry.grab_focus()
+
+
 func _fill(stats: RunStats) -> void:
 	for cell: Node in _rows.get_children():
 		cell.free()
 	_add_row(&"RESULTS_TIME", RunClock.format(stats.seconds))
+	if stats.won:
+		_add_row(&"RESULTS_BOSS_BONUS", tr(&"RESULTS_BOSS_BONUS_VALUE") % StatFormat.number(stats.boss_bonus))
 	_add_row(&"RESULTS_LEVEL", str(stats.level))
 	_add_row(&"RESULTS_KILLS", str(stats.kills))
 	_add_row(&"RESULTS_ELITE_KILLS", str(stats.elite_kills))
@@ -111,9 +145,24 @@ func _set_open(open_panel: bool) -> void:
 	EventBus.cursor_requested.emit(self, open_panel)
 
 
+## Material del fondo (el desenfoque con su color).
+func _tint_material() -> ShaderMaterial:
+	return _blur.material as ShaderMaterial
+
+
 func _on_player_died() -> void:
+	if _ended:
+		return
+	_ended = true
 	# Temporizador del árbol que se para con la pausa: si hay otra pantalla abierta, espera.
 	get_tree().create_timer(delay, false).timeout.connect(open)
+
+
+func _on_boss_defeated(victory_key: StringName, _seconds: float, _bonus: float) -> void:
+	if _ended:
+		return
+	_ended = true
+	get_tree().create_timer(victory_delay, false).timeout.connect(open_victory.bind(victory_key))
 
 
 func _to_main_menu() -> void:

@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3]
+
+[ext_resource type="Script" path="res://entities/enemies/enemy_data.gd" id="1_data"]
+[ext_resource type="Script" path="res://core/components/health/health_data.gd" id="2_health"]
+[ext_resource type="Script" path="res://entities/enemies/enemy_stats.gd" id="3_stats"]
+[ext_resource type="PackedScene" path="res://entities/enemies/sapling/sapling.tscn" id="4_scene"]
+
+[sub_resource type="Resource" id="Resource_health"]
+script = ExtResource("2_health")
+max_health = 30.0
+
+[sub_resource type="Resource" id="Resource_stats"]
+script = ExtResource("3_stats")
+move_speed = 6.2
+acceleration = 35.0
+contact_damage = 6.0
+contact_interval = 0.8
+separation_radius = 1.0
+separation_weight = 0.3
+climb_speed = 3.5
+climb_height = 1.5
+approach_spread = 30.0
+xp_reward = 0.5
+gold_reward = 0.5
+
+[resource]
+script = ExtResource("1_data")
+id = &"sapling"
+name_key = &"ENEMY_SAPLING_NAME"
+description_key = &"ENEMY_SAPLING_DESCRIPTION"
+scene = ExtResource("4_scene")
+stat_sources = Array[Resource]([SubResource("Resource_health"), SubResource("Resource_stats")])

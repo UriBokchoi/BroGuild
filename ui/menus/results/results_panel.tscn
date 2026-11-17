@@ -4,6 +4,7 @@
 [ext_resource type="Shader" path="res://vfx/shaders/screen_blur.gdshader" id="2_blur"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_blur"]
+resource_local_to_scene = true
 shader = ExtResource("2_blur")
 shader_parameter/blur_lod = 2.5
 shader_parameter/tint = Color(0.12, 0.03, 0.04, 0.6)
@@ -15,6 +16,7 @@ script = ExtResource("1_results")
 death_lines = Array[StringName]([&"DEATH_LINE_GG", &"DEATH_LINE_GIT_GUD", &"DEATH_LINE_SKILL_ISSUE", &"DEATH_LINE_QUITTERS", &"DEATH_LINE_TRY", &"DEATH_LINE_COUSIN", &"DEATH_LINE_DIED"])
 
 [node name="Blur" type="ColorRect" parent="."]
+unique_name_in_owner = true
 material = SubResource("ShaderMaterial_blur")
 anchors_preset = 15
 anchor_right = 1.0

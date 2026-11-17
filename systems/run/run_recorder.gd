@@ -3,7 +3,8 @@ extends Node
 ## Apunta lo que pasa en la partida en un [RunStats], escuchando el [code]EventBus[/code]: enemigos
 ## y élites derrotados, daño infligido, oro ganado, nivel y tiempo. El tiempo es el del reloj de la
 ## ronda mientras hay una en marcha; si no, el que lleva el nivel. Deja de apuntar al morir el
-## jugador, así los resultados se quedan como estaban en ese momento.
+## jugador o al vencer al jefe (con su premio por rapidez), así los resultados se quedan como estaban
+## en ese momento.
 
 ## Lo apuntado hasta ahora.
 var stats := RunStats.new()
@@ -23,6 +24,7 @@ func _enter_tree() -> void:
 	_connect(EventBus.player_xp_changed, _on_xp_changed)
 	_connect(EventBus.run_clock_changed, _on_clock_changed)
 	_connect(EventBus.player_died, _on_player_died)
+	_connect(EventBus.boss_defeated, _on_boss_defeated)
 
 
 func _physics_process(delta: float) -> void:
@@ -73,4 +75,13 @@ func _on_clock_changed(seconds: float, _overtime: bool) -> void:
 
 
 func _on_player_died() -> void:
+	_stopped = true
+
+
+func _on_boss_defeated(_victory_key: StringName, seconds: float, bonus: float) -> void:
+	if _stopped:
+		return
+	stats.won = true
+	stats.boss_bonus = bonus
+	stats.seconds = seconds
 	_stopped = true

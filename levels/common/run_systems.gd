@@ -1,9 +1,10 @@
 class_name RunSystems
 extends Node3D
 ## Todo lo que necesita un nivel para jugar una partida, ya conectado: jugador, horda y oleadas,
-## botín, subir de nivel, HUD, pausa, resultados, números de daño y panel de depuración. Un nivel
-## pone su mapa, una instancia de esto y el punto donde aparece el jugador; aquí se eligen sus
-## oleadas, si empiezan solas, la zona donde pueden salir enemigos y los mensajes del principio.
+## botín, subir de nivel, jefe, HUD, pausa, resultados, números de daño y panel de depuración. Un
+## nivel pone su mapa, una instancia de esto y el punto donde aparece el jugador; aquí se eligen sus
+## oleadas, si empiezan solas, la zona donde pueden salir enemigos, los mensajes del principio y su
+## jefe.
 
 ## Oleadas de este nivel.
 @export var waves: WaveData
@@ -18,9 +19,12 @@ extends Node3D
 @export var spawn_point: Node3D
 ## Mensajes al empezar (claves de traducción): el primero, grande. Vacío: ninguno.
 @export var intro_keys: Array[StringName] = []
+## Jefe del nivel (vacío: sin jefe).
+@export var boss: BossData
 
 @export var player: Player
 @export var director: WaveDirector
+@export var encounter: BossEncounter
 
 
 func _enter_tree() -> void:
@@ -31,6 +35,7 @@ func _enter_tree() -> void:
 		director.data = waves
 	director.autostart = autostart_waves
 	director.play_area = play_area
+	encounter.data = boss
 
 
 func _ready() -> void:

@@ -41,6 +41,14 @@ func test_same_seed_same_places() -> void:
 	assert_eq(_spots(first), _spots(second))
 
 
+func test_can_keep_away_from_the_center() -> void:
+	var scatter := _make_scatter(5)
+	scatter.min_center_distance = 8.0
+	scatter.scatter()
+	for spot: Vector3 in _spots(scatter):
+		assert_gte(Vector2(spot.x, spot.z).length(), 8.0, "las llaves del jefe, lejos de donde aparece el jugador")
+
+
 func _make_scatter(seed_value: int) -> BreakableScatter:
 	var entry := ScatterEntry.new()
 	entry.scene = SKULL

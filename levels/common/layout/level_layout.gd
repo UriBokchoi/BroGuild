@@ -59,7 +59,7 @@ func get_pieces() -> Array[Node3D]:
 func _place_on_ground(piece: LayoutPiece) -> void:
 	var reach := data.half_size - piece.footprint
 	for _attempt: int in data.attempts:
-		var at := Vector2(rng.randf_range(-reach, reach), rng.randf_range(-reach, reach))
+		var at := _random_spot(piece, reach)
 		if piece.avoid_clearing and at.length() < data.clearing_radius + piece.footprint:
 			continue
 		if _overlaps(at, piece.footprint):
@@ -69,6 +69,14 @@ func _place_on_ground(piece: LayoutPiece) -> void:
 		if piece.top_height > 0.0:
 			_tops.append(Vector3(at.x, piece.top_height, at.y))
 		return
+
+
+## Un sitio al azar para [param piece]: a la distancia del centro de su [member LayoutPiece.ring]
+## o, sin ella, en el cuadrado (sin salirse por [param reach]).
+func _random_spot(piece: LayoutPiece, reach: float) -> Vector2:
+	if piece.ring != Vector2.ZERO:
+		return Vector2.from_angle(rng.randf() * TAU) * rng.randf_range(piece.ring.x, piece.ring.y)
+	return Vector2(rng.randf_range(-reach, reach), rng.randf_range(-reach, reach))
 
 
 func _place_on_top(piece: LayoutPiece) -> void:
@@ -82,6 +90,9 @@ func _spawn(piece: LayoutPiece, at: Vector3) -> void:
 	var node := piece.scene.instantiate() as Node3D
 	node.position = at
 	node.rotation.y = rng.randf_range(0.0, TAU)
+	if piece.face_center and Vector2(at.x, at.z).length_squared() > 0.0:
+		# Con rotation.y = θ, −Z apunta a (−sen θ, −cos θ): hacia el centro, θ = atan2(x, z).
+		node.rotation.y = atan2(at.x, at.z)
 	add_child(node)
 
 

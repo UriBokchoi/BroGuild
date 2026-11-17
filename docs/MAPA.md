@@ -22,11 +22,11 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 |---|---|
 | `autoload/` | Los únicos singletons: `EventBus` (solo señales), `Rng` (todo el azar, un generador por sistema), `RunState` (partida en curso: personaje, nivel y semilla) y `Save` (lo que dura entre partidas, en `user://`; de momento, las opciones). Sin lógica de gameplay. |
 | `core/` | Piezas genéricas que no saben de este juego: stats, máquina de estados, componentes de combate, pool (`NodePool`), rejilla espacial (`SpatialHash`, con marcas y tope de resultados), carga de carpetas de datos (`ResourceDir`), tabla ponderada (`WeightedTable` de `WeightedEntry`: cada uso hereda su entrada; la Suerte sube el peso de cada entrada según su `luck_scaling`), nombres de acciones y capas. |
-| `entities/` | Lo que existe en el mundo: el jugador, los enemigos, los interactuables y los rompibles. |
-| `systems/` | Reglas y sistemas que reparten trabajo entre entidades: combate (fórmulas y armas), progresión, aparición de enemigos, armas y runas (`upgrades/`), objetos pasivos (`items/`), la partida (`run/`) y las opciones (`settings/`). Vacía, para más adelante: `gamble/`. |
+| `entities/` | Lo que existe en el mundo: el jugador, los enemigos (y los jefes), los interactuables y los rompibles. |
+| `systems/` | Reglas y sistemas que reparten trabajo entre entidades: combate (fórmulas y armas), progresión, aparición de enemigos, armas y runas (`upgrades/`), objetos pasivos (`items/`), el jefe del nivel (`boss/`), la partida (`run/`) y las opciones (`settings/`). Vacía, para más adelante: `gamble/`. |
 | `data/` | Los `.tres` de balance y la traducción. Nada de código. |
 | `ui/` | HUD, menús, panel de depuración, vista de stats, tema global y dueño del ratón. |
-| `vfx/` | Efectos visuales: juice que reacciona a señales, shaders compartidos y líneas de velocidad. |
+| `vfx/` | Efectos visuales: juice que reacciona a señales, shaders compartidos (desenfoque, rejilla y columna de luz) y líneas de velocidad. |
 | `levels/` | Escenas jugables: `common/` (`RunSystems`, los sistemas de partida que usa cada nivel, y `layout/`, los mapas generados: `LevelLayout`, `LayoutData`, `LayoutPiece`, `ForestBuilder`, `ForestData`), el Brosque (`brosque/`), el gimnasio de pruebas con su zona de combate y la prueba de estrés. |
 | `tools/` | Validación por terminal (`validate.sh`, `ci/`) y generadores (`gen_themes.gd`). |
 | `tests/` | GUT: `unit/` y `integration/`, con la misma ruta que el código. `hooks/` es el script de fin de ejecución. |
@@ -90,19 +90,45 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
   - Fija su velocidad horizontal con `EnemySteering`: perseguir con desvío, separarse y decidir si trepa. Con `keep_distance` se queda a esa distancia (`keep_range`) mirando al objetivo.
   - Daña al tocar y con sus armas, si tiene: las crea al prepararse, esperan un poco al aparecer (`first_attack_delay`) y paran al morir (sus disparos en vuelo siguen). Avisa de su muerte y encoge.
   - Mejoras de una vida (se quitan al volver a salir del pool): `boost(StatModifierSet)` aplica modificadores a sus stats y a las de sus armas (cada uno adonde exista su stat) y le llena la vida; `promote(EliteData)` lo hace élite.
+  - Recalcula su rumbo repartido entre ticks, salvo con `steer_every_tick` (los jefes, en todos). `is_boss()` dice si es un jefe.
 - **Élites** (`elite/`): `EliteData` (en `data/enemies/elite.tres`) lleva sus mejoras, su tamaño (cuerpo, zonas de golpe, modelo y masa) y su brillo (`elite_glow`, un `material_overlay`). Cualquier enemigo puede salir élite: lo decide quien lo saca (`WaveData.elite_chance`, el invocador de élites).
 - **`EnemySwarm`** (en el nivel) saca enemigos de un `NodePool` por tipo y los mueve en un único bucle.
   - Usa un `SpatialHash` con los vivos, marcando los apoyados para trepar, y una sola consulta de hasta `max_neighbors` vecinos.
   - Cada enemigo recalcula su rumbo cada `steering_slices` ticks; la física lo mueve en todos.
-  - Tiene el `ProjectilePool` de los enemigos (`projectile_limit` en vuelo a la vez); `clear()` retira enemigos y proyectiles.
+  - Tiene el `ProjectilePool` de los enemigos (`projectile_limit` en vuelo a la vez); `clear()` retira enemigos y proyectiles (con `keep_dying`, los que están muriendo terminan de caer: el jefe vencido).
 - **Oleadas:**
   - `WaveData` (en `data/waves/`) es una ronda: curva de enemigos por segundo según la **dificultad** (la stat `difficulty` del jugador, que sube 1 por minuto y con objetos; sin bonus, dificultad = minutos), picos, máximo a la vez, distancias de aparición, `WaveEnemy` con pesos y dificultad de entrada, probabilidad de élite según la dificultad, duración de la ronda (`round_minutes`) y escalado (`StatScaling`: una stat de enemigo o de arma y su curva de multiplicador según la dificultad). `data/waves/test_gym.tres` y `brosque.tres` son la ronda normal.
-  - `WaveDirector` (en `RunSystems`) los saca alrededor del jugador, en el suelo (un rayo por intento), con el escalado de la dificultad de ese momento (`boost`) y, a veces, élites. Lleva la parte del tiempo de la dificultad: un modificador +1 por minuto en la stat `difficulty` de `difficulty_stats` (el jugador), que quita al parar. Es el reloj de la ronda: avisa cada segundo por `run_clock_changed`.
+  - `WaveDirector` (en `RunSystems`) los saca alrededor del jugador, en el suelo (un rayo por intento), con el escalado de la dificultad de ese momento (`boost`) y, a veces, élites. Lleva la parte del tiempo de la dificultad: un modificador +1 por minuto en la stat `difficulty` de `difficulty_stats` (el jugador), que quita al parar. Es el reloj de la ronda: avisa cada segundo por `run_clock_changed`. `spawn_around` saca enemigos alrededor de un punto con el escalado del momento, aunque no esté en marcha (los refuerzos del jefe).
 - **`DamageReporter`** avisa de cada golpe con la posición de la cabeza (para los números).
 - **Tipos y escenas actuales:**
   - `swarmer/`: el esbirro, rápido y frágil, ataca al tocar;
   - `shooter/`: el tirador, se queda a distancia y dispara bolas de fuego lentas (su arma y su proyectil van en la misma carpeta);
+  - `sapling/`: el Bro-te, un arbolito con cinta en la frente, rápido y frágil, que solo sale como refuerzo del Ent-renador;
+  - `ent_trainer/`: el Ent-renador, jefe del Brosque (ver «Jefe»);
   - `target_dummy/`: muñeco de práctica inmortal con `DpsMeter`.
+
+### Jefe — `entities/enemies/boss/`, `systems/boss/` y el altar
+- **Para qué:** el jefe de cada nivel (GDD §9). Se invoca en su altar con las llaves del nivel o sale solo al acabar la ronda; vencerlo pasa el nivel.
+- **`Boss`** (`entities/enemies/boss/`, base de la escena de un jefe): un `Enemy` grande que sale del mismo enjambre y recalcula su rumbo en cada tick. Persigue y, cada `attack_interval`, hace uno de sus ataques (sus nodos hijos `BossAttack`, al azar por peso); mientras ataca, el ataque mueve el cuerpo.
+  - Por debajo de `enrage_below` de su vida entra en rabia: aplica `enrage` (más rápido) sin rellenarse la vida, ataca más a menudo y se le pone `enrage_overlay`.
+  - Grita al empezar cada ataque (`shouted`) y pide refuerzos con `summon_requested`.
+  - La bomba no le hace nada.
+- **Ataques** (`attacks/`, cada uno con sus números en `@export` de la escena del jefe):
+  - `LeapAttack` (salta y, al caer, suelta una `Shockwave` por el suelo; un aro marca dónde caerá);
+  - `ChargeAttack` (apunta con una franja en el suelo y embiste en línea recta, varias veces, con más daño al tocar);
+  - `SummonAttack` (pide refuerzos de un `EnemyData`, más con rabia).
+  - El daño de sus ataques es su daño al tocar (con el escalado) por un factor.
+- **`Shockwave`** (`shockwave/`): onda que se abre hasta su radio y daña una vez a lo que alcanza su borde a ras de suelo (se esquiva saltándola o alejándose). Se ve con `ring.gdshader`, que también dibuja el aro de aviso.
+- **`BossData`** (`systems/boss/`, en `data/bosses/`): qué enemigo es, llaves que hacen falta, mensajes al salir, título de la victoria, sus curvas de escalado con la dificultad y el premio (oro × `early_bonus` según los minutos al vencerlo, y un objeto de su `ItemPool` de rarezas altas).
+- **`BossEncounter`** (en `RunSystems`, con el `BossData` del nivel: `RunSystems.boss`):
+  - cuenta las llaves (`boss_key_collected` → `boss_keys_changed`);
+  - saca al jefe cuando el altar lo pide con las llaves (o forzado), una vez por partida, escalado con la dificultad de ese momento;
+  - pasa al HUD su vida y sus gritos; sus refuerzos salen por `WaveDirector.spawn_around`.
+  - Al vencerlo: para las oleadas, retira a los demás enemigos, da el premio (oro por `pickup_collected` y el objeto por `item_revealed`) y avisa con `boss_defeated`.
+- **Altar** (`entities/interactables/boss_altar/`, `BossAltar`): pieza del mapa generado.
+  - Con «interactuar» pide el jefe donde aparece (`boss_spawn`), y lo pide forzado al empezar la prórroga (`run_clock_changed`).
+  - Muestra las llaves en sus ranuras y, con todas, una columna de luz. Se apaga al salir el jefe.
+- **Llaves** (`entities/interactables/boss_key/`, `BossKey`): en el Brosque, tarjetas de socio que giran bajo una columna de luz. Se cogen con «interactuar» y las reparte un `BreakableScatter` del nivel.
 
 ### Interacción — `entities/interactables/`
 - `Interactable` es el área con un texto y la señal `interacted`; la detecta el `Interactor` del jugador.
@@ -112,8 +138,9 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
   - `summoner/`: el invocador de enemigos de práctica (uno por tipo, y uno de élites; su cartel muestra el nombre del enemigo);
   - `character_pedestal/`: pedestal con el modelo vestido de un personaje; al interactuar, el jugador pasa a ser él (hasta la selección de personaje del Hito 3);
   - `slot_machine/`: tragaperras (`SlotMachine`). Aguanta `max_uses` tiradas (5) y revienta. Con «interactuar» cobra su coste (`SlotMachineData`: `base_cost` + `cost_per_difficulty` × dificultad, ×`cost_growth` por cada uso de esa máquina), saca un símbolo por rodillo de su `WeightedTable` de `SlotSymbol` y avisa por `slot_spun`. Al parar, da el premio del trío o de la pareja (`SlotOutcome`: una recompensa por `pickup_collected`, como un recogible) y lo anuncia por `slot_resolved`. No pausa. Datos en `data/slots/`;
-  - `chest/`: cofre (`Chest`). Con «interactuar» cobra su coste (`ChestData`: `base_cost` + `cost_per_difficulty` × dificultad, ×`cost_growth` por cada cofre abierto en la partida; todos los cofres los cuentan por `chest_opened`), tira una rareza con la Suerte del jugador y saca un objeto pasivo de esa rareza (si no hay, de la de debajo). Avisa por `chest_opened` (o `chest_denied` si falta oro); al acabar el revelado (`reveal_time`), el objeto pasa al `PassiveInventory` del jugador y el cofre desaparece. No pausa. Datos en `data/chests/`;
+  - `chest/`: cofre (`Chest`). Con «interactuar» cobra su coste (`ChestData`: `base_cost` + `cost_per_difficulty` × dificultad, ×`cost_growth` por cada cofre abierto en la partida; todos los cofres los cuentan por `chest_opened`), saca un objeto pasivo de su `ItemPool` con la Suerte del jugador y lo enseña por `item_revealed` (o avisa por `chest_denied` si falta oro); al acabar el revelado (`reveal_time`), el objeto pasa al `PassiveInventory` del jugador y el cofre desaparece. No pausa. Datos en `data/chests/`;
   - `wave_bell/`: la campana que arranca y para el director de oleadas.
+  - `boss_altar/` y `boss_key/`: el altar y las llaves del jefe (ver «Jefe»).
 
 ### Objetos y runas — `systems/upgrades/`
 - **`ItemData`** es la base de lo que el jugador lleva y sube de nivel: armas (`WeaponData`) y runas (`RuneData`). Lleva id, nombre, descripción, icono, `kind_key()` (arma o runa), su nivel máximo (`level_cap`: 10 las armas y 20 las runas) y las stats que pueden mejorar sus subidas (`upgrade_stats`: `UpgradeStat`, stat, tipo y mejora de una carta común; los enteros se redondean y los multiplicadores escalan lo que se alejan de 1).
@@ -127,13 +154,14 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
   - `LevelUpController` (en el nivel) escucha `player_leveled_up`, abre `LevelUpPanel` (pausa y cartas, en `ui/menus/level_up/`) y aplica la elegida a las armas o runas del jugador. Usa el flujo `GAMBLE` de `Rng`: la ruleta del Hito 4 irá encima.
 
 ### Objetos pasivos — `systems/items/`
-- **`PassiveItemData`** (un `StatModifierSet` con id, nombre, descripción, icono y `rarity`): objeto de cofre. Viven en `data/items/` (15 de momento, de cultura bro: el gimnasio es solo un tema más). No ocupan ranura y se apilan.
+- **`PassiveItemData`** (un `StatModifierSet` con id, nombre, descripción, icono y `rarity`): objeto de cofre y del premio del jefe. Viven en `data/items/` (15 de momento, de cultura bro: el gimnasio es solo un tema más). No ocupan ranura y se apilan.
+- **`ItemPool`**: de dónde sale un objeto (una `WeightedTable` de rarezas, con la Suerte, y la carpeta de objetos). `roll` tira una rareza y elige un objeto de ella (si no hay, de las de debajo). Lo usan los cofres (`ChestData.items`) y el jefe (`BossData.reward_items`, solo rarezas altas).
 - **`PassiveInventory`** (nodo `Items` del jugador): `add` aplica otra vez los modificadores de una copia (cada copia es su propio origen), `remove` quita la última, `count`, `get_items` (por orden de llegada) y `total`. Avisa con `item_changed`, que el `Player` pasa a `EventBus.player_passive_changed`.
 
 ### Rompibles — `entities/breakables/`
-- **`Breakable`:** rompible del nivel (como los jarrones de Megabonk). Se rompe con «interactuar» (su `Interactable`: «Romper la calavera», «Abrir la bolsita»), una sola vez; avisa por `EventBus.breakable_broken` con su `BreakableData` (qué recogible, cuánto, en cuántos trozos y a qué distancia) y desaparece con un estallido.
+- **`Breakable`:** rompible del nivel (como los jarrones de Megabonk). Se rompe con «interactuar» (su `Interactable`: «Romper la calavera», «Abrir la bolsita»), una sola vez; avisa por `EventBus.breakable_broken` con su `BreakableData` (qué recogible, cuánto, en cuántos trozos y a qué distancia) y desaparece con un estallido (`PopOut`, en `vfx/juice/`).
 - **Los de serie:** la calavera (`skull/`, experiencia) y la bolsita (`pouch/`, oro), con sus datos en `data/breakables/`.
-- **`BreakableScatter`** (`systems/spawning/`, en el nivel): reparte al empezar las `ScatterEntry` (escena y cuántas) por un rectángulo, en sitios distintos cada partida (flujo `LOOT`). Cada uno cae sobre suelo plano o encima de una meseta, nunca dentro o encima de un árbol o un prop, y separado de los demás.
+- **`BreakableScatter`** (`systems/spawning/`, en el nivel): reparte al empezar las `ScatterEntry` (escena y cuántas) por un rectángulo, en sitios distintos cada partida (flujo `LOOT`). Cada uno cae sobre suelo plano o encima de una meseta, nunca dentro o encima de un árbol o un prop, separado de los demás y, si se pide (`min_center_distance`), lejos del centro. También reparte las llaves del jefe.
 
 ### Botín y progresión — `entities/pickups/` y `systems/progression/`
 - **Recogibles:**
@@ -153,27 +181,28 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
   - `damage_numbers/`: números de daño con pool y estilo en `data/vfx/damage_numbers.tres`;
   - `hit_wobble.gd`: bamboleo al recibir golpes;
   - `slow_motion.gd` (`SlowMotion`, en `RunSystems`): cámara lenta en el jackpot de la tragaperras (`slot_resolved`), en segundos reales;
-  - `spin_bob.gd` (`SpinBob`): giro y balanceo de los recogibles especiales (pocos; los que salen a cientos lo hacen en su shader).
+  - `spin_bob.gd` (`SpinBob`): giro y balanceo de los recogibles especiales y las llaves del jefe (pocos; los que salen a cientos lo hacen en su shader);
+  - `pop_out.gd` (`PopOut`): estallido al desaparecer (rompibles y llaves del jefe).
 - **`speed_lines/`:** líneas de velocidad en pantalla.
-- **`shaders/`:** shaders compartidos: desenfoque de los menús y rejilla del greybox.
-- **Shaders propios de una feature:** van con ella (tajo de la espada, teletransporte, líneas de velocidad).
+- **`shaders/`:** shaders compartidos: desenfoque de los menús, rejilla del greybox y columna de luz (`light_beam`: teletransporte, altar y llaves del jefe).
+- **Shaders propios de una feature:** van con ella (tajo de la espada, plataforma del teletransporte, líneas de velocidad, aro de la onda del jefe).
 
 ### UI — `ui/`
-- **`hud/`:** bienvenida al nivel (`LevelIntro`, en el centro, se desvanece sola), vida, stamina, experiencia y nivel (arriba), oro (`GoldCounter`) y reloj de la ronda (`RunClock`, en rojo en la prórroga) y dificultad (`DifficultyCounter`, una calavera y su valor) debajo, armas y runas (`LoadoutBar`: una fila de `LoadoutSlot` por tipo, con icono y nivel; las ranuras sin abrir, con candado), objetos pasivos debajo (`PassiveBar`: icono con el borde de su rareza y «×N» si hay varias copias), cofres (`ChestPanel`, abajo en el centro: la luz recorre las rarezas, frena y se para en la del objeto, que se muestra con su nombre del color de la rareza), tragaperras (`SlotPanel`, también abajo: rodillos que paran uno tras otro y el resultado) y aviso de interacción. Escuchan el `EventBus`.
+- **`hud/`:** bienvenida al nivel (`LevelIntro`, en el centro, se desvanece sola), vida, stamina, experiencia y nivel (arriba), oro (`GoldCounter`) y reloj de la ronda (`RunClock`, en rojo en la prórroga) y dificultad (`DifficultyCounter`, una calavera y su valor) debajo, las llaves del jefe (`BossKeyCounter`, «1/3», solo en niveles con jefe), armas y runas (`LoadoutBar`: una fila de `LoadoutSlot` por tipo, con icono y nivel; las ranuras sin abrir, con candado), objetos pasivos debajo (`PassiveBar`: icono con el borde de su rareza y «×N» si hay varias copias), el jefe (`BossBar`, arriba en el centro: su nombre, su vida y lo que grita), objetos que salen (`ChestPanel`, de un cofre o del premio del jefe por `item_revealed`, abajo en el centro: la luz recorre las rarezas, frena y se para en la del objeto, que se muestra con su nombre del color de la rareza), tragaperras (`SlotPanel`, también abajo: rodillos que paran uno tras otro y el resultado) y aviso de interacción. Escuchan el `EventBus`.
 - **`menus/pause/`:** menú de pausa con todas las stats del jugador; «Opciones» abre el `OptionsPanel`; «Reintentar» y «Salir» (al menú principal) van por `RunFlow`.
 - **`menus/run_setup/`:** `RunSetup`, la selección antes de jugar: personajes a la izquierda, su modelo girando en el centro y, al pasar el ratón, su ficha a la derecha (nombre, diferencias de stats, arma principal y pasiva). Al elegir uno, la ficha se cambia por los niveles (`LevelData.is_available()`: sin escena, «próximamente» y desactivado). «Volver» o Esc retroceden. La muestra `Game` tras «Jugar».
 - **`menus/main/`:** `MainMenu`, el menú principal (Jugar, Opciones, Archivo —desactivado hasta su tarea— y Abandonar), con los personajes vestidos de fondo. Lo muestra `Game`.
 - **`menus/armory/`:** panel de la armería.
 - **`menus/level_up/`:** elección al subir de nivel (`LevelUpPanel` y sus `LevelUpCard`; una mejora lleva el borde y el nombre del color de su rareza).
 - **`menus/options/`:** `OptionsPanel`, opciones básicas: volumen de cada bus (`SettingsData.volume_buses`, en `default_bus_layout.tres`), pantalla completa, tamaño de la ventana y VSync. El volumen se aplica al momento; lo de pantalla espera a «Aplicar» (que lo aplica y lo guarda) y «Volver» descarta lo no aplicado. Trabaja sobre `Save.settings`. Dentro del editor (pestaña «Juego») avisa de que la ventana no se puede cambiar y desactiva esas opciones. Lo abre la pausa (y lo abrirá el menú principal).
-- **`menus/results/`:** `ResultsPanel`, la pantalla de resultados al morir: una frase de muerte al azar (`death_lines`, claves `DEATH_LINE_*`), tiempo, nivel, enemigos y élites derrotados, oro y daño (del `RunRecorder`); «Reintentar» (R) recarga el nivel y «Salir» cierra el juego.
+- **`menus/results/`:** `ResultsPanel`, la pantalla de resultados al acabar la partida: al morir, una frase de muerte al azar (`death_lines`, claves `DEATH_LINE_*`); al vencer al jefe (`boss_defeated`, tras `victory_delay`), el título de la victoria («¡Brosque superado!») y el premio por rapidez. Debajo, tiempo, nivel, enemigos y élites derrotados, oro y daño (del `RunRecorder`). Lo primero que pasa manda. «Reintentar» (R) empieza otra partida y «Salir» vuelve al menú (`RunFlow`).
 - **`stats/`:** `StatsView`, la lista de stats de cualquier `StatsComponent` (la usan la pausa y la armería); `StatFormat`, el formato de un valor; y `ModifierFormat`, que describe un modificador («+10 % Daño»).
 - **`debug/`:** panel F3 con secciones (`DebugSection`); no se traduce.
 - **`theme/`:** el tema global, generado por `tools/gen_themes.gd`.
 - **`mouse_capture.gd`:** único dueño del modo del ratón.
 
 ### Partida — `systems/run/`
-- **`RunRecorder`** (en el nivel): escucha el `EventBus` y apunta en un `RunStats` lo que pasa en la partida: enemigos y élites derrotados, daño infligido, oro ganado (sin restar lo gastado), nivel y tiempo (el del reloj de la ronda si la hay). Para al morir el jugador.
+- **`RunRecorder`** (en el nivel): escucha el `EventBus` y apunta en un `RunStats` lo que pasa en la partida: enemigos y élites derrotados, daño infligido, oro ganado (sin restar lo gastado), nivel y tiempo (el del reloj de la ronda si la hay). Para al morir el jugador o al vencer al jefe (apunta la victoria y su premio por rapidez).
 - **`Game`** (`game.tscn`, la escena principal): raíz del juego y flujo de pantallas. Empieza en el `MainMenu`; «Jugar» lleva a `RunSetup`, que fija `RunState.character` y el nivel (`RunState.level`) (`LevelData`: id, nombre y escena, en `data/levels/`; de serie, el Brosque) y empieza la partida con una semilla nueva. Cada pantalla sustituye a la anterior.
 - **`RunFlow`:** reintentar y volver al menú desde la pausa o los resultados. Dentro de `Game`, por el `EventBus` (`retry_requested`, `main_menu_requested`); con el nivel ejecutado solo (F6), recarga la escena o cierra el juego.
 - **Reinicio rápido:** reintentar vuelve a instanciar el nivel con otra semilla (unos 0,2 s en el gimnasio).
@@ -184,15 +213,16 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 - **`Save`** (autoload) lo carga y lo aplica al arrancar; quien lo cambia llama a `Save.save_settings()`. Los tests usan otro archivo (`settings_path`).
 
 ### Niveles — `levels/`
-- **`common/run_systems.tscn`** (`RunSystems`): jugador, horda y oleadas, botín, subir de nivel, HUD, pausa, resultados, números de daño y panel de depuración, ya conectados. Cada nivel pone una instancia con sus oleadas (`waves`), si empiezan solas (`autostart_waves`), el personaje de serie y el punto de aparición (`spawn_point`).
+- **`common/run_systems.tscn`** (`RunSystems`): jugador, horda y oleadas, botín, subir de nivel, jefe (`BossEncounter`), HUD, pausa, resultados, números de daño y panel de depuración, ya conectados. Cada nivel pone una instancia con sus oleadas (`waves`), su jefe (`boss`, un `BossData`; vacío: sin jefe), si empiezan solas (`autostart_waves`), el personaje de serie y el punto de aparición (`spawn_point`).
 - **`brosque/brosque.tscn`:** el Brosque (`data/levels/brosque.tres`), un gimnasio en el bosque de unos 150 × 150 m rodeado de paredes invisibles (a 81 m; también para los enemigos, que solo salen dentro de `RunSystems.play_area`):
   - claro central con el punto de aparición; al empezar, el HUD da la bienvenida (`RunSystems.intro_keys` → `EventBus.level_intro` → `LevelIntro`);
-  - piezas: mesetas con rampa (`props/plateau_low.tscn` y `plateau_high.tscn`), pesas de piedra, bancos de tronco, tragaperras y cofres;
-  - **el mapa se genera al cargar, distinto en cada partida** (`Layout`, un `LevelLayout` con `data/layouts/brosque.tres`): mesetas, pesas, bancos, una tragaperras y cinco cofres por el suelo sin pisarse ni invadir el claro, tres tragaperras y dos cofres encima de mesetas y el bosque alrededor (`ForestBuilder`: árboles sueltos que esquivan las piezas, un anillo junto a las paredes que choca y una banda grande fuera que no);
+  - piezas: mesetas con rampa (`props/plateau_low.tscn` y `plateau_high.tscn`), pesas de piedra, bancos de tronco, tragaperras, cofres y el altar del jefe;
+  - **el mapa se genera al cargar, distinto en cada partida** (`Layout`, un `LevelLayout` con `data/layouts/brosque.tres`): el altar del jefe al borde del claro y mirándolo (`LayoutPiece.ring` y `face_center`), mesetas, pesas, bancos, una tragaperras y cinco cofres por el suelo sin pisarse ni invadir el claro, tres tragaperras y dos cofres encima de mesetas y el bosque alrededor (`ForestBuilder`: árboles sueltos que esquivan las piezas, un anillo junto a las paredes que choca y una banda grande fuera que no);
+  - el jefe es el Ent-renador (`data/bosses/brosque.tres`): cinco tarjetas de socio repartidas a más de 25 m del centro (`BossKeys`, un `BreakableScatter`); con tres se invoca en el altar y, si no, sale solo en el minuto 10;
   - las oleadas empiezan solas.
 - **`test_gym/test_gym.tscn`:** escena de pruebas (usa `RunSystems`; las oleadas las empieza la campana de la zona de combate). Zona de movimiento con rampas, bordes, paredes, huecos y escalones, más el pad de daño (`props/`).
 - **`test_gym/zones/combat_range.tscn`:** zona de combate a 200 m del gimnasio. Muñecos, armería, invocadores (esbirros, tiradores y esbirros élite), pedestales de personaje, campana de oleadas, plataforma escalonada, teletransportes y recogedor de caídas. Las oleadas paran al volver.
-- **Sistemas de partida:** viven en `RunSystems` (ver arriba): `EnemySwarm`, `WaveDirector`, `PickupField`, `LootDropper`, `LevelUpController` y `LevelUpPanel`, `RunRecorder` y `ResultsPanel`, `DamageNumbers`, HUD, pausa y panel de depuración.
+- **Sistemas de partida:** viven en `RunSystems` (ver arriba): `EnemySwarm`, `WaveDirector`, `PickupField`, `LootDropper`, `LevelUpController` y `LevelUpPanel`, `RunRecorder` y `ResultsPanel`, `BossEncounter`, `DamageNumbers`, HUD, pausa y panel de depuración.
 - **`stress/stress_test.tscn`:** prueba de rendimiento (herramienta, sin traducir). Mantiene 300 y luego 500 esbirros sobre un jugador inmortal con la espada, mide frames y física y sale. Comando en CLAUDE.md.
 
 ## Señales del `EventBus`
@@ -201,7 +231,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 |---|---|---|
 | `run_started`, `run_ended` | `RunState` | (nadie aún) |
 | `retry_requested`, `main_menu_requested` | `RunFlow` (pausa, resultados) | `Game` |
-| `level_intro` (mensajes de bienvenida) | `RunSystems` | `LevelIntro` |
+| `level_intro` (mensajes de bienvenida; también la llegada del jefe) | `RunSystems`, `BossEncounter` | `LevelIntro` |
 | `cursor_requested` | pausa, armería, panel de depuración | `MouseCapture` |
 | `player_stamina_changed` | `StaminaComponent` | `StaminaBar` |
 | `player_health_changed` | `Player` | `HealthBar` |
@@ -209,18 +239,25 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 | `enemy_damaged` | `DamageReporter` | `DamageNumbers` |
 | `enemy_died` (el propio enemigo) | `Enemy` | `LootDropper` (y más adelante el Archivo) |
 | `breakable_broken` (sus datos y dónde) | `Breakable` | `LootDropper` |
-| `pickup_collected` | `PickupField` | `ExperienceComponent` (la recompensa `experience`), `WalletComponent` (`gold`), los `PickupEffect` (`heal`, `magnet`, `bomb`) |
+| `pickup_collected` | `PickupField` (y las tragaperras y el premio del jefe) | `ExperienceComponent` (la recompensa `experience`), `WalletComponent` (`gold`), los `PickupEffect` (`heal`, `magnet`, `bomb`) |
 | `player_xp_changed` | `Player` | `XpBar` |
 | `player_gold_changed` | `Player` | `GoldCounter` |
 | `difficulty_changed` (la stat `difficulty` del jugador) | `Player` | `DifficultyCounter`, `LootDropper` |
 | `player_item_changed` (arma o runa y su nivel; 0 = quitada) | `Player` (de `WeaponInventory.weapon_changed` y `RuneInventory.rune_changed`) | `LoadoutBar` |
 | `player_slots_changed` (ranuras abiertas) | `Player` | `LoadoutBar` |
-| `run_clock_changed` (segundos, prórroga; negativo = sin ronda) | `WaveDirector` | `RunClock` |
+| `run_clock_changed` (segundos, prórroga; negativo = sin ronda) | `WaveDirector` | `RunClock`, `RunRecorder`, `BossAltar` (al empezar la prórroga, pide el jefe) |
 | `player_leveled_up` | `Player` | `LevelUpController` |
 | `interaction_prompt_changed` | `Interactor` | `InteractionPrompt` |
 | `slot_spun`, `slot_resolved` | `SlotMachine` | `SlotPanel`, `SlowMotion` (el jackpot) |
-| `chest_opened` (objeto y segundos del revelado), `chest_denied` (coste) | `Chest` | `ChestPanel`; los cofres cuentan los abiertos |
+| `chest_opened`, `chest_denied` (coste) | `Chest` | los cofres cuentan los abiertos; `ChestPanel` (el aviso de que falta oro) |
+| `item_revealed` (objeto pasivo y segundos del revelado) | `Chest`, `BossEncounter` (el premio) | `ChestPanel` |
 | `player_passive_changed` (objeto pasivo y copias; 0 = quitado) | `Player` (de `PassiveInventory.item_changed`) | `PassiveBar` |
+| `boss_key_collected` | `BossKey` | `BossEncounter` |
+| `boss_keys_changed` (llaves que lleva y que hacen falta) | `BossEncounter` | `BossAltar`, `BossKeyCounter` |
+| `boss_summon_requested` (dónde y si es forzado) | `BossAltar` | `BossEncounter` |
+| `boss_spawned` (nombre del jefe) | `BossEncounter` | `BossAltar`, `BossBar`, `BossKeyCounter` |
+| `boss_health_changed`, `boss_shouted` | `BossEncounter` (de su `Boss`) | `BossBar` |
+| `boss_defeated` (título de la victoria, segundos y premio por rapidez) | `BossEncounter` | `ResultsPanel`, `RunRecorder`, `BossBar` |
 
 ## Capas de física (`core/physics_layers.gd`)
 
@@ -253,6 +290,11 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
   3. Si ataca a distancia, dale `keep_distance` y un arma en `weapons`: un `WeaponData` en `data/enemies/weapons/` cuya escena busque `player_hurtbox` (como `shooter_gun.tscn`).
   4. Traduce su nombre y descripción (y los de su arma).
   5. Para que salga en las oleadas, añádelo como `WaveEnemy` en el `WaveData`; para probarlo, pon otro invocador en la zona de combate.
+- **Un jefe:**
+  1. Crea su escena en `entities/enemies/<jefe>/` con raíz `Boss` (como `ent_trainer.tscn`) y sus ataques como nodos hijos: `LeapAttack`, `ChargeAttack`, `SummonAttack` o un script nuevo que herede de `BossAttack`.
+  2. Crea su `EnemyData` en `data/enemies/` y su `BossData` en `data/bosses/` (llaves, mensajes, victoria, escalado y premio).
+  3. En el nivel: pon el `BossData` en `RunSystems.boss`, el altar como pieza del mapa (o en la escena) y reparte sus llaves con un `BreakableScatter`.
+  4. Traduce su nombre, su descripción, sus gritos y los textos del altar y de la victoria.
 - **Una stat:** añade un `@export_range` en el Resource de datos que toque (`MovementData`, `OffenseData`, `WeaponStats`, `EnemyStats`…), pon su valor en el `.tres` y su fila `STAT_<NOMBRE>` en `data/i18n/strings.csv`. Un test exige la traducción.
 - **Un estado de movimiento:** crea un script en `entities/player/movement/states/` que herede de `MovementState` y añade un nodo hijo de `Movement` en `player.tscn` con su acción, prioridad y reglas.
 - **Un personaje:** crea un `.tres` `CharacterData` en `data/characters/` con sus diferencias de stats, color, arma inicial, pasiva y piezas del modelo (`attachments`: escena de `assets/models/props/`, punto y colocación) y sus textos. Una pasiva nueva es un script que herede de `CharacterPassive` (`_activated()`, y `_set_bonus()` para su modificador) con su escena en `entities/player/characters/passives/`. Para probarlo, pon otro pedestal en la zona de combate.
