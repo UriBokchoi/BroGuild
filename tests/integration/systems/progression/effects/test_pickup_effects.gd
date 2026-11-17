@@ -99,6 +99,7 @@ func test_a_free_upgrade_levels_up_something_owned() -> void:
 	upgrade.reward = &"upgrade"
 	upgrade.weapons = player.weapons
 	upgrade.runes = player.runes
+	upgrade.rarities = preload("res://data/rarities/rarities.tres")
 	add_child_autofree(upgrade)
 	var sword := player.weapons.get_weapons()[0]
 	upgrade.apply(2.0)

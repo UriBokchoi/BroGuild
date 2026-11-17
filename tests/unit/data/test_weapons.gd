@@ -1,11 +1,12 @@
 extends GutTest
 ## Armas de data/weapons: cada una tiene identificador único, nombre y descripción traducidos,
-## icono, una escena que es un Weapon, stats de nivel 1 y mejoras de nivel sobre stats que existen.
+## icono, una escena que es un Weapon, stats de nivel 1, nivel máximo 10 y varias stats que mejorar
+## que existen.
 
 const WEAPONS_DIR := "res://data/weapons"
 const STRINGS_PATH := "res://data/i18n/strings.csv"
-## Nivel máximo de partida de las armas (GDD §6).
-const MAX_LEVEL := 5
+## Nivel máximo de las armas (GDD §6).
+const MAX_LEVEL := 10
 
 var _keys := PackedStringArray()
 var _weapons: Array[WeaponData] = []
@@ -43,11 +44,11 @@ func test_each_weapon_has_a_weapon_scene_and_stats() -> void:
 		node.free()
 
 
-func test_levels_change_existing_stats_up_to_the_max_level() -> void:
+func test_upgrades_touch_existing_stats_up_to_level_10() -> void:
 	for weapon: WeaponData in _weapons:
-		assert_between(weapon.max_level(), 1, MAX_LEVEL, "%s: nivel máximo" % weapon.id)
+		assert_eq(weapon.max_level(), MAX_LEVEL, "%s: nivel máximo" % weapon.id)
+		assert_gt(weapon.upgrade_stats.size(), 1, "%s: varias stats que mejorar" % weapon.id)
 		var block := StatBlock.new()
 		block.define_from_resource(weapon.stats)
-		for level_set: StatModifierSet in weapon.levels:
-			for modifier: StatModifier in level_set.stat_modifiers:
-				assert_true(block.has_stat(modifier.stat), "%s: «%s» no es una stat" % [weapon.id, modifier.stat])
+		for upgrade_stat: UpgradeStat in weapon.upgrade_stats:
+			assert_true(block.has_stat(upgrade_stat.stat), "%s: «%s» no es una stat" % [weapon.id, upgrade_stat.stat])

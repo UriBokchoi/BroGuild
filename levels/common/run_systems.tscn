@@ -29,6 +29,7 @@
 [ext_resource type="Script" path="res://systems/progression/effects/elite_wave_effect.gd" id="27_elite_wave"]
 [ext_resource type="Resource" path="res://data/slots/frailty_curse.tres" id="28_frailty"]
 [ext_resource type="Script" path="res://vfx/juice/slow_motion.gd" id="29_slow_motion"]
+[ext_resource type="Resource" path="res://data/rarities/rarities.tres" id="30_rarities"]
 
 [node name="RunSystems" type="Node3D" node_paths=PackedStringArray("player", "director")]
 script = ExtResource("1_run")
@@ -118,6 +119,7 @@ script = ExtResource("26_upgrade")
 reward = &"upgrade"
 weapons = NodePath("../../Player/Weapons")
 runes = NodePath("../../Player/Runes")
+rarities = ExtResource("30_rarities")
 
 [node name="Frailty" type="Node" parent="PickupEffects" node_paths=PackedStringArray("stats")]
 script = ExtResource("24_buff")

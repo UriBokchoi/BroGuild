@@ -185,20 +185,25 @@ STAT_XP_REWARD,Experiencia que suelta,Experience dropped
 STAT_GOLD_REWARD,Oro que suelta,Gold dropped
 HUD_LEVEL,Nv. %d,Lv. %d
 RUNE_STRENGTH_NAME,Runa de Fuerza,Rune of Strength
-RUNE_STRENGTH_DESCRIPTION,"+10 % de daño con todas las armas por nivel.","+10% damage with every weapon per level."
+RUNE_STRENGTH_DESCRIPTION,"Más daño con todas las armas.","More damage with every weapon."
 RUNE_AMPLITUDE_NAME,Runa de Amplitud,Rune of Amplitude
-RUNE_AMPLITUDE_DESCRIPTION,"+10 % de área por nivel: golpes y explosiones más grandes.","+10% area per level: bigger hits and blasts."
+RUNE_AMPLITUDE_DESCRIPTION,"Más área: golpes y explosiones más grandes.","More area: bigger hits and blasts."
 RUNE_HASTE_NAME,Runa de Prisa,Rune of Haste
-RUNE_HASTE_DESCRIPTION,"+8 % de velocidad de ataque por nivel.","+8% attack speed per level."
+RUNE_HASTE_DESCRIPTION,"Más velocidad de ataque.","More attack speed."
 RUNE_VIGOR_NAME,Runa de Vigor,Rune of Vigor
-RUNE_VIGOR_DESCRIPTION,"+20 de vida máxima por nivel.","+20 max health per level."
+RUNE_VIGOR_DESCRIPTION,"Más vida máxima.","More max health."
 RUNE_MULTIPLICITY_NAME,Runa de Multiplicidad,Rune of Multiplicity
-RUNE_MULTIPLICITY_DESCRIPTION,"+1 proyectil por nivel (también un tajo más con la espada).","+1 projectile per level (also one more sword slash)."
+RUNE_MULTIPLICITY_DESCRIPTION,"Más proyectiles (también más tajos con la espada).","More projectiles (also more sword slashes)."
 ARMORY_WEAPONS,Armas,Weapons
 ARMORY_RUNES,Runas,Runes
 LEVEL_UP_TITLE,¡Nivel %d!,Level %d!
 LEVEL_UP_CHOOSE,Elige una mejora,Choose an upgrade
 LOADOUT_MAX,MÁX,MAX
+RARITY_COMMON,Común,Common
+RARITY_RARE,Rara,Rare
+RARITY_IMPROBABLE,Improbable,Improbable
+RARITY_LEGENDARY,De leyenda,Legendary
+RARITY_MYTHIC,Mítica,Mythic
 LEVEL_UP_NEW,Nuevo,New
 LEVEL_UP_LEVEL,Nv. %d → %d,Lv. %d → %d
 ITEM_KIND_WEAPON,Arma,Weapon

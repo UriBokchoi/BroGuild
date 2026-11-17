@@ -34,6 +34,7 @@ var level: int = 1
 
 var _weapon: WeaponStats
 var _offense: OffenseData
+var _upgrades: Array[ItemUpgrade] = []
 var _finder: TargetFinder
 var _cooldown_left: float = 0.0
 var _shots_left: int = 0
@@ -69,20 +70,35 @@ func _physics_process(delta: float) -> void:
 		_start_attack()
 
 
-## Sube o baja el arma a [param new_level] (entre 1 y su máximo): aplica las mejoras de cada nivel
-## hasta ese.
+## Le suma una mejora (un nivel más): sus modificadores van a las stats del arma. Al máximo, no
+## hace nada.
+func add_upgrade(upgrade: ItemUpgrade) -> void:
+	if level >= data.max_level():
+		return
+	for modifier: StatModifier in upgrade.stat_modifiers:
+		stats.add_modifier(modifier, upgrade)
+	_upgrades.append(upgrade)
+	level += 1
+	level_changed.emit(level)
+
+
+## Mejoras que lleva, de la primera a la última.
+func get_upgrades() -> Array[ItemUpgrade]:
+	return _upgrades.duplicate()
+
+
+## Sube o baja el arma a [param new_level] (entre 1 y su máximo): para subir, suma mejoras
+## estándar ([method ItemData.default_upgrade]; la armería de práctica); para bajar, quita las
+## últimas.
 func set_level(new_level: int) -> void:
 	new_level = clampi(new_level, 1, data.max_level())
-	if new_level == level:
-		return
-	for level_set: StatModifierSet in data.levels:
-		stats.remove_modifiers_from(level_set)
-	for index: int in new_level - 1:
-		var level_set := data.levels[index]
-		for modifier: StatModifier in level_set.stat_modifiers:
-			stats.add_modifier(modifier, level_set)
-	level = new_level
-	level_changed.emit(level)
+	while level < new_level:
+		add_upgrade(data.default_upgrade())
+	while level > new_level:
+		var last: ItemUpgrade = _upgrades.pop_back()
+		stats.remove_modifiers_from(last)
+		level -= 1
+		level_changed.emit(level)
 
 
 ## Deja de atacar hasta [method rearm] y corta el ataque a medias (quien la lleva murió).

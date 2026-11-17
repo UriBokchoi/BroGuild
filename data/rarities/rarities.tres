@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="WeightedTable" format=3]
+
+[ext_resource type="Script" path="res://core/weighted_table.gd" id="1_table"]
+[ext_resource type="Script" path="res://core/weighted_entry.gd" id="2_entry"]
+[ext_resource type="Resource" path="res://data/rarities/common.tres" id="3_common"]
+[ext_resource type="Resource" path="res://data/rarities/rare.tres" id="4_rare"]
+[ext_resource type="Resource" path="res://data/rarities/improbable.tres" id="5_improbable"]
+[ext_resource type="Resource" path="res://data/rarities/legendary.tres" id="6_legendary"]
+[ext_resource type="Resource" path="res://data/rarities/mythic.tres" id="7_mythic"]
+
+[resource]
+script = ExtResource("1_table")
+entries = Array[ExtResource("2_entry")]([ExtResource("3_common"), ExtResource("4_rare"), ExtResource("5_improbable"), ExtResource("6_legendary"), ExtResource("7_mythic")])

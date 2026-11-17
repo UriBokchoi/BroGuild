@@ -831,3 +831,23 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - Solo hacen falta dos efectos nuevos: la mejora gratis y la oleada de élites (`WaveDirector.spawn_elites`).
   - El HUD y la cámara lenta se enteran por `slot_spun` y `slot_resolved`.
 - **El aviso de «interactuar» lleva el coste:** la máquina pone en su `prompt_key` el texto ya formateado; el `Label` no encuentra la clave y lo muestra tal cual. Así no hubo que tocar el `Interactor`.
+
+## 2026-11-17 · Mejoras con rareza
+- **Decisión:**
+  - Las subidas de nivel ya no son listas fijas por nivel. Cada una es una `ItemUpgrade` tirada: una `Rarity` (de una `WeightedTable` en `data/rarities/`) elige cuántas stats distintas de las `upgrade_stats` del objeto toca y con qué fuerza.
+
+    | Rareza | Peso | Stats que toca | Fuerza |
+    |---|---|---|---|
+    | Común | 60 | 1 | ×1 |
+    | Rara | 25 | 1–2 | ×1,25 |
+    | Improbable | 10 | 2 | ×1,5 |
+    | De leyenda | 4 | 2–3 | ×2 |
+    | Mítica | 1 | todas | ×2,5 |
+
+  - Nivel máximo: armas 10, runas 20 (`ItemData.level_cap`).
+  - Armas y runas guardan su historial de mejoras para poder quitar la última (armería).
+  - La armería y las herramientas usan una mejora estándar sin rareza (todas sus stats como una común). Las runas dan esa mejora estándar al conseguirlas.
+  - La recarga del arma mejora como multiplicador (×0,92 la común); la rareza escala lo que se aleja de 1. En % se acumularía sumando y podría llegar a 0.
+  - Proyectiles y rebotes van en enteros y nunca suman menos de 1.
+- **Por qué:** lo pidió el diseñador (colores y que las raras toquen varias cosas). Todo va en datos: un arma nueva solo lista sus stats mejorables, y una rareza nueva es un `.tres`.
+- **Pendiente:** la Suerte desplazará los pesos de las rarezas. Con 20 niveles, Multiplicidad (+1 proyectil por mejora) puede quedar muy fuerte; habrá que mirarlo jugando.

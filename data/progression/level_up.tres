@@ -1,9 +1,11 @@
 [gd_resource type="Resource" script_class="LevelUpData" format=3]
 
 [ext_resource type="Script" path="res://systems/upgrades/level_up/level_up_data.gd" id="1_data"]
+[ext_resource type="Resource" path="res://data/rarities/rarities.tres" id="2_rarities"]
 
 [resource]
 script = ExtResource("1_data")
+rarities = ExtResource("2_rarities")
 choices = 3
 max_weapon_slots = 4
 max_rune_slots = 4

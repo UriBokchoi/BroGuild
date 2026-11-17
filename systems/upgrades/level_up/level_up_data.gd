@@ -7,6 +7,8 @@ extends Resource
 ## Cuántas ranuras están abiertas lo dicen las stats del jugador [code]weapon_slots[/code] y
 ## [code]rune_slots[/code] ([ProgressionData]): empieza con unas pocas y el resto se desbloquean.
 
+## Rarezas de las mejoras ([WeightedTable] de [Rarity]).
+@export var rarities: WeightedTable
 ## Opciones en cada elección.
 @export_range(1, 6, 1) var choices: int = 0
 ## Ranuras de armas que hay, abiertas o cerradas (las que muestra el HUD).

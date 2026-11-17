@@ -69,7 +69,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
   - Cada golpe es un `DamageInfo`.
 - **`HealthComponent`:** muere una sola vez, puede ser inmortal (el muñeco) y `reset()` la rellena (enemigos reutilizados). Solo se procesa si regenera.
 - **Armas** (`systems/combat/weapons/`):
-  - `WeaponData` lleva el `.tres` del arma con sus `WeaponStats` y un conjunto de mejoras por nivel.
+  - `WeaponData` lleva el `.tres` del arma con sus `WeaponStats` de nivel 1; sus mejoras por nivel son tiradas (ver «Objetos y runas»). `Weapon` guarda las que lleva (`add_upgrade`, `get_upgrades`); `set_level` sube con la mejora estándar o quita las últimas (la armería).
   - `Weapon` es la base: ataca sola por cadencia al más cercano desde `aim_height` y combina sus stats con las del personaje (si las tiene: un enemigo no). `disarm()` la para y retira lo que tenga en juego; `rearm(espera)` la vuelve a poner en marcha. Sin objetivo, busca cada `search_interval`.
   - `TargetFinder` hace una consulta de física y apunta al centro de la hurtbox.
   - `WeaponInventory` es el nodo que crea y quita armas: lo lleva el jugador y lo crea el enemigo que tiene armas.
@@ -115,13 +115,14 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
   - `wave_bell/`: la campana que arranca y para el director de oleadas.
 
 ### Objetos y runas — `systems/upgrades/`
-- **`ItemData`** es la base de lo que el jugador lleva y sube de nivel: armas (`WeaponData`) y runas (`RuneData`). Lleva id, nombre, descripción, `max_level()`, `kind_key()` (arma o runa) y `level_modifiers(level)` (lo que mejora cada nivel). La usan la armería y la elección al subir de nivel, y la usará el Archivo.
+- **`ItemData`** es la base de lo que el jugador lleva y sube de nivel: armas (`WeaponData`) y runas (`RuneData`). Lleva id, nombre, descripción, icono, `kind_key()` (arma o runa), su nivel máximo (`level_cap`: 10 las armas y 20 las runas) y las stats que pueden mejorar sus subidas (`upgrade_stats`: `UpgradeStat`, stat, tipo y mejora de una carta común; los enteros se redondean y los multiplicadores escalan lo que se alejan de 1).
+- **Mejoras con rareza:** cada subida de nivel es una `ItemUpgrade` (un `StatModifierSet` con su `Rarity`) tirada con `ItemData.roll_upgrade`. La `Rarity` (`data/rarities/`, en la tabla `rarities.tres`: común gris, rara verde, improbable azul, de leyenda amarilla y mítica roja) decide cuánto sale (peso), cuántas stats distintas toca (`min_stats`/`max_stats`; 0 = todas) y cuánto más fuerte es (`power`). `default_upgrade()` es la estándar (todas sus stats como una común): la usan la armería, las herramientas y las runas al conseguirlas.
 - **Runas** (`runes/`):
-  - `RuneData` (en `data/runes/`) lleva un `StatModifierSet` por nivel, acumulativos, sobre las stats del jugador; el nivel máximo es cuántos haya.
-  - `RuneInventory` (en el jugador) aplica y quita esos modificadores al subir, bajar o quitar una runa.
+  - `RuneData` (en `data/runes/`): al conseguirla da su mejora estándar y cada subida, una tirada.
+  - `RuneInventory` (en el jugador) guarda las mejoras de cada runa (`add`, `upgrade`, `set_level`, `remove`) y aplica o quita sus modificadores; su nivel es cuántas lleva.
 - **Subir de nivel** (`level_up/`):
-  - `LevelUpData` (`data/progression/level_up.tres`): número de opciones, ranuras de armas y de runas que hay (4 y 4) y carpetas de las que salen. Cuántas están abiertas lo dicen las stats del jugador `weapon_slots` y `rune_slots` (2 y 2 al empezar; desbloquear una es un modificador +1).
-  - `LevelUpOffer` (lógica pura, con el azar inyectado) elige las opciones: subir lo que lleva sin pasar del máximo, o algo nuevo si queda ranura abierta de su tipo.
+  - `LevelUpData` (`data/progression/level_up.tres`): número de opciones, tabla de rarezas, ranuras de armas y de runas que hay (4 y 4) y carpetas de las que salen. Cuántas están abiertas lo dicen las stats del jugador `weapon_slots` y `rune_slots` (2 y 2 al empezar; desbloquear una es un modificador +1).
+  - `LevelUpOffer` (lógica pura, con el azar inyectado) elige las opciones: subir lo que lleva sin pasar del máximo (con una mejora tirada con rareza), o algo nuevo si queda ranura abierta de su tipo.
   - `LevelUpController` (en el nivel) escucha `player_leveled_up`, abre `LevelUpPanel` (pausa y cartas, en `ui/menus/level_up/`) y aplica la elegida a las armas o runas del jugador. Usa el flujo `GAMBLE` de `Rng`: la ruleta del Hito 4 irá encima.
 
 ### Rompibles — `entities/breakables/`
@@ -157,7 +158,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 - **`menus/pause/`:** menú de pausa con todas las stats del jugador; «Opciones» abre el `OptionsPanel`; «Reintentar» y «Salir» (al menú principal) van por `RunFlow`.
 - **`menus/main/`:** `MainMenu`, el menú principal (Jugar, Opciones, Archivo —desactivado hasta su tarea— y Abandonar), con los personajes vestidos de fondo. Lo muestra `Game`.
 - **`menus/armory/`:** panel de la armería.
-- **`menus/level_up/`:** elección al subir de nivel (`LevelUpPanel` y sus `LevelUpCard`).
+- **`menus/level_up/`:** elección al subir de nivel (`LevelUpPanel` y sus `LevelUpCard`; una mejora lleva el borde y el nombre del color de su rareza).
 - **`menus/options/`:** `OptionsPanel`, opciones básicas: volumen de cada bus (`SettingsData.volume_buses`, en `default_bus_layout.tres`), pantalla completa, tamaño de la ventana y VSync. El volumen se aplica al momento; lo de pantalla espera a «Aplicar» (que lo aplica y lo guarda) y «Volver» descarta lo no aplicado. Trabaja sobre `Save.settings`. Dentro del editor (pestaña «Juego») avisa de que la ventana no se puede cambiar y desactiva esas opciones. Lo abre la pausa (y lo abrirá el menú principal).
 - **`menus/results/`:** `ResultsPanel`, la pantalla de resultados al morir: una frase de muerte al azar (`death_lines`, claves `DEATH_LINE_*`), tiempo, nivel, enemigos y élites derrotados, oro y daño (del `RunRecorder`); «Reintentar» (R) recarga el nivel y «Salir» cierra el juego.
 - **`stats/`:** `StatsView`, la lista de stats de cualquier `StatsComponent` (la usan la pausa y la armería); `StatFormat`, el formato de un valor; y `ModifierFormat`, que describe un modificador («+10 % Daño»).
