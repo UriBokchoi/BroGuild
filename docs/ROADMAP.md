@@ -48,7 +48,7 @@
 - [x] Bastón de mago (proyectiles que explotan al contacto con daño en área) y daga (proyectil rápido a un objetivo; sus mejoras pueden subir su rebote, que da todo el daño al enemigo más cercano dentro de una distancia máxima)
 - [x] Segundo enemigo: el tirador, que se queda a distancia y dispara bolas de fuego lentas. Los enemigos pueden llevar armas desde sus datos (`EnemyData.weapons`), con el mismo sistema que las del jugador
 - [x] Oro (antes «fichas»): cada enemigo lo suelta y vuela solo hacia el jugador al matarlo, sin pasar por encima; contador en el HUD
-- [ ] Gemas de experiencia por niveles: las que están juntas se funden en una de otro color con su valor sumado
+- [x] Gemas de experiencia por niveles: las que están juntas se funden en una de otro color con su valor sumado
 - [ ] Élites: cada enemigo tiene un % de salir élite (más grande, pega más, más vida y suelta más experiencia y oro)
 - [ ] Dificultad: ronda normal de 10 minutos; enemigos más fuertes con el tiempo y, desde el minuto 10, muy duros (hace falta buena build para aguantar); curva de experiencia del jugador ajustada a esa duración
 - [ ] Muerte, resultados y reinicio rápido; HUD de experiencia, nivel y tiempo

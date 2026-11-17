@@ -13,8 +13,9 @@ height = 0.4
 radial_segments = 6
 rings = 2
 
-[node name="XpGem" type="Node3D"]
+[node name="XpGem" type="Node3D" node_paths=PackedStringArray("visual")]
 script = ExtResource("1_pickup")
+visual = NodePath("Visual")
 
 [node name="Visual" type="MeshInstance3D" parent="."]
 cast_shadow = 0

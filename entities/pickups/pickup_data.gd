@@ -24,3 +24,25 @@ extends Resource
 @export_range(0.05, 5.0, 0.05, "or_greater", "suffix:m") var collect_radius: float = 0.0
 ## Altura sobre los pies de quien lo recoge hacia la que vuela (el pecho).
 @export_range(0.0, 3.0, 0.05, "suffix:m") var target_height: float = 0.0
+
+@export_group("merge")
+## Lado de la zona en la que los de este tipo que esperan en el suelo se juntan en uno solo con su
+## valor sumado (las gemas: menos en pantalla, y de más valor). 0 = no se juntan.
+@export_range(0.0, 20.0, 0.1, "or_greater", "suffix:m") var merge_radius: float = 0.0
+## Cuántos tiene que haber juntos para fundirse.
+@export_range(0, 100, 1) var merge_count: int = 0
+
+@export_group("tiers")
+## Cómo se ve según lo que vale (de menor a mayor [member PickupTier.min_amount]). Vacío: siempre
+## como su escena.
+@export var tiers: Array[PickupTier] = []
+
+
+## El nivel con el que se ve un recogible que vale [param amount] (el de mayor
+## [member PickupTier.min_amount] que no lo pasa), o [code]null[/code] si no tiene niveles.
+func tier_for(amount: float) -> PickupTier:
+	var best: PickupTier = null
+	for tier: PickupTier in tiers:
+		if tier.min_amount <= amount and (best == null or tier.min_amount > best.min_amount):
+			best = tier
+	return best

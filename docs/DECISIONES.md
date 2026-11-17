@@ -616,3 +616,18 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - **`WalletComponent`** (nodo `Wallet` del jugador): suma el oro × `currency_gain` y avisa por `EventBus.player_gold_changed`. Ya tiene `spend()` para los cofres, el reroll y las tragaperras del Hito 4. Guarda decimales, porque el multiplicador los da, y el HUD muestra el entero.
   - **HUD:** `GoldCounter` va debajo de la barra de experiencia, con una moneda dibujada (`CoinIcon`) y la cantidad en dorado.
 - **Por qué:** el diseñador quiere el oro sin recogerlo a mano, solo matando. Reutiliza el `PickupField` (pool, vuelo y aviso por el `EventBus`), así que la moneda se ve llegar sin un sistema nuevo.
+
+## 2026-11-16 · Gemas de experiencia por niveles
+- **Decisión:**
+  - **Fundirse:**
+    - Cada 0,5 s (`PickupField.merge_interval`), las gemas que esperan en el suelo se agrupan por zonas de 2,5 m de lado (`PickupData.merge_radius`).
+    - Si en una zona hay 5 o más (`merge_count`), la de más valor se queda con la suma y las demás vuelven al pool.
+    - Las que ya vuelan hacia el jugador no se tocan.
+    - Las zonas se desplazan media zona en pasadas alternas, para que un grupo partido por un borde se junte en la siguiente.
+    - Es una rejilla por pasada: O(n), sin física ni comparar todas con todas.
+  - **Niveles por valor:**
+    - `PickupTier` guarda desde qué valor se usa, el color y el tamaño. Vive en `PickupData.tiers`.
+    - La gema: azul ×1, verde desde 5 (×1,25), roja desde 25 (×1,5) y morada desde 100 (×1,8).
+    - El color es un parámetro de instancia del shader (`instance uniform`): miles de gemas siguen compartiendo un único material.
+  - **El oro no se funde:** vuela nada más salir.
+- **Por qué:** el diseñador notó demasiadas gemas en pantalla. Fundirlas reduce nodos visibles y ruido, y una gema grande de otro color se lee como un premio que merece ir a buscar. Todo en datos, así que otro recogible puede tener niveles sin código.

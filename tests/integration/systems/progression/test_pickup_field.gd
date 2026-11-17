@@ -1,7 +1,8 @@
 extends GutTest
 ## PickupField con física real: deja los recogibles en el suelo, vuelan hacia quien recoge al entrar
-## en su radio (o nada más salir, el oro), al llegar avisan por el EventBus y vuelven al pool. El
-## LootDropper suelta la gema de experiencia y la moneda de oro de cada enemigo que muere.
+## en su radio (o nada más salir, el oro), al llegar avisan por el EventBus y vuelven al pool; los
+## que esperan juntos se funden en uno de más nivel. El LootDropper suelta la gema de experiencia y
+## la moneda de oro de cada enemigo que muere.
 
 const XP_GEM := preload("res://data/pickups/xp_gem.tres")
 const GOLD_COIN := preload("res://data/pickups/gold_coin.tres")
@@ -58,6 +59,39 @@ func test_gold_flies_to_the_collector_from_anywhere() -> void:
 	await wait_physics_frames(60)
 	assert_eq(_field.active_count(), 0, "recogida a 20 m")
 	assert_signal_emitted_with_parameters(EventBus, "pickup_collected", [&"gold", 2.0])
+
+
+func test_gems_close_together_merge_into_one_of_a_higher_tier() -> void:
+	for index: int in XP_GEM.merge_count:
+		_field.drop(XP_GEM, Vector3(index * 0.3, 0.0, 0.5), 1.0)
+	_field.merge_nearby()
+	assert_eq(_field.active_count(), 1)
+	var gem := _field.get_active()[0]
+	assert_eq(gem.amount, float(XP_GEM.merge_count), "con el valor sumado")
+	assert_eq(gem.visual.scale, Vector3.ONE * XP_GEM.tier_for(gem.amount).scale)
+	assert_gt(gem.visual.scale.x, XP_GEM.tier_for(1.0).scale, "de otro nivel")
+
+
+func test_too_few_or_far_apart_gems_do_not_merge() -> void:
+	for index: int in XP_GEM.merge_count - 1:
+		_field.drop(XP_GEM, Vector3(index * 0.3, 0.0, 0.5), 1.0)
+	_field.drop(XP_GEM, Vector3(-10.0, 0.0, 0.5), 1.0)
+	_field.merge_nearby()
+	assert_eq(_field.active_count(), XP_GEM.merge_count)
+
+
+func test_flying_gems_do_not_merge() -> void:
+	for index: int in XP_GEM.merge_count:
+		_field.drop(XP_GEM, Vector3(index * 0.3, 0.0, 0.5), 1.0).attracted = true
+	_field.merge_nearby()
+	assert_eq(_field.active_count(), XP_GEM.merge_count)
+
+
+func test_merges_on_its_own_every_interval() -> void:
+	for index: int in XP_GEM.merge_count:
+		_field.drop(XP_GEM, Vector3(index * 0.3, 0.0, 0.5), 1.0)
+	await wait_seconds(_field.merge_interval + 0.1)
+	assert_eq(_field.active_count(), 1)
 
 
 func test_collected_gems_are_reused() -> void:

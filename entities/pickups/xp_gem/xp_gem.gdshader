@@ -2,7 +2,8 @@ shader_type spatial;
 // Gema de experiencia: gira y flota sola (en el shader, sin coste por nodo), cada una con su desfase
 // según dónde está, y brilla.
 
-uniform vec4 color : source_color = vec4(0.3, 0.75, 1.0, 1.0);
+// De instancia: cada gema toma el color de su nivel (PickupTier) sin material propio.
+instance uniform vec4 color : source_color = vec4(0.3, 0.75, 1.0, 1.0);
 uniform float glow = 1.6;
 uniform float spin_speed = 2.0;
 uniform float bob_height = 0.08;
