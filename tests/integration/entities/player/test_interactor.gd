@@ -1,6 +1,6 @@
 extends GutTest
 ## Interactor: con física real, elige el Interactable más cercano que toca, avisa de su texto por el
-## EventBus y lo activa al pulsar «interactuar».
+## EventBus, le dice que es el elegido (y al anterior que ya no) y lo activa al pulsar «interactuar».
 
 const INTERACTABLE_LAYER := 256
 
@@ -27,6 +27,18 @@ func test_focuses_the_nearest_and_tells_the_hud() -> void:
 	assert_same(_interactor.get_focus(), near)
 	assert_ne(_interactor.get_focus(), far)
 	assert_signal_emitted_with_parameters(EventBus, "interaction_prompt_changed", [&"NEAR"])
+
+
+func test_only_the_chosen_one_knows_it() -> void:
+	var far := _add_interactable(Vector3(-1.0, 0.0, 0.0), &"FAR")
+	var near := _add_interactable(Vector3(0.8, 0.0, 0.0), &"NEAR")
+	await wait_physics_frames(6)
+	assert_true(near.is_focused())
+	assert_false(far.is_focused())
+	near.enabled = false
+	await wait_physics_frames(4)
+	assert_false(near.is_focused(), "desactivado, deja de ser el elegido")
+	assert_true(far.is_focused())
 
 
 func test_interact_action_activates_the_focus() -> void:

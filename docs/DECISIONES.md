@@ -961,3 +961,11 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
 ## 2026-11-18 · Botín más llamativo
 - **Decisión:** los power-ups (comida, imán, bomba y bebida energética) llevan un `DropGlow`: una columna de luz corta y un aro que late en el suelo, del color de cada uno. Las gemas de experiencia laten y destellan en los bordes, y las monedas destellan al ponerse de cara. Todo en shaders, sin `_process`. El aro (`ground_ring.gdshader`) pasa a `vfx/shaders` porque lo usan el jefe y los power-ups.
 - **Por qué:** lo pidió el diseñador: entre la horda no se veía lo que soltaban los enemigos. Los power-ups son pocos (pueden llevar mallas propias); las gemas salen a cientos, así que solo cambia su shader.
+
+## 2026-11-18 · Aviso sutil de lo que se puede usar
+- **Decisión:** lo que se usa con «interactuar» destella encima de sus mallas (`material_overlay`). Lo hace `InteractHint`, que escucha a su `Interactable`:
+  - De siempre, un borde de luz muy suave y una franja que lo recorre de abajo arriba cada 3 s. La franja es un plano algo inclinado que barre el mundo: las piezas de un objeto destellan a la vez y cada objeto, a su momento.
+  - El elegido (el más cercano, el que se usaría con E) lleva un borde más marcado y franjas más seguidas: el `Interactor` se lo dice con `Interactable.set_focused`.
+  - Al desactivarse (cofre abierto, altar usado), nada.
+  - Solo en las mallas: con un texto (`Label3D`) encima se vería un rectángulo.
+- **Por qué:** lo pidió el diseñador, algo sutil. Un borde fijo en todo el mapa cansaría la vista; una franja de vez en cuando se nota sin molestar.

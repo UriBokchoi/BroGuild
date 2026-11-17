@@ -131,7 +131,8 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 - **Llaves** (`entities/interactables/boss_key/`, `BossKey`): en el Brosque, tarjetas de socio que giran bajo una columna de luz. Se cogen con «interactuar» y las reparte un `BreakableScatter` del nivel.
 
 ### Interacción — `entities/interactables/`
-- `Interactable` es el área con un texto y la señal `interacted`; la detecta el `Interactor` del jugador.
+- `Interactable` es el área con un texto y la señal `interacted`; la detecta el `Interactor` del jugador, que marca como elegido al más cercano (`focus_changed`). También avisa al activarse o desactivarse (`enabled_changed`).
+- **Aviso de que se puede usar** (`InteractHint`, en `vfx/juice/interact_hint/`): encima de las mallas del objeto, un destello que lo recorre de vez en cuando y, en el elegido, un borde de luz más marcado (`interact_glint.gdshader`). Desactivado, no se ve. Lo llevan el cofre, la tragaperras, la calavera, la bolsita, la tarjeta y el altar.
 - **Interactuables actuales:**
   - `teleporter/`: `Teleporter`, pisar y aparecer en su destino; también es el recogedor de caídas;
   - `armory/`: la armería de práctica (armas y runas);
@@ -184,9 +185,10 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
   - `slow_motion.gd` (`SlowMotion`, en `RunSystems`): cámara lenta en el jackpot de la tragaperras (`slot_resolved`), en segundos reales;
   - `spin_bob.gd` (`SpinBob`): giro y balanceo de los recogibles especiales y las llaves del jefe (pocos; los que salen a cientos lo hacen en su shader);
   - `pop_out.gd` (`PopOut`): estallido al desaparecer (rompibles y llaves del jefe).
+  - `interact_hint/` (`InteractHint`): el destello de lo que se puede usar con «interactuar» (ver «Interacción»);
   - `drop_glow/` (`DropGlow`): columna de luz corta y aro que late en el suelo, del color de cada power-up, para verlos entre la horda.
 - **`speed_lines/`:** líneas de velocidad en pantalla.
-- **`shaders/`:** shaders compartidos: desenfoque de los menús, rejilla del greybox y columna de luz (`light_beam`: teletransporte, altar, llaves del jefe y power-ups) y aro en el suelo (`ground_ring`: onda y aviso del jefe, power-ups).
+- **`shaders/`:** shaders compartidos: desenfoque de los menús, rejilla del greybox y columna de luz (`light_beam`: teletransporte, altar, llaves del jefe y power-ups) , aro en el suelo (`ground_ring`: onda y aviso del jefe, power-ups) y destello de lo que se puede usar (`interact_glint`).
 - **Shaders propios de una feature:** van con ella (tajo de la espada, plataforma del teletransporte, líneas de velocidad).
 
 ### UI — `ui/`
@@ -300,7 +302,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 - **Una stat:** añade un `@export_range` en el Resource de datos que toque (`MovementData`, `OffenseData`, `WeaponStats`, `EnemyStats`…), pon su valor en el `.tres` y su fila `STAT_<NOMBRE>` en `data/i18n/strings.csv`. Un test exige la traducción.
 - **Un estado de movimiento:** crea un script en `entities/player/movement/states/` que herede de `MovementState` y añade un nodo hijo de `Movement` en `player.tscn` con su acción, prioridad y reglas.
 - **Un personaje:** crea un `.tres` `CharacterData` en `data/characters/` con sus diferencias de stats, color, arma inicial, pasiva y piezas del modelo (`attachments`: escena de `assets/models/props/`, punto y colocación) y sus textos. Una pasiva que suba una stat por nivel es solo una escena con `LevelStatPassive`; otra distinta es un script que herede de `CharacterPassive` (`_activated()`, y `_set_bonus()` para su modificador) con su escena en `entities/player/characters/passives/`. Para probarlo, pon otro pedestal en la zona de combate.
-- **Un interactuable:** crea una escena con un `Interactable` (capa 9, `prompt_key`) y conecta su `interacted`.
+- **Un interactuable:** crea una escena con un `Interactable` (capa 9, `prompt_key`) y conecta su `interacted`. Para que destelle, añádele un `InteractHint` con su modelo y los materiales de `vfx/juice/interact_hint/`.
 - **Un recogible** (cura, imán…):
   1. Crea un `.tres` `PickupData` en `data/pickups/` con su escena (raíz `Pickup`) y su `reward`.
   2. Haz que el sistema que lo usa escuche `EventBus.pickup_collected` con esa recompensa.

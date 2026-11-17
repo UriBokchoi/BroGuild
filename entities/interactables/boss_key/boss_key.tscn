@@ -4,6 +4,9 @@
 [ext_resource type="Script" path="res://entities/interactables/interactable.gd" id="2_interactable"]
 [ext_resource type="Script" path="res://vfx/juice/spin_bob.gd" id="3_spin"]
 [ext_resource type="Shader" path="res://vfx/shaders/light_beam.gdshader" id="4_beam"]
+[ext_resource type="Script" path="res://vfx/juice/interact_hint/interact_hint.gd" id="91_hint"]
+[ext_resource type="Material" path="res://vfx/juice/interact_hint/interact_glint_idle.tres" id="92_idle"]
+[ext_resource type="Material" path="res://vfx/juice/interact_hint/interact_glint_focus.tres" id="93_focus"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_card"]
 albedo_color = Color(0.1, 0.72, 0.62, 1)
@@ -105,3 +108,10 @@ prompt_key = &"INTERACT_BOSS_KEY"
 [node name="Shape" type="CollisionShape3D" parent="Interactable"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("SphereShape3D_reach")
+
+[node name="InteractHint" type="Node" parent="." node_paths=PackedStringArray("interactable", "visual")]
+script = ExtResource("91_hint")
+interactable = NodePath("../Interactable")
+visual = NodePath("../Visual/Card")
+idle_material = ExtResource("92_idle")
+focus_material = ExtResource("93_focus")
