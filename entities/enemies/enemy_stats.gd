@@ -33,3 +33,5 @@ extends Resource
 @export_group("loot")
 ## Experiencia que suelta al morir.
 @export_range(0.0, 1000.0, 0.5, "or_greater") var xp_reward: float = 0.0
+## Oro que suelta al morir (vuela solo hacia el jugador).
+@export_range(0.0, 1000.0, 0.5, "or_greater") var gold_reward: float = 0.0

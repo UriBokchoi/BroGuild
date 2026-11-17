@@ -1,7 +1,7 @@
 class_name Player
 extends CharacterBody3D
 ## Jugador: monta el contexto de movimiento, avanza la máquina de estados y mueve el cuerpo.
-## Avisa a la interfaz de su vida, su experiencia y su muerte (al morir se queda quieto y sus armas
+## Avisa a la interfaz de su vida, su experiencia, su oro y su muerte (al morir se queda quieto y sus armas
 ## paran); al subir de nivel aleja la cámara. Las mecánicas van en sus estados y componentes, nunca
 ## aquí (CLAUDE.md, «Nunca»).
 
@@ -9,6 +9,7 @@ extends CharacterBody3D
 @export var stamina: StaminaComponent
 @export var health: HealthComponent
 @export var experience: ExperienceComponent
+@export var wallet: WalletComponent
 @export var weapons: WeaponInventory
 @export var runes: RuneInventory
 ## Cámara que se aleja con el nivel.
@@ -44,9 +45,11 @@ func _ready() -> void:
 	health.died.connect(_on_died)
 	experience.xp_changed.connect(EventBus.player_xp_changed.emit)
 	experience.leveled_up.connect(_on_leveled_up)
+	wallet.gold_changed.connect(EventBus.player_gold_changed.emit)
 	# Vida y experiencia avisaron en su _ready, antes de estas conexiones: se repite para la interfaz.
 	EventBus.player_health_changed.emit(health.get_current(), health.get_maximum())
 	EventBus.player_xp_changed.emit(experience.get_xp(), experience.needed(), experience.get_level())
+	EventBus.player_gold_changed.emit(wallet.get_gold())
 
 
 func _physics_process(delta: float) -> void:

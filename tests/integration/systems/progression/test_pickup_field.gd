@@ -1,9 +1,10 @@
 extends GutTest
 ## PickupField con física real: deja los recogibles en el suelo, vuelan hacia quien recoge al entrar
-## en su radio, al llegar avisan por el EventBus y vuelven al pool. El LootDropper suelta la gema de
-## experiencia de cada enemigo que muere.
+## en su radio (o nada más salir, el oro), al llegar avisan por el EventBus y vuelven al pool. El
+## LootDropper suelta la gema de experiencia y la moneda de oro de cada enemigo que muere.
 
 const XP_GEM := preload("res://data/pickups/xp_gem.tres")
+const GOLD_COIN := preload("res://data/pickups/gold_coin.tres")
 const SWARMER := preload("res://data/enemies/swarmer.tres")
 
 var _collector: Node3D
@@ -50,6 +51,15 @@ func test_flies_to_the_collector_in_range_and_is_collected() -> void:
 	assert_signal_emitted_with_parameters(EventBus, "pickup_collected", [&"experience", 3.0])
 
 
+func test_gold_flies_to_the_collector_from_anywhere() -> void:
+	var coin := _field.drop(GOLD_COIN, Vector3.ZERO, 2.0)
+	assert_true(coin.attracted, "vuela nada más salir")
+	watch_signals(EventBus)
+	await wait_physics_frames(60)
+	assert_eq(_field.active_count(), 0, "recogida a 20 m")
+	assert_signal_emitted_with_parameters(EventBus, "pickup_collected", [&"gold", 2.0])
+
+
 func test_collected_gems_are_reused() -> void:
 	_collector.position = Vector3(1.0, 0.0, 0.0)
 	var first := _field.drop(XP_GEM, Vector3.ZERO, 1.0)
@@ -68,6 +78,22 @@ func test_dead_enemies_drop_their_experience() -> void:
 	enemy.health.take_damage(DamageInfo.create(1000.0))
 	assert_eq(_field.active_count(), 1)
 	assert_eq(_field.get_active()[0].amount, enemy.xp_reward())
+
+
+func test_dead_enemies_also_drop_their_gold() -> void:
+	var dropper := LootDropper.new()
+	dropper.field = _field
+	dropper.xp_gem = XP_GEM
+	dropper.gold_coin = GOLD_COIN
+	add_child_autofree(dropper)
+	var swarm := EnemySwarm.new()
+	add_child_autofree(swarm)
+	var enemy := swarm.spawn(SWARMER, Vector3(-5.0, 0.0, 0.0))
+	enemy.health.take_damage(DamageInfo.create(1000.0))
+	var coins := _field.get_active().filter(func(pickup: Pickup) -> bool: return pickup.data == GOLD_COIN)
+	assert_eq(coins.size(), 1)
+	assert_gt(enemy.gold_reward(), 0.0)
+	assert_eq((coins[0] as Pickup).amount, enemy.gold_reward())
 
 
 func _add_ground() -> void:

@@ -63,7 +63,7 @@ func test_stops_at_the_max_level() -> void:
 
 
 func test_counts_only_its_reward_from_pickups() -> void:
-	EventBus.pickup_collected.emit(&"currency", 50.0)
-	assert_eq(_experience.get_level(), 1, "las fichas no son experiencia")
+	EventBus.pickup_collected.emit(&"gold", 50.0)
+	assert_eq(_experience.get_level(), 1, "el oro no es experiencia")
 	EventBus.pickup_collected.emit(&"experience", 10.0)
 	assert_eq(_experience.get_level(), 2)

@@ -52,7 +52,7 @@ STAT_DURATION,Duración,Duration
 STAT_KNOCKBACK,Retroceso,Knockback
 STAT_GROUP_PROGRESSION,Progresión,Progression
 STAT_XP_GAIN,Experiencia ganada,XP gain
-STAT_CURRENCY_GAIN,Fichas ganadas,Chips gained
+STAT_CURRENCY_GAIN,Oro ganado,Gold gained
 STAT_LUCK,Suerte,Luck
 STAT_PICKUP_RANGE,Radio de recogida,Pickup range
 STAT_GROUP_SLIDE,Slide,Slide
@@ -125,6 +125,7 @@ INTERACT_WAVES_STOP,Parar oleadas,Stop waves
 WAVE_BELL_TITLE,Campana de oleadas,Wave bell
 STAT_GROUP_LOOT,Botín,Loot
 STAT_XP_REWARD,Experiencia que suelta,Experience dropped
+STAT_GOLD_REWARD,Oro que suelta,Gold dropped
 HUD_LEVEL,Nv. %d,Lv. %d
 RUNE_STRENGTH_NAME,Runa de Fuerza,Rune of Strength
 RUNE_STRENGTH_DESCRIPTION,"+10 % de daño con todas las armas por nivel.","+10% damage with every weapon per level."

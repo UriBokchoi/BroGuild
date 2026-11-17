@@ -10,7 +10,7 @@ extends Node3D
 
 ## Tipo de recogible (lo pone el [PickupField] al crearlo).
 var data: PickupData
-## Lo que vale (experiencia, fichas…).
+## Lo que vale (experiencia, oro…).
 var amount: float = 0.0
 ## Ya vuela hacia quien lo recoge (no se suelta aunque se aleje).
 var attracted: bool = false

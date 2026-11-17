@@ -1,6 +1,6 @@
 class_name PickupData
 extends Resource
-## Un tipo de recogible (gema de experiencia; más adelante fichas, curas…): su escena, qué da al
+## Un tipo de recogible (gema de experiencia, oro; más adelante curas…): su escena, qué da al
 ## recogerlo y cómo vuela hacia quien lo recoge. Los valores viven en [code]data/pickups/[/code];
 ## aquí todo vale 0 o vacío a propósito.
 
@@ -13,7 +13,10 @@ extends Resource
 @export var reward: StringName = &""
 
 @export_group("magnet")
-## Velocidad a la que empieza a volar hacia quien lo recoge al entrar en su radio de recogida.
+## Vuela hacia quien lo recoge nada más salir, esté donde esté (el oro: se cobra solo al matar).
+## Si no, espera en el suelo a que entre en su radio de recogida.
+@export var auto_collect: bool = false
+## Velocidad a la que empieza a volar hacia quien lo recoge.
 @export_range(0.0, 50.0, 0.1, "or_greater", "suffix:m/s") var start_speed: float = 0.0
 ## Aceleración mientras vuela (cuanto más tarda, más rápido va).
 @export_range(0.0, 500.0, 1.0, "or_greater", "suffix:m/s²") var acceleration: float = 0.0
