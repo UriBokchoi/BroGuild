@@ -1,12 +1,15 @@
 extends GutTest
 ## Runas de data/runes: están las cinco iniciales, cada una con id único, nombre y descripción
-## traducidos, icono, nivel máximo 20 y stats que mejorar que el jugador tiene.
+## traducidos, icono, nivel máximo 20 (Multiplicidad, 3: cada nivel es un proyectil más) y stats que
+## mejorar que el jugador tiene.
 
 const RUNES_DIR := "res://data/runes"
 const STRINGS_PATH := "res://data/i18n/strings.csv"
 const PlayerScene := preload("res://entities/player/player.tscn")
 ## Nivel máximo de partida de las runas (GDD §6).
 const MAX_LEVEL := 20
+## Runas con su propio nivel máximo.
+const CAPPED: Dictionary[StringName, int] = {&"multiplicity": 3}
 
 var _keys := PackedStringArray()
 var _runes: Array[RuneData] = []
@@ -43,7 +46,8 @@ func test_upgrades_touch_player_stats_up_to_level_20() -> void:
 	var player := PlayerScene.instantiate() as Player
 	add_child_autofree(player)
 	for rune: RuneData in _runes:
-		assert_eq(rune.max_level(), MAX_LEVEL, "%s: nivel máximo" % rune.id)
+		var cap: int = CAPPED.get(rune.id, MAX_LEVEL)
+		assert_eq(rune.max_level(), cap, "%s: nivel máximo" % rune.id)
 		assert_false(rune.upgrade_stats.is_empty(), "%s: sin stats que mejorar" % rune.id)
 		for upgrade_stat: UpgradeStat in rune.upgrade_stats:
 			assert_true(player.stats.has_stat(upgrade_stat.stat), "%s: «%s» no es una stat" % [rune.id, upgrade_stat.stat])

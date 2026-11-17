@@ -288,10 +288,10 @@ CHARACTER_MAGE_NAME,Mago,Mage
 CHARACTER_MAGE_DESCRIPTION,"Frágil pero arrollador: más área y experiencia, y planea manteniendo el salto.","Frail but overwhelming: more area and experience, and glides while holding jump."
 CHARACTER_ROGUE_NAME,Pícaro,Rogue
 CHARACTER_ROGUE_DESCRIPTION,"Rápido y escurridizo: más velocidad, crítico y stamina, y un salto más en el aire.","Fast and slippery: more speed, crit and stamina, and an extra air jump."
-PASSIVE_ENDURANCE_NAME,Aguante,Endurance
-PASSIVE_ENDURANCE_DESCRIPTION,"+2 % de daño por cada enemigo a menos de 5 m (hasta +30 %).","+2% damage for each enemy within 5 m (up to +30%)."
-PASSIVE_ARCANE_ECHO_NAME,Eco arcano,Arcane echo
-PASSIVE_ARCANE_ECHO_DESCRIPTION,"Cada 4.º ataque de cada arma sale dos veces.","Every 4th attack of each weapon fires twice."
+PASSIVE_VETERAN_NAME,Veterano,Veteran
+PASSIVE_VETERAN_DESCRIPTION,"+1 % de daño por cada nivel.","+1% damage per level."
+PASSIVE_ARCANE_EXPANSION_NAME,Expansión arcana,Arcane expansion
+PASSIVE_ARCANE_EXPANSION_DESCRIPTION,"+1 % de área por cada nivel.","+1% area per level."
 PASSIVE_LETHAL_NAME,Letal,Lethal
 PASSIVE_LETHAL_DESCRIPTION,"+1 % de probabilidad de crítico por cada nivel.","+1% crit chance per level."
 INTERACT_CHOOSE_CHARACTER,Jugar con este personaje,Play as this character

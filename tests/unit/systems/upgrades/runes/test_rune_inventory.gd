@@ -32,16 +32,16 @@ func before_each() -> void:
 func test_adding_a_rune_applies_its_first_level() -> void:
 	assert_true(_runes.add(STRENGTH))
 	assert_eq(_runes.get_level(STRENGTH), 1)
-	assert_almost_eq(_stats.get_value(&"damage"), 110.0, 0.001)
+	assert_almost_eq(_stats.get_value(&"damage"), _damage_at(1), 0.001)
 	assert_false(_runes.add(STRENGTH), "ya la lleva")
 
 
 func test_levels_stack_and_go_back() -> void:
 	_runes.add(STRENGTH)
 	_runes.set_level(STRENGTH, 3)
-	assert_almost_eq(_stats.get_value(&"damage"), 130.0, 0.001)
+	assert_almost_eq(_stats.get_value(&"damage"), _damage_at(3), 0.001)
 	_runes.set_level(STRENGTH, 2)
-	assert_almost_eq(_stats.get_value(&"damage"), 120.0, 0.001)
+	assert_almost_eq(_stats.get_value(&"damage"), _damage_at(2), 0.001)
 
 
 func test_removing_takes_everything_back() -> void:
@@ -69,3 +69,8 @@ func test_tells_when_a_level_changes() -> void:
 	watch_signals(_runes)
 	_runes.add(STRENGTH)
 	assert_signal_emitted_with_parameters(_runes, "rune_changed", [STRENGTH, 1])
+
+
+## Daño (100 de base) con Fuerza a [param level] con sus mejoras estándar.
+func _damage_at(level: int) -> float:
+	return 100.0 * (1.0 + STRENGTH.upgrade_stats[0].value * level)

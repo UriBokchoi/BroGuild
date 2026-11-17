@@ -1,7 +1,8 @@
 class_name UpgradeStat
 extends Resource
 ## Una stat que puede mejorar un arma o una runa al subir de nivel, con su mejora base (la de una
-## carta común); la rareza de la carta la multiplica ([member Rarity.power]).
+## carta común) y lo a menudo que sale ([member weight]); la rareza de la carta la multiplica
+## ([member Rarity.power]).
 
 ## Nombre de la stat ([code]damage[/code], [code]projectiles[/code], [code]area[/code]…).
 @export var stat: StringName = &""
@@ -11,6 +12,9 @@ extends Resource
 @export var value: float = 0.0
 ## Si la mejora va en números enteros (proyectiles, rebotes): se redondea, y nunca a menos de 1.
 @export var whole_numbers: bool = false
+## Peso al elegir qué stats toca una mejora (1 = como las demás; 0,5 = la mitad de veces). Con 0, solo
+## en la mejora estándar.
+@export_range(0.0, 10.0, 0.05) var weight: float = 1.0
 
 
 ## El modificador con la fuerza [param power] (1 = común).

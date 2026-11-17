@@ -40,9 +40,10 @@ func test_inventory_holds_each_weapon_once() -> void:
 func test_levels_add_and_remove_upgrades() -> void:
 	var sword := _inventory.add(SWORD)
 	sword.set_level(2)
-	assert_eq(sword.damage(), 25.0, "la mejora estándar: +5 de daño")
+	var base := SWORD.stats as WeaponStats
+	assert_almost_eq(sword.damage(), base.damage + _common(&"damage"), 1e-4, "la mejora estándar: todas sus stats")
 	assert_eq(sword.projectile_count(), 2)
-	assert_almost_eq(sword.cooldown(), 1.1 * 0.92, 1e-4)
+	assert_almost_eq(sword.cooldown(), base.cooldown * _common(&"cooldown"), 1e-4)
 	sword.set_level(99)
 	assert_eq(sword.level, SWORD.max_level(), "no pasa del máximo")
 	assert_eq(sword.get_upgrades().size(), SWORD.max_level() - 1)
@@ -116,3 +117,11 @@ func _add_dummy(at: Vector3) -> Node3D:
 	dummy.position = at
 	add_child_autofree(dummy)
 	return dummy
+
+
+## Mejora de [param stat] de una carta común de la espada.
+func _common(stat: StringName) -> float:
+	for upgrade_stat: UpgradeStat in SWORD.upgrade_stats:
+		if upgrade_stat.stat == stat:
+			return upgrade_stat.value
+	return 0.0

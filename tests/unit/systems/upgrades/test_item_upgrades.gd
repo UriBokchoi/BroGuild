@@ -1,7 +1,7 @@
 extends GutTest
 ## Mejoras con rareza: las rarezas de data/rarities van de común (gris) a mítica (roja), cada vez
 ## menos probables y más fuertes; una mejora tirada toca tantas stats distintas del objeto como
-## diga su rareza (la mítica, todas), con su fuerza; los enteros se redondean y los multiplicadores
+## diga su rareza (la mítica, todas), elegidas según su peso y con su fuerza; los enteros se redondean y los multiplicadores
 ## escalan lo que se alejan de 1.
 
 const RARITIES := preload("res://data/rarities/rarities.tres")
@@ -43,7 +43,7 @@ func test_a_mythic_upgrade_touches_every_stat_stronger() -> void:
 		assert_does_not_have(touched, modifier.stat, "sin repetir stat")
 		touched.append(modifier.stat)
 		if modifier.stat == &"damage":
-			assert_almost_eq(modifier.value, 5.0 * MYTHIC.power, 0.001)
+			assert_almost_eq(modifier.value, _common_value(SWORD, &"damage") * MYTHIC.power, 0.001)
 	assert_eq(touched.size(), SWORD.upgrade_stats.size())
 
 
@@ -63,3 +63,29 @@ func test_whole_numbers_are_rounded_and_multipliers_scale_from_one() -> void:
 
 func test_each_default_upgrade_is_a_new_one() -> void:
 	assert_ne(SWORD.default_upgrade(), SWORD.default_upgrade(), "se pueden quitar por separado")
+
+
+func test_lighter_stats_come_up_less_often() -> void:
+	var rune := RuneData.new()
+	rune.upgrade_stats = [_upgrade_stat(&"damage", 1.0), _upgrade_stat(&"area", 0.25), _upgrade_stat(&"luck", 0.0)] as Array[UpgradeStat]
+	var picks: Dictionary[StringName, int] = {&"damage": 0, &"area": 0, &"luck": 0}
+	for _roll: int in 2000:
+		picks[rune.roll_upgrade(COMMON, _rng).stat_modifiers[0].stat] += 1
+	assert_between(picks[&"area"], 300, 500, "≈ 20 %: un cuarto de peso")
+	assert_eq(picks[&"luck"], 0, "con peso 0, nunca")
+
+
+## Mejora de [param stat] de una carta común en [param item].
+func _common_value(item: ItemData, stat: StringName) -> float:
+	for upgrade_stat: UpgradeStat in item.upgrade_stats:
+		if upgrade_stat.stat == stat:
+			return upgrade_stat.value
+	return 0.0
+
+
+func _upgrade_stat(stat: StringName, weight: float) -> UpgradeStat:
+	var upgrade_stat := UpgradeStat.new()
+	upgrade_stat.stat = stat
+	upgrade_stat.value = 1.0
+	upgrade_stat.weight = weight
+	return upgrade_stat

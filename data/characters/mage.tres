@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://entities/player/characters/character_data.gd" id="1_data"]
 [ext_resource type="Script" path="res://core/stats/stat_modifier.gd" id="2_modifier"]
 [ext_resource type="Resource" path="res://data/weapons/staff.tres" id="3_weapon"]
-[ext_resource type="PackedScene" path="res://entities/player/characters/passives/arcane_echo.tscn" id="4_passive"]
+[ext_resource type="PackedScene" path="res://entities/player/characters/passives/arcane_expansion.tscn" id="4_passive"]
 [ext_resource type="Script" path="res://entities/player/characters/model/model_attachment.gd" id="5_attachment"]
 [ext_resource type="PackedScene" path="res://assets/models/props/staff.tscn" id="6_staff"]
 [ext_resource type="PackedScene" path="res://assets/models/props/wizard_hat.tscn" id="7_hat"]
@@ -55,6 +55,6 @@ description_key = &"CHARACTER_MAGE_DESCRIPTION"
 color = Color(0.58, 0.42, 1, 1)
 starting_weapon = ExtResource("3_weapon")
 passive = ExtResource("4_passive")
-passive_name_key = &"PASSIVE_ARCANE_ECHO_NAME"
-passive_description_key = &"PASSIVE_ARCANE_ECHO_DESCRIPTION"
+passive_name_key = &"PASSIVE_ARCANE_EXPANSION_NAME"
+passive_description_key = &"PASSIVE_ARCANE_EXPANSION_DESCRIPTION"
 attachments = Array[ExtResource("5_attachment")]([SubResource("Resource_staff"), SubResource("Resource_hat")])

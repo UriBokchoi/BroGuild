@@ -54,7 +54,7 @@ func test_rows_equip_level_and_remove_runes() -> void:
 	assert_eq(_player.runes.get_level(STRENGTH), 1)
 	row.level_stepped.emit(STRENGTH, 1)
 	assert_eq(_player.runes.get_level(STRENGTH), 2)
-	assert_almost_eq(_player.stats.get_value(&"damage"), 120.0, 0.001)
+	assert_almost_eq(_player.stats.get_value(&"damage"), 100.0 * (1.0 + STRENGTH.upgrade_stats[0].value * 2), 0.001)
 	row.equip_toggled.emit(STRENGTH)
 	assert_false(_player.runes.has(STRENGTH), "quitada")
 	assert_eq(_player.stats.get_value(&"damage"), 100.0)

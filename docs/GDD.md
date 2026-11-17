@@ -69,13 +69,13 @@ Toda apuesta tiene **anticipación** (giro, luces, sonido que sube), **revelado*
 **Mejoras que tocan el azar** (ejemplos): Dado trucado (1 reroll gratis por nivel) · Amigo del crupier (las maldiciones de la tragaperras a veces son premio) · Mano caliente (cofres más baratos con racha alta).
 
 ## 6. Combate
-- **Armas automáticas** (como en Megabonk o Vampire Survivors): atacan solas al objetivo más cercano o al grupo más denso; tú te centras en moverte. Ranuras: 4 de armas y 4 de runas, hasta nivel 10 las armas y 20 las runas; al empezar solo hay 2 de cada abiertas y las otras 2 se desbloquearán (cómo, por decidir; en el HUD se ven cerradas). Todo en datos.
+- **Armas automáticas** (como en Megabonk o Vampire Survivors): atacan solas al objetivo más cercano o al grupo más denso; tú te centras en moverte. Ranuras: 4 de armas y 4 de runas, hasta nivel 10 las armas y 20 las runas (Multiplicidad, 3); al empezar solo hay 2 de cada abiertas y las otras 2 se desbloquearán (cómo, por decidir; en el HUD se ven cerradas). Todo en datos.
 - **Armas iniciales**:
   - **Espada** (cuerpo a cuerpo): la cantidad de proyectiles también le afecta (más tajos).
   - **Bastón de mago**: proyectiles que explotan al contacto, con daño en área.
-  - **Daga**: proyectil rápido que da a un solo enemigo. Sus mejoras pueden subir su **rebote**: el golpe salta con todo su daño al enemigo más cercano, hasta una distancia máxima.
+  - **Daga**: proyectil rápido que da a un solo enemigo. Su **rebote** hace saltar el golpe con todo su daño al enemigo más cercano, hasta una distancia máxima: empieza con 2 y sus mejoras lo suben.
   - Las armas de proyectiles (bastón y daga) también pueden mejorar la **velocidad de su proyectil** al subir de nivel.
-- **Runas** (pasivas): suben stats principales con cada nivel: Fuerza (daño) · Amplitud (área) · Prisa (velocidad de ataque) · Vigor (vida máxima) · Multiplicidad (cantidad de proyectiles, también para armas cuerpo a cuerpo).
+- **Runas** (pasivas): suben stats principales con cada nivel: Fuerza (daño) · Amplitud (área) · Prisa (velocidad de ataque) · Vigor (vida máxima) · Multiplicidad (cantidad de proyectiles, también para armas cuerpo a cuerpo). Cada proyectil es un golpe entero más, así que Multiplicidad llega como mucho a nivel 3. Al subir un arma, la mejora de proyectiles sale la mitad de veces que las demás.
 - **Objetos de la partida** (aparte de armas y runas):
   - *Pasivos:* como los objetos de Megabonk. Salen de cofres y del jefe, tienen rareza, no ocupan ranura y se apilan: cada copia suma su efecto (+% daño, robo de vida, más oro…). Van de cultura bro en general (el gimnasio es un tema más): batido de proteínas, pizza fría de ayer, riñonera, mando de consola, gorra hacia atrás, chanclas con calcetines, rasca y gana, altavoz portátil, gafas de sol, aceite corporal, cinturón de levantar, mancuerna de oro, batido sospechoso (más daño y más dificultad), cadena de oro y la corona del Bro.
   - *Power-ups del suelo:* imán (atrae toda la experiencia del mapa), comida (cura), bomba (daño a todo lo cercano) y bebida energética (más velocidad, velocidad de ataque y daño durante unos segundos). Salen de una tabla de botín con la **probabilidad de botín** (stat del jugador, muy baja: 0,5 % por enemigo normal), que multiplican los élites (×8) y los rompibles (×12). Más adelante, la misma tirada podrá dar cofres.
@@ -138,7 +138,7 @@ WASD mover · Ratón cámara · Espacio saltar · Shift dash · Ctrl slide (dobl
   | Stats | +30 vida, +5 defensa, −5 % velocidad | −20 vida, +15 % área, +10 % experiencia | −10 vida, +10 % velocidad, +10 % crítico, +1 carga de stamina |
   | Movimiento | Dash un 30 % más largo | Planea manteniendo el salto (cae como mucho a 3 m/s) | +1 salto en el aire, con un mortal hacia delante |
   | Regeneración | 0,8 de vida/s | 0,4 de vida/s | 0,5 de vida/s |
-  | Pasiva | **Aguante**: +2 % de daño por cada enemigo a menos de 5 m (hasta +30 %) | **Eco arcano**: cada 4.º ataque de cada arma sale dos veces | **Letal**: +1 % de probabilidad de crítico por cada nivel |
+  | Pasiva (crece con cada nivel) | **Veterano**: +1 % de daño por cada nivel | **Expansión arcana**: +1 % de área por cada nivel | **Letal**: +1 % de probabilidad de crítico por cada nivel |
 
 - **Menús**: al iniciar, menú principal con Jugar, Archivo y Abandonar (cierra el juego).
   - *Jugar* → selección de personaje: lista a la izquierda, su modelo 3D en el centro y, al pasar el ratón, un panel a la derecha con nombre, stats, arma principal y habilidad pasiva. Al elegir, ese panel se cambia por la selección de nivel.

@@ -1,0 +1,9 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://entities/player/characters/passives/level_stat_passive.gd" id="1_passive"]
+
+[node name="Veteran" type="Node"]
+script = ExtResource("1_passive")
+stat = &"damage"
+kind = 1
+per_level = 0.01

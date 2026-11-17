@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://entities/player/characters/character_data.gd" id="1_data"]
 [ext_resource type="Script" path="res://core/stats/stat_modifier.gd" id="2_modifier"]
 [ext_resource type="Resource" path="res://data/weapons/sword.tres" id="3_weapon"]
-[ext_resource type="PackedScene" path="res://entities/player/characters/passives/endurance.tscn" id="4_passive"]
+[ext_resource type="PackedScene" path="res://entities/player/characters/passives/veteran.tscn" id="4_passive"]
 [ext_resource type="Script" path="res://entities/player/characters/model/model_attachment.gd" id="5_attachment"]
 [ext_resource type="PackedScene" path="res://assets/models/props/sword.tscn" id="6_sword"]
 [ext_resource type="PackedScene" path="res://assets/models/props/shield.tscn" id="7_shield"]
@@ -61,6 +61,6 @@ description_key = &"CHARACTER_WARRIOR_DESCRIPTION"
 color = Color(0.85, 0.32, 0.25, 1)
 starting_weapon = ExtResource("3_weapon")
 passive = ExtResource("4_passive")
-passive_name_key = &"PASSIVE_ENDURANCE_NAME"
-passive_description_key = &"PASSIVE_ENDURANCE_DESCRIPTION"
+passive_name_key = &"PASSIVE_VETERAN_NAME"
+passive_description_key = &"PASSIVE_VETERAN_DESCRIPTION"
 attachments = Array[ExtResource("5_attachment")]([SubResource("Resource_sword"), SubResource("Resource_shield")])

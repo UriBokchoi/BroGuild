@@ -19,25 +19,26 @@ reach = 2.8
 [sub_resource type="Resource" id="Upgrade_damage"]
 script = ExtResource("90_upgrade")
 stat = &"damage"
-value = 5.0
+value = 3.0
 
 [sub_resource type="Resource" id="Upgrade_projectiles"]
 script = ExtResource("90_upgrade")
 stat = &"projectiles"
 value = 1.0
 whole_numbers = true
+weight = 0.5
 
 [sub_resource type="Resource" id="Upgrade_area"]
 script = ExtResource("90_upgrade")
 stat = &"area"
 kind = 1
-value = 0.12
+value = 0.05
 
 [sub_resource type="Resource" id="Upgrade_cooldown"]
 script = ExtResource("90_upgrade")
 stat = &"cooldown"
 kind = 2
-value = 0.92
+value = 0.95
 
 [resource]
 script = ExtResource("1_data")

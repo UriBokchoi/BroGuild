@@ -929,3 +929,31 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
 ## 2026-11-17 · El juego empieza en español
 - **Decisión:** el idioma es una opción más (`GameSettings.locale`, guardada en `user://settings.cfg`). Un juego recién estrenado empieza en español (`SettingsData.default_locale = "es"`) aunque el sistema esté en otro idioma, y `Save` lo aplica al arrancar. El inglés sigue traducido.
 - **Por qué:** lo pidió el diseñador. Se hace en las opciones y no en `project.godot` para que un selector de idioma futuro solo tenga que cambiar esa opción.
+
+## 2026-11-18 · Equilibrio: menos escalado y personajes más parejos
+- **Problema** (del diseñador, jugando): todo escalaba demasiado (armas y mejoras); el Guerrero se disparaba y el Mago y el Pícaro se sentían flojos.
+- **Cómo se midió:** una simulación por terminal. Cada personaje, quieto, contra una horda de 104 esbirros inmortales a su alrededor y contra uno solo (un jefe). Al empezar, y con una build de mitad de partida: arma a nivel 10 con mejoras tiradas, Fuerza y Multiplicidad a nivel 8 (o su máximo) y nivel 25. Daño por segundo medio de 6 tiradas:
+
+  | | Horda antes | Horda ahora | Jefe antes | Jefe ahora |
+  |---|---|---|---|---|
+  | Guerrero | 172 → 12.480 (×72) | 133 → 4.950 (×37) | 20 → 493 | 20 → 328 |
+  | Mago | 116 → 4.060 (×35) | 177 → 5.160 (×29) | 14 → 259 | 17 → 239 |
+  | Pícaro | 16 → 1.940 (×124) | 69 → 1.840 (×27) | 17 → 529 | 22 → 384 |
+
+  Hacia el minuto 10 los enemigos tienen ×5 de vida y salen ×6 más a menudo (×30 en total): la build ya no los deja tan atrás.
+- **Decisión:**
+  - **Lo que más multiplicaba eran los proyectiles** (cada uno es un golpe entero más):
+    - Multiplicidad llega como mucho a nivel 3 (antes, 20).
+    - Al subir un arma, la mejora de proyectiles sale la mitad de veces: `UpgradeStat.weight` = 0,5 (el resto, 1).
+  - **Runas por nivel:** Fuerza y Amplitud, +6 % (antes +10 %); Prisa, +5 % (antes +8 %).
+  - **Rarezas:** de leyenda ×1,75 (antes ×2) y mítica ×2 (antes ×2,5).
+  - **Espada:** mejora de daño +3 (antes +5) y de área +5 % (antes +12 %), porque el área hace el arco más grande y le da enemigos en proporción al cuadrado; tiempo de recarga ×0,95 (antes ×0,92).
+  - **Bastón:** daño 26 (antes 18), proyectil a 15 m/s (antes 12), explosión de 2,2 m (antes 2); mejoras de daño +3,5, de radio +10 % y de recarga ×0,94.
+  - **Daga:** daño 15 (antes 12), recarga 0,7 s (antes 0,8) y empieza con 2 rebotes; mejoras de daño +2,5 y de recarga ×0,94.
+  - **Pasivas** (las pidió así el diseñador): todas suben una stat por nivel, como Letal. Son datos de `LevelStatPassive`:
+    - Veterano (Guerrero): +1 % de daño;
+    - Expansión arcana (Mago): +1 % de área;
+    - Letal (Pícaro): +1 % de crítico.
+    - Se quitan Aguante y Eco arcano. Con ellos se van `Weapon.attack_started` y `add_shots`, que solo usaba el Eco.
+- **Resultado:** el Guerrero y el Mago son los de la horda (de cerca y en área); el Pícaro, el mejor contra un solo enemigo.
+- **Pendiente:** el *feel* lo decide el diseñador jugando. La simulación no se mueve ni recibe daño, y los enemigos están quietos y muy juntos (favorece el área).
