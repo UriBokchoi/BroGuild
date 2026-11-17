@@ -5,10 +5,11 @@ extends RigidBody3D
 ## Megabonk. Persigue al objetivo separándose un poco de los que tiene al lado ([EnemySteering]), o
 ## se queda a su distancia si es de los que disparan ([member EnemyStats.keep_distance]). Hace daño
 ## al tocar (su hitbox de contacto) y con sus armas, si tiene ([member EnemyData.weapons]); al
-## morir, sus armas paran (sus disparos en vuelo siguen) y él encoge y desaparece. No se mueve solo:
-## un [EnemySwarm] lo saca de su pool con [method spawn], fija su velocidad horizontal con
-## [method physics_step] cada tick (la física pone la gravedad y los choques) y lo guarda cuando
-## avisa con [signal despawned]. Sus stats salen de su [EnemyData] ([method setup]).
+## morir, sus armas paran (sus disparos en vuelo siguen), su cuerpo deja de chocar con el jugador y
+## con los demás enemigos, y él encoge y desaparece. No se mueve solo: un [EnemySwarm] lo saca de su
+## pool con [method spawn], fija su velocidad horizontal con [method physics_step] cada tick (la
+## física pone la gravedad y los choques) y lo guarda cuando avisa con [signal despawned]. Sus stats
+## salen de su [EnemyData] ([method setup]).
 
 ## Acaba de morir (aún encogiéndose).
 signal died(enemy: Enemy)
@@ -46,6 +47,9 @@ var elite: EliteData
 var _stats: EnemyStats
 var _rest_scale: Vector3 = Vector3.ONE
 var _rest_mass: float = 1.0
+## Capas y máscara de su cuerpo vivo (al morir deja de chocar con el jugador y con los demás).
+var _rest_layer: int = 0
+var _rest_mask: int = 0
 ## Tamaño de esta vida respecto al normal (ver [member EliteData.size]).
 var _size: float = 1.0
 ## Formas de colisión y marcadores que crecen con el tamaño, con su transform normal.
@@ -80,6 +84,8 @@ func _ready() -> void:
 	_stats = stats.get_resolved(EnemyStats) as EnemyStats
 	_rest_scale = visual.scale
 	_rest_mass = mass
+	_rest_layer = collision_layer
+	_rest_mask = collision_mask
 	for shape: Node in find_children("*", "CollisionShape3D", true, false):
 		_sized[shape as Node3D] = (shape as Node3D).transform
 	for child: Node in get_children():
@@ -104,6 +110,8 @@ func spawn(feet: Vector3) -> void:
 	visible = true
 	global_position = feet
 	linear_velocity = Vector3.ZERO
+	collision_layer = _rest_layer
+	collision_mask = _rest_mask
 	angular_velocity = Vector3.ZERO
 	_clear_boosts()
 	contact_hitbox.reset_hits()
@@ -306,6 +314,10 @@ func _on_died() -> void:
 	# Ya no recibe ni hace daño; desaparece al terminar de encoger.
 	hurtbox.set_deferred(&"monitorable", false)
 	contact_hitbox.set_deferred(&"monitoring", false)
+	# Mientras encoge no frena a nadie (el sprint del jugador, los que vienen detrás): solo se apoya en
+	# el suelo.
+	collision_layer = 0
+	collision_mask = PhysicsLayers.mask(PhysicsLayers.WORLD)
 	_disarm()
 	_dying_left = death_time
 	EventBus.enemy_died.emit(self)

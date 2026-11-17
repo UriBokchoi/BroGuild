@@ -1,7 +1,7 @@
 extends GutTest
 ## EnemySwarm con física real y el esbirro: saca enemigos del pool, los lleva hacia el objetivo
-## chocando entre sí (pueden quedar apilados), los guarda al morir para reutilizarlos y retira a los
-## que caen del mapa.
+## chocando entre sí (pueden quedar apilados), los guarda al morir para reutilizarlos (mientras
+## mueren ya no chocan con nadie) y retira a los que caen del mapa.
 
 const SWARMER := preload("res://data/enemies/swarmer.tres")
 
@@ -79,6 +79,20 @@ func test_enemies_that_fall_off_are_retired() -> void:
 	_swarm.spawn(SWARMER, Vector3(0.0, _swarm.kill_height - 10.0, 0.0))
 	await wait_physics_frames(2)
 	assert_eq(_swarm.active_count(), 0)
+
+
+func test_a_dying_enemy_no_longer_blocks_anyone() -> void:
+	var enemy := _swarm.spawn(SWARMER, Vector3.ZERO)
+	var layer := enemy.collision_layer
+	var mask := enemy.collision_mask
+	enemy.health.take_damage(DamageInfo.create(enemy.health.get_maximum() * 10.0))
+	assert_eq(enemy.collision_layer, 0, "ni el jugador ni los demás chocan con él")
+	assert_eq(enemy.collision_mask, PhysicsLayers.mask(PhysicsLayers.WORLD), "solo se apoya en el suelo")
+	await wait_seconds(enemy.death_time + 0.1)
+	var again := _swarm.spawn(SWARMER, Vector3.ZERO)
+	assert_same(again, enemy, "el mismo, del pool")
+	assert_eq(again.collision_layer, layer, "vivo, vuelve a chocar")
+	assert_eq(again.collision_mask, mask)
 
 
 func test_clear_retires_everyone() -> void:
