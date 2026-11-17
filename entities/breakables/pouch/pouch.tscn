@@ -1,0 +1,72 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://entities/breakables/breakable.gd" id="1_breakable"]
+[ext_resource type="Resource" path="res://data/breakables/pouch.tres" id="2_data"]
+[ext_resource type="Material" path="res://assets/models/props/materials/leather.tres" id="3_leather"]
+[ext_resource type="Material" path="res://assets/models/props/materials/gold.tres" id="4_gold"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_sack"]
+material = ExtResource("3_leather")
+radius = 0.34
+height = 0.56
+radial_segments = 12
+rings = 6
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_neck"]
+material = ExtResource("3_leather")
+top_radius = 0.13
+bottom_radius = 0.08
+height = 0.16
+radial_segments = 10
+rings = 1
+
+[sub_resource type="TorusMesh" id="TorusMesh_tie"]
+material = ExtResource("4_gold")
+inner_radius = 0.07
+outer_radius = 0.11
+rings = 16
+ring_segments = 6
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_coin"]
+material = ExtResource("4_gold")
+top_radius = 0.1
+bottom_radius = 0.1
+height = 0.03
+radial_segments = 12
+rings = 1
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_touch"]
+radius = 0.7
+
+[node name="Pouch" type="Node3D" node_paths=PackedStringArray("area", "visual")]
+script = ExtResource("1_breakable")
+data = ExtResource("2_data")
+area = NodePath("Touch")
+visual = NodePath("Visual")
+
+[node name="Visual" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.28, 0)
+
+[node name="Sack" type="MeshInstance3D" parent="Visual"]
+mesh = SubResource("SphereMesh_sack")
+
+[node name="Neck" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
+mesh = SubResource("CylinderMesh_neck")
+
+[node name="Tie" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.26, 0)
+mesh = SubResource("TorusMesh_tie")
+
+[node name="Coin" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0.02, -0.33)
+mesh = SubResource("CylinderMesh_coin")
+
+[node name="Touch" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="Shape" type="CollisionShape3D" parent="Touch"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
+shape = SubResource("SphereShape3D_touch")

@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="BreakableData" format=3]
+
+[ext_resource type="Script" path="res://entities/breakables/breakable_data.gd" id="1_data"]
+[ext_resource type="Resource" path="res://data/pickups/xp_gem.tres" id="2_reward"]
+
+[resource]
+script = ExtResource("1_data")
+reward = ExtResource("2_reward")
+amount = 3.0
+pieces = 3
+spread = 0.8

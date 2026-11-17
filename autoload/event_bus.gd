@@ -30,6 +30,8 @@ signal enemy_damaged(position: Vector3, amount: float, info: DamageInfo)
 signal interaction_prompt_changed(prompt_key: StringName)
 ## Murió [param enemy] (aún en su sitio, con su tipo y sus stats): botín, experiencia, Archivo…
 signal enemy_died(enemy: Enemy)
+## El jugador rompió un rompible (calavera, bolsita…) de [param data] en [param at].
+signal breakable_broken(data: BreakableData, at: Vector3)
 ## Se recogió un recogible que da [param reward] (p. ej. [code]experience[/code]) por [param amount].
 signal pickup_collected(reward: StringName, amount: float)
 ## Cambió la experiencia del jugador ([param current] de [param needed]) o su nivel.

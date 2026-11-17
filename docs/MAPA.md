@@ -22,7 +22,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 |---|---|
 | `autoload/` | Los únicos singletons: `EventBus` (solo señales), `Rng` (todo el azar, un generador por sistema), `RunState` (partida en curso: personaje, nivel y semilla) y `Save` (lo que dura entre partidas, en `user://`; de momento, las opciones). Sin lógica de gameplay. |
 | `core/` | Piezas genéricas que no saben de este juego: stats, máquina de estados, componentes de combate, pool (`NodePool`), rejilla espacial (`SpatialHash`, con marcas y tope de resultados), carga de carpetas de datos (`ResourceDir`), nombres de acciones y capas. |
-| `entities/` | Lo que existe en el mundo: el jugador, los enemigos y los interactuables. |
+| `entities/` | Lo que existe en el mundo: el jugador, los enemigos, los interactuables y los rompibles. |
 | `systems/` | Reglas y sistemas que reparten trabajo entre entidades: combate (fórmulas y armas), progresión, aparición de enemigos, objetos y runas (`upgrades/`), la partida (`run/`) y las opciones (`settings/`). Vacía, para más adelante: `gamble/`. |
 | `data/` | Los `.tres` de balance y la traducción. Nada de código. |
 | `ui/` | HUD, menús, panel de depuración, vista de stats, tema global y dueño del ratón. |
@@ -123,6 +123,11 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
   - `LevelUpOffer` (lógica pura, con el azar inyectado) elige las opciones: subir lo que lleva sin pasar del máximo, o algo nuevo si queda ranura abierta de su tipo.
   - `LevelUpController` (en el nivel) escucha `player_leveled_up`, abre `LevelUpPanel` (pausa y cartas, en `ui/menus/level_up/`) y aplica la elegida a las armas o runas del jugador. Usa el flujo `GAMBLE` de `Rng`: la ruleta del Hito 4 irá encima.
 
+### Rompibles — `entities/breakables/`
+- **`Breakable`:** rompible del nivel (como los jarrones de Megabonk). Su `Area3D` solo detecta al jugador: al tocarlo se rompe una vez, avisa por `EventBus.breakable_broken` con su `BreakableData` (qué recogible, cuánto, en cuántos trozos y a qué distancia) y desaparece con un estallido. Los ataques no lo rompen.
+- **Los de serie:** la calavera (`skull/`, experiencia) y la bolsita (`pouch/`, oro), con sus datos en `data/breakables/`.
+- **`BreakableScatter`** (`systems/spawning/`, en el nivel): reparte al empezar las `ScatterEntry` (escena y cuántas) por un rectángulo, en sitios distintos cada partida (flujo `LOOT`). Cada uno cae sobre suelo plano o encima de una meseta, nunca dentro o encima de un árbol o un prop, y separado de los demás.
+
 ### Botín y progresión — `entities/pickups/` y `systems/progression/`
 - **Recogibles:**
   - `PickupData` (en `data/pickups/`) lleva escena, recompensa (p. ej. `experience`, `gold`), vuelo hacia quien recoge (`auto_collect`: vuela nada más salir, esté donde esté), cómo se juntan y sus niveles por valor (`tiers`).
@@ -130,7 +135,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
   - `xp_gem/`: la gema de experiencia; su color (parámetro de instancia del shader) y su tamaño salen de su nivel (`PickupTier`: azul, verde desde 5, roja desde 25, morada desde 100).
   - `gold_coin/`: la moneda de oro (de recogida automática).
 - **`PickupField`** (en el nivel): suelta recogibles en el suelo desde un pool por tipo. Cuando quien recoge está dentro de su `pickup_range` (o nada más salir, si son `auto_collect`), vuelan acelerando hacia él; al llegar, avisan por `EventBus.pickup_collected`. Todos van en un bucle y sin física. Cada `merge_interval` funde los del mismo tipo que esperan juntos (`PickupData.merge_radius` y `merge_count`) en uno con el valor sumado.
-- **`LootDropper`** (en el nivel): escucha `enemy_died` y suelta la gema con la `xp_reward` y la moneda con el `gold_reward` del enemigo. Los cofres y las probabilidades de botín irán aquí.
+- **`LootDropper`** (en `RunSystems`): escucha `breakable_broken` y suelta el botín del rompible (`BreakableData`) en trozos alrededor (flujo `LOOT`); escucha `enemy_died` y suelta la gema con la `xp_reward` y la moneda con el `gold_reward` del enemigo. Los cofres y las probabilidades de botín irán aquí.
 - **`ExperienceComponent`** (en el jugador): suma la experiencia recogida × `xp_gain` y sube de nivel con la curva de `ExperienceData` (`data/progression/experience.tres`). El jugador aleja la cámara con el nivel.
 - **`WalletComponent`** (en el jugador): el oro de la partida (antes «fichas» en el GDD). Suma el recogido × `currency_gain` y lo gasta con `spend()`.
 - **Stats de progresión:** `ProgressionData` (experiencia y oro ganados, suerte, radio de recogida y ranuras abiertas de armas y runas).
@@ -191,6 +196,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 | `player_died` | `Player` | `ResultsPanel`, `RunRecorder` |
 | `enemy_damaged` | `DamageReporter` | `DamageNumbers` |
 | `enemy_died` (el propio enemigo) | `Enemy` | `LootDropper` (y más adelante el Archivo) |
+| `breakable_broken` (sus datos y dónde) | `Breakable` | `LootDropper` |
 | `pickup_collected` | `PickupField` | `ExperienceComponent` (la recompensa `experience`), `WalletComponent` (`gold`) |
 | `player_xp_changed` | `Player` | `XpBar` |
 | `player_gold_changed` | `Player` | `GoldCounter` |
@@ -223,6 +229,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 
   Aparece sola en la armería.
 - **Una runa:** crea un `.tres` `RuneData` en `data/runes/` con su icono (`assets/textures/icons/runes/`), un `StatModifierSet` por nivel (sobre stats que el jugador tenga) y traduce su nombre y descripción. Aparece sola en la armería.
+- **Un rompible:** crea su `BreakableData` en `data/breakables/` (recogible, valor, trozos, dispersión) y su escena con raíz `Breakable` (modelo y `Area3D` que solo detecte al jugador); añádelo como `ScatterEntry` al `BreakableScatter` del nivel.
 - **Un enemigo:**
   1. Crea un `.tres` `EnemyData` en `data/enemies/`.
   2. Si no reutiliza la escena de otro, crea la suya en `entities/enemies/<enemigo>/`, con raíz `Enemy`, como `swarmer.tscn`.

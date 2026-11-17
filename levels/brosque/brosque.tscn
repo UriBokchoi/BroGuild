@@ -10,6 +10,10 @@
 [ext_resource type="PackedScene" path="res://levels/common/run_systems.tscn" id="8_run_systems"]
 [ext_resource type="Resource" path="res://data/waves/brosque.tres" id="9_waves"]
 [ext_resource type="Resource" path="res://data/characters/warrior.tres" id="10_warrior"]
+[ext_resource type="Script" path="res://systems/spawning/breakable_scatter.gd" id="11_scatter"]
+[ext_resource type="Script" path="res://systems/spawning/scatter_entry.gd" id="12_entry"]
+[ext_resource type="PackedScene" path="res://entities/breakables/skull/skull.tscn" id="13_skull"]
+[ext_resource type="PackedScene" path="res://entities/breakables/pouch/pouch.tscn" id="14_pouch"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_sky"]
 sky_top_color = Color(0.3, 0.52, 0.82, 1)
@@ -42,6 +46,16 @@ size = Vector3(164, 30, 2)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_bound_z"]
 size = Vector3(2, 30, 164)
+
+[sub_resource type="Resource" id="Resource_skulls"]
+script = ExtResource("12_entry")
+scene = ExtResource("13_skull")
+count = 30
+
+[sub_resource type="Resource" id="Resource_pouches"]
+script = ExtResource("12_entry")
+scene = ExtResource("14_pouch")
+count = 20
 
 [node name="Brosque" type="Node3D"]
 
@@ -132,6 +146,11 @@ transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -14, 0, 2)
 
 [node name="BenchEast" parent="Clearing" instance=ExtResource("6_bench")]
 transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 14, 0, 2)
+
+[node name="Breakables" type="Node3D" parent="."]
+script = ExtResource("11_scatter")
+entries = Array[ExtResource("12_entry")]([SubResource("Resource_skulls"), SubResource("Resource_pouches")])
+half_extent = Vector2(70, 70)
 
 [node name="PlayerSpawn" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3)

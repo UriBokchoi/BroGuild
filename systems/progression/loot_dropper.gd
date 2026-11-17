@@ -1,9 +1,11 @@
 class_name LootDropper
 extends Node
-## Lo que sueltan los enemigos al morir (escucha [code]EventBus.enemy_died[/code]): una gema con su
-## experiencia ([member EnemyStats.xp_reward]) y una moneda con su oro
-## ([member EnemyStats.gold_reward]), que vuela sola hacia el jugador. Cofres y probabilidades de
-## botín llegarán aquí.
+## Lo que sueltan los enemigos y los rompibles. Al morir un enemigo
+## ([code]EventBus.enemy_died[/code]): una gema con su experiencia ([member EnemyStats.xp_reward])
+## y una moneda con su oro ([member EnemyStats.gold_reward]), que vuela sola hacia el jugador. Al
+## romperse un rompible ([code]EventBus.breakable_broken[/code]): su botín
+## ([BreakableData]) en trozos repartidos alrededor. Cofres y probabilidades de botín llegarán
+## aquí.
 
 ## Dónde caen los recogibles.
 @export var field: PickupField
@@ -12,16 +14,31 @@ extends Node
 ## Recogible del oro.
 @export var gold_coin: PickupData
 
+## Azar del reparto. Si no se asigna antes de entrar en el árbol, el flujo de botín de
+## [code]Rng[/code].
+var rng: RandomNumberGenerator
+
 
 func _ready() -> void:
+	if rng == null:
+		rng = Rng.stream(Rng.Stream.LOOT)
 	EventBus.enemy_died.connect(_on_enemy_died)
+	EventBus.breakable_broken.connect(_on_breakable_broken)
 
 
 func _on_enemy_died(enemy: Enemy) -> void:
-	_drop(xp_gem, enemy, enemy.xp_reward())
-	_drop(gold_coin, enemy, enemy.gold_reward())
+	_drop(xp_gem, enemy.global_position, enemy.xp_reward())
+	_drop(gold_coin, enemy.global_position, enemy.gold_reward())
 
 
-func _drop(pickup_data: PickupData, enemy: Enemy, amount: float) -> void:
+func _on_breakable_broken(data: BreakableData, at: Vector3) -> void:
+	var piece := data.amount / data.pieces
+	for _index: int in data.pieces:
+		var angle := rng.randf_range(0.0, TAU)
+		var offset := Vector3(cos(angle), 0.0, sin(angle)) * rng.randf_range(0.0, data.spread)
+		_drop(data.reward, at + offset, piece)
+
+
+func _drop(pickup_data: PickupData, at: Vector3, amount: float) -> void:
 	if pickup_data and amount > 0.0:
-		field.drop(pickup_data, enemy.global_position, amount)
+		field.drop(pickup_data, at, amount)
