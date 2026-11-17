@@ -44,7 +44,7 @@
 - [x] Director de oleadas en la zona de pruebas (curva en datos) y escena de estrés con 300 y 500 enemigos y fps medidos (se repite al cerrar cada hito). Primera medición: 300 a 130 fps y 500 a 57 fps (RX 6800 XT, ver DECISIONES)
 - [x] Experiencia: gemas atraídas por el radio de recogida, niveles con curva en datos (la cámara ya se aleja con el nivel); barra de experiencia y nivel arriba en el HUD
 - [ ] Subir de nivel: elegir 1 de 3 entre armas y runas nuevas o mejorarlas; 4 ranuras de armas y 4 de runas, nivel máximo 5
-- [ ] Runas: `RuneData` (modificadores por nivel) y las 5 iniciales: Fuerza (daño), Amplitud (área), Prisa (velocidad de ataque), Vigor (vida) y Multiplicidad (cantidad de proyectiles)
+- [x] Runas: `RuneData` (modificadores por nivel) y las 5 iniciales: Fuerza (daño), Amplitud (área), Prisa (velocidad de ataque), Vigor (vida) y Multiplicidad (cantidad de proyectiles); también en la armería de práctica. Se hizo antes que «Subir de nivel», para que la elección tenga opciones
 - [ ] Bastón de mago (proyectiles que explotan al contacto con daño en área) y daga (proyectil rápido a un objetivo; sus mejoras pueden subir su rebote, que da todo el daño al enemigo más cercano dentro de una distancia máxima)
 - [ ] Segundo enemigo (tirador a distancia)
 - [ ] Muerte, resultados y reinicio rápido; HUD de experiencia, nivel y tiempo

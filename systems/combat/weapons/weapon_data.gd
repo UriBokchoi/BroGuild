@@ -1,15 +1,9 @@
 class_name WeaponData
-extends Resource
-## Un arma: nombre, escena con su comportamiento, stats de nivel 1 y mejoras de cada nivel. Añadir
-## un arma es crear su [code].tres[/code] en [code]data/weapons/[/code] (y su escena si ataca de una
-## forma nueva).
+extends ItemData
+## Un arma: escena con su comportamiento, stats de nivel 1 y mejoras de cada nivel (su nombre e id
+## vienen de [ItemData]). Añadir un arma es crear su [code].tres[/code] en [code]data/weapons/[/code]
+## (y su escena si ataca de una forma nueva).
 
-## Identificador estable (guardado, desbloqueos): no cambia aunque cambie el nombre.
-@export var id: StringName = &""
-## Clave de traducción del nombre (p. ej. [code]WEAPON_SWORD_NAME[/code]).
-@export var name_key: StringName = &""
-## Clave de traducción de la descripción.
-@export var description_key: StringName = &""
 ## Escena del arma: su raíz es un [Weapon].
 @export var scene: PackedScene
 ## Stats a nivel 1.

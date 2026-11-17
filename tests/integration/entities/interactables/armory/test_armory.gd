@@ -1,10 +1,12 @@
 extends GutTest
-## Armería: al interactuar abre su panel con todas las armas de data/weapons; el panel equipa,
-## quita y cambia de nivel las armas del jugador, pausa el juego y se cierra con Esc.
+## Armería: al interactuar abre su panel con todas las armas de data/weapons y las runas de
+## data/runes; el panel equipa, quita y cambia de nivel las armas y runas del jugador, pausa el
+## juego y se cierra con Esc.
 
 const PlayerScene := preload("res://entities/player/player.tscn")
 const ArmoryScene := preload("res://entities/interactables/armory/armory.tscn")
 const SWORD := preload("res://data/weapons/sword.tres")
+const STRENGTH := preload("res://data/runes/strength.tres")
 
 var _player: Player
 var _armory: Armory
@@ -22,17 +24,18 @@ func after_each() -> void:
 	get_tree().paused = false
 
 
-func test_interacting_opens_the_panel_with_every_weapon() -> void:
+func test_interacting_opens_the_panel_with_every_weapon_and_rune() -> void:
 	_armory.interactable.interact(_player)
 	assert_true(_armory.panel.is_open())
 	assert_true(get_tree().paused)
 	var weapon_count := ResourceDir.load_all("res://data/weapons", WeaponData).size()
-	assert_eq(_armory.panel.get_rows().size(), weapon_count)
+	var rune_count := ResourceDir.load_all("res://data/runes", RuneData).size()
+	assert_eq(_armory.panel.get_rows().size(), weapon_count + rune_count)
 
 
 func test_rows_equip_level_and_remove_weapons() -> void:
 	_armory.interactable.interact(_player)
-	var row := _sword_row()
+	var row := _row_for(SWORD)
 	row.equip_toggled.emit(SWORD)
 	var sword := _player.weapons.get_weapon(SWORD)
 	assert_not_null(sword, "equipada")
@@ -42,6 +45,19 @@ func test_rows_equip_level_and_remove_weapons() -> void:
 	assert_eq(sword.level, 1)
 	row.equip_toggled.emit(SWORD)
 	assert_false(_player.weapons.has(SWORD), "quitada")
+
+
+func test_rows_equip_level_and_remove_runes() -> void:
+	_armory.interactable.interact(_player)
+	var row := _row_for(STRENGTH)
+	row.equip_toggled.emit(STRENGTH)
+	assert_eq(_player.runes.get_level(STRENGTH), 1)
+	row.level_stepped.emit(STRENGTH, 1)
+	assert_eq(_player.runes.get_level(STRENGTH), 2)
+	assert_almost_eq(_player.stats.get_value(&"damage"), 120.0, 0.001)
+	row.equip_toggled.emit(STRENGTH)
+	assert_false(_player.runes.has(STRENGTH), "quitada")
+	assert_eq(_player.stats.get_value(&"damage"), 100.0)
 
 
 func test_escape_closes_without_opening_the_pause() -> void:
@@ -54,8 +70,8 @@ func test_escape_closes_without_opening_the_pause() -> void:
 	assert_false(get_tree().paused)
 
 
-func _sword_row() -> ArmoryRow:
+func _row_for(item: ItemData) -> ArmoryRow:
 	for row: ArmoryRow in _armory.panel.get_rows():
-		if row.data.id == SWORD.id:
+		if row.data.id == item.id:
 			return row
 	return null

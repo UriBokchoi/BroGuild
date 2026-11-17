@@ -67,6 +67,10 @@ func test_weapons_use_the_player_stats() -> void:
 	assert_same(_player.weapons.wielder_stats, _player.stats)
 
 
+func test_runes_improve_the_player_stats() -> void:
+	assert_same(_player.runes.stats, _player.stats)
+
+
 func test_collected_experience_levels_up_and_moves_the_camera_back() -> void:
 	watch_signals(EventBus)
 	var needed := _player.experience.needed()
