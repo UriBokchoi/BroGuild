@@ -2,7 +2,7 @@ extends GutTest
 ## El Brosque: las oleadas empiezan solas, el jugador aparece en el claro, el mapa se genera al
 ## cargar (mesetas, tragaperras, cofres, props y bosque; dentro de las paredes los árboles chocan y
 ## fuera una banda tapa el borde), los enemigos salen solo dentro, el nivel da la bienvenida y tiene
-## su jefe: el altar al borde del claro y cinco tarjetas de socio lejos del punto de aparición; y
+## su jefe: el altar al borde del claro y las tarjetas de socio justas, lejos del punto de aparición; y
 ## unas ruinas pequeñas fuera del claro.
 
 const BrosqueScene := preload("res://levels/brosque/brosque.tscn")
@@ -81,7 +81,7 @@ func test_it_has_its_boss_altar_and_membership_cards() -> void:
 	# Las tarjetas se reparten un tick de física después de cargar.
 	await wait_physics_frames(2)
 	var keys := _level.get_node(^"BossKeys").get_children()
-	assert_eq(keys.size(), 5)
+	assert_eq(keys.size(), systems.boss.keys_needed, "las justas: ni una de más")
 	for key: Node in keys:
 		var at := (key as Node3D).global_position
 		assert_gte(Vector2(at.x, at.z).length(), 25.0, "lejos del punto de aparición")

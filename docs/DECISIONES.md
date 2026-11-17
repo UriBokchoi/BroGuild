@@ -973,3 +973,7 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
 ## 2026-11-18 · Ruinas en el Brosque
 - **Decisión:** tres piezas nuevas de piedra con musgo, repartidas por el mapa generado fuera del claro: un templo de columnas rotas (1), muros caídos (3) y arcos medio derrumbados (2). Tienen colisión; sus bordes, de hasta 2,6 m, se pueden subir con el mantle. Solo mallas básicas y tres materiales (`ruin_stone`, `ruin_stone_dark` y `moss`).
 - **Por qué:** lo pidió el diseñador, para que el Brosque parezca más medieval. Como piezas del `LayoutData`, salen en sitios distintos en cada partida y no se pisan con lo demás.
+
+## 2026-11-18 · Ent-renador: las tarjetas justas y menos daño
+- **Decisión:** en el Brosque hay exactamente las tarjetas que pide el jefe (3; un test lo exige). El Ent-renador hace menos daño: al tocar, 16 (antes 22); la onda del Burpee, ×1,3 (antes ×1,6); las embestidas, ×1,25 (antes ×1,5).
+- **Por qué:** lo pidió el diseñador jugando: sobraban tarjetas y el jefe pegaba demasiado.

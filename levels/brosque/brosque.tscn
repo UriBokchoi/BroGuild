@@ -58,7 +58,7 @@ count = 20
 [sub_resource type="Resource" id="Resource_keys"]
 script = ExtResource("12_entry")
 scene = ExtResource("18_key")
-count = 5
+count = 3
 
 [node name="Brosque" type="Node3D"]
 

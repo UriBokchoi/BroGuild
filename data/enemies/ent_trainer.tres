@@ -13,7 +13,7 @@ max_health = 5000.0
 script = ExtResource("3_stats")
 move_speed = 4.2
 acceleration = 25.0
-contact_damage = 22.0
+contact_damage = 16.0
 contact_interval = 0.9
 separation_radius = 2.0
 
