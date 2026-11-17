@@ -11,6 +11,7 @@
 [ext_resource type="Texture2D" path="res://assets/textures/icons/ui/lock.svg" id="9_lock"]
 [ext_resource type="Script" path="res://ui/hud/difficulty_counter.gd" id="10_difficulty"]
 [ext_resource type="Texture2D" path="res://assets/textures/icons/ui/difficulty.svg" id="11_skull"]
+[ext_resource type="Script" path="res://ui/hud/slot_panel.gd" id="12_slots"]
 
 [node name="HUD" type="CanvasLayer"]
 layer = 10
@@ -138,6 +139,32 @@ size_flags_horizontal = 4
 size_flags_vertical = 8
 mouse_filter = 2
 theme_type_variation = &"HudColumn"
+
+[node name="SlotPanel" type="PanelContainer" parent="Margin/Column"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_filter = 2
+theme_type_variation = &"SlotPanel"
+script = ExtResource("12_slots")
+
+[node name="Content" type="VBoxContainer" parent="Margin/Column/SlotPanel"]
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"CardColumn"
+
+[node name="Reels" type="HBoxContainer" parent="Margin/Column/SlotPanel/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_filter = 2
+theme_type_variation = &"LoadoutRow"
+
+[node name="SlotResult" type="Label" parent="Margin/Column/SlotPanel/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"SlotResultLabel"
+horizontal_alignment = 1
 
 [node name="InteractionPrompt" type="PanelContainer" parent="Margin/Column"]
 unique_name_in_owner = true

@@ -817,3 +817,17 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
 - **Qué extra sale** lo decide una `WeightedTable` (`core/`): entradas con peso, y cada uso hereda su tipo de entrada (`BonusDrop`: recogible y valor). Sustituye a las probabilidades sueltas por recogible de la versión anterior. Las tragaperras y los cofres usarán la misma tabla, y la Suerte desplazará sus pesos cuando lleguen las rarezas. Los cofres entrarán en esta misma tirada.
 - **Bebida energética:** un `BuffEffect` aplica un `StatModifierSet` de datos (+25 % de carrera y sprint, +30 % de velocidad de ataque y +20 % de daño) durante los segundos que vale el recogible (10). Otra lata reinicia la cuenta en lugar de acumularse, para que no se vuelva imparable.
 - **`LootDropper`** lee la dificultad y la probabilidad de botín directamente de las stats del jugador (`player_stats`) en lugar de guardar la última dificultad que avisó el `EventBus`: es más simple, y el `EventBus` queda para el HUD.
+
+## 2026-11-17 · Tragaperras
+- **Diseño** (propuesto y aceptado):
+  - Cuatro máquinas en el Brosque: una en el claro y tres en las mesetas.
+  - Coste: 15 de oro + 5 por punto de dificultad, ×1,5 cada vez que se usa esa misma máquina.
+  - Tres rodillos con cuatro símbolos de pesos 4, 3, 2 y 3: moneda, corazón, estrella y calavera.
+  - Trío = jackpot, pareja = premio menor, todos distintos = nada. Con esos pesos sale ≈ 7 % de tríos, ≈ 57 % de parejas y ≈ 35 % de nada.
+  - No pausa: apostar con la horda encima forma parte del riesgo.
+- **Montaje:**
+  - Los símbolos son `SlotSymbol` sobre la `WeightedTable`.
+  - Los premios (`SlotOutcome`) son recompensas por `pickup_collected`, igual que los recogibles. Así se reutiliza lo que ya había: el monedero cobra el oro (con su `currency_gain`) y los `PickupEffect` aplican la cura y la maldición (otra vez `BuffEffect`).
+  - Solo hacen falta dos efectos nuevos: la mejora gratis y la oleada de élites (`WaveDirector.spawn_elites`).
+  - El HUD y la cámara lenta se enteran por `slot_spun` y `slot_resolved`.
+- **El aviso de «interactuar» lleva el coste:** la máquina pone en su `prompt_key` el texto ya formateado; el `Label` no encuentra la clave y lo muestra tal cual. Así no hubo que tocar el `Interactor`.

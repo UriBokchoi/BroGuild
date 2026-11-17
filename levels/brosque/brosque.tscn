@@ -14,6 +14,7 @@
 [ext_resource type="Script" path="res://systems/spawning/scatter_entry.gd" id="12_entry"]
 [ext_resource type="PackedScene" path="res://entities/breakables/skull/skull.tscn" id="13_skull"]
 [ext_resource type="PackedScene" path="res://entities/breakables/pouch/pouch.tscn" id="14_pouch"]
+[ext_resource type="PackedScene" path="res://entities/interactables/slot_machine/slot_machine.tscn" id="15_slots"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_sky"]
 sky_top_color = Color(0.3, 0.52, 0.82, 1)
@@ -146,6 +147,20 @@ transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -14, 0, 2)
 
 [node name="BenchEast" parent="Clearing" instance=ExtResource("6_bench")]
 transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 14, 0, 2)
+
+[node name="SlotMachines" type="Node3D" parent="."]
+
+[node name="Clearing" parent="SlotMachines" instance=ExtResource("15_slots")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -6, 0, -13)
+
+[node name="LowWest" parent="SlotMachines" instance=ExtResource("15_slots")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -38, 3, -33)
+
+[node name="HighNorth" parent="SlotMachines" instance=ExtResource("15_slots")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 42, 5, -38)
+
+[node name="HighSouth" parent="SlotMachines" instance=ExtResource("15_slots")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -38, 5, 40)
 
 [node name="Breakables" type="Node3D" parent="."]
 script = ExtResource("11_scatter")

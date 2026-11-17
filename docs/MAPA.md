@@ -111,6 +111,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
   - `armory/`: la armería de práctica (armas y runas);
   - `summoner/`: el invocador de enemigos de práctica (uno por tipo, y uno de élites; su cartel muestra el nombre del enemigo);
   - `character_pedestal/`: pedestal con el modelo vestido de un personaje; al interactuar, el jugador pasa a ser él (hasta la selección de personaje del Hito 3);
+  - `slot_machine/`: tragaperras (`SlotMachine`). Con «interactuar» cobra su coste (`SlotMachineData`: `base_cost` + `cost_per_difficulty` × dificultad, ×`cost_growth` por cada uso de esa máquina), saca un símbolo por rodillo de su `WeightedTable` de `SlotSymbol` y avisa por `slot_spun`. Al parar, da el premio del trío o de la pareja (`SlotOutcome`: una recompensa por `pickup_collected`, como un recogible) y lo anuncia por `slot_resolved`. No pausa. Datos en `data/slots/`;
   - `wave_bell/`: la campana que arranca y para el director de oleadas.
 
 ### Objetos y runas — `systems/upgrades/`
@@ -136,7 +137,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
   - `gold_coin/`: la moneda de oro (de recogida automática).
 - **`PickupField`** (en el nivel): suelta recogibles en el suelo desde un pool por tipo. Cuando quien recoge está dentro de su `pickup_range` (o nada más salir, si son `auto_collect`), vuelan acelerando hacia él; al llegar, avisan por `EventBus.pickup_collected`. Todos van en un bucle y sin física. Cada `merge_interval` funde los del mismo tipo que esperan juntos (`PickupData.merge_radius` y `merge_count`) en uno con el valor sumado.
 - **`LootDropper`** (en `RunSystems`): al morir un enemigo, su gema (`xp_reward`) y su moneda (`gold_reward`); al romperse un rompible, su botín (`BreakableData`, más con la dificultad) en trozos alrededor. Además, a veces, un **extra** de una `WeightedTable` de `BonusDrop` (recogible, peso y valor; `data/loot/power_ups.tres`): con la probabilidad de botín del jugador (`drop_chance`, 0,5 %) por el multiplicador de quien lo suelta (×1 un enemigo normal, `EliteData.drop_chance_multiplier` ×8, `BreakableData.drop_chance_multiplier` ×12). Lee la dificultad y la probabilidad de `player_stats`. Flujo `LOOT`.
-- **Recogibles especiales** (`systems/progression/effects/`, en `RunSystems/PickupEffects`): cada uno es un `PickupData` con su recompensa y un `PickupEffect` que la escucha en `pickup_collected`: comida (`HealEffect`, cura esa parte de la vida máxima), imán (`MagnetEffect`, toda la experiencia del mapa vuela hacia ti, `PickupField.attract_all`) , bomba (`BombEffect`, quita esa parte de la vida máxima a los enemigos a menos de `radius`) y bebida energética (`BuffEffect`, aplica un `StatModifierSet` —`data/pickups/energy_drink_buff.tres`— durante los segundos que vale; otra lata reinicia la cuenta, no acumula). Sus modelos giran y flotan con `SpinBob` (`vfx/juice/`).
+- **Recogibles especiales** (`systems/progression/effects/`, en `RunSystems/PickupEffects`): cada uno es un `PickupData` con su recompensa y un `PickupEffect` que la escucha en `pickup_collected`: comida (`HealEffect`, cura esa parte de la vida máxima), imán (`MagnetEffect`, toda la experiencia del mapa vuela hacia ti, `PickupField.attract_all`), bomba (`BombEffect`, quita esa parte de la vida máxima a los enemigos a menos de `radius`) y bebida energética (`BuffEffect`, aplica un `StatModifierSet` —`data/pickups/energy_drink_buff.tres`— durante los segundos que vale; otra lata reinicia la cuenta, no acumula). Sus modelos giran y flotan con `SpinBob` (`vfx/juice/`). Además: mejora gratis (`UpgradeEffect`, sube un nivel a un arma o runa que no esté al máximo, al azar, por cada punto), maldición de fragilidad (`BuffEffect` con `data/slots/frailty_curse.tres`, −20 % de vida máxima) y oleada de élites (`EliteWaveEffect`, `WaveDirector.spawn_elites`); los usan las tragaperras.
 - **`ExperienceComponent`** (en el jugador): suma la experiencia recogida × `xp_gain` y sube de nivel con la curva de `ExperienceData` (`data/progression/experience.tres`). El jugador aleja la cámara con el nivel.
 - **`WalletComponent`** (en el jugador): el oro de la partida (antes «fichas» en el GDD). Suma el recogido × `currency_gain` y lo gasta con `spend()`.
 - **Stats de progresión:** `ProgressionData` (experiencia y oro ganados, suerte, radio de recogida, dificultad, probabilidad de botín y ranuras abiertas de armas y runas).
@@ -144,13 +145,15 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 ### Juice y efectos — `vfx/`
 - **`juice/`**, efectos que solo escuchan señales:
   - `damage_numbers/`: números de daño con pool y estilo en `data/vfx/damage_numbers.tres`;
-  - `hit_wobble.gd`: bamboleo al recibir golpes.
+  - `hit_wobble.gd`: bamboleo al recibir golpes;
+  - `slow_motion.gd` (`SlowMotion`, en `RunSystems`): cámara lenta en el jackpot de la tragaperras (`slot_resolved`), en segundos reales;
+  - `spin_bob.gd` (`SpinBob`): giro y balanceo de los recogibles especiales (pocos; los que salen a cientos lo hacen en su shader).
 - **`speed_lines/`:** líneas de velocidad en pantalla.
 - **`shaders/`:** shaders compartidos: desenfoque de los menús y rejilla del greybox.
 - **Shaders propios de una feature:** van con ella (tajo de la espada, teletransporte, líneas de velocidad).
 
 ### UI — `ui/`
-- **`hud/`:** vida, stamina, experiencia y nivel (arriba), oro (`GoldCounter`) y reloj de la ronda (`RunClock`, en rojo en la prórroga) y dificultad (`DifficultyCounter`, una calavera y su valor) debajo, armas y runas (`LoadoutBar`: una fila de `LoadoutSlot` por tipo, con icono y nivel; las ranuras sin abrir, con candado) y aviso de interacción. Escuchan el `EventBus`.
+- **`hud/`:** vida, stamina, experiencia y nivel (arriba), oro (`GoldCounter`) y reloj de la ronda (`RunClock`, en rojo en la prórroga) y dificultad (`DifficultyCounter`, una calavera y su valor) debajo, armas y runas (`LoadoutBar`: una fila de `LoadoutSlot` por tipo, con icono y nivel; las ranuras sin abrir, con candado) tragaperras (`SlotPanel`, abajo en el centro: rodillos que paran uno tras otro y el resultado) y aviso de interacción. Escuchan el `EventBus`.
 - **`menus/pause/`:** menú de pausa con todas las stats del jugador; «Opciones» abre el `OptionsPanel`; «Reintentar» y «Salir» (al menú principal) van por `RunFlow`.
 - **`menus/main/`:** `MainMenu`, el menú principal (Jugar, Opciones, Archivo —desactivado hasta su tarea— y Abandonar), con los personajes vestidos de fondo. Lo muestra `Game`.
 - **`menus/armory/`:** panel de la armería.
@@ -207,6 +210,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 | `run_clock_changed` (segundos, prórroga; negativo = sin ronda) | `WaveDirector` | `RunClock` |
 | `player_leveled_up` | `Player` | `LevelUpController` |
 | `interaction_prompt_changed` | `Interactor` | `InteractionPrompt` |
+| `slot_spun`, `slot_resolved` | `SlotMachine` | `SlotPanel`, `SlowMotion` (el jackpot) |
 
 ## Capas de física (`core/physics_layers.gd`)
 

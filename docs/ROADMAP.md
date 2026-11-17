@@ -65,7 +65,7 @@
 - [x] Dificultad como stat del jugador: sube sola 1 por minuto y con objetos o runas; las oleadas (cantidad, enemigos, élites, vida y daño) van según ella y calaveras y bolsitas dan más con ella; indicador en el HUD
 - [x] Recogibles del suelo: imán (atrae toda la experiencia), comida (cura un 25 %) y bomba (mata a los enemigos cercanos), que salen a veces de rompibles (3, 3 y 2 %) y élites (10, 15 y 10 %)
 - [x] Probabilidad de botín (stat, 0,5 %; élites ×8 y rompibles ×12) que tira de una tabla ponderada (`WeightedTable`) de power-ups; nuevo power-up: bebida energética (más velocidad, velocidad de ataque y daño 10 s)
-- [ ] Tragaperras repartidas por el nivel (GDD §5.3; adelantadas del Hito 7)
+- [x] Tragaperras (GDD §5.3; adelantadas del Hito 7): 4 en el Brosque (claro y mesetas); coste en oro que sube con la dificultad y con cada uso; moneda, corazón, estrella y calavera con premio de pareja y de trío (oro, cura, mejoras gratis, maldición de −vida máxima u oleada de élites); rodillos en el HUD sin pausar y cámara lenta en el jackpot
 - [ ] Rarezas en datos y Suerte (tests con semilla; adelantado del Hito 4)
 - [ ] Cofres y objetos pasivos: cofres por el nivel que cuestan oro (coste creciente, revelado de rareza) y dan objetos con rareza que se apilan
 - [ ] Jefe del Brosque: altar que se invoca con llaves repartidas por el nivel (o se activa solo al minuto 10); vencerlo antes da más recompensa; vencerlo pasa el nivel (pantalla de victoria)

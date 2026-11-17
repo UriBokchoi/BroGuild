@@ -29,6 +29,18 @@ RESULTS_DAMAGE,Daño infligido,Damage dealt
 RESULTS_RETRY,Reintentar (%s),Retry (%s)
 RESULTS_QUIT,Salir al menú,Main menu
 PAUSE_STATS_TITLE,Estadísticas,Stats
+INTERACT_SLOTS,Jugar a la tragaperras (%d de oro),Play the slot machine (%d gold)
+SLOT_MACHINE_SIGN,TRAGAPERRAS,SLOTS
+SLOT_NOT_ENOUGH_GOLD,Te falta oro: cuesta %d,Not enough gold: it costs %d
+SLOT_NOTHING,Nada… a la próxima,Nothing… next time
+SLOT_WIN_GOLD,¡+%d de oro!,+%d gold!
+SLOT_JACKPOT_GOLD,¡JACKPOT! +%d de oro,JACKPOT! +%d gold
+SLOT_WIN_HEAL,Te curas un poco,You heal a bit
+SLOT_JACKPOT_HEAL,¡JACKPOT! Vida al máximo,JACKPOT! Full health
+SLOT_WIN_UPGRADE,¡Mejora gratis!,Free upgrade!
+SLOT_JACKPOT_UPGRADE,¡JACKPOT! Tres mejoras gratis,JACKPOT! Three free upgrades
+SLOT_CURSE_FRAILTY,Maldición: −20 % de vida máxima un minuto,Curse: −20% max health for a minute
+SLOT_CURSE_ELITES,¡Maldición! Cinco élites a por ti,Curse! Five elites are coming
 OPTIONS_TITLE,Opciones,Options
 OPTIONS_GROUP_AUDIO,Sonido,Sound
 OPTIONS_GROUP_DISPLAY,Pantalla,Display

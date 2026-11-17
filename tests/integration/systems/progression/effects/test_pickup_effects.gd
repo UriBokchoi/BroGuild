@@ -1,7 +1,8 @@
 extends GutTest
 ## Efectos de los recogibles especiales: la comida cura una parte de la vida máxima, el imán atrae
 ## toda la experiencia del mapa y la bomba quita su parte de vida a los enemigos cercanos (no a los
-## lejanos) y la bebida energética mejora stats un rato (otra lata no lo acumula). Solo reaccionan a
+## lejanos), la bebida energética mejora stats un rato (otra lata no lo acumula), la mejora gratis
+## sube lo que se lleva sin pasar del máximo y la oleada de élites los saca. Solo reaccionan a
 ## su recompensa.
 
 const PlayerScene := preload("res://entities/player/player.tscn")
@@ -88,3 +89,48 @@ func test_the_energy_drink_boosts_stats_for_a_while() -> void:
 	await wait_seconds(0.5)
 	assert_false(drink.is_active())
 	assert_eq(player.stats.get_value(&"run_speed"), speed, "se pasa el efecto")
+
+
+func test_a_free_upgrade_levels_up_something_owned() -> void:
+	var player := PlayerScene.instantiate() as Player
+	player.character = preload("res://data/characters/warrior.tres")
+	add_child_autofree(player)
+	var upgrade := UpgradeEffect.new()
+	upgrade.reward = &"upgrade"
+	upgrade.weapons = player.weapons
+	upgrade.runes = player.runes
+	add_child_autofree(upgrade)
+	var sword := player.weapons.get_weapons()[0]
+	upgrade.apply(2.0)
+	assert_eq(sword.level, 3, "lo único que lleva es la espada: sube dos niveles")
+	upgrade.apply(99.0)
+	assert_eq(sword.level, sword.data.max_level(), "nunca pasa del máximo")
+
+
+func test_the_elite_wave_brings_elites() -> void:
+	var ground := StaticBody3D.new()
+	var shape := CollisionShape3D.new()
+	var box := BoxShape3D.new()
+	box.size = Vector3(80.0, 1.0, 80.0)
+	shape.shape = box
+	shape.position = Vector3(0.0, -0.5, 0.0)
+	ground.add_child(shape)
+	add_child_autofree(ground)
+	var target := Node3D.new()
+	add_child_autofree(target)
+	var swarm := EnemySwarm.new()
+	add_child_autofree(swarm)
+	var director := WaveDirector.new()
+	director.data = preload("res://data/waves/brosque.tres")
+	director.swarm = swarm
+	director.target = target
+	add_child_autofree(director)
+	await wait_physics_frames(2)
+	var wave := EliteWaveEffect.new()
+	wave.reward = &"elite_wave"
+	wave.director = director
+	add_child_autofree(wave)
+	wave.apply(3.0)
+	assert_eq(swarm.active_count(), 3)
+	for enemy: Enemy in swarm.get_active():
+		assert_true(enemy.is_elite())

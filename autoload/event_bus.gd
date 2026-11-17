@@ -28,6 +28,11 @@ signal player_died
 signal enemy_damaged(position: Vector3, amount: float, info: DamageInfo)
 ## Cambió lo que el jugador puede hacer con «interactuar» (clave de traducción; vacía = nada).
 signal interaction_prompt_changed(prompt_key: StringName)
+## Una tragaperras empezó a girar: sus datos (símbolos y ritmo) y lo que va a salir en cada rodillo.
+signal slot_spun(data: SlotMachineData, results: Array[SlotSymbol])
+## Una tragaperras dio su resultado (o no se pudo pagar): el texto (clave; si lleva [code]%d[/code],
+## [param value]) y si fue jackpot.
+signal slot_resolved(text_key: StringName, value: float, jackpot: bool)
 ## Murió [param enemy] (aún en su sitio, con su tipo y sus stats): botín, experiencia, Archivo…
 signal enemy_died(enemy: Enemy)
 ## El jugador rompió un rompible (calavera, bolsita…) de [param data] en [param at].

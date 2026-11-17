@@ -105,19 +105,43 @@ func get_elapsed() -> float:
 	return _elapsed
 
 
+## Saca de golpe [param count] élites alrededor de [member target] (la maldición de la tragaperras),
+## aunque no esté en marcha ni haya sitio en el máximo a la vez. Devuelve cuántos salieron.
+func spawn_elites(count: int) -> int:
+	if data == null or data.elite == null:
+		return 0
+	var spawned := 0
+	for _elite: int in count:
+		var enemy := _spawn_at_difficulty(get_difficulty())
+		if enemy == null:
+			continue
+		enemy.promote(data.elite)
+		spawned += 1
+	return spawned
+
+
 func _spawn_one() -> bool:
 	var difficulty := get_difficulty()
-	var enemy := data.pick_enemy(difficulty, rng)
-	if enemy == null:
+	var spawned := _spawn_at_difficulty(difficulty)
+	if spawned == null:
 		return false
-	var feet := _find_spawn_point()
-	if not feet.is_finite():
-		return false
-	var spawned := swarm.spawn(enemy, feet)
-	spawned.boost(data.scaling_at(difficulty))
 	if rng.randf() * 100.0 < data.elite_chance_at(difficulty):
 		spawned.promote(data.elite)
 	return true
+
+
+## Un enemigo de los datos en un punto del suelo, con el escalado de [param difficulty], o
+## [code]null[/code] si no hay enemigo o sitio.
+func _spawn_at_difficulty(difficulty: float) -> Enemy:
+	var enemy := data.pick_enemy(difficulty, rng)
+	if enemy == null:
+		return null
+	var feet := _find_spawn_point()
+	if not feet.is_finite():
+		return null
+	var spawned := swarm.spawn(enemy, feet)
+	spawned.boost(data.scaling_at(difficulty))
+	return spawned
 
 
 ## Cada segundo: sube la parte del tiempo de la dificultad y avisa al HUD del reloj.

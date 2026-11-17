@@ -25,6 +25,10 @@
 [ext_resource type="Resource" path="res://data/loot/power_ups.tres" id="23_power_ups"]
 [ext_resource type="Script" path="res://systems/progression/effects/buff_effect.gd" id="24_buff"]
 [ext_resource type="Resource" path="res://data/pickups/energy_drink_buff.tres" id="25_energy_buff"]
+[ext_resource type="Script" path="res://systems/progression/effects/upgrade_effect.gd" id="26_upgrade"]
+[ext_resource type="Script" path="res://systems/progression/effects/elite_wave_effect.gd" id="27_elite_wave"]
+[ext_resource type="Resource" path="res://data/slots/frailty_curse.tres" id="28_frailty"]
+[ext_resource type="Script" path="res://vfx/juice/slow_motion.gd" id="29_slow_motion"]
 
 [node name="RunSystems" type="Node3D" node_paths=PackedStringArray("player", "director")]
 script = ExtResource("1_run")
@@ -108,3 +112,23 @@ script = ExtResource("24_buff")
 reward = &"energy"
 stats = NodePath("../../Player/Stats")
 buff = ExtResource("25_energy_buff")
+
+[node name="Upgrade" type="Node" parent="PickupEffects" node_paths=PackedStringArray("weapons", "runes")]
+script = ExtResource("26_upgrade")
+reward = &"upgrade"
+weapons = NodePath("../../Player/Weapons")
+runes = NodePath("../../Player/Runes")
+
+[node name="Frailty" type="Node" parent="PickupEffects" node_paths=PackedStringArray("stats")]
+script = ExtResource("24_buff")
+reward = &"frailty"
+stats = NodePath("../../Player/Stats")
+buff = ExtResource("28_frailty")
+
+[node name="EliteWave" type="Node" parent="PickupEffects" node_paths=PackedStringArray("director")]
+script = ExtResource("27_elite_wave")
+reward = &"elite_wave"
+director = NodePath("../../WaveDirector")
+
+[node name="SlowMotion" type="Node" parent="."]
+script = ExtResource("29_slow_motion")
