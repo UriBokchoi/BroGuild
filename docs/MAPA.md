@@ -20,7 +20,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 
 | Carpeta | Qué va ahí |
 |---|---|
-| `autoload/` | Los únicos singletons: `EventBus` (solo señales), `Rng` (todo el azar, un generador por sistema), `RunState` (partida en curso) y `Save` (lo que dura entre partidas, en `user://`; de momento, las opciones). Sin lógica de gameplay. |
+| `autoload/` | Los únicos singletons: `EventBus` (solo señales), `Rng` (todo el azar, un generador por sistema), `RunState` (partida en curso: personaje, nivel y semilla) y `Save` (lo que dura entre partidas, en `user://`; de momento, las opciones). Sin lógica de gameplay. |
 | `core/` | Piezas genéricas que no saben de este juego: stats, máquina de estados, componentes de combate, pool (`NodePool`), rejilla espacial (`SpatialHash`, con marcas y tope de resultados), carga de carpetas de datos (`ResourceDir`), nombres de acciones y capas. |
 | `entities/` | Lo que existe en el mundo: el jugador, los enemigos y los interactuables. |
 | `systems/` | Reglas y sistemas que reparten trabajo entre entidades: combate (fórmulas y armas), progresión, aparición de enemigos, objetos y runas (`upgrades/`), la partida (`run/`) y las opciones (`settings/`). Vacía, para más adelante: `gamble/`. |
@@ -145,7 +145,8 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 
 ### UI — `ui/`
 - **`hud/`:** vida, stamina, experiencia y nivel (arriba), oro (`GoldCounter`) y reloj de la ronda (`RunClock`, en rojo en la prórroga) debajo, armas y runas (`LoadoutBar`: una fila de `LoadoutSlot` por tipo, con icono y nivel; las ranuras sin abrir, con candado) y aviso de interacción. Escuchan el `EventBus`.
-- **`menus/pause/`:** menú de pausa con todas las stats del jugador; «Opciones» abre el `OptionsPanel`.
+- **`menus/pause/`:** menú de pausa con todas las stats del jugador; «Opciones» abre el `OptionsPanel`; «Reintentar» y «Salir» (al menú principal) van por `RunFlow`.
+- **`menus/main/`:** `MainMenu`, el menú principal (Jugar, Opciones, Archivo —desactivado hasta su tarea— y Abandonar), con los personajes vestidos de fondo. Lo muestra `Game`.
 - **`menus/armory/`:** panel de la armería.
 - **`menus/level_up/`:** elección al subir de nivel (`LevelUpPanel` y sus `LevelUpCard`).
 - **`menus/options/`:** `OptionsPanel`, opciones básicas: volumen de cada bus (`SettingsData.volume_buses`, en `default_bus_layout.tres`), pantalla completa, tamaño de la ventana y VSync. El volumen se aplica al momento; lo de pantalla espera a «Aplicar» (que lo aplica y lo guarda) y «Volver» descarta lo no aplicado. Trabaja sobre `Save.settings`. Dentro del editor (pestaña «Juego») avisa de que la ventana no se puede cambiar y desactiva esas opciones. Lo abre la pausa (y lo abrirá el menú principal).
@@ -157,7 +158,9 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 
 ### Partida — `systems/run/`
 - **`RunRecorder`** (en el nivel): escucha el `EventBus` y apunta en un `RunStats` lo que pasa en la partida: enemigos y élites derrotados, daño infligido, oro ganado (sin restar lo gastado), nivel y tiempo (el del reloj de la ronda si la hay). Para al morir el jugador.
-- **Reinicio rápido:** de momento recarga la escena (`reload_current_scene`, unos 0,2 s en el gimnasio). Con el flujo de partida del Hito 3 pasará por `RunState`.
+- **`Game`** (`game.tscn`, la escena principal): raíz del juego y flujo de pantallas. Empieza en el `MainMenu`; «Jugar» instancia el nivel de `RunState.level` (`LevelData`: id, nombre y escena, en `data/levels/`; de serie, el Brosque) y empieza la partida con una semilla nueva. Cada pantalla sustituye a la anterior.
+- **`RunFlow`:** reintentar y volver al menú desde la pausa o los resultados. Dentro de `Game`, por el `EventBus` (`retry_requested`, `main_menu_requested`); con el nivel ejecutado solo (F6), recarga la escena o cierra el juego.
+- **Reinicio rápido:** reintentar vuelve a instanciar el nivel con otra semilla (unos 0,2 s en el gimnasio).
 
 ### Opciones — `systems/settings/` y `autoload/save.gd`
 - **`SettingsData`** (`data/settings/settings.tres`): buses con volumen, valores al estrenar el juego y tamaños de ventana que se ofrecen.
@@ -165,7 +168,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 - **`Save`** (autoload) lo carga y lo aplica al arrancar; quien lo cambia llama a `Save.save_settings()`. Los tests usan otro archivo (`settings_path`).
 
 ### Niveles — `levels/`
-- **`test_gym/test_gym.tscn`:** escena principal de pruebas. Zona de movimiento con rampas, bordes, paredes, huecos y escalones, más el pad de daño (`props/`).
+- **`test_gym/test_gym.tscn`:** escena de pruebas (de momento, también la del Brosque en `data/levels/brosque.tres`). Zona de movimiento con rampas, bordes, paredes, huecos y escalones, más el pad de daño (`props/`).
 - **`test_gym/zones/combat_range.tscn`:** zona de combate a 200 m del gimnasio. Muñecos, armería, invocadores (esbirros, tiradores y esbirros élite), pedestales de personaje, campana de oleadas, plataforma escalonada, teletransportes y recogedor de caídas. Las oleadas paran al volver.
 - **En la raíz del gimnasio viven** `EnemySwarm`, `WaveDirector`, `PickupField`, `LootDropper`, `LevelUpController` y `LevelUpPanel`, `RunRecorder` y `ResultsPanel`, `DamageNumbers`, HUD, pausa y panel de depuración.
 - **`stress/stress_test.tscn`:** prueba de rendimiento (herramienta, sin traducir). Mantiene 300 y luego 500 esbirros sobre un jugador inmortal con la espada, mide frames y física y sale. Comando en CLAUDE.md.
@@ -175,6 +178,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 | Señal | La emite | La escucha |
 |---|---|---|
 | `run_started`, `run_ended` | `RunState` | (nadie aún) |
+| `retry_requested`, `main_menu_requested` | `RunFlow` (pausa, resultados) | `Game` |
 | `cursor_requested` | pausa, armería, panel de depuración | `MouseCapture` |
 | `player_stamina_changed` | `StaminaComponent` | `StaminaBar` |
 | `player_health_changed` | `Player` | `HealthBar` |

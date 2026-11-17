@@ -1,9 +1,15 @@
 keys,es,en
+GAME_TITLE,Bro Guild,Bro Guild
+MENU_PLAY,Jugar,Play
+MENU_OPTIONS,Opciones,Options
+MENU_ARCHIVE,Archivo,Archive
+MENU_QUIT,Abandonar,Quit game
+LEVEL_BROSQUE_NAME,El Brosque,The Brorest
 PAUSE_TITLE,Pausa,Paused
 PAUSE_CONTINUE,Continuar,Resume
 PAUSE_OPTIONS,Opciones,Options
 PAUSE_RETRY,Reintentar,Retry
-PAUSE_QUIT,Salir,Quit
+PAUSE_QUIT,Salir al menú,Main menu
 DEATH_LINE_GG,GG bro,GG bro
 DEATH_LINE_GIT_GUD,Just git gud,Just git gud
 DEATH_LINE_SKILL_ISSUE,¿Skill issue?,Skill issue?
@@ -18,7 +24,7 @@ RESULTS_ELITE_KILLS,Élites derrotados,Elites defeated
 RESULTS_GOLD,Oro ganado,Gold earned
 RESULTS_DAMAGE,Daño infligido,Damage dealt
 RESULTS_RETRY,Reintentar (%s),Retry (%s)
-RESULTS_QUIT,Salir,Quit
+RESULTS_QUIT,Salir al menú,Main menu
 PAUSE_STATS_TITLE,Estadísticas,Stats
 OPTIONS_TITLE,Opciones,Options
 OPTIONS_GROUP_AUDIO,Sonido,Sound

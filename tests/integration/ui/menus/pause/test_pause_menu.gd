@@ -1,6 +1,7 @@
 extends GutTest
 ## Menú de pausa: Esc lo abre y lo cierra pausando el juego, «Opciones» abre su panel (Esc vuelve a
-## la pausa) y muestra todas las stats del jugador, resaltando las modificadas.
+## la pausa), «Salir» vuelve al menú principal y muestra todas las stats del jugador, resaltando
+## las modificadas.
 
 const PlayerScene := preload("res://entities/player/player.tscn")
 const MenuScene := preload("res://ui/menus/pause/pause_menu.tscn")
@@ -80,3 +81,13 @@ func _press(action: StringName) -> InputEventAction:
 	event.action = action
 	event.pressed = true
 	return event
+
+
+func test_quit_goes_back_to_the_main_menu() -> void:
+	var asked: Array[int] = []
+	var on_menu := func() -> void: asked.append(1)
+	EventBus.main_menu_requested.connect(on_menu)
+	_menu.open()
+	(_menu.get_node(^"%Quit") as Button).pressed.emit()
+	EventBus.main_menu_requested.disconnect(on_menu)
+	assert_eq(asked.size(), 1)

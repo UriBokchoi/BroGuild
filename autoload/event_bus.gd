@@ -10,6 +10,10 @@ extends Node
 signal run_started(run_seed: int)
 ## La partida en curso ha terminado.
 signal run_ended
+## Se pide reintentar la partida (pausa, resultados): lo atiende [Game]. Ver [RunFlow].
+signal retry_requested
+## Se pide volver al menú principal (pausa, resultados): lo atiende [Game]. Ver [RunFlow].
+signal main_menu_requested
 ## Una interfaz pide ([param wants_cursor] = true) o suelta el cursor del ratón. Mientras alguna
 ## lo pida, el ratón no se captura (lo gestiona MouseCapture).
 signal cursor_requested(requester: Object, wants_cursor: bool)

@@ -58,8 +58,8 @@
 - [x] Aspecto de cada personaje: su color y sus piezas en el modelo (Guerrero: espada y escudo; Mago: bastón y sombrero; Pícaro: dos dagas), en el jugador y en los pedestales. Las piezas son assets reutilizables (`assets/models/props/`)
 - [x] HUD de armas y runas: ranuras con su icono y su nivel; al empezar, 2 de cada abiertas y 2 bloqueadas (se desbloquearán más adelante). Las cartas de subir de nivel también llevan el icono
 - [x] Opciones básicas (desde la pausa): volumen (general, música y efectos), resolución, pantalla completa y VSync, guardadas entre partidas (`Save`)
-- [ ] Escena raíz `Game` con el flujo de pantallas; `RunState` guarda personaje, nivel y semilla; «Salir» de la pausa vuelve al menú
-- [ ] Menú principal: Jugar, Archivo y Abandonar (cierra el juego)
+- [x] Escena raíz `Game` con el flujo de pantallas; `RunState` guarda personaje, nivel y semilla; «Salir» de la pausa vuelve al menú
+- [x] Menú principal: Jugar, Opciones, Archivo (desactivado hasta su tarea) y Abandonar (cierra el juego). De momento, Jugar lleva al Brosque (aún la zona de pruebas) con el último personaje
 - [ ] Selección de personaje: lista a la izquierda, modelo 3D en el centro, a la derecha (al pasar el ratón) nombre, stats, arma principal y habilidad pasiva
 - [ ] Selección de nivel (sustituye al panel de info al elegir personaje): el Brosque, la Torre del Mago y la Mazmorra (de momento, los tres cargan la zona de pruebas)
 - [ ] Catálogo de contenido (`data/content.tres`) y `Save` con desbloqueos persistentes

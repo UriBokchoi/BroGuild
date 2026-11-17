@@ -7,15 +7,20 @@ var is_running: bool = false
 ## Personaje elegido. Vacío: el que traiga el jugador por defecto. Sobrevive a recargar el nivel
 ## (reintentar sigue con el mismo personaje).
 var character: CharacterData
+## Nivel elegido (o [code]null[/code] si se juega un nivel ejecutado solo).
+var level: LevelData
+## Semilla de la partida en curso (la última que empezó).
+var run_seed: int = 0
 
 
 ## Empieza una partida nueva. Si ya había una, la termina antes (reinicio).
-func start_run(run_seed: int) -> void:
+func start_run(new_seed: int) -> void:
 	if is_running:
 		end_run()
-	Rng.seed_run(run_seed)
+	run_seed = new_seed
+	Rng.seed_run(new_seed)
 	is_running = true
-	EventBus.run_started.emit(run_seed)
+	EventBus.run_started.emit(new_seed)
 
 
 ## Termina la partida en curso. Sin partida en curso no hace nada.
