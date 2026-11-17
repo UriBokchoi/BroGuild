@@ -1,5 +1,5 @@
 extends GutTest
-## Zona de combate del gimnasio: la vuelta lleva adonde diga quien la coloca, el invocador saca los
+## Zona de combate del gimnasio: la vuelta lleva adonde diga quien la coloca, los invocadores sacan los
 ## enemigos en el enjambre del nivel, la campana usa el director del nivel y las oleadas paran al
 ## volver, el recogedor de caídas devuelve a la llegada y los muñecos cuentan como enemigos.
 
@@ -31,8 +31,10 @@ func test_exit_goes_where_the_level_says() -> void:
 	assert_same(_range.exit_teleporter.destination, _exit)
 
 
-func test_summoner_uses_the_level_swarm() -> void:
-	assert_same(_range.summoner.swarm, _swarm)
+func test_summoners_use_the_level_swarm() -> void:
+	assert_gt(_range.summoners.size(), 1, "uno por tipo de enemigo")
+	for summoner: Summoner in _range.summoners:
+		assert_same(summoner.swarm, _swarm)
 
 
 func test_the_bell_starts_the_level_director() -> void:

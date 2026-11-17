@@ -9,15 +9,16 @@
 [ext_resource type="PackedScene" path="res://entities/interactables/summoner/summoner.tscn" id="7_summoner"]
 [ext_resource type="Material" path="res://levels/test_gym/materials/greybox_platform.tres" id="8_platform"]
 [ext_resource type="PackedScene" path="res://entities/interactables/wave_bell/wave_bell.tscn" id="9_bell"]
+[ext_resource type="Resource" path="res://data/enemies/shooter.tres" id="10_shooter"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_fall"]
 size = Vector3(400, 4, 400)
 
-[node name="CombatRange" type="Node3D" node_paths=PackedStringArray("exit_teleporter", "arrival", "summoner", "wave_bell")]
+[node name="CombatRange" type="Node3D" node_paths=PackedStringArray("exit_teleporter", "arrival", "summoners", "wave_bell")]
 script = ExtResource("1_range")
 exit_teleporter = NodePath("ExitTeleporter")
 arrival = NodePath("Arrival")
-summoner = NodePath("Summoner")
+summoners = [NodePath("Summoner"), NodePath("ShooterSummoner")]
 wave_bell = NodePath("WaveBell")
 
 [node name="Floor" type="CSGBox3D" parent="."]
@@ -66,6 +67,12 @@ transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 9, 0, -12)
 
 [node name="Summoner" parent="." instance=ExtResource("7_summoner")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, 6)
+
+[node name="ShooterSummoner" parent="." instance=ExtResource("7_summoner")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, 10.5)
+enemy = ExtResource("10_shooter")
+count = 6
+ring_radius = 14.0
 
 [node name="HighGround" type="Node3D" parent="."]
 

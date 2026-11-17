@@ -114,10 +114,12 @@ STAT_SEPARATION_WEIGHT,Fuerza de separación,Separation strength
 STAT_CLIMB_SPEED,Velocidad al trepar,Climb speed
 STAT_CLIMB_HEIGHT,Altura a la que trepa sobre el objetivo,Climb height above the target
 STAT_APPROACH_SPREAD,Desvío al acercarse,Approach spread
+STAT_KEEP_DISTANCE,Distancia que guarda,Distance kept
 ENEMY_SWARMER_NAME,Esbirro,Minion
 ENEMY_SWARMER_DESCRIPTION,"Rápido y frágil; llega en enjambre.","Fast and frail; comes in swarms."
-INTERACT_SUMMON,Invocar esbirros,Summon minions
-SUMMONER_TITLE,Invocador,Summoner
+ENEMY_SHOOTER_NAME,Tirador,Shooter
+ENEMY_SHOOTER_DESCRIPTION,"Se queda a distancia y dispara bolas de fuego lentas; no te quedes quieto.","Keeps its distance and shoots slow fireballs; don't stand still."
+INTERACT_SUMMON,Invocar enemigos,Summon enemies
 INTERACT_WAVES_START,Empezar oleadas,Start waves
 INTERACT_WAVES_STOP,Parar oleadas,Stop waves
 WAVE_BELL_TITLE,Campana de oleadas,Wave bell
@@ -146,6 +148,8 @@ WEAPON_STAFF_NAME,Bastón de mago,Mage staff
 WEAPON_STAFF_DESCRIPTION,"Orbes que explotan al tocar algo y dañan a todos los enemigos cercanos.","Orbs that explode on contact and hit every nearby enemy."
 WEAPON_DAGGER_NAME,Daga,Dagger
 WEAPON_DAGGER_DESCRIPTION,"Dagas rápidas a un solo enemigo; al mejorarla rebotan al más cercano con todo su daño.","Fast daggers at a single enemy; upgraded, they bounce to the nearest one with full damage."
+WEAPON_SHOOTER_GUN_NAME,Bola de fuego,Fireball
+WEAPON_SHOOTER_GUN_DESCRIPTION,"Disparo lento del tirador: da al primero que toca.","The shooter's slow shot: hits the first thing it touches."
 STAT_GROUP_PROJECTILE,Proyectil,Projectile
 STAT_GROUP_STAFF,Bastón,Staff
 STAT_EXPLOSION_RADIUS,Radio de explosión,Explosion radius

@@ -1,5 +1,6 @@
 extends GutTest
-## Invocador de práctica: al interactuar saca su anillo de enemigos alrededor de quien lo usa.
+## Invocador de práctica: al interactuar saca su anillo de enemigos alrededor de quien lo usa, y su
+## cartel dice qué enemigo invoca.
 
 const SummonerScene := preload("res://entities/interactables/summoner/summoner.tscn")
 
@@ -24,3 +25,7 @@ func test_interacting_summons_a_ring_around_the_user() -> void:
 	for enemy: Enemy in _swarm.get_active():
 		var distance := Vector2(enemy.global_position.x - 3.0, enemy.global_position.z - 4.0).length()
 		assert_almost_eq(distance, _summoner.ring_radius, 0.01)
+
+
+func test_its_label_names_the_enemy() -> void:
+	assert_eq(_summoner.label.text, String(_summoner.enemy.name_key))

@@ -5,6 +5,8 @@ extends Node3D
 ## el director de oleadas.
 
 @export var interactable: Interactable
+## Cartel encima: muestra el nombre del enemigo que invoca.
+@export var label: Label3D
 ## Dónde salen los enemigos (lo asigna el nivel).
 @export var swarm: EnemySwarm
 ## Tipo de enemigo que invoca.
@@ -17,6 +19,9 @@ extends Node3D
 
 func _ready() -> void:
 	interactable.interacted.connect(_on_interacted)
+	if label and enemy:
+		# Es una clave: el Label3D la traduce solo.
+		label.text = enemy.name_key
 
 
 ## Saca el anillo de enemigos alrededor de [param center].

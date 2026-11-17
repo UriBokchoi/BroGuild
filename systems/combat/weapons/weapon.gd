@@ -13,10 +13,14 @@ extends Node3D
 signal fired(target: Node3D, index: int)
 signal level_changed(level: int)
 
-## Capas de física de los objetivos que busca ([code]enemy_hurtbox[/code] en las del jugador).
+## Capas de física de los objetivos que busca ([code]enemy_hurtbox[/code] en las del jugador,
+## [code]player_hurtbox[/code] en las de los enemigos).
 @export_flags_3d_physics var target_mask: int = 0
 ## Altura sobre los pies desde la que busca objetivos y apunta (el pecho de quien la lleva).
 @export_range(0.0, 3.0, 0.05, "suffix:m") var aim_height: float = 0.0
+## Segundos entre búsquedas de objetivo mientras no encuentra ninguno (0 = en cada tick). Las armas
+## de los enemigos, que pueden ser muchas, buscan menos a menudo.
+@export_range(0.0, 2.0, 0.01, "suffix:s") var search_interval: float = 0.0
 
 ## Datos del arma.
 var data: WeaponData
@@ -48,7 +52,8 @@ func setup(weapon_data: WeaponData, wielder: StatsComponent) -> void:
 func _ready() -> void:
 	_weapon = stats.get_resolved(WeaponStats) as WeaponStats
 	if wielder_stats:
-		_offense = wielder_stats.get_resolved(OffenseData) as OffenseData
+		# Opcional: un enemigo no tiene daño % ni crítico.
+		_offense = wielder_stats.find_resolved(OffenseData) as OffenseData
 	_finder = TargetFinder.new(target_mask)
 
 
@@ -76,6 +81,20 @@ func set_level(new_level: int) -> void:
 			stats.add_modifier(modifier, level_set)
 	level = new_level
 	level_changed.emit(level)
+
+
+## Deja de atacar hasta [method rearm] y corta el ataque a medias (quien la lleva murió).
+func disarm() -> void:
+	set_physics_process(false)
+	_shots_left = 0
+	_disarmed()
+
+
+## Vuelve a atacar cuando pasen [param wait] segundos.
+func rearm(wait: float) -> void:
+	_cooldown_left = maxf(wait, 0.0)
+	_shots_left = 0
+	set_physics_process(true)
 
 
 ## Daño de cada golpe antes del daño % y el crítico del personaje (que se aplican al golpear).
@@ -122,9 +141,15 @@ func aim_origin() -> Vector3:
 @abstract func _fire(target: Node3D, index: int) -> void
 
 
+## Acaba de dejar de atacar ([method disarm]): para retirar lo que tenga en juego.
+func _disarmed() -> void:
+	pass
+
+
 func _start_attack() -> void:
 	var targets := _find_targets()
 	if targets.is_empty():
+		_cooldown_left = search_interval
 		return
 	_cooldown_left = cooldown()
 	_shots_left = projectile_count()

@@ -64,6 +64,30 @@ func test_dagger_bounces_to_the_next_enemy() -> void:
 	assert_signal_emitted(other, "damaged", "rebota con todo su daño")
 
 
+func test_disarming_recalls_its_projectiles_in_flight() -> void:
+	var target := _dummy_health(Vector3(0.0, 0.0, -8.0))
+	var staff := _inventory.add(STAFF)
+	watch_signals(staff)
+	await wait_physics_frames(2)
+	assert_signal_emitted(staff, "fired")
+	staff.disarm()
+	await wait_physics_frames(60)
+	assert_signal_not_emitted(target, "damaged", "el orbe desapareció")
+	assert_signal_emit_count(staff, "fired", 1, "y no ataca más")
+
+
+func test_rearming_waits_before_attacking() -> void:
+	_dummy_health(Vector3(0.0, 0.0, -6.0))
+	var dagger := _inventory.add(DAGGER)
+	dagger.disarm()
+	dagger.rearm(0.5)
+	watch_signals(dagger)
+	await wait_physics_frames(15)
+	assert_signal_not_emitted(dagger, "fired")
+	await wait_physics_frames(30)
+	assert_signal_emitted(dagger, "fired")
+
+
 func _dummy_health(at: Vector3) -> HealthComponent:
 	var dummy := DummyScene.instantiate() as Node3D
 	dummy.position = at

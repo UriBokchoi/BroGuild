@@ -1,6 +1,6 @@
 extends GutTest
 ## EnemySteering: perseguir en el plano XZ (con un desvío que desaparece al llegar), separarse de
-## los vecinos cercanos y saber cuándo trepar sobre uno que tapa el paso.
+## los vecinos cercanos, saber cuándo trepar sobre uno que tapa el paso y quedarse a distancia.
 
 
 func test_seek_goes_flat_towards_the_target_at_speed() -> void:
@@ -59,3 +59,20 @@ func test_a_foothold_already_below_is_not_in_the_way() -> void:
 	var target := Vector3(0.0, 0.0, -10.0)
 	var below := PackedVector3Array([Vector3(0.0, -1.3, -0.3)])
 	assert_false(EnemySteering.blocked_ahead(Vector3.ZERO, Vector3.FORWARD, target, below, 1.1))
+
+
+func test_keep_range_approaches_from_far() -> void:
+	var velocity := EnemySteering.keep_range(Vector3.ZERO, Vector3(0.0, 0.0, -20.0), 4.0, 0.0, 10.0)
+	assert_almost_eq(velocity, Vector3(0.0, 0.0, -4.0), Vector3.ONE * 1e-4, "a toda velocidad")
+
+
+func test_keep_range_backs_off_when_too_close() -> void:
+	var velocity := EnemySteering.keep_range(Vector3.ZERO, Vector3(0.0, 0.0, -3.0), 4.0, 0.0, 10.0)
+	assert_almost_eq(velocity, Vector3(0.0, 0.0, 4.0), Vector3.ONE * 1e-4, "se aleja")
+
+
+func test_keep_range_stops_at_its_distance_and_slows_near_it() -> void:
+	var target := Vector3(0.0, 0.0, -10.0)
+	assert_almost_eq(EnemySteering.keep_range(Vector3.ZERO, target, 4.0, 0.0, 10.0), Vector3.ZERO, Vector3.ONE * 1e-4)
+	var near := EnemySteering.keep_range(Vector3.ZERO, Vector3(0.0, 0.0, -11.0), 4.0, 0.0, 10.0)
+	assert_almost_eq(near.length(), 2.0, 1e-4, "a 1 m de su distancia, a media velocidad")

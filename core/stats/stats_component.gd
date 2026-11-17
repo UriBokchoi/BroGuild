@@ -48,12 +48,21 @@ func add_base_set(modifier_set: StatModifierSet) -> void:
 		_block.add_base_modifier(modifier, modifier_set)
 
 
-## Copia resuelta del Resource de datos de tipo [param type] (o de un subtipo).
+## Copia resuelta del Resource de datos de tipo [param type] (o de un subtipo). Si no lo tiene, es
+## un error: para datos opcionales, [method find_resolved].
 func get_resolved(type: Script) -> Resource:
+	var copy := find_resolved(type)
+	if copy == null:
+		push_error("StatsComponent: no hay datos de tipo '%s'." % type.resource_path)
+	return copy
+
+
+## Como [method get_resolved], pero sin error si no lo tiene: devuelve [code]null[/code] (p. ej. las
+## stats de ataque, que un enemigo puede no tener).
+func find_resolved(type: Script) -> Resource:
 	for copy: Resource in _resolved:
 		if is_instance_of(copy, type):
 			return copy
-	push_error("StatsComponent: no hay datos de tipo '%s'." % type.resource_path)
 	return null
 
 

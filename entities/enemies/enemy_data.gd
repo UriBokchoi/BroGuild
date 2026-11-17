@@ -14,3 +14,7 @@ extends Resource
 @export var scene: PackedScene
 ## Resources de stats del enemigo ([HealthData], [EnemyStats]…): las fuentes de su [StatsComponent].
 @export var stat_sources: Array[Resource] = []
+## Armas con las que ataca además de al tocar (el tirador, su disparo). Son [WeaponData] como las
+## del jugador, pero apuntan a [code]player_hurtbox[/code]; viven en
+## [code]data/enemies/weapons/[/code] para que no salgan en la armería ni al subir de nivel.
+@export var weapons: Array[WeaponData] = []

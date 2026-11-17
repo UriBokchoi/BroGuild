@@ -24,6 +24,12 @@ const SETTLED_TAG: int = 1
 @export_range(1, 64, 1) var max_neighbors: int = 8
 ## Un enemigo que cae por debajo de esta altura se retira (se cayó del mapa).
 @export_range(-1000.0, 0.0, 1.0, "suffix:m") var kill_height: float = -50.0
+## Proyectiles de enemigos en vuelo a la vez como mucho (con el máximo, los disparos nuevos no
+## salen). 0 = sin máximo.
+@export_range(0, 2000, 1, "or_greater") var projectile_limit: int = 80
+
+## Proyectiles de los enemigos: viven aquí y no en quien dispara, así siguen volando aunque muera.
+var projectiles: ProjectilePool
 
 var _pools: Dictionary[StringName, NodePool] = {}
 var _active: Array[Enemy] = []
@@ -36,6 +42,10 @@ var _tick: int = 0
 
 func _ready() -> void:
 	_hash = SpatialHash.new(cell_size)
+	projectiles = ProjectilePool.new()
+	projectiles.name = "Projectiles"
+	projectiles.limit = projectile_limit
+	add_child(projectiles)
 
 
 func _physics_process(delta: float) -> void:
@@ -89,10 +99,11 @@ func spawn(enemy_data: EnemyData, feet: Vector3) -> Enemy:
 	return enemy
 
 
-## Retira a todos los enemigos en juego.
+## Retira a todos los enemigos en juego y sus proyectiles.
 func clear() -> void:
 	for index: int in range(_active.size() - 1, -1, -1):
 		_retire(_active[index])
+	projectiles.clear()
 
 
 ## Enemigos en juego ahora mismo (vivos o terminando de morir).
@@ -112,7 +123,7 @@ func _pool_for(enemy_data: EnemyData) -> NodePool:
 
 func _create(enemy_data: EnemyData) -> Node:
 	var enemy := enemy_data.scene.instantiate() as Enemy
-	enemy.setup(enemy_data)
+	enemy.setup(enemy_data, projectiles)
 	enemy.despawned.connect(_on_despawned)
 	return enemy
 
