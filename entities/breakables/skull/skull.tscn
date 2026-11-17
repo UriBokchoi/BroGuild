@@ -1,6 +1,7 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://entities/breakables/breakable.gd" id="1_breakable"]
+[ext_resource type="Script" path="res://entities/interactables/interactable.gd" id="9_interactable"]
 [ext_resource type="Resource" path="res://data/breakables/skull.tres" id="2_data"]
 [ext_resource type="Material" path="res://assets/models/props/materials/bone.tres" id="3_bone"]
 [ext_resource type="Material" path="res://assets/models/props/materials/shadow.tres" id="4_shadow"]
@@ -27,13 +28,13 @@ rings = 4
 material = ExtResource("4_shadow")
 size = Vector3(0.08, 0.08, 0.04)
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_touch"]
+[sub_resource type="SphereShape3D" id="SphereShape3D_reach"]
 radius = 0.7
 
-[node name="Skull" type="Node3D" node_paths=PackedStringArray("area", "visual")]
+[node name="Skull" type="Node3D" node_paths=PackedStringArray("interactable", "visual")]
 script = ExtResource("1_breakable")
 data = ExtResource("2_data")
-area = NodePath("Touch")
+interactable = NodePath("Interactable")
 visual = NodePath("Visual")
 
 [node name="Visual" type="Node3D" parent="."]
@@ -58,11 +59,12 @@ mesh = SubResource("SphereMesh_eye")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.13, -0.3)
 mesh = SubResource("PrismMesh_nose")
 
-[node name="Touch" type="Area3D" parent="."]
-collision_layer = 0
-collision_mask = 2
-monitorable = false
+[node name="Interactable" type="Area3D" parent="."]
+collision_layer = 256
+collision_mask = 0
+script = ExtResource("9_interactable")
+prompt_key = &"BREAK_SKULL"
 
-[node name="Shape" type="CollisionShape3D" parent="Touch"]
+[node name="Shape" type="CollisionShape3D" parent="Interactable"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.42, 0)
-shape = SubResource("SphereShape3D_touch")
+shape = SubResource("SphereShape3D_reach")

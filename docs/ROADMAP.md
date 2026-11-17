@@ -61,7 +61,7 @@
 - [x] Escena raíz `Game` con el flujo de pantallas; `RunState` guarda personaje, nivel y semilla; «Salir» de la pausa vuelve al menú
 - [x] Menú principal: Jugar, Opciones, Archivo (desactivado hasta su tarea) y Abandonar (cierra el juego). De momento, Jugar lleva al Brosque con el último personaje
 - [x] El Brosque v1 (gimnasio en el bosque): claro con pesas de piedra, bancos de tronco y carteles; mesetas con rampa; bosque low-poly de colores (generado, con MultiMesh). Los sistemas de partida van en `RunSystems`, común a todos los niveles. Jugar lo carga y las oleadas empiezan solas
-- [x] Rompibles: calaveras (experiencia) y bolsitas (oro) repartidas por el nivel en sitios distintos cada partida (30 y 20 en el Brosque), que se rompen al tocarlas
+- [x] Rompibles: calaveras (experiencia) y bolsitas (oro) repartidas por el nivel en sitios distintos cada partida (30 y 20 en el Brosque), que se rompen con E
 - [x] Dificultad como stat del jugador: sube sola 1 por minuto y con objetos o runas; las oleadas (cantidad, enemigos, élites, vida y daño) van según ella y calaveras y bolsitas dan más con ella; indicador en el HUD
 - [x] Recogibles del suelo: imán (atrae toda la experiencia), comida (cura un 25 %) y bomba (mata a los enemigos cercanos), que salen a veces de rompibles (3, 3 y 2 %) y élites (10, 15 y 10 %)
 - [x] Probabilidad de botín (stat, 0,5 %; élites ×8 y rompibles ×12) que tira de una tabla ponderada (`WeightedTable`) de power-ups; nuevo power-up: bebida energética (más velocidad, velocidad de ataque y daño 10 s)

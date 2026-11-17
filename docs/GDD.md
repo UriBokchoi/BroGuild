@@ -19,7 +19,7 @@ Si una idea no sirve al menos a uno, se descarta.
 ## 3. Bucle
 | Escala | Qué haces |
 |---|---|
-| Segundos | Moverte (dash, slide, saltos); las armas disparan solas; recoges XP y el oro vuela solo hacia ti; rompes calaveras y bolsitas al pasar |
+| Segundos | Moverte (dash, slide, saltos); las armas disparan solas; recoges XP y el oro vuela solo hacia ti; rompes calaveras y bolsitas con E |
 | Minutos | Subes de nivel (ruleta), abres cofres, juegas a la tragaperras, aceptas o rechazas pactos, cobras tu racha |
 | Partida | Exploras el nivel juntando llaves; invocas al jefe en su altar (al minuto 10 se activa solo) → lo vences → **¿Cobrar o Doblar?** |
 | Entre partidas | Gastas el bote en desbloqueos y vuelves a entrar |
@@ -79,7 +79,7 @@ Toda apuesta tiene **anticipación** (giro, luces, sonido que sube), **revelado*
   - *Pasivos:* como los objetos de Megabonk. Salen de cofres y del jefe, tienen rareza, no ocupan ranura y se apilan: cada copia suma su efecto (+% daño, robo de vida, más oro…).
   - *Power-ups del suelo:* imán (atrae toda la experiencia del mapa), comida (cura), bomba (daño a todo lo cercano) y bebida energética (más velocidad, velocidad de ataque y daño durante unos segundos). Salen de una tabla de botín con la **probabilidad de botín** (stat del jugador, muy baja: 0,5 % por enemigo normal), que multiplican los élites (×8) y los rompibles (×12). Más adelante, la misma tirada podrá dar cofres.
   - *Llaves del jefe:* repartidas por el nivel; con las suficientes se puede invocar al jefe antes de tiempo (§9).
-- **Rompibles** (como los jarrones de Megabonk): calaveras que sueltan experiencia y bolsitas que sueltan oro, repartidas por el nivel. Se rompen **al tocarlas** (pasar a través corriendo, con dash o slide), no con ataques: premian moverse por el mapa.
+- **Rompibles** (como los jarrones de Megabonk): calaveras que sueltan experiencia y bolsitas que sueltan oro, repartidas por el nivel. Se rompen **con «interactuar» (E)**, no con ataques: premian moverse por el mapa y pararse un instante.
 - **Subir de nivel**: eliges 1 de 3 opciones (arma o runa nueva, o subir una que ya tengas). La ruleta de apuestas (§5) se monta encima de esta elección.
 - **Enemigos**: enjambre cuerpo a cuerpo (rápido, frágil) · tanque lento · tirador a distancia (te obliga a moverte) · élites: cualquier enemigo puede salir élite, con una probabilidad que sube con los minutos (más grande, más vida y daño, suelta más experiencia y oro); más adelante, con afijos y cofre.
 - **Cuerpos de los enemigos** (como en Megabonk): chocan con el mundo, con el jugador y entre ellos, y no se hacen daño entre ellos. El jugador no los atraviesa: le bloquean, le dañan al tocarle y puede saltar y quedarse de pie encima. Cuando se atascan, los de atrás trepan sobre los de delante: alrededor del jugador forman un montículo y, si está en alto, se apilan para alcanzarlo.

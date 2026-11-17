@@ -125,7 +125,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
   - `LevelUpController` (en el nivel) escucha `player_leveled_up`, abre `LevelUpPanel` (pausa y cartas, en `ui/menus/level_up/`) y aplica la elegida a las armas o runas del jugador. Usa el flujo `GAMBLE` de `Rng`: la ruleta del Hito 4 irá encima.
 
 ### Rompibles — `entities/breakables/`
-- **`Breakable`:** rompible del nivel (como los jarrones de Megabonk). Su `Area3D` solo detecta al jugador: al tocarlo se rompe una vez, avisa por `EventBus.breakable_broken` con su `BreakableData` (qué recogible, cuánto, en cuántos trozos y a qué distancia) y desaparece con un estallido. Los ataques no lo rompen.
+- **`Breakable`:** rompible del nivel (como los jarrones de Megabonk). Se rompe con «interactuar» (su `Interactable`: «Romper la calavera», «Abrir la bolsita»), una sola vez; avisa por `EventBus.breakable_broken` con su `BreakableData` (qué recogible, cuánto, en cuántos trozos y a qué distancia) y desaparece con un estallido.
 - **Los de serie:** la calavera (`skull/`, experiencia) y la bolsita (`pouch/`, oro), con sus datos en `data/breakables/`.
 - **`BreakableScatter`** (`systems/spawning/`, en el nivel): reparte al empezar las `ScatterEntry` (escena y cuántas) por un rectángulo, en sitios distintos cada partida (flujo `LOOT`). Cada uno cae sobre suelo plano o encima de una meseta, nunca dentro o encima de un árbol o un prop, y separado de los demás.
 
@@ -235,7 +235,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 
   Aparece sola en la armería.
 - **Una runa:** crea un `.tres` `RuneData` en `data/runes/` con su icono (`assets/textures/icons/runes/`), un `StatModifierSet` por nivel (sobre stats que el jugador tenga) y traduce su nombre y descripción. Aparece sola en la armería.
-- **Un rompible:** crea su `BreakableData` en `data/breakables/` (recogible, valor, trozos, dispersión) y su escena con raíz `Breakable` (modelo y `Area3D` que solo detecte al jugador); añádelo como `ScatterEntry` al `BreakableScatter` del nivel.
+- **Un rompible:** crea su `BreakableData` en `data/breakables/` (recogible, valor, trozos, dispersión) y su escena con raíz `Breakable` (modelo e `Interactable` con su aviso); añádelo como `ScatterEntry` al `BreakableScatter` del nivel.
 - **Un enemigo:**
   1. Crea un `.tres` `EnemyData` en `data/enemies/`.
   2. Si no reutiliza la escena de otro, crea la suya en `entities/enemies/<enemigo>/`, con raíz `Enemy`, como `swarmer.tscn`.

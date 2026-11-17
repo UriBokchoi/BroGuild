@@ -41,6 +41,8 @@ SLOT_WIN_UPGRADE,¡Mejora gratis!,Free upgrade!
 SLOT_JACKPOT_UPGRADE,¡JACKPOT! Tres mejoras gratis,JACKPOT! Three free upgrades
 SLOT_CURSE_FRAILTY,Maldición: −20 % de vida máxima un minuto,Curse: −20% max health for a minute
 SLOT_CURSE_ELITES,¡Maldición! Cinco élites a por ti,Curse! Five elites are coming
+BREAK_SKULL,Romper la calavera,Break the skull
+OPEN_POUCH,Abrir la bolsita,Open the pouch
 OPTIONS_TITLE,Opciones,Options
 OPTIONS_GROUP_AUDIO,Sonido,Sound
 OPTIONS_GROUP_DISPLAY,Pantalla,Display
