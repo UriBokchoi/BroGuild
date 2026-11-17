@@ -925,3 +925,7 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - El premio aún no sirve de mucho, porque la partida termina al vencerlo. Pesará cuando lleguen el bote y «¿Cobrar o Doblar?» (Hitos 7 y 8).
   - El salto confía en la física: aterriza cuando deja de caer o, si algo lo frena, pasado el doble de su tiempo en el aire.
   - Los refuerzos no cuentan para el máximo de enemigos a la vez.
+
+## 2026-11-17 · El juego empieza en español
+- **Decisión:** el idioma es una opción más (`GameSettings.locale`, guardada en `user://settings.cfg`). Un juego recién estrenado empieza en español (`SettingsData.default_locale = "es"`) aunque el sistema esté en otro idioma, y `Save` lo aplica al arrancar. El inglés sigue traducido.
+- **Por qué:** lo pidió el diseñador. Se hace en las opciones y no en `project.godot` para que un selector de idioma futuro solo tenga que cambiar esa opción.

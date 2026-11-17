@@ -208,9 +208,9 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 - **Reinicio rápido:** reintentar vuelve a instanciar el nivel con otra semilla (unos 0,2 s en el gimnasio).
 
 ### Opciones — `systems/settings/` y `autoload/save.gd`
-- **`SettingsData`** (`data/settings/settings.tres`): buses con volumen, valores al estrenar el juego y tamaños de ventana que se ofrecen.
-- **`GameSettings`:** lo elegido (volúmenes, pantalla completa, tamaño de ventana, VSync). Se guarda en un `ConfigFile` (`user://settings.cfg`) y se aplica al motor (`apply_audio`, `apply_display`). Sin pantalla (headless) no toca nada; incrustado en el editor (`Engine.is_embedded_in_editor()`, ver `can_change_window`) solo el VSync.
-- **`Save`** (autoload) lo carga y lo aplica al arrancar; quien lo cambia llama a `Save.save_settings()`. Los tests usan otro archivo (`settings_path`).
+- **`SettingsData`** (`data/settings/settings.tres`): buses con volumen, valores al estrenar el juego (el idioma, español) y tamaños de ventana que se ofrecen.
+- **`GameSettings`:** lo elegido (idioma, volúmenes, pantalla completa, tamaño de ventana, VSync). Se guarda en un `ConfigFile` (`user://settings.cfg`) y se aplica al motor (`apply_audio`, `apply_display`). Sin pantalla (headless) no toca nada; incrustado en el editor (`Engine.is_embedded_in_editor()`, ver `can_change_window`) solo el VSync.
+- **`Save`** (autoload) lo carga y lo aplica al arrancar (también el idioma: `TranslationServer.set_locale`); quien lo cambia llama a `Save.save_settings()`. Los tests usan otro archivo (`settings_path`).
 
 ### Niveles — `levels/`
 - **`common/run_systems.tscn`** (`RunSystems`): jugador, horda y oleadas, botín, subir de nivel, jefe (`BossEncounter`), HUD, pausa, resultados, números de daño y panel de depuración, ya conectados. Cada nivel pone una instancia con sus oleadas (`waves`), su jefe (`boss`, un `BossData`; vacío: sin jefe), si empiezan solas (`autostart_waves`), el personaje de serie y el punto de aparición (`spawn_point`).

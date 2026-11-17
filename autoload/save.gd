@@ -13,6 +13,7 @@ var settings: GameSettings
 
 func _ready() -> void:
 	load_settings()
+	settings.apply_locale()
 	settings.apply_audio()
 	settings.apply_display(get_window())
 
