@@ -57,13 +57,28 @@ size = Vector3(1.4, 2, 1)
 [sub_resource type="SphereShape3D" id="SphereShape3D_reach"]
 radius = 1.9
 
+[sub_resource type="StandardMaterial3D" id="Mat_blast"]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(1, 0.62, 0.15, 0.9)
+
+[sub_resource type="SphereMesh" id="SphereMesh_blast"]
+material = SubResource("Mat_blast")
+radius = 0.5
+height = 1.0
+radial_segments = 16
+rings = 8
+
 [sub_resource type="FontVariation" id="FontVariation_sign"]
 variation_embolden = 0.9
 
-[node name="SlotMachine" type="Node3D" node_paths=PackedStringArray("interactable")]
+[node name="SlotMachine" type="Node3D" node_paths=PackedStringArray("interactable", "visual", "body", "explosion")]
 script = ExtResource("1_slot")
 data = ExtResource("2_data")
 interactable = NodePath("Interactable")
+visual = NodePath("Visual")
+body = NodePath("Body")
+explosion = NodePath("Explosion")
 prompt_key = &"INTERACT_SLOTS"
 
 [node name="Visual" type="Node3D" parent="."]
@@ -116,3 +131,9 @@ prompt_key = &"INTERACT_SLOTS"
 [node name="Shape" type="CollisionShape3D" parent="Interactable"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("SphereShape3D_reach")
+
+[node name="Explosion" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+visible = false
+cast_shadow = 0
+mesh = SubResource("SphereMesh_blast")

@@ -111,7 +111,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
   - `armory/`: la armería de práctica (armas y runas);
   - `summoner/`: el invocador de enemigos de práctica (uno por tipo, y uno de élites; su cartel muestra el nombre del enemigo);
   - `character_pedestal/`: pedestal con el modelo vestido de un personaje; al interactuar, el jugador pasa a ser él (hasta la selección de personaje del Hito 3);
-  - `slot_machine/`: tragaperras (`SlotMachine`). Con «interactuar» cobra su coste (`SlotMachineData`: `base_cost` + `cost_per_difficulty` × dificultad, ×`cost_growth` por cada uso de esa máquina), saca un símbolo por rodillo de su `WeightedTable` de `SlotSymbol` y avisa por `slot_spun`. Al parar, da el premio del trío o de la pareja (`SlotOutcome`: una recompensa por `pickup_collected`, como un recogible) y lo anuncia por `slot_resolved`. No pausa. Datos en `data/slots/`;
+  - `slot_machine/`: tragaperras (`SlotMachine`). Aguanta `max_uses` tiradas (5) y revienta. Con «interactuar» cobra su coste (`SlotMachineData`: `base_cost` + `cost_per_difficulty` × dificultad, ×`cost_growth` por cada uso de esa máquina), saca un símbolo por rodillo de su `WeightedTable` de `SlotSymbol` y avisa por `slot_spun`. Al parar, da el premio del trío o de la pareja (`SlotOutcome`: una recompensa por `pickup_collected`, como un recogible) y lo anuncia por `slot_resolved`. No pausa. Datos en `data/slots/`;
   - `wave_bell/`: la campana que arranca y para el director de oleadas.
 
 ### Objetos y runas — `systems/upgrades/`

@@ -96,6 +96,7 @@ entries = Array[ExtResource("3_entry")]([SubResource("Symbol_coin"), SubResource
 script = ExtResource("1_data")
 symbols = SubResource("Table_symbols")
 reels = 3
+max_uses = 5
 base_cost = 15.0
 cost_per_difficulty = 5.0
 cost_growth = 1.5

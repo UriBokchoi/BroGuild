@@ -1,13 +1,16 @@
 class_name SlotMachineData
 extends Resource
-## Cómo es una tragaperras (GDD §5.3): sus símbolos ([WeightedTable] de [SlotSymbol]), lo que cuesta
-## (sube con la dificultad y cada vez que se usa esa máquina) y el ritmo de los rodillos. Los valores
-## viven en [code]data/slots/[/code]; aquí todo vale 0 o vacío a propósito.
+## Cómo es una tragaperras (GDD §5.3): sus símbolos ([WeightedTable] de [SlotSymbol]), cuántas
+## tiradas aguanta antes de explotar, lo que cuesta (sube con la dificultad y cada vez que se usa esa
+## máquina) y el ritmo de los rodillos. Los valores viven en [code]data/slots/[/code]; aquí todo vale
+## 0 o vacío a propósito.
 
 ## Símbolos de los rodillos (cada rodillo saca uno según sus pesos).
 @export var symbols: WeightedTable
 ## Rodillos.
 @export_range(2, 5, 1) var reels: int = 0
+## Tiradas que aguanta antes de explotar.
+@export_range(1, 100, 1) var max_uses: int = 0
 @export_group("cost")
 ## Oro que cuesta la primera tirada con dificultad 0.
 @export_range(0.0, 10000.0, 1.0, "or_greater") var base_cost: float = 0.0

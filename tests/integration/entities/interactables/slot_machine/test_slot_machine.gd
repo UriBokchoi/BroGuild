@@ -1,7 +1,8 @@
 extends GutTest
 ## Tragaperras: cobra su coste, avisa de lo que sale y, cuando paran los rodillos, da el premio como
 ## recompensa y lo anuncia; mientras gira no se puede volver a jugar; sin oro no gira; cada uso la
-## encarece. Con datos de prueba de un solo símbolo (siempre jackpot de oro ×10) y rodillos rápidos.
+## encarece; tras su última tirada revienta. Con datos de prueba de un solo símbolo (siempre jackpot
+## de oro ×10) y rodillos rápidos.
 
 const MachineScene := preload("res://entities/interactables/slot_machine/slot_machine.tscn")
 const COIN_ICON := preload("res://assets/textures/icons/slots/coin.svg")
@@ -65,6 +66,19 @@ func test_each_use_makes_it_pricier() -> void:
 	assert_gt(_machine.get_cost(), first)
 
 
+func test_after_its_last_spin_it_blows_up() -> void:
+	_wallet.add(1000.0)
+	_machine.data.max_uses = 1
+	assert_true(_machine.play(_wallet))
+	await wait_seconds(_machine.data.total_time() + 0.1)
+	assert_true(_machine.is_exhausted())
+	assert_false(_machine.interactable.enabled, "ya no se puede usar")
+	assert_false(_machine.play(_wallet))
+	assert_eq(_rewards.size(), 1, "pero el premio de la última sí llega")
+	await wait_seconds(_machine.explosion_time + 0.1)
+	assert_false(is_instance_valid(_machine), "y desaparece")
+
+
 ## Un solo símbolo (siempre tres iguales): el jackpot da 10 veces el coste en oro.
 func _gold_only_data() -> SlotMachineData:
 	var jackpot := SlotOutcome.new()
@@ -82,6 +96,7 @@ func _gold_only_data() -> SlotMachineData:
 	var data := SlotMachineData.new()
 	data.symbols = table
 	data.reels = 3
+	data.max_uses = 5
 	data.base_cost = 10.0
 	data.cost_growth = 1.5
 	data.spin_time = 0.1
