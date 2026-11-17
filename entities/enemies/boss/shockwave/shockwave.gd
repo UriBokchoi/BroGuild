@@ -19,7 +19,7 @@ const MAX_RESULTS: int = 8
 @export_range(0.1, 5.0, 0.05, "suffix:m") var reach_height: float = 1.3
 ## A quién daña (capas de hurtbox).
 @export_flags_3d_physics var hit_mask: int = 0
-## Aro que se ve: un plano de 2 × 2 con [code]ring.gdshader[/code] (se escala al radio).
+## Aro que se ve: un plano de 2 × 2 con [code]ground_ring.gdshader[/code] (se escala al radio).
 @export var ring: GeometryInstance3D
 
 ## Azar del crítico (no tiene). Si no se asigna antes de entrar en el árbol, el flujo de combate de

@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://entities/pickups/pickup.gd" id="1_pickup"]
 [ext_resource type="Script" path="res://vfx/juice/spin_bob.gd" id="2_spin"]
+[ext_resource type="PackedScene" path="res://vfx/juice/drop_glow/drop_glow.tscn" id="90_glow"]
 
 [sub_resource type="StandardMaterial3D" id="Mat_red"]
 albedo_color = Color(0.86, 0.18, 0.18, 1)
@@ -58,3 +59,6 @@ mesh = SubResource("BoxMesh_tip")
 [node name="SpinBob" type="Node" parent="." node_paths=PackedStringArray("target")]
 script = ExtResource("2_spin")
 target = NodePath("../Model")
+
+[node name="Glow" parent="." instance=ExtResource("90_glow")]
+color = Color(0.4, 0.7, 1, 1)

@@ -957,3 +957,7 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
     - Se quitan Aguante y Eco arcano. Con ellos se van `Weapon.attack_started` y `add_shots`, que solo usaba el Eco.
 - **Resultado:** el Guerrero y el Mago son los de la horda (de cerca y en área); el Pícaro, el mejor contra un solo enemigo.
 - **Pendiente:** el *feel* lo decide el diseñador jugando. La simulación no se mueve ni recibe daño, y los enemigos están quietos y muy juntos (favorece el área).
+
+## 2026-11-18 · Botín más llamativo
+- **Decisión:** los power-ups (comida, imán, bomba y bebida energética) llevan un `DropGlow`: una columna de luz corta y un aro que late en el suelo, del color de cada uno. Las gemas de experiencia laten y destellan en los bordes, y las monedas destellan al ponerse de cara. Todo en shaders, sin `_process`. El aro (`ground_ring.gdshader`) pasa a `vfx/shaders` porque lo usan el jefe y los power-ups.
+- **Por qué:** lo pidió el diseñador: entre la horda no se veía lo que soltaban los enemigos. Los power-ups son pocos (pueden llevar mallas propias); las gemas salen a cientos, así que solo cambia su shader.

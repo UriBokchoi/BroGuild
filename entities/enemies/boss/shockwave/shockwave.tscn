@@ -1,7 +1,7 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://entities/enemies/boss/shockwave/shockwave.gd" id="1_wave"]
-[ext_resource type="Shader" path="res://entities/enemies/boss/shockwave/ring.gdshader" id="2_ring"]
+[ext_resource type="Shader" path="res://vfx/shaders/ground_ring.gdshader" id="2_ring"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ring"]
 render_priority = 0

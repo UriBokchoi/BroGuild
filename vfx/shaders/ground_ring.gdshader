@@ -1,7 +1,8 @@
 shader_type spatial;
-// Aro en el suelo: la onda del salto del jefe (que se abre) y el aviso de dónde va a caer. Va en un
-// PlaneMesh de 2 × 2 escalado al radio: el aro está a «progress» del centro al borde (0–1), tiene
-// «band» de ancho (en la misma escala) y brilla más en el centro de ese ancho.
+// Aro en el suelo: la onda del salto del jefe (que se abre), el aviso de dónde va a caer y el brillo
+// de los power-ups. Va en un PlaneMesh de 2 × 2 escalado al radio: el aro está a «progress» del
+// centro al borde (0–1), tiene «band» de ancho (en la misma escala) y brilla más en el centro de ese
+// ancho.
 render_mode unshaded, blend_add, depth_draw_never, cull_disabled, shadows_disabled;
 
 uniform vec4 color : source_color = vec4(1.0, 0.55, 0.2, 1.0);

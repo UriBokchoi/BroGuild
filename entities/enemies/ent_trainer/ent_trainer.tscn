@@ -14,7 +14,7 @@
 [ext_resource type="Script" path="res://entities/enemies/boss/attacks/charge_attack.gd" id="12_charge"]
 [ext_resource type="Script" path="res://entities/enemies/boss/attacks/summon_attack.gd" id="13_summon"]
 [ext_resource type="PackedScene" path="res://entities/enemies/boss/shockwave/shockwave.tscn" id="14_shockwave"]
-[ext_resource type="Shader" path="res://entities/enemies/boss/shockwave/ring.gdshader" id="15_ring"]
+[ext_resource type="Shader" path="res://vfx/shaders/ground_ring.gdshader" id="15_ring"]
 [ext_resource type="Resource" path="res://data/enemies/sapling.tres" id="16_sapling"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_body"]
