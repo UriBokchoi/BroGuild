@@ -20,5 +20,10 @@ func show_time(seconds: float, overtime: bool) -> void:
 	visible = seconds >= 0.0
 	if not visible:
 		return
-	text = "%d:%02d" % [floori(seconds / 60.0), floori(seconds) % 60]
+	text = format(seconds)
 	theme_type_variation = &"ClockLabelOvertime" if overtime else &"ClockLabel"
+
+
+## [param seconds] como minutos:segundos (p. ej. «1:05»).
+static func format(seconds: float) -> String:
+	return "%d:%02d" % [floori(seconds / 60.0), floori(seconds) % 60]

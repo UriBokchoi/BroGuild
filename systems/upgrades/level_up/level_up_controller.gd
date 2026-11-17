@@ -2,7 +2,7 @@ class_name LevelUpController
 extends Node
 ## Al subir de nivel el jugador ([code]EventBus.player_leveled_up[/code]), le ofrece la elección
 ## ([LevelUpPanel]) y aplica la opción elegida a sus armas o runas. Si sube varios niveles de golpe,
-## una elección tras otra. Si no queda nada que ofrecer, no pregunta.
+## una elección tras otra. Si no queda nada que ofrecer, o el jugador ha muerto, no pregunta.
 
 @export var data: LevelUpData
 @export var player: Player
@@ -43,6 +43,9 @@ func apply(option: LevelUpOption) -> void:
 
 
 func _on_leveled_up(_level: int) -> void:
+	# Muerto, no elige: las gemas que aún volaban no le abren las cartas encima de los resultados.
+	if player.health.is_dead():
+		return
 	_pending += 1
 	if not panel.is_open():
 		_offer()

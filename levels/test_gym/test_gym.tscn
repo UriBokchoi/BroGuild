@@ -25,6 +25,8 @@
 [ext_resource type="Resource" path="res://data/progression/level_up.tres" id="23_level_up_data"]
 [ext_resource type="PackedScene" path="res://ui/menus/level_up/level_up_panel.tscn" id="24_level_up_panel"]
 [ext_resource type="Resource" path="res://data/pickups/gold_coin.tres" id="25_gold_coin"]
+[ext_resource type="Script" path="res://systems/run/run_recorder.gd" id="26_recorder"]
+[ext_resource type="PackedScene" path="res://ui/menus/results/results_panel.tscn" id="27_results"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_lgb4e"]
 
@@ -98,6 +100,12 @@ script = ExtResource("22_level_up")
 data = ExtResource("23_level_up_data")
 player = NodePath("../Player")
 panel = NodePath("../LevelUpPanel")
+
+[node name="RunRecorder" type="Node" parent="."]
+script = ExtResource("26_recorder")
+
+[node name="ResultsPanel" parent="." node_paths=PackedStringArray("recorder") instance=ExtResource("27_results")]
+recorder = NodePath("../RunRecorder")
 
 [node name="WaveDirector" type="Node" parent="." node_paths=PackedStringArray("swarm", "target")]
 script = ExtResource("17_director")

@@ -4,6 +4,21 @@ PAUSE_CONTINUE,Continuar,Resume
 PAUSE_OPTIONS,Opciones,Options
 PAUSE_RETRY,Reintentar,Retry
 PAUSE_QUIT,Salir,Quit
+DEATH_LINE_GG,GG bro,GG bro
+DEATH_LINE_GIT_GUD,Just git gud,Just git gud
+DEATH_LINE_SKILL_ISSUE,¿Skill issue?,Skill issue?
+DEATH_LINE_QUITTERS,El 99 % se rinde justo antes de conseguirlo,99% quit right before they make it
+DEATH_LINE_TRY,A la próxima inténtalo al menos,Next time at least try
+DEATH_LINE_COUSIN,Mi primo pequeño lo haría mejor,My little cousin would do better
+DEATH_LINE_DIED,Has muerto,You died
+RESULTS_TIME,Tiempo,Time
+RESULTS_LEVEL,Nivel,Level
+RESULTS_KILLS,Enemigos derrotados,Enemies defeated
+RESULTS_ELITE_KILLS,Élites derrotados,Elites defeated
+RESULTS_GOLD,Oro ganado,Gold earned
+RESULTS_DAMAGE,Daño infligido,Damage dealt
+RESULTS_RETRY,Reintentar (%s),Retry (%s)
+RESULTS_QUIT,Salir,Quit
 PAUSE_STATS_TITLE,Estadísticas,Stats
 STAT_BASE,base %s,base %s
 STAT_GROUP_RUN,Carrera,Running

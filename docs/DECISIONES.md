@@ -694,3 +694,33 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
     - En la prórroga se pone rojo.
     - Se adelanta de la tarea «Muerte, resultados y reinicio», porque es lo que deja ver la dificultad.
 - **Por qué:** todo vive en curvas de datos, así que las dificultades y los ajustes de playtest son cambiar puntos de una curva. El escalado reutiliza el mismo `boost` que los élites, sin un sistema nuevo.
+
+## 2026-11-16 · Muerte, resultados y reinicio rápido
+- **Decisión:**
+  - **`RunRecorder`** (`systems/run/`, en el nivel):
+    - Apunta la partida en un `RunStats` escuchando el `EventBus`: enemigos derrotados (`enemy_died`), cuántos eran élites, daño infligido (`enemy_damaged`), oro ganado y nivel.
+    - El oro cuenta lo ganado aunque luego se gaste: suma solo las subidas de `player_gold_changed`.
+    - El tiempo es el del reloj de la ronda (`run_clock_changed`); sin ronda en marcha, el que lleva el nivel.
+    - Al morir el jugador deja de apuntar. Lo que llega después (la moneda que aún volaba) no cuenta.
+  - **`ResultsPanel`** (`ui/menus/results/`):
+    - Al morir el jugador espera 1 s (`delay`, para verle caer), pausa, pide el cursor y muestra «Has caído» con tiempo, nivel, enemigos y élites derrotados, oro ganado y daño infligido.
+    - «Reintentar» tiene el foco: Enter o Espacio también lo pulsan. Lleva escrita su tecla, que sale del InputMap.
+    - «Salir» cierra el juego, como en la pausa, hasta que exista el menú principal (Hito 3). Esc no cierra los resultados.
+  - **Reinicio rápido:**
+    - Acción nueva `retry` (R, tecla física), solo en los resultados.
+    - Recarga el nivel (`reload_current_scene`): unos 0,2 s en el gimnasio, muy por debajo de los 2 s del GDD.
+    - Cuando exista el flujo de partida (Hito 3), pasará por `RunState` con semilla nueva.
+  - **Muerto, no se sube de nivel:** el `LevelUpController` ignora las subidas de un jugador muerto. Si no, las gemas que aún volaban abrirían las cartas encima de los resultados.
+- **Por qué:** el GDD pide reinicio instantáneo («una más») y ver cómo te ha ido. Apuntar con un nodo que solo escucha deja los resultados desacoplados del gameplay, y servirá para el bote, el Archivo y el resumen de partida del Hito 8.
+
+## 2026-11-16 · Frases de muerte
+- **Decisión:** en los resultados, en vez de «Has caído», sale al azar una frase de muerte gamer (flujo `COSMETIC` de `Rng`). Las frases las propuso el diseñador:
+  - «GG bro»
+  - «Just git gud»
+  - «¿Skill issue?»
+  - «El 99 % se rinde justo antes de conseguirlo»
+  - «A la próxima inténtalo al menos»
+  - «Mi primo pequeño lo haría mejor»
+  - «Has muerto»
+- **Cómo se añaden:** son claves `DEATH_LINE_*` en la lista `death_lines` de `results_panel.tscn`. Una frase nueva es su clave en la lista y su traducción; un test exige que todas estén traducidas. El título se parte en varias líneas si no cabe (hasta 900 px de ancho).
+- **Por qué:** da personalidad a la muerte, que se va a ver muchas veces («una más»).

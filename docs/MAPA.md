@@ -23,7 +23,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 | `autoload/` | Los únicos singletons: `EventBus` (solo señales), `Rng` (todo el azar, un generador por sistema) y `RunState` (partida en curso). Sin lógica de gameplay. |
 | `core/` | Piezas genéricas que no saben de este juego: stats, máquina de estados, componentes de combate, pool (`NodePool`), rejilla espacial (`SpatialHash`, con marcas y tope de resultados), carga de carpetas de datos (`ResourceDir`), nombres de acciones y capas. |
 | `entities/` | Lo que existe en el mundo: el jugador, los enemigos y los interactuables. |
-| `systems/` | Reglas y sistemas que reparten trabajo entre entidades: combate (fórmulas y armas), progresión, aparición de enemigos. Vacías, para más adelante: `gamble/` y `upgrades/`. |
+| `systems/` | Reglas y sistemas que reparten trabajo entre entidades: combate (fórmulas y armas), progresión, aparición de enemigos, objetos y runas (`upgrades/`) y la partida (`run/`). Vacía, para más adelante: `gamble/`. |
 | `data/` | Los `.tres` de balance y la traducción. Nada de código. |
 | `ui/` | HUD, menús, panel de depuración, vista de stats, tema global y dueño del ratón. |
 | `vfx/` | Efectos visuales: juice que reacciona a señales, shaders compartidos y líneas de velocidad. |
@@ -147,15 +147,20 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 - **`menus/pause/`:** menú de pausa con todas las stats del jugador.
 - **`menus/armory/`:** panel de la armería.
 - **`menus/level_up/`:** elección al subir de nivel (`LevelUpPanel` y sus `LevelUpCard`).
+- **`menus/results/`:** `ResultsPanel`, la pantalla de resultados al morir: una frase de muerte al azar (`death_lines`, claves `DEATH_LINE_*`), tiempo, nivel, enemigos y élites derrotados, oro y daño (del `RunRecorder`); «Reintentar» (R) recarga el nivel y «Salir» cierra el juego.
 - **`stats/`:** `StatsView`, la lista de stats de cualquier `StatsComponent` (la usan la pausa y la armería); `StatFormat`, el formato de un valor; y `ModifierFormat`, que describe un modificador («+10 % Daño»).
 - **`debug/`:** panel F3 con secciones (`DebugSection`); no se traduce.
 - **`theme/`:** el tema global, generado por `tools/gen_themes.gd`.
 - **`mouse_capture.gd`:** único dueño del modo del ratón.
 
+### Partida — `systems/run/`
+- **`RunRecorder`** (en el nivel): escucha el `EventBus` y apunta en un `RunStats` lo que pasa en la partida: enemigos y élites derrotados, daño infligido, oro ganado (sin restar lo gastado), nivel y tiempo (el del reloj de la ronda si la hay). Para al morir el jugador.
+- **Reinicio rápido:** de momento recarga la escena (`reload_current_scene`, unos 0,2 s en el gimnasio). Con el flujo de partida del Hito 3 pasará por `RunState`.
+
 ### Niveles — `levels/`
 - **`test_gym/test_gym.tscn`:** escena principal de pruebas. Zona de movimiento con rampas, bordes, paredes, huecos y escalones, más el pad de daño (`props/`).
 - **`test_gym/zones/combat_range.tscn`:** zona de combate a 200 m del gimnasio. Muñecos, armería, invocadores (esbirros, tiradores y esbirros élite), campana de oleadas, plataforma escalonada, teletransportes y recogedor de caídas. Las oleadas paran al volver.
-- **En la raíz del gimnasio viven** `EnemySwarm`, `WaveDirector`, `PickupField`, `LootDropper`, `LevelUpController` y `LevelUpPanel`, `DamageNumbers`, HUD, pausa y panel de depuración.
+- **En la raíz del gimnasio viven** `EnemySwarm`, `WaveDirector`, `PickupField`, `LootDropper`, `LevelUpController` y `LevelUpPanel`, `RunRecorder` y `ResultsPanel`, `DamageNumbers`, HUD, pausa y panel de depuración.
 - **`stress/stress_test.tscn`:** prueba de rendimiento (herramienta, sin traducir). Mantiene 300 y luego 500 esbirros sobre un jugador inmortal con la espada, mide frames y física y sale. Comando en CLAUDE.md.
 
 ## Señales del `EventBus`
@@ -166,7 +171,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 | `cursor_requested` | pausa, armería, panel de depuración | `MouseCapture` |
 | `player_stamina_changed` | `StaminaComponent` | `StaminaBar` |
 | `player_health_changed` | `Player` | `HealthBar` |
-| `player_died` | `Player` | (nadie aún: pantalla de resultados) |
+| `player_died` | `Player` | `ResultsPanel`, `RunRecorder` |
 | `enemy_damaged` | `DamageReporter` | `DamageNumbers` |
 | `enemy_died` (el propio enemigo) | `Enemy` | `LootDropper` (y más adelante el Archivo) |
 | `pickup_collected` | `PickupField` | `ExperienceComponent` (la recompensa `experience`), `WalletComponent` (`gold`) |
