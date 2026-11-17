@@ -119,6 +119,7 @@ ENEMY_SWARMER_NAME,Esbirro,Minion
 ENEMY_SWARMER_DESCRIPTION,"Rápido y frágil; llega en enjambre.","Fast and frail; comes in swarms."
 ENEMY_SHOOTER_NAME,Tirador,Shooter
 ENEMY_SHOOTER_DESCRIPTION,"Se queda a distancia y dispara bolas de fuego lentas; no te quedes quieto.","Keeps its distance and shoots slow fireballs; don't stand still."
+ENEMY_ELITE_NAME,%s élite,Elite %s
 INTERACT_SUMMON,Invocar enemigos,Summon enemies
 INTERACT_WAVES_START,Empezar oleadas,Start waves
 INTERACT_WAVES_STOP,Parar oleadas,Stop waves

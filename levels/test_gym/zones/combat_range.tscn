@@ -10,6 +10,8 @@
 [ext_resource type="Material" path="res://levels/test_gym/materials/greybox_platform.tres" id="8_platform"]
 [ext_resource type="PackedScene" path="res://entities/interactables/wave_bell/wave_bell.tscn" id="9_bell"]
 [ext_resource type="Resource" path="res://data/enemies/shooter.tres" id="10_shooter"]
+[ext_resource type="Resource" path="res://data/enemies/swarmer.tres" id="11_swarmer"]
+[ext_resource type="Resource" path="res://data/enemies/elite.tres" id="12_elite"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_fall"]
 size = Vector3(400, 4, 400)
@@ -18,7 +20,7 @@ size = Vector3(400, 4, 400)
 script = ExtResource("1_range")
 exit_teleporter = NodePath("ExitTeleporter")
 arrival = NodePath("Arrival")
-summoners = [NodePath("Summoner"), NodePath("ShooterSummoner")]
+summoners = [NodePath("Summoner"), NodePath("ShooterSummoner"), NodePath("EliteSummoner")]
 wave_bell = NodePath("WaveBell")
 
 [node name="Floor" type="CSGBox3D" parent="."]
@@ -73,6 +75,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, 10.5)
 enemy = ExtResource("10_shooter")
 count = 6
 ring_radius = 14.0
+
+[node name="EliteSummoner" parent="." instance=ExtResource("7_summoner")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, 15)
+enemy = ExtResource("11_swarmer")
+count = 4
+elite = ExtResource("12_elite")
 
 [node name="HighGround" type="Node3D" parent="."]
 

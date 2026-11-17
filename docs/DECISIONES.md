@@ -631,3 +631,31 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
     - El color es un parámetro de instancia del shader (`instance uniform`): miles de gemas siguen compartiendo un único material.
   - **El oro no se funde:** vuela nada más salir.
 - **Por qué:** el diseñador notó demasiadas gemas en pantalla. Fundirlas reduce nodos visibles y ruido, y una gema grande de otro color se lee como un premio que merece ir a buscar. Todo en datos, así que otro recogible puede tener niveles sin código.
+
+## 2026-11-16 · Élites
+- **Decisión:**
+  - **Cualquier enemigo puede salir élite.** Quien lo saca lo decide:
+    - El `WaveDirector` tira por cada enemigo con `WaveData.elite_chance`, una curva de probabilidad (%) según los minutos. En el gimnasio va del 1 % al empezar al 6 % a los 10 min y al 12 % a los 20; se reajustará con la dificultad.
+    - El invocador de élites de la zona de práctica saca 4 esbirros élite.
+  - **`EliteData`** (`data/enemies/elite.tres`):
+
+    | Qué | Élite |
+    |---|---|
+    | Vida | ×5 |
+    | Daño al tocar | ×1,5 |
+    | Daño de sus armas | ×1,5 |
+    | Experiencia y oro que suelta | ×5 (un esbirro élite suelta una gema verde) |
+    | Radio de separación | ×1,6 |
+    | Tamaño | ×1,6 |
+    | Brillo | borde dorado que late |
+
+  - **Mejoras de una vida:**
+    - `Enemy.boost(StatModifierSet)` reparte cada modificador a la stat que lo tenga, sea del enemigo (`max_health`, `contact_damage`, `xp_reward`…) o de sus armas (`damage`).
+    - `Enemy.promote(EliteData)` usa `boost` y además le cambia tamaño y brillo.
+    - Al volver a salir del pool (`spawn`), se quitan todas: el mismo nodo sirve de normal o de élite.
+    - El escalado de la dificultad usará el mismo `boost`.
+  - **Tamaño:**
+    - El cuerpo de un `RigidBody3D` no se puede escalar, porque la física le quita la escala. Por eso se escalan las formas de colisión (cuerpo, hurtbox y contacto), el modelo y los marcadores (los números de daño salen sobre su cabeza), incluida su posición, para que sigan apoyadas en el suelo.
+    - La masa sube al cubo del tamaño: un élite empuja a los pequeños y no al revés.
+  - **Brillo:** `elite_glow.gdshader`, un borde de luz aditivo que late, puesto como `material_overlay` en las mallas del modelo. No hace falta un material por enemigo.
+- **Por qué:** el diseñador pidió un % de élites más grandes, que peguen más y suelten más experiencia. Hacerlo con modificadores de stats deja cualquier combinación en datos. Los afijos y el cofre del GDD (Hito 7) se montarán encima de `EliteData`.

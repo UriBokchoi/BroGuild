@@ -1,0 +1,52 @@
+[gd_resource type="Resource" script_class="EliteData" format=3]
+
+[ext_resource type="Script" path="res://entities/enemies/elite/elite_data.gd" id="1_data"]
+[ext_resource type="Script" path="res://core/stats/stat_modifier_set.gd" id="2_set"]
+[ext_resource type="Script" path="res://core/stats/stat_modifier.gd" id="3_modifier"]
+[ext_resource type="Material" path="res://entities/enemies/elite/elite_glow.tres" id="4_glow"]
+
+[sub_resource type="Resource" id="Resource_health"]
+script = ExtResource("3_modifier")
+stat = &"max_health"
+kind = 2
+value = 5.0
+
+[sub_resource type="Resource" id="Resource_contact"]
+script = ExtResource("3_modifier")
+stat = &"contact_damage"
+kind = 2
+value = 1.5
+
+[sub_resource type="Resource" id="Resource_weapon_damage"]
+script = ExtResource("3_modifier")
+stat = &"damage"
+kind = 2
+value = 1.5
+
+[sub_resource type="Resource" id="Resource_xp"]
+script = ExtResource("3_modifier")
+stat = &"xp_reward"
+kind = 2
+value = 5.0
+
+[sub_resource type="Resource" id="Resource_gold"]
+script = ExtResource("3_modifier")
+stat = &"gold_reward"
+kind = 2
+value = 5.0
+
+[sub_resource type="Resource" id="Resource_separation"]
+script = ExtResource("3_modifier")
+stat = &"separation_radius"
+kind = 2
+value = 1.6
+
+[sub_resource type="Resource" id="Resource_set"]
+script = ExtResource("2_set")
+stat_modifiers = Array[ExtResource("3_modifier")]([SubResource("Resource_health"), SubResource("Resource_contact"), SubResource("Resource_weapon_damage"), SubResource("Resource_xp"), SubResource("Resource_gold"), SubResource("Resource_separation")])
+
+[resource]
+script = ExtResource("1_data")
+stat_modifiers = SubResource("Resource_set")
+size = 1.6
+overlay = ExtResource("4_glow")

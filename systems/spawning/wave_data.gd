@@ -25,6 +25,20 @@ extends Resource
 @export_group("enemies")
 @export var enemies: Array[WaveEnemy] = []
 
+@export_group("elites")
+## Probabilidad (%) de que cada enemigo salga élite (y) según los minutos de partida (x). Vacía:
+## nunca.
+@export var elite_chance: Curve
+## Cómo son los élites.
+@export var elite: EliteData
+
+
+## Probabilidad (%) de que un enemigo que sale a los [param seconds] de partida sea élite.
+func elite_chance_at(seconds: float) -> float:
+	if elite_chance == null or elite == null:
+		return 0.0
+	return elite_chance.sample(seconds / 60.0)
+
 
 ## Enemigos por segundo a los [param seconds] de partida, con los picos.
 func rate_at(seconds: float) -> float:

@@ -64,3 +64,14 @@ func test_each_enemy_has_an_enemy_scene_and_its_stats() -> void:
 		var has_health := enemy.stat_sources.any(func(source: Resource) -> bool: return source is HealthData)
 		var has_stats := enemy.stat_sources.any(func(source: Resource) -> bool: return source is EnemyStats)
 		assert_true(has_health and has_stats, "%s: le falta HealthData o EnemyStats" % enemy.id)
+
+
+func test_elite_modifiers_change_enemy_or_weapon_stats() -> void:
+	var elite := load("res://data/enemies/elite.tres") as EliteData
+	assert_not_null(elite.stat_modifiers, "élite sin mejoras")
+	assert_not_null(elite.overlay, "élite sin brillo")
+	var block := StatBlock.new()
+	for source: Resource in [HealthData.new(), EnemyStats.new(), ProjectileStats.new()]:
+		block.define_from_resource(source)
+	for modifier: StatModifier in elite.stat_modifiers.stat_modifiers:
+		assert_true(block.has_stat(modifier.stat), "élite: «%s» no es una stat de enemigo ni de arma" % modifier.stat)
