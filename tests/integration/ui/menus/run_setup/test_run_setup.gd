@@ -62,3 +62,12 @@ func test_back_goes_from_levels_to_characters_to_the_menu() -> void:
 	assert_signal_not_emitted(_setup, "back_requested")
 	_setup.back()
 	assert_signal_emitted(_setup, "back_requested")
+
+
+func test_while_choosing_a_level_the_character_list_hides() -> void:
+	var side := _setup.get_node(^"%Side") as Control
+	assert_true(side.visible)
+	_setup.choose(MAGE)
+	assert_false(side.visible, "un solo «Volver», el de los niveles")
+	_setup.back()
+	assert_true(side.visible)

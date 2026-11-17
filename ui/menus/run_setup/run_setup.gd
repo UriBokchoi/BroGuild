@@ -3,8 +3,9 @@ extends Node3D
 ## Selección de personaje y de nivel antes de jugar (GDD §9, «Menús»): a la izquierda, la lista de
 ## personajes; en el centro, el modelo del que se mira, girando; a la derecha, al pasar el ratón, su
 ## nombre, sus diferencias de stats, su arma principal y su habilidad pasiva. Al elegir uno, ese
-## panel se cambia por la lista de niveles (los que aún no existen salen desactivados). Esc o
-## «Volver» retroceden: de los niveles a los personajes y de ahí al menú. Lo muestra [Game].
+## panel se cambia por la lista de niveles (los que aún no existen salen desactivados) y la lista de
+## personajes se oculta. Esc o «Volver» retroceden: de los niveles a los personajes y de ahí al menú.
+## Lo muestra [Game].
 
 ## Se eligió personaje y nivel.
 signal play_requested(character: CharacterData, level: LevelData)
@@ -21,6 +22,7 @@ signal back_requested
 var _shown: CharacterData
 var _chosen: CharacterData
 
+@onready var _side: Control = %Side
 @onready var _character_list: VBoxContainer = %CharacterList
 @onready var _info: Control = %Info
 @onready var _level_panel: Control = %LevelPanel
@@ -109,6 +111,7 @@ func is_choosing_level() -> bool:
 
 
 func _show_levels(on: bool) -> void:
+	_side.visible = not on
 	_info.visible = not on
 	_level_panel.visible = on
 

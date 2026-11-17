@@ -84,6 +84,7 @@ theme_type_variation = &"ScreenMargin"
 layout_mode = 2
 
 [node name="Side" type="VBoxContainer" parent="UI/Margin/Layout"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 size_flags_vertical = 4
