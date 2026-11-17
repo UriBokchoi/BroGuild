@@ -51,7 +51,7 @@ Cámara en tercera persona a una distancia moderada que crece muy poco a poco co
 ## 5. Apuestas (el corazón del juego)
 Toda apuesta tiene **anticipación** (giro, luces, sonido que sube), **revelado** claro por color y **coste creciente**: repetir nunca es gratis.
 
-**Rarezas** (mismo color en todo el juego): Común (gris) · Poco común (verde) · Rara (azul) · Épica (morado) · Legendaria (dorado). Pesos de partida 60/25/10/4/1; la **Suerte** desplaza peso hacia arriba.
+**Rarezas** (mismo color en todo el juego): Común (gris) · Rara (verde) · Improbable (azul) · De leyenda (amarillo) · Mítica (rojo). Pesos de partida 60/25/10/4/1; la **Suerte** sube el peso de las altas (cada punto, +1 / +2 / +3 / +5 % del suyo a rara, improbable, de leyenda y mítica).
 
 1. **Ruleta de nivel** — al subir de nivel, 3 cartas giran como rodillos y caen en una rareza; eliges una.
    - *Reroll:* cuesta oro y el coste sube con cada uso en la partida.
@@ -101,7 +101,7 @@ Toda apuesta tiene **anticipación** (giro, luces, sonido que sube), **revelado*
 | | Proyectiles extra | 0 | Se suman a los de cada arma |
 | | Velocidad de proyectil, área, duración, retroceso | 100 % | Multiplican lo de cada arma |
 | Progresión | Experiencia ganada, oro ganado | 100 % | |
-| | Suerte | 0 | Desplaza los pesos de rareza hacia arriba |
+| | Suerte | 0 | Sube el peso de las rarezas altas (con 100, la mítica pasa del 1 al 3,7 %) |
 | | Radio de recogida | 3 m | Distancia a la que se recoge el botín |
 | | Dificultad | 0 (+1 por minuto) | Enemigos más numerosos y fuertes, más botín de los rompibles (sube con objetos o runas) |
 | | Probabilidad de botín | 0,5 % | Que un enemigo normal suelte un power-up (o, más adelante, un cofre); ×8 los élites y ×12 los rompibles |

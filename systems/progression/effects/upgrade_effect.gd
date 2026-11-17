@@ -2,7 +2,7 @@ class_name UpgradeEffect
 extends PickupEffect
 ## Mejora gratis (premio de la tragaperras): sube un nivel, con una mejora tirada con su rareza, a
 ## un arma o runa que lleve el jugador y no esté al máximo, al azar, tantas veces como vale el
-## premio. Si ya lo tiene todo al máximo, no hace nada.
+## premio. Si ya lo tiene todo al máximo, no hace nada. Con Suerte, las rarezas altas salen más.
 
 ## Armas del jugador.
 @export var weapons: WeaponInventory
@@ -10,6 +10,8 @@ extends PickupEffect
 @export var runes: RuneInventory
 ## Rarezas de las mejoras.
 @export var rarities: WeightedTable
+## Stats del jugador, de donde sale su Suerte. Sin ellas, Suerte 0.
+@export var stats: StatsComponent
 
 ## Azar de la elección. Si no se asigna antes de entrar en el árbol, el flujo de apuestas de
 ## [code]Rng[/code].
@@ -43,4 +45,5 @@ func _upgradable() -> Array[Callable]:
 
 
 func _roll(item: ItemData) -> ItemUpgrade:
-	return item.roll_upgrade(rarities.pick(rng) as Rarity, rng)
+	var luck := stats.get_value(&"luck") if is_instance_valid(stats) else 0.0
+	return item.roll_upgrade(rarities.pick(rng, luck) as Rarity, rng)

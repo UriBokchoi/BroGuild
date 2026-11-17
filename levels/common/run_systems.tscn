@@ -114,12 +114,13 @@ reward = &"energy"
 stats = NodePath("../../Player/Stats")
 buff = ExtResource("25_energy_buff")
 
-[node name="Upgrade" type="Node" parent="PickupEffects" node_paths=PackedStringArray("weapons", "runes")]
+[node name="Upgrade" type="Node" parent="PickupEffects" node_paths=PackedStringArray("weapons", "runes", "stats")]
 script = ExtResource("26_upgrade")
 reward = &"upgrade"
 weapons = NodePath("../../Player/Weapons")
 runes = NodePath("../../Player/Runes")
 rarities = ExtResource("30_rarities")
+stats = NodePath("../../Player/Stats")
 
 [node name="Frailty" type="Node" parent="PickupEffects" node_paths=PackedStringArray("stats")]
 script = ExtResource("24_buff")

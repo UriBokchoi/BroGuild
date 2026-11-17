@@ -67,7 +67,7 @@
 - [x] Probabilidad de botín (stat, 0,5 %; élites ×8 y rompibles ×12) que tira de una tabla ponderada (`WeightedTable`) de power-ups; nuevo power-up: bebida energética (más velocidad, velocidad de ataque y daño 10 s)
 - [x] Tragaperras (GDD §5.3; adelantadas del Hito 7): 4 en el Brosque (claro y mesetas); 5 tiradas y revientan; coste en oro que sube con la dificultad y con cada uso; moneda, corazón, estrella y calavera con premio de pareja y de trío (oro, cura, mejoras gratis, maldición de −vida máxima u oleada de élites); rodillos en el HUD sin pausar y cámara lenta en el jackpot
 - [x] Rarezas de las mejoras (común gris, rara verde, improbable azul, de leyenda amarilla y mítica roja) en datos: cada subida de nivel es una mejora tirada que toca de 1 a todas las stats del arma o runa, más fuerte cuanto más rara; borde de la carta del color de la rareza. Nivel máximo: armas 10, runas 20
-- [ ] Suerte: desplaza los pesos de las rarezas (tests con semilla)
+- [x] Suerte (stat): cada entrada de una tabla ponderada gana peso con ella según su `luck_scaling`; las rarezas altas suben más (con 100, la mítica pasa del 1 al 3,7 %). La usan las cartas de subir de nivel y las mejoras gratis
 - [ ] Cofres y objetos pasivos: cofres por el nivel que cuestan oro (coste creciente, revelado de rareza) y dan objetos con rareza que se apilan
 - [ ] Jefe del Brosque: altar que se invoca con llaves repartidas por el nivel (o se activa solo al minuto 10); vencerlo antes da más recompensa; vencerlo pasa el nivel (pantalla de victoria)
 - [x] Selección de personaje: lista a la izquierda, modelo 3D en el centro, a la derecha (al pasar el ratón) nombre, stats, arma principal y habilidad pasiva

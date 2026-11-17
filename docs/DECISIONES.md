@@ -850,7 +850,7 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - La recarga del arma mejora como multiplicador (×0,92 la común); la rareza escala lo que se aleja de 1. En % se acumularía sumando y podría llegar a 0.
   - Proyectiles y rebotes van en enteros y nunca suman menos de 1.
 - **Por qué:** lo pidió el diseñador (colores y que las raras toquen varias cosas). Todo va en datos: un arma nueva solo lista sus stats mejorables, y una rareza nueva es un `.tres`.
-- **Pendiente:** la Suerte desplazará los pesos de las rarezas. Con 20 niveles, Multiplicidad (+1 proyectil por mejora) puede quedar muy fuerte; habrá que mirarlo jugando.
+- **Pendiente:** con 20 niveles, Multiplicidad (+1 proyectil por mejora) puede quedar muy fuerte; habrá que mirarlo jugando.
 
 ## 2026-11-17 · Ritmo algo más lento y enemigos más duros
 - **Decisión** (lo pidió el diseñador):
@@ -868,3 +868,11 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - Se borran `tools/gen_brosque_forest.gd` y `forest.tscn`, que eran el bosque horneado.
 - **Por qué:** lo pidió el diseñador, y es más rejugable. Un nivel nuevo solo necesita su `LayoutData` con sus piezas.
 - **Coste:** generar 2.600 árboles y 300 colisiones al cargar es instantáneo. En el juego no cambia nada respecto al bosque horneado.
+
+## 2026-11-17 · Suerte
+- **Decisión:**
+  - Cada entrada de una `WeightedTable` lleva `luck_scaling`: el % de su peso que gana por cada punto de Suerte. Su peso con Suerte es `peso × (1 + Suerte × luck_scaling / 100)`. Con 0 no le afecta.
+  - Las rarezas lo llevan creciente: común 0, rara 1, improbable 2, de leyenda 3, mítica 5. Con 100 de Suerte, los pesos 60/25/10/4/1 pasan a 60/50/30/16/6: la común baja del 60 al 37 %, y la mítica sube del 1 al 3,7 %.
+  - Usan la Suerte del jugador (`ProgressionData.luck`, 0 de base) las cartas de subir de nivel y las mejoras gratis de la tragaperras. Los power-ups y los símbolos de la tragaperras no escalan, de momento.
+- **Por qué:** lo pide el GDD (§5). Va en la tabla genérica para que los cofres y los objetos la usen sin código nuevo. Escala con el peso, y no sumando, para que una entrada de peso 0 siga sin salir nunca.
+- **Pendiente:** aún no hay nada que dé Suerte; llegará con los objetos de los cofres.

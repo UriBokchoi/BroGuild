@@ -68,7 +68,10 @@ func _on_chosen(option: LevelUpOption) -> void:
 func _offer() -> void:
 	var weapon_slots := data.clamp_weapon_slots(player.stats.get_int(&"weapon_slots"))
 	var rune_slots := data.clamp_rune_slots(player.stats.get_int(&"rune_slots"))
-	var options := LevelUpOffer.build(_catalog, _owned_levels(), data.choices, weapon_slots, rune_slots, data.rarities, rng)
+	var luck := player.stats.get_value(&"luck")
+	var options := LevelUpOffer.build(
+		_catalog, _owned_levels(), data.choices, weapon_slots, rune_slots, data.rarities, rng, luck
+	)
 	if options.is_empty():
 		_pending = 0
 		panel.close()

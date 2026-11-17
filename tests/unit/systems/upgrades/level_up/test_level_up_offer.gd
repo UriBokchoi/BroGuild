@@ -1,7 +1,7 @@
 extends GutTest
 ## LevelUpOffer: ofrece subir lo que ya lleva (sin pasar del máximo, con una mejora tirada con
 ## rareza) y objetos nuevos solo si queda ranura abierta de su tipo; opciones distintas, como mucho
-## las pedidas, reproducibles con semilla.
+## las pedidas, reproducibles con semilla. Con Suerte, las mejoras salen más raras.
 
 const SWORD := preload("res://data/weapons/sword.tres")
 const STRENGTH := preload("res://data/runes/strength.tres")
@@ -78,3 +78,27 @@ func test_more_open_slots_let_new_items_in() -> void:
 		for option: LevelUpOption in LevelUpOffer.build(_catalog, levels, CHOICES, WEAPON_SLOTS, RUNE_SLOTS + 1, RARITIES, _rng):
 			ids.append(option.item.id)
 	assert_has(ids, &"haste")
+
+
+func test_luck_makes_upgrades_rarer() -> void:
+	var levels: Dictionary[StringName, int] = {&"sword": 1}
+	var commons_without_luck := _count_commons(levels, 0.0)
+	var commons_with_luck := _count_commons(levels, 100.0)
+	assert_lt(commons_with_luck, commons_without_luck - 50, "menos comunes con 100 de Suerte")
+
+
+func test_the_higher_the_rarity_the_more_luck_helps() -> void:
+	var previous := -1.0
+	for entry: WeightedEntry in RARITIES.entries:
+		var gain := RARITIES.chance(entry, 100.0) / RARITIES.chance(entry)
+		assert_gt(gain, previous, "%s gana más que la anterior" % (entry as Rarity).id)
+		previous = gain
+
+
+func _count_commons(levels: Dictionary[StringName, int], luck: float) -> int:
+	var commons := 0
+	for _try: int in 400:
+		var options := LevelUpOffer.build([SWORD] as Array[ItemData], levels, CHOICES, WEAPON_SLOTS, RUNE_SLOTS, RARITIES, _rng, luck)
+		if options[0].rarity().id == &"common":
+			commons += 1
+	return commons

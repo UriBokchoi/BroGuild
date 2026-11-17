@@ -2,13 +2,13 @@ class_name LevelUpOffer
 extends RefCounted
 ## Elige las opciones de una subida de nivel (lógica pura, con el azar inyectado): de
 ## [param catalog], los objetos que ya lleva y no están al máximo (para subirlos) y los que no lleva
-## si le queda ranura abierta de ese tipo (armas o runas). Todas distintas, al azar. De momento
-## todas pesan lo mismo; las rarezas y la ruleta llegarán en el Hito 4.
+## si le queda ranura abierta de ese tipo (armas o runas). Todas distintas, al azar; cada mejora
+## con su rareza (más altas con Suerte). La ruleta llegará en el Hito 4.
 
 
 ## Hasta [param choices] opciones. [param levels] es el nivel de cada objeto que lleva (por id);
 ## [param weapon_slots] y [param rune_slots], sus ranuras abiertas de cada tipo. Cada mejora sale con
-## una rareza de [param rarities].
+## una rareza de [param rarities], con [param luck] puntos de Suerte.
 static func build(
 	catalog: Array[ItemData],
 	levels: Dictionary[StringName, int],
@@ -17,6 +17,7 @@ static func build(
 	rune_slots: int,
 	rarities: WeightedTable,
 	rng: RandomNumberGenerator,
+	luck: float = 0.0,
 ) -> Array[LevelUpOption]:
 	var weapons := _count_owned(catalog, levels, WeaponData)
 	var runes := _count_owned(catalog, levels, RuneData)
@@ -31,7 +32,7 @@ static func build(
 				continue
 			candidates.append(LevelUpOption.create(item, 1))
 			continue
-		var rarity := rarities.pick(rng) as Rarity
+		var rarity := rarities.pick(rng, luck) as Rarity
 		candidates.append(LevelUpOption.create_upgrade(item, level + 1, item.roll_upgrade(rarity, rng)))
 	_shuffle(candidates, rng)
 	return candidates.slice(0, choices)

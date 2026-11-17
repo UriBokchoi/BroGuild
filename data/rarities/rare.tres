@@ -5,6 +5,7 @@
 [resource]
 script = ExtResource("1_rarity")
 weight = 25.0
+luck_scaling = 1.0
 id = &"rare"
 name_key = &"RARITY_RARE"
 color = Color(0.35, 0.85, 0.4, 1)
