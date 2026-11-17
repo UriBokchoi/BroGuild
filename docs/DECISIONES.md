@@ -811,3 +811,9 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - Calaveras y bolsitas dan `amount + amount_per_difficulty × dificultad`.
   - El HUD la muestra con una calavera.
 - **Por qué:** el diseñador quiere que la dificultad suba sola y también con objetos y runas, con más riesgo y más recompensa. Al ser una stat, cualquier mejora la toca con el sistema de modificadores de siempre y sale en la pausa. Al medirla en «minutos equivalentes», los datos que ya había siguen valiendo.
+
+## 2026-11-17 · Probabilidad de botín, tablas ponderadas y bebida energética
+- **Probabilidad de botín** (`drop_chance`): stat del jugador, 0,5 % de serie (muy baja, como pidió el diseñador). Es la probabilidad de que un enemigo normal suelte un extra. Los élites la multiplican por 8 y los rompibles por 12, según sus datos. Objetos y runas podrán subirla.
+- **Qué extra sale** lo decide una `WeightedTable` (`core/`): entradas con peso, y cada uso hereda su tipo de entrada (`BonusDrop`: recogible y valor). Sustituye a las probabilidades sueltas por recogible de la versión anterior. Las tragaperras y los cofres usarán la misma tabla, y la Suerte desplazará sus pesos cuando lleguen las rarezas. Los cofres entrarán en esta misma tirada.
+- **Bebida energética:** un `BuffEffect` aplica un `StatModifierSet` de datos (+25 % de carrera y sprint, +30 % de velocidad de ataque y +20 % de daño) durante los segundos que vale el recogible (10). Otra lata reinicia la cuenta en lugar de acumularse, para que no se vuelva imparable.
+- **`LootDropper`** lee la dificultad y la probabilidad de botín directamente de las stats del jugador (`player_stats`) en lugar de guardar la última dificultad que avisó el `EventBus`: es más simple, y el `EventBus` queda para el HUD.

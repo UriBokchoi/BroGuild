@@ -13,8 +13,10 @@ extends Resource
 @export_range(0.0, 1000.0, 0.1, "or_greater") var amount_per_difficulty: float = 0.0
 ## En cuántos recogibles se reparte.
 @export_range(1, 20, 1) var pieces: int = 0
-## Recogibles que a veces suelta además (imán, comida, bomba…).
-@export var bonus_drops: Array[BonusDrop] = []
+## Multiplica la probabilidad de botín del jugador ([code]drop_chance[/code]) para sus extras.
+@export_range(0.0, 100.0, 0.1, "or_greater") var drop_chance_multiplier: float = 0.0
+## De qué tabla salen sus extras (power-ups; más adelante, cofres).
+@export var drop_table: WeightedTable
 ## Hasta qué distancia del rompible caen.
 @export_range(0.0, 5.0, 0.1, "suffix:m") var spread: float = 0.0
 

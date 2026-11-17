@@ -1,11 +1,13 @@
 extends GutTest
 ## Efectos de los recogibles especiales: la comida cura una parte de la vida máxima, el imán atrae
 ## toda la experiencia del mapa y la bomba quita su parte de vida a los enemigos cercanos (no a los
-## lejanos). Solo reaccionan a su recompensa.
+## lejanos) y la bebida energética mejora stats un rato (otra lata no lo acumula). Solo reaccionan a
+## su recompensa.
 
 const PlayerScene := preload("res://entities/player/player.tscn")
 const XP_GEM := preload("res://data/pickups/xp_gem.tres")
 const SWARMER := preload("res://data/enemies/swarmer.tres")
+const ENERGY_BUFF := preload("res://data/pickups/energy_drink_buff.tres")
 
 
 func before_each() -> void:
@@ -67,3 +69,22 @@ func test_the_bomb_hits_only_nearby_enemies() -> void:
 	bomb.apply(1.0)
 	assert_true(near.health.is_dead(), "a 5 m, toda su vida")
 	assert_false(far.health.is_dead(), "a 40 m, fuera de su alcance")
+
+
+func test_the_energy_drink_boosts_stats_for_a_while() -> void:
+	var player := PlayerScene.instantiate() as Player
+	add_child_autofree(player)
+	var drink := BuffEffect.new()
+	drink.reward = &"energy"
+	drink.stats = player.stats
+	drink.buff = ENERGY_BUFF
+	add_child_autofree(drink)
+	var speed := player.stats.get_value(&"run_speed")
+	EventBus.pickup_collected.emit(&"energy", 0.3)
+	assert_gt(player.stats.get_value(&"run_speed"), speed)
+	EventBus.pickup_collected.emit(&"energy", 0.3)
+	var boosted := player.stats.get_value(&"run_speed")
+	assert_almost_eq(boosted, speed * 1.25, 0.01, "otra lata no lo acumula")
+	await wait_seconds(0.5)
+	assert_false(drink.is_active())
+	assert_eq(player.stats.get_value(&"run_speed"), speed, "se pasa el efecto")

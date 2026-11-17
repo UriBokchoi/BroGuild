@@ -3,7 +3,8 @@ extends GutTest
 ## en su radio (o nada más salir, el oro), al llegar avisan por el EventBus y vuelven al pool; los
 ## que esperan juntos se funden en uno de más nivel. El LootDropper suelta la gema de experiencia y
 ## la moneda de oro de cada enemigo que muere, y el botín de cada rompible en trozos alrededor (más
-## cuanto mayor es la dificultad); rompibles y élites pueden soltar además recogibles especiales.
+## cuanto mayor es la dificultad) y, con la probabilidad de botín (por el multiplicador de élites y
+## rompibles), un extra de su tabla.
 
 const XP_GEM := preload("res://data/pickups/xp_gem.tres")
 const GOLD_COIN := preload("res://data/pickups/gold_coin.tres")
@@ -14,6 +15,7 @@ const ELITE := preload("res://data/enemies/elite.tres")
 
 var _collector: Node3D
 var _field: PickupField
+var _dropper: LootDropper
 
 
 func before_each() -> void:
@@ -149,10 +151,9 @@ func test_broken_breakables_drop_their_loot_in_pieces() -> void:
 
 
 func test_more_difficulty_more_loot_from_breakables() -> void:
-	var dropper := LootDropper.new()
-	dropper.field = _field
-	add_child_autofree(dropper)
-	EventBus.difficulty_changed.emit(10.0)
+	var stats := _player_stats(0.0)
+	stats.add_modifier(StatModifier.create(&"difficulty", StatModifier.Kind.FLAT, 10.0), self)
+	_make_dropper(stats)
 	EventBus.breakable_broken.emit(SKULL, Vector3(-5.0, 0.0, 0.0))
 	var total := 0.0
 	for pickup: Pickup in _field.get_active():
@@ -160,29 +161,61 @@ func test_more_difficulty_more_loot_from_breakables() -> void:
 	assert_almost_eq(total, SKULL.amount + SKULL.amount_per_difficulty * 10.0, 0.001)
 
 
-func test_breakables_and_elites_can_drop_special_pickups() -> void:
-	var dropper := LootDropper.new()
-	dropper.field = _field
-	add_child_autofree(dropper)
-	var bonus := BonusDrop.new()
-	bonus.pickup = BOMB
-	bonus.chance = 100.0
-	bonus.amount = 1.0
-	var breakable := SKULL.duplicate() as BreakableData
-	breakable.bonus_drops = [bonus] as Array[BonusDrop]
-	EventBus.breakable_broken.emit(breakable, Vector3(-5.0, 0.0, 0.0))
-	assert_eq(_bombs(), 1, "del rompible, con un 100 %")
-	var elite := ELITE.duplicate() as EliteData
-	elite.bonus_drops = [bonus] as Array[BonusDrop]
+func test_normal_enemies_drop_extras_with_the_drop_chance() -> void:
 	var swarm := EnemySwarm.new()
 	add_child_autofree(swarm)
-	var normal := swarm.spawn(SWARMER, Vector3(-8.0, 0.0, 0.0))
-	normal.health.take_damage(DamageInfo.create(1000.0))
-	assert_eq(_bombs(), 1, "un enemigo normal no")
+	_make_dropper(_player_stats(0.0))
+	swarm.spawn(SWARMER, Vector3(-8.0, 0.0, 0.0)).health.take_damage(DamageInfo.create(1000.0))
+	assert_eq(_bombs(), 0, "con un 0 %, nada")
+	_dropper.player_stats = _player_stats(100.0)
+	swarm.spawn(SWARMER, Vector3(8.0, 0.0, 0.0)).health.take_damage(DamageInfo.create(1000.0))
+	assert_eq(_bombs(), 1, "con un 100 %, de su tabla")
+
+
+func test_elites_and_breakables_multiply_the_drop_chance() -> void:
+	_make_dropper(_player_stats(10.0))
+	var breakable := SKULL.duplicate() as BreakableData
+	breakable.drop_table = _bomb_table()
+	breakable.drop_chance_multiplier = 10.0
+	EventBus.breakable_broken.emit(breakable, Vector3(-5.0, 0.0, 0.0))
+	assert_eq(_bombs(), 1, "10 % × 10 del rompible")
+	var elite := ELITE.duplicate() as EliteData
+	elite.drop_table = _bomb_table()
+	elite.drop_chance_multiplier = 10.0
+	var swarm := EnemySwarm.new()
+	add_child_autofree(swarm)
 	var promoted := swarm.spawn(SWARMER, Vector3(8.0, 0.0, 0.0))
 	promoted.promote(elite)
 	promoted.health.take_damage(DamageInfo.create(100000.0))
-	assert_eq(_bombs(), 2, "el élite sí")
+	assert_eq(_bombs(), 2, "10 % × 10 del élite")
+
+
+func _make_dropper(stats: StatsComponent) -> void:
+	_dropper = LootDropper.new()
+	_dropper.field = _field
+	_dropper.player_stats = stats
+	_dropper.enemy_drop_table = _bomb_table()
+	add_child_autofree(_dropper)
+
+
+func _player_stats(drop_chance: float) -> StatsComponent:
+	var progression := ProgressionData.new()
+	progression.drop_chance = drop_chance
+	var stats := StatsComponent.new()
+	stats.sources.append(progression)
+	add_child_autofree(stats)
+	return stats
+
+
+## Tabla con un solo extra: una bomba.
+func _bomb_table() -> WeightedTable:
+	var bonus := BonusDrop.new()
+	bonus.pickup = BOMB
+	bonus.weight = 1.0
+	bonus.amount = 1.0
+	var table := WeightedTable.new()
+	table.entries = [bonus] as Array[WeightedEntry]
+	return table
 
 
 func _bombs() -> int:

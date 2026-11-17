@@ -22,6 +22,9 @@
 [ext_resource type="Script" path="res://systems/progression/effects/heal_effect.gd" id="20_heal"]
 [ext_resource type="Script" path="res://systems/progression/effects/magnet_effect.gd" id="21_magnet"]
 [ext_resource type="Script" path="res://systems/progression/effects/bomb_effect.gd" id="22_bomb"]
+[ext_resource type="Resource" path="res://data/loot/power_ups.tres" id="23_power_ups"]
+[ext_resource type="Script" path="res://systems/progression/effects/buff_effect.gd" id="24_buff"]
+[ext_resource type="Resource" path="res://data/pickups/energy_drink_buff.tres" id="25_energy_buff"]
 
 [node name="RunSystems" type="Node3D" node_paths=PackedStringArray("player", "director")]
 script = ExtResource("1_run")
@@ -54,11 +57,13 @@ script = ExtResource("11_pickups")
 collector = NodePath("../Player")
 collector_stats = NodePath("../Player/Stats")
 
-[node name="LootDropper" type="Node" parent="." node_paths=PackedStringArray("field")]
+[node name="LootDropper" type="Node" parent="." node_paths=PackedStringArray("field", "player_stats")]
 script = ExtResource("12_loot")
 field = NodePath("../PickupField")
 xp_gem = ExtResource("13_xp_gem")
 gold_coin = ExtResource("14_gold_coin")
+player_stats = NodePath("../Player/Stats")
+enemy_drop_table = ExtResource("23_power_ups")
 
 [node name="LevelUpPanel" parent="." instance=ExtResource("17_level_up_panel")]
 
@@ -97,3 +102,9 @@ script = ExtResource("22_bomb")
 reward = &"bomb"
 swarm = NodePath("../../EnemySwarm")
 center = NodePath("../../Player")
+
+[node name="EnergyDrink" type="Node" parent="PickupEffects" node_paths=PackedStringArray("stats")]
+script = ExtResource("24_buff")
+reward = &"energy"
+stats = NodePath("../../Player/Stats")
+buff = ExtResource("25_energy_buff")

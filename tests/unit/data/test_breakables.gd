@@ -1,7 +1,8 @@
 extends GutTest
 ## Rompibles de data/breakables: están la calavera (experiencia) y la bolsita (oro), y cada uno
-## suelta algo, con valor y en al menos un trozo, y más cuanto mayor es la dificultad; sus
-## recogibles extra (y los de los élites) están completos.
+## suelta algo, con valor y en al menos un trozo, y más cuanto mayor es la dificultad; élites y
+## rompibles multiplican la probabilidad de botín y tiran de una tabla de extras completa (con la
+## bebida energética).
 
 const BREAKABLES_DIR := "res://data/breakables"
 const XP_GEM := preload("res://data/pickups/xp_gem.tres")
@@ -35,13 +36,32 @@ func test_more_difficulty_more_loot() -> void:
 		assert_almost_eq(data.amount_at(10.0), data.amount + data.amount_per_difficulty * 10.0, 0.001)
 
 
-func test_bonus_drops_are_complete() -> void:
+func test_breakables_and_elites_roll_a_complete_drop_table() -> void:
 	var elite := preload("res://data/enemies/elite.tres") as EliteData
-	var groups: Dictionary[String, Array] = {"elite": elite.bonus_drops}
+	assert_gt(elite.drop_chance_multiplier, 1.0, "el élite suelta más que un enemigo normal")
+	_assert_table(elite.drop_table, "elite")
 	for id: String in _breakables:
-		groups[id] = _breakables[id].bonus_drops
-	for id: String in groups:
-		for bonus: BonusDrop in groups[id]:
-			assert_not_null(bonus.pickup, "%s: recogible extra vacío" % id)
-			assert_between(bonus.chance, 0.1, 100.0, "%s: probabilidad" % id)
-			assert_gt(bonus.amount, 0.0, "%s: sin valor" % id)
+		assert_gt(_breakables[id].drop_chance_multiplier, 1.0, "%s: multiplicador" % id)
+		_assert_table(_breakables[id].drop_table, id)
+
+
+func test_the_power_up_table_has_the_energy_drink() -> void:
+	var table := preload("res://data/loot/power_ups.tres") as WeightedTable
+	var ids: Array[StringName] = []
+	for entry: WeightedEntry in table.entries:
+		ids.append((entry as BonusDrop).pickup.id)
+	for id: StringName in [&"magnet", &"food", &"bomb", &"energy_drink"]:
+		assert_has(ids, id)
+
+
+func _assert_table(table: WeightedTable, owner_id: String) -> void:
+	assert_not_null(table, "%s: sin tabla de extras" % owner_id)
+	if table == null:
+		return
+	assert_gt(table.total_weight(), 0.0, "%s: tabla sin pesos" % owner_id)
+	for entry: WeightedEntry in table.entries:
+		var bonus := entry as BonusDrop
+		assert_not_null(bonus, "%s: entrada que no es un BonusDrop" % owner_id)
+		if bonus:
+			assert_not_null(bonus.pickup, "%s: extra sin recogible" % owner_id)
+			assert_gt(bonus.amount, 0.0, "%s: extra sin valor" % owner_id)

@@ -2,28 +2,7 @@
 
 [ext_resource type="Script" path="res://entities/breakables/breakable_data.gd" id="1_data"]
 [ext_resource type="Resource" path="res://data/pickups/xp_gem.tres" id="2_reward"]
-[ext_resource type="Script" path="res://systems/progression/bonus_drop.gd" id="90_bonus"]
-[ext_resource type="Resource" path="res://data/pickups/magnet.tres" id="91_magnet"]
-[ext_resource type="Resource" path="res://data/pickups/food.tres" id="92_food"]
-[ext_resource type="Resource" path="res://data/pickups/bomb.tres" id="93_bomb"]
-
-[sub_resource type="Resource" id="Bonus_magnet"]
-script = ExtResource("90_bonus")
-pickup = ExtResource("91_magnet")
-chance = 3.0
-amount = 1.0
-
-[sub_resource type="Resource" id="Bonus_food"]
-script = ExtResource("90_bonus")
-pickup = ExtResource("92_food")
-chance = 3.0
-amount = 0.25
-
-[sub_resource type="Resource" id="Bonus_bomb"]
-script = ExtResource("90_bonus")
-pickup = ExtResource("93_bomb")
-chance = 2.0
-amount = 1.0
+[ext_resource type="Resource" path="res://data/loot/power_ups.tres" id="20_drops"]
 
 [resource]
 script = ExtResource("1_data")
@@ -32,4 +11,5 @@ amount = 3.0
 amount_per_difficulty = 1.5
 pieces = 3
 spread = 0.8
-bonus_drops = Array[ExtResource("90_bonus")]([SubResource("Bonus_magnet"), SubResource("Bonus_food"), SubResource("Bonus_bomb")])
+drop_chance_multiplier = 12.0
+drop_table = ExtResource("20_drops")

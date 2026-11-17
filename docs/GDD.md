@@ -77,7 +77,7 @@ Toda apuesta tiene **anticipación** (giro, luces, sonido que sube), **revelado*
 - **Runas** (pasivas): suben stats principales con cada nivel: Fuerza (daño) · Amplitud (área) · Prisa (velocidad de ataque) · Vigor (vida máxima) · Multiplicidad (cantidad de proyectiles, también para armas cuerpo a cuerpo).
 - **Objetos de la partida** (aparte de armas y runas):
   - *Pasivos:* como los objetos de Megabonk. Salen de cofres y del jefe, tienen rareza, no ocupan ranura y se apilan: cada copia suma su efecto (+% daño, robo de vida, más oro…).
-  - *Recogibles del suelo:* imán (atrae toda la experiencia del mapa), comida (cura) y bomba (daño a todo lo cercano). Salen a veces de rompibles y élites.
+  - *Power-ups del suelo:* imán (atrae toda la experiencia del mapa), comida (cura), bomba (daño a todo lo cercano) y bebida energética (más velocidad, velocidad de ataque y daño durante unos segundos). Salen de una tabla de botín con la **probabilidad de botín** (stat del jugador, muy baja: 0,5 % por enemigo normal), que multiplican los élites (×8) y los rompibles (×12). Más adelante, la misma tirada podrá dar cofres.
   - *Llaves del jefe:* repartidas por el nivel; con las suficientes se puede invocar al jefe antes de tiempo (§9).
 - **Rompibles** (como los jarrones de Megabonk): calaveras que sueltan experiencia y bolsitas que sueltan oro, repartidas por el nivel. Se rompen **al tocarlas** (pasar a través corriendo, con dash o slide), no con ataques: premian moverse por el mapa.
 - **Subir de nivel**: eliges 1 de 3 opciones (arma o runa nueva, o subir una que ya tengas). La ruleta de apuestas (§5) se monta encima de esta elección.
@@ -104,6 +104,7 @@ Toda apuesta tiene **anticipación** (giro, luces, sonido que sube), **revelado*
 | | Suerte | 0 | Desplaza los pesos de rareza hacia arriba |
 | | Radio de recogida | 3 m | Distancia a la que se recoge el botín |
 | | Dificultad | 0 (+1 por minuto) | Enemigos más numerosos y fuertes, más botín de los rompibles (sube con objetos o runas) |
+| | Probabilidad de botín | 0,5 % | Que un enemigo normal suelte un power-up (o, más adelante, un cofre); ×8 los élites y ×12 los rompibles |
 | Movimiento | Velocidad de carrera, saltos y dashes en el aire, stamina… | ver §4 | |
 
 Las mejoras de % («+10 % de daño») multiplican; las de puntos («+5 % de crítico», «+1 proyectil», «+1 salto en el aire») suman.

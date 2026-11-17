@@ -1,7 +1,7 @@
 class_name ProgressionData
 extends Resource
-## Stats de progresión y botín: experiencia y oro ganados, suerte, radio de recogida, dificultad y
-## ranuras abiertas de armas y runas. Los valores viven en
+## Stats de progresión y botín: experiencia y oro ganados, suerte, radio de recogida, dificultad,
+## probabilidad de botín y ranuras abiertas de armas y runas. Los valores viven en
 ## [code]data/player/progression.tres[/code]; aquí todo vale 0 a propósito. Su efecto exacto está en
 ## el GDD (§6, «Stats del personaje»).
 
@@ -18,6 +18,10 @@ extends Resource
 ## sola 1 por minuto (se la suma el director de oleadas) y con objetos o runas: más riesgo, más
 ## recompensa. Las curvas de [WaveData] van según ella.
 @export_range(0.0, 100.0, 0.1, "or_greater") var difficulty: float = 0.0
+## Probabilidad de botín: la de que un enemigo normal suelte un extra (un power-up; más adelante,
+## cofres). Élites y rompibles la multiplican ([member EliteData.drop_chance_multiplier]). Muy baja de
+## serie; la suben objetos y runas.
+@export_range(0.0, 100.0, 0.01, "suffix:%") var drop_chance: float = 0.0
 
 @export_group("slots")
 ## Armas que puede llevar a la vez: las ranuras abiertas. Nunca pasan de las que hay

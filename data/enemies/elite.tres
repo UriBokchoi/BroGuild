@@ -4,10 +4,7 @@
 [ext_resource type="Script" path="res://core/stats/stat_modifier_set.gd" id="2_set"]
 [ext_resource type="Script" path="res://core/stats/stat_modifier.gd" id="3_modifier"]
 [ext_resource type="Material" path="res://entities/enemies/elite/elite_glow.tres" id="4_glow"]
-[ext_resource type="Script" path="res://systems/progression/bonus_drop.gd" id="90_bonus"]
-[ext_resource type="Resource" path="res://data/pickups/magnet.tres" id="91_magnet"]
-[ext_resource type="Resource" path="res://data/pickups/food.tres" id="92_food"]
-[ext_resource type="Resource" path="res://data/pickups/bomb.tres" id="93_bomb"]
+[ext_resource type="Resource" path="res://data/loot/power_ups.tres" id="20_drops"]
 
 [sub_resource type="Resource" id="Resource_health"]
 script = ExtResource("3_modifier")
@@ -49,27 +46,10 @@ value = 1.6
 script = ExtResource("2_set")
 stat_modifiers = Array[ExtResource("3_modifier")]([SubResource("Resource_health"), SubResource("Resource_contact"), SubResource("Resource_weapon_damage"), SubResource("Resource_xp"), SubResource("Resource_gold"), SubResource("Resource_separation")])
 
-[sub_resource type="Resource" id="Bonus_magnet"]
-script = ExtResource("90_bonus")
-pickup = ExtResource("91_magnet")
-chance = 10.0
-amount = 1.0
-
-[sub_resource type="Resource" id="Bonus_food"]
-script = ExtResource("90_bonus")
-pickup = ExtResource("92_food")
-chance = 15.0
-amount = 0.25
-
-[sub_resource type="Resource" id="Bonus_bomb"]
-script = ExtResource("90_bonus")
-pickup = ExtResource("93_bomb")
-chance = 10.0
-amount = 1.0
-
 [resource]
 script = ExtResource("1_data")
 stat_modifiers = SubResource("Resource_set")
 size = 1.6
 overlay = ExtResource("4_glow")
-bonus_drops = Array[ExtResource("90_bonus")]([SubResource("Bonus_magnet"), SubResource("Bonus_food"), SubResource("Bonus_bomb")])
+drop_chance_multiplier = 8.0
+drop_table = ExtResource("20_drops")
