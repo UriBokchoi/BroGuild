@@ -15,7 +15,7 @@ var _denied: Array[int] = []
 func before_each() -> void:
 	_opened.clear()
 	_denied.clear()
-	EventBus.chest_opened.connect(_on_opened)
+	EventBus.item_revealed.connect(_on_opened)
 	EventBus.chest_denied.connect(_on_denied)
 	# Todas las fuentes del jugador: cualquier objeto que salga tiene sus stats.
 	var stats := StatsComponent.new()
@@ -35,7 +35,7 @@ func before_each() -> void:
 
 
 func after_each() -> void:
-	EventBus.chest_opened.disconnect(_on_opened)
+	EventBus.item_revealed.disconnect(_on_opened)
 	EventBus.chest_denied.disconnect(_on_denied)
 
 

@@ -18,7 +18,7 @@ func before_each() -> void:
 
 func test_the_light_stops_on_the_item_rarity() -> void:
 	var panel := _hud.get_node(^"%ChestPanel") as ChestPanel
-	EventBus.chest_opened.emit(CROWN, 0.3)
+	EventBus.item_revealed.emit(CROWN, 0.3)
 	assert_true(panel.visible)
 	assert_true(panel.is_revealing())
 	await wait_seconds(0.4)

@@ -35,9 +35,12 @@ signal slot_spun(data: SlotMachineData, results: Array[SlotSymbol])
 ## Una tragaperras dio su resultado (o no se pudo pagar): el texto (clave; si lleva [code]%d[/code],
 ## [param value]) y si fue jackpot.
 signal slot_resolved(text_key: StringName, value: float, jackpot: bool)
-## Se abrió un cofre: sale [param item], que el HUD revela durante [param reveal_time] segundos
-## (luego llega al jugador). Los cofres lo cuentan para subir su coste.
-signal chest_opened(item: PassiveItemData, reveal_time: float)
+## Se abrió un cofre (los cofres lo cuentan para subir su coste; lo que sale llega por
+## [signal item_revealed]).
+signal chest_opened
+## Sale un objeto pasivo (de un cofre, del jefe): el HUD revela [param item] durante
+## [param reveal_time] segundos y luego llega al jugador.
+signal item_revealed(item: PassiveItemData, reveal_time: float)
 ## No se pudo abrir un cofre: falta oro (cuesta [param cost]).
 signal chest_denied(cost: int)
 ## Murió [param enemy] (aún en su sitio, con su tipo y sus stats): botín, experiencia, Archivo…

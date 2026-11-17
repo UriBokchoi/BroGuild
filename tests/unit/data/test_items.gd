@@ -49,7 +49,7 @@ func test_every_rarity_has_items() -> void:
 
 
 func test_the_chest_finds_every_item() -> void:
-	assert_eq(CHEST.load_catalog().size(), _items.size())
-	assert_same(CHEST.rarities, RARITIES)
+	assert_eq(CHEST.items.load_catalog().size(), _items.size())
+	assert_same(CHEST.items.rarities, RARITIES)
 	assert_gt(CHEST.cost_at(0.0, 0), 0)
 	assert_gt(CHEST.reveal_time, 0.0)

@@ -1,11 +1,11 @@
 class_name ChestPanel
 extends PanelContainer
-## El revelado de un cofre en el HUD, sin pausar el juego (GDD §5.2, «case opening»): al abrirse
-## uno ([signal EventBus.chest_opened]) una luz recorre las rarezas, cada vez más despacio, y se para
-## en la del objeto; entonces lo muestra (icono, nombre del color de su rareza y lo que hace) un rato
-## y se oculta. Si falta oro ([signal EventBus.chest_denied]), solo el aviso. Estilo: variaciones
-## [code]ChestPanel[/code], [code]ChestTile[/code], [code]ChestItemLabel[/code] y
-## [code]ChestDescriptionLabel[/code].
+## El revelado de un objeto pasivo en el HUD, sin pausar el juego (GDD §5.2, «case opening»): al
+## salir uno ([signal EventBus.item_revealed]: un cofre, el premio del jefe) una luz recorre las
+## rarezas, cada vez más despacio, y se para en la del objeto; entonces lo muestra (icono, nombre del
+## color de su rareza y lo que hace) un rato y se oculta. Si falta oro para un cofre
+## ([signal EventBus.chest_denied]), solo el aviso. Estilo: variaciones [code]ChestPanel[/code],
+## [code]ChestTile[/code], [code]ChestItemLabel[/code] y [code]ChestDescriptionLabel[/code].
 
 ## Rarezas, en el orden de las casillas (la de cada una, de su color).
 @export var rarities: WeightedTable
@@ -37,8 +37,8 @@ var _hide_left: float = 0.0
 
 
 func _enter_tree() -> void:
-	if not EventBus.chest_opened.is_connected(show_opening):
-		EventBus.chest_opened.connect(show_opening)
+	if not EventBus.item_revealed.is_connected(show_opening):
+		EventBus.item_revealed.connect(show_opening)
 		EventBus.chest_denied.connect(show_denied)
 
 

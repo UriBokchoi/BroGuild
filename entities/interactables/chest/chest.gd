@@ -2,7 +2,7 @@ class_name Chest
 extends Node3D
 ## Cofre del nivel (GDD §5.2): con «interactuar» cobra su coste en oro y se abre. Sale un objeto
 ## pasivo con rareza (la Suerte del jugador sube las altas). El HUD lo revela
-## ([signal EventBus.chest_opened]) y, al acabar el revelado, el objeto pasa al jugador y el cofre
+## ([signal EventBus.item_revealed]) y, al acabar el revelado, el objeto pasa al jugador y el cofre
 ## desaparece. El coste sube con la dificultad y con cada cofre abierto en la partida: todos los
 ## cofres cuentan los que se abren por el [code]EventBus[/code]. No pausa el juego.
 
@@ -41,7 +41,7 @@ func _enter_tree() -> void:
 func _ready() -> void:
 	if rng == null:
 		rng = Rng.stream(Rng.Stream.GAMBLE)
-	_catalog = data.load_catalog()
+	_catalog = data.items.load_catalog()
 	interactable.interacted.connect(_on_interacted)
 	_refresh_prompt()
 
@@ -69,8 +69,9 @@ func open(wallet: WalletComponent, items: PassiveInventory, luck: float = 0.0) -
 	_open = true
 	interactable.enabled = false
 	body.process_mode = Node.PROCESS_MODE_DISABLED
-	var item := data.roll(_catalog, luck, rng)
-	EventBus.chest_opened.emit(item, data.reveal_time)
+	var item := data.items.roll(_catalog, luck, rng)
+	EventBus.chest_opened.emit()
+	EventBus.item_revealed.emit(item, data.reveal_time)
 	# La bisagra está detrás (+Z) y el cierre delante (−Z): girar en +X levanta el frente.
 	create_tween().tween_property(lid, ^"rotation:x", deg_to_rad(lid_angle), lid_time)
 	# Con el juego en pausa, el revelado espera.
@@ -103,6 +104,6 @@ func _on_difficulty_changed(difficulty: float) -> void:
 	_refresh_prompt()
 
 
-func _on_chest_opened(_item: PassiveItemData, _reveal_time: float) -> void:
+func _on_chest_opened() -> void:
 	_opened_in_run += 1
 	_refresh_prompt()
