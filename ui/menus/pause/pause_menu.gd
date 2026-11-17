@@ -2,7 +2,7 @@ class_name PauseMenu
 extends CanvasLayer
 ## Menú de pausa (Esc): pausa el juego y pide el cursor. A la izquierda, el menú; a la derecha,
 ## todas las stats del jugador. «Opciones» cambia ambos por el panel de opciones ([OptionsPanel]),
-## que se cierra con Esc o «Volver».
+## que se cierra con Esc o «Volver». «Reintentar» y «Salir» (al menú principal) van por [RunFlow].
 ## Funciona con el juego en pausa ([code]process_mode = ALWAYS[/code] en la escena).
 
 ## Jugador cuyas stats se muestran.
@@ -20,7 +20,7 @@ extends CanvasLayer
 func _ready() -> void:
 	_continue.pressed.connect(close)
 	_retry.pressed.connect(_retry_run)
-	_quit.pressed.connect(_quit_game)
+	_quit.pressed.connect(_to_main_menu)
 	_options_button.pressed.connect(_open_options)
 	_options.closed.connect(_on_options_closed)
 	_stats_view.show_stats(player.stats)
@@ -68,11 +68,11 @@ func _set_open(open_menu: bool) -> void:
 
 func _retry_run() -> void:
 	close()
-	get_tree().reload_current_scene()
+	RunFlow.retry(get_tree())
 
 
-func _quit_game() -> void:
-	get_tree().quit()
+func _to_main_menu() -> void:
+	RunFlow.to_main_menu(get_tree())
 
 
 func _open_options() -> void:

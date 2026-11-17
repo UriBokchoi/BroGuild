@@ -1,0 +1,33 @@
+extends GutTest
+## Menú principal: viste a los personajes de fondo, «Jugar» lo pide, «Opciones» cambia el menú por
+## su panel y «Archivo» está desactivado hasta que exista.
+
+const MenuScene := preload("res://ui/menus/main/main_menu.tscn")
+
+var _menu: MainMenu
+
+
+func before_each() -> void:
+	_menu = MenuScene.instantiate() as MainMenu
+	add_child_autofree(_menu)
+
+
+func test_dresses_the_characters() -> void:
+	for index: int in _menu.models.size():
+		assert_eq(_menu.models[index].get_color(), _menu.characters[index].color)
+
+
+func test_play_asks_to_play() -> void:
+	watch_signals(_menu)
+	(_menu.get_node(^"%Play") as Button).pressed.emit()
+	assert_signal_emitted(_menu, "play_requested")
+
+
+func test_options_replace_the_menu() -> void:
+	(_menu.get_node(^"%Options") as Button).pressed.emit()
+	assert_true((_menu.get_node(^"%OptionsPanel") as OptionsPanel).visible)
+	assert_false((_menu.get_node(^"%Menu") as Control).visible)
+
+
+func test_the_archive_is_not_ready_yet() -> void:
+	assert_true((_menu.get_node(^"%Archive") as Button).disabled)

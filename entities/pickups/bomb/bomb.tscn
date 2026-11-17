@@ -1,0 +1,74 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://entities/pickups/pickup.gd" id="1_pickup"]
+[ext_resource type="Script" path="res://vfx/juice/spin_bob.gd" id="2_spin"]
+
+[sub_resource type="StandardMaterial3D" id="Mat_body"]
+albedo_color = Color(0.1, 0.1, 0.12, 1)
+metallic = 0.3
+roughness = 0.35
+
+[sub_resource type="StandardMaterial3D" id="Mat_spark"]
+albedo_color = Color(1, 0.7, 0.2, 1)
+emission_enabled = true
+emission = Color(1, 0.55, 0.1, 1)
+emission_energy_multiplier = 4.0
+
+[sub_resource type="SphereMesh" id="SphereMesh_body"]
+material = SubResource("Mat_body")
+radius = 0.22
+height = 0.44
+radial_segments = 14
+rings = 7
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_cap"]
+material = SubResource("Mat_body")
+top_radius = 0.07
+bottom_radius = 0.08
+height = 0.08
+radial_segments = 10
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_fuse"]
+material = SubResource("Mat_spark")
+top_radius = 0.015
+bottom_radius = 0.015
+height = 0.1
+radial_segments = 6
+rings = 1
+
+[sub_resource type="SphereMesh" id="SphereMesh_spark"]
+material = SubResource("Mat_spark")
+radius = 0.04
+height = 0.08
+radial_segments = 6
+rings = 3
+
+[node name="Bomb" type="Node3D"]
+script = ExtResource("1_pickup")
+float_height = 0.6
+
+[node name="Model" type="Node3D" parent="."]
+
+[node name="Body" type="MeshInstance3D" parent="Model"]
+cast_shadow = 0
+mesh = SubResource("SphereMesh_body")
+
+[node name="Cap" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.23, 0)
+cast_shadow = 0
+mesh = SubResource("CylinderMesh_cap")
+
+[node name="Fuse" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(0.94, -0.342, 0, 0.342, 0.94, 0, 0, 0, 1, 0.02, 0.31, 0)
+cast_shadow = 0
+mesh = SubResource("CylinderMesh_fuse")
+
+[node name="Spark" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.04, 0.37, 0)
+cast_shadow = 0
+mesh = SubResource("SphereMesh_spark")
+
+[node name="SpinBob" type="Node" parent="." node_paths=PackedStringArray("target")]
+script = ExtResource("2_spin")
+target = NodePath("../Model")

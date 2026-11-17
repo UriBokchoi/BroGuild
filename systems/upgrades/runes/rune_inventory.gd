@@ -1,7 +1,9 @@
 class_name RuneInventory
 extends Node
-## Runas que lleva el jugador y su nivel. Aplica los modificadores de cada nivel a sus stats (se
-## acumulan) y los quita al bajar de nivel o al quitar la runa.
+## Runas que lleva el jugador y sus mejoras. Su nivel es cuántas lleva: al conseguirla, la estándar
+## ([method ItemData.default_upgrade]); cada subida de nivel, una tirada con rareza. Aplica los
+## modificadores de cada mejora a sus stats (se acumulan) y los quita al bajar de nivel o al quitar
+## la runa.
 
 ## Cambió el nivel de [param rune] ([param level] 0 = quitada).
 signal rune_changed(rune: RuneData, level: int)
@@ -10,29 +12,37 @@ signal rune_changed(rune: RuneData, level: int)
 @export var stats: StatsComponent
 
 var _runes: Array[RuneData] = []
-var _levels: Dictionary[StringName, int] = {}
+## Mejoras de cada runa (por id), de la primera a la última.
+var _upgrades: Dictionary[StringName, Array] = {}
 
 
 ## Añade [param rune] a nivel 1. Si ya la lleva, no hace nada y devuelve [code]false[/code].
 func add(rune: RuneData) -> bool:
 	if has(rune):
 		return false
-	set_level(rune, 1)
+	_runes.append(rune)
+	_upgrades[rune.id] = []
+	_apply(rune, rune.default_upgrade())
 	return true
 
 
-## Pone [param rune] a [param level] (de 0 a su máximo; 0 la quita).
+## Le suma a [param rune] la mejora [param extra] (un nivel más). Si no la lleva o está al
+## máximo, no hace nada.
+func upgrade(rune: RuneData, extra: ItemUpgrade) -> void:
+	if has(rune) and get_level(rune) < rune.max_level():
+		_apply(rune, extra)
+
+
+## Pone [param rune] a [param level] (de 0 a su máximo; 0 la quita): para subir, suma mejoras
+## estándar (la armería de práctica); para bajar, quita las últimas.
 func set_level(rune: RuneData, level: int) -> void:
 	level = clampi(level, 0, rune.max_level())
-	if level == get_level(rune):
-		return
-	for level_set: StatModifierSet in rune.levels:
-		stats.remove_modifiers_from(level_set)
-	for index: int in level:
-		for modifier: StatModifier in rune.levels[index].stat_modifiers:
-			stats.add_modifier(modifier, rune.levels[index])
-	_store(rune, level)
-	rune_changed.emit(rune, level)
+	if level > 0 and not has(rune):
+		add(rune)
+	while has(rune) and get_level(rune) < level:
+		_apply(rune, rune.default_upgrade())
+	while has(rune) and get_level(rune) > level:
+		_remove_last(rune)
 
 
 ## Quita [param rune] y sus mejoras.
@@ -42,7 +52,7 @@ func remove(rune: RuneData) -> void:
 
 ## Nivel de [param rune] (0 si no la lleva).
 func get_level(rune: RuneData) -> int:
-	return _levels.get(rune.id, 0)
+	return _upgrades[rune.id].size() if _upgrades.has(rune.id) else 0
 
 
 func has(rune: RuneData) -> bool:
@@ -54,11 +64,17 @@ func get_runes() -> Array[RuneData]:
 	return _runes.duplicate()
 
 
-func _store(rune: RuneData, level: int) -> void:
-	if level == 0:
-		_levels.erase(rune.id)
+func _apply(rune: RuneData, extra: ItemUpgrade) -> void:
+	for modifier: StatModifier in extra.stat_modifiers:
+		stats.add_modifier(modifier, extra)
+	_upgrades[rune.id].append(extra)
+	rune_changed.emit(rune, get_level(rune))
+
+
+func _remove_last(rune: RuneData) -> void:
+	var last: ItemUpgrade = _upgrades[rune.id].pop_back()
+	stats.remove_modifiers_from(last)
+	if _upgrades[rune.id].is_empty():
+		_upgrades.erase(rune.id)
 		_runes = _runes.filter(func(owned: RuneData) -> bool: return owned.id != rune.id)
-		return
-	if not _levels.has(rune.id):
-		_runes.append(rune)
-	_levels[rune.id] = level
+	rune_changed.emit(rune, get_level(rune))

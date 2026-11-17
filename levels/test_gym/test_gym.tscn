@@ -5,29 +5,12 @@
 [ext_resource type="Material" path="res://levels/test_gym/materials/greybox_ramp.tres" id="3_omi0l"]
 [ext_resource type="Material" path="res://levels/test_gym/materials/greybox_platform.tres" id="4_1r577"]
 [ext_resource type="Material" path="res://levels/test_gym/materials/greybox_marker.tres" id="5_alsl7"]
-[ext_resource type="Script" path="res://ui/mouse_capture.gd" id="6_mouse"]
-[ext_resource type="PackedScene" path="res://entities/player/player.tscn" id="7_player"]
-[ext_resource type="PackedScene" path="res://ui/debug/debug_panel.tscn" id="8_debug"]
-[ext_resource type="PackedScene" path="res://ui/menus/pause/pause_menu.tscn" id="9_pause"]
-[ext_resource type="PackedScene" path="res://ui/hud/hud.tscn" id="10_hud"]
 [ext_resource type="PackedScene" path="res://levels/test_gym/props/damage_pad.tscn" id="11_damage_pad"]
 [ext_resource type="PackedScene" path="res://entities/interactables/teleporter/teleporter.tscn" id="12_teleporter"]
 [ext_resource type="PackedScene" path="res://levels/test_gym/zones/combat_range.tscn" id="13_combat_range"]
-[ext_resource type="Script" path="res://vfx/juice/damage_numbers/damage_numbers.gd" id="14_damage_numbers"]
-[ext_resource type="Resource" path="res://data/vfx/damage_numbers.tres" id="15_number_style"]
-[ext_resource type="Script" path="res://systems/spawning/enemy_swarm.gd" id="16_swarm"]
-[ext_resource type="Script" path="res://systems/spawning/wave_director.gd" id="17_director"]
 [ext_resource type="Resource" path="res://data/waves/test_gym.tres" id="18_waves"]
-[ext_resource type="Script" path="res://systems/progression/pickup_field.gd" id="19_pickups"]
-[ext_resource type="Script" path="res://systems/progression/loot_dropper.gd" id="20_loot"]
-[ext_resource type="Resource" path="res://data/pickups/xp_gem.tres" id="21_xp_gem"]
-[ext_resource type="Script" path="res://systems/upgrades/level_up/level_up_controller.gd" id="22_level_up"]
-[ext_resource type="Resource" path="res://data/progression/level_up.tres" id="23_level_up_data"]
-[ext_resource type="PackedScene" path="res://ui/menus/level_up/level_up_panel.tscn" id="24_level_up_panel"]
-[ext_resource type="Resource" path="res://data/pickups/gold_coin.tres" id="25_gold_coin"]
-[ext_resource type="Script" path="res://systems/run/run_recorder.gd" id="26_recorder"]
-[ext_resource type="PackedScene" path="res://ui/menus/results/results_panel.tscn" id="27_results"]
 [ext_resource type="Resource" path="res://data/characters/warrior.tres" id="28_warrior"]
+[ext_resource type="PackedScene" path="res://levels/common/run_systems.tscn" id="29_run_systems"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_lgb4e"]
 
@@ -51,26 +34,8 @@ shadow_enabled = true
 [node name="OverviewCamera" type="Camera3D" parent="." unique_id=1289150874]
 transform = Transform3D(1, 0, 0, 0, 0.8637789, 0.503871, 0, -0.503871, 0.8637789, 0, 42, 66)
 
-[node name="MouseCapture" type="Node" parent="."]
-script = ExtResource("6_mouse")
-
-[node name="Player" parent="." instance=ExtResource("7_player")]
-character = ExtResource("28_warrior")
-
-[node name="DebugPanel" parent="." node_paths=PackedStringArray("player") instance=ExtResource("8_debug")]
-player = NodePath("../Player")
-
-[node name="PauseMenu" parent="." node_paths=PackedStringArray("player") instance=ExtResource("9_pause")]
-player = NodePath("../Player")
-
-[node name="HUD" parent="." instance=ExtResource("10_hud")]
-
 [node name="DamagePad" parent="." instance=ExtResource("11_damage_pad")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, -6)
-
-[node name="DamageNumbers" type="Node3D" parent="."]
-script = ExtResource("14_damage_numbers")
-style = ExtResource("15_number_style")
 
 [node name="ToCombatTeleporter" parent="." node_paths=PackedStringArray("destination") instance=ExtResource("12_teleporter")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, -6)
@@ -80,46 +45,15 @@ label_key = &"TELEPORT_TO_COMBAT"
 [node name="MovementArrival" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, -2.5)
 
-[node name="EnemySwarm" type="Node3D" parent="." node_paths=PackedStringArray("target")]
-script = ExtResource("16_swarm")
-target = NodePath("../Player")
-
-[node name="PickupField" type="Node3D" parent="." node_paths=PackedStringArray("collector", "collector_stats")]
-script = ExtResource("19_pickups")
-collector = NodePath("../Player")
-collector_stats = NodePath("../Player/Stats")
-
-[node name="LootDropper" type="Node" parent="." node_paths=PackedStringArray("field")]
-script = ExtResource("20_loot")
-field = NodePath("../PickupField")
-xp_gem = ExtResource("21_xp_gem")
-gold_coin = ExtResource("25_gold_coin")
-
-[node name="LevelUpPanel" parent="." instance=ExtResource("24_level_up_panel")]
-
-[node name="LevelUpController" type="Node" parent="." node_paths=PackedStringArray("player", "panel")]
-script = ExtResource("22_level_up")
-data = ExtResource("23_level_up_data")
-player = NodePath("../Player")
-panel = NodePath("../LevelUpPanel")
-
-[node name="RunRecorder" type="Node" parent="."]
-script = ExtResource("26_recorder")
-
-[node name="ResultsPanel" parent="." node_paths=PackedStringArray("recorder") instance=ExtResource("27_results")]
-recorder = NodePath("../RunRecorder")
-
-[node name="WaveDirector" type="Node" parent="." node_paths=PackedStringArray("swarm", "target")]
-script = ExtResource("17_director")
-data = ExtResource("18_waves")
-swarm = NodePath("../EnemySwarm")
-target = NodePath("../Player")
+[node name="RunSystems" parent="." instance=ExtResource("29_run_systems")]
+waves = ExtResource("18_waves")
+default_character = ExtResource("28_warrior")
 
 [node name="CombatRange" parent="." node_paths=PackedStringArray("exit_destination", "swarm", "director") instance=ExtResource("13_combat_range")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 200, 0, 0)
 exit_destination = NodePath("../MovementArrival")
-swarm = NodePath("../EnemySwarm")
-director = NodePath("../WaveDirector")
+swarm = NodePath("../RunSystems/EnemySwarm")
+director = NodePath("../RunSystems/WaveDirector")
 
 [node name="Geometry" type="Node3D" parent="." unique_id=361505001]
 

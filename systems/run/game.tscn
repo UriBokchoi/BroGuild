@@ -1,0 +1,12 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://systems/run/game.gd" id="1_game"]
+[ext_resource type="PackedScene" path="res://ui/menus/main/main_menu.tscn" id="2_menu"]
+[ext_resource type="Resource" path="res://data/levels/brosque.tres" id="3_level"]
+[ext_resource type="PackedScene" path="res://ui/menus/run_setup/run_setup.tscn" id="4_setup"]
+
+[node name="Game" type="Node"]
+script = ExtResource("1_game")
+main_menu = ExtResource("2_menu")
+run_setup = ExtResource("4_setup")
+default_level = ExtResource("3_level")

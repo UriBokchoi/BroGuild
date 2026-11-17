@@ -73,7 +73,26 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 8
 
-[node name="Back" type="Button" parent="Content"]
+[node name="WindowNote" type="Label" parent="Content"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(560, 0)
+layout_mode = 2
+theme_type_variation = &"StatBaseLabel"
+text = "OPTIONS_WINDOW_LOCKED"
+autowrap_mode = 3
+
+[node name="Buttons" type="HBoxContainer" parent="Content"]
+layout_mode = 2
+theme_type_variation = &"ResultsButtons"
+
+[node name="Apply" type="Button" parent="Content/Buttons"]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 3
+text = "OPTIONS_APPLY"
+
+[node name="Back" type="Button" parent="Content/Buttons"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
 text = "OPTIONS_BACK"

@@ -1,7 +1,8 @@
 extends GutTest
 ## WaveDirector con física real: en marcha saca enemigos en el suelo a la distancia de sus datos,
 ## sin pasar del máximo y con la probabilidad de élite de sus datos; parado no saca ninguno y puede
-## retirar a los que hay.
+## retirar a los que hay. La dificultad (stat del jugador) sube 1 por minuto en marcha y, con más
+## dificultad, los enemigos salen más fuertes.
 
 const SWARMER := preload("res://data/enemies/swarmer.tres")
 const ELITE := preload("res://data/enemies/elite.tres")
@@ -74,7 +75,7 @@ func test_no_elite_chance_no_elites() -> void:
 		assert_false(enemy.is_elite(), "sin curva, ninguno")
 
 
-func test_enemies_come_with_the_stats_of_their_minute() -> void:
+func test_enemies_come_with_the_stats_of_their_difficulty() -> void:
 	var scaling := StatScaling.new()
 	scaling.stat = &"max_health"
 	scaling.multiplier = _flat_curve(3.0)
@@ -102,11 +103,48 @@ func test_announces_the_clock_every_second() -> void:
 	assert_signal_emitted_with_parameters(EventBus, "run_clock_changed", [-1.0, false])
 
 
+func test_difficulty_rises_one_per_minute_on_the_stats() -> void:
+	var stats := _difficulty_stats()
+	_director.difficulty_stats = stats
+	_director.start()
+	assert_eq(_director.get_difficulty(), 0.0)
+	await wait_seconds(1.1)
+	assert_almost_eq(stats.get_value(&"difficulty"), 1.0 / 60.0, 0.001, "un segundo, 1/60")
+	_director.stop()
+	assert_eq(stats.get_value(&"difficulty"), 0.0, "parado, sin la parte del tiempo")
+
+
+func test_extra_difficulty_brings_stronger_enemies() -> void:
+	var stats := _difficulty_stats()
+	stats.add_modifier(StatModifier.create(&"difficulty", StatModifier.Kind.FLAT, 10.0), self)
+	_director.difficulty_stats = stats
+	var scaling := StatScaling.new()
+	scaling.stat = &"max_health"
+	scaling.multiplier = _line(1.0, 3.0, 10.0)
+	_director.data.stat_scaling = [scaling]
+	var normal := SWARMER.stat_sources[0] as HealthData
+	_director.start()
+	await wait_physics_frames(3)
+	assert_gt(_swarm.active_count(), 0)
+	for enemy: Enemy in _swarm.get_active():
+		assert_almost_eq(enemy.health.get_maximum(), normal.max_health * 3.0, 0.1, "como con dificultad 10")
+
+
 func test_without_ground_nobody_spawns() -> void:
 	_target.position = Vector3(500.0, 0.0, 500.0)
 	_director.start()
 	await wait_physics_frames(10)
 	assert_eq(_swarm.active_count(), 0)
+
+
+func test_enemies_only_spawn_inside_the_play_area() -> void:
+	# Solo la mitad x > 0 alrededor del objetivo: ninguno sale en la otra.
+	_director.play_area = Rect2(0.0, -40.0, 40.0, 80.0)
+	_director.start()
+	await wait_physics_frames(6)
+	assert_gt(_swarm.active_count(), 0)
+	for enemy: Enemy in _swarm.get_active():
+		assert_gte(enemy.global_position.x, 0.0)
 
 
 func _wave_data(rate: float, max_alive: int) -> WaveData:
@@ -136,6 +174,24 @@ func _add_ground() -> void:
 	shape.position = Vector3(0.0, -0.5, 0.0)
 	ground.add_child(shape)
 	add_child_autofree(ground)
+
+
+func _difficulty_stats() -> StatsComponent:
+	var stats := StatsComponent.new()
+	stats.sources.append(ProgressionData.new())
+	add_child_autofree(stats)
+	return stats
+
+
+## De [param from] con dificultad 0 a [param to] con [param domain], en línea recta.
+func _line(from: float, to: float, domain: float) -> Curve:
+	var curve := Curve.new()
+	curve.max_value = 100.0
+	curve.max_domain = domain
+	var slope := (to - from) / domain
+	curve.add_point(Vector2(0.0, from), 0.0, slope, Curve.TANGENT_LINEAR, Curve.TANGENT_LINEAR)
+	curve.add_point(Vector2(domain, to), slope, 0.0, Curve.TANGENT_LINEAR, Curve.TANGENT_LINEAR)
+	return curve
 
 
 func _flat_curve(value: float) -> Curve:

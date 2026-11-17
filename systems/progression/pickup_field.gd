@@ -78,6 +78,15 @@ func get_active() -> Array[Pickup]:
 	return _active.duplicate()
 
 
+## Hace volar hacia quien recoge todos los recogibles de recompensa [param reward] (el imán), estén
+## donde estén.
+func attract_all(reward: StringName) -> void:
+	for pickup: Pickup in _active:
+		if pickup.data.reward == reward and not pickup.attracted:
+			pickup.attracted = true
+			pickup.speed = pickup.data.start_speed
+
+
 ## Retira todos los recogibles sin darlos.
 func clear() -> void:
 	for index: int in range(_active.size() - 1, -1, -1):

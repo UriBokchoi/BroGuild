@@ -19,9 +19,9 @@ Si una idea no sirve al menos a uno, se descarta.
 ## 3. Bucle
 | Escala | Qué haces |
 |---|---|
-| Segundos | Moverte (dash, slide, saltos); las armas disparan solas; recoges XP y el oro vuela solo hacia ti |
+| Segundos | Moverte (dash, slide, saltos); las armas disparan solas; recoges XP y el oro vuela solo hacia ti; rompes calaveras y bolsitas con E |
 | Minutos | Subes de nivel (ruleta), abres cofres, juegas a la tragaperras, aceptas o rechazas pactos, cobras tu racha |
-| Partida | Sobrevives 10 min → jefe **La Banca** → **¿Cobrar o Doblar?** |
+| Partida | Exploras el nivel juntando llaves; invocas al jefe en su altar (al minuto 10 se activa solo) → lo vences → **¿Cobrar o Doblar?** |
 | Entre partidas | Gastas el bote en desbloqueos y vuelves a entrar |
 
 ## 4. Movimiento
@@ -56,8 +56,8 @@ Toda apuesta tiene **anticipación** (giro, luces, sonido que sube), **revelado*
 1. **Ruleta de nivel** — al subir de nivel, 3 cartas giran como rodillos y caen en una rareza; eliges una.
    - *Reroll:* cuesta oro y el coste sube con cada uso en la partida.
    - *Doble o nada:* tras elegir, puedes apostar la carta: ~50 % sube una rareza, ~50 % la pierdes. La Suerte mejora las probabilidades.
-2. **Cofres** — repartidos por la arena y soltados por élites. Abrirlos cuesta oro (coste creciente). Revelado tipo "case opening": la luz recorre las rarezas antes de pararse.
-3. **Tragaperras** — máquinas en la arena. Pagas y giran 3 rodillos: premio (oro ×N, mejora, cura), nada o **maldición** (oleada de élites, −vida máxima temporal). Tres iguales = jackpot con cámara lenta.
+2. **Cofres** — repartidos por el nivel y soltados por élites. Abrirlos cuesta oro (coste creciente). Revelado tipo "case opening": la luz recorre las rarezas antes de pararse. Dan **objetos pasivos** (§6).
+3. **Tragaperras** — máquinas repartidas por el nivel (también en sitios a los que hay que subir). Pagas oro (sube con la dificultad y cada vez que usas esa máquina) y giran 3 rodillos sin pausar el juego. Cada máquina aguanta 5 tiradas y luego revienta. Símbolos: moneda (pareja: oro ×2 de lo pagado; trío: ×10), corazón (cura un 30 %; trío: vida al máximo), estrella (sube un nivel un arma o runa al azar; trío: tres) y calavera, la **maldición** (pareja: −20 % de vida máxima un minuto; trío: cinco élites). Sin dos iguales, nada. El trío (jackpot) va con cámara lenta.
 4. **Racha y bote** — matar encadenado y moverte rápido sube la racha (×1 → ×2 → ×3 → ×5), que multiplica oro, XP y Suerte. Lo ganado con racha va a un **bote** que hay que **cobrar** (mantener E un segundo quedando vulnerable, o en una tragaperras). Si te golpean con el bote lleno, pierdes la mitad y bajas un nivel. Quedarte quieto la enfría.
 5. **Pactos de la Banca** — de vez en cuando, una oferta: aceptas una maldición para el resto de la partida (más enemigos, menos curación…) a cambio de Suerte o multiplicador. Se puede rechazar.
 6. **¿Cobrar o Doblar?** — al vencer al jefe: *Cobrar* termina la partida y guarda el bote. *Doblar* abre la siguiente mesa, más dura, con el bote ×2; si mueres ahí, te llevas solo la mitad.
@@ -69,16 +69,21 @@ Toda apuesta tiene **anticipación** (giro, luces, sonido que sube), **revelado*
 **Mejoras que tocan el azar** (ejemplos): Dado trucado (1 reroll gratis por nivel) · Amigo del crupier (las maldiciones de la tragaperras a veces son premio) · Mano caliente (cofres más baratos con racha alta).
 
 ## 6. Combate
-- **Armas automáticas** (como en Megabonk o Vampire Survivors): atacan solas al objetivo más cercano o al grupo más denso; tú te centras en moverte. Ranuras: 4 de armas y 4 de runas, cada una hasta nivel 5; al empezar solo hay 2 de cada abiertas y las otras 2 se desbloquearán (cómo, por decidir; en el HUD se ven cerradas). Todo en datos.
+- **Armas automáticas** (como en Megabonk o Vampire Survivors): atacan solas al objetivo más cercano o al grupo más denso; tú te centras en moverte. Ranuras: 4 de armas y 4 de runas, hasta nivel 10 las armas y 20 las runas; al empezar solo hay 2 de cada abiertas y las otras 2 se desbloquearán (cómo, por decidir; en el HUD se ven cerradas). Todo en datos.
 - **Armas iniciales**:
   - **Espada** (cuerpo a cuerpo): la cantidad de proyectiles también le afecta (más tajos).
   - **Bastón de mago**: proyectiles que explotan al contacto, con daño en área.
   - **Daga**: proyectil rápido que da a un solo enemigo. Sus mejoras pueden subir su **rebote**: el golpe salta con todo su daño al enemigo más cercano, hasta una distancia máxima.
 - **Runas** (pasivas): suben stats principales con cada nivel: Fuerza (daño) · Amplitud (área) · Prisa (velocidad de ataque) · Vigor (vida máxima) · Multiplicidad (cantidad de proyectiles, también para armas cuerpo a cuerpo).
-- **Subir de nivel**: eliges 1 de 3 opciones (arma o runa nueva, o subir una que ya tengas). La ruleta de apuestas (§5) se monta encima de esta elección.
+- **Objetos de la partida** (aparte de armas y runas):
+  - *Pasivos:* como los objetos de Megabonk. Salen de cofres y del jefe, tienen rareza, no ocupan ranura y se apilan: cada copia suma su efecto (+% daño, robo de vida, más oro…).
+  - *Power-ups del suelo:* imán (atrae toda la experiencia del mapa), comida (cura), bomba (daño a todo lo cercano) y bebida energética (más velocidad, velocidad de ataque y daño durante unos segundos). Salen de una tabla de botín con la **probabilidad de botín** (stat del jugador, muy baja: 0,5 % por enemigo normal), que multiplican los élites (×8) y los rompibles (×12). Más adelante, la misma tirada podrá dar cofres.
+  - *Llaves del jefe:* repartidas por el nivel; con las suficientes se puede invocar al jefe antes de tiempo (§9).
+- **Rompibles** (como los jarrones de Megabonk): calaveras que sueltan experiencia y bolsitas que sueltan oro, repartidas por el nivel. Se rompen **con «interactuar» (E)**, no con ataques: premian moverse por el mapa y pararse un instante.
+- **Subir de nivel**: eliges 1 de 3 opciones (arma o runa nueva, o subir una que ya tengas). Cada mejora tiene **rareza**, que se ve en el color del borde de la carta: común (gris), rara (verde), improbable (azul), de leyenda (amarilla) y mítica (roja). Cada arma tiene varias stats que puede mejorar (la espada: daño, cantidad, área y velocidad de ataque) y la rareza decide cuántas toca y cuánto: una común, una; las raras, varias; la mítica, todas, y más fuertes. La ruleta de apuestas (§5) se monta encima de esta elección.
 - **Enemigos**: enjambre cuerpo a cuerpo (rápido, frágil) · tanque lento · tirador a distancia (te obliga a moverte) · élites: cualquier enemigo puede salir élite, con una probabilidad que sube con los minutos (más grande, más vida y daño, suelta más experiencia y oro); más adelante, con afijos y cofre.
 - **Cuerpos de los enemigos** (como en Megabonk): chocan con el mundo, con el jugador y entre ellos, y no se hacen daño entre ellos. El jugador no los atraviesa: le bloquean, le dañan al tocarle y puede saltar y quedarse de pie encima. Cuando se atascan, los de atrás trepan sobre los de delante: alrededor del jugador forman un montículo y, si está en alto, se apilan para alcanzarlo.
-- **Director de oleadas**: la densidad sube con el tiempo, con picos cada minuto, y los enemigos salen más fuertes cuanto más tarde (vida y daño); todo en curvas de datos. La ronda normal dura 10 min: a partir de ahí, los enemigos se disparan (hace falta buena build para aguantar un poco) hasta que llegue el jefe.
+- **Dificultad y director de oleadas**: la **dificultad** es una stat que sube sola (1 por minuto) y también con objetos o runas: **más riesgo, más recompensa**. De ella dependen cuántos enemigos salen, cuáles, cuántos élites y lo fuertes que son (vida y daño), todo en curvas de datos; los picos de cada minuto van por el reloj. También sube lo que sueltan calaveras y bolsitas. La ronda normal dura 10 min: hacia la dificultad 10 los enemigos se disparan (hace falta buena build para aguantar un poco) y en el minuto 10 el altar del jefe se activa solo.
 
 **Stats del personaje** (como en Megabonk o Vampire Survivors; todas mejorables, §5). Valores de partida en `data/player/`. Ya funcionan vida, regeneración, defensa, esquiva, daño y crítico; el resto de fórmulas son la intención de diseño y se confirman al implementar armas y enemigos (Hito 2). Al recibir un golpe, primero se tira la esquiva y luego la defensa reduce lo que entra.
 
@@ -98,6 +103,8 @@ Toda apuesta tiene **anticipación** (giro, luces, sonido que sube), **revelado*
 | Progresión | Experiencia ganada, oro ganado | 100 % | |
 | | Suerte | 0 | Desplaza los pesos de rareza hacia arriba |
 | | Radio de recogida | 3 m | Distancia a la que se recoge el botín |
+| | Dificultad | 0 (+1 por minuto) | Enemigos más numerosos y fuertes, más botín de los rompibles (sube con objetos o runas) |
+| | Probabilidad de botín | 0,5 % | Que un enemigo normal suelte un power-up (o, más adelante, un cofre); ×8 los élites y ×12 los rompibles |
 | Movimiento | Velocidad de carrera, saltos y dashes en el aire, stamina… | ver §4 | |
 
 Las mejoras de % («+10 % de daño») multiplican; las de puntos («+5 % de crítico», «+1 proyectil», «+1 salto en el aire») suman.
@@ -116,7 +123,8 @@ WASD mover · Ratón cámara · Espacio saltar · Shift dash · Ctrl slide (dobl
 **Menú de pausa (Esc):** a la izquierda, Continuar, Opciones, Reintentar y Salir; a la derecha, un panel fijo con todas las stats del personaje, resaltando las que han cambiado mejoras o maldiciones. Mando: más adelante.
 
 ## 9. Partida y progresión
-- **Mesa**: ~10 min (dificultad normal; nivel ~30 al minuto 10 si se mata casi todo). Élites por probabilidad, cada vez más a menudo. Jefe al minuto 10; mientras no exista, enemigos muy fuertes.
+- **Mesa**: ~10 min (dificultad normal; nivel ~30 al minuto 10 si se mata casi todo). Élites por probabilidad, cada vez más a menudo.
+- **Jefe**: cada nivel tiene el suyo en un **altar**. Se invoca con las llaves del nivel cuando te veas fuerte; al minuto 10 el altar se activa solo. Vencerlo antes da más recompensa, y vencerlo pasa el nivel. Mientras no exista, desde el minuto 10 salen enemigos muy fuertes.
 - **Monedas**: XP (niveles) · Oro (en partida, se apuesta; lo suelta cada enemigo y llega solo al matarlo) · Bote (sale de la partida y se gasta fuera).
 - **Meta-progresión**: desbloquear personajes (cada uno con un rasgo de movimiento: triple salto, dash más largo, slide más rápido…), armas iniciales y ventajas pequeñas. Nunca más poder bruto que el que da jugar bien.
 - **Personajes**: todos parten de las mismas stats básicas y cada uno cambia unas pocas según su gimmick (p. ej., +1 salto en el aire y −10 % de vida). Esas diferencias son su base: en el menú no salen como mejoras. Cada uno tiene un arma principal y una habilidad pasiva. Iniciales:
@@ -125,12 +133,13 @@ WASD mover · Ratón cámara · Espacio saltar · Shift dash · Ctrl slide (dobl
   |---|---|---|---|
   | Arma inicial | Espada | Bastón de mago | Daga |
   | Stats | +30 vida, +5 defensa, −5 % velocidad | −20 vida, +15 % área, +10 % experiencia | −10 vida, +10 % velocidad, +10 % crítico, +1 carga de stamina |
-  | Movimiento | Dash un 30 % más largo | Planea manteniendo el salto (cae como mucho a 3 m/s) | +1 salto en el aire |
+  | Movimiento | Dash un 30 % más largo | Planea manteniendo el salto (cae como mucho a 3 m/s) | +1 salto en el aire, con un mortal hacia delante |
+  | Regeneración | 0,8 de vida/s | 0,4 de vida/s | 0,5 de vida/s |
   | Pasiva | **Aguante**: +2 % de daño por cada enemigo a menos de 5 m (hasta +30 %) | **Eco arcano**: cada 4.º ataque de cada arma sale dos veces | **Letal**: +1 % de probabilidad de crítico por cada nivel |
 
 - **Menús**: al iniciar, menú principal con Jugar, Archivo y Abandonar (cierra el juego).
   - *Jugar* → selección de personaje: lista a la izquierda, su modelo 3D en el centro y, al pasar el ratón, un panel a la derecha con nombre, stats, arma principal y habilidad pasiva. Al elegir, ese panel se cambia por la selección de nivel.
-  - *Niveles*: el Brosque (bosque bro), la Torre del Mago y la Mazmorra. Hasta que existan sus mapas, se juega en la zona de pruebas.
+  - *Niveles*: el Brosque (en inglés, the Brorest), la Torre del Mago y la Mazmorra. El Brosque es un **gimnasio en el bosque**: bosque low-poly de colores vivos con humor (rocas con forma de pesas, troncos-banco, carteles de «No pain, no gain»), tragaperras entre los árboles y mesetas para moverse en vertical. Empieza sencillo y gana detalles con el tiempo.
   - *Archivo*: personajes, armas, runas y enemigos. Cada entrada se desbloquea al conseguirla o al derrotar a ese enemigo; mientras tanto sale como «???».
 - **Reinicio**: de la muerte a una partida nueva en menos de 2 s.
 

@@ -1,7 +1,7 @@
 extends GutTest
 ## Pantalla de resultados: al morir el jugador y tras su espera, pausa y muestra lo apuntado por el
 ## RunRecorder bajo una frase de muerte al azar, con el foco en «Reintentar» (que lleva su tecla);
-## Esc no la cierra.
+## Esc no la cierra. Reintentar y Salir van por el flujo del juego (RunFlow).
 
 const PanelScene := preload("res://ui/menus/results/results_panel.tscn")
 
@@ -83,3 +83,16 @@ func test_shows_a_random_death_line() -> void:
 func test_every_death_line_is_translated() -> void:
 	for line: StringName in _panel.death_lines:
 		assert_ne(TranslationServer.translate(line), line, "«%s» sin traducir" % line)
+
+
+func test_retry_and_quit_go_through_the_game_flow() -> void:
+	var asked: Array[StringName] = []
+	var on_retry := func() -> void: asked.append(&"retry")
+	var on_menu := func() -> void: asked.append(&"menu")
+	EventBus.retry_requested.connect(on_retry)
+	EventBus.main_menu_requested.connect(on_menu)
+	(_panel.get_node(^"%Retry") as Button).pressed.emit()
+	(_panel.get_node(^"%Quit") as Button).pressed.emit()
+	EventBus.retry_requested.disconnect(on_retry)
+	EventBus.main_menu_requested.disconnect(on_menu)
+	assert_eq(asked, [&"retry", &"menu"] as Array[StringName])

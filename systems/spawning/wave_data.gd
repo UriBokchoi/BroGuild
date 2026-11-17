@@ -1,18 +1,22 @@
 class_name WaveData
 extends Resource
-## Cómo salen los enemigos con el tiempo (GDD §6, «Director de oleadas»), es decir, la dificultad de
-## una ronda: una curva de enemigos por segundo que sube con los minutos, un pico al final de cada
-## intervalo, un máximo de enemigos a la vez, qué enemigos pueden salir, cuántos salen élites, cómo
-## se hacen más fuertes con el tiempo y cuánto dura la ronda (pasada, llegan los muy fuertes). Los
-## valores viven en [code]data/waves/[/code]; aquí todo vale 0 o vacío a propósito.
+## Cómo salen los enemigos de una ronda (GDD §6, «Director de oleadas»): una curva de enemigos por
+## segundo, un pico al final de cada intervalo, un máximo de enemigos a la vez, qué enemigos pueden
+## salir, cuántos salen élites, cómo se hacen más fuertes y cuánto dura la ronda (pasada, llegan los
+## muy fuertes). Los valores viven en [code]data/waves/[/code]; aquí todo vale 0 o vacío a
+## propósito.
+##
+## Las curvas van según la [b]dificultad[/b] (x), no según el tiempo: la stat
+## [code]difficulty[/code] del jugador, que sube sola 1 por minuto (así, sin bonus, dificultad 5 es
+## el minuto 5) y con objetos o runas (más riesgo, más recompensa). Los picos y la duración de la
+## ronda sí van por el reloj.
 
 @export_group("round")
-## Minutos que dura la ronda. Pasados, la partida sigue con enemigos muy fuertes (las curvas se
-## disparan; más adelante, el jefe) y el reloj del HUD se pone en rojo.
+## Minutos que dura la ronda. Pasados, el reloj del HUD se pone en rojo (y llegará el jefe).
 @export_range(0.0, 120.0, 0.5, "or_greater", "suffix:min") var round_minutes: float = 0.0
 
 @export_group("rate")
-## Enemigos por segundo (y) según los minutos de partida (x).
+## Enemigos por segundo (y) según la dificultad (x).
 @export var spawn_rate: Curve
 ## Segundos entre picos; 0 = sin picos. El pico ocupa el final de cada intervalo.
 @export_range(0.0, 600.0, 1.0, "or_greater", "suffix:s") var peak_interval: float = 0.0
@@ -32,15 +36,14 @@ extends Resource
 @export var enemies: Array[WaveEnemy] = []
 
 @export_group("elites")
-## Probabilidad (%) de que cada enemigo salga élite (y) según los minutos de partida (x). Vacía:
-## nunca.
+## Probabilidad (%) de que cada enemigo salga élite (y) según la dificultad (x). Vacía: nunca.
 @export var elite_chance: Curve
 ## Cómo son los élites.
 @export var elite: EliteData
 
 @export_group("scaling")
-## Stats de los enemigos que se multiplican con los minutos (vida, daño…): cada enemigo sale con los
-## multiplicadores de su minuto.
+## Stats de los enemigos que se multiplican con la dificultad (vida, daño…): cada enemigo sale con
+## los multiplicadores de la dificultad de ese momento.
 @export var stat_scaling: Array[StatScaling] = []
 
 
@@ -49,30 +52,31 @@ func is_overtime(seconds: float) -> bool:
 	return round_minutes > 0.0 and seconds >= round_minutes * 60.0
 
 
-## Mejoras con las que sale un enemigo a los [param seconds] de partida (un multiplicador por cada
+## Mejoras con las que sale un enemigo con dificultad [param difficulty] (un multiplicador por cada
 ## [member stat_scaling]), o [code]null[/code] si no hay escalado.
-func scaling_at(seconds: float) -> StatModifierSet:
+func scaling_at(difficulty: float) -> StatModifierSet:
 	if stat_scaling.is_empty():
 		return null
 	var modifiers := StatModifierSet.new()
 	for scaling: StatScaling in stat_scaling:
-		var factor := scaling.multiplier_at(seconds)
+		var factor := scaling.multiplier_at(difficulty)
 		modifiers.stat_modifiers.append(StatModifier.create(scaling.stat, StatModifier.Kind.MULTIPLIER, factor))
 	return modifiers
 
 
-## Probabilidad (%) de que un enemigo que sale a los [param seconds] de partida sea élite.
-func elite_chance_at(seconds: float) -> float:
+## Probabilidad (%) de que un enemigo que sale con dificultad [param difficulty] sea élite.
+func elite_chance_at(difficulty: float) -> float:
 	if elite_chance == null or elite == null:
 		return 0.0
-	return elite_chance.sample(seconds / 60.0)
+	return elite_chance.sample(difficulty)
 
 
-## Enemigos por segundo a los [param seconds] de partida, con los picos.
-func rate_at(seconds: float) -> float:
+## Enemigos por segundo con dificultad [param difficulty], a los [param seconds] de partida (los
+## picos van por el reloj).
+func rate_at(difficulty: float, seconds: float) -> float:
 	if spawn_rate == null:
 		return 0.0
-	var rate := spawn_rate.sample(seconds / 60.0)
+	var rate := spawn_rate.sample(difficulty)
 	return rate * peak_multiplier if is_peak(seconds) else rate
 
 
@@ -83,19 +87,18 @@ func is_peak(seconds: float) -> bool:
 	return fmod(seconds, peak_interval) >= peak_interval - peak_duration
 
 
-## Un enemigo al azar entre los disponibles a los [param seconds] de partida, según sus pesos.
+## Un enemigo al azar entre los disponibles con dificultad [param difficulty], según sus pesos.
 ## [code]null[/code] si no hay ninguno.
-func pick_enemy(seconds: float, rng: RandomNumberGenerator) -> EnemyData:
-	var minutes := seconds / 60.0
+func pick_enemy(difficulty: float, rng: RandomNumberGenerator) -> EnemyData:
 	var total := 0.0
 	for entry: WaveEnemy in enemies:
-		if entry.from_minute <= minutes:
+		if entry.from_difficulty <= difficulty:
 			total += entry.weight
 	if total <= 0.0:
 		return null
 	var roll := rng.randf() * total
 	for entry: WaveEnemy in enemies:
-		if entry.from_minute > minutes:
+		if entry.from_difficulty > difficulty:
 			continue
 		roll -= entry.weight
 		if roll < 0.0:

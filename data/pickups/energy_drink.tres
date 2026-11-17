@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="PickupData" format=3]
+
+[ext_resource type="Script" path="res://entities/pickups/pickup_data.gd" id="1_data"]
+[ext_resource type="PackedScene" path="res://entities/pickups/energy_drink/energy_drink.tscn" id="2_scene"]
+
+[resource]
+script = ExtResource("1_data")
+id = &"energy_drink"
+scene = ExtResource("2_scene")
+reward = &"energy"
+start_speed = 4.0
+acceleration = 40.0
+collect_radius = 0.6
+target_height = 0.9

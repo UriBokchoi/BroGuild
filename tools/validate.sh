@@ -2,7 +2,7 @@
 # validate.sh — valida el proyecto desde la terminal (Git Bash en Windows, o Linux).
 # Uso:   GODOT="/ruta/Godot_v4.7.2-stable_win64_console.exe" tools/validate.sh [proyecto]
 # Pasos: import -> project (scripts, escenas, recursos y shaders) -> smoke (escena
-#        principal) -> gut (si existe).
+#        principal: el menú) -> level-* (cada nivel jugándose) -> gut (si existe).
 # Falla si un paso sale con código != 0 o si su salida contiene ERROR/WARNING:
 # Godot suele salir con 0 aunque haya errores de script o de shader.
 set -uo pipefail
@@ -10,6 +10,8 @@ set -uo pipefail
 PROJECT_DIR="${1:-$(dirname "$0")/..}"
 STEP_TIMEOUT="${STEP_TIMEOUT:-300}"   # segundos máximos por paso
 SMOKE_FRAMES="${SMOKE_FRAMES:-600}"   # frames del smoke test
+# Niveles que se arrancan tras el menú (la escena principal ya no entra en partida sola).
+LEVEL_SCENES="${LEVEL_SCENES:-res://levels/brosque/brosque.tscn res://levels/test_gym/test_gym.tscn}"
 CHECK_SCRIPT="res://tools/ci/check_project.gd"
 
 # Líneas que hacen fallar un paso (se buscan tras quitar colores ANSI y \r).
@@ -83,6 +85,10 @@ else
   FAILED+=(project)
 fi
 run_step smoke "$STRICT_PATTERN" --quit-after "$SMOKE_FRAMES" -d --ignore-error-breaks
+for scene in $LEVEL_SCENES; do
+  level_name="$(basename "$scene" .tscn)"
+  run_step "level-$level_name" "$STRICT_PATTERN" "$scene" --quit-after "$SMOKE_FRAMES" -d --ignore-error-breaks
+done
 if [[ -d "$PROJECT_DIR/addons/gut" ]]; then
   if [[ ! -f "$PROJECT_DIR/.gutconfig.json" ]]; then
     echo "==> gut      FAIL (addons/gut existe pero falta .gutconfig.json)"

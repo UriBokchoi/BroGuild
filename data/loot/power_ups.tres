@@ -1,0 +1,37 @@
+[gd_resource type="Resource" script_class="WeightedTable" format=3]
+
+[ext_resource type="Script" path="res://core/weighted_table.gd" id="1_table"]
+[ext_resource type="Script" path="res://core/weighted_entry.gd" id="2_entry"]
+[ext_resource type="Script" path="res://systems/progression/bonus_drop.gd" id="3_bonus"]
+[ext_resource type="Resource" path="res://data/pickups/magnet.tres" id="4_magnet"]
+[ext_resource type="Resource" path="res://data/pickups/food.tres" id="5_food"]
+[ext_resource type="Resource" path="res://data/pickups/bomb.tres" id="6_bomb"]
+[ext_resource type="Resource" path="res://data/pickups/energy_drink.tres" id="7_energy"]
+
+[sub_resource type="Resource" id="Drop_magnet"]
+script = ExtResource("3_bonus")
+weight = 3.0
+pickup = ExtResource("4_magnet")
+amount = 1.0
+
+[sub_resource type="Resource" id="Drop_food"]
+script = ExtResource("3_bonus")
+weight = 4.0
+pickup = ExtResource("5_food")
+amount = 0.25
+
+[sub_resource type="Resource" id="Drop_bomb"]
+script = ExtResource("3_bonus")
+weight = 2.0
+pickup = ExtResource("6_bomb")
+amount = 1.0
+
+[sub_resource type="Resource" id="Drop_energy"]
+script = ExtResource("3_bonus")
+weight = 3.0
+pickup = ExtResource("7_energy")
+amount = 10.0
+
+[resource]
+script = ExtResource("1_table")
+entries = Array[ExtResource("2_entry")]([SubResource("Drop_magnet"), SubResource("Drop_food"), SubResource("Drop_bomb"), SubResource("Drop_energy")])

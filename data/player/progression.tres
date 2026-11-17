@@ -7,5 +7,6 @@ script = ExtResource("1_jatqs")
 xp_gain = 100.0
 currency_gain = 100.0
 pickup_range = 3.0
+drop_chance = 0.5
 weapon_slots = 2
 rune_slots = 2

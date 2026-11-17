@@ -1,7 +1,7 @@
 extends GutTest
-## WaveData: enemigos por segundo según la curva, con picos al final de cada intervalo, y elección
-## de enemigo por pesos solo entre los ya disponibles, multiplicadores de stats según el minuto y
-## final de la ronda.
+## WaveData (curvas según la dificultad): enemigos por segundo según la curva, con picos del reloj
+## al final de cada intervalo; elección de enemigo por pesos solo entre los ya disponibles;
+## multiplicadores de stats según la dificultad, y final de la ronda.
 
 var _data: WaveData
 var _early: EnemyData
@@ -28,27 +28,27 @@ func before_each() -> void:
 	_rng.seed = 7
 
 
-func test_rate_follows_the_curve_in_minutes() -> void:
-	assert_almost_eq(_data.rate_at(0.0), 1.0, 0.01)
-	assert_almost_eq(_data.rate_at(5.0 * 60.0 + 20.0), 6.33, 0.05, "a los 5 min 20 s")
+func test_rate_follows_the_curve_by_difficulty() -> void:
+	assert_almost_eq(_data.rate_at(0.0, 0.0), 1.0, 0.01)
+	assert_almost_eq(_data.rate_at(5.0 + 20.0 / 60.0, 320.0), 6.33, 0.05, "con dificultad 5,33")
 
 
 func test_peaks_at_the_end_of_each_interval() -> void:
 	assert_false(_data.is_peak(30.0))
 	assert_true(_data.is_peak(55.0))
 	assert_false(_data.is_peak(61.0), "empieza otro intervalo")
-	assert_almost_eq(_data.rate_at(55.0), _data.spawn_rate.sample(55.0 / 60.0) * 3.0, 0.001)
+	assert_almost_eq(_data.rate_at(2.0, 55.0), _data.spawn_rate.sample(2.0) * 3.0, 0.001, "el pico va por el reloj")
 
 
 func test_only_available_enemies_are_picked() -> void:
 	for _pick: int in 50:
-		assert_same(_data.pick_enemy(60.0, _rng), _early, "el tardío sale desde el minuto 5")
+		assert_same(_data.pick_enemy(1.0, _rng), _early, "el tardío sale desde la dificultad 5")
 
 
 func test_weights_decide_how_often() -> void:
 	var late := 0
 	for _pick: int in 2000:
-		if _data.pick_enemy(600.0, _rng) == _late:
+		if _data.pick_enemy(10.0, _rng) == _late:
 			late += 1
 	assert_between(late, 1350, 1650, "≈ 3 de cada 4")
 
@@ -60,7 +60,7 @@ func test_nothing_to_pick_gives_null() -> void:
 
 func test_scaling_multiplies_each_stat_by_its_curve() -> void:
 	_data.stat_scaling = [_scaling(&"max_health", 2.0, 6.0), _scaling(&"damage", 1.0, 3.0)]
-	var modifiers := _data.scaling_at(5.0 * 60.0)
+	var modifiers := _data.scaling_at(5.0)
 	assert_eq(modifiers.stat_modifiers.size(), 2)
 	var health := modifiers.stat_modifiers[0]
 	assert_eq(health.stat, &"max_health")
@@ -70,7 +70,7 @@ func test_scaling_multiplies_each_stat_by_its_curve() -> void:
 
 
 func test_no_scaling_gives_null() -> void:
-	assert_null(_data.scaling_at(300.0))
+	assert_null(_data.scaling_at(5.0))
 
 
 func test_overtime_after_the_round() -> void:
@@ -80,7 +80,7 @@ func test_overtime_after_the_round() -> void:
 	assert_true(_data.is_overtime(600.0))
 
 
-## De [param from] en el minuto 0 a [param to] en el 10, en línea recta.
+## De [param from] con dificultad 0 a [param to] con dificultad 10, en línea recta.
 func _scaling(stat: StringName, from: float, to: float) -> StatScaling:
 	var curve := Curve.new()
 	curve.max_value = 100.0
@@ -94,9 +94,9 @@ func _scaling(stat: StringName, from: float, to: float) -> StatScaling:
 	return scaling
 
 
-func _entry(enemy: EnemyData, weight: float, from_minute: float) -> WaveEnemy:
+func _entry(enemy: EnemyData, weight: float, from_difficulty: float) -> WaveEnemy:
 	var entry := WaveEnemy.new()
 	entry.enemy = enemy
 	entry.weight = weight
-	entry.from_minute = from_minute
+	entry.from_difficulty = from_difficulty
 	return entry

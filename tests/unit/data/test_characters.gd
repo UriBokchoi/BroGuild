@@ -62,3 +62,15 @@ func test_every_piece_goes_to_an_existing_socket() -> void:
 		for attachment: ModelAttachment in character.attachments:
 			assert_not_null(attachment.scene, "%s: pieza sin escena" % label)
 			assert_true(model.sockets.has_node(NodePath(String(attachment.socket))), "%s: no hay punto «%s»" % [label, attachment.socket])
+
+
+func test_each_character_regenerates_a_little_its_own_way() -> void:
+	var regens: Array[float] = []
+	for character: CharacterData in _characters:
+		var regen := 0.0
+		for modifier: StatModifier in character.stat_modifiers:
+			if modifier.stat == &"health_regen":
+				regen += modifier.value
+		assert_between(regen, 0.1, 2.0, "%s: un poco de regeneración" % character.resource_path.get_file())
+		assert_does_not_have(regens, regen, "cada uno la suya")
+		regens.append(regen)

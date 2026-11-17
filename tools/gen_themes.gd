@@ -14,6 +14,7 @@ const SLATE_HOVER := Color("394152")
 const MODIFIED := Color("7cc7ff")
 const HEALTH := Color("c94a4a")
 const EXPERIENCE := Color("4fb6ff")
+const DIFFICULTY := Color("e0806e")
 const TOGGLE_ON := preload("res://assets/textures/icons/ui/toggle_on.svg")
 const TOGGLE_OFF := preload("res://assets/textures/icons/ui/toggle_off.svg")
 
@@ -172,6 +173,12 @@ func _add_hud(theme: Theme) -> void:
 	# Reloj de la ronda, arriba en el centro; en rojo pasada la ronda.
 	_label_variation(theme, &"ClockLabel", 28, INK)
 	_label_variation(theme, &"ClockLabelOvertime", 28, HEALTH)
+	# Dificultad, arriba a la derecha: una calavera y su valor.
+	_label_variation(theme, &"DifficultyLabel", 22, DIFFICULTY)
+	_add_slots(theme)
+	# Bienvenida al nivel, en el centro: el título y unas líneas.
+	_label_variation(theme, &"IntroTitleLabel", 56, GOLD)
+	_label_variation(theme, &"IntroLineLabel", 26, INK)
 	_add_loadout(theme)
 
 
@@ -256,3 +263,14 @@ func _box(color: Color, radius: int, margin: Vector2, border: Color, width: int,
 	box.border_width_top = width
 	box.border_width_bottom = bottom
 	return box
+
+
+## Tragaperras en el HUD: un panel con los rodillos (cajas oscuras con borde dorado) y el resultado
+## debajo; el jackpot, más grande y en dorado.
+func _add_slots(theme: Theme) -> void:
+	theme.set_type_variation(&"SlotPanel", &"PanelContainer")
+	theme.set_stylebox(&"panel", &"SlotPanel", _box(Color(SLATE, 0.9), 12, Vector2(14, 10), Color(GOLD, 0.6), 2, 3))
+	theme.set_type_variation(&"SlotReel", &"PanelContainer")
+	theme.set_stylebox(&"panel", &"SlotReel", _box(SLATE_LIGHT, 8, Vector2(6, 6), GOLD_DARK, 2, 2))
+	_label_variation(theme, &"SlotResultLabel", 22, INK)
+	_label_variation(theme, &"SlotJackpotLabel", 32, GOLD)

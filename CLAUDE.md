@@ -32,7 +32,7 @@ Ejecutable de consola de Godot 4.7.2 en esta máquina (Git Bash):
 - Comprobar scripts (con warnings), escenas, recursos y shaders: `"$G" --headless --path . -s res://tools/ci/check_project.gd -d --ignore-error-breaks`
 - Regenerar los temas (`ui/theme/main_theme.tres` y el de depuración; no se editan a mano): `"$G" --headless --path . -s res://tools/gen_themes.gd`
 - Prueba de estrés (con ventana, sin `--headless`; mide 300 y 500 enemigos, escribe líneas `ESTRÉS …` y sale): `"$G" --path . res://levels/stress/stress_test.tscn`. Se repite al cerrar cada hito y el resultado se apunta en `docs/DECISIONES.md`.
-- Smoke test (arranca la escena principal y sale): `"$G" --headless --path . --quit-after 600 -d --ignore-error-breaks`
+- Smoke test (arranca la escena principal, el menú, y sale): `"$G" --headless --path . --quit-after 600 -d --ignore-error-breaks`. `validate.sh` además arranca cada nivel (`LEVEL_SCENES`: el Brosque y el gimnasio).
 - Tests (GUT 9.7.1, configuración en `.gutconfig.json`): `"$G" --headless --path . -s res://addons/gut/gut_cmdln.gd -gconfig=res://.gutconfig.json`. GUT sale con 0 si un test no compila (se lo salta): fíate de `validate.sh`, no solo de esto.
 
 Comprobado en 4.7.2 (detalle en `docs/DECISIONES.md`):

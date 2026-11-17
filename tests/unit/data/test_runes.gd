@@ -1,12 +1,12 @@
 extends GutTest
 ## Runas de data/runes: están las cinco iniciales, cada una con id único, nombre y descripción
-## traducidos, icono, entre 1 y 5 niveles y modificadores sobre stats que el jugador tiene.
+## traducidos, icono, nivel máximo 20 y stats que mejorar que el jugador tiene.
 
 const RUNES_DIR := "res://data/runes"
 const STRINGS_PATH := "res://data/i18n/strings.csv"
 const PlayerScene := preload("res://entities/player/player.tscn")
 ## Nivel máximo de partida de las runas (GDD §6).
-const MAX_LEVEL := 5
+const MAX_LEVEL := 20
 
 var _keys := PackedStringArray()
 var _runes: Array[RuneData] = []
@@ -39,11 +39,11 @@ func test_ids_are_unique_and_texts_translated() -> void:
 		assert_not_null(rune.icon, "%s: sin icono" % rune.id)
 
 
-func test_levels_change_player_stats() -> void:
+func test_upgrades_touch_player_stats_up_to_level_20() -> void:
 	var player := PlayerScene.instantiate() as Player
 	add_child_autofree(player)
 	for rune: RuneData in _runes:
-		assert_between(rune.max_level(), 1, MAX_LEVEL, "%s: nivel máximo" % rune.id)
-		for level_set: StatModifierSet in rune.levels:
-			for modifier: StatModifier in level_set.stat_modifiers:
-				assert_true(player.stats.has_stat(modifier.stat), "%s: «%s» no es una stat" % [rune.id, modifier.stat])
+		assert_eq(rune.max_level(), MAX_LEVEL, "%s: nivel máximo" % rune.id)
+		assert_false(rune.upgrade_stats.is_empty(), "%s: sin stats que mejorar" % rune.id)
+		for upgrade_stat: UpgradeStat in rune.upgrade_stats:
+			assert_true(player.stats.has_stat(upgrade_stat.stat), "%s: «%s» no es una stat" % [rune.id, upgrade_stat.stat])

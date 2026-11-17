@@ -10,6 +10,12 @@ extends Node
 signal run_started(run_seed: int)
 ## La partida en curso ha terminado.
 signal run_ended
+## Empieza un nivel: sus mensajes de bienvenida (claves de traducción; el primero, el grande).
+signal level_intro(text_keys: Array[StringName])
+## Se pide reintentar la partida (pausa, resultados): lo atiende [Game]. Ver [RunFlow].
+signal retry_requested
+## Se pide volver al menú principal (pausa, resultados): lo atiende [Game]. Ver [RunFlow].
+signal main_menu_requested
 ## Una interfaz pide ([param wants_cursor] = true) o suelta el cursor del ratón. Mientras alguna
 ## lo pida, el ratón no se captura (lo gestiona MouseCapture).
 signal cursor_requested(requester: Object, wants_cursor: bool)
@@ -24,8 +30,15 @@ signal player_died
 signal enemy_damaged(position: Vector3, amount: float, info: DamageInfo)
 ## Cambió lo que el jugador puede hacer con «interactuar» (clave de traducción; vacía = nada).
 signal interaction_prompt_changed(prompt_key: StringName)
+## Una tragaperras empezó a girar: sus datos (símbolos y ritmo) y lo que va a salir en cada rodillo.
+signal slot_spun(data: SlotMachineData, results: Array[SlotSymbol])
+## Una tragaperras dio su resultado (o no se pudo pagar): el texto (clave; si lleva [code]%d[/code],
+## [param value]) y si fue jackpot.
+signal slot_resolved(text_key: StringName, value: float, jackpot: bool)
 ## Murió [param enemy] (aún en su sitio, con su tipo y sus stats): botín, experiencia, Archivo…
 signal enemy_died(enemy: Enemy)
+## El jugador rompió un rompible (calavera, bolsita…) de [param data] en [param at].
+signal breakable_broken(data: BreakableData, at: Vector3)
 ## Se recogió un recogible que da [param reward] (p. ej. [code]experience[/code]) por [param amount].
 signal pickup_collected(reward: StringName, amount: float)
 ## Cambió la experiencia del jugador ([param current] de [param needed]) o su nivel.
@@ -34,6 +47,8 @@ signal player_xp_changed(current: float, needed: float, level: int)
 signal player_leveled_up(level: int)
 ## Cambió el oro del jugador.
 signal player_gold_changed(gold: float)
+## Cambió la dificultad (la stat [code]difficulty[/code] del jugador; sube con el tiempo y con objetos).
+signal difficulty_changed(difficulty: float)
 ## Cambió el nivel de un arma o runa del jugador: al conseguirla (1), al subirla y al perderla (0).
 signal player_item_changed(item: ItemData, level: int)
 ## Cambiaron las ranuras abiertas del jugador (sin limitar a las que hay: eso lo hace [LevelUpData]).

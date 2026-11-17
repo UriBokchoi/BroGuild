@@ -1,0 +1,104 @@
+[gd_resource type="Resource" script_class="SlotMachineData" format=3]
+
+[ext_resource type="Script" path="res://entities/interactables/slot_machine/slot_machine_data.gd" id="1_data"]
+[ext_resource type="Script" path="res://core/weighted_table.gd" id="2_table"]
+[ext_resource type="Script" path="res://core/weighted_entry.gd" id="3_entry"]
+[ext_resource type="Script" path="res://entities/interactables/slot_machine/slot_symbol.gd" id="4_symbol"]
+[ext_resource type="Script" path="res://entities/interactables/slot_machine/slot_outcome.gd" id="5_outcome"]
+[ext_resource type="Texture2D" path="res://assets/textures/icons/slots/coin.svg" id="6_coin"]
+[ext_resource type="Texture2D" path="res://assets/textures/icons/slots/heart.svg" id="7_heart"]
+[ext_resource type="Texture2D" path="res://assets/textures/icons/slots/star.svg" id="8_star"]
+[ext_resource type="Texture2D" path="res://assets/textures/icons/ui/difficulty.svg" id="9_skull"]
+
+[sub_resource type="Resource" id="Gold_pair"]
+script = ExtResource("5_outcome")
+reward = &"gold"
+amount = 2.0
+scale_with_cost = true
+text_key = &"SLOT_WIN_GOLD"
+
+[sub_resource type="Resource" id="Gold_jackpot"]
+script = ExtResource("5_outcome")
+reward = &"gold"
+amount = 10.0
+scale_with_cost = true
+text_key = &"SLOT_JACKPOT_GOLD"
+
+[sub_resource type="Resource" id="Heal_pair"]
+script = ExtResource("5_outcome")
+reward = &"heal"
+amount = 0.3
+text_key = &"SLOT_WIN_HEAL"
+
+[sub_resource type="Resource" id="Heal_jackpot"]
+script = ExtResource("5_outcome")
+reward = &"heal"
+amount = 1.0
+text_key = &"SLOT_JACKPOT_HEAL"
+
+[sub_resource type="Resource" id="Upgrade_pair"]
+script = ExtResource("5_outcome")
+reward = &"upgrade"
+amount = 1.0
+text_key = &"SLOT_WIN_UPGRADE"
+
+[sub_resource type="Resource" id="Upgrade_jackpot"]
+script = ExtResource("5_outcome")
+reward = &"upgrade"
+amount = 3.0
+text_key = &"SLOT_JACKPOT_UPGRADE"
+
+[sub_resource type="Resource" id="Curse_pair"]
+script = ExtResource("5_outcome")
+reward = &"frailty"
+amount = 60.0
+text_key = &"SLOT_CURSE_FRAILTY"
+
+[sub_resource type="Resource" id="Curse_jackpot"]
+script = ExtResource("5_outcome")
+reward = &"elite_wave"
+amount = 5.0
+text_key = &"SLOT_CURSE_ELITES"
+
+[sub_resource type="Resource" id="Symbol_coin"]
+script = ExtResource("4_symbol")
+weight = 4.0
+icon = ExtResource("6_coin")
+pair = SubResource("Gold_pair")
+jackpot = SubResource("Gold_jackpot")
+
+[sub_resource type="Resource" id="Symbol_heart"]
+script = ExtResource("4_symbol")
+weight = 3.0
+icon = ExtResource("7_heart")
+pair = SubResource("Heal_pair")
+jackpot = SubResource("Heal_jackpot")
+
+[sub_resource type="Resource" id="Symbol_star"]
+script = ExtResource("4_symbol")
+weight = 2.0
+icon = ExtResource("8_star")
+pair = SubResource("Upgrade_pair")
+jackpot = SubResource("Upgrade_jackpot")
+
+[sub_resource type="Resource" id="Symbol_skull"]
+script = ExtResource("4_symbol")
+weight = 3.0
+icon = ExtResource("9_skull")
+pair = SubResource("Curse_pair")
+jackpot = SubResource("Curse_jackpot")
+
+[sub_resource type="Resource" id="Table_symbols"]
+script = ExtResource("2_table")
+entries = Array[ExtResource("3_entry")]([SubResource("Symbol_coin"), SubResource("Symbol_heart"), SubResource("Symbol_star"), SubResource("Symbol_skull")])
+
+[resource]
+script = ExtResource("1_data")
+symbols = SubResource("Table_symbols")
+reels = 3
+max_uses = 5
+base_cost = 15.0
+cost_per_difficulty = 5.0
+cost_growth = 1.5
+spin_time = 1.0
+reel_delay = 0.45

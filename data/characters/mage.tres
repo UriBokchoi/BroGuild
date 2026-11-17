@@ -42,9 +42,14 @@ scene = ExtResource("7_hat")
 socket = &"Head"
 transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 0, 0, 0)
 
+[sub_resource type="Resource" id="Resource_regen"]
+script = ExtResource("2_modifier")
+stat = &"health_regen"
+value = 0.4
+
 [resource]
 script = ExtResource("1_data")
-stat_modifiers = Array[ExtResource("2_modifier")]([SubResource("Resource_health"), SubResource("Resource_area"), SubResource("Resource_xp"), SubResource("Resource_glide")])
+stat_modifiers = Array[ExtResource("2_modifier")]([SubResource("Resource_health"), SubResource("Resource_area"), SubResource("Resource_xp"), SubResource("Resource_glide"), SubResource("Resource_regen")])
 name_key = &"CHARACTER_MAGE_NAME"
 description_key = &"CHARACTER_MAGE_DESCRIPTION"
 color = Color(0.58, 0.42, 1, 1)

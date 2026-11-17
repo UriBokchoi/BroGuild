@@ -4,6 +4,7 @@
 [ext_resource type="Script" path="res://core/stats/stat_modifier_set.gd" id="2_set"]
 [ext_resource type="Script" path="res://core/stats/stat_modifier.gd" id="3_modifier"]
 [ext_resource type="Material" path="res://entities/enemies/elite/elite_glow.tres" id="4_glow"]
+[ext_resource type="Resource" path="res://data/loot/power_ups.tres" id="20_drops"]
 
 [sub_resource type="Resource" id="Resource_health"]
 script = ExtResource("3_modifier")
@@ -50,3 +51,5 @@ script = ExtResource("1_data")
 stat_modifiers = SubResource("Resource_set")
 size = 1.6
 overlay = ExtResource("4_glow")
+drop_chance_multiplier = 8.0
+drop_table = ExtResource("20_drops")

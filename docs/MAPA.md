@@ -20,14 +20,14 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 
 | Carpeta | Qué va ahí |
 |---|---|
-| `autoload/` | Los únicos singletons: `EventBus` (solo señales), `Rng` (todo el azar, un generador por sistema), `RunState` (partida en curso) y `Save` (lo que dura entre partidas, en `user://`; de momento, las opciones). Sin lógica de gameplay. |
-| `core/` | Piezas genéricas que no saben de este juego: stats, máquina de estados, componentes de combate, pool (`NodePool`), rejilla espacial (`SpatialHash`, con marcas y tope de resultados), carga de carpetas de datos (`ResourceDir`), nombres de acciones y capas. |
-| `entities/` | Lo que existe en el mundo: el jugador, los enemigos y los interactuables. |
+| `autoload/` | Los únicos singletons: `EventBus` (solo señales), `Rng` (todo el azar, un generador por sistema), `RunState` (partida en curso: personaje, nivel y semilla) y `Save` (lo que dura entre partidas, en `user://`; de momento, las opciones). Sin lógica de gameplay. |
+| `core/` | Piezas genéricas que no saben de este juego: stats, máquina de estados, componentes de combate, pool (`NodePool`), rejilla espacial (`SpatialHash`, con marcas y tope de resultados), carga de carpetas de datos (`ResourceDir`), tabla ponderada (`WeightedTable` de `WeightedEntry`: cada uso hereda su entrada), nombres de acciones y capas. |
+| `entities/` | Lo que existe en el mundo: el jugador, los enemigos, los interactuables y los rompibles. |
 | `systems/` | Reglas y sistemas que reparten trabajo entre entidades: combate (fórmulas y armas), progresión, aparición de enemigos, objetos y runas (`upgrades/`), la partida (`run/`) y las opciones (`settings/`). Vacía, para más adelante: `gamble/`. |
 | `data/` | Los `.tres` de balance y la traducción. Nada de código. |
 | `ui/` | HUD, menús, panel de depuración, vista de stats, tema global y dueño del ratón. |
 | `vfx/` | Efectos visuales: juice que reacciona a señales, shaders compartidos y líneas de velocidad. |
-| `levels/` | Escenas jugables: el gimnasio de pruebas con su zona de combate y la prueba de estrés. |
+| `levels/` | Escenas jugables: `common/` (`RunSystems`, los sistemas de partida que usa cada nivel, y `layout/`, los mapas generados: `LevelLayout`, `LayoutData`, `LayoutPiece`, `ForestBuilder`, `ForestData`), el Brosque (`brosque/`), el gimnasio de pruebas con su zona de combate y la prueba de estrés. |
 | `tools/` | Validación por terminal (`validate.sh`, `ci/`) y generadores (`gen_themes.gd`). |
 | `tests/` | GUT: `unit/` y `integration/`, con la misma ruta que el código. `hooks/` es el script de fin de ejecución. |
 | `docs/` | GDD, ROADMAP, DECISIONES y este mapa. |
@@ -53,7 +53,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 | Subcarpeta o nodo | Para qué |
 |---|---|
 | `movement/` | `MovementContext` (estado compartido entre estados), `MovementData` (sus stats), `WallSensor` y `LedgeSensor` (rayos que solo miran el mundo) y `states/`: suelo, aire, salto, doble salto, dash, dash-jump, slide, slide-jump, salto en pared, caída rápida y mantle. Base común: `MovementState`. |
-| `feedback/` | Lo que el cuerpo muestra: `BodyCrouch` (agacha el modelo y baja la hurtbox en el slide), `BodyFacing` (gira el modelo), `DashJumpCue` (aro de la ventana del dash-jump) y `SpeedTrail` (estela). |
+| `feedback/` | Lo que el cuerpo muestra: `BodyCrouch` (agacha el modelo y baja la hurtbox en el slide), `BodyFlip` (mortal hacia delante en el doble salto si el personaje lo tiene, `CharacterData.air_jump_flip`), `BodyFacing` (gira el modelo), `DashJumpCue` (aro de la ventana del dash-jump) y `SpeedTrail` (estela). |
 | `stamina/` | Cargas de stamina: `StaminaPool` (lógica pura), `StaminaComponent` (nodo que recarga y avisa por EventBus) y `StaminaData`. |
 | `camera/` | `CameraRig` (tercera persona, se mueve en `_process` siguiendo la posición interpolada) y `CameraData`. |
 | `characters/` | `CharacterData`: las diferencias de un personaje sobre las stats básicas (su base), su color, su arma inicial, su pasiva y las piezas de su modelo. `model/`: `CharacterModel` (cuerpo que toma el color del personaje y puntos de anclaje: manos, cabeza y espalda; lo usan el jugador y los pedestales) y `ModelAttachment` (qué pieza, en qué punto y cómo colocada). `passives/`: `CharacterPassive` (base: un nodo que el jugador añade al elegir el personaje; sus modificadores se van con él) y las de los iniciales: `EndurancePassive` (Aguante, Guerrero), `ArcaneEchoPassive` (Eco arcano, Mago) y `LethalPassive` (Letal, Pícaro), cada una con su escena y sus números. |
@@ -69,7 +69,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
   - Cada golpe es un `DamageInfo`.
 - **`HealthComponent`:** muere una sola vez, puede ser inmortal (el muñeco) y `reset()` la rellena (enemigos reutilizados). Solo se procesa si regenera.
 - **Armas** (`systems/combat/weapons/`):
-  - `WeaponData` lleva el `.tres` del arma con sus `WeaponStats` y un conjunto de mejoras por nivel.
+  - `WeaponData` lleva el `.tres` del arma con sus `WeaponStats` de nivel 1; sus mejoras por nivel son tiradas (ver «Objetos y runas»). `Weapon` guarda las que lleva (`add_upgrade`, `get_upgrades`); `set_level` sube con la mejora estándar o quita las últimas (la armería).
   - `Weapon` es la base: ataca sola por cadencia al más cercano desde `aim_height` y combina sus stats con las del personaje (si las tiene: un enemigo no). `disarm()` la para y retira lo que tenga en juego; `rearm(espera)` la vuelve a poner en marcha. Sin objetivo, busca cada `search_interval`.
   - `TargetFinder` hace una consulta de física y apunta al centro de la hurtbox.
   - `WeaponInventory` es el nodo que crea y quita armas: lo lleva el jugador y lo crea el enemigo que tiene armas.
@@ -96,8 +96,8 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
   - Cada enemigo recalcula su rumbo cada `steering_slices` ticks; la física lo mueve en todos.
   - Tiene el `ProjectilePool` de los enemigos (`projectile_limit` en vuelo a la vez); `clear()` retira enemigos y proyectiles.
 - **Oleadas:**
-  - `WaveData` (en `data/waves/`) es la dificultad de una ronda: curva de enemigos por segundo según los minutos, picos, máximo a la vez, distancias de aparición, `WaveEnemy` con pesos y minuto de entrada, probabilidad de élite por minuto, duración de la ronda (`round_minutes`) y escalado (`StatScaling`: una stat de enemigo o de arma y su curva de multiplicador por minuto). `data/waves/test_gym.tres` es la ronda normal.
-  - `WaveDirector` (en el nivel) los saca alrededor del jugador, en el suelo (un rayo por intento), con el escalado de su minuto (`boost`) y, a veces, élites. Es el reloj de la ronda: avisa cada segundo por `run_clock_changed`.
+  - `WaveData` (en `data/waves/`) es una ronda: curva de enemigos por segundo según la **dificultad** (la stat `difficulty` del jugador, que sube 1 por minuto y con objetos; sin bonus, dificultad = minutos), picos, máximo a la vez, distancias de aparición, `WaveEnemy` con pesos y dificultad de entrada, probabilidad de élite según la dificultad, duración de la ronda (`round_minutes`) y escalado (`StatScaling`: una stat de enemigo o de arma y su curva de multiplicador según la dificultad). `data/waves/test_gym.tres` y `brosque.tres` son la ronda normal.
+  - `WaveDirector` (en `RunSystems`) los saca alrededor del jugador, en el suelo (un rayo por intento), con el escalado de la dificultad de ese momento (`boost`) y, a veces, élites. Lleva la parte del tiempo de la dificultad: un modificador +1 por minuto en la stat `difficulty` de `difficulty_stats` (el jugador), que quita al parar. Es el reloj de la ronda: avisa cada segundo por `run_clock_changed`.
 - **`DamageReporter`** avisa de cada golpe con la posición de la cabeza (para los números).
 - **Tipos y escenas actuales:**
   - `swarmer/`: el esbirro, rápido y frágil, ataca al tocar;
@@ -111,17 +111,24 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
   - `armory/`: la armería de práctica (armas y runas);
   - `summoner/`: el invocador de enemigos de práctica (uno por tipo, y uno de élites; su cartel muestra el nombre del enemigo);
   - `character_pedestal/`: pedestal con el modelo vestido de un personaje; al interactuar, el jugador pasa a ser él (hasta la selección de personaje del Hito 3);
+  - `slot_machine/`: tragaperras (`SlotMachine`). Aguanta `max_uses` tiradas (5) y revienta. Con «interactuar» cobra su coste (`SlotMachineData`: `base_cost` + `cost_per_difficulty` × dificultad, ×`cost_growth` por cada uso de esa máquina), saca un símbolo por rodillo de su `WeightedTable` de `SlotSymbol` y avisa por `slot_spun`. Al parar, da el premio del trío o de la pareja (`SlotOutcome`: una recompensa por `pickup_collected`, como un recogible) y lo anuncia por `slot_resolved`. No pausa. Datos en `data/slots/`;
   - `wave_bell/`: la campana que arranca y para el director de oleadas.
 
 ### Objetos y runas — `systems/upgrades/`
-- **`ItemData`** es la base de lo que el jugador lleva y sube de nivel: armas (`WeaponData`) y runas (`RuneData`). Lleva id, nombre, descripción, `max_level()`, `kind_key()` (arma o runa) y `level_modifiers(level)` (lo que mejora cada nivel). La usan la armería y la elección al subir de nivel, y la usará el Archivo.
+- **`ItemData`** es la base de lo que el jugador lleva y sube de nivel: armas (`WeaponData`) y runas (`RuneData`). Lleva id, nombre, descripción, icono, `kind_key()` (arma o runa), su nivel máximo (`level_cap`: 10 las armas y 20 las runas) y las stats que pueden mejorar sus subidas (`upgrade_stats`: `UpgradeStat`, stat, tipo y mejora de una carta común; los enteros se redondean y los multiplicadores escalan lo que se alejan de 1).
+- **Mejoras con rareza:** cada subida de nivel es una `ItemUpgrade` (un `StatModifierSet` con su `Rarity`) tirada con `ItemData.roll_upgrade`. La `Rarity` (`data/rarities/`, en la tabla `rarities.tres`: común gris, rara verde, improbable azul, de leyenda amarilla y mítica roja) decide cuánto sale (peso), cuántas stats distintas toca (`min_stats`/`max_stats`; 0 = todas) y cuánto más fuerte es (`power`). `default_upgrade()` es la estándar (todas sus stats como una común): la usan la armería, las herramientas y las runas al conseguirlas.
 - **Runas** (`runes/`):
-  - `RuneData` (en `data/runes/`) lleva un `StatModifierSet` por nivel, acumulativos, sobre las stats del jugador; el nivel máximo es cuántos haya.
-  - `RuneInventory` (en el jugador) aplica y quita esos modificadores al subir, bajar o quitar una runa.
+  - `RuneData` (en `data/runes/`): al conseguirla da su mejora estándar y cada subida, una tirada.
+  - `RuneInventory` (en el jugador) guarda las mejoras de cada runa (`add`, `upgrade`, `set_level`, `remove`) y aplica o quita sus modificadores; su nivel es cuántas lleva.
 - **Subir de nivel** (`level_up/`):
-  - `LevelUpData` (`data/progression/level_up.tres`): número de opciones, ranuras de armas y de runas que hay (4 y 4) y carpetas de las que salen. Cuántas están abiertas lo dicen las stats del jugador `weapon_slots` y `rune_slots` (2 y 2 al empezar; desbloquear una es un modificador +1).
-  - `LevelUpOffer` (lógica pura, con el azar inyectado) elige las opciones: subir lo que lleva sin pasar del máximo, o algo nuevo si queda ranura abierta de su tipo.
+  - `LevelUpData` (`data/progression/level_up.tres`): número de opciones, tabla de rarezas, ranuras de armas y de runas que hay (4 y 4) y carpetas de las que salen. Cuántas están abiertas lo dicen las stats del jugador `weapon_slots` y `rune_slots` (2 y 2 al empezar; desbloquear una es un modificador +1).
+  - `LevelUpOffer` (lógica pura, con el azar inyectado) elige las opciones: subir lo que lleva sin pasar del máximo (con una mejora tirada con rareza), o algo nuevo si queda ranura abierta de su tipo.
   - `LevelUpController` (en el nivel) escucha `player_leveled_up`, abre `LevelUpPanel` (pausa y cartas, en `ui/menus/level_up/`) y aplica la elegida a las armas o runas del jugador. Usa el flujo `GAMBLE` de `Rng`: la ruleta del Hito 4 irá encima.
+
+### Rompibles — `entities/breakables/`
+- **`Breakable`:** rompible del nivel (como los jarrones de Megabonk). Se rompe con «interactuar» (su `Interactable`: «Romper la calavera», «Abrir la bolsita»), una sola vez; avisa por `EventBus.breakable_broken` con su `BreakableData` (qué recogible, cuánto, en cuántos trozos y a qué distancia) y desaparece con un estallido.
+- **Los de serie:** la calavera (`skull/`, experiencia) y la bolsita (`pouch/`, oro), con sus datos en `data/breakables/`.
+- **`BreakableScatter`** (`systems/spawning/`, en el nivel): reparte al empezar las `ScatterEntry` (escena y cuántas) por un rectángulo, en sitios distintos cada partida (flujo `LOOT`). Cada uno cae sobre suelo plano o encima de una meseta, nunca dentro o encima de un árbol o un prop, y separado de los demás.
 
 ### Botín y progresión — `entities/pickups/` y `systems/progression/`
 - **Recogibles:**
@@ -130,25 +137,30 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
   - `xp_gem/`: la gema de experiencia; su color (parámetro de instancia del shader) y su tamaño salen de su nivel (`PickupTier`: azul, verde desde 5, roja desde 25, morada desde 100).
   - `gold_coin/`: la moneda de oro (de recogida automática).
 - **`PickupField`** (en el nivel): suelta recogibles en el suelo desde un pool por tipo. Cuando quien recoge está dentro de su `pickup_range` (o nada más salir, si son `auto_collect`), vuelan acelerando hacia él; al llegar, avisan por `EventBus.pickup_collected`. Todos van en un bucle y sin física. Cada `merge_interval` funde los del mismo tipo que esperan juntos (`PickupData.merge_radius` y `merge_count`) en uno con el valor sumado.
-- **`LootDropper`** (en el nivel): escucha `enemy_died` y suelta la gema con la `xp_reward` y la moneda con el `gold_reward` del enemigo. Los cofres y las probabilidades de botín irán aquí.
+- **`LootDropper`** (en `RunSystems`): al morir un enemigo, su gema (`xp_reward`) y su moneda (`gold_reward`); al romperse un rompible, su botín (`BreakableData`, más con la dificultad) en trozos alrededor. Además, a veces, un **extra** de una `WeightedTable` de `BonusDrop` (recogible, peso y valor; `data/loot/power_ups.tres`): con la probabilidad de botín del jugador (`drop_chance`, 0,5 %) por el multiplicador de quien lo suelta (×1 un enemigo normal, `EliteData.drop_chance_multiplier` ×8, `BreakableData.drop_chance_multiplier` ×12). Lee la dificultad y la probabilidad de `player_stats`. Flujo `LOOT`.
+- **Recogibles especiales** (`systems/progression/effects/`, en `RunSystems/PickupEffects`): cada uno es un `PickupData` con su recompensa y un `PickupEffect` que la escucha en `pickup_collected`: comida (`HealEffect`, cura esa parte de la vida máxima), imán (`MagnetEffect`, toda la experiencia del mapa vuela hacia ti, `PickupField.attract_all`), bomba (`BombEffect`, quita esa parte de la vida máxima a los enemigos a menos de `radius`) y bebida energética (`BuffEffect`, aplica un `StatModifierSet` —`data/pickups/energy_drink_buff.tres`— durante los segundos que vale; otra lata reinicia la cuenta, no acumula). Sus modelos giran y flotan con `SpinBob` (`vfx/juice/`). Además: mejora gratis (`UpgradeEffect`, sube un nivel a un arma o runa que no esté al máximo, al azar, por cada punto), maldición de fragilidad (`BuffEffect` con `data/slots/frailty_curse.tres`, −20 % de vida máxima) y oleada de élites (`EliteWaveEffect`, `WaveDirector.spawn_elites`); los usan las tragaperras.
 - **`ExperienceComponent`** (en el jugador): suma la experiencia recogida × `xp_gain` y sube de nivel con la curva de `ExperienceData` (`data/progression/experience.tres`). El jugador aleja la cámara con el nivel.
 - **`WalletComponent`** (en el jugador): el oro de la partida (antes «fichas» en el GDD). Suma el recogido × `currency_gain` y lo gasta con `spend()`.
-- **Stats de progresión:** `ProgressionData` (experiencia y oro ganados, suerte, radio de recogida y ranuras abiertas de armas y runas).
+- **Stats de progresión:** `ProgressionData` (experiencia y oro ganados, suerte, radio de recogida, dificultad, probabilidad de botín y ranuras abiertas de armas y runas).
 
 ### Juice y efectos — `vfx/`
 - **`juice/`**, efectos que solo escuchan señales:
   - `damage_numbers/`: números de daño con pool y estilo en `data/vfx/damage_numbers.tres`;
-  - `hit_wobble.gd`: bamboleo al recibir golpes.
+  - `hit_wobble.gd`: bamboleo al recibir golpes;
+  - `slow_motion.gd` (`SlowMotion`, en `RunSystems`): cámara lenta en el jackpot de la tragaperras (`slot_resolved`), en segundos reales;
+  - `spin_bob.gd` (`SpinBob`): giro y balanceo de los recogibles especiales (pocos; los que salen a cientos lo hacen en su shader).
 - **`speed_lines/`:** líneas de velocidad en pantalla.
 - **`shaders/`:** shaders compartidos: desenfoque de los menús y rejilla del greybox.
 - **Shaders propios de una feature:** van con ella (tajo de la espada, teletransporte, líneas de velocidad).
 
 ### UI — `ui/`
-- **`hud/`:** vida, stamina, experiencia y nivel (arriba), oro (`GoldCounter`) y reloj de la ronda (`RunClock`, en rojo en la prórroga) debajo, armas y runas (`LoadoutBar`: una fila de `LoadoutSlot` por tipo, con icono y nivel; las ranuras sin abrir, con candado) y aviso de interacción. Escuchan el `EventBus`.
-- **`menus/pause/`:** menú de pausa con todas las stats del jugador; «Opciones» abre el `OptionsPanel`.
+- **`hud/`:** bienvenida al nivel (`LevelIntro`, en el centro, se desvanece sola), vida, stamina, experiencia y nivel (arriba), oro (`GoldCounter`) y reloj de la ronda (`RunClock`, en rojo en la prórroga) y dificultad (`DifficultyCounter`, una calavera y su valor) debajo, armas y runas (`LoadoutBar`: una fila de `LoadoutSlot` por tipo, con icono y nivel; las ranuras sin abrir, con candado) tragaperras (`SlotPanel`, abajo en el centro: rodillos que paran uno tras otro y el resultado) y aviso de interacción. Escuchan el `EventBus`.
+- **`menus/pause/`:** menú de pausa con todas las stats del jugador; «Opciones» abre el `OptionsPanel`; «Reintentar» y «Salir» (al menú principal) van por `RunFlow`.
+- **`menus/run_setup/`:** `RunSetup`, la selección antes de jugar: personajes a la izquierda, su modelo girando en el centro y, al pasar el ratón, su ficha a la derecha (nombre, diferencias de stats, arma principal y pasiva). Al elegir uno, la ficha se cambia por los niveles (`LevelData.is_available()`: sin escena, «próximamente» y desactivado). «Volver» o Esc retroceden. La muestra `Game` tras «Jugar».
+- **`menus/main/`:** `MainMenu`, el menú principal (Jugar, Opciones, Archivo —desactivado hasta su tarea— y Abandonar), con los personajes vestidos de fondo. Lo muestra `Game`.
 - **`menus/armory/`:** panel de la armería.
-- **`menus/level_up/`:** elección al subir de nivel (`LevelUpPanel` y sus `LevelUpCard`).
-- **`menus/options/`:** `OptionsPanel`, opciones básicas: volumen de cada bus (`SettingsData.volume_buses`, en `default_bus_layout.tres`), pantalla completa, tamaño de la ventana y VSync. Cada cambio se aplica al momento sobre `Save.settings` y se guarda al cerrar. Lo abre la pausa (y lo abrirá el menú principal).
+- **`menus/level_up/`:** elección al subir de nivel (`LevelUpPanel` y sus `LevelUpCard`; una mejora lleva el borde y el nombre del color de su rareza).
+- **`menus/options/`:** `OptionsPanel`, opciones básicas: volumen de cada bus (`SettingsData.volume_buses`, en `default_bus_layout.tres`), pantalla completa, tamaño de la ventana y VSync. El volumen se aplica al momento; lo de pantalla espera a «Aplicar» (que lo aplica y lo guarda) y «Volver» descarta lo no aplicado. Trabaja sobre `Save.settings`. Dentro del editor (pestaña «Juego») avisa de que la ventana no se puede cambiar y desactiva esas opciones. Lo abre la pausa (y lo abrirá el menú principal).
 - **`menus/results/`:** `ResultsPanel`, la pantalla de resultados al morir: una frase de muerte al azar (`death_lines`, claves `DEATH_LINE_*`), tiempo, nivel, enemigos y élites derrotados, oro y daño (del `RunRecorder`); «Reintentar» (R) recarga el nivel y «Salir» cierra el juego.
 - **`stats/`:** `StatsView`, la lista de stats de cualquier `StatsComponent` (la usan la pausa y la armería); `StatFormat`, el formato de un valor; y `ModifierFormat`, que describe un modificador («+10 % Daño»).
 - **`debug/`:** panel F3 con secciones (`DebugSection`); no se traduce.
@@ -157,17 +169,25 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 
 ### Partida — `systems/run/`
 - **`RunRecorder`** (en el nivel): escucha el `EventBus` y apunta en un `RunStats` lo que pasa en la partida: enemigos y élites derrotados, daño infligido, oro ganado (sin restar lo gastado), nivel y tiempo (el del reloj de la ronda si la hay). Para al morir el jugador.
-- **Reinicio rápido:** de momento recarga la escena (`reload_current_scene`, unos 0,2 s en el gimnasio). Con el flujo de partida del Hito 3 pasará por `RunState`.
+- **`Game`** (`game.tscn`, la escena principal): raíz del juego y flujo de pantallas. Empieza en el `MainMenu`; «Jugar» lleva a `RunSetup`, que fija `RunState.character` y el nivel (`RunState.level`) (`LevelData`: id, nombre y escena, en `data/levels/`; de serie, el Brosque) y empieza la partida con una semilla nueva. Cada pantalla sustituye a la anterior.
+- **`RunFlow`:** reintentar y volver al menú desde la pausa o los resultados. Dentro de `Game`, por el `EventBus` (`retry_requested`, `main_menu_requested`); con el nivel ejecutado solo (F6), recarga la escena o cierra el juego.
+- **Reinicio rápido:** reintentar vuelve a instanciar el nivel con otra semilla (unos 0,2 s en el gimnasio).
 
 ### Opciones — `systems/settings/` y `autoload/save.gd`
 - **`SettingsData`** (`data/settings/settings.tres`): buses con volumen, valores al estrenar el juego y tamaños de ventana que se ofrecen.
-- **`GameSettings`:** lo elegido (volúmenes, pantalla completa, tamaño de ventana, VSync). Se guarda en un `ConfigFile` (`user://settings.cfg`) y se aplica al motor (`apply_audio`, `apply_display`; sin pantalla, en headless, no toca la ventana).
+- **`GameSettings`:** lo elegido (volúmenes, pantalla completa, tamaño de ventana, VSync). Se guarda en un `ConfigFile` (`user://settings.cfg`) y se aplica al motor (`apply_audio`, `apply_display`). Sin pantalla (headless) no toca nada; incrustado en el editor (`Engine.is_embedded_in_editor()`, ver `can_change_window`) solo el VSync.
 - **`Save`** (autoload) lo carga y lo aplica al arrancar; quien lo cambia llama a `Save.save_settings()`. Los tests usan otro archivo (`settings_path`).
 
 ### Niveles — `levels/`
-- **`test_gym/test_gym.tscn`:** escena principal de pruebas. Zona de movimiento con rampas, bordes, paredes, huecos y escalones, más el pad de daño (`props/`).
+- **`common/run_systems.tscn`** (`RunSystems`): jugador, horda y oleadas, botín, subir de nivel, HUD, pausa, resultados, números de daño y panel de depuración, ya conectados. Cada nivel pone una instancia con sus oleadas (`waves`), si empiezan solas (`autostart_waves`), el personaje de serie y el punto de aparición (`spawn_point`).
+- **`brosque/brosque.tscn`:** el Brosque (`data/levels/brosque.tres`), un gimnasio en el bosque de unos 150 × 150 m rodeado de paredes invisibles (a 81 m; también para los enemigos, que solo salen dentro de `RunSystems.play_area`):
+  - claro central con el punto de aparición; al empezar, el HUD da la bienvenida (`RunSystems.intro_keys` → `EventBus.level_intro` → `LevelIntro`);
+  - piezas: mesetas con rampa (`props/plateau_low.tscn` y `plateau_high.tscn`), pesas de piedra, bancos de tronco y tragaperras;
+  - **el mapa se genera al cargar, distinto en cada partida** (`Layout`, un `LevelLayout` con `data/layouts/brosque.tres`): mesetas, pesas, bancos y una tragaperras por el suelo sin pisarse ni invadir el claro, tres tragaperras encima de mesetas y el bosque alrededor (`ForestBuilder`: árboles sueltos que esquivan las piezas, un anillo junto a las paredes que choca y una banda grande fuera que no);
+  - las oleadas empiezan solas.
+- **`test_gym/test_gym.tscn`:** escena de pruebas (usa `RunSystems`; las oleadas las empieza la campana de la zona de combate). Zona de movimiento con rampas, bordes, paredes, huecos y escalones, más el pad de daño (`props/`).
 - **`test_gym/zones/combat_range.tscn`:** zona de combate a 200 m del gimnasio. Muñecos, armería, invocadores (esbirros, tiradores y esbirros élite), pedestales de personaje, campana de oleadas, plataforma escalonada, teletransportes y recogedor de caídas. Las oleadas paran al volver.
-- **En la raíz del gimnasio viven** `EnemySwarm`, `WaveDirector`, `PickupField`, `LootDropper`, `LevelUpController` y `LevelUpPanel`, `RunRecorder` y `ResultsPanel`, `DamageNumbers`, HUD, pausa y panel de depuración.
+- **Sistemas de partida:** viven en `RunSystems` (ver arriba): `EnemySwarm`, `WaveDirector`, `PickupField`, `LootDropper`, `LevelUpController` y `LevelUpPanel`, `RunRecorder` y `ResultsPanel`, `DamageNumbers`, HUD, pausa y panel de depuración.
 - **`stress/stress_test.tscn`:** prueba de rendimiento (herramienta, sin traducir). Mantiene 300 y luego 500 esbirros sobre un jugador inmortal con la espada, mide frames y física y sale. Comando en CLAUDE.md.
 
 ## Señales del `EventBus`
@@ -175,20 +195,25 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 | Señal | La emite | La escucha |
 |---|---|---|
 | `run_started`, `run_ended` | `RunState` | (nadie aún) |
+| `retry_requested`, `main_menu_requested` | `RunFlow` (pausa, resultados) | `Game` |
+| `level_intro` (mensajes de bienvenida) | `RunSystems` | `LevelIntro` |
 | `cursor_requested` | pausa, armería, panel de depuración | `MouseCapture` |
 | `player_stamina_changed` | `StaminaComponent` | `StaminaBar` |
 | `player_health_changed` | `Player` | `HealthBar` |
 | `player_died` | `Player` | `ResultsPanel`, `RunRecorder` |
 | `enemy_damaged` | `DamageReporter` | `DamageNumbers` |
 | `enemy_died` (el propio enemigo) | `Enemy` | `LootDropper` (y más adelante el Archivo) |
-| `pickup_collected` | `PickupField` | `ExperienceComponent` (la recompensa `experience`), `WalletComponent` (`gold`) |
+| `breakable_broken` (sus datos y dónde) | `Breakable` | `LootDropper` |
+| `pickup_collected` | `PickupField` | `ExperienceComponent` (la recompensa `experience`), `WalletComponent` (`gold`), los `PickupEffect` (`heal`, `magnet`, `bomb`) |
 | `player_xp_changed` | `Player` | `XpBar` |
 | `player_gold_changed` | `Player` | `GoldCounter` |
+| `difficulty_changed` (la stat `difficulty` del jugador) | `Player` | `DifficultyCounter`, `LootDropper` |
 | `player_item_changed` (arma o runa y su nivel; 0 = quitada) | `Player` (de `WeaponInventory.weapon_changed` y `RuneInventory.rune_changed`) | `LoadoutBar` |
 | `player_slots_changed` (ranuras abiertas) | `Player` | `LoadoutBar` |
 | `run_clock_changed` (segundos, prórroga; negativo = sin ronda) | `WaveDirector` | `RunClock` |
 | `player_leveled_up` | `Player` | `LevelUpController` |
 | `interaction_prompt_changed` | `Interactor` | `InteractionPrompt` |
+| `slot_spun`, `slot_resolved` | `SlotMachine` | `SlotPanel`, `SlowMotion` (el jackpot) |
 
 ## Capas de física (`core/physics_layers.gd`)
 
@@ -213,6 +238,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 
   Aparece sola en la armería.
 - **Una runa:** crea un `.tres` `RuneData` en `data/runes/` con su icono (`assets/textures/icons/runes/`), un `StatModifierSet` por nivel (sobre stats que el jugador tenga) y traduce su nombre y descripción. Aparece sola en la armería.
+- **Un rompible:** crea su `BreakableData` en `data/breakables/` (recogible, valor, trozos, dispersión) y su escena con raíz `Breakable` (modelo e `Interactable` con su aviso); añádelo como `ScatterEntry` al `BreakableScatter` del nivel.
 - **Un enemigo:**
   1. Crea un `.tres` `EnemyData` en `data/enemies/`.
   2. Si no reutiliza la escena de otro, crea la suya en `entities/enemies/<enemigo>/`, con raíz `Enemy`, como `swarmer.tscn`.

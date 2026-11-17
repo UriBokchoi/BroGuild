@@ -1,8 +1,11 @@
 class_name OptionsPanel
 extends PanelContainer
-## Opciones básicas: volumen de cada bus, pantalla completa, tamaño de la ventana y VSync. Cada
-## cambio se aplica al momento sobre [code]Save.settings[/code] y al cerrar se guarda. Lo abre la
-## pausa (y, más adelante, el menú principal). Esc o «Volver» lo cierran.
+## Opciones básicas: volumen de cada bus, pantalla completa, tamaño de la ventana y VSync. El volumen
+## se aplica al momento (para oírlo); las de pantalla quedan pendientes hasta «Aplicar», que las
+## aplica y las guarda. «Volver» o Esc guardan el volumen, descartan lo de pantalla sin aplicar y
+## cierran. Trabaja sobre [code]Save.settings[/code]. Lo abre la pausa (y, más adelante, el menú
+## principal). Ejecutado dentro del editor, la ventana no se puede cambiar: lo avisa y desactiva
+## esas opciones.
 
 ## Se cerró (ya guardado).
 signal closed
@@ -13,11 +16,15 @@ signal closed
 var _sliders: Dictionary[StringName, HSlider] = {}
 var _value_labels: Dictionary[StringName, Label] = {}
 var _resolutions: Array[Vector2i] = []
+## Opciones de pantalla elegidas y aún sin aplicar.
+var _pending: GameSettings
 
 @onready var _volumes: VBoxContainer = %Volumes
 @onready var _fullscreen: CheckButton = %Fullscreen
 @onready var _resolution: OptionButton = %Resolution
 @onready var _vsync: CheckButton = %VSync
+@onready var _window_note: Label = %WindowNote
+@onready var _apply: Button = %Apply
 @onready var _back: Button = %Back
 
 
@@ -27,6 +34,7 @@ func _ready() -> void:
 	_fullscreen.toggled.connect(_on_fullscreen_toggled)
 	_resolution.item_selected.connect(_on_resolution_selected)
 	_vsync.toggled.connect(_on_vsync_toggled)
+	_apply.pressed.connect(apply)
 	_back.pressed.connect(close)
 	visible = false
 
@@ -39,12 +47,21 @@ func _unhandled_input(event: InputEvent) -> void:
 
 ## Muestra las opciones actuales y deja el foco en «Volver».
 func open() -> void:
+	_pending = Save.settings.copy()
 	_show_settings()
 	visible = true
 	_back.grab_focus()
 
 
-## Guarda y se cierra.
+## Aplica y guarda las opciones de pantalla pendientes.
+func apply() -> void:
+	Save.settings.take_display(_pending)
+	Save.settings.apply_display(get_window())
+	Save.save_settings()
+	_refresh_apply()
+
+
+## Guarda el volumen, descarta lo de pantalla sin aplicar y se cierra.
 func close() -> void:
 	if not visible:
 		return
@@ -88,26 +105,30 @@ func _add_volume_row(bus: StringName) -> void:
 
 
 func _show_settings() -> void:
-	var settings := Save.settings
 	for bus: StringName in _sliders:
-		var slider := _sliders[bus]
-		slider.set_value_no_signal(settings.volumes[bus] if settings.volumes.has(bus) else 0.0)
+		var volumes := Save.settings.volumes
+		_sliders[bus].set_value_no_signal(volumes[bus] if volumes.has(bus) else 0.0)
 		_show_volume(bus)
-	_fullscreen.set_pressed_no_signal(settings.fullscreen)
-	_vsync.set_pressed_no_signal(settings.vsync)
+	var can_change := GameSettings.can_change_window()
+	_window_note.visible = not can_change
+	_fullscreen.disabled = not can_change
+	_fullscreen.set_pressed_no_signal(_pending.fullscreen)
+	_vsync.set_pressed_no_signal(_pending.vsync)
 	_fill_resolutions()
+	_refresh_apply()
 
 
-## Lista los tamaños que caben en la pantalla y el de la ventana ahora, si no está entre ellos.
+## Lista los tamaños que caben en la pantalla (sin la barra de tareas) y el de la ventana ahora, si
+## no está entre ellos.
 func _fill_resolutions() -> void:
-	var screen := DisplayServer.screen_get_size()
-	var current := Save.settings.resolution
+	var usable := DisplayServer.screen_get_usable_rect().size
+	var current := _pending.resolution
 	if current == Vector2i.ZERO:
 		current = get_window().size
 	_resolutions.clear()
 	for option: Vector2i in data.resolutions:
-		# Sin pantalla (headless), screen es cero: se ofrecen todos.
-		if screen == Vector2i.ZERO or (option.x <= screen.x and option.y <= screen.y):
+		# Sin pantalla (headless), el área es cero: se ofrecen todos.
+		if usable == Vector2i.ZERO or (option.x <= usable.x and option.y <= usable.y):
 			_resolutions.append(option)
 	if not _resolutions.has(current):
 		_resolutions.push_front(current)
@@ -115,7 +136,16 @@ func _fill_resolutions() -> void:
 	for option: Vector2i in _resolutions:
 		_resolution.add_item(tr(&"OPTIONS_RESOLUTION_VALUE") % [option.x, option.y])
 	_resolution.select(_resolutions.find(current))
-	_resolution.disabled = Save.settings.fullscreen
+	_refresh_resolution()
+
+
+## Sin tamaño de ventana en pantalla completa ni dentro del editor.
+func _refresh_resolution() -> void:
+	_resolution.disabled = _pending.fullscreen or not GameSettings.can_change_window()
+
+
+func _refresh_apply() -> void:
+	_apply.disabled = not _pending.display_differs(Save.settings)
 
 
 func _show_volume(bus: StringName) -> void:
@@ -129,16 +159,16 @@ func _on_volume_changed(value: float, bus: StringName) -> void:
 
 
 func _on_fullscreen_toggled(on: bool) -> void:
-	Save.settings.fullscreen = on
-	_resolution.disabled = on
-	Save.settings.apply_display(get_window())
+	_pending.fullscreen = on
+	_refresh_resolution()
+	_refresh_apply()
 
 
 func _on_resolution_selected(index: int) -> void:
-	Save.settings.resolution = _resolutions[index]
-	Save.settings.apply_display(get_window())
+	_pending.resolution = _resolutions[index]
+	_refresh_apply()
 
 
 func _on_vsync_toggled(on: bool) -> void:
-	Save.settings.vsync = on
-	Save.settings.apply_display(get_window())
+	_pending.vsync = on
+	_refresh_apply()

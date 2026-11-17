@@ -39,6 +39,7 @@
 [ext_resource type="Script" path="res://systems/upgrades/runes/rune_inventory.gd" id="40_runes"]
 [ext_resource type="Script" path="res://systems/progression/wallet_component.gd" id="41_wallet"]
 [ext_resource type="PackedScene" path="res://entities/player/characters/model/character_model.tscn" id="42_model"]
+[ext_resource type="Script" path="res://entities/player/feedback/body_flip.gd" id="43_flip"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_interactor"]
 radius = 0.6
@@ -288,3 +289,10 @@ stats = NodePath("../Stats")
 
 [node name="CameraRig" parent="." node_paths=PackedStringArray("target") instance=ExtResource("2_rig")]
 target = NodePath("..")
+
+[node name="BodyFlip" type="Node" parent="." node_paths=PackedStringArray("machine", "player", "visual", "flip_states")]
+script = ExtResource("43_flip")
+machine = NodePath("../Movement")
+player = NodePath("..")
+visual = NodePath("../Body")
+flip_states = [NodePath("../Movement/DoubleJump")]

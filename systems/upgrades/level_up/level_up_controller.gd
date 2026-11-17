@@ -37,9 +37,13 @@ func apply(option: LevelUpOption) -> void:
 		if option.is_new():
 			player.weapons.add(weapon_data)
 		else:
-			player.weapons.get_weapon(weapon_data).set_level(option.level)
+			player.weapons.get_weapon(weapon_data).add_upgrade(option.upgrade)
 	elif option.item is RuneData:
-		player.runes.set_level(option.item as RuneData, option.level)
+		var rune := option.item as RuneData
+		if option.is_new():
+			player.runes.add(rune)
+		else:
+			player.runes.upgrade(rune, option.upgrade)
 
 
 func _on_leveled_up(_level: int) -> void:
@@ -64,7 +68,7 @@ func _on_chosen(option: LevelUpOption) -> void:
 func _offer() -> void:
 	var weapon_slots := data.clamp_weapon_slots(player.stats.get_int(&"weapon_slots"))
 	var rune_slots := data.clamp_rune_slots(player.stats.get_int(&"rune_slots"))
-	var options := LevelUpOffer.build(_catalog, _owned_levels(), data.choices, weapon_slots, rune_slots, rng)
+	var options := LevelUpOffer.build(_catalog, _owned_levels(), data.choices, weapon_slots, rune_slots, data.rarities, rng)
 	if options.is_empty():
 		_pending = 0
 		panel.close()

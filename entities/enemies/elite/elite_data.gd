@@ -13,3 +13,7 @@ extends Resource
 @export_range(0.25, 5.0, 0.05) var size: float = 1.0
 ## Material que se superpone a su modelo (el brillo de élite).
 @export var overlay: Material
+## Multiplica la probabilidad de botín del jugador ([code]drop_chance[/code]) para sus extras.
+@export_range(0.0, 100.0, 0.1, "or_greater") var drop_chance_multiplier: float = 0.0
+## De qué tabla salen sus extras (power-ups; más adelante, cofres).
+@export var drop_table: WeightedTable

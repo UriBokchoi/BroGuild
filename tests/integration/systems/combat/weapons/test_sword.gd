@@ -37,18 +37,27 @@ func test_inventory_holds_each_weapon_once() -> void:
 	assert_false(_inventory.has(SWORD))
 
 
-func test_levels_apply_the_upgrades_of_its_data() -> void:
+func test_levels_add_and_remove_upgrades() -> void:
 	var sword := _inventory.add(SWORD)
 	sword.set_level(2)
-	assert_eq(sword.damage(), 26.0)
+	assert_eq(sword.damage(), 25.0, "la mejora estándar: +5 de daño")
+	assert_eq(sword.projectile_count(), 2)
+	assert_almost_eq(sword.cooldown(), 1.1 * 0.92, 1e-4)
 	sword.set_level(99)
 	assert_eq(sword.level, SWORD.max_level(), "no pasa del máximo")
-	assert_eq(sword.damage(), 36.0)
-	assert_eq(sword.projectile_count(), 2)
-	assert_almost_eq(sword.cooldown(), 0.88, 1e-4)
+	assert_eq(sword.get_upgrades().size(), SWORD.max_level() - 1)
 	sword.set_level(1)
 	assert_eq(sword.damage(), 20.0, "bajar de nivel quita las mejoras")
 	assert_eq(sword.projectile_count(), 1)
+
+
+func test_a_rolled_upgrade_adds_its_modifiers() -> void:
+	var sword := _inventory.add(SWORD)
+	var upgrade := ItemUpgrade.new()
+	upgrade.stat_modifiers.append(StatModifier.create(&"damage", StatModifier.Kind.FLAT, 7.0))
+	sword.add_upgrade(upgrade)
+	assert_eq(sword.level, 2)
+	assert_eq(sword.damage(), 27.0)
 
 
 func test_wielder_stats_scale_the_weapon() -> void:
@@ -95,7 +104,7 @@ func test_extra_projectiles_are_extra_slashes() -> void:
 	var health := dummy.get_node(^"Health") as HealthComponent
 	watch_signals(health)
 	var sword := _inventory.add(SWORD)
-	sword.set_level(3)
+	sword.set_level(2)
 	watch_signals(sword)
 	await wait_physics_frames(20)
 	assert_signal_emit_count(sword, "fired", 2)

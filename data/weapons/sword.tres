@@ -2,10 +2,9 @@
 
 [ext_resource type="Script" path="res://systems/combat/weapons/weapon_data.gd" id="1_data"]
 [ext_resource type="Script" path="res://systems/combat/weapons/weapon_stats.gd" id="2_stats"]
-[ext_resource type="Script" path="res://core/stats/stat_modifier_set.gd" id="3_set"]
-[ext_resource type="Script" path="res://core/stats/stat_modifier.gd" id="4_modifier"]
 [ext_resource type="PackedScene" path="res://systems/combat/weapons/sword/sword.tscn" id="5_scene"]
 [ext_resource type="Texture2D" path="res://assets/textures/icons/weapons/sword.svg" id="99_icon"]
+[ext_resource type="Script" path="res://systems/upgrades/upgrade_stat.gd" id="90_upgrade"]
 
 [sub_resource type="Resource" id="Resource_stats"]
 script = ExtResource("2_stats")
@@ -17,48 +16,28 @@ area = 100.0
 duration = 0.3
 reach = 2.8
 
-[sub_resource type="Resource" id="Resource_level2_damage"]
-script = ExtResource("4_modifier")
+[sub_resource type="Resource" id="Upgrade_damage"]
+script = ExtResource("90_upgrade")
 stat = &"damage"
-value = 6.0
+value = 5.0
 
-[sub_resource type="Resource" id="Resource_level2"]
-script = ExtResource("3_set")
-stat_modifiers = Array[ExtResource("4_modifier")]([SubResource("Resource_level2_damage")])
-
-[sub_resource type="Resource" id="Resource_level3_projectiles"]
-script = ExtResource("4_modifier")
+[sub_resource type="Resource" id="Upgrade_projectiles"]
+script = ExtResource("90_upgrade")
 stat = &"projectiles"
 value = 1.0
+whole_numbers = true
 
-[sub_resource type="Resource" id="Resource_level3"]
-script = ExtResource("3_set")
-stat_modifiers = Array[ExtResource("4_modifier")]([SubResource("Resource_level3_projectiles")])
-
-[sub_resource type="Resource" id="Resource_level4_area"]
-script = ExtResource("4_modifier")
+[sub_resource type="Resource" id="Upgrade_area"]
+script = ExtResource("90_upgrade")
 stat = &"area"
 kind = 1
-value = 0.25
+value = 0.12
 
-[sub_resource type="Resource" id="Resource_level4"]
-script = ExtResource("3_set")
-stat_modifiers = Array[ExtResource("4_modifier")]([SubResource("Resource_level4_area")])
-
-[sub_resource type="Resource" id="Resource_level5_damage"]
-script = ExtResource("4_modifier")
-stat = &"damage"
-value = 10.0
-
-[sub_resource type="Resource" id="Resource_level5_cooldown"]
-script = ExtResource("4_modifier")
+[sub_resource type="Resource" id="Upgrade_cooldown"]
+script = ExtResource("90_upgrade")
 stat = &"cooldown"
-kind = 1
-value = -0.2
-
-[sub_resource type="Resource" id="Resource_level5"]
-script = ExtResource("3_set")
-stat_modifiers = Array[ExtResource("4_modifier")]([SubResource("Resource_level5_damage"), SubResource("Resource_level5_cooldown")])
+kind = 2
+value = 0.92
 
 [resource]
 script = ExtResource("1_data")
@@ -68,4 +47,5 @@ name_key = &"WEAPON_SWORD_NAME"
 description_key = &"WEAPON_SWORD_DESCRIPTION"
 scene = ExtResource("5_scene")
 stats = SubResource("Resource_stats")
-levels = Array[ExtResource("3_set")]([SubResource("Resource_level2"), SubResource("Resource_level3"), SubResource("Resource_level4"), SubResource("Resource_level5")])
+level_cap = 10
+upgrade_stats = Array[ExtResource("90_upgrade")]([SubResource("Upgrade_damage"), SubResource("Upgrade_projectiles"), SubResource("Upgrade_area"), SubResource("Upgrade_cooldown")])

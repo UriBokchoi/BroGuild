@@ -9,11 +9,11 @@
 
 [sub_resource type="Resource" id="Resource_health"]
 script = ExtResource("2_health")
-max_health = 20.0
+max_health = 30.0
 
 [sub_resource type="Resource" id="Resource_stats"]
 script = ExtResource("3_stats")
-move_speed = 4.0
+move_speed = 3.4
 acceleration = 20.0
 contact_damage = 4.0
 contact_interval = 0.8

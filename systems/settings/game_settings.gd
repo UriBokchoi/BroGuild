@@ -63,13 +63,44 @@ func apply_audio() -> void:
 		AudioServer.set_bus_volume_linear(index, volumes[bus])
 
 
-## Pone [param window] en pantalla completa o en ventana (con su tamaño, centrada) y el VSync. Sin
-## pantalla (headless: tests y validación), no hace nada.
+## Pone el VSync y [param window] en pantalla completa o en ventana (con su tamaño, centrada). Sin
+## pantalla (headless: tests y validación), no hace nada; incrustado en el editor, solo el VSync
+## (ver [method can_change_window]).
 func apply_display(window: Window) -> void:
 	if DisplayServer.get_name() == "headless":
+		return
+	DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_ENABLED if vsync else DisplayServer.VSYNC_DISABLED)
+	if not can_change_window():
 		return
 	window.mode = Window.MODE_FULLSCREEN if fullscreen else Window.MODE_WINDOWED
 	if not fullscreen and resolution != Vector2i.ZERO:
 		window.size = resolution
 		window.move_to_center()
-	DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_ENABLED if vsync else DisplayServer.VSYNC_DISABLED)
+
+
+## Copia independiente (para editarla sin tocar estas).
+func copy() -> GameSettings:
+	var other := GameSettings.new()
+	other.volumes = volumes.duplicate()
+	other.fullscreen = fullscreen
+	other.resolution = resolution
+	other.vsync = vsync
+	return other
+
+
+## Si las opciones de pantalla (pantalla completa, tamaño y VSync) de [param other] son otras.
+func display_differs(other: GameSettings) -> bool:
+	return fullscreen != other.fullscreen or resolution != other.resolution or vsync != other.vsync
+
+
+## Toma de [param other] las opciones de pantalla.
+func take_display(other: GameSettings) -> void:
+	fullscreen = other.fullscreen
+	resolution = other.resolution
+	vsync = other.vsync
+
+
+## Si el juego puede cambiar su ventana. Ejecutado dentro del editor (pestaña «Juego»), la ventana
+## es del editor: ni pantalla completa ni otro tamaño.
+static func can_change_window() -> bool:
+	return not Engine.is_embedded_in_editor()

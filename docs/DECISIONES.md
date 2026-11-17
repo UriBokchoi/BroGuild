@@ -776,3 +776,95 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - Mientras no se elija un tamaño, la ventana se queda como diga el proyecto: no se cambia ningún Project Setting.
   - En headless no se toca la ventana, así que los tests y la validación no la mueven.
 - **Por qué:** lo pidió el diseñador, y todo queda en datos. Las opciones adelantan una parte del Hito 8. La sensibilidad y el remapeo siguen allí.
+
+## 2026-11-17 · Opciones: «Aplicar» y el juego dentro del editor
+- **Problema:** el diseñador probaba desde el editor, que ejecuta el juego incrustado en la pestaña «Juego». Ahí la ventana es del editor: Godot rechaza la pantalla completa y el cambio de tamaño («Embedded window only supports Windowed mode»), así que esas opciones no hacían nada.
+- **Decisión:**
+  - Con `Engine.is_embedded_in_editor()` (`GameSettings.can_change_window()`), dentro del editor se aplica solo el VSync. El panel avisa y desactiva pantalla completa y resolución.
+  - Para probarlas hay que ejecutar el juego en su propia ventana.
+  - Las opciones de pantalla esperan a «Aplicar», que las aplica y las guarda. El volumen sigue al momento, para oírlo mientras se ajusta.
+  - «Volver» descarta lo de pantalla que no se aplicó.
+  - Solo se ofrecen tamaños que caben en el área útil de la pantalla, sin la barra de tareas.
+- **Por qué:** lo pidió el diseñador («falta botón de aplicar»). Además, cambiar la ventana al tocar cada control es incómodo y arriesgado; con «Aplicar», el cambio se hace una vez, cuando se decide.
+
+## 2026-11-17 · Flujo de partida, `RunSystems` y el Brosque v1
+- **`Game`** es la escena principal y lleva el flujo: menú → nivel → menú. Cada pantalla sustituye a la anterior.
+  - Reintentar y volver al menú se piden por el `EventBus` (`RunFlow`). Así cada nivel se sigue pudiendo ejecutar solo (F6): sin `Game` que escuche, recarga la escena o cierra el juego.
+  - `validate.sh` arranca además cada nivel, porque la escena principal ya no entra en partida.
+- **`RunSystems`:** los sistemas de una partida (jugador, horda, oleadas, botín, subir de nivel, HUD, pausa, resultados, depuración) salen del gimnasio a una escena común. El gimnasio y el Brosque la instancian con sus oleadas, su personaje de serie y su punto de aparición. Se extrajo al segundo nivel, para no copiarlos.
+- **Bosque con MultiMesh:** los ~300 árboles se dibujan con cinco MultiMesh (tronco y copas) y chocan con un solo cuerpo con un cilindro por tronco. Así cuesta pocas llamadas de dibujo, que hacen falta para la horda.
+  - Lo generaba `tools/gen_brosque_forest.gd` con semilla fija (sustituido: ahora el mapa entero se genera al cargar; ver «Mapa procedural»).
+  - Hay que generarlo con ventana: en headless el render es ficticio y el MultiMesh se guarda sin transformaciones.
+  - Los colores por árbol necesitan `vertex_color_is_srgb` en el material.
+- **Diseño acordado** (GDD §6 y §9):
+  - Calaveras y bolsitas se rompen al tocarlas.
+  - Hay tres tipos de objetos de partida: pasivos de cofre apilables, recogibles del suelo y llaves del jefe.
+  - El jefe se invoca en un altar con llaves; al minuto 10 el altar se activa solo.
+  - El Brosque es un gimnasio en el bosque.
+  - Las tragaperras, las rarezas y los cofres se adelantan al Hito 3 para el Brosque.
+
+## 2026-11-17 · La dificultad es una stat
+- **Decisión:**
+  - La dificultad es la stat `difficulty` del jugador (`ProgressionData`), con base 0. El `WaveDirector` le suma la parte del tiempo: un modificador de +1 por minuto en marcha, que se actualiza cada segundo y se quita al parar. Objetos y runas podrán sumarle más (FLAT) o multiplicarla (PERCENT).
+  - Las curvas de `WaveData` (aparición, élites, escalado de stats y `WaveEnemy.from_difficulty`) van según la dificultad, no según los minutos. Sin bonus, dificultad = minutos, así que el balance de la ronda normal no cambia.
+  - Los picos y la duración de la ronda siguen yendo por el reloj.
+  - Calaveras y bolsitas dan `amount + amount_per_difficulty × dificultad`.
+  - El HUD la muestra con una calavera.
+- **Por qué:** el diseñador quiere que la dificultad suba sola y también con objetos y runas, con más riesgo y más recompensa. Al ser una stat, cualquier mejora la toca con el sistema de modificadores de siempre y sale en la pausa. Al medirla en «minutos equivalentes», los datos que ya había siguen valiendo.
+
+## 2026-11-17 · Probabilidad de botín, tablas ponderadas y bebida energética
+- **Probabilidad de botín** (`drop_chance`): stat del jugador, 0,5 % de serie (muy baja, como pidió el diseñador). Es la probabilidad de que un enemigo normal suelte un extra. Los élites la multiplican por 8 y los rompibles por 12, según sus datos. Objetos y runas podrán subirla.
+- **Qué extra sale** lo decide una `WeightedTable` (`core/`): entradas con peso, y cada uso hereda su tipo de entrada (`BonusDrop`: recogible y valor). Sustituye a las probabilidades sueltas por recogible de la versión anterior. Las tragaperras y los cofres usarán la misma tabla, y la Suerte desplazará sus pesos cuando lleguen las rarezas. Los cofres entrarán en esta misma tirada.
+- **Bebida energética:** un `BuffEffect` aplica un `StatModifierSet` de datos (+25 % de carrera y sprint, +30 % de velocidad de ataque y +20 % de daño) durante los segundos que vale el recogible (10). Otra lata reinicia la cuenta en lugar de acumularse, para que no se vuelva imparable.
+- **`LootDropper`** lee la dificultad y la probabilidad de botín directamente de las stats del jugador (`player_stats`) en lugar de guardar la última dificultad que avisó el `EventBus`: es más simple, y el `EventBus` queda para el HUD.
+
+## 2026-11-17 · Tragaperras
+- **Diseño** (propuesto y aceptado):
+  - Cuatro máquinas en el Brosque: una en el claro y tres en las mesetas.
+  - Coste: 15 de oro + 5 por punto de dificultad, ×1,5 cada vez que se usa esa misma máquina.
+  - Tres rodillos con cuatro símbolos de pesos 4, 3, 2 y 3: moneda, corazón, estrella y calavera.
+  - Trío = jackpot, pareja = premio menor, todos distintos = nada. Con esos pesos sale ≈ 7 % de tríos, ≈ 57 % de parejas y ≈ 35 % de nada.
+  - No pausa: apostar con la horda encima forma parte del riesgo.
+- **Montaje:**
+  - Los símbolos son `SlotSymbol` sobre la `WeightedTable`.
+  - Los premios (`SlotOutcome`) son recompensas por `pickup_collected`, igual que los recogibles. Así se reutiliza lo que ya había: el monedero cobra el oro (con su `currency_gain`) y los `PickupEffect` aplican la cura y la maldición (otra vez `BuffEffect`).
+  - Solo hacen falta dos efectos nuevos: la mejora gratis y la oleada de élites (`WaveDirector.spawn_elites`).
+  - El HUD y la cámara lenta se enteran por `slot_spun` y `slot_resolved`.
+- **El aviso de «interactuar» lleva el coste:** la máquina pone en su `prompt_key` el texto ya formateado; el `Label` no encuentra la clave y lo muestra tal cual. Así no hubo que tocar el `Interactor`.
+
+## 2026-11-17 · Mejoras con rareza
+- **Decisión:**
+  - Las subidas de nivel ya no son listas fijas por nivel. Cada una es una `ItemUpgrade` tirada: una `Rarity` (de una `WeightedTable` en `data/rarities/`) elige cuántas stats distintas de las `upgrade_stats` del objeto toca y con qué fuerza.
+
+    | Rareza | Peso | Stats que toca | Fuerza |
+    |---|---|---|---|
+    | Común | 60 | 1 | ×1 |
+    | Rara | 25 | 1–2 | ×1,25 |
+    | Improbable | 10 | 2 | ×1,5 |
+    | De leyenda | 4 | 2–3 | ×2 |
+    | Mítica | 1 | todas | ×2,5 |
+
+  - Nivel máximo: armas 10, runas 20 (`ItemData.level_cap`).
+  - Armas y runas guardan su historial de mejoras para poder quitar la última (armería).
+  - La armería y las herramientas usan una mejora estándar sin rareza (todas sus stats como una común). Las runas dan esa mejora estándar al conseguirlas.
+  - La recarga del arma mejora como multiplicador (×0,92 la común); la rareza escala lo que se aleja de 1. En % se acumularía sumando y podría llegar a 0.
+  - Proyectiles y rebotes van en enteros y nunca suman menos de 1.
+- **Por qué:** lo pidió el diseñador (colores y que las raras toquen varias cosas). Todo va en datos: un arma nueva solo lista sus stats mejorables, y una rareza nueva es un `.tres`.
+- **Pendiente:** la Suerte desplazará los pesos de las rarezas. Con 20 niveles, Multiplicidad (+1 proyectil por mejora) puede quedar muy fuerte; habrá que mirarlo jugando.
+
+## 2026-11-17 · Ritmo algo más lento y enemigos más duros
+- **Decisión** (lo pidió el diseñador):
+  - Todo se mueve un 15 % más despacio: carrera 9 → 7,6 m/s, sprint 11,5 → 9,8, dash 28 → 24, slide y salto en pared en proporción. Esbirro 6 → 5,1 m/s, tirador 4 → 3,4 y sus bolas 11 → 9,4 m/s (con más duración, para que lleguen igual de lejos).
+  - Los enemigos tienen un 50 % más de vida: esbirro 30 → 45, tirador 20 → 30.
+  - Salen al mismo ritmo, porque las curvas de aparición no cambian.
+- **Además:** cada personaje regenera un poco de vida de base (0,8 / 0,4 / 0,5 por segundo) y el Pícaro da un mortal en el doble salto (`BodyFlip`, solo visual).
+
+## 2026-11-17 · Mapa procedural
+- **Decisión:**
+  - El Brosque se genera al cargar, con la semilla de la partida (nuevo flujo `LAYOUT` de `Rng`): reintentar da otro mapa y una semilla reproduce el mismo.
+  - Un `LevelLayout` reparte las `LayoutPiece` de su `LayoutData`, con círculos de suelo que no se pisan: dos mesetas altas y tres bajas fuera del claro, una tragaperras, ocho pesas y seis bancos. Luego pone tres tragaperras encima de mesetas al azar.
+  - `ForestBuilder` hace el bosque alrededor: árboles sueltos que esquivan las piezas, el anillo junto a las paredes con colisión y la banda grande de fuera sin colisión. Todo con MultiMesh, como antes.
+  - Las paredes y la zona de los enemigos no cambian. Calaveras y bolsitas se reparten después, sobre lo generado.
+  - Se borran `tools/gen_brosque_forest.gd` y `forest.tscn`, que eran el bosque horneado.
+- **Por qué:** lo pidió el diseñador, y es más rejugable. Un nivel nuevo solo necesita su `LayoutData` con sus piezas.
+- **Coste:** generar 2.600 árboles y 300 colisiones al cargar es instantáneo. En el juego no cambia nada respecto al bosque horneado.

@@ -4,7 +4,7 @@ extends CanvasLayer
 ## [member delay] segundos, pausa el juego, pide el cursor y muestra lo que pasó en la partida
 ## (según su [RunRecorder]): tiempo, nivel, enemigos y élites derrotados, oro ganado y daño
 ## infligido. Arriba, una frase de muerte al azar. «Reintentar» (o su tecla, [code]retry[/code])
-## empieza otra partida al momento recargando el nivel; «Salir» cierra el juego. Esc no la cierra.
+## empieza otra partida al momento; «Salir» vuelve al menú principal ([RunFlow]). Esc no la cierra.
 ## Funciona con el juego en pausa ([code]process_mode = ALWAYS[/code] en la escena).
 
 ## Quién apuntó la partida.
@@ -29,7 +29,7 @@ func _ready() -> void:
 	if rng == null:
 		rng = Rng.stream(Rng.Stream.COSMETIC)
 	_retry.pressed.connect(retry)
-	_quit.pressed.connect(_quit_game)
+	_quit.pressed.connect(_to_main_menu)
 	EventBus.player_died.connect(_on_player_died)
 
 
@@ -65,10 +65,10 @@ func is_open() -> bool:
 	return visible
 
 
-## Empieza otra partida: recarga el nivel (reinicio rápido).
+## Empieza otra partida en el mismo nivel (reinicio rápido).
 func retry() -> void:
 	_set_open(false)
-	get_tree().reload_current_scene()
+	RunFlow.retry(get_tree())
 
 
 ## Filas de resultados que muestra (pares nombre y valor; para tests).
@@ -116,5 +116,5 @@ func _on_player_died() -> void:
 	get_tree().create_timer(delay, false).timeout.connect(open)
 
 
-func _quit_game() -> void:
-	get_tree().quit()
+func _to_main_menu() -> void:
+	RunFlow.to_main_menu(get_tree())

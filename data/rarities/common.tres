@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="Rarity" format=3]
+
+[ext_resource type="Script" path="res://systems/upgrades/rarity.gd" id="1_rarity"]
+
+[resource]
+script = ExtResource("1_rarity")
+weight = 60.0
+id = &"common"
+name_key = &"RARITY_COMMON"
+color = Color(0.66, 0.68, 0.72, 1)
+min_stats = 1
+max_stats = 1
+power = 1.0

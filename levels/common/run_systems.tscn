@@ -1,0 +1,136 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://levels/common/run_systems.gd" id="1_run"]
+[ext_resource type="Script" path="res://ui/mouse_capture.gd" id="2_mouse"]
+[ext_resource type="PackedScene" path="res://entities/player/player.tscn" id="3_player"]
+[ext_resource type="PackedScene" path="res://ui/debug/debug_panel.tscn" id="4_debug"]
+[ext_resource type="PackedScene" path="res://ui/menus/pause/pause_menu.tscn" id="5_pause"]
+[ext_resource type="PackedScene" path="res://ui/hud/hud.tscn" id="6_hud"]
+[ext_resource type="Script" path="res://vfx/juice/damage_numbers/damage_numbers.gd" id="7_damage_numbers"]
+[ext_resource type="Resource" path="res://data/vfx/damage_numbers.tres" id="8_number_style"]
+[ext_resource type="Script" path="res://systems/spawning/enemy_swarm.gd" id="9_swarm"]
+[ext_resource type="Script" path="res://systems/spawning/wave_director.gd" id="10_director"]
+[ext_resource type="Script" path="res://systems/progression/pickup_field.gd" id="11_pickups"]
+[ext_resource type="Script" path="res://systems/progression/loot_dropper.gd" id="12_loot"]
+[ext_resource type="Resource" path="res://data/pickups/xp_gem.tres" id="13_xp_gem"]
+[ext_resource type="Resource" path="res://data/pickups/gold_coin.tres" id="14_gold_coin"]
+[ext_resource type="Script" path="res://systems/upgrades/level_up/level_up_controller.gd" id="15_level_up"]
+[ext_resource type="Resource" path="res://data/progression/level_up.tres" id="16_level_up_data"]
+[ext_resource type="PackedScene" path="res://ui/menus/level_up/level_up_panel.tscn" id="17_level_up_panel"]
+[ext_resource type="Script" path="res://systems/run/run_recorder.gd" id="18_recorder"]
+[ext_resource type="PackedScene" path="res://ui/menus/results/results_panel.tscn" id="19_results"]
+[ext_resource type="Script" path="res://systems/progression/effects/heal_effect.gd" id="20_heal"]
+[ext_resource type="Script" path="res://systems/progression/effects/magnet_effect.gd" id="21_magnet"]
+[ext_resource type="Script" path="res://systems/progression/effects/bomb_effect.gd" id="22_bomb"]
+[ext_resource type="Resource" path="res://data/loot/power_ups.tres" id="23_power_ups"]
+[ext_resource type="Script" path="res://systems/progression/effects/buff_effect.gd" id="24_buff"]
+[ext_resource type="Resource" path="res://data/pickups/energy_drink_buff.tres" id="25_energy_buff"]
+[ext_resource type="Script" path="res://systems/progression/effects/upgrade_effect.gd" id="26_upgrade"]
+[ext_resource type="Script" path="res://systems/progression/effects/elite_wave_effect.gd" id="27_elite_wave"]
+[ext_resource type="Resource" path="res://data/slots/frailty_curse.tres" id="28_frailty"]
+[ext_resource type="Script" path="res://vfx/juice/slow_motion.gd" id="29_slow_motion"]
+[ext_resource type="Resource" path="res://data/rarities/rarities.tres" id="30_rarities"]
+
+[node name="RunSystems" type="Node3D" node_paths=PackedStringArray("player", "director")]
+script = ExtResource("1_run")
+player = NodePath("Player")
+director = NodePath("WaveDirector")
+
+[node name="MouseCapture" type="Node" parent="."]
+script = ExtResource("2_mouse")
+
+[node name="Player" parent="." instance=ExtResource("3_player")]
+
+[node name="DebugPanel" parent="." node_paths=PackedStringArray("player") instance=ExtResource("4_debug")]
+player = NodePath("../Player")
+
+[node name="PauseMenu" parent="." node_paths=PackedStringArray("player") instance=ExtResource("5_pause")]
+player = NodePath("../Player")
+
+[node name="HUD" parent="." instance=ExtResource("6_hud")]
+
+[node name="DamageNumbers" type="Node3D" parent="."]
+script = ExtResource("7_damage_numbers")
+style = ExtResource("8_number_style")
+
+[node name="EnemySwarm" type="Node3D" parent="." node_paths=PackedStringArray("target")]
+script = ExtResource("9_swarm")
+target = NodePath("../Player")
+
+[node name="PickupField" type="Node3D" parent="." node_paths=PackedStringArray("collector", "collector_stats")]
+script = ExtResource("11_pickups")
+collector = NodePath("../Player")
+collector_stats = NodePath("../Player/Stats")
+
+[node name="LootDropper" type="Node" parent="." node_paths=PackedStringArray("field", "player_stats")]
+script = ExtResource("12_loot")
+field = NodePath("../PickupField")
+xp_gem = ExtResource("13_xp_gem")
+gold_coin = ExtResource("14_gold_coin")
+player_stats = NodePath("../Player/Stats")
+enemy_drop_table = ExtResource("23_power_ups")
+
+[node name="LevelUpPanel" parent="." instance=ExtResource("17_level_up_panel")]
+
+[node name="LevelUpController" type="Node" parent="." node_paths=PackedStringArray("player", "panel")]
+script = ExtResource("15_level_up")
+data = ExtResource("16_level_up_data")
+player = NodePath("../Player")
+panel = NodePath("../LevelUpPanel")
+
+[node name="RunRecorder" type="Node" parent="."]
+script = ExtResource("18_recorder")
+
+[node name="ResultsPanel" parent="." node_paths=PackedStringArray("recorder") instance=ExtResource("19_results")]
+recorder = NodePath("../RunRecorder")
+
+[node name="WaveDirector" type="Node" parent="." node_paths=PackedStringArray("swarm", "target", "difficulty_stats")]
+script = ExtResource("10_director")
+swarm = NodePath("../EnemySwarm")
+target = NodePath("../Player")
+difficulty_stats = NodePath("../Player/Stats")
+
+[node name="PickupEffects" type="Node" parent="."]
+
+[node name="Heal" type="Node" parent="PickupEffects" node_paths=PackedStringArray("health")]
+script = ExtResource("20_heal")
+reward = &"heal"
+health = NodePath("../../Player/Health")
+
+[node name="Magnet" type="Node" parent="PickupEffects" node_paths=PackedStringArray("field")]
+script = ExtResource("21_magnet")
+reward = &"magnet"
+field = NodePath("../../PickupField")
+
+[node name="Bomb" type="Node" parent="PickupEffects" node_paths=PackedStringArray("swarm", "center")]
+script = ExtResource("22_bomb")
+reward = &"bomb"
+swarm = NodePath("../../EnemySwarm")
+center = NodePath("../../Player")
+
+[node name="EnergyDrink" type="Node" parent="PickupEffects" node_paths=PackedStringArray("stats")]
+script = ExtResource("24_buff")
+reward = &"energy"
+stats = NodePath("../../Player/Stats")
+buff = ExtResource("25_energy_buff")
+
+[node name="Upgrade" type="Node" parent="PickupEffects" node_paths=PackedStringArray("weapons", "runes")]
+script = ExtResource("26_upgrade")
+reward = &"upgrade"
+weapons = NodePath("../../Player/Weapons")
+runes = NodePath("../../Player/Runes")
+rarities = ExtResource("30_rarities")
+
+[node name="Frailty" type="Node" parent="PickupEffects" node_paths=PackedStringArray("stats")]
+script = ExtResource("24_buff")
+reward = &"frailty"
+stats = NodePath("../../Player/Stats")
+buff = ExtResource("28_frailty")
+
+[node name="EliteWave" type="Node" parent="PickupEffects" node_paths=PackedStringArray("director")]
+script = ExtResource("27_elite_wave")
+reward = &"elite_wave"
+director = NodePath("../../WaveDirector")
+
+[node name="SlowMotion" type="Node" parent="."]
+script = ExtResource("29_slow_motion")

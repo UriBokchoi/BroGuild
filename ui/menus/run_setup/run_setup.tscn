@@ -1,0 +1,210 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ui/menus/run_setup/run_setup.gd" id="1_setup"]
+[ext_resource type="Resource" path="res://data/characters/warrior.tres" id="2_warrior"]
+[ext_resource type="Resource" path="res://data/characters/mage.tres" id="3_mage"]
+[ext_resource type="Resource" path="res://data/characters/rogue.tres" id="4_rogue"]
+[ext_resource type="Resource" path="res://data/levels/brosque.tres" id="5_brosque"]
+[ext_resource type="Resource" path="res://data/levels/wizard_tower.tres" id="6_tower"]
+[ext_resource type="Resource" path="res://data/levels/dungeon.tres" id="7_dungeon"]
+[ext_resource type="PackedScene" path="res://entities/player/characters/model/character_model.tscn" id="8_model"]
+[ext_resource type="Script" path="res://vfx/juice/spin_bob.gd" id="9_spin"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_sky"]
+sky_top_color = Color(0.32, 0.45, 0.68, 1)
+sky_horizon_color = Color(0.78, 0.66, 0.5, 1)
+ground_bottom_color = Color(0.12, 0.14, 0.12, 1)
+ground_horizon_color = Color(0.78, 0.66, 0.5, 1)
+
+[sub_resource type="Sky" id="Sky_setup"]
+sky_material = SubResource("ProceduralSkyMaterial_sky")
+
+[sub_resource type="Environment" id="Environment_setup"]
+background_mode = 2
+sky = SubResource("Sky_setup")
+ambient_light_source = 3
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ground"]
+albedo_color = Color(0.3, 0.46, 0.27, 1)
+roughness = 0.95
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_pedestal"]
+material = SubResource("StandardMaterial3D_ground")
+top_radius = 1.4
+bottom_radius = 1.6
+height = 0.3
+radial_segments = 32
+rings = 1
+
+[node name="RunSetup" type="Node3D" node_paths=PackedStringArray("model")]
+script = ExtResource("1_setup")
+characters = Array[Resource]([ExtResource("2_warrior"), ExtResource("3_mage"), ExtResource("4_rogue")])
+levels = Array[Resource]([ExtResource("5_brosque"), ExtResource("6_tower"), ExtResource("7_dungeon")])
+model = NodePath("Model")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_setup")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.866, -0.25, 0.433, 0, 0.866, 0.5, -0.5, -0.433, 0.75, 0, 6, 0)
+light_color = Color(1, 0.93, 0.82, 1)
+shadow_enabled = true
+
+[node name="Camera" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.985, 0.174, 0, -0.174, 0.985, 1.1, 1.9, 5.8)
+fov = 45.0
+current = true
+
+[node name="Pedestal" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.15, 0)
+mesh = SubResource("CylinderMesh_pedestal")
+
+[node name="Model" parent="." instance=ExtResource("8_model")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0.9, 0)
+
+[node name="Turn" type="Node" parent="." node_paths=PackedStringArray("target")]
+script = ExtResource("9_spin")
+target = NodePath("../Model")
+spin_speed = 0.6
+bob_height = 0.0
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="Margin" type="MarginContainer" parent="UI"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"ScreenMargin"
+
+[node name="Layout" type="HBoxContainer" parent="UI/Margin"]
+layout_mode = 2
+
+[node name="Side" type="VBoxContainer" parent="UI/Margin/Layout"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_vertical = 4
+theme_type_variation = &"MenuList"
+
+[node name="Title" type="Label" parent="UI/Margin/Layout/Side"]
+layout_mode = 2
+theme_type_variation = &"HeaderLabel"
+text = "SELECT_CHARACTER_TITLE"
+
+[node name="CharacterList" type="VBoxContainer" parent="UI/Margin/Layout/Side"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"MenuList"
+
+[node name="Back" type="Button" parent="UI/Margin/Layout/Side"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"SmallButton"
+text = "SELECT_BACK"
+
+[node name="Spacer" type="Control" parent="UI/Margin/Layout"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="Panel" type="PanelContainer" parent="UI/Margin/Layout"]
+custom_minimum_size = Vector2(460, 0)
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="Content" type="VBoxContainer" parent="UI/Margin/Layout/Panel"]
+layout_mode = 2
+
+[node name="Info" type="VBoxContainer" parent="UI/Margin/Layout/Panel/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"CardColumn"
+
+[node name="CharacterName" type="Label" parent="UI/Margin/Layout/Panel/Content/Info"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"HeaderLabel"
+
+[node name="CharacterDescription" type="Label" parent="UI/Margin/Layout/Panel/Content/Info"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"StatBaseLabel"
+autowrap_mode = 3
+
+[node name="StatsHeader" type="Label" parent="UI/Margin/Layout/Panel/Content/Info"]
+layout_mode = 2
+theme_type_variation = &"StatGroupLabel"
+text = "SELECT_STATS"
+
+[node name="CharacterStats" type="VBoxContainer" parent="UI/Margin/Layout/Panel/Content/Info"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"StatList"
+
+[node name="WeaponHeader" type="Label" parent="UI/Margin/Layout/Panel/Content/Info"]
+layout_mode = 2
+theme_type_variation = &"StatGroupLabel"
+text = "SELECT_WEAPON"
+
+[node name="WeaponRow" type="HBoxContainer" parent="UI/Margin/Layout/Panel/Content/Info"]
+layout_mode = 2
+theme_type_variation = &"GoldRow"
+
+[node name="WeaponIcon" type="TextureRect" parent="UI/Margin/Layout/Panel/Content/Info/WeaponRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="WeaponName" type="Label" parent="UI/Margin/Layout/Panel/Content/Info/WeaponRow"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"StatNameLabel"
+
+[node name="PassiveHeader" type="Label" parent="UI/Margin/Layout/Panel/Content/Info"]
+layout_mode = 2
+theme_type_variation = &"StatGroupLabel"
+text = "SELECT_PASSIVE"
+
+[node name="PassiveName" type="Label" parent="UI/Margin/Layout/Panel/Content/Info"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"StatNameLabel"
+
+[node name="PassiveDescription" type="Label" parent="UI/Margin/Layout/Panel/Content/Info"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"StatBaseLabel"
+autowrap_mode = 3
+
+[node name="Choose" type="Button" parent="UI/Margin/Layout/Panel/Content/Info"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "SELECT_CHOOSE"
+
+[node name="LevelPanel" type="VBoxContainer" parent="UI/Margin/Layout/Panel/Content"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_type_variation = &"MenuList"
+
+[node name="LevelTitle" type="Label" parent="UI/Margin/Layout/Panel/Content/LevelPanel"]
+layout_mode = 2
+theme_type_variation = &"HeaderLabel"
+text = "SELECT_LEVEL_TITLE"
+
+[node name="LevelList" type="VBoxContainer" parent="UI/Margin/Layout/Panel/Content/LevelPanel"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"MenuList"
+
+[node name="LevelBack" type="Button" parent="UI/Margin/Layout/Panel/Content/LevelPanel"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"SmallButton"
+text = "SELECT_BACK"

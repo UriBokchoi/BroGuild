@@ -1,0 +1,139 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://entities/interactables/slot_machine/slot_machine.gd" id="1_slot"]
+[ext_resource type="Resource" path="res://data/slots/slot_machine.tres" id="2_data"]
+[ext_resource type="Script" path="res://entities/interactables/interactable.gd" id="3_interactable"]
+[ext_resource type="Material" path="res://assets/models/props/materials/gold.tres" id="4_gold"]
+[ext_resource type="Material" path="res://assets/models/props/materials/steel.tres" id="5_steel"]
+
+[sub_resource type="StandardMaterial3D" id="Mat_cabinet"]
+albedo_color = Color(0.72, 0.12, 0.14, 1)
+roughness = 0.45
+
+[sub_resource type="StandardMaterial3D" id="Mat_screen"]
+albedo_color = Color(0.12, 0.1, 0.05, 1)
+emission_enabled = true
+emission = Color(1, 0.78, 0.3, 1)
+emission_energy_multiplier = 1.2
+
+[sub_resource type="StandardMaterial3D" id="Mat_knob"]
+albedo_color = Color(0.9, 0.15, 0.15, 1)
+roughness = 0.3
+
+[sub_resource type="BoxMesh" id="BoxMesh_cabinet"]
+material = SubResource("Mat_cabinet")
+size = Vector3(1.3, 1.6, 0.9)
+
+[sub_resource type="BoxMesh" id="BoxMesh_top"]
+material = ExtResource("4_gold")
+size = Vector3(1.4, 0.4, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_screen"]
+material = SubResource("Mat_screen")
+size = Vector3(0.95, 0.45, 0.05)
+
+[sub_resource type="BoxMesh" id="BoxMesh_tray"]
+material = ExtResource("5_steel")
+size = Vector3(0.8, 0.12, 0.25)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_lever"]
+material = ExtResource("5_steel")
+top_radius = 0.04
+bottom_radius = 0.04
+height = 0.7
+radial_segments = 8
+rings = 1
+
+[sub_resource type="SphereMesh" id="SphereMesh_knob"]
+material = SubResource("Mat_knob")
+radius = 0.1
+height = 0.2
+radial_segments = 12
+rings = 6
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_body"]
+size = Vector3(1.4, 2, 1)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_reach"]
+radius = 1.9
+
+[sub_resource type="StandardMaterial3D" id="Mat_blast"]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(1, 0.62, 0.15, 0.9)
+
+[sub_resource type="SphereMesh" id="SphereMesh_blast"]
+material = SubResource("Mat_blast")
+radius = 0.5
+height = 1.0
+radial_segments = 16
+rings = 8
+
+[sub_resource type="FontVariation" id="FontVariation_sign"]
+variation_embolden = 0.9
+
+[node name="SlotMachine" type="Node3D" node_paths=PackedStringArray("interactable", "visual", "body", "explosion")]
+script = ExtResource("1_slot")
+data = ExtResource("2_data")
+interactable = NodePath("Interactable")
+visual = NodePath("Visual")
+body = NodePath("Body")
+explosion = NodePath("Explosion")
+prompt_key = &"INTERACT_SLOTS"
+
+[node name="Visual" type="Node3D" parent="."]
+
+[node name="Cabinet" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+mesh = SubResource("BoxMesh_cabinet")
+
+[node name="Top" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, 0)
+mesh = SubResource("BoxMesh_top")
+
+[node name="Screen" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.15, -0.46)
+mesh = SubResource("BoxMesh_screen")
+
+[node name="Tray" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.35, -0.5)
+mesh = SubResource("BoxMesh_tray")
+
+[node name="Lever" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 1.25, 0)
+mesh = SubResource("CylinderMesh_lever")
+
+[node name="Knob" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 1.62, 0)
+mesh = SubResource("SphereMesh_knob")
+
+[node name="Sign" type="Label3D" parent="Visual"]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 1.8, -0.51)
+pixel_size = 0.004
+modulate = Color(0.45, 0.06, 0.06, 1)
+text = "SLOT_MACHINE_SIGN"
+font = SubResource("FontVariation_sign")
+font_size = 72
+
+[node name="Body" type="StaticBody3D" parent="."]
+collision_mask = 0
+
+[node name="Shape" type="CollisionShape3D" parent="Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("BoxShape3D_body")
+
+[node name="Interactable" type="Area3D" parent="."]
+collision_layer = 256
+collision_mask = 0
+script = ExtResource("3_interactable")
+prompt_key = &"INTERACT_SLOTS"
+
+[node name="Shape" type="CollisionShape3D" parent="Interactable"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("SphereShape3D_reach")
+
+[node name="Explosion" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+visible = false
+cast_shadow = 0
+mesh = SubResource("SphereMesh_blast")

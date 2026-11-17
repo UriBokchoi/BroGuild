@@ -7,13 +7,15 @@ extends RefCounted
 
 
 ## Hasta [param choices] opciones. [param levels] es el nivel de cada objeto que lleva (por id);
-## [param weapon_slots] y [param rune_slots], sus ranuras abiertas de cada tipo.
+## [param weapon_slots] y [param rune_slots], sus ranuras abiertas de cada tipo. Cada mejora sale con
+## una rareza de [param rarities].
 static func build(
 	catalog: Array[ItemData],
 	levels: Dictionary[StringName, int],
 	choices: int,
 	weapon_slots: int,
 	rune_slots: int,
+	rarities: WeightedTable,
 	rng: RandomNumberGenerator,
 ) -> Array[LevelUpOption]:
 	var weapons := _count_owned(catalog, levels, WeaponData)
@@ -27,7 +29,10 @@ static func build(
 			var full := weapons >= weapon_slots if item is WeaponData else runes >= rune_slots
 			if full:
 				continue
-		candidates.append(LevelUpOption.create(item, level + 1))
+			candidates.append(LevelUpOption.create(item, 1))
+			continue
+		var rarity := rarities.pick(rng) as Rarity
+		candidates.append(LevelUpOption.create_upgrade(item, level + 1, item.roll_upgrade(rarity, rng)))
 	_shuffle(candidates, rng)
 	return candidates.slice(0, choices)
 
