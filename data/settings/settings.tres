@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="SettingsData" format=3]
+
+[ext_resource type="Script" path="res://systems/settings/settings_data.gd" id="1_data"]
+
+[resource]
+script = ExtResource("1_data")
+volume_buses = Array[StringName]([&"Master", &"Music", &"Effects"])
+default_volume = 0.8
+volume_step = 0.05
+default_vsync = true
+resolutions = Array[Vector2i]([Vector2i(1280, 720), Vector2i(1600, 900), Vector2i(1920, 1080), Vector2i(2560, 1440), Vector2i(3840, 2160)])

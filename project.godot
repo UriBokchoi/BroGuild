@@ -22,6 +22,7 @@ config/icon="res://icon.svg"
 EventBus="*res://autoload/event_bus.gd"
 Rng="*res://autoload/rng.gd"
 RunState="*res://autoload/run_state.gd"
+Save="*res://autoload/save.gd"
 
 [debug]
 

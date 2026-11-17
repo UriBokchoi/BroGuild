@@ -14,6 +14,8 @@ const SLATE_HOVER := Color("394152")
 const MODIFIED := Color("7cc7ff")
 const HEALTH := Color("c94a4a")
 const EXPERIENCE := Color("4fb6ff")
+const TOGGLE_ON := preload("res://assets/textures/icons/ui/toggle_on.svg")
+const TOGGLE_OFF := preload("res://assets/textures/icons/ui/toggle_off.svg")
 
 
 func _initialize() -> void:
@@ -37,7 +39,35 @@ func _main_theme() -> Theme:
 	_add_layouts(theme)
 	_add_hud(theme)
 	_add_scrollbar(theme)
+	_add_options(theme)
 	return theme
+
+
+## Panel de opciones: deslizadores de volumen, interruptores y la lista de resoluciones.
+func _add_options(theme: Theme) -> void:
+	_separation(theme, &"OptionsRow", &"HBoxContainer", 16)
+	theme.set_type_variation(&"OptionsGrid", &"GridContainer")
+	theme.set_constant(&"h_separation", &"OptionsGrid", 24)
+	theme.set_constant(&"v_separation", &"OptionsGrid", 10)
+	_label_variation(theme, &"OptionsValueLabel", 20, GOLD)
+	theme.set_constant(&"minimum_character_width", &"OptionsValueLabel", 5)
+	# Deslizador: pista oscura, relleno dorado.
+	theme.set_stylebox(&"slider", &"HSlider", _box(Color(SLATE, 0.95), 4, Vector2(0, 4), Color(GOLD, 0.3), 1, 1))
+	theme.set_stylebox(&"grabber_area", &"HSlider", _box(Color(GOLD, 0.75), 4, Vector2(0, 4), Color.TRANSPARENT, 0, 0))
+	theme.set_stylebox(&"grabber_area_highlight", &"HSlider", _box(GOLD, 4, Vector2(0, 4), Color.TRANSPARENT, 0, 0))
+	# Interruptores sin la caja de los botones (si no, la heredan de Button) y con iconos propios.
+	for state: StringName in [&"normal", &"hover", &"pressed", &"hover_pressed", &"disabled", &"focus"]:
+		theme.set_stylebox(state, &"CheckButton", StyleBoxEmpty.new())
+	for icon: StringName in [&"checked", &"checked_mirrored", &"checked_disabled", &"checked_disabled_mirrored"]:
+		theme.set_icon(icon, &"CheckButton", TOGGLE_ON)
+	for icon: StringName in [&"unchecked", &"unchecked_mirrored", &"unchecked_disabled", &"unchecked_disabled_mirrored"]:
+		theme.set_icon(icon, &"CheckButton", TOGGLE_OFF)
+	# Lista desplegable.
+	theme.set_stylebox(&"panel", &"PopupMenu", _box(SLATE_LIGHT, 8, Vector2(8, 8), Color(GOLD, 0.45), 2, 2))
+	theme.set_stylebox(&"hover", &"PopupMenu", _box(SLATE_HOVER, 6, Vector2(8, 4), Color.TRANSPARENT, 0, 0))
+	theme.set_color(&"font_color", &"PopupMenu", INK)
+	theme.set_color(&"font_hover_color", &"PopupMenu", GOLD)
+	theme.set_font_size(&"font_size", &"PopupMenu", 20)
 
 
 func _add_labels(theme: Theme) -> void:

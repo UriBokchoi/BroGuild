@@ -20,10 +20,10 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 
 | Carpeta | Qué va ahí |
 |---|---|
-| `autoload/` | Los únicos singletons: `EventBus` (solo señales), `Rng` (todo el azar, un generador por sistema) y `RunState` (partida en curso). Sin lógica de gameplay. |
+| `autoload/` | Los únicos singletons: `EventBus` (solo señales), `Rng` (todo el azar, un generador por sistema), `RunState` (partida en curso) y `Save` (lo que dura entre partidas, en `user://`; de momento, las opciones). Sin lógica de gameplay. |
 | `core/` | Piezas genéricas que no saben de este juego: stats, máquina de estados, componentes de combate, pool (`NodePool`), rejilla espacial (`SpatialHash`, con marcas y tope de resultados), carga de carpetas de datos (`ResourceDir`), nombres de acciones y capas. |
 | `entities/` | Lo que existe en el mundo: el jugador, los enemigos y los interactuables. |
-| `systems/` | Reglas y sistemas que reparten trabajo entre entidades: combate (fórmulas y armas), progresión, aparición de enemigos, objetos y runas (`upgrades/`) y la partida (`run/`). Vacía, para más adelante: `gamble/`. |
+| `systems/` | Reglas y sistemas que reparten trabajo entre entidades: combate (fórmulas y armas), progresión, aparición de enemigos, objetos y runas (`upgrades/`), la partida (`run/`) y las opciones (`settings/`). Vacía, para más adelante: `gamble/`. |
 | `data/` | Los `.tres` de balance y la traducción. Nada de código. |
 | `ui/` | HUD, menús, panel de depuración, vista de stats, tema global y dueño del ratón. |
 | `vfx/` | Efectos visuales: juice que reacciona a señales, shaders compartidos y líneas de velocidad. |
@@ -145,9 +145,10 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 
 ### UI — `ui/`
 - **`hud/`:** vida, stamina, experiencia y nivel (arriba), oro (`GoldCounter`) y reloj de la ronda (`RunClock`, en rojo en la prórroga) debajo, armas y runas (`LoadoutBar`: una fila de `LoadoutSlot` por tipo, con icono y nivel; las ranuras sin abrir, con candado) y aviso de interacción. Escuchan el `EventBus`.
-- **`menus/pause/`:** menú de pausa con todas las stats del jugador.
+- **`menus/pause/`:** menú de pausa con todas las stats del jugador; «Opciones» abre el `OptionsPanel`.
 - **`menus/armory/`:** panel de la armería.
 - **`menus/level_up/`:** elección al subir de nivel (`LevelUpPanel` y sus `LevelUpCard`).
+- **`menus/options/`:** `OptionsPanel`, opciones básicas: volumen de cada bus (`SettingsData.volume_buses`, en `default_bus_layout.tres`), pantalla completa, tamaño de la ventana y VSync. Cada cambio se aplica al momento sobre `Save.settings` y se guarda al cerrar. Lo abre la pausa (y lo abrirá el menú principal).
 - **`menus/results/`:** `ResultsPanel`, la pantalla de resultados al morir: una frase de muerte al azar (`death_lines`, claves `DEATH_LINE_*`), tiempo, nivel, enemigos y élites derrotados, oro y daño (del `RunRecorder`); «Reintentar» (R) recarga el nivel y «Salir» cierra el juego.
 - **`stats/`:** `StatsView`, la lista de stats de cualquier `StatsComponent` (la usan la pausa y la armería); `StatFormat`, el formato de un valor; y `ModifierFormat`, que describe un modificador («+10 % Daño»).
 - **`debug/`:** panel F3 con secciones (`DebugSection`); no se traduce.
@@ -157,6 +158,11 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 ### Partida — `systems/run/`
 - **`RunRecorder`** (en el nivel): escucha el `EventBus` y apunta en un `RunStats` lo que pasa en la partida: enemigos y élites derrotados, daño infligido, oro ganado (sin restar lo gastado), nivel y tiempo (el del reloj de la ronda si la hay). Para al morir el jugador.
 - **Reinicio rápido:** de momento recarga la escena (`reload_current_scene`, unos 0,2 s en el gimnasio). Con el flujo de partida del Hito 3 pasará por `RunState`.
+
+### Opciones — `systems/settings/` y `autoload/save.gd`
+- **`SettingsData`** (`data/settings/settings.tres`): buses con volumen, valores al estrenar el juego y tamaños de ventana que se ofrecen.
+- **`GameSettings`:** lo elegido (volúmenes, pantalla completa, tamaño de ventana, VSync). Se guarda en un `ConfigFile` (`user://settings.cfg`) y se aplica al motor (`apply_audio`, `apply_display`; sin pantalla, en headless, no toca la ventana).
+- **`Save`** (autoload) lo carga y lo aplica al arrancar; quien lo cambia llama a `Save.save_settings()`. Los tests usan otro archivo (`settings_path`).
 
 ### Niveles — `levels/`
 - **`test_gym/test_gym.tscn`:** escena principal de pruebas. Zona de movimiento con rampas, bordes, paredes, huecos y escalones, más el pad de daño (`props/`).
