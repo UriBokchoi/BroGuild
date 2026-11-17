@@ -42,8 +42,8 @@ func roll_upgrade(rarity: Rarity, rng: RandomNumberGenerator) -> ItemUpgrade:
 	return upgrade
 
 
-## Mejora estándar (sin rareza): todas sus [member upgrade_stats] con la fuerza de una común. La
-## usan la armería de práctica y las herramientas; cada llamada da una nueva.
+## Mejora estándar (sin rareza): todas sus [member upgrade_stats] con su mejora base. La usan la
+## armería de práctica y las herramientas; cada llamada da una nueva.
 func default_upgrade() -> ItemUpgrade:
 	var upgrade := ItemUpgrade.new()
 	for upgrade_stat: UpgradeStat in upgrade_stats:
