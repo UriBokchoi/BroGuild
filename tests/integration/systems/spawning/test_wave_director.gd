@@ -137,6 +137,16 @@ func test_without_ground_nobody_spawns() -> void:
 	assert_eq(_swarm.active_count(), 0)
 
 
+func test_enemies_only_spawn_inside_the_play_area() -> void:
+	# Solo la mitad x > 0 alrededor del objetivo: ninguno sale en la otra.
+	_director.play_area = Rect2(0.0, -40.0, 40.0, 80.0)
+	_director.start()
+	await wait_physics_frames(6)
+	assert_gt(_swarm.active_count(), 0)
+	for enemy: Enemy in _swarm.get_active():
+		assert_gte(enemy.global_position.x, 0.0)
+
+
 func _wave_data(rate: float, max_alive: int) -> WaveData:
 	var data := WaveData.new()
 	var curve := Curve.new()

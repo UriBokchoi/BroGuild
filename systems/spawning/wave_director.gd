@@ -28,6 +28,9 @@ signal stopped
 ## Stats donde vive la dificultad (las del jugador): el director le suma la parte del tiempo. Vacío:
 ## la dificultad son los minutos en marcha.
 @export var difficulty_stats: StatsComponent
+## Zona del suelo (x, z) donde pueden salir (dentro de las paredes del nivel). Vacía: en cualquier
+## sitio con suelo.
+@export var play_area: Rect2 = Rect2()
 ## Puntos que prueba para cada enemigo antes de dejarlo para el siguiente tick.
 @export_range(1, 32, 1) var placement_attempts: int = 6
 
@@ -166,6 +169,8 @@ func _find_spawn_point() -> Vector3:
 		var angle := rng.randf() * TAU
 		var distance := rng.randf_range(data.min_spawn_distance, data.max_spawn_distance)
 		var spot := center + Vector3(cos(angle), 0.0, sin(angle)) * distance
+		if play_area.has_area() and not play_area.has_point(Vector2(spot.x, spot.z)):
+			continue
 		var from := spot + Vector3.UP * probe_height
 		var to := spot + Vector3.DOWN * probe_height
 		var hit := space.intersect_ray(PhysicsRayQueryParameters3D.create(from, to, ground_mask))

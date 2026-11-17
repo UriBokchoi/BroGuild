@@ -1,9 +1,10 @@
 extends SceneTree
 ## Genera levels/brosque/forest.tscn: los árboles del Brosque (pinos y árboles redondos de colores)
 ## repartidos con semilla fija, sin pisar el claro del centro ni las mesetas, más un anillo denso en
-## el borde. Se dibujan con MultiMesh (pocas llamadas de dibujo) y chocan con un solo cuerpo con un
-## cilindro por tronco. El resto del nivel (mesetas, props, sistemas) está en brosque.tscn y se
-## edita a mano; si mueves una meseta, actualiza EXCLUSIONS y vuelve a generar:
+## el borde (con colisión) y una banda grande y densa fuera de las paredes que tapa el final del
+## mundo (sin colisión). Se dibujan con MultiMesh (pocas llamadas de dibujo) y chocan con un solo
+## cuerpo con un cilindro por tronco. El resto del nivel (mesetas, props, sistemas) está en
+## brosque.tscn y se edita a mano; si mueves una meseta, actualiza EXCLUSIONS y vuelve a generar:
 ## [code]"$G" --path . -s res://tools/gen_brosque_forest.gd[/code] (sin [code]--headless[/code]: sin
 ## render de verdad, los MultiMesh se guardan vacíos).
 
@@ -16,6 +17,12 @@ const BORDER := 74.0
 const BORDER_DEPTH := 5.0
 const BORDER_STEP := 4.0
 const MIN_SPACING := 7.0
+## Banda de bosque fuera de las paredes (que están a 81 m): tapa el borde del mundo. Sin colisión
+## (nadie llega) y más grande y densa.
+const OUTER_START := 83.0
+const OUTER_END := 135.0
+const OUTER_STEP := 4.5
+const OUTER_SCALE_RANGE := Vector2(1.2, 1.9)
 const MAX_TREES := 150
 const ATTEMPTS := 3000
 ## Zonas sin árboles: centro (x, z) y radio. El claro y las mesetas de brosque.tscn.
@@ -74,20 +81,31 @@ func _place_trees() -> Array[Dictionary]:
 			if side % 2 == 1:
 				at = -at
 			trees.append(_tree(at))
+	# Banda exterior: rejilla con temblor, solo fuera de las paredes.
+	var outer_steps := floori(OUTER_END * 2.0 / OUTER_STEP)
+	for row: int in outer_steps + 1:
+		for column: int in outer_steps + 1:
+			var spot := Vector2(-OUTER_END + column * OUTER_STEP, -OUTER_END + row * OUTER_STEP)
+			if maxf(absf(spot.x), absf(spot.y)) < OUTER_START:
+				continue
+			var jitter := OUTER_STEP * 0.4
+			spot += Vector2(_rng.randf_range(-jitter, jitter), _rng.randf_range(-jitter, jitter))
+			trees.append(_tree(spot, OUTER_SCALE_RANGE, false))
 	return trees
 
 
-func _tree(at: Vector2) -> Dictionary:
+func _tree(at: Vector2, scale_range: Vector2 = SCALE_RANGE, collides: bool = true) -> Dictionary:
 	var round_tree := _rng.randf() < ROUND_SHARE
 	var palette := ROUND_COLORS if round_tree else PINE_COLORS
 	if _rng.randf() < ACCENT_SHARE:
 		palette = ACCENT_COLORS
 	return {
 		"at": at,
-		"scale": _rng.randf_range(SCALE_RANGE.x, SCALE_RANGE.y),
+		"scale": _rng.randf_range(scale_range.x, scale_range.y),
 		"yaw": _rng.randf_range(0.0, TAU),
 		"round": round_tree,
 		"color": palette[_rng.randi_range(0, palette.size() - 1)],
+		"collides": collides,
 	}
 
 
@@ -154,14 +172,18 @@ func _add_colliders(forest: Node3D, trees: Array[Dictionary]) -> void:
 	var shape := CylinderShape3D.new()
 	shape.radius = TRUNK_RADIUS
 	shape.height = TRUNK_HEIGHT
-	for index: int in trees.size():
-		var at: Vector2 = trees[index]["at"]
+	var index := 0
+	for tree: Dictionary in trees:
+		if not tree["collides"]:
+			continue
+		var at: Vector2 = tree["at"]
 		var collider := CollisionShape3D.new()
 		collider.name = "Trunk%d" % index
 		collider.shape = shape
 		collider.position = Vector3(at.x, TRUNK_HEIGHT * 0.5, at.y)
 		body.add_child(collider)
 		collider.owner = forest
+		index += 1
 
 
 func _cylinder(material: Material, top: float, bottom: float, height: float) -> CylinderMesh:

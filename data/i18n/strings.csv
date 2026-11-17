@@ -5,9 +5,9 @@ MENU_OPTIONS,Opciones,Options
 MENU_ARCHIVE,Archivo,Archive
 MENU_QUIT,Abandonar,Quit game
 LEVEL_BROSQUE_NAME,El Brosque,The Brorest
-BROSQUE_SIGN_WELCOME,Bienvenido al Brosque,Welcome to the Brorest
-BROSQUE_SIGN_NO_PAIN,"No pain, no gain","No pain, no gain"
-BROSQUE_SIGN_LEG_DAY,Hoy toca pierna,It's leg day
+BROSQUE_INTRO_WELCOME,Bienvenido al Brosque,Welcome to the Brorest
+BROSQUE_INTRO_NO_PAIN,"No pain, no gain","No pain, no gain"
+BROSQUE_INTRO_LEG_DAY,Hoy toca pierna,It's leg day
 PAUSE_TITLE,Pausa,Paused
 PAUSE_CONTINUE,Continuar,Resume
 PAUSE_OPTIONS,Opciones,Options

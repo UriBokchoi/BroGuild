@@ -153,7 +153,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 - **Shaders propios de una feature:** van con ella (tajo de la espada, teletransporte, líneas de velocidad).
 
 ### UI — `ui/`
-- **`hud/`:** vida, stamina, experiencia y nivel (arriba), oro (`GoldCounter`) y reloj de la ronda (`RunClock`, en rojo en la prórroga) y dificultad (`DifficultyCounter`, una calavera y su valor) debajo, armas y runas (`LoadoutBar`: una fila de `LoadoutSlot` por tipo, con icono y nivel; las ranuras sin abrir, con candado) tragaperras (`SlotPanel`, abajo en el centro: rodillos que paran uno tras otro y el resultado) y aviso de interacción. Escuchan el `EventBus`.
+- **`hud/`:** bienvenida al nivel (`LevelIntro`, en el centro, se desvanece sola), vida, stamina, experiencia y nivel (arriba), oro (`GoldCounter`) y reloj de la ronda (`RunClock`, en rojo en la prórroga) y dificultad (`DifficultyCounter`, una calavera y su valor) debajo, armas y runas (`LoadoutBar`: una fila de `LoadoutSlot` por tipo, con icono y nivel; las ranuras sin abrir, con candado) tragaperras (`SlotPanel`, abajo en el centro: rodillos que paran uno tras otro y el resultado) y aviso de interacción. Escuchan el `EventBus`.
 - **`menus/pause/`:** menú de pausa con todas las stats del jugador; «Opciones» abre el `OptionsPanel`; «Reintentar» y «Salir» (al menú principal) van por `RunFlow`.
 - **`menus/main/`:** `MainMenu`, el menú principal (Jugar, Opciones, Archivo —desactivado hasta su tarea— y Abandonar), con los personajes vestidos de fondo. Lo muestra `Game`.
 - **`menus/armory/`:** panel de la armería.
@@ -178,10 +178,10 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 
 ### Niveles — `levels/`
 - **`common/run_systems.tscn`** (`RunSystems`): jugador, horda y oleadas, botín, subir de nivel, HUD, pausa, resultados, números de daño y panel de depuración, ya conectados. Cada nivel pone una instancia con sus oleadas (`waves`), si empiezan solas (`autostart_waves`), el personaje de serie y el punto de aparición (`spawn_point`).
-- **`brosque/brosque.tscn`:** el Brosque (`data/levels/brosque.tres`), un gimnasio en el bosque de unos 150 × 150 m con límites invisibles:
-  - claro central con el punto de aparición, pesas de piedra, bancos de tronco y carteles (`SignPost`, con su texto traducible);
+- **`brosque/brosque.tscn`:** el Brosque (`data/levels/brosque.tres`), un gimnasio en el bosque de unos 150 × 150 m rodeado de paredes invisibles (a 81 m; también para los enemigos, que solo salen dentro de `RunSystems.play_area`):
+  - claro central con el punto de aparición, pesas de piedra y bancos de tronco; al empezar, el HUD da la bienvenida (`RunSystems.intro_keys` → `EventBus.level_intro` → `LevelIntro`);
   - cuatro mesetas con rampa (`props/plateau_low.tscn` y `plateau_high.tscn`);
-  - el bosque (`forest.tscn`), generado con `tools/gen_brosque_forest.gd`: árboles con MultiMesh (pocas llamadas de dibujo) y un cuerpo con un tronco que choca por árbol. Si mueves una meseta o el claro, actualiza sus zonas en el generador y vuelve a generarlo (con ventana, no headless);
+  - el bosque (`forest.tscn`), generado con `tools/gen_brosque_forest.gd`: árboles con MultiMesh (pocas llamadas de dibujo); los de dentro de las paredes chocan (un cuerpo con un cilindro por tronco) y fuera una banda grande y densa sin colisión tapa el final del mundo. Si mueves una meseta o el claro, actualiza sus zonas en el generador y vuelve a generarlo (con ventana, no headless);
   - las oleadas empiezan solas.
 - **`test_gym/test_gym.tscn`:** escena de pruebas (usa `RunSystems`; las oleadas las empieza la campana de la zona de combate). Zona de movimiento con rampas, bordes, paredes, huecos y escalones, más el pad de daño (`props/`).
 - **`test_gym/zones/combat_range.tscn`:** zona de combate a 200 m del gimnasio. Muñecos, armería, invocadores (esbirros, tiradores y esbirros élite), pedestales de personaje, campana de oleadas, plataforma escalonada, teletransportes y recogedor de caídas. Las oleadas paran al volver.
@@ -194,6 +194,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 |---|---|---|
 | `run_started`, `run_ended` | `RunState` | (nadie aún) |
 | `retry_requested`, `main_menu_requested` | `RunFlow` (pausa, resultados) | `Game` |
+| `level_intro` (mensajes de bienvenida) | `RunSystems` | `LevelIntro` |
 | `cursor_requested` | pausa, armería, panel de depuración | `MouseCapture` |
 | `player_stamina_changed` | `StaminaComponent` | `StaminaBar` |
 | `player_health_changed` | `Player` | `HealthBar` |

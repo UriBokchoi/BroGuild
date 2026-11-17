@@ -176,6 +176,9 @@ func _add_hud(theme: Theme) -> void:
 	# Dificultad, arriba a la derecha: una calavera y su valor.
 	_label_variation(theme, &"DifficultyLabel", 22, DIFFICULTY)
 	_add_slots(theme)
+	# Bienvenida al nivel, en el centro: el título y unas líneas.
+	_label_variation(theme, &"IntroTitleLabel", 56, GOLD)
+	_label_variation(theme, &"IntroLineLabel", 26, INK)
 	_add_loadout(theme)
 
 
