@@ -969,3 +969,7 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - Al desactivarse (cofre abierto, altar usado), nada.
   - Solo en las mallas: con un texto (`Label3D`) encima se vería un rectángulo.
 - **Por qué:** lo pidió el diseñador, algo sutil. Un borde fijo en todo el mapa cansaría la vista; una franja de vez en cuando se nota sin molestar.
+
+## 2026-11-18 · Ruinas en el Brosque
+- **Decisión:** tres piezas nuevas de piedra con musgo, repartidas por el mapa generado fuera del claro: un templo de columnas rotas (1), muros caídos (3) y arcos medio derrumbados (2). Tienen colisión; sus bordes, de hasta 2,6 m, se pueden subir con el mantle. Solo mallas básicas y tres materiales (`ruin_stone`, `ruin_stone_dark` y `moss`).
+- **Por qué:** lo pidió el diseñador, para que el Brosque parezca más medieval. Como piezas del `LayoutData`, salen en sitios distintos en cada partida y no se pisan con lo demás.

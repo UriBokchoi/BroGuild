@@ -12,6 +12,9 @@
 [ext_resource type="Material" path="res://levels/brosque/materials/foliage.tres" id="10_foliage"]
 [ext_resource type="PackedScene" path="res://entities/interactables/chest/chest.tscn" id="11_chest"]
 [ext_resource type="PackedScene" path="res://entities/interactables/boss_altar/boss_altar.tscn" id="12_altar"]
+[ext_resource type="PackedScene" path="res://levels/brosque/props/ruin_temple.tscn" id="13_temple"]
+[ext_resource type="PackedScene" path="res://levels/brosque/props/ruin_wall.tscn" id="14_wall"]
+[ext_resource type="PackedScene" path="res://levels/brosque/props/ruin_arch.tscn" id="15_arch"]
 
 [sub_resource type="Resource" id="Piece_altar"]
 script = ExtResource("2_piece")
@@ -36,6 +39,27 @@ scene = ExtResource("5_low")
 count = 3
 footprint = 15.0
 top_height = 3.0
+avoid_clearing = true
+
+[sub_resource type="Resource" id="Piece_ruin_temple"]
+script = ExtResource("2_piece")
+scene = ExtResource("13_temple")
+count = 1
+footprint = 5.5
+avoid_clearing = true
+
+[sub_resource type="Resource" id="Piece_ruin_wall"]
+script = ExtResource("2_piece")
+scene = ExtResource("14_wall")
+count = 3
+footprint = 3.5
+avoid_clearing = true
+
+[sub_resource type="Resource" id="Piece_ruin_arch"]
+script = ExtResource("2_piece")
+scene = ExtResource("15_arch")
+count = 2
+footprint = 3.0
 avoid_clearing = true
 
 [sub_resource type="Resource" id="Piece_slots_ground"]
@@ -105,6 +129,6 @@ clearing_radius = 18.0
 spawn_radius = 6.0
 gap = 3.0
 attempts = 60
-pieces = Array[ExtResource("2_piece")]([SubResource("Piece_altar"), SubResource("Piece_high"), SubResource("Piece_low"), SubResource("Piece_slots_ground"), SubResource("Piece_chest_ground"), SubResource("Piece_dumbbell"), SubResource("Piece_bench")])
+pieces = Array[ExtResource("2_piece")]([SubResource("Piece_altar"), SubResource("Piece_high"), SubResource("Piece_low"), SubResource("Piece_ruin_temple"), SubResource("Piece_slots_ground"), SubResource("Piece_chest_ground"), SubResource("Piece_ruin_wall"), SubResource("Piece_ruin_arch"), SubResource("Piece_dumbbell"), SubResource("Piece_bench")])
 top_pieces = Array[ExtResource("2_piece")]([SubResource("Piece_slots_top"), SubResource("Piece_chest_top")])
 forest = SubResource("Forest_brosque")

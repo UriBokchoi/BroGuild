@@ -142,7 +142,7 @@ WASD mover · Ratón cámara · Espacio saltar · Shift dash · Ctrl slide (dobl
 
 - **Menús**: al iniciar, menú principal con Jugar, Archivo y Abandonar (cierra el juego).
   - *Jugar* → selección de personaje: lista a la izquierda, su modelo 3D en el centro y, al pasar el ratón, un panel a la derecha con nombre, stats, arma principal y habilidad pasiva. Al elegir, ese panel se cambia por la selección de nivel.
-  - *Niveles*: el Brosque (en inglés, the Brorest), la Torre del Mago y la Mazmorra. El Brosque es un **gimnasio en el bosque**: bosque low-poly de colores vivos con humor (rocas con forma de pesas, troncos-banco, carteles de «No pain, no gain»), tragaperras entre los árboles y mesetas para moverse en vertical. Empieza sencillo y gana detalles con el tiempo.
+  - *Niveles*: el Brosque (en inglés, the Brorest), la Torre del Mago y la Mazmorra. El Brosque es un **gimnasio en el bosque**: bosque low-poly de colores vivos con humor (rocas con forma de pesas, troncos-banco, carteles de «No pain, no gain») y ruinas pequeñas de piedra con musgo (un templo de columnas, muros rotos y arcos) que le dan el toque medieval, tragaperras entre los árboles y mesetas para moverse en vertical. Empieza sencillo y gana detalles con el tiempo.
   - *Archivo*: personajes, armas, runas y enemigos. Cada entrada se desbloquea al conseguirla o al derrotar a ese enemigo; mientras tanto sale como «???».
 - **Reinicio**: de la muerte a una partida nueva en menos de 2 s.
 
