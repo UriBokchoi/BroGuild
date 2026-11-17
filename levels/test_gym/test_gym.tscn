@@ -27,6 +27,7 @@
 [ext_resource type="Resource" path="res://data/pickups/gold_coin.tres" id="25_gold_coin"]
 [ext_resource type="Script" path="res://systems/run/run_recorder.gd" id="26_recorder"]
 [ext_resource type="PackedScene" path="res://ui/menus/results/results_panel.tscn" id="27_results"]
+[ext_resource type="Resource" path="res://data/characters/warrior.tres" id="28_warrior"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_lgb4e"]
 
@@ -54,6 +55,7 @@ transform = Transform3D(1, 0, 0, 0, 0.8637789, 0.503871, 0, -0.503871, 0.8637789
 script = ExtResource("6_mouse")
 
 [node name="Player" parent="." instance=ExtResource("7_player")]
+character = ExtResource("28_warrior")
 
 [node name="DebugPanel" parent="." node_paths=PackedStringArray("player") instance=ExtResource("8_debug")]
 player = NodePath("../Player")

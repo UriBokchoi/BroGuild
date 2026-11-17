@@ -48,7 +48,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 - Cada `State` declara en el inspector su acción, su prioridad, si es comprometido, si cancela y a quién puede interrumpir.
 
 ### Jugador — `entities/player/`
-`player.tscn` monta todos los componentes; `player.gd` solo los conecta y mueve el cuerpo (y se teletransporta y muere).
+`player.tscn` monta todos los componentes; `player.gd` solo los conecta y mueve el cuerpo (y se teletransporta y muere). Lleva un personaje: el de `RunState.character` si se eligió uno, si no el de su `character` (el gimnasio pone el Guerrero; la escena sola va sin personaje). `set_character()` lo cambia en el momento (base, arma inicial y pasiva) y guarda la elección en `RunState`.
 
 | Subcarpeta o nodo | Para qué |
 |---|---|
@@ -56,7 +56,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 | `feedback/` | Lo que el cuerpo muestra: `BodyCrouch` (agacha el modelo y baja la hurtbox en el slide), `BodyFacing` (gira el modelo), `DashJumpCue` (aro de la ventana del dash-jump) y `SpeedTrail` (estela). |
 | `stamina/` | Cargas de stamina: `StaminaPool` (lógica pura), `StaminaComponent` (nodo que recarga y avisa por EventBus) y `StaminaData`. |
 | `camera/` | `CameraRig` (tercera persona, se mueve en `_process` siguiendo la posición interpolada) y `CameraData`. |
-| `characters/` | `CharacterData`: las diferencias de un personaje sobre las stats básicas. |
+| `characters/` | `CharacterData`: las diferencias de un personaje sobre las stats básicas (su base), su color, su arma inicial y su pasiva. `passives/`: `CharacterPassive` (base: un nodo que el jugador añade al elegir el personaje; sus modificadores se van con él) y las de los iniciales: `EndurancePassive` (Aguante, Guerrero), `ArcaneEchoPassive` (Eco arcano, Mago) y `LethalPassive` (Letal, Pícaro), cada una con su escena y sus números. |
 | `player_input.gd` | Convierte el InputMap en acciones de la máquina y en la dirección pedida, relativa a la cámara. |
 | `interactor.gd` | Zona que encuentra el `Interactable` más cercano y lo activa con E. |
 | Nodos `Health`, `Hurtbox` y `Weapons` | Vida, zona donde recibe daño y `WeaponInventory` con sus armas. |
@@ -110,6 +110,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
   - `teleporter/`: `Teleporter`, pisar y aparecer en su destino; también es el recogedor de caídas;
   - `armory/`: la armería de práctica (armas y runas);
   - `summoner/`: el invocador de enemigos de práctica (uno por tipo, y uno de élites; su cartel muestra el nombre del enemigo);
+  - `character_pedestal/`: pedestal con la figura de un personaje; al interactuar, el jugador pasa a ser él (hasta la selección de personaje del Hito 3);
   - `wave_bell/`: la campana que arranca y para el director de oleadas.
 
 ### Objetos y runas — `systems/upgrades/`
@@ -159,7 +160,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 
 ### Niveles — `levels/`
 - **`test_gym/test_gym.tscn`:** escena principal de pruebas. Zona de movimiento con rampas, bordes, paredes, huecos y escalones, más el pad de daño (`props/`).
-- **`test_gym/zones/combat_range.tscn`:** zona de combate a 200 m del gimnasio. Muñecos, armería, invocadores (esbirros, tiradores y esbirros élite), campana de oleadas, plataforma escalonada, teletransportes y recogedor de caídas. Las oleadas paran al volver.
+- **`test_gym/zones/combat_range.tscn`:** zona de combate a 200 m del gimnasio. Muñecos, armería, invocadores (esbirros, tiradores y esbirros élite), pedestales de personaje, campana de oleadas, plataforma escalonada, teletransportes y recogedor de caídas. Las oleadas paran al volver.
 - **En la raíz del gimnasio viven** `EnemySwarm`, `WaveDirector`, `PickupField`, `LootDropper`, `LevelUpController` y `LevelUpPanel`, `RunRecorder` y `ResultsPanel`, `DamageNumbers`, HUD, pausa y panel de depuración.
 - **`stress/stress_test.tscn`:** prueba de rendimiento (herramienta, sin traducir). Mantiene 300 y luego 500 esbirros sobre un jugador inmortal con la espada, mide frames y física y sale. Comando en CLAUDE.md.
 
@@ -212,7 +213,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
   5. Para que salga en las oleadas, añádelo como `WaveEnemy` en el `WaveData`; para probarlo, pon otro invocador en la zona de combate.
 - **Una stat:** añade un `@export_range` en el Resource de datos que toque (`MovementData`, `OffenseData`, `WeaponStats`, `EnemyStats`…), pon su valor en el `.tres` y su fila `STAT_<NOMBRE>` en `data/i18n/strings.csv`. Un test exige la traducción.
 - **Un estado de movimiento:** crea un script en `entities/player/movement/states/` que herede de `MovementState` y añade un nodo hijo de `Movement` en `player.tscn` con su acción, prioridad y reglas.
-- **Un personaje:** crea un `.tres` `CharacterData` en `data/characters/` con sus diferencias de stats.
+- **Un personaje:** crea un `.tres` `CharacterData` en `data/characters/` con sus diferencias de stats, color, arma inicial y pasiva (y sus textos). Una pasiva nueva es un script que herede de `CharacterPassive` (`_activated()`, y `_set_bonus()` para su modificador) con su escena en `entities/player/characters/passives/`. Para probarlo, pon otro pedestal en la zona de combate.
 - **Un interactuable:** crea una escena con un `Interactable` (capa 9, `prompt_key`) y conecta su `interacted`.
 - **Un recogible** (cura, imán…):
   1. Crea un `.tres` `PickupData` en `data/pickups/` con su escena (raíz `Pickup`) y su `reward`.

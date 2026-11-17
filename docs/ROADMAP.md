@@ -52,7 +52,7 @@
 - [x] Élites: cada enemigo tiene un % de salir élite (más grande, pega más, más vida y suelta más experiencia y oro)
 - [x] Dificultad: ronda normal de 10 minutos; enemigos más fuertes con el tiempo y, desde el minuto 10, muy duros (hace falta buena build para aguantar); curva de experiencia del jugador ajustada a esa duración; reloj de la ronda en el HUD
 - [x] Muerte, resultados y reinicio rápido: al morir, pantalla de resultados (tiempo, nivel, enemigos y élites derrotados, oro y daño) y «Reintentar» (R) en unos 0,2 s; HUD de experiencia, nivel, oro y tiempo
-- [ ] Personajes iniciales: Guerrero (espada), Mago (bastón) y Pícaro (daga), cada uno con sus diferencias de stats y su habilidad pasiva
+- [x] Personajes iniciales: Guerrero (espada), Mago (bastón) y Pícaro (daga), cada uno con sus diferencias de stats, su rasgo de movimiento y su habilidad pasiva (Aguante, Eco arcano y Letal); pedestales en la zona de combate para cambiar de personaje
 
 ## Hito 3 — Menús y flujo de partida
 - [ ] Escena raíz `Game` con el flujo de pantallas; `RunState` guarda personaje, nivel y semilla; «Salir» de la pausa vuelve al menú

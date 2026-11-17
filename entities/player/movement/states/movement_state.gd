@@ -16,10 +16,14 @@ func settle() -> void:
 	machine.transition_to(ctx.ground if ctx.body.is_on_floor() else ctx.air)
 
 
-## Aplica la gravedad de los datos sin pasar de la velocidad máxima de caída.
+## Aplica la gravedad de los datos sin pasar de la velocidad máxima de caída (ni de la de planear,
+## si se mantiene el salto y planea).
 func apply_gravity(delta: float) -> void:
 	var fall := ctx.body.velocity.y - ctx.move.gravity() * delta
-	ctx.body.velocity.y = maxf(fall, -ctx.move.max_fall_speed)
+	var max_fall := ctx.move.max_fall_speed
+	if ctx.jump_held and ctx.move.glide_fall_speed > 0.0:
+		max_fall = minf(max_fall, ctx.move.glide_fall_speed)
+	ctx.body.velocity.y = maxf(fall, -max_fall)
 
 
 ## Control en el aire: acelera hacia la dirección pedida sin frenar el impulso que ya se lleva

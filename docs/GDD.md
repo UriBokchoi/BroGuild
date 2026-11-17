@@ -119,7 +119,15 @@ WASD mover · Ratón cámara · Espacio saltar · Shift dash · Ctrl slide (dobl
 - **Mesa**: ~10 min (dificultad normal; nivel ~30 al minuto 10 si se mata casi todo). Élites por probabilidad, cada vez más a menudo. Jefe al minuto 10; mientras no exista, enemigos muy fuertes.
 - **Monedas**: XP (niveles) · Oro (en partida, se apuesta; lo suelta cada enemigo y llega solo al matarlo) · Bote (sale de la partida y se gasta fuera).
 - **Meta-progresión**: desbloquear personajes (cada uno con un rasgo de movimiento: triple salto, dash más largo, slide más rápido…), armas iniciales y ventajas pequeñas. Nunca más poder bruto que el que da jugar bien.
-- **Personajes**: todos parten de las mismas stats básicas y cada uno cambia unas pocas según su gimmick (p. ej., +1 salto en el aire y −10 % de vida). Esas diferencias son su base: en el menú no salen como mejoras. Cada uno tiene un arma principal y una habilidad pasiva. Iniciales: **Guerrero** (espada), **Mago** (bastón de mago) y **Pícaro** (daga); sus diferencias de stats y sus pasivas, por definir.
+- **Personajes**: todos parten de las mismas stats básicas y cada uno cambia unas pocas según su gimmick (p. ej., +1 salto en el aire y −10 % de vida). Esas diferencias son su base: en el menú no salen como mejoras. Cada uno tiene un arma principal y una habilidad pasiva. Iniciales:
+
+  | | Guerrero | Mago | Pícaro |
+  |---|---|---|---|
+  | Arma inicial | Espada | Bastón de mago | Daga |
+  | Stats | +30 vida, +5 defensa, −5 % velocidad | −20 vida, +15 % área, +10 % experiencia | −10 vida, +10 % velocidad, +10 % crítico, +1 carga de stamina |
+  | Movimiento | Dash un 30 % más largo | Planea manteniendo el salto (cae como mucho a 3 m/s) | +1 salto en el aire |
+  | Pasiva | **Aguante**: +2 % de daño por cada enemigo a menos de 5 m (hasta +30 %) | **Eco arcano**: cada 4.º ataque de cada arma sale dos veces | **Letal**: +1 % de probabilidad de crítico por cada nivel |
+
 - **Menús**: al iniciar, menú principal con Jugar, Archivo y Abandonar (cierra el juego).
   - *Jugar* → selección de personaje: lista a la izquierda, su modelo 3D en el centro y, al pasar el ratón, un panel a la derecha con nombre, stats, arma principal y habilidad pasiva. Al elegir, ese panel se cambia por la selección de nivel.
   - *Niveles*: el Brosque (bosque bro), la Torre del Mago y la Mazmorra. Hasta que existan sus mapas, se juega en la zona de pruebas.
@@ -131,4 +139,3 @@ Multijugador · historia · generación procedural de mapas (de momento, arenas 
 
 ## 11. Decisiones abiertas
 - Adaptar a la temática medieval los nombres y elementos que vienen del casino: bote, La Banca, crupier, mesa, «¿Cobrar o Doblar?» y estética neón (§7). Las tragaperras se quedan. Las fichas ya son oro.
-- Diferencias de stats y habilidad pasiva de Guerrero, Mago y Pícaro.

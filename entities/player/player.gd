@@ -1,7 +1,8 @@
 class_name Player
 extends CharacterBody3D
 ## Jugador: monta el contexto de movimiento, avanza la máquina de estados y mueve el cuerpo.
-## Avisa a la interfaz de su vida, su experiencia, su oro y su muerte (al morir se queda quieto y sus armas
+## Lleva un personaje ([CharacterData]: su base de stats, su arma inicial y su pasiva). Avisa a la
+## interfaz de su vida, su experiencia, su oro y su muerte (al morir se queda quieto y sus armas
 ## paran); al subir de nivel aleja la cámara. Las mecánicas van en sus estados y componentes, nunca
 ## aquí (CLAUDE.md, «Nunca»).
 
@@ -24,10 +25,24 @@ extends CharacterBody3D
 @export var ground_state: State
 ## Estado neutro en el aire.
 @export var air_state: State
+## Personaje con el que empieza si no se eligió otro ([code]RunState.character[/code]). Vacío:
+## stats básicas, sin arma ni pasiva (el nivel decide).
+@export var character: CharacterData
 
 ## Contexto compartido por los estados de movimiento. Fuera de los estados, solo para leer
 ## (el panel de depuración, por ejemplo).
 var context: MovementContext
+## Habilidad pasiva de su personaje (o [code]null[/code]).
+var passive: CharacterPassive
+
+
+func _enter_tree() -> void:
+	# Antes de que sus stats se registren (son hijas: entran después), el personaje pasa a ser su
+	# base: la vida, la stamina y el movimiento arrancan ya con sus diferencias.
+	if RunState.character:
+		character = RunState.character
+	if character and not stats.base_sets.has(character):
+		stats.base_sets.append(character)
 
 
 func _ready() -> void:
@@ -50,6 +65,24 @@ func _ready() -> void:
 	EventBus.player_health_changed.emit(health.get_current(), health.get_maximum())
 	EventBus.player_xp_changed.emit(experience.get_xp(), experience.needed(), experience.get_level())
 	EventBus.player_gold_changed.emit(wallet.get_gold())
+	if character:
+		_equip(character)
+
+
+## Cambia de personaje en el momento: su base de stats, su arma inicial (quita la del anterior) y su
+## pasiva, con la vida llena. La elección se guarda en [code]RunState[/code]: reintentar sigue con
+## él.
+func set_character(data: CharacterData) -> void:
+	if data == null or data == character:
+		return
+	if character:
+		stats.remove_modifiers_from(character)
+		_unequip(character)
+	character = data
+	RunState.character = data
+	stats.add_base_set(data)
+	_equip(data)
+	health.reset()
 
 
 func _physics_process(delta: float) -> void:
@@ -57,6 +90,7 @@ func _physics_process(delta: float) -> void:
 	context.wish_direction = input.move_direction()
 	context.view_forward = input.view_forward()
 	context.slide_held = input.is_held(InputActions.SLIDE)
+	context.jump_held = input.is_held(InputActions.JUMP)
 	# Cada tick, por si una mejora acaba de cambiar estas stats.
 	movement.buffer_time = context.move.input_buffer_time
 	movement.committed_end_buffer = context.move.action_end_buffer_time
@@ -72,13 +106,35 @@ func teleport_to(feet: Vector3) -> void:
 	reset_physics_interpolation()
 
 
+## Le da el arma inicial y la pasiva de [param data].
+func _equip(data: CharacterData) -> void:
+	if data.starting_weapon:
+		weapons.add(data.starting_weapon)
+	if data.passive:
+		passive = data.passive.instantiate() as CharacterPassive
+		add_child(passive)
+		passive.activate(self)
+
+
+## Le quita el arma inicial y la pasiva de [param data].
+func _unequip(data: CharacterData) -> void:
+	if data.starting_weapon:
+		weapons.remove(data.starting_weapon)
+	if passive:
+		stats.remove_modifiers_from(passive)
+		# Se queda en el árbol, parada, hasta que se borre al acabar el frame.
+		passive.process_mode = Node.PROCESS_MODE_DISABLED
+		passive.queue_free()
+		passive = null
+
+
 func _on_leveled_up(level: int) -> void:
 	camera.level = level
 	EventBus.player_leveled_up.emit(level)
 
 
-## Muerto, se queda quieto y sus armas paran. La pantalla de resultados y el reinicio llegarán con
-## su tarea.
+## Muerto, se queda quieto y sus armas paran; la pantalla de resultados se entera por el
+## [code]EventBus[/code].
 func _on_died() -> void:
 	set_physics_process(false)
 	velocity = Vector3.ZERO

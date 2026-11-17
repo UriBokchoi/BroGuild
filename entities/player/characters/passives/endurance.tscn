@@ -1,0 +1,10 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://entities/player/characters/passives/endurance_passive.gd" id="1_passive"]
+
+[node name="Endurance" type="Node"]
+script = ExtResource("1_passive")
+enemy_mask = 16
+radius = 5.0
+damage_per_enemy = 0.02
+max_enemies = 15
