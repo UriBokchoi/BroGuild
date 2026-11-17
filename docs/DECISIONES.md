@@ -880,14 +880,14 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
 ## 2026-11-17 · Cofres y objetos pasivos
 - **Decisión:**
   - **Objetos pasivos:** `PassiveItemData` es un `StatModifierSet` con id, textos, icono y una rareza fija. Viven en `data/items/` y el jugador los lleva en `PassiveInventory`. Cada copia aplica sus modificadores con su propio origen: se apilan y se puede quitar una.
-  - **13 objetos de gimnasio** como propuesta inicial, para cambiar en datos:
+  - **15 objetos de cultura bro** como propuesta inicial, para cambiar en datos. El gimnasio es solo un tema más (lo pidió el diseñador: «cosas de bro en general, no solo gym»):
 
     | Rareza | Objetos |
     |---|---|
-    | Común | batido de proteínas (+10 % vida), muñequeras (+8 % vel. ataque), toalla (+0,4 vida/s), riñonera (+15 % oro) |
-    | Rara | guantes (+10 % daño), zapatillas (+6 % carrera y sprint), calcetines de la suerte (+10 Suerte) |
-    | Improbable | espejo (+6 % crítico), aceite corporal (+5 % esquiva), cinturón de levantar (+10 defensa) |
-    | De leyenda | mancuerna de oro (+1 proyectil), batido sospechoso (+25 % daño y +3 dificultad) |
+    | Común | batido de proteínas (+10 % vida), pizza fría de ayer (+0,4 vida/s), riñonera (+15 % oro), mando de consola (+8 % vel. ataque) |
+    | Rara | gorra hacia atrás (+10 % daño), chanclas con calcetines (+6 % carrera y sprint), rasca y gana (+10 Suerte), altavoz portátil (+12 % área) |
+    | Improbable | gafas de sol (+6 % crítico), aceite corporal (+5 % esquiva), cinturón de levantar (+10 defensa) |
+    | De leyenda | mancuerna de oro (+1 proyectil), batido sospechoso (+25 % daño y +3 dificultad), cadena de oro (+25 % oro y +10 Suerte) |
     | Mítica | corona del Bro (+15 % daño, vel. ataque, vida y área) |
 
   - **Cofres:** cuestan `(20 + 4 × dificultad) × 1,3^cofres abiertos` en la partida. Tiran una rareza de la tabla de siempre con la Suerte del jugador y sacan un objeto de esa rareza; si no hay ninguno, uno de la de debajo.

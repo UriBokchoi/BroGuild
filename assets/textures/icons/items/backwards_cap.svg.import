@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dw4lkvmyjt6sl"
-path="res://.godot/imported/wrist_wraps.svg-a634876c4a6dc2558944804944a419ac.ctex"
+uid="uid://chtrccbpqr12y"
+path="res://.godot/imported/backwards_cap.svg-81027b80aa7d4962ec03a9cbcd3123af.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/icons/items/wrist_wraps.svg"
-dest_files=["res://.godot/imported/wrist_wraps.svg-a634876c4a6dc2558944804944a419ac.ctex"]
+source_file="res://assets/textures/icons/items/backwards_cap.svg"
+dest_files=["res://.godot/imported/backwards_cap.svg-81027b80aa7d4962ec03a9cbcd3123af.ctex"]
 
 [params]
 

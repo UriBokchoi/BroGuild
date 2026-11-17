@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://y2uyuknylguy"
-path="res://.godot/imported/gym_towel.svg-9373dcfe5e31007026ec2dee92599f6e.ctex"
+uid="uid://bc0q2lk3adyad"
+path="res://.godot/imported/sunglasses.svg-ddb38acdd6a2c658dce7dbab8eaaf855.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/icons/items/gym_towel.svg"
-dest_files=["res://.godot/imported/gym_towel.svg-9373dcfe5e31007026ec2dee92599f6e.ctex"]
+source_file="res://assets/textures/icons/items/sunglasses.svg"
+dest_files=["res://.godot/imported/sunglasses.svg-ddb38acdd6a2c658dce7dbab8eaaf855.ctex"]
 
 [params]
 

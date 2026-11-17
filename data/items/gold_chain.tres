@@ -2,26 +2,25 @@
 
 [ext_resource type="Script" path="res://systems/items/passive_item_data.gd" id="1_item"]
 [ext_resource type="Script" path="res://core/stats/stat_modifier.gd" id="2_modifier"]
-[ext_resource type="Resource" path="res://data/rarities/rare.tres" id="3_rarity"]
-[ext_resource type="Texture2D" path="res://assets/textures/icons/items/running_shoes.svg" id="4_icon"]
+[ext_resource type="Resource" path="res://data/rarities/legendary.tres" id="3_rarity"]
+[ext_resource type="Texture2D" path="res://assets/textures/icons/items/gold_chain.svg" id="4_icon"]
 
 [sub_resource type="Resource" id="Modifier_1"]
 script = ExtResource("2_modifier")
-stat = &"run_speed"
+stat = &"currency_gain"
 kind = 1
-value = 0.06
+value = 0.25
 
 [sub_resource type="Resource" id="Modifier_2"]
 script = ExtResource("2_modifier")
-stat = &"sprint_speed"
-kind = 1
-value = 0.06
+stat = &"luck"
+value = 10.0
 
 [resource]
 script = ExtResource("1_item")
 stat_modifiers = Array[ExtResource("2_modifier")]([SubResource("Modifier_1"), SubResource("Modifier_2")])
-id = &"running_shoes"
-name_key = &"ITEM_RUNNING_SHOES_NAME"
-description_key = &"ITEM_RUNNING_SHOES_DESCRIPTION"
+id = &"gold_chain"
+name_key = &"ITEM_GOLD_CHAIN_NAME"
+description_key = &"ITEM_GOLD_CHAIN_DESCRIPTION"
 icon = ExtResource("4_icon")
 rarity = ExtResource("3_rarity")

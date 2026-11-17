@@ -2,20 +2,20 @@
 
 [ext_resource type="Script" path="res://systems/items/passive_item_data.gd" id="1_item"]
 [ext_resource type="Script" path="res://core/stats/stat_modifier.gd" id="2_modifier"]
-[ext_resource type="Resource" path="res://data/rarities/common.tres" id="3_rarity"]
-[ext_resource type="Texture2D" path="res://assets/textures/icons/items/wrist_wraps.svg" id="4_icon"]
+[ext_resource type="Resource" path="res://data/rarities/rare.tres" id="3_rarity"]
+[ext_resource type="Texture2D" path="res://assets/textures/icons/items/backwards_cap.svg" id="4_icon"]
 
 [sub_resource type="Resource" id="Modifier_1"]
 script = ExtResource("2_modifier")
-stat = &"attack_speed"
+stat = &"damage"
 kind = 1
-value = 0.08
+value = 0.1
 
 [resource]
 script = ExtResource("1_item")
 stat_modifiers = Array[ExtResource("2_modifier")]([SubResource("Modifier_1")])
-id = &"wrist_wraps"
-name_key = &"ITEM_WRIST_WRAPS_NAME"
-description_key = &"ITEM_WRIST_WRAPS_DESCRIPTION"
+id = &"backwards_cap"
+name_key = &"ITEM_BACKWARDS_CAP_NAME"
+description_key = &"ITEM_BACKWARDS_CAP_DESCRIPTION"
 icon = ExtResource("4_icon")
 rarity = ExtResource("3_rarity")

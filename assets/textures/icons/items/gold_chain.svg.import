@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cawtsou3tdj15"
-path="res://.godot/imported/gym_mirror.svg-f183b2262fdf40463e596051f7ef49f9.ctex"
+uid="uid://h8clkpe508bx"
+path="res://.godot/imported/gold_chain.svg-11af7590c9b916c4cc37d3d960d1a0f0.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/icons/items/gym_mirror.svg"
-dest_files=["res://.godot/imported/gym_mirror.svg-f183b2262fdf40463e596051f7ef49f9.ctex"]
+source_file="res://assets/textures/icons/items/gold_chain.svg"
+dest_files=["res://.godot/imported/gold_chain.svg-11af7590c9b916c4cc37d3d960d1a0f0.ctex"]
 
 [params]
 

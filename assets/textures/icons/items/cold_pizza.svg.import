@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dukkkwfxsxw6x"
-path="res://.godot/imported/lucky_socks.svg-49203e19cb0937d6a3b24b4513bdf529.ctex"
+uid="uid://dik5hhj5h1ui6"
+path="res://.godot/imported/cold_pizza.svg-032812ecb1a83a61cbdb072ca7c9ad87.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/icons/items/lucky_socks.svg"
-dest_files=["res://.godot/imported/lucky_socks.svg-49203e19cb0937d6a3b24b4513bdf529.ctex"]
+source_file="res://assets/textures/icons/items/cold_pizza.svg"
+dest_files=["res://.godot/imported/cold_pizza.svg-032812ecb1a83a61cbdb072ca7c9ad87.ctex"]
 
 [params]
 

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c7qkdcv1wb8oc"
-path="res://.godot/imported/running_shoes.svg-e48d6769dc0c30945e93f994005b4408.ctex"
+uid="uid://dr5in8jvt0v0f"
+path="res://.godot/imported/scratch_card.svg-7bf71abb5ad5064943974fb33d37e202.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/icons/items/running_shoes.svg"
-dest_files=["res://.godot/imported/running_shoes.svg-e48d6769dc0c30945e93f994005b4408.ctex"]
+source_file="res://assets/textures/icons/items/scratch_card.svg"
+dest_files=["res://.godot/imported/scratch_card.svg-7bf71abb5ad5064943974fb33d37e202.ctex"]
 
 [params]
 

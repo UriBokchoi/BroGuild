@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://systems/items/passive_item_data.gd" id="1_item"]
 [ext_resource type="Script" path="res://core/stats/stat_modifier.gd" id="2_modifier"]
 [ext_resource type="Resource" path="res://data/rarities/common.tres" id="3_rarity"]
-[ext_resource type="Texture2D" path="res://assets/textures/icons/items/gym_towel.svg" id="4_icon"]
+[ext_resource type="Texture2D" path="res://assets/textures/icons/items/cold_pizza.svg" id="4_icon"]
 
 [sub_resource type="Resource" id="Modifier_1"]
 script = ExtResource("2_modifier")
@@ -13,8 +13,8 @@ value = 0.4
 [resource]
 script = ExtResource("1_item")
 stat_modifiers = Array[ExtResource("2_modifier")]([SubResource("Modifier_1")])
-id = &"gym_towel"
-name_key = &"ITEM_GYM_TOWEL_NAME"
-description_key = &"ITEM_GYM_TOWEL_DESCRIPTION"
+id = &"cold_pizza"
+name_key = &"ITEM_COLD_PIZZA_NAME"
+description_key = &"ITEM_COLD_PIZZA_DESCRIPTION"
 icon = ExtResource("4_icon")
 rarity = ExtResource("3_rarity")

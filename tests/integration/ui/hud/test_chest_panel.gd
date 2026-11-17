@@ -5,7 +5,7 @@ extends GutTest
 
 const HudScene := preload("res://ui/hud/hud.tscn")
 const RARITIES := preload("res://data/rarities/rarities.tres")
-const SOCKS := preload("res://data/items/lucky_socks.tres")
+const CARD := preload("res://data/items/scratch_card.tres")
 const CROWN := preload("res://data/items/bro_crown.tres")
 
 var _hud: Node
@@ -42,11 +42,11 @@ func test_without_gold_only_the_warning() -> void:
 
 func test_the_items_show_under_the_runes_with_their_copies() -> void:
 	var bar := _hud.get_node(^"%PassiveBar") as PassiveBar
-	EventBus.player_passive_changed.emit(SOCKS, 1)
+	EventBus.player_passive_changed.emit(CARD, 1)
 	EventBus.player_passive_changed.emit(CROWN, 1)
-	EventBus.player_passive_changed.emit(SOCKS, 3)
-	assert_eq(bar.get_shown(), [SOCKS.id, CROWN.id] as Array[StringName])
-	assert_eq(bar.get_count_text(SOCKS), "×3")
+	EventBus.player_passive_changed.emit(CARD, 3)
+	assert_eq(bar.get_shown(), [CARD.id, CROWN.id] as Array[StringName])
+	assert_eq(bar.get_count_text(CARD), "×3")
 	assert_eq(bar.get_count_text(CROWN), "", "una sola copia, sin número")
-	EventBus.player_passive_changed.emit(SOCKS, 0)
+	EventBus.player_passive_changed.emit(CARD, 0)
 	assert_eq(bar.get_shown(), [CROWN.id] as Array[StringName])

@@ -127,7 +127,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
   - `LevelUpController` (en el nivel) escucha `player_leveled_up`, abre `LevelUpPanel` (pausa y cartas, en `ui/menus/level_up/`) y aplica la elegida a las armas o runas del jugador. Usa el flujo `GAMBLE` de `Rng`: la ruleta del Hito 4 irá encima.
 
 ### Objetos pasivos — `systems/items/`
-- **`PassiveItemData`** (un `StatModifierSet` con id, nombre, descripción, icono y `rarity`): objeto de cofre. Viven en `data/items/` (13 de momento, con temática de gimnasio). No ocupan ranura y se apilan.
+- **`PassiveItemData`** (un `StatModifierSet` con id, nombre, descripción, icono y `rarity`): objeto de cofre. Viven en `data/items/` (15 de momento, de cultura bro: el gimnasio es solo un tema más). No ocupan ranura y se apilan.
 - **`PassiveInventory`** (nodo `Items` del jugador): `add` aplica otra vez los modificadores de una copia (cada copia es su propio origen), `remove` quita la última, `count`, `get_items` (por orden de llegada) y `total`. Avisa con `item_changed`, que el `Player` pasa a `EventBus.player_passive_changed`.
 
 ### Rompibles — `entities/breakables/`

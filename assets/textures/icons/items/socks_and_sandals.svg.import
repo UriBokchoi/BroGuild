@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b5s45qayj05th"
-path="res://.godot/imported/lifting_gloves.svg-339e699d756d0b1de4ff9c6007c0f806.ctex"
+uid="uid://ctykn2vx5dgmd"
+path="res://.godot/imported/socks_and_sandals.svg-6ae777d94980265cd7d8193f7796b60e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/icons/items/lifting_gloves.svg"
-dest_files=["res://.godot/imported/lifting_gloves.svg-339e699d756d0b1de4ff9c6007c0f806.ctex"]
+source_file="res://assets/textures/icons/items/socks_and_sandals.svg"
+dest_files=["res://.godot/imported/socks_and_sandals.svg-6ae777d94980265cd7d8193f7796b60e.ctex"]
 
 [params]
 
