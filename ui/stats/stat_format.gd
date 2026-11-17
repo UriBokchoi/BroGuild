@@ -29,6 +29,11 @@ static func group_key(group: String) -> String:
 	return "STAT_GROUP_%s" % group.to_upper()
 
 
+## [param value] con [constant MAX_DECIMALS] decimales como mucho y sin ceros al final.
+static func number(value: float) -> String:
+	return _trim_zeros(String.num(value, MAX_DECIMALS))
+
+
 ## [code]"9.0"[/code] → [code]"9"[/code], [code]"0.50"[/code] → [code]"0.5"[/code]
 ## (String.num deja un «.0» en 4.7.2).
 static func _trim_zeros(text: String) -> String:

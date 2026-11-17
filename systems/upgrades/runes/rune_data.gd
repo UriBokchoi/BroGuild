@@ -12,3 +12,13 @@ extends ItemData
 ## Nivel máximo de la runa.
 func max_level() -> int:
 	return levels.size()
+
+
+func kind_key() -> StringName:
+	return &"ITEM_KIND_RUNE"
+
+
+func level_modifiers(level: int) -> Array[StatModifier]:
+	if level < 1 or level > max_level():
+		return []
+	return levels[level - 1].stat_modifiers

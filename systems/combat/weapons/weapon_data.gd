@@ -16,3 +16,13 @@ extends ItemData
 ## Nivel máximo del arma.
 func max_level() -> int:
 	return levels.size() + 1
+
+
+func kind_key() -> StringName:
+	return &"ITEM_KIND_WEAPON"
+
+
+func level_modifiers(level: int) -> Array[StatModifier]:
+	if level < 2 or level > max_level():
+		return []
+	return levels[level - 2].stat_modifiers

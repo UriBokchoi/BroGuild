@@ -15,3 +15,12 @@ extends Resource
 
 ## Nivel máximo.
 @abstract func max_level() -> int
+
+
+## Clave de traducción de qué es (arma, runa…), para mostrarlo.
+@abstract func kind_key() -> StringName
+
+
+## Modificadores que trae el nivel [param level] (vacío si ese nivel no cambia stats, como el 1 de
+## un arma).
+@abstract func level_modifiers(level: int) -> Array[StatModifier]

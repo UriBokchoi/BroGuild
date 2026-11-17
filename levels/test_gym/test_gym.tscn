@@ -21,6 +21,9 @@
 [ext_resource type="Script" path="res://systems/progression/pickup_field.gd" id="19_pickups"]
 [ext_resource type="Script" path="res://systems/progression/loot_dropper.gd" id="20_loot"]
 [ext_resource type="Resource" path="res://data/pickups/xp_gem.tres" id="21_xp_gem"]
+[ext_resource type="Script" path="res://systems/upgrades/level_up/level_up_controller.gd" id="22_level_up"]
+[ext_resource type="Resource" path="res://data/progression/level_up.tres" id="23_level_up_data"]
+[ext_resource type="PackedScene" path="res://ui/menus/level_up/level_up_panel.tscn" id="24_level_up_panel"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_lgb4e"]
 
@@ -85,6 +88,14 @@ collector_stats = NodePath("../Player/Stats")
 script = ExtResource("20_loot")
 field = NodePath("../PickupField")
 xp_gem = ExtResource("21_xp_gem")
+
+[node name="LevelUpPanel" parent="." instance=ExtResource("24_level_up_panel")]
+
+[node name="LevelUpController" type="Node" parent="." node_paths=PackedStringArray("player", "panel")]
+script = ExtResource("22_level_up")
+data = ExtResource("23_level_up_data")
+player = NodePath("../Player")
+panel = NodePath("../LevelUpPanel")
 
 [node name="WaveDirector" type="Node" parent="." node_paths=PackedStringArray("swarm", "target")]
 script = ExtResource("17_director")

@@ -32,6 +32,7 @@ func _main_theme() -> Theme:
 	_add_labels(theme)
 	_add_buttons(theme)
 	_add_small_buttons(theme)
+	_add_cards(theme)
 	_add_panels(theme)
 	_add_layouts(theme)
 	_add_hud(theme)
@@ -68,6 +69,14 @@ func _add_small_buttons(theme: Theme) -> void:
 	theme.set_type_variation(&"SmallButton", &"Button")
 	_button_boxes(theme, &"SmallButton", Vector2(16, 6), 8)
 	theme.set_font_size(&"font_size", &"SmallButton", 18)
+
+
+## Cartas de la elección al subir de nivel: un botón grande con su contenido en columna.
+func _add_cards(theme: Theme) -> void:
+	theme.set_type_variation(&"CardButton", &"Button")
+	_button_boxes(theme, &"CardButton", Vector2(20, 20), 14)
+	_separation(theme, &"CardColumn", &"VBoxContainer", 8)
+	_separation(theme, &"CardRow", &"HBoxContainer", 24)
 
 
 func _add_panels(theme: Theme) -> void:

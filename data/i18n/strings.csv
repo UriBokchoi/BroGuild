@@ -136,3 +136,9 @@ RUNE_MULTIPLICITY_NAME,Runa de Multiplicidad,Rune of Multiplicity
 RUNE_MULTIPLICITY_DESCRIPTION,"+1 proyectil por nivel (también un tajo más con la espada).","+1 projectile per level (also one more sword slash)."
 ARMORY_WEAPONS,Armas,Weapons
 ARMORY_RUNES,Runas,Runes
+LEVEL_UP_TITLE,¡Nivel %d!,Level %d!
+LEVEL_UP_CHOOSE,Elige una mejora,Choose an upgrade
+LEVEL_UP_NEW,Nuevo,New
+LEVEL_UP_LEVEL,Nv. %d → %d,Lv. %d → %d
+ITEM_KIND_WEAPON,Arma,Weapon
+ITEM_KIND_RUNE,Runa,Rune
