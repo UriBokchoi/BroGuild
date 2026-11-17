@@ -148,7 +148,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 - **`menus/pause/`:** menú de pausa con todas las stats del jugador; «Opciones» abre el `OptionsPanel`.
 - **`menus/armory/`:** panel de la armería.
 - **`menus/level_up/`:** elección al subir de nivel (`LevelUpPanel` y sus `LevelUpCard`).
-- **`menus/options/`:** `OptionsPanel`, opciones básicas: volumen de cada bus (`SettingsData.volume_buses`, en `default_bus_layout.tres`), pantalla completa, tamaño de la ventana y VSync. Cada cambio se aplica al momento sobre `Save.settings` y se guarda al cerrar. Lo abre la pausa (y lo abrirá el menú principal).
+- **`menus/options/`:** `OptionsPanel`, opciones básicas: volumen de cada bus (`SettingsData.volume_buses`, en `default_bus_layout.tres`), pantalla completa, tamaño de la ventana y VSync. El volumen se aplica al momento; lo de pantalla espera a «Aplicar» (que lo aplica y lo guarda) y «Volver» descarta lo no aplicado. Trabaja sobre `Save.settings`. Dentro del editor (pestaña «Juego») avisa de que la ventana no se puede cambiar y desactiva esas opciones. Lo abre la pausa (y lo abrirá el menú principal).
 - **`menus/results/`:** `ResultsPanel`, la pantalla de resultados al morir: una frase de muerte al azar (`death_lines`, claves `DEATH_LINE_*`), tiempo, nivel, enemigos y élites derrotados, oro y daño (del `RunRecorder`); «Reintentar» (R) recarga el nivel y «Salir» cierra el juego.
 - **`stats/`:** `StatsView`, la lista de stats de cualquier `StatsComponent` (la usan la pausa y la armería); `StatFormat`, el formato de un valor; y `ModifierFormat`, que describe un modificador («+10 % Daño»).
 - **`debug/`:** panel F3 con secciones (`DebugSection`); no se traduce.
@@ -161,7 +161,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 
 ### Opciones — `systems/settings/` y `autoload/save.gd`
 - **`SettingsData`** (`data/settings/settings.tres`): buses con volumen, valores al estrenar el juego y tamaños de ventana que se ofrecen.
-- **`GameSettings`:** lo elegido (volúmenes, pantalla completa, tamaño de ventana, VSync). Se guarda en un `ConfigFile` (`user://settings.cfg`) y se aplica al motor (`apply_audio`, `apply_display`; sin pantalla, en headless, no toca la ventana).
+- **`GameSettings`:** lo elegido (volúmenes, pantalla completa, tamaño de ventana, VSync). Se guarda en un `ConfigFile` (`user://settings.cfg`) y se aplica al motor (`apply_audio`, `apply_display`). Sin pantalla (headless) no toca nada; incrustado en el editor (`Engine.is_embedded_in_editor()`, ver `can_change_window`) solo el VSync.
 - **`Save`** (autoload) lo carga y lo aplica al arrancar; quien lo cambia llama a `Save.save_settings()`. Los tests usan otro archivo (`settings_path`).
 
 ### Niveles — `levels/`

@@ -1,7 +1,8 @@
 extends GutTest
-## Panel de opciones: un deslizador por bus que cambia el volumen al momento; la pantalla completa
-## desactiva la resolución; elegir una resolución la guarda en las opciones; al cerrar (Volver o
-## Esc) se guarda en el archivo. Trabaja sobre Save.settings, que aquí es una copia de prueba.
+## Panel de opciones: un deslizador por bus que cambia el volumen al momento; las opciones de
+## pantalla esperan a «Aplicar», que las aplica y las guarda, y «Volver» descarta las que no se
+## aplicaron; la pantalla completa desactiva la resolución; al cerrar (Volver o Esc) se guarda.
+## Trabaja sobre Save.settings, que aquí es una copia de prueba.
 
 const PanelScene := preload("res://ui/menus/options/options_panel.tscn")
 const DATA := preload("res://data/settings/settings.tres")
@@ -44,22 +45,44 @@ func test_moving_a_slider_changes_the_volume_now() -> void:
 	assert_almost_eq(AudioServer.get_bus_volume_linear(AudioServer.get_bus_index(&"Effects")), 0.3, 0.001)
 
 
+func test_display_options_wait_for_apply() -> void:
+	var apply := _panel.get_node(^"%Apply") as Button
+	assert_true(apply.disabled, "sin cambios, no hay nada que aplicar")
+	var resolution := _panel.get_node(^"%Resolution") as OptionButton
+	var last := _panel.get_resolutions().size() - 1
+	resolution.select(last)
+	resolution.item_selected.emit(last)
+	(_panel.get_node(^"%VSync") as CheckButton).button_pressed = not DATA.default_vsync
+	assert_eq(Save.settings.resolution, Vector2i.ZERO, "aún sin aplicar")
+	assert_eq(Save.settings.vsync, DATA.default_vsync)
+	assert_false(apply.disabled)
+	apply.pressed.emit()
+	assert_eq(Save.settings.resolution, _panel.get_resolutions()[last])
+	assert_eq(Save.settings.vsync, not DATA.default_vsync)
+	assert_true(apply.disabled, "ya aplicado")
+	assert_true(FileAccess.file_exists(PATH), "y guardado")
+
+
+func test_back_drops_what_was_not_applied() -> void:
+	(_panel.get_node(^"%Fullscreen") as CheckButton).button_pressed = true
+	(_panel.get_node(^"%Back") as Button).pressed.emit()
+	assert_false(Save.settings.fullscreen)
+	_panel.open()
+	assert_false((_panel.get_node(^"%Fullscreen") as CheckButton).button_pressed, "al volver a abrir")
+
+
 func test_fullscreen_disables_the_resolution() -> void:
 	var fullscreen := _panel.get_node(^"%Fullscreen") as CheckButton
 	var resolution := _panel.get_node(^"%Resolution") as OptionButton
 	fullscreen.button_pressed = true
-	assert_true(Save.settings.fullscreen)
 	assert_true(resolution.disabled)
 	fullscreen.button_pressed = false
 	assert_false(resolution.disabled)
 
 
-func test_choosing_a_resolution_keeps_it() -> void:
-	var resolution := _panel.get_node(^"%Resolution") as OptionButton
-	var last := _panel.get_resolutions().size() - 1
-	resolution.select(last)
-	resolution.item_selected.emit(last)
-	assert_eq(Save.settings.resolution, _panel.get_resolutions()[last])
+func test_no_window_note_outside_the_editor() -> void:
+	assert_false((_panel.get_node(^"%WindowNote") as Label).visible)
+	assert_false((_panel.get_node(^"%Fullscreen") as CheckButton).disabled)
 
 
 func test_offers_the_data_resolutions_and_the_current_window() -> void:

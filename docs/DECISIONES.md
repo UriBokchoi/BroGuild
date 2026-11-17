@@ -776,3 +776,13 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - Mientras no se elija un tamaño, la ventana se queda como diga el proyecto: no se cambia ningún Project Setting.
   - En headless no se toca la ventana, así que los tests y la validación no la mueven.
 - **Por qué:** lo pidió el diseñador, y todo queda en datos. Las opciones adelantan una parte del Hito 8. La sensibilidad y el remapeo siguen allí.
+
+## 2026-11-17 · Opciones: «Aplicar» y el juego dentro del editor
+- **Problema:** el diseñador probaba desde el editor, que ejecuta el juego incrustado en la pestaña «Juego». Ahí la ventana es del editor: Godot rechaza la pantalla completa y el cambio de tamaño («Embedded window only supports Windowed mode»), así que esas opciones no hacían nada.
+- **Decisión:**
+  - Con `Engine.is_embedded_in_editor()` (`GameSettings.can_change_window()`), dentro del editor se aplica solo el VSync. El panel avisa y desactiva pantalla completa y resolución.
+  - Para probarlas hay que ejecutar el juego en su propia ventana.
+  - Las opciones de pantalla esperan a «Aplicar», que las aplica y las guarda. El volumen sigue al momento, para oírlo mientras se ajusta.
+  - «Volver» descarta lo de pantalla que no se aplicó.
+  - Solo se ofrecen tamaños que caben en el área útil de la pantalla, sin la barra de tareas.
+- **Por qué:** lo pidió el diseñador («falta botón de aplicar»). Además, cambiar la ventana al tocar cada control es incómodo y arriesgado; con «Aplicar», el cambio se hace una vez, cuando se decide.

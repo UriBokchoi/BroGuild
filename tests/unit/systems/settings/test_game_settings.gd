@@ -1,7 +1,7 @@
 extends GutTest
 ## GameSettings: empieza con los valores de SettingsData, se guarda y se lee de un ConfigFile sin
-## perder nada, ignora lo que no vale (y limita el volumen entre 0 y 1) y pone el volumen de cada
-## bus en el AudioServer (a 0, silenciado).
+## perder nada, ignora lo que no vale (y limita el volumen entre 0 y 1), pone el volumen de cada bus
+## en el AudioServer (a 0, silenciado) y se copia y compara sus opciones de pantalla.
 
 const DATA := preload("res://data/settings/settings.tres")
 
@@ -69,3 +69,23 @@ func test_applies_the_volume_to_each_bus() -> void:
 	assert_almost_eq(AudioServer.get_bus_volume_linear(effects), 0.5, 0.001)
 	assert_false(AudioServer.is_bus_mute(effects))
 	assert_true(AudioServer.is_bus_mute(music), "a 0, silenciado")
+
+
+func test_a_copy_is_independent() -> void:
+	var copy := _settings.copy()
+	copy.volumes[&"Master"] = 0.1
+	copy.fullscreen = true
+	assert_eq(_settings.volumes[&"Master"], DATA.default_volume)
+	assert_false(_settings.fullscreen)
+
+
+func test_compares_and_takes_the_display_options() -> void:
+	var other := _settings.copy()
+	assert_false(other.display_differs(_settings))
+	other.resolution = Vector2i(1600, 900)
+	other.volumes[&"Music"] = 0.2
+	assert_true(other.display_differs(_settings))
+	_settings.take_display(other)
+	assert_eq(_settings.resolution, Vector2i(1600, 900))
+	assert_eq(_settings.volumes[&"Music"], DATA.default_volume, "el volumen no es de pantalla")
+	assert_false(other.display_differs(_settings))

@@ -31,7 +31,9 @@ OPTIONS_FULLSCREEN,Pantalla completa,Fullscreen
 OPTIONS_RESOLUTION,Resolución,Resolution
 OPTIONS_RESOLUTION_VALUE,%d × %d,%d × %d
 OPTIONS_VSYNC,VSync,VSync
+OPTIONS_APPLY,Aplicar,Apply
 OPTIONS_BACK,Volver,Back
+OPTIONS_WINDOW_LOCKED,"Dentro del editor (pestaña Juego), la ventana es del editor: para cambiar pantalla completa o resolución, ejecuta el juego en su propia ventana.","Inside the editor (Game tab) the window belongs to the editor: run the game in its own window to change fullscreen or resolution."
 STAT_BASE,base %s,base %s
 STAT_GROUP_RUN,Carrera,Running
 STAT_GROUP_JUMP,Salto y gravedad,Jump and gravity
