@@ -20,6 +20,18 @@ RESULTS_DAMAGE,Daño infligido,Damage dealt
 RESULTS_RETRY,Reintentar (%s),Retry (%s)
 RESULTS_QUIT,Salir,Quit
 PAUSE_STATS_TITLE,Estadísticas,Stats
+OPTIONS_TITLE,Opciones,Options
+OPTIONS_GROUP_AUDIO,Sonido,Sound
+OPTIONS_GROUP_DISPLAY,Pantalla,Display
+OPTIONS_VOLUME_MASTER,Volumen general,Master volume
+OPTIONS_VOLUME_MUSIC,Música,Music
+OPTIONS_VOLUME_EFFECTS,Efectos,Effects
+OPTIONS_VOLUME_VALUE,%d %%,%d%%
+OPTIONS_FULLSCREEN,Pantalla completa,Fullscreen
+OPTIONS_RESOLUTION,Resolución,Resolution
+OPTIONS_RESOLUTION_VALUE,%d × %d,%d × %d
+OPTIONS_VSYNC,VSync,VSync
+OPTIONS_BACK,Volver,Back
 STAT_BASE,base %s,base %s
 STAT_GROUP_RUN,Carrera,Running
 STAT_GROUP_JUMP,Salto y gravedad,Jump and gravity

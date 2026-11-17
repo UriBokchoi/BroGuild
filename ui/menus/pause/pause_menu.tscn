@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://ui/menus/pause/pause_menu.gd" id="1_pause"]
 [ext_resource type="Shader" path="res://vfx/shaders/screen_blur.gdshader" id="2_blur"]
 [ext_resource type="Script" path="res://ui/stats/stats_view.gd" id="3_stats"]
+[ext_resource type="PackedScene" path="res://ui/menus/options/options_panel.tscn" id="4_options"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_blur"]
 shader = ExtResource("2_blur")
@@ -31,6 +32,7 @@ grow_vertical = 2
 theme_type_variation = &"ScreenMargin"
 
 [node name="Layout" type="HBoxContainer" parent="Margin"]
+unique_name_in_owner = true
 layout_mode = 2
 
 [node name="Menu" type="VBoxContainer" parent="Margin/Layout"]
@@ -50,8 +52,8 @@ layout_mode = 2
 text = "PAUSE_CONTINUE"
 
 [node name="Options" type="Button" parent="Margin/Layout/Menu"]
+unique_name_in_owner = true
 layout_mode = 2
-disabled = true
 text = "PAUSE_OPTIONS"
 
 [node name="Retry" type="Button" parent="Margin/Layout/Menu"]
@@ -92,3 +94,8 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"StatList"
 script = ExtResource("3_stats")
+
+[node name="OptionsPanel" parent="Margin" instance=ExtResource("4_options")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2

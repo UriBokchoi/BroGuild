@@ -760,3 +760,19 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
 
 - **Lectura:** sin pérdida apreciable; la diferencia entre pasadas (±10 %) es mayor que entre versiones. Los 130 fps de la primera medición salieron con el equipo en otro estado, así que solo vale comparar mediciones del mismo día.
 - **Ajuste:** un enemigo que vuelve del pool solo rehace formas y materiales si fue élite. Así no se reescriben las formas de colisión en cada aparición.
+
+## 2026-11-17 · Aspecto de los personajes, ranuras de armas y runas, y opciones
+- **Aspecto:** cada personaje lleva su color y sus piezas en un `CharacterModel` común: cuerpo, manos y puntos de anclaje (manos, cabeza, espalda). Las piezas se listan en `CharacterData.attachments` (`ModelAttachment`: escena, punto y colocación).
+  - Las piezas (espada, escudo, bastón, sombrero, daga) son assets propios hechos con mallas básicas de Godot, en `assets/models/props/`, para poder reutilizarlas.
+  - Hasta tener modelos de verdad, un personaje nuevo solo necesita datos.
+- **Ranuras:**
+  - Hay 4 de armas y 4 de runas (`LevelUpData.max_*_slots`), pero al empezar solo hay 2 abiertas de cada tipo.
+  - Las abiertas son stats del jugador (`weapon_slots`, `rune_slots`, en `ProgressionData`): desbloquear una será un modificador +1, venga de donde venga (meta, mejora, personaje). Nunca pasan de las que hay.
+  - El HUD muestra las cerradas con un candado.
+- **Iconos:** armas y runas tienen `icon` (SVG propios en `assets/textures/icons/`). Se usan en el HUD y en las cartas.
+- **Opciones:**
+  - Las guarda el autoload `Save` (ya previsto en `CLAUDE.md`) en `user://settings.cfg` con `ConfigFile`. No se usa un `.tres`: cargar recursos de `user://` puede ejecutar código.
+  - Los buses son Master, Music y Effects (`default_bus_layout.tres`).
+  - Mientras no se elija un tamaño, la ventana se queda como diga el proyecto: no se cambia ningún Project Setting.
+  - En headless no se toca la ventana, así que los tests y la validación no la mueven.
+- **Por qué:** lo pidió el diseñador, y todo queda en datos. Las opciones adelantan una parte del Hito 8. La sensibilidad y el remapeo siguen allí.

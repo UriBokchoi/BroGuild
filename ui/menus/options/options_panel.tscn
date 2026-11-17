@@ -1,0 +1,79 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ui/menus/options/options_panel.gd" id="1_options"]
+[ext_resource type="Resource" path="res://data/settings/settings.tres" id="2_data"]
+
+[node name="OptionsPanel" type="PanelContainer"]
+custom_minimum_size = Vector2(640, 0)
+size_flags_horizontal = 4
+size_flags_vertical = 4
+script = ExtResource("1_options")
+data = ExtResource("2_data")
+
+[node name="Content" type="VBoxContainer" parent="."]
+layout_mode = 2
+theme_type_variation = &"MenuList"
+
+[node name="Title" type="Label" parent="Content"]
+layout_mode = 2
+theme_type_variation = &"HeaderLabel"
+text = "OPTIONS_TITLE"
+
+[node name="AudioHeader" type="Label" parent="Content"]
+layout_mode = 2
+theme_type_variation = &"StatGroupLabel"
+text = "OPTIONS_GROUP_AUDIO"
+
+[node name="Volumes" type="VBoxContainer" parent="Content"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"StatList"
+
+[node name="DisplayHeader" type="Label" parent="Content"]
+layout_mode = 2
+theme_type_variation = &"StatGroupLabel"
+text = "OPTIONS_GROUP_DISPLAY"
+
+[node name="Display" type="GridContainer" parent="Content"]
+layout_mode = 2
+theme_type_variation = &"OptionsGrid"
+columns = 2
+
+[node name="FullscreenLabel" type="Label" parent="Content/Display"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"StatNameLabel"
+text = "OPTIONS_FULLSCREEN"
+
+[node name="Fullscreen" type="CheckButton" parent="Content/Display"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="ResolutionLabel" type="Label" parent="Content/Display"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"StatNameLabel"
+text = "OPTIONS_RESOLUTION"
+
+[node name="Resolution" type="OptionButton" parent="Content/Display"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+theme_type_variation = &"SmallButton"
+
+[node name="VSyncLabel" type="Label" parent="Content/Display"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"StatNameLabel"
+text = "OPTIONS_VSYNC"
+
+[node name="VSync" type="CheckButton" parent="Content/Display"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="Back" type="Button" parent="Content"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "OPTIONS_BACK"
