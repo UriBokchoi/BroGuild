@@ -1,6 +1,6 @@
 extends GutTest
-## Pedestal de personaje: su cartel dice el nombre y al interactuar el jugador pasa a ser ese
-## personaje.
+## Pedestal de personaje: su cartel dice el nombre, su modelo va vestido como el personaje y al
+## interactuar el jugador pasa a ser ese personaje.
 
 const PedestalScene := preload("res://entities/interactables/character_pedestal/character_pedestal.tscn")
 const PlayerScene := preload("res://entities/player/player.tscn")
@@ -30,3 +30,8 @@ func test_interacting_makes_the_player_that_character() -> void:
 	_pedestal.interactable.interact(player)
 	assert_same(player.character, MAGE)
 	assert_true(player.weapons.has(MAGE.starting_weapon))
+
+
+func test_its_model_wears_the_character() -> void:
+	assert_eq(_pedestal.model.get_color(), MAGE.color)
+	assert_eq(_pedestal.model.get_pieces().size(), MAGE.attachments.size())

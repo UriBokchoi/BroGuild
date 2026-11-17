@@ -1,0 +1,53 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://entities/player/characters/model/character_model.gd" id="1_model"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_skin"]
+radius = 0.4
+height = 1.8
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_visor"]
+albedo_color = Color(0.12, 0.12, 0.15, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_visor"]
+material = SubResource("StandardMaterial3D_visor")
+size = Vector3(0.5, 0.15, 0.2)
+
+[sub_resource type="SphereMesh" id="SphereMesh_hand"]
+radius = 0.12
+height = 0.24
+radial_segments = 16
+rings = 8
+
+[node name="CharacterModel" type="Node3D" node_paths=PackedStringArray("tinted", "sockets")]
+script = ExtResource("1_model")
+tinted = [NodePath("Skin"), NodePath("Sockets/HandRight/Hand"), NodePath("Sockets/HandLeft/Hand")]
+sockets = NodePath("Sockets")
+default_color = Color(0.95, 0.55, 0.15, 1)
+
+[node name="Skin" type="MeshInstance3D" parent="."]
+mesh = SubResource("CapsuleMesh_skin")
+
+[node name="Visor" type="MeshInstance3D" parent="Skin"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -0.33)
+mesh = SubResource("BoxMesh_visor")
+
+[node name="Sockets" type="Node3D" parent="."]
+
+[node name="HandRight" type="Node3D" parent="Sockets"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.52, -0.05, -0.12)
+
+[node name="Hand" type="MeshInstance3D" parent="Sockets/HandRight"]
+mesh = SubResource("SphereMesh_hand")
+
+[node name="HandLeft" type="Node3D" parent="Sockets"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.52, -0.05, -0.12)
+
+[node name="Hand" type="MeshInstance3D" parent="Sockets/HandLeft"]
+mesh = SubResource("SphereMesh_hand")
+
+[node name="Head" type="Node3D" parent="Sockets"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.78, 0)
+
+[node name="Back" type="Node3D" parent="Sockets"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0.38)

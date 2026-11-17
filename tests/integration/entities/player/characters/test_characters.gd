@@ -1,6 +1,6 @@
 extends GutTest
-## Personajes en el jugador: la base de stats del personaje, su arma inicial y su pasiva; cambiar de
-## personaje en el momento quita lo del anterior; RunState guarda la elección.
+## Personajes en el jugador: la base de stats del personaje, su arma inicial, su pasiva y su aspecto;
+## cambiar de personaje en el momento quita lo del anterior; RunState guarda la elección.
 
 const PlayerScene := preload("res://entities/player/player.tscn")
 const WARRIOR := preload("res://data/characters/warrior.tres")
@@ -28,6 +28,11 @@ func test_starts_with_its_character() -> void:
 	assert_true(_player.passive is EndurancePassive)
 
 
+func test_its_model_wears_its_look() -> void:
+	assert_eq(_player.model.get_color(), WARRIOR.color)
+	assert_eq(_player.model.get_pieces().size(), WARRIOR.attachments.size(), "espada y escudo")
+
+
 func test_character_differences_are_base_not_upgrades() -> void:
 	assert_eq(_player.stats.get_base(&"max_health"), _player.stats.get_value(&"max_health"))
 
@@ -43,6 +48,8 @@ func test_changing_character_swaps_everything() -> void:
 	assert_true(_player.passive is ArcaneEchoPassive)
 	assert_eq(_player.stats.get_value(&"armor"), neutral.stats.get_value(&"armor"), "sin su defensa")
 	assert_same(RunState.character, MAGE, "la elección se guarda")
+	assert_eq(_player.model.get_color(), MAGE.color, "con el color del Mago")
+	assert_eq(_player.model.get_pieces().size(), MAGE.attachments.size(), "bastón y sombrero")
 
 
 func test_the_chosen_character_wins_over_the_default() -> void:

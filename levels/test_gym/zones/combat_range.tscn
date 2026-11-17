@@ -106,13 +106,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13, 0, 4)
 [node name="Characters" type="Node3D" parent="."]
 
 [node name="Warrior" parent="Characters" instance=ExtResource("13_pedestal")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 0, 1)
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 14, 0, 1)
 character = ExtResource("14_warrior")
 
 [node name="Mage" parent="Characters" instance=ExtResource("13_pedestal")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 0, 5)
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 14, 0, 5)
 character = ExtResource("15_mage")
 
 [node name="Rogue" parent="Characters" instance=ExtResource("13_pedestal")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 0, 9)
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 14, 0, 9)
 character = ExtResource("16_rogue")

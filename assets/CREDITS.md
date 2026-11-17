@@ -6,6 +6,7 @@ Solo assets y código de terceros con licencia libre (mejor CC0). Una fila por a
 
 | Asset | Autor | Origen | Licencia | Dónde se usa |
 |---|---|---|---|---|
+| Piezas de personaje (espada, escudo, bastón, sombrero de mago, daga) | Bro Guild (hechas en el proyecto con mallas básicas de Godot) | `assets/models/props/` | Propia (CC0) | Modelos de los personajes (`data/characters/`) |
 
 ## Código de terceros
 
