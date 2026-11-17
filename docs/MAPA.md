@@ -156,6 +156,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 ### UI — `ui/`
 - **`hud/`:** bienvenida al nivel (`LevelIntro`, en el centro, se desvanece sola), vida, stamina, experiencia y nivel (arriba), oro (`GoldCounter`) y reloj de la ronda (`RunClock`, en rojo en la prórroga) y dificultad (`DifficultyCounter`, una calavera y su valor) debajo, armas y runas (`LoadoutBar`: una fila de `LoadoutSlot` por tipo, con icono y nivel; las ranuras sin abrir, con candado) tragaperras (`SlotPanel`, abajo en el centro: rodillos que paran uno tras otro y el resultado) y aviso de interacción. Escuchan el `EventBus`.
 - **`menus/pause/`:** menú de pausa con todas las stats del jugador; «Opciones» abre el `OptionsPanel`; «Reintentar» y «Salir» (al menú principal) van por `RunFlow`.
+- **`menus/run_setup/`:** `RunSetup`, la selección antes de jugar: personajes a la izquierda, su modelo girando en el centro y, al pasar el ratón, su ficha a la derecha (nombre, diferencias de stats, arma principal y pasiva). Al elegir uno, la ficha se cambia por los niveles (`LevelData.is_available()`: sin escena, «próximamente» y desactivado). «Volver» o Esc retroceden. La muestra `Game` tras «Jugar».
 - **`menus/main/`:** `MainMenu`, el menú principal (Jugar, Opciones, Archivo —desactivado hasta su tarea— y Abandonar), con los personajes vestidos de fondo. Lo muestra `Game`.
 - **`menus/armory/`:** panel de la armería.
 - **`menus/level_up/`:** elección al subir de nivel (`LevelUpPanel` y sus `LevelUpCard`; una mejora lleva el borde y el nombre del color de su rareza).
@@ -168,7 +169,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 
 ### Partida — `systems/run/`
 - **`RunRecorder`** (en el nivel): escucha el `EventBus` y apunta en un `RunStats` lo que pasa en la partida: enemigos y élites derrotados, daño infligido, oro ganado (sin restar lo gastado), nivel y tiempo (el del reloj de la ronda si la hay). Para al morir el jugador.
-- **`Game`** (`game.tscn`, la escena principal): raíz del juego y flujo de pantallas. Empieza en el `MainMenu`; «Jugar» instancia el nivel de `RunState.level` (`LevelData`: id, nombre y escena, en `data/levels/`; de serie, el Brosque) y empieza la partida con una semilla nueva. Cada pantalla sustituye a la anterior.
+- **`Game`** (`game.tscn`, la escena principal): raíz del juego y flujo de pantallas. Empieza en el `MainMenu`; «Jugar» lleva a `RunSetup`, que fija `RunState.character` y el nivel (`RunState.level`) (`LevelData`: id, nombre y escena, en `data/levels/`; de serie, el Brosque) y empieza la partida con una semilla nueva. Cada pantalla sustituye a la anterior.
 - **`RunFlow`:** reintentar y volver al menú desde la pausa o los resultados. Dentro de `Game`, por el `EventBus` (`retry_requested`, `main_menu_requested`); con el nivel ejecutado solo (F6), recarga la escena o cierra el juego.
 - **Reinicio rápido:** reintentar vuelve a instanciar el nivel con otra semilla (unos 0,2 s en el gimnasio).
 

@@ -1,12 +1,15 @@
 class_name Game
 extends Node
-## Raíz del juego y su flujo de pantallas: empieza en el menú principal; «Jugar» empieza una partida
-## en el nivel elegido ([code]RunState.level[/code]); reintentar la vuelve a empezar con otra
-## semilla y salir vuelve al menú. Cada pantalla es una escena que sustituye a la anterior. Los
-## demás le piden cosas por el [code]EventBus[/code] (ver [RunFlow]).
+## Raíz del juego y su flujo de pantallas: empieza en el menú principal; «Jugar» lleva a la selección
+## de personaje y nivel ([RunSetup]), que empieza la partida en el nivel elegido
+## ([code]RunState.level[/code]); reintentar la vuelve a empezar con otra semilla y salir vuelve al
+## menú. Cada pantalla es una escena que sustituye a la anterior. Los demás le piden cosas por el
+## [code]EventBus[/code] (ver [RunFlow]).
 
 ## Menú principal: su raíz es un [MainMenu].
 @export var main_menu: PackedScene
+## Selección de personaje y nivel: su raíz es un [RunSetup].
+@export var run_setup: PackedScene
 ## Nivel que se juega si no se ha elegido otro.
 @export var default_level: LevelData
 
@@ -23,8 +26,16 @@ func _ready() -> void:
 func show_main_menu() -> void:
 	RunState.end_run()
 	var menu := main_menu.instantiate() as MainMenu
-	menu.play_requested.connect(play)
+	menu.play_requested.connect(show_run_setup)
 	_show.call_deferred(menu)
+
+
+## Muestra la selección de personaje y nivel.
+func show_run_setup() -> void:
+	var setup := run_setup.instantiate() as RunSetup
+	setup.play_requested.connect(_on_setup_done)
+	setup.back_requested.connect(show_main_menu)
+	_show.call_deferred(setup)
 
 
 ## Empieza una partida en [param level] (sin nivel, el elegido o el de serie).
@@ -53,3 +64,8 @@ func _show(screen: Node) -> void:
 		_screen.free()
 	_screen = screen
 	add_child(screen)
+
+
+func _on_setup_done(character: CharacterData, level: LevelData) -> void:
+	RunState.character = character
+	play(level)

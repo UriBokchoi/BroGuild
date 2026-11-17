@@ -59,7 +59,7 @@
 - [x] HUD de armas y runas: ranuras con su icono y su nivel; al empezar, 2 de cada abiertas y 2 bloqueadas (se desbloquearán más adelante). Las cartas de subir de nivel también llevan el icono
 - [x] Opciones básicas (desde la pausa): volumen (general, música y efectos), resolución, pantalla completa y VSync, guardadas entre partidas (`Save`)
 - [x] Escena raíz `Game` con el flujo de pantallas; `RunState` guarda personaje, nivel y semilla; «Salir» de la pausa vuelve al menú
-- [x] Menú principal: Jugar, Opciones, Archivo (desactivado hasta su tarea) y Abandonar (cierra el juego). De momento, Jugar lleva al Brosque con el último personaje
+- [x] Menú principal: Jugar, Opciones, Archivo (desactivado hasta su tarea) y Abandonar (cierra el juego). Jugar lleva a la selección de personaje y nivel
 - [x] El Brosque v1 (gimnasio en el bosque): claro con pesas de piedra y bancos de tronco (y bienvenida en el HUD al empezar); paredes invisibles con un bosque grande detrás que tapa el borde (los enemigos salen solo dentro); mesetas con rampa; bosque low-poly de colores (generado, con MultiMesh). Los sistemas de partida van en `RunSystems`, común a todos los niveles. Jugar lo carga y las oleadas empiezan solas
 - [x] Rompibles: calaveras (experiencia) y bolsitas (oro) repartidas por el nivel en sitios distintos cada partida (30 y 20 en el Brosque), que se rompen con E
 - [x] Dificultad como stat del jugador: sube sola 1 por minuto y con objetos o runas; las oleadas (cantidad, enemigos, élites, vida y daño) van según ella y calaveras y bolsitas dan más con ella; indicador en el HUD
@@ -70,8 +70,8 @@
 - [ ] Suerte: desplaza los pesos de las rarezas (tests con semilla)
 - [ ] Cofres y objetos pasivos: cofres por el nivel que cuestan oro (coste creciente, revelado de rareza) y dan objetos con rareza que se apilan
 - [ ] Jefe del Brosque: altar que se invoca con llaves repartidas por el nivel (o se activa solo al minuto 10); vencerlo antes da más recompensa; vencerlo pasa el nivel (pantalla de victoria)
-- [ ] Selección de personaje: lista a la izquierda, modelo 3D en el centro, a la derecha (al pasar el ratón) nombre, stats, arma principal y habilidad pasiva
-- [ ] Selección de nivel (sustituye al panel de info al elegir personaje): el Brosque, la Torre del Mago y la Mazmorra (de momento, los tres cargan la zona de pruebas)
+- [x] Selección de personaje: lista a la izquierda, modelo 3D en el centro, a la derecha (al pasar el ratón) nombre, stats, arma principal y habilidad pasiva
+- [x] Selección de nivel (sustituye al panel de info al elegir personaje): el Brosque; la Torre del Mago y la Mazmorra salen como «próximamente» hasta que existan
 - [ ] Catálogo de contenido (`data/content.tres`) y `Save` con desbloqueos persistentes
 - [ ] Archivo: personajes, armas, runas y enemigos; se desbloquean al conseguirlos o al derrotar al enemigo («???» mientras tanto)
 

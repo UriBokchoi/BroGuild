@@ -7,5 +7,10 @@ extends Resource
 @export var id: StringName = &""
 ## Clave de traducción del nombre (p. ej. [code]LEVEL_BROSQUE_NAME[/code]).
 @export var name_key: StringName = &""
-## Escena del nivel.
+## Escena del nivel. Vacía: aún no existe (sale como «Próximamente»).
 @export var scene: PackedScene
+
+
+## ¿Se puede jugar ya?
+func is_available() -> bool:
+	return scene != null
