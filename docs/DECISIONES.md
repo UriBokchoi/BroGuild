@@ -793,7 +793,7 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - `validate.sh` arranca además cada nivel, porque la escena principal ya no entra en partida.
 - **`RunSystems`:** los sistemas de una partida (jugador, horda, oleadas, botín, subir de nivel, HUD, pausa, resultados, depuración) salen del gimnasio a una escena común. El gimnasio y el Brosque la instancian con sus oleadas, su personaje de serie y su punto de aparición. Se extrajo al segundo nivel, para no copiarlos.
 - **Bosque con MultiMesh:** los ~300 árboles se dibujan con cinco MultiMesh (tronco y copas) y chocan con un solo cuerpo con un cilindro por tronco. Así cuesta pocas llamadas de dibujo, que hacen falta para la horda.
-  - Lo genera `tools/gen_brosque_forest.gd` con semilla fija. El resto del nivel se edita a mano.
+  - Lo generaba `tools/gen_brosque_forest.gd` con semilla fija (sustituido: ahora el mapa entero se genera al cargar; ver «Mapa procedural»).
   - Hay que generarlo con ventana: en headless el render es ficticio y el MultiMesh se guarda sin transformaciones.
   - Los colores por árbol necesitan `vertex_color_is_srgb` en el material.
 - **Diseño acordado** (GDD §6 y §9):
@@ -858,3 +858,13 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - Los enemigos tienen un 50 % más de vida: esbirro 30 → 45, tirador 20 → 30.
   - Salen al mismo ritmo, porque las curvas de aparición no cambian.
 - **Además:** cada personaje regenera un poco de vida de base (0,8 / 0,4 / 0,5 por segundo) y el Pícaro da un mortal en el doble salto (`BodyFlip`, solo visual).
+
+## 2026-11-17 · Mapa procedural
+- **Decisión:**
+  - El Brosque se genera al cargar, con la semilla de la partida (nuevo flujo `LAYOUT` de `Rng`): reintentar da otro mapa y una semilla reproduce el mismo.
+  - Un `LevelLayout` reparte las `LayoutPiece` de su `LayoutData`, con círculos de suelo que no se pisan: dos mesetas altas y tres bajas fuera del claro, una tragaperras, ocho pesas y seis bancos. Luego pone tres tragaperras encima de mesetas al azar.
+  - `ForestBuilder` hace el bosque alrededor: árboles sueltos que esquivan las piezas, el anillo junto a las paredes con colisión y la banda grande de fuera sin colisión. Todo con MultiMesh, como antes.
+  - Las paredes y la zona de los enemigos no cambian. Calaveras y bolsitas se reparten después, sobre lo generado.
+  - Se borran `tools/gen_brosque_forest.gd` y `forest.tscn`, que eran el bosque horneado.
+- **Por qué:** lo pidió el diseñador, y es más rejugable. Un nivel nuevo solo necesita su `LayoutData` con sus piezas.
+- **Coste:** generar 2.600 árboles y 300 colisiones al cargar es instantáneo. En el juego no cambia nada respecto al bosque horneado.

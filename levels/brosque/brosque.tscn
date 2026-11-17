@@ -1,11 +1,6 @@
 [gd_scene format=3]
 
 [ext_resource type="Material" path="res://levels/brosque/materials/grass.tres" id="1_grass"]
-[ext_resource type="PackedScene" path="res://levels/brosque/forest.tscn" id="2_forest"]
-[ext_resource type="PackedScene" path="res://levels/brosque/props/plateau_low.tscn" id="3_plateau_low"]
-[ext_resource type="PackedScene" path="res://levels/brosque/props/plateau_high.tscn" id="4_plateau_high"]
-[ext_resource type="PackedScene" path="res://levels/brosque/props/dumbbell_rock.tscn" id="5_dumbbell"]
-[ext_resource type="PackedScene" path="res://levels/brosque/props/bench_log.tscn" id="6_bench"]
 [ext_resource type="PackedScene" path="res://levels/common/run_systems.tscn" id="8_run_systems"]
 [ext_resource type="Resource" path="res://data/waves/brosque.tres" id="9_waves"]
 [ext_resource type="Resource" path="res://data/characters/warrior.tres" id="10_warrior"]
@@ -13,7 +8,8 @@
 [ext_resource type="Script" path="res://systems/spawning/scatter_entry.gd" id="12_entry"]
 [ext_resource type="PackedScene" path="res://entities/breakables/skull/skull.tscn" id="13_skull"]
 [ext_resource type="PackedScene" path="res://entities/breakables/pouch/pouch.tscn" id="14_pouch"]
-[ext_resource type="PackedScene" path="res://entities/interactables/slot_machine/slot_machine.tscn" id="15_slots"]
+[ext_resource type="Script" path="res://levels/common/layout/level_layout.gd" id="16_layout"]
+[ext_resource type="Resource" path="res://data/layouts/brosque.tres" id="17_layout_data"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_sky"]
 sky_top_color = Color(0.3, 0.52, 0.82, 1)
@@ -97,58 +93,9 @@ shape = SubResource("BoxShape3D_bound_z")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 81, 15, 0)
 shape = SubResource("BoxShape3D_bound_z")
 
-[node name="Forest" parent="." instance=ExtResource("2_forest")]
-
-[node name="Plateaus" type="Node3D" parent="."]
-
-[node name="LowWest" parent="Plateaus" instance=ExtResource("3_plateau_low")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -38, 0, -30)
-
-[node name="LowEast" parent="Plateaus" instance=ExtResource("3_plateau_low")]
-transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 42, 0, 34)
-
-[node name="HighNorth" parent="Plateaus" instance=ExtResource("4_plateau_high")]
-transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 40, 0, -38)
-
-[node name="HighSouth" parent="Plateaus" instance=ExtResource("4_plateau_high")]
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -36, 0, 40)
-
-[node name="Clearing" type="Node3D" parent="."]
-
-[node name="DumbbellA" parent="Clearing" instance=ExtResource("5_dumbbell")]
-transform = Transform3D(0.866, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866, -7, 0, 7)
-
-[node name="DumbbellB" parent="Clearing" instance=ExtResource("5_dumbbell")]
-transform = Transform3D(0.94, 0, -0.342, 0, 1, 0, 0.342, 0, 0.94, 8, 0, 8)
-
-[node name="DumbbellC" parent="Clearing" instance=ExtResource("5_dumbbell")]
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -13, 0, -11)
-
-[node name="DumbbellD" parent="Clearing" instance=ExtResource("5_dumbbell")]
-transform = Transform3D(0.866, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866, 13, 0, -10)
-
-[node name="BenchSouth" parent="Clearing" instance=ExtResource("6_bench")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 12)
-
-[node name="BenchWest" parent="Clearing" instance=ExtResource("6_bench")]
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -14, 0, 2)
-
-[node name="BenchEast" parent="Clearing" instance=ExtResource("6_bench")]
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 14, 0, 2)
-
-[node name="SlotMachines" type="Node3D" parent="."]
-
-[node name="Clearing" parent="SlotMachines" instance=ExtResource("15_slots")]
-transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -6, 0, -13)
-
-[node name="LowWest" parent="SlotMachines" instance=ExtResource("15_slots")]
-transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -38, 3, -33)
-
-[node name="HighNorth" parent="SlotMachines" instance=ExtResource("15_slots")]
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 42, 5, -38)
-
-[node name="HighSouth" parent="SlotMachines" instance=ExtResource("15_slots")]
-transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -38, 5, 40)
+[node name="Layout" type="Node3D" parent="."]
+script = ExtResource("16_layout")
+data = ExtResource("17_layout_data")
 
 [node name="Breakables" type="Node3D" parent="."]
 script = ExtResource("11_scatter")

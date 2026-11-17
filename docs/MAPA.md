@@ -27,8 +27,8 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 | `data/` | Los `.tres` de balance y la traducción. Nada de código. |
 | `ui/` | HUD, menús, panel de depuración, vista de stats, tema global y dueño del ratón. |
 | `vfx/` | Efectos visuales: juice que reacciona a señales, shaders compartidos y líneas de velocidad. |
-| `levels/` | Escenas jugables: `common/` (`RunSystems`, los sistemas de partida que usa cada nivel), el Brosque (`brosque/`), el gimnasio de pruebas con su zona de combate y la prueba de estrés. |
-| `tools/` | Validación por terminal (`validate.sh`, `ci/`) y generadores (`gen_themes.gd`; `gen_brosque_forest.gd`, los árboles del Brosque). |
+| `levels/` | Escenas jugables: `common/` (`RunSystems`, los sistemas de partida que usa cada nivel, y `layout/`, los mapas generados: `LevelLayout`, `LayoutData`, `LayoutPiece`, `ForestBuilder`, `ForestData`), el Brosque (`brosque/`), el gimnasio de pruebas con su zona de combate y la prueba de estrés. |
+| `tools/` | Validación por terminal (`validate.sh`, `ci/`) y generadores (`gen_themes.gd`). |
 | `tests/` | GUT: `unit/` y `integration/`, con la misma ruta que el código. `hooks/` es el script de fin de ejecución. |
 | `docs/` | GDD, ROADMAP, DECISIONES y este mapa. |
 | `assets/` | Assets reutilizables y `CREDITS.md`. `models/props/`: piezas hechas con mallas básicas (espada, escudo, bastón, sombrero de mago, daga) con sus materiales en `materials/`; las llevan los personajes y pueden servir para otras cosas (el Archivo, botín). `textures/icons/`: iconos SVG de armas, runas y de la interfaz (candado). Audio y fuentes, aún vacíos. |
@@ -181,9 +181,9 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 ### Niveles — `levels/`
 - **`common/run_systems.tscn`** (`RunSystems`): jugador, horda y oleadas, botín, subir de nivel, HUD, pausa, resultados, números de daño y panel de depuración, ya conectados. Cada nivel pone una instancia con sus oleadas (`waves`), si empiezan solas (`autostart_waves`), el personaje de serie y el punto de aparición (`spawn_point`).
 - **`brosque/brosque.tscn`:** el Brosque (`data/levels/brosque.tres`), un gimnasio en el bosque de unos 150 × 150 m rodeado de paredes invisibles (a 81 m; también para los enemigos, que solo salen dentro de `RunSystems.play_area`):
-  - claro central con el punto de aparición, pesas de piedra y bancos de tronco; al empezar, el HUD da la bienvenida (`RunSystems.intro_keys` → `EventBus.level_intro` → `LevelIntro`);
-  - cuatro mesetas con rampa (`props/plateau_low.tscn` y `plateau_high.tscn`);
-  - el bosque (`forest.tscn`), generado con `tools/gen_brosque_forest.gd`: árboles con MultiMesh (pocas llamadas de dibujo); los de dentro de las paredes chocan (un cuerpo con un cilindro por tronco) y fuera una banda grande y densa sin colisión tapa el final del mundo. Si mueves una meseta o el claro, actualiza sus zonas en el generador y vuelve a generarlo (con ventana, no headless);
+  - claro central con el punto de aparición; al empezar, el HUD da la bienvenida (`RunSystems.intro_keys` → `EventBus.level_intro` → `LevelIntro`);
+  - piezas: mesetas con rampa (`props/plateau_low.tscn` y `plateau_high.tscn`), pesas de piedra, bancos de tronco y tragaperras;
+  - **el mapa se genera al cargar, distinto en cada partida** (`Layout`, un `LevelLayout` con `data/layouts/brosque.tres`): mesetas, pesas, bancos y una tragaperras por el suelo sin pisarse ni invadir el claro, tres tragaperras encima de mesetas y el bosque alrededor (`ForestBuilder`: árboles sueltos que esquivan las piezas, un anillo junto a las paredes que choca y una banda grande fuera que no);
   - las oleadas empiezan solas.
 - **`test_gym/test_gym.tscn`:** escena de pruebas (usa `RunSystems`; las oleadas las empieza la campana de la zona de combate). Zona de movimiento con rampas, bordes, paredes, huecos y escalones, más el pad de daño (`props/`).
 - **`test_gym/zones/combat_range.tscn`:** zona de combate a 200 m del gimnasio. Muñecos, armería, invocadores (esbirros, tiradores y esbirros élite), pedestales de personaje, campana de oleadas, plataforma escalonada, teletransportes y recogedor de caídas. Las oleadas paran al volver.

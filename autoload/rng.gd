@@ -14,6 +14,7 @@ enum Stream {
 	COMBAT, ## Críticos, dispersión y probabilidades de efectos.
 	ENEMIES, ## Afijos de élite y variaciones de enemigos.
 	COSMETIC, ## Efectos visuales y sonido; nunca decide nada de gameplay.
+	LAYOUT, ## Mapas generados: dónde va cada pieza y cada árbol.
 }
 
 ## Semilla de la partida actual (la que hay que apuntar para reproducir un bug).

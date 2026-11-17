@@ -1,7 +1,7 @@
 extends GutTest
-## El Brosque: las oleadas empiezan solas, el jugador aparece en el claro, dentro de las paredes los
-## árboles chocan y fuera una banda de bosque tapa el borde; los enemigos salen solo dentro y el
-## nivel da la bienvenida.
+## El Brosque: las oleadas empiezan solas, el jugador aparece en el claro, el mapa se genera al
+## cargar (mesetas, tragaperras, props y bosque; dentro de las paredes los árboles chocan y fuera una
+## banda tapa el borde), los enemigos salen solo dentro y el nivel da la bienvenida.
 
 const BrosqueScene := preload("res://levels/brosque/brosque.tscn")
 
@@ -11,6 +11,9 @@ var _level: Node3D
 func before_all() -> void:
 	RunState.character = null
 	_level = BrosqueScene.instantiate() as Node3D
+	var layout := _level.get_node(^"Layout") as LevelLayout
+	layout.rng = RandomNumberGenerator.new()
+	layout.rng.seed = 17
 	add_child(_level)
 
 
@@ -30,9 +33,16 @@ func test_the_player_appears_in_the_clearing() -> void:
 	assert_almost_eq(systems.player.global_position, spawn.global_position, Vector3.ONE * 0.01)
 
 
+func test_the_map_is_generated_with_its_slot_machines() -> void:
+	var layout := _level.get_node(^"Layout") as LevelLayout
+	var slots := layout.get_pieces().filter(func(piece: Node3D) -> bool: return piece is SlotMachine)
+	assert_eq(slots.size(), 4, "una en el suelo y tres encima de mesetas")
+	assert_gt(layout.get_pieces().size(), slots.size())
+
+
 func test_the_trees_inside_the_walls_collide_and_the_outer_forest_hides_the_edge() -> void:
-	var trunks := (_level.get_node(^"Forest/Trunks") as MultiMeshInstance3D).multimesh.instance_count
-	var colliders := _level.get_node(^"Forest/TreeColliders").get_children()
+	var trunks := (_level.get_node(^"Layout/Forest/Trunks") as MultiMeshInstance3D).multimesh.instance_count
+	var colliders := _level.get_node(^"Layout/Forest/TreeColliders").get_children()
 	assert_gt(colliders.size(), 0)
 	assert_gt(trunks, colliders.size() * 3, "la banda de fuera es mucho más grande")
 	for collider: Node in colliders:
