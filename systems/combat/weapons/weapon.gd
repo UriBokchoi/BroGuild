@@ -83,6 +83,11 @@ func damage() -> float:
 	return _weapon.damage
 
 
+## Stats de ataque de quien la lleva (su daño % y su crítico), o [code]null[/code] si no tiene.
+func offense() -> OffenseData:
+	return _offense
+
+
 ## Segundos entre ataques, con la velocidad de ataque del personaje.
 func cooldown() -> float:
 	return _weapon.cooldown / _percent(_offense.attack_speed if _offense else 100.0)
