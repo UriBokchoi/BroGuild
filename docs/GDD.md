@@ -78,7 +78,7 @@ Toda apuesta tiene **anticipación** (giro, luces, sonido que sube), **revelado*
 - **Subir de nivel**: eliges 1 de 3 opciones (arma o runa nueva, o subir una que ya tengas). La ruleta de apuestas (§5) se monta encima de esta elección.
 - **Enemigos**: enjambre cuerpo a cuerpo (rápido, frágil) · tanque lento · tirador a distancia (te obliga a moverte) · élites: cualquier enemigo puede salir élite, con una probabilidad que sube con los minutos (más grande, más vida y daño, suelta más experiencia y oro); más adelante, con afijos y cofre.
 - **Cuerpos de los enemigos** (como en Megabonk): chocan con el mundo, con el jugador y entre ellos, y no se hacen daño entre ellos. El jugador no los atraviesa: le bloquean, le dañan al tocarle y puede saltar y quedarse de pie encima. Cuando se atascan, los de atrás trepan sobre los de delante: alrededor del jugador forman un montículo y, si está en alto, se apilan para alcanzarlo.
-- **Director de oleadas**: la densidad sube con el tiempo, con picos cada minuto; la curva vive en datos.
+- **Director de oleadas**: la densidad sube con el tiempo, con picos cada minuto, y los enemigos salen más fuertes cuanto más tarde (vida y daño); todo en curvas de datos. La ronda normal dura 10 min: a partir de ahí, los enemigos se disparan (hace falta buena build para aguantar un poco) hasta que llegue el jefe.
 
 **Stats del personaje** (como en Megabonk o Vampire Survivors; todas mejorables, §5). Valores de partida en `data/player/`. Ya funcionan vida, regeneración, defensa, esquiva, daño y crítico; el resto de fórmulas son la intención de diseño y se confirman al implementar armas y enemigos (Hito 2). Al recibir un golpe, primero se tira la esquiva y luego la defensa reduce lo que entra.
 
@@ -116,7 +116,7 @@ WASD mover · Ratón cámara · Espacio saltar · Shift dash · Ctrl slide (dobl
 **Menú de pausa (Esc):** a la izquierda, Continuar, Opciones, Reintentar y Salir; a la derecha, un panel fijo con todas las stats del personaje, resaltando las que han cambiado mejoras o maldiciones. Mando: más adelante.
 
 ## 9. Partida y progresión
-- **Mesa**: ~10 min. Élites por probabilidad, cada vez más a menudo. Jefe al minuto 10.
+- **Mesa**: ~10 min (dificultad normal; nivel ~30 al minuto 10 si se mata casi todo). Élites por probabilidad, cada vez más a menudo. Jefe al minuto 10; mientras no exista, enemigos muy fuertes.
 - **Monedas**: XP (niveles) · Oro (en partida, se apuesta; lo suelta cada enemigo y llega solo al matarlo) · Bote (sale de la partida y se gasta fuera).
 - **Meta-progresión**: desbloquear personajes (cada uno con un rasgo de movimiento: triple salto, dash más largo, slide más rápido…), armas iniciales y ventajas pequeñas. Nunca más poder bruto que el que da jugar bien.
 - **Personajes**: todos parten de las mismas stats básicas y cada uno cambia unas pocas según su gimmick (p. ej., +1 salto en el aire y −10 % de vida). Esas diferencias son su base: en el menú no salen como mejoras. Cada uno tiene un arma principal y una habilidad pasiva. Iniciales: **Guerrero** (espada), **Mago** (bastón de mago) y **Pícaro** (daga); sus diferencias de stats y sus pasivas, por definir.

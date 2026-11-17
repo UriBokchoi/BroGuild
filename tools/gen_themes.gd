@@ -133,6 +133,9 @@ func _add_hud(theme: Theme) -> void:
 	theme.set_type_variation(&"CoinIcon", &"PanelContainer")
 	theme.set_stylebox(&"panel", &"CoinIcon", _box(GOLD, 9, Vector2(0, 0), GOLD_DARK, 2, 3))
 	_label_variation(theme, &"GoldLabel", 22, GOLD)
+	# Reloj de la ronda, arriba en el centro; en rojo pasada la ronda.
+	_label_variation(theme, &"ClockLabel", 28, INK)
+	_label_variation(theme, &"ClockLabelOvertime", 28, HEALTH)
 
 
 func _add_scrollbar(theme: Theme) -> void:

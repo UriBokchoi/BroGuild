@@ -74,6 +74,34 @@ func test_no_elite_chance_no_elites() -> void:
 		assert_false(enemy.is_elite(), "sin curva, ninguno")
 
 
+func test_enemies_come_with_the_stats_of_their_minute() -> void:
+	var scaling := StatScaling.new()
+	scaling.stat = &"max_health"
+	scaling.multiplier = _flat_curve(3.0)
+	_director.data.stat_scaling = [scaling]
+	var normal := SWARMER.stat_sources[0] as HealthData
+	_director.start()
+	await wait_physics_frames(3)
+	assert_gt(_swarm.active_count(), 0)
+	for enemy: Enemy in _swarm.get_active():
+		assert_almost_eq(enemy.health.get_maximum(), normal.max_health * 3.0, 0.01)
+		assert_eq(enemy.health.get_current(), enemy.health.get_maximum())
+
+
+func test_announces_the_clock_every_second() -> void:
+	_director.data.round_minutes = 1.0 / 60.0
+	watch_signals(EventBus)
+	_director.start()
+	assert_signal_emitted_with_parameters(EventBus, "run_clock_changed", [0.0, false])
+	await wait_seconds(1.1)
+	var seconds: float = get_signal_parameters(EventBus, "run_clock_changed")[0]
+	var overtime: bool = get_signal_parameters(EventBus, "run_clock_changed")[1]
+	assert_gte(seconds, 1.0)
+	assert_true(overtime, "pasado su minuto de ronda")
+	_director.stop()
+	assert_signal_emitted_with_parameters(EventBus, "run_clock_changed", [-1.0, false])
+
+
 func test_without_ground_nobody_spawns() -> void:
 	_target.position = Vector3(500.0, 0.0, 500.0)
 	_director.start()
