@@ -1,7 +1,7 @@
 extends GutTest
 ## Armas de data/weapons: cada una tiene identificador único, nombre y descripción traducidos,
 ## icono, una escena que es un Weapon, stats de nivel 1, nivel máximo 10 y varias stats que mejorar
-## que existen.
+## que existen; las que disparan proyectiles pueden mejorar su velocidad.
 
 const WEAPONS_DIR := "res://data/weapons"
 const STRINGS_PATH := "res://data/i18n/strings.csv"
@@ -52,3 +52,13 @@ func test_upgrades_touch_existing_stats_up_to_level_10() -> void:
 		block.define_from_resource(weapon.stats)
 		for upgrade_stat: UpgradeStat in weapon.upgrade_stats:
 			assert_true(block.has_stat(upgrade_stat.stat), "%s: «%s» no es una stat" % [weapon.id, upgrade_stat.stat])
+
+
+func test_projectile_weapons_can_speed_up_their_projectiles() -> void:
+	for weapon: WeaponData in _weapons:
+		if not weapon.stats is ProjectileStats:
+			continue
+		var faster := weapon.upgrade_stats.any(
+			func(upgrade_stat: UpgradeStat) -> bool: return upgrade_stat.stat == &"projectile_speed"
+		)
+		assert_true(faster, "%s: sin mejora de velocidad de proyectil" % weapon.id)

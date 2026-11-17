@@ -74,6 +74,7 @@ Toda apuesta tiene **anticipación** (giro, luces, sonido que sube), **revelado*
   - **Espada** (cuerpo a cuerpo): la cantidad de proyectiles también le afecta (más tajos).
   - **Bastón de mago**: proyectiles que explotan al contacto, con daño en área.
   - **Daga**: proyectil rápido que da a un solo enemigo. Sus mejoras pueden subir su **rebote**: el golpe salta con todo su daño al enemigo más cercano, hasta una distancia máxima.
+  - Las armas de proyectiles (bastón y daga) también pueden mejorar la **velocidad de su proyectil** al subir de nivel.
 - **Runas** (pasivas): suben stats principales con cada nivel: Fuerza (daño) · Amplitud (área) · Prisa (velocidad de ataque) · Vigor (vida máxima) · Multiplicidad (cantidad de proyectiles, también para armas cuerpo a cuerpo).
 - **Objetos de la partida** (aparte de armas y runas):
   - *Pasivos:* como los objetos de Megabonk. Salen de cofres y del jefe, tienen rareza, no ocupan ranura y se apilan: cada copia suma su efecto (+% daño, robo de vida, más oro…). Van de cultura bro en general (el gimnasio es un tema más): batido de proteínas, pizza fría de ayer, riñonera, mando de consola, gorra hacia atrás, chanclas con calcetines, rasca y gana, altavoz portátil, gafas de sol, aceite corporal, cinturón de levantar, mancuerna de oro, batido sospechoso (más daño y más dificultad), cadena de oro y la corona del Bro.

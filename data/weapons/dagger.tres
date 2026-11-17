@@ -35,6 +35,12 @@ stat = &"bounces"
 value = 1.0
 whole_numbers = true
 
+[sub_resource type="Resource" id="Upgrade_projectile_speed"]
+script = ExtResource("90_upgrade")
+stat = &"projectile_speed"
+kind = 1
+value = 0.1
+
 [sub_resource type="Resource" id="Upgrade_cooldown"]
 script = ExtResource("90_upgrade")
 stat = &"cooldown"
@@ -50,4 +56,4 @@ description_key = &"WEAPON_DAGGER_DESCRIPTION"
 scene = ExtResource("5_scene")
 stats = SubResource("Resource_stats")
 level_cap = 10
-upgrade_stats = Array[ExtResource("90_upgrade")]([SubResource("Upgrade_damage"), SubResource("Upgrade_projectiles"), SubResource("Upgrade_bounces"), SubResource("Upgrade_cooldown")])
+upgrade_stats = Array[ExtResource("90_upgrade")]([SubResource("Upgrade_damage"), SubResource("Upgrade_projectiles"), SubResource("Upgrade_bounces"), SubResource("Upgrade_projectile_speed"), SubResource("Upgrade_cooldown")])
