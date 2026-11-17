@@ -135,7 +135,8 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
   - `xp_gem/`: la gema de experiencia; su color (parámetro de instancia del shader) y su tamaño salen de su nivel (`PickupTier`: azul, verde desde 5, roja desde 25, morada desde 100).
   - `gold_coin/`: la moneda de oro (de recogida automática).
 - **`PickupField`** (en el nivel): suelta recogibles en el suelo desde un pool por tipo. Cuando quien recoge está dentro de su `pickup_range` (o nada más salir, si son `auto_collect`), vuelan acelerando hacia él; al llegar, avisan por `EventBus.pickup_collected`. Todos van en un bucle y sin física. Cada `merge_interval` funde los del mismo tipo que esperan juntos (`PickupData.merge_radius` y `merge_count`) en uno con el valor sumado.
-- **`LootDropper`** (en `RunSystems`): escucha `breakable_broken` y suelta el botín del rompible (`BreakableData`) en trozos alrededor (flujo `LOOT`); escucha `enemy_died` y suelta la gema con la `xp_reward` y la moneda con el `gold_reward` del enemigo. Los cofres y las probabilidades de botín irán aquí.
+- **`LootDropper`** (en `RunSystems`): escucha `breakable_broken` y suelta el botín del rompible (`BreakableData`) en trozos alrededor (flujo `LOOT`); escucha `enemy_died` y suelta la gema con la `xp_reward` y la moneda con el `gold_reward` del enemigo. Los cofres y las probabilidades de botín irán aquí. Rompibles y élites (`bonus_drops`) pueden soltar además recogibles especiales (`BonusDrop`: recogible, probabilidad y valor).
+- **Recogibles especiales** (`systems/progression/effects/`, en `RunSystems/PickupEffects`): cada uno es un `PickupData` con su recompensa y un `PickupEffect` que la escucha en `pickup_collected`: comida (`HealEffect`, cura esa parte de la vida máxima), imán (`MagnetEffect`, toda la experiencia del mapa vuela hacia ti, `PickupField.attract_all`) y bomba (`BombEffect`, quita esa parte de la vida máxima a los enemigos a menos de `radius`). Sus modelos giran y flotan con `SpinBob` (`vfx/juice/`).
 - **`ExperienceComponent`** (en el jugador): suma la experiencia recogida × `xp_gain` y sube de nivel con la curva de `ExperienceData` (`data/progression/experience.tres`). El jugador aleja la cámara con el nivel.
 - **`WalletComponent`** (en el jugador): el oro de la partida (antes «fichas» en el GDD). Suma el recogido × `currency_gain` y lo gasta con `spend()`.
 - **Stats de progresión:** `ProgressionData` (experiencia y oro ganados, suerte, radio de recogida, dificultad y ranuras abiertas de armas y runas).
@@ -197,7 +198,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 | `enemy_damaged` | `DamageReporter` | `DamageNumbers` |
 | `enemy_died` (el propio enemigo) | `Enemy` | `LootDropper` (y más adelante el Archivo) |
 | `breakable_broken` (sus datos y dónde) | `Breakable` | `LootDropper` |
-| `pickup_collected` | `PickupField` | `ExperienceComponent` (la recompensa `experience`), `WalletComponent` (`gold`) |
+| `pickup_collected` | `PickupField` | `ExperienceComponent` (la recompensa `experience`), `WalletComponent` (`gold`), los `PickupEffect` (`heal`, `magnet`, `bomb`) |
 | `player_xp_changed` | `Player` | `XpBar` |
 | `player_gold_changed` | `Player` | `GoldCounter` |
 | `difficulty_changed` (la stat `difficulty` del jugador) | `Player` | `DifficultyCounter`, `LootDropper` |

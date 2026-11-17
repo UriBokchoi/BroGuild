@@ -3,12 +3,14 @@ extends GutTest
 ## en su radio (o nada más salir, el oro), al llegar avisan por el EventBus y vuelven al pool; los
 ## que esperan juntos se funden en uno de más nivel. El LootDropper suelta la gema de experiencia y
 ## la moneda de oro de cada enemigo que muere, y el botín de cada rompible en trozos alrededor (más
-## cuanto mayor es la dificultad).
+## cuanto mayor es la dificultad); rompibles y élites pueden soltar además recogibles especiales.
 
 const XP_GEM := preload("res://data/pickups/xp_gem.tres")
 const GOLD_COIN := preload("res://data/pickups/gold_coin.tres")
 const SWARMER := preload("res://data/enemies/swarmer.tres")
 const SKULL := preload("res://data/breakables/skull.tres")
+const BOMB := preload("res://data/pickups/bomb.tres")
+const ELITE := preload("res://data/enemies/elite.tres")
 
 var _collector: Node3D
 var _field: PickupField
@@ -156,6 +158,35 @@ func test_more_difficulty_more_loot_from_breakables() -> void:
 	for pickup: Pickup in _field.get_active():
 		total += pickup.amount
 	assert_almost_eq(total, SKULL.amount + SKULL.amount_per_difficulty * 10.0, 0.001)
+
+
+func test_breakables_and_elites_can_drop_special_pickups() -> void:
+	var dropper := LootDropper.new()
+	dropper.field = _field
+	add_child_autofree(dropper)
+	var bonus := BonusDrop.new()
+	bonus.pickup = BOMB
+	bonus.chance = 100.0
+	bonus.amount = 1.0
+	var breakable := SKULL.duplicate() as BreakableData
+	breakable.bonus_drops = [bonus] as Array[BonusDrop]
+	EventBus.breakable_broken.emit(breakable, Vector3(-5.0, 0.0, 0.0))
+	assert_eq(_bombs(), 1, "del rompible, con un 100 %")
+	var elite := ELITE.duplicate() as EliteData
+	elite.bonus_drops = [bonus] as Array[BonusDrop]
+	var swarm := EnemySwarm.new()
+	add_child_autofree(swarm)
+	var normal := swarm.spawn(SWARMER, Vector3(-8.0, 0.0, 0.0))
+	normal.health.take_damage(DamageInfo.create(1000.0))
+	assert_eq(_bombs(), 1, "un enemigo normal no")
+	var promoted := swarm.spawn(SWARMER, Vector3(8.0, 0.0, 0.0))
+	promoted.promote(elite)
+	promoted.health.take_damage(DamageInfo.create(100000.0))
+	assert_eq(_bombs(), 2, "el élite sí")
+
+
+func _bombs() -> int:
+	return _field.get_active().filter(func(pickup: Pickup) -> bool: return pickup.data == BOMB).size()
 
 
 func _add_ground() -> void:

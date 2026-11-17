@@ -13,3 +13,5 @@ extends Resource
 @export_range(0.25, 5.0, 0.05) var size: float = 1.0
 ## Material que se superpone a su modelo (el brillo de élite).
 @export var overlay: Material
+## Recogibles que a veces suelta además de su botín (imán, comida, bomba…).
+@export var bonus_drops: Array[BonusDrop] = []

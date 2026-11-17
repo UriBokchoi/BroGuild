@@ -5,7 +5,8 @@ extends Node
 ## y una moneda con su oro ([member EnemyStats.gold_reward]), que vuela sola hacia el jugador. Al
 ## romperse un rompible ([code]EventBus.breakable_broken[/code]): su botín
 ## ([BreakableData], más cuanto mayor es la dificultad) en trozos repartidos alrededor. Cofres y
-## probabilidades de botín llegarán aquí.
+## probabilidades de botín llegarán aquí. Rompibles y élites pueden soltar además recogibles
+## especiales ([BonusDrop]: imán, comida, bomba), cada uno con su probabilidad.
 
 ## Dónde caen los recogibles.
 @export var field: PickupField
@@ -38,6 +39,8 @@ func _ready() -> void:
 func _on_enemy_died(enemy: Enemy) -> void:
 	_drop(xp_gem, enemy.global_position, enemy.xp_reward())
 	_drop(gold_coin, enemy.global_position, enemy.gold_reward())
+	if enemy.is_elite():
+		_roll_bonus(enemy.elite.bonus_drops, enemy.global_position)
 
 
 func _on_breakable_broken(data: BreakableData, at: Vector3) -> void:
@@ -46,6 +49,14 @@ func _on_breakable_broken(data: BreakableData, at: Vector3) -> void:
 		var angle := rng.randf_range(0.0, TAU)
 		var offset := Vector3(cos(angle), 0.0, sin(angle)) * rng.randf_range(0.0, data.spread)
 		_drop(data.reward, at + offset, piece)
+	_roll_bonus(data.bonus_drops, at)
+
+
+## Tira cada recogible extra de [param drops] con su probabilidad y suelta los que salen.
+func _roll_bonus(drops: Array[BonusDrop], at: Vector3) -> void:
+	for bonus: BonusDrop in drops:
+		if rng.randf() * 100.0 < bonus.chance:
+			_drop(bonus.pickup, at, bonus.amount)
 
 
 func _drop(pickup_data: PickupData, at: Vector3, amount: float) -> void:

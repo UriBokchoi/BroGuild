@@ -1,6 +1,7 @@
 extends GutTest
 ## Rompibles de data/breakables: están la calavera (experiencia) y la bolsita (oro), y cada uno
-## suelta algo, con valor y en al menos un trozo, y más cuanto mayor es la dificultad.
+## suelta algo, con valor y en al menos un trozo, y más cuanto mayor es la dificultad; sus
+## recogibles extra (y los de los élites) están completos.
 
 const BREAKABLES_DIR := "res://data/breakables"
 const XP_GEM := preload("res://data/pickups/xp_gem.tres")
@@ -32,3 +33,15 @@ func test_more_difficulty_more_loot() -> void:
 		var data := _breakables[id]
 		assert_gt(data.amount_per_difficulty, 0.0, "%s: no sube con la dificultad" % id)
 		assert_almost_eq(data.amount_at(10.0), data.amount + data.amount_per_difficulty * 10.0, 0.001)
+
+
+func test_bonus_drops_are_complete() -> void:
+	var elite := preload("res://data/enemies/elite.tres") as EliteData
+	var groups: Dictionary[String, Array] = {"elite": elite.bonus_drops}
+	for id: String in _breakables:
+		groups[id] = _breakables[id].bonus_drops
+	for id: String in groups:
+		for bonus: BonusDrop in groups[id]:
+			assert_not_null(bonus.pickup, "%s: recogible extra vacío" % id)
+			assert_between(bonus.chance, 0.1, 100.0, "%s: probabilidad" % id)
+			assert_gt(bonus.amount, 0.0, "%s: sin valor" % id)

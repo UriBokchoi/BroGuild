@@ -1,0 +1,64 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://entities/pickups/pickup.gd" id="1_pickup"]
+[ext_resource type="Script" path="res://vfx/juice/spin_bob.gd" id="2_spin"]
+
+[sub_resource type="StandardMaterial3D" id="Mat_meat"]
+albedo_color = Color(0.6, 0.3, 0.16, 1)
+roughness = 0.7
+
+[sub_resource type="StandardMaterial3D" id="Mat_bone"]
+albedo_color = Color(0.95, 0.92, 0.84, 1)
+roughness = 0.6
+
+[sub_resource type="SphereMesh" id="SphereMesh_meat"]
+material = SubResource("Mat_meat")
+radius = 0.2
+height = 0.34
+radial_segments = 12
+rings = 6
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_bone"]
+material = SubResource("Mat_bone")
+top_radius = 0.04
+bottom_radius = 0.04
+height = 0.26
+radial_segments = 8
+rings = 1
+
+[sub_resource type="SphereMesh" id="SphereMesh_knob"]
+material = SubResource("Mat_bone")
+radius = 0.05
+height = 0.1
+radial_segments = 8
+rings = 4
+
+[node name="Food" type="Node3D"]
+script = ExtResource("1_pickup")
+float_height = 0.6
+
+[node name="Model" type="Node3D" parent="."]
+
+[node name="Meat" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(0.866, -0.5, 0, 0.5, 0.866, 0, 0, 0, 1, -0.06, -0.04, 0)
+cast_shadow = 0
+mesh = SubResource("SphereMesh_meat")
+
+[node name="Bone" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(0.5, -0.866, 0, 0.866, 0.5, 0, 0, 0, 1, 0.13, 0.08, 0)
+cast_shadow = 0
+mesh = SubResource("CylinderMesh_bone")
+
+[node name="KnobA" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.24, 0.17, 0.035)
+cast_shadow = 0
+mesh = SubResource("SphereMesh_knob")
+
+[node name="KnobB" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.24, 0.17, -0.035)
+cast_shadow = 0
+mesh = SubResource("SphereMesh_knob")
+
+[node name="SpinBob" type="Node" parent="." node_paths=PackedStringArray("target")]
+script = ExtResource("2_spin")
+target = NodePath("../Model")

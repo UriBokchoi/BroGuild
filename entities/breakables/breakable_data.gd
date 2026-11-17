@@ -13,6 +13,8 @@ extends Resource
 @export_range(0.0, 1000.0, 0.1, "or_greater") var amount_per_difficulty: float = 0.0
 ## En cuántos recogibles se reparte.
 @export_range(1, 20, 1) var pieces: int = 0
+## Recogibles que a veces suelta además (imán, comida, bomba…).
+@export var bonus_drops: Array[BonusDrop] = []
 ## Hasta qué distancia del rompible caen.
 @export_range(0.0, 5.0, 0.1, "suffix:m") var spread: float = 0.0
 

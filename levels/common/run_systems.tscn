@@ -19,6 +19,9 @@
 [ext_resource type="PackedScene" path="res://ui/menus/level_up/level_up_panel.tscn" id="17_level_up_panel"]
 [ext_resource type="Script" path="res://systems/run/run_recorder.gd" id="18_recorder"]
 [ext_resource type="PackedScene" path="res://ui/menus/results/results_panel.tscn" id="19_results"]
+[ext_resource type="Script" path="res://systems/progression/effects/heal_effect.gd" id="20_heal"]
+[ext_resource type="Script" path="res://systems/progression/effects/magnet_effect.gd" id="21_magnet"]
+[ext_resource type="Script" path="res://systems/progression/effects/bomb_effect.gd" id="22_bomb"]
 
 [node name="RunSystems" type="Node3D" node_paths=PackedStringArray("player", "director")]
 script = ExtResource("1_run")
@@ -76,3 +79,21 @@ script = ExtResource("10_director")
 swarm = NodePath("../EnemySwarm")
 target = NodePath("../Player")
 difficulty_stats = NodePath("../Player/Stats")
+
+[node name="PickupEffects" type="Node" parent="."]
+
+[node name="Heal" type="Node" parent="PickupEffects" node_paths=PackedStringArray("health")]
+script = ExtResource("20_heal")
+reward = &"heal"
+health = NodePath("../../Player/Health")
+
+[node name="Magnet" type="Node" parent="PickupEffects" node_paths=PackedStringArray("field")]
+script = ExtResource("21_magnet")
+reward = &"magnet"
+field = NodePath("../../PickupField")
+
+[node name="Bomb" type="Node" parent="PickupEffects" node_paths=PackedStringArray("swarm", "center")]
+script = ExtResource("22_bomb")
+reward = &"bomb"
+swarm = NodePath("../../EnemySwarm")
+center = NodePath("../../Player")
