@@ -70,6 +70,9 @@ STAT_XP_GAIN,Experiencia ganada,XP gain
 STAT_CURRENCY_GAIN,Oro ganado,Gold gained
 STAT_LUCK,Suerte,Luck
 STAT_PICKUP_RANGE,Radio de recogida,Pickup range
+STAT_GROUP_SLOTS,Ranuras,Slots
+STAT_WEAPON_SLOTS,Ranuras de armas,Weapon slots
+STAT_RUNE_SLOTS,Ranuras de runas,Rune slots
 STAT_GROUP_SLIDE,Slide,Slide
 STAT_SLIDE_MIN_SPEED,Velocidad mínima del slide,Slide min speed
 STAT_SLIDE_MAX_SPEED,Velocidad máxima del slide,Slide max speed
@@ -156,6 +159,7 @@ ARMORY_WEAPONS,Armas,Weapons
 ARMORY_RUNES,Runas,Runes
 LEVEL_UP_TITLE,¡Nivel %d!,Level %d!
 LEVEL_UP_CHOOSE,Elige una mejora,Choose an upgrade
+LOADOUT_MAX,MÁX,MAX
 LEVEL_UP_NEW,Nuevo,New
 LEVEL_UP_LEVEL,Nv. %d → %d,Lv. %d → %d
 ITEM_KIND_WEAPON,Arma,Weapon

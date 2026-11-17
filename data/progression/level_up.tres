@@ -5,7 +5,7 @@
 [resource]
 script = ExtResource("1_data")
 choices = 3
-weapon_slots = 4
-rune_slots = 4
+max_weapon_slots = 4
+max_rune_slots = 4
 weapons_dir = "res://data/weapons"
 runes_dir = "res://data/runes"

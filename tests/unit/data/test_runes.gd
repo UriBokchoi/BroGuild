@@ -1,6 +1,6 @@
 extends GutTest
 ## Runas de data/runes: están las cinco iniciales, cada una con id único, nombre y descripción
-## traducidos, entre 1 y 5 niveles y modificadores sobre stats que el jugador tiene.
+## traducidos, icono, entre 1 y 5 niveles y modificadores sobre stats que el jugador tiene.
 
 const RUNES_DIR := "res://data/runes"
 const STRINGS_PATH := "res://data/i18n/strings.csv"
@@ -36,6 +36,7 @@ func test_ids_are_unique_and_texts_translated() -> void:
 		ids.append(rune.id)
 		assert_has(_keys, String(rune.name_key), "%s: falta su nombre" % rune.id)
 		assert_has(_keys, String(rune.description_key), "%s: falta su descripción" % rune.id)
+		assert_not_null(rune.icon, "%s: sin icono" % rune.id)
 
 
 func test_levels_change_player_stats() -> void:

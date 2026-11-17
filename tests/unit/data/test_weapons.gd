@@ -1,6 +1,6 @@
 extends GutTest
-## Armas de data/weapons: cada una tiene identificador único, nombre y descripción traducidos, una
-## escena que es un Weapon, stats de nivel 1 y mejoras de nivel sobre stats que existen.
+## Armas de data/weapons: cada una tiene identificador único, nombre y descripción traducidos,
+## icono, una escena que es un Weapon, stats de nivel 1 y mejoras de nivel sobre stats que existen.
 
 const WEAPONS_DIR := "res://data/weapons"
 const STRINGS_PATH := "res://data/i18n/strings.csv"
@@ -32,6 +32,7 @@ func test_ids_are_unique_and_texts_translated() -> void:
 		ids.append(weapon.id)
 		assert_has(_keys, String(weapon.name_key), "%s: falta su nombre" % weapon.id)
 		assert_has(_keys, String(weapon.description_key), "%s: falta su descripción" % weapon.id)
+		assert_not_null(weapon.icon, "%s: sin icono" % weapon.id)
 
 
 func test_each_weapon_has_a_weapon_scene_and_stats() -> void:

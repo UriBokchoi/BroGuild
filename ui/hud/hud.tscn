@@ -6,6 +6,9 @@
 [ext_resource type="Script" path="res://ui/hud/xp_bar.gd" id="4_xp"]
 [ext_resource type="Script" path="res://ui/hud/gold_counter.gd" id="5_gold"]
 [ext_resource type="Script" path="res://ui/hud/run_clock.gd" id="6_clock"]
+[ext_resource type="Script" path="res://ui/hud/loadout_bar.gd" id="7_loadout"]
+[ext_resource type="Resource" path="res://data/progression/level_up.tres" id="8_level_up"]
+[ext_resource type="Texture2D" path="res://assets/textures/icons/ui/lock.svg" id="9_lock"]
 
 [node name="HUD" type="CanvasLayer"]
 layer = 10
@@ -85,6 +88,28 @@ script = ExtResource("6_clock")
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 2
+
+[node name="LoadoutBar" type="VBoxContainer" parent="Margin/Top"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 2
+theme_type_variation = &"LoadoutBar"
+script = ExtResource("7_loadout")
+level_up = ExtResource("8_level_up")
+lock_icon = ExtResource("9_lock")
+
+[node name="WeaponSlots" type="HBoxContainer" parent="Margin/Top/LoadoutBar"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"LoadoutRow"
+
+[node name="RuneSlots" type="HBoxContainer" parent="Margin/Top/LoadoutBar"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"LoadoutRow"
 
 [node name="Column" type="VBoxContainer" parent="Margin"]
 layout_mode = 2

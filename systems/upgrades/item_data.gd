@@ -11,6 +11,9 @@ extends Resource
 @export var name_key: StringName = &""
 ## Clave de traducción de la descripción.
 @export var description_key: StringName = &""
+## Icono (HUD, cartas de subir de nivel). Los de serie están en
+## [code]assets/textures/icons/[/code].
+@export var icon: Texture2D
 
 
 ## Nivel máximo.

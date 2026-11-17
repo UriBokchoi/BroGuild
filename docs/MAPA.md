@@ -31,7 +31,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 | `tools/` | Validación por terminal (`validate.sh`, `ci/`) y generadores (`gen_themes.gd`). |
 | `tests/` | GUT: `unit/` y `integration/`, con la misma ruta que el código. `hooks/` es el script de fin de ejecución. |
 | `docs/` | GDD, ROADMAP, DECISIONES y este mapa. |
-| `assets/` | Assets reutilizables y `CREDITS.md`. `models/props/`: piezas hechas con mallas básicas (espada, escudo, bastón, sombrero de mago, daga) con sus materiales en `materials/`; las llevan los personajes y pueden servir para otras cosas (iconos, el Archivo, botín). Texturas, audio y fuentes, aún vacíos. |
+| `assets/` | Assets reutilizables y `CREDITS.md`. `models/props/`: piezas hechas con mallas básicas (espada, escudo, bastón, sombrero de mago, daga) con sus materiales en `materials/`; las llevan los personajes y pueden servir para otras cosas (el Archivo, botín). `textures/icons/`: iconos SVG de armas, runas y de la interfaz (candado). Audio y fuentes, aún vacíos. |
 
 ## Sistemas
 
@@ -119,8 +119,8 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
   - `RuneData` (en `data/runes/`) lleva un `StatModifierSet` por nivel, acumulativos, sobre las stats del jugador; el nivel máximo es cuántos haya.
   - `RuneInventory` (en el jugador) aplica y quita esos modificadores al subir, bajar o quitar una runa.
 - **Subir de nivel** (`level_up/`):
-  - `LevelUpData` (`data/progression/level_up.tres`): número de opciones, ranuras de armas y de runas, y carpetas de las que salen.
-  - `LevelUpOffer` (lógica pura, con el azar inyectado) elige las opciones: subir lo que lleva sin pasar del máximo, o algo nuevo si queda ranura de su tipo.
+  - `LevelUpData` (`data/progression/level_up.tres`): número de opciones, ranuras de armas y de runas que hay (4 y 4) y carpetas de las que salen. Cuántas están abiertas lo dicen las stats del jugador `weapon_slots` y `rune_slots` (2 y 2 al empezar; desbloquear una es un modificador +1).
+  - `LevelUpOffer` (lógica pura, con el azar inyectado) elige las opciones: subir lo que lleva sin pasar del máximo, o algo nuevo si queda ranura abierta de su tipo.
   - `LevelUpController` (en el nivel) escucha `player_leveled_up`, abre `LevelUpPanel` (pausa y cartas, en `ui/menus/level_up/`) y aplica la elegida a las armas o runas del jugador. Usa el flujo `GAMBLE` de `Rng`: la ruleta del Hito 4 irá encima.
 
 ### Botín y progresión — `entities/pickups/` y `systems/progression/`
@@ -133,7 +133,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 - **`LootDropper`** (en el nivel): escucha `enemy_died` y suelta la gema con la `xp_reward` y la moneda con el `gold_reward` del enemigo. Los cofres y las probabilidades de botín irán aquí.
 - **`ExperienceComponent`** (en el jugador): suma la experiencia recogida × `xp_gain` y sube de nivel con la curva de `ExperienceData` (`data/progression/experience.tres`). El jugador aleja la cámara con el nivel.
 - **`WalletComponent`** (en el jugador): el oro de la partida (antes «fichas» en el GDD). Suma el recogido × `currency_gain` y lo gasta con `spend()`.
-- **Stats de progresión:** `ProgressionData` (experiencia y oro ganados, suerte, radio de recogida).
+- **Stats de progresión:** `ProgressionData` (experiencia y oro ganados, suerte, radio de recogida y ranuras abiertas de armas y runas).
 
 ### Juice y efectos — `vfx/`
 - **`juice/`**, efectos que solo escuchan señales:
@@ -144,7 +144,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 - **Shaders propios de una feature:** van con ella (tajo de la espada, teletransporte, líneas de velocidad).
 
 ### UI — `ui/`
-- **`hud/`:** vida, stamina, experiencia y nivel (arriba), oro (`GoldCounter`) y reloj de la ronda (`RunClock`, en rojo en la prórroga) debajo, y aviso de interacción. Escuchan el `EventBus`.
+- **`hud/`:** vida, stamina, experiencia y nivel (arriba), oro (`GoldCounter`) y reloj de la ronda (`RunClock`, en rojo en la prórroga) debajo, armas y runas (`LoadoutBar`: una fila de `LoadoutSlot` por tipo, con icono y nivel; las ranuras sin abrir, con candado) y aviso de interacción. Escuchan el `EventBus`.
 - **`menus/pause/`:** menú de pausa con todas las stats del jugador.
 - **`menus/armory/`:** panel de la armería.
 - **`menus/level_up/`:** elección al subir de nivel (`LevelUpPanel` y sus `LevelUpCard`).
@@ -178,6 +178,8 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 | `pickup_collected` | `PickupField` | `ExperienceComponent` (la recompensa `experience`), `WalletComponent` (`gold`) |
 | `player_xp_changed` | `Player` | `XpBar` |
 | `player_gold_changed` | `Player` | `GoldCounter` |
+| `player_item_changed` (arma o runa y su nivel; 0 = quitada) | `Player` (de `WeaponInventory.weapon_changed` y `RuneInventory.rune_changed`) | `LoadoutBar` |
+| `player_slots_changed` (ranuras abiertas) | `Player` | `LoadoutBar` |
 | `run_clock_changed` (segundos, prórroga; negativo = sin ronda) | `WaveDirector` | `RunClock` |
 | `player_leveled_up` | `Player` | `LevelUpController` |
 | `interaction_prompt_changed` | `Interactor` | `InteractionPrompt` |
@@ -199,12 +201,12 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 ## Recetas: cómo añadir…
 
 - **Un arma:**
-  1. Crea un `.tres` `WeaponData` en `data/weapons/`.
+  1. Crea un `.tres` `WeaponData` en `data/weapons/` con su icono (`assets/textures/icons/weapons/`, SVG).
   2. Si ataca de otra forma, crea su escena con un script que herede de `Weapon` e implemente `_fire()`, en `systems/combat/weapons/<arma>/`.
   3. Traduce su nombre y descripción.
 
   Aparece sola en la armería.
-- **Una runa:** crea un `.tres` `RuneData` en `data/runes/` con un `StatModifierSet` por nivel (sobre stats que el jugador tenga) y traduce su nombre y descripción. Aparece sola en la armería.
+- **Una runa:** crea un `.tres` `RuneData` en `data/runes/` con su icono (`assets/textures/icons/runes/`), un `StatModifierSet` por nivel (sobre stats que el jugador tenga) y traduce su nombre y descripción. Aparece sola en la armería.
 - **Un enemigo:**
   1. Crea un `.tres` `EnemyData` en `data/enemies/`.
   2. Si no reutiliza la escena de otro, crea la suya en `entities/enemies/<enemigo>/`, con raíz `Enemy`, como `swarmer.tscn`.
