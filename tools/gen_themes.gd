@@ -274,3 +274,18 @@ func _add_slots(theme: Theme) -> void:
 	theme.set_stylebox(&"panel", &"SlotReel", _box(SLATE_LIGHT, 8, Vector2(6, 6), GOLD_DARK, 2, 2))
 	_label_variation(theme, &"SlotResultLabel", 22, INK)
 	_label_variation(theme, &"SlotJackpotLabel", 32, GOLD)
+	_add_chests(theme)
+
+
+## Cofres en el HUD: un panel como el de la tragaperras con una casilla por rareza (su color lo pone
+## el panel) y el objeto que sale; debajo de las runas, los objetos que lleva.
+func _add_chests(theme: Theme) -> void:
+	theme.set_type_variation(&"ChestPanel", &"PanelContainer")
+	theme.set_stylebox(&"panel", &"ChestPanel", _box(Color(SLATE, 0.9), 12, Vector2(14, 10), Color(GOLD, 0.6), 2, 3))
+	theme.set_type_variation(&"ChestTile", &"Panel")
+	theme.set_stylebox(&"panel", &"ChestTile", _box(Color.WHITE, 6, Vector2.ZERO, SLATE, 2, 2))
+	_label_variation(theme, &"ChestItemLabel", 26, INK)
+	_label_variation(theme, &"ChestDescriptionLabel", 18, INK)
+	theme.set_type_variation(&"PassiveBar", &"HFlowContainer")
+	theme.set_constant(&"h_separation", &"PassiveBar", 6)
+	theme.set_constant(&"v_separation", &"PassiveBar", 6)

@@ -1,7 +1,7 @@
 extends GutTest
 ## El Brosque: las oleadas empiezan solas, el jugador aparece en el claro, el mapa se genera al
-## cargar (mesetas, tragaperras, props y bosque; dentro de las paredes los árboles chocan y fuera una
-## banda tapa el borde), los enemigos salen solo dentro y el nivel da la bienvenida.
+## cargar (mesetas, tragaperras, cofres, props y bosque; dentro de las paredes los árboles chocan y
+## fuera una banda tapa el borde), los enemigos salen solo dentro y el nivel da la bienvenida.
 
 const BrosqueScene := preload("res://levels/brosque/brosque.tscn")
 
@@ -38,6 +38,14 @@ func test_the_map_is_generated_with_its_slot_machines() -> void:
 	var slots := layout.get_pieces().filter(func(piece: Node3D) -> bool: return piece is SlotMachine)
 	assert_eq(slots.size(), 4, "una en el suelo y tres encima de mesetas")
 	assert_gt(layout.get_pieces().size(), slots.size())
+
+
+func test_the_map_has_chests_on_the_ground_and_on_plateaus() -> void:
+	var layout := _level.get_node(^"Layout") as LevelLayout
+	var chests := layout.get_pieces().filter(func(piece: Node3D) -> bool: return piece is Chest)
+	assert_eq(chests.size(), 7, "cinco en el suelo y dos en las mesetas que quedan")
+	var high := chests.filter(func(chest: Node3D) -> bool: return chest.position.y > 0.0)
+	assert_eq(high.size(), 2)
 
 
 func test_the_trees_inside_the_walls_collide_and_the_outer_forest_hides_the_edge() -> void:

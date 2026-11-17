@@ -876,3 +876,22 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - Usan la Suerte del jugador (`ProgressionData.luck`, 0 de base) las cartas de subir de nivel y las mejoras gratis de la tragaperras. Los power-ups y los símbolos de la tragaperras no escalan, de momento.
 - **Por qué:** lo pide el GDD (§5). Va en la tabla genérica para que los cofres y los objetos la usen sin código nuevo. Escala con el peso, y no sumando, para que una entrada de peso 0 siga sin salir nunca.
 - **Pendiente:** aún no hay nada que dé Suerte; llegará con los objetos de los cofres.
+
+## 2026-11-17 · Cofres y objetos pasivos
+- **Decisión:**
+  - **Objetos pasivos:** `PassiveItemData` es un `StatModifierSet` con id, textos, icono y una rareza fija. Viven en `data/items/` y el jugador los lleva en `PassiveInventory`. Cada copia aplica sus modificadores con su propio origen: se apilan y se puede quitar una.
+  - **13 objetos de gimnasio** como propuesta inicial, para cambiar en datos:
+
+    | Rareza | Objetos |
+    |---|---|
+    | Común | batido de proteínas (+10 % vida), muñequeras (+8 % vel. ataque), toalla (+0,4 vida/s), riñonera (+15 % oro) |
+    | Rara | guantes (+10 % daño), zapatillas (+6 % carrera y sprint), calcetines de la suerte (+10 Suerte) |
+    | Improbable | espejo (+6 % crítico), aceite corporal (+5 % esquiva), cinturón de levantar (+10 defensa) |
+    | De leyenda | mancuerna de oro (+1 proyectil), batido sospechoso (+25 % daño y +3 dificultad) |
+    | Mítica | corona del Bro (+15 % daño, vel. ataque, vida y área) |
+
+  - **Cofres:** cuestan `(20 + 4 × dificultad) × 1,3^cofres abiertos` en la partida. Tiran una rareza de la tabla de siempre con la Suerte del jugador y sacan un objeto de esa rareza; si no hay ninguno, uno de la de debajo.
+  - El revelado dura 1,6 s en el HUD sin pausar: la luz recorre las cinco rarezas, frena y se para. Después llega el objeto y el cofre desaparece.
+  - En el Brosque hay 7: cinco en el suelo y dos encima de las mesetas que no tienen tragaperras.
+- **Por qué:** lo pide el GDD (§5.2 y §6) y es la segunda apuesta de la partida. No se usa el robo de vida porque aún no está implementado.
+- **Coste:** cada cofre cuenta los abiertos escuchando `chest_opened`. Un cofre que aparezca a mitad de partida (por ejemplo, soltado por un élite) empezaría a contar desde 0: habrá que pasarle la cuenta cuando lleguen.

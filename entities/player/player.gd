@@ -15,6 +15,8 @@ extends CharacterBody3D
 @export var wallet: WalletComponent
 @export var weapons: WeaponInventory
 @export var runes: RuneInventory
+## Objetos pasivos (de los cofres).
+@export var items: PassiveInventory
 ## Cámara que se aleja con el nivel.
 @export var camera: CameraRig
 @export var input: PlayerInput
@@ -65,6 +67,7 @@ func _ready() -> void:
 	wallet.gold_changed.connect(EventBus.player_gold_changed.emit)
 	weapons.weapon_changed.connect(EventBus.player_item_changed.emit)
 	runes.rune_changed.connect(EventBus.player_item_changed.emit)
+	items.item_changed.connect(EventBus.player_passive_changed.emit)
 	stats.stat_changed.connect(_on_stat_changed)
 	# Vida, experiencia y armas iniciales avisaron en su _ready, antes de estas conexiones: se repite
 	# para la interfaz.
@@ -137,13 +140,15 @@ func _unequip(data: CharacterData) -> void:
 		passive = null
 
 
-## Avisa a la interfaz de sus ranuras abiertas y de las armas y runas que ya lleva.
+## Avisa a la interfaz de sus ranuras abiertas y de las armas, runas y objetos que ya lleva.
 func _announce_loadout() -> void:
 	EventBus.player_slots_changed.emit(stats.get_int(&"weapon_slots"), stats.get_int(&"rune_slots"))
 	for weapon: Weapon in weapons.get_weapons():
 		EventBus.player_item_changed.emit(weapon.data, weapon.level)
 	for rune: RuneData in runes.get_runes():
 		EventBus.player_item_changed.emit(rune, runes.get_level(rune))
+	for item: PassiveItemData in items.get_items():
+		EventBus.player_passive_changed.emit(item, items.count(item))
 
 
 func _on_stat_changed(stat: StringName, value: float, _previous: float) -> void:

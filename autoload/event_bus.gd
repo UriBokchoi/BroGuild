@@ -35,6 +35,11 @@ signal slot_spun(data: SlotMachineData, results: Array[SlotSymbol])
 ## Una tragaperras dio su resultado (o no se pudo pagar): el texto (clave; si lleva [code]%d[/code],
 ## [param value]) y si fue jackpot.
 signal slot_resolved(text_key: StringName, value: float, jackpot: bool)
+## Se abrió un cofre: sale [param item], que el HUD revela durante [param reveal_time] segundos
+## (luego llega al jugador). Los cofres lo cuentan para subir su coste.
+signal chest_opened(item: PassiveItemData, reveal_time: float)
+## No se pudo abrir un cofre: falta oro (cuesta [param cost]).
+signal chest_denied(cost: int)
 ## Murió [param enemy] (aún en su sitio, con su tipo y sus stats): botín, experiencia, Archivo…
 signal enemy_died(enemy: Enemy)
 ## El jugador rompió un rompible (calavera, bolsita…) de [param data] en [param at].
@@ -51,6 +56,8 @@ signal player_gold_changed(gold: float)
 signal difficulty_changed(difficulty: float)
 ## Cambió el nivel de un arma o runa del jugador: al conseguirla (1), al subirla y al perderla (0).
 signal player_item_changed(item: ItemData, level: int)
+## Cambió cuántas copias lleva el jugador de un objeto pasivo (0 = ya no lo lleva).
+signal player_passive_changed(item: PassiveItemData, count: int)
 ## Cambiaron las ranuras abiertas del jugador (sin limitar a las que hay: eso lo hace [LevelUpData]).
 signal player_slots_changed(weapon_slots: int, rune_slots: int)
 ## Pasó un segundo de la ronda: van [param seconds] y si ya pasó su duración ([param overtime]). Con

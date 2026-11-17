@@ -43,6 +43,8 @@ INTERACT_SLOTS,"Jugar a la tragaperras (%d de oro, quedan %d)","Play the slot ma
 SLOT_MACHINE_SIGN,TRAGAPERRAS,SLOTS
 SLOT_NOT_ENOUGH_GOLD,Te falta oro: cuesta %d,Not enough gold: it costs %d
 SLOT_NOTHING,Nada… a la próxima,Nothing… next time
+INTERACT_CHEST,"Abrir el cofre (%d de oro)","Open the chest (%d gold)"
+CHEST_NOT_ENOUGH_GOLD,Te falta oro: cuesta %d,Not enough gold: it costs %d
 SLOT_WIN_GOLD,¡+%d de oro!,+%d gold!
 SLOT_JACKPOT_GOLD,¡JACKPOT! +%d de oro,JACKPOT! +%d gold
 SLOT_WIN_HEAL,Te curas un poco,You heal a bit
@@ -214,6 +216,32 @@ RARITY_RARE,Rara,Rare
 RARITY_IMPROBABLE,Improbable,Improbable
 RARITY_LEGENDARY,De leyenda,Legendary
 RARITY_MYTHIC,Mítica,Mythic
+ITEM_PROTEIN_SHAKE_NAME,Batido de proteínas,Protein Shake
+ITEM_PROTEIN_SHAKE_DESCRIPTION,"+10 % de vida máxima.","+10% max health."
+ITEM_WRIST_WRAPS_NAME,Muñequeras,Wrist Wraps
+ITEM_WRIST_WRAPS_DESCRIPTION,"+8 % de velocidad de ataque.","+8% attack speed."
+ITEM_GYM_TOWEL_NAME,Toalla del gym,Gym Towel
+ITEM_GYM_TOWEL_DESCRIPTION,"+0,4 de vida por segundo.","+0.4 health per second."
+ITEM_FANNY_PACK_NAME,Riñonera,Fanny Pack
+ITEM_FANNY_PACK_DESCRIPTION,"+15 % de oro.","+15% gold."
+ITEM_LIFTING_GLOVES_NAME,Guantes de levantar,Lifting Gloves
+ITEM_LIFTING_GLOVES_DESCRIPTION,"+10 % de daño.","+10% damage."
+ITEM_RUNNING_SHOES_NAME,Zapatillas de correr,Running Shoes
+ITEM_RUNNING_SHOES_DESCRIPTION,"+6 % de velocidad al correr y al esprintar.","+6% run and sprint speed."
+ITEM_LUCKY_SOCKS_NAME,Calcetines de la suerte,Lucky Socks
+ITEM_LUCKY_SOCKS_DESCRIPTION,"+10 de Suerte: mejoras y cofres más raros.","+10 Luck: rarer upgrades and chests."
+ITEM_GYM_MIRROR_NAME,Espejo del gym,Gym Mirror
+ITEM_GYM_MIRROR_DESCRIPTION,"+6 % de crítico. Te ves fuerte.","+6% crit chance. Looking strong."
+ITEM_BODY_OIL_NAME,Aceite corporal,Body Oil
+ITEM_BODY_OIL_DESCRIPTION,"+5 % de esquiva: los golpes resbalan.","+5% evasion: hits slip right off."
+ITEM_LIFTING_BELT_NAME,Cinturón de levantar,Lifting Belt
+ITEM_LIFTING_BELT_DESCRIPTION,"+10 de defensa.","+10 armor."
+ITEM_GOLDEN_DUMBBELL_NAME,Mancuerna de oro,Golden Dumbbell
+ITEM_GOLDEN_DUMBBELL_DESCRIPTION,"+1 proyectil en todas las armas.","+1 projectile on every weapon."
+ITEM_SHADY_SHAKE_NAME,Batido sospechoso,Shady Shake
+ITEM_SHADY_SHAKE_DESCRIPTION,"+25 % de daño, pero +3 de dificultad.","+25% damage, but +3 difficulty."
+ITEM_BRO_CROWN_NAME,Corona del Bro,Bro Crown
+ITEM_BRO_CROWN_DESCRIPTION,"+15 % de daño, velocidad de ataque, vida máxima y área.","+15% damage, attack speed, max health and area."
 LEVEL_UP_NEW,Nuevo,New
 LEVEL_UP_LEVEL,Nv. %d → %d,Lv. %d → %d
 ITEM_KIND_WEAPON,Arma,Weapon
