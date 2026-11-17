@@ -1,0 +1,42 @@
+[gd_scene format=3]
+
+[ext_resource type="Material" path="res://levels/brosque/materials/bark.tres" id="1_bark"]
+[ext_resource type="Material" path="res://levels/brosque/materials/plank.tres" id="2_plank"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_log"]
+material = ExtResource("1_bark")
+top_radius = 0.32
+bottom_radius = 0.32
+height = 3.0
+radial_segments = 12
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_stump"]
+material = ExtResource("2_plank")
+top_radius = 0.3
+bottom_radius = 0.34
+height = 0.5
+radial_segments = 10
+rings = 1
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_bench"]
+size = Vector3(3, 1.1, 0.7)
+
+[node name="BenchLog" type="StaticBody3D"]
+collision_mask = 0
+
+[node name="Log" type="MeshInstance3D" parent="."]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0, 0.8, 0)
+mesh = SubResource("CylinderMesh_log")
+
+[node name="StumpLeft" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.1, 0.25, 0)
+mesh = SubResource("CylinderMesh_stump")
+
+[node name="StumpRight" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1, 0.25, 0)
+mesh = SubResource("CylinderMesh_stump")
+
+[node name="Shape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55, 0)
+shape = SubResource("BoxShape3D_bench")

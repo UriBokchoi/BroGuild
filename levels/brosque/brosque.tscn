@@ -1,0 +1,143 @@
+[gd_scene format=3]
+
+[ext_resource type="Material" path="res://levels/brosque/materials/grass.tres" id="1_grass"]
+[ext_resource type="PackedScene" path="res://levels/brosque/forest.tscn" id="2_forest"]
+[ext_resource type="PackedScene" path="res://levels/brosque/props/plateau_low.tscn" id="3_plateau_low"]
+[ext_resource type="PackedScene" path="res://levels/brosque/props/plateau_high.tscn" id="4_plateau_high"]
+[ext_resource type="PackedScene" path="res://levels/brosque/props/dumbbell_rock.tscn" id="5_dumbbell"]
+[ext_resource type="PackedScene" path="res://levels/brosque/props/bench_log.tscn" id="6_bench"]
+[ext_resource type="PackedScene" path="res://levels/brosque/props/sign.tscn" id="7_sign"]
+[ext_resource type="PackedScene" path="res://levels/common/run_systems.tscn" id="8_run_systems"]
+[ext_resource type="Resource" path="res://data/waves/brosque.tres" id="9_waves"]
+[ext_resource type="Resource" path="res://data/characters/warrior.tres" id="10_warrior"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_sky"]
+sky_top_color = Color(0.3, 0.52, 0.82, 1)
+sky_horizon_color = Color(0.72, 0.82, 0.78, 1)
+ground_bottom_color = Color(0.16, 0.22, 0.14, 1)
+ground_horizon_color = Color(0.72, 0.82, 0.78, 1)
+
+[sub_resource type="Sky" id="Sky_brosque"]
+sky_material = SubResource("ProceduralSkyMaterial_sky")
+
+[sub_resource type="Environment" id="Environment_brosque"]
+background_mode = 2
+sky = SubResource("Sky_brosque")
+ambient_light_source = 3
+tonemap_mode = 2
+glow_enabled = true
+fog_enabled = true
+fog_light_color = Color(0.62, 0.76, 0.66, 1)
+fog_density = 0.003
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ground"]
+material = ExtResource("1_grass")
+size = Vector2(200, 200)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ground"]
+size = Vector3(200, 1, 200)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_bound_x"]
+size = Vector3(164, 30, 2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_bound_z"]
+size = Vector3(2, 30, 164)
+
+[node name="Brosque" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_brosque")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.819, 0.47, -0.329, 0, 0.574, 0.819, 0.574, -0.671, 0.47, 0, 0, 0)
+light_color = Color(1, 0.95, 0.84, 1)
+shadow_enabled = true
+directional_shadow_max_distance = 80.0
+
+[node name="Ground" type="StaticBody3D" parent="."]
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="Ground"]
+mesh = SubResource("PlaneMesh_ground")
+
+[node name="Shape" type="CollisionShape3D" parent="Ground"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+shape = SubResource("BoxShape3D_ground")
+
+[node name="Bounds" type="StaticBody3D" parent="."]
+collision_mask = 0
+
+[node name="North" type="CollisionShape3D" parent="Bounds"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15, -81)
+shape = SubResource("BoxShape3D_bound_x")
+
+[node name="South" type="CollisionShape3D" parent="Bounds"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15, 81)
+shape = SubResource("BoxShape3D_bound_x")
+
+[node name="West" type="CollisionShape3D" parent="Bounds"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -81, 15, 0)
+shape = SubResource("BoxShape3D_bound_z")
+
+[node name="East" type="CollisionShape3D" parent="Bounds"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 81, 15, 0)
+shape = SubResource("BoxShape3D_bound_z")
+
+[node name="Forest" parent="." instance=ExtResource("2_forest")]
+
+[node name="Plateaus" type="Node3D" parent="."]
+
+[node name="LowWest" parent="Plateaus" instance=ExtResource("3_plateau_low")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -38, 0, -30)
+
+[node name="LowEast" parent="Plateaus" instance=ExtResource("3_plateau_low")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 42, 0, 34)
+
+[node name="HighNorth" parent="Plateaus" instance=ExtResource("4_plateau_high")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 40, 0, -38)
+
+[node name="HighSouth" parent="Plateaus" instance=ExtResource("4_plateau_high")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -36, 0, 40)
+
+[node name="Clearing" type="Node3D" parent="."]
+
+[node name="SignWelcome" parent="Clearing" instance=ExtResource("7_sign")]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 0, -9)
+text_key = &"BROSQUE_SIGN_WELCOME"
+
+[node name="SignNoPain" parent="Clearing" instance=ExtResource("7_sign")]
+transform = Transform3D(0.406, 0, 0.914, 0, 1, 0, -0.914, 0, 0.406, -10, 0, -4)
+
+[node name="SignLegDay" parent="Clearing" instance=ExtResource("7_sign")]
+transform = Transform3D(0.406, 0, -0.914, 0, 1, 0, 0.914, 0, 0.406, 10, 0, -4)
+text_key = &"BROSQUE_SIGN_LEG_DAY"
+
+[node name="DumbbellA" parent="Clearing" instance=ExtResource("5_dumbbell")]
+transform = Transform3D(0.866, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866, -7, 0, 7)
+
+[node name="DumbbellB" parent="Clearing" instance=ExtResource("5_dumbbell")]
+transform = Transform3D(0.94, 0, -0.342, 0, 1, 0, 0.342, 0, 0.94, 8, 0, 8)
+
+[node name="DumbbellC" parent="Clearing" instance=ExtResource("5_dumbbell")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -13, 0, -11)
+
+[node name="DumbbellD" parent="Clearing" instance=ExtResource("5_dumbbell")]
+transform = Transform3D(0.866, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866, 13, 0, -10)
+
+[node name="BenchSouth" parent="Clearing" instance=ExtResource("6_bench")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 12)
+
+[node name="BenchWest" parent="Clearing" instance=ExtResource("6_bench")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -14, 0, 2)
+
+[node name="BenchEast" parent="Clearing" instance=ExtResource("6_bench")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 14, 0, 2)
+
+[node name="PlayerSpawn" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3)
+
+[node name="RunSystems" parent="." node_paths=PackedStringArray("spawn_point") instance=ExtResource("8_run_systems")]
+waves = ExtResource("9_waves")
+autostart_waves = true
+default_character = ExtResource("10_warrior")
+spawn_point = NodePath("../PlayerSpawn")

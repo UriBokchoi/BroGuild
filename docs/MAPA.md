@@ -27,8 +27,8 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 | `data/` | Los `.tres` de balance y la traducción. Nada de código. |
 | `ui/` | HUD, menús, panel de depuración, vista de stats, tema global y dueño del ratón. |
 | `vfx/` | Efectos visuales: juice que reacciona a señales, shaders compartidos y líneas de velocidad. |
-| `levels/` | Escenas jugables: el gimnasio de pruebas con su zona de combate y la prueba de estrés. |
-| `tools/` | Validación por terminal (`validate.sh`, `ci/`) y generadores (`gen_themes.gd`). |
+| `levels/` | Escenas jugables: `common/` (`RunSystems`, los sistemas de partida que usa cada nivel), el Brosque (`brosque/`), el gimnasio de pruebas con su zona de combate y la prueba de estrés. |
+| `tools/` | Validación por terminal (`validate.sh`, `ci/`) y generadores (`gen_themes.gd`; `gen_brosque_forest.gd`, los árboles del Brosque). |
 | `tests/` | GUT: `unit/` y `integration/`, con la misma ruta que el código. `hooks/` es el script de fin de ejecución. |
 | `docs/` | GDD, ROADMAP, DECISIONES y este mapa. |
 | `assets/` | Assets reutilizables y `CREDITS.md`. `models/props/`: piezas hechas con mallas básicas (espada, escudo, bastón, sombrero de mago, daga) con sus materiales en `materials/`; las llevan los personajes y pueden servir para otras cosas (el Archivo, botín). `textures/icons/`: iconos SVG de armas, runas y de la interfaz (candado). Audio y fuentes, aún vacíos. |
@@ -96,7 +96,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
   - Cada enemigo recalcula su rumbo cada `steering_slices` ticks; la física lo mueve en todos.
   - Tiene el `ProjectilePool` de los enemigos (`projectile_limit` en vuelo a la vez); `clear()` retira enemigos y proyectiles.
 - **Oleadas:**
-  - `WaveData` (en `data/waves/`) es la dificultad de una ronda: curva de enemigos por segundo según los minutos, picos, máximo a la vez, distancias de aparición, `WaveEnemy` con pesos y minuto de entrada, probabilidad de élite por minuto, duración de la ronda (`round_minutes`) y escalado (`StatScaling`: una stat de enemigo o de arma y su curva de multiplicador por minuto). `data/waves/test_gym.tres` es la ronda normal.
+  - `WaveData` (en `data/waves/`) es la dificultad de una ronda: curva de enemigos por segundo según los minutos, picos, máximo a la vez, distancias de aparición, `WaveEnemy` con pesos y minuto de entrada, probabilidad de élite por minuto, duración de la ronda (`round_minutes`) y escalado (`StatScaling`: una stat de enemigo o de arma y su curva de multiplicador por minuto). `data/waves/test_gym.tres` y `brosque.tres` son la ronda normal.
   - `WaveDirector` (en el nivel) los saca alrededor del jugador, en el suelo (un rayo por intento), con el escalado de su minuto (`boost`) y, a veces, élites. Es el reloj de la ronda: avisa cada segundo por `run_clock_changed`.
 - **`DamageReporter`** avisa de cada golpe con la posición de la cabeza (para los números).
 - **Tipos y escenas actuales:**
@@ -168,9 +168,15 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 - **`Save`** (autoload) lo carga y lo aplica al arrancar; quien lo cambia llama a `Save.save_settings()`. Los tests usan otro archivo (`settings_path`).
 
 ### Niveles — `levels/`
-- **`test_gym/test_gym.tscn`:** escena de pruebas (de momento, también la del Brosque en `data/levels/brosque.tres`). Zona de movimiento con rampas, bordes, paredes, huecos y escalones, más el pad de daño (`props/`).
+- **`common/run_systems.tscn`** (`RunSystems`): jugador, horda y oleadas, botín, subir de nivel, HUD, pausa, resultados, números de daño y panel de depuración, ya conectados. Cada nivel pone una instancia con sus oleadas (`waves`), si empiezan solas (`autostart_waves`), el personaje de serie y el punto de aparición (`spawn_point`).
+- **`brosque/brosque.tscn`:** el Brosque (`data/levels/brosque.tres`), un gimnasio en el bosque de unos 150 × 150 m con límites invisibles:
+  - claro central con el punto de aparición, pesas de piedra, bancos de tronco y carteles (`SignPost`, con su texto traducible);
+  - cuatro mesetas con rampa (`props/plateau_low.tscn` y `plateau_high.tscn`);
+  - el bosque (`forest.tscn`), generado con `tools/gen_brosque_forest.gd`: árboles con MultiMesh (pocas llamadas de dibujo) y un cuerpo con un tronco que choca por árbol. Si mueves una meseta o el claro, actualiza sus zonas en el generador y vuelve a generarlo (con ventana, no headless);
+  - las oleadas empiezan solas.
+- **`test_gym/test_gym.tscn`:** escena de pruebas (usa `RunSystems`; las oleadas las empieza la campana de la zona de combate). Zona de movimiento con rampas, bordes, paredes, huecos y escalones, más el pad de daño (`props/`).
 - **`test_gym/zones/combat_range.tscn`:** zona de combate a 200 m del gimnasio. Muñecos, armería, invocadores (esbirros, tiradores y esbirros élite), pedestales de personaje, campana de oleadas, plataforma escalonada, teletransportes y recogedor de caídas. Las oleadas paran al volver.
-- **En la raíz del gimnasio viven** `EnemySwarm`, `WaveDirector`, `PickupField`, `LootDropper`, `LevelUpController` y `LevelUpPanel`, `RunRecorder` y `ResultsPanel`, `DamageNumbers`, HUD, pausa y panel de depuración.
+- **Sistemas de partida:** viven en `RunSystems` (ver arriba): `EnemySwarm`, `WaveDirector`, `PickupField`, `LootDropper`, `LevelUpController` y `LevelUpPanel`, `RunRecorder` y `ResultsPanel`, `DamageNumbers`, HUD, pausa y panel de depuración.
 - **`stress/stress_test.tscn`:** prueba de rendimiento (herramienta, sin traducir). Mantiene 300 y luego 500 esbirros sobre un jugador inmortal con la espada, mide frames y física y sale. Comando en CLAUDE.md.
 
 ## Señales del `EventBus`

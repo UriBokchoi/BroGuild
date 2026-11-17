@@ -786,3 +786,19 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - «Volver» descarta lo de pantalla que no se aplicó.
   - Solo se ofrecen tamaños que caben en el área útil de la pantalla, sin la barra de tareas.
 - **Por qué:** lo pidió el diseñador («falta botón de aplicar»). Además, cambiar la ventana al tocar cada control es incómodo y arriesgado; con «Aplicar», el cambio se hace una vez, cuando se decide.
+
+## 2026-11-17 · Flujo de partida, `RunSystems` y el Brosque v1
+- **`Game`** es la escena principal y lleva el flujo: menú → nivel → menú. Cada pantalla sustituye a la anterior.
+  - Reintentar y volver al menú se piden por el `EventBus` (`RunFlow`). Así cada nivel se sigue pudiendo ejecutar solo (F6): sin `Game` que escuche, recarga la escena o cierra el juego.
+  - `validate.sh` arranca además cada nivel, porque la escena principal ya no entra en partida.
+- **`RunSystems`:** los sistemas de una partida (jugador, horda, oleadas, botín, subir de nivel, HUD, pausa, resultados, depuración) salen del gimnasio a una escena común. El gimnasio y el Brosque la instancian con sus oleadas, su personaje de serie y su punto de aparición. Se extrajo al segundo nivel, para no copiarlos.
+- **Bosque con MultiMesh:** los ~300 árboles se dibujan con cinco MultiMesh (tronco y copas) y chocan con un solo cuerpo con un cilindro por tronco. Así cuesta pocas llamadas de dibujo, que hacen falta para la horda.
+  - Lo genera `tools/gen_brosque_forest.gd` con semilla fija. El resto del nivel se edita a mano.
+  - Hay que generarlo con ventana: en headless el render es ficticio y el MultiMesh se guarda sin transformaciones.
+  - Los colores por árbol necesitan `vertex_color_is_srgb` en el material.
+- **Diseño acordado** (GDD §6 y §9):
+  - Calaveras y bolsitas se rompen al tocarlas.
+  - Hay tres tipos de objetos de partida: pasivos de cofre apilables, recogibles del suelo y llaves del jefe.
+  - El jefe se invoca en un altar con llaves; al minuto 10 el altar se activa solo.
+  - El Brosque es un gimnasio en el bosque.
+  - Las tragaperras, las rarezas y los cofres se adelantan al Hito 3 para el Brosque.

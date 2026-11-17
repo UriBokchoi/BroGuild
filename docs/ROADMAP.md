@@ -54,12 +54,19 @@
 - [x] Muerte, resultados y reinicio rápido: al morir, pantalla de resultados (tiempo, nivel, enemigos y élites derrotados, oro y daño) y «Reintentar» (R) en unos 0,2 s; HUD de experiencia, nivel, oro y tiempo
 - [x] Personajes iniciales: Guerrero (espada), Mago (bastón) y Pícaro (daga), cada uno con sus diferencias de stats, su rasgo de movimiento y su habilidad pasiva (Aguante, Eco arcano y Letal); pedestales en la zona de combate para cambiar de personaje
 
-## Hito 3 — Menús y flujo de partida
+## Hito 3 — Menús, flujo de partida y el Brosque
 - [x] Aspecto de cada personaje: su color y sus piezas en el modelo (Guerrero: espada y escudo; Mago: bastón y sombrero; Pícaro: dos dagas), en el jugador y en los pedestales. Las piezas son assets reutilizables (`assets/models/props/`)
 - [x] HUD de armas y runas: ranuras con su icono y su nivel; al empezar, 2 de cada abiertas y 2 bloqueadas (se desbloquearán más adelante). Las cartas de subir de nivel también llevan el icono
 - [x] Opciones básicas (desde la pausa): volumen (general, música y efectos), resolución, pantalla completa y VSync, guardadas entre partidas (`Save`)
 - [x] Escena raíz `Game` con el flujo de pantallas; `RunState` guarda personaje, nivel y semilla; «Salir» de la pausa vuelve al menú
-- [x] Menú principal: Jugar, Opciones, Archivo (desactivado hasta su tarea) y Abandonar (cierra el juego). De momento, Jugar lleva al Brosque (aún la zona de pruebas) con el último personaje
+- [x] Menú principal: Jugar, Opciones, Archivo (desactivado hasta su tarea) y Abandonar (cierra el juego). De momento, Jugar lleva al Brosque con el último personaje
+- [x] El Brosque v1 (gimnasio en el bosque): claro con pesas de piedra, bancos de tronco y carteles; mesetas con rampa; bosque low-poly de colores (generado, con MultiMesh). Los sistemas de partida van en `RunSystems`, común a todos los niveles. Jugar lo carga y las oleadas empiezan solas
+- [ ] Rompibles: calaveras (experiencia) y bolsitas (oro) repartidas por el nivel, que se rompen al tocarlas
+- [ ] Recogibles del suelo: imán, comida y bomba, que salen a veces de rompibles y élites
+- [ ] Tragaperras repartidas por el nivel (GDD §5.3; adelantadas del Hito 7)
+- [ ] `WeightedTable`, rarezas en datos y Suerte (tests con semilla; adelantado del Hito 4)
+- [ ] Cofres y objetos pasivos: cofres por el nivel que cuestan oro (coste creciente, revelado de rareza) y dan objetos con rareza que se apilan
+- [ ] Jefe del Brosque: altar que se invoca con llaves repartidas por el nivel (o se activa solo al minuto 10); vencerlo antes da más recompensa; vencerlo pasa el nivel (pantalla de victoria)
 - [ ] Selección de personaje: lista a la izquierda, modelo 3D en el centro, a la derecha (al pasar el ratón) nombre, stats, arma principal y habilidad pasiva
 - [ ] Selección de nivel (sustituye al panel de info al elegir personaje): el Brosque, la Torre del Mago y la Mazmorra (de momento, los tres cargan la zona de pruebas)
 - [ ] Catálogo de contenido (`data/content.tres`) y `Save` con desbloqueos persistentes
@@ -67,10 +74,8 @@
 
 ## Hito 4 — Apuestas v1
 - [ ] GDD adaptado a la temática medieval (pendientes de §11)
-- [ ] `WeightedTable`, rarezas en datos y Suerte (tests con semilla)
 - [ ] Ruleta de nivel: las 3 opciones de subir de nivel giran como rodillos; reroll de coste creciente
 - [ ] Doble o nada sobre la opción elegida
-- [ ] Cofres con coste creciente y revelado de rareza
 - [ ] Más armas y runas en `.tres` (3 con sinergia de movimiento)
 - [ ] Pantalla de estadísticas (Tab), reutilizando la lista de stats de la pausa
 
@@ -83,18 +88,17 @@
 - [ ] Rendimiento: 300+ enemigos a 60 fps
 
 ## Hito 6 — Niveles
-- [ ] El Brosque (bosque bro)
+- [ ] El Brosque: más detalle (decoración, variedad del suelo, props de gimnasio, sonido ambiente); la v1 llegó en el Hito 3
 - [ ] La Torre del Mago
 - [ ] La Mazmorra
 
 ## Hito 7 — La mesa de juego
 - [ ] Racha y bote (niveles, multiplicador, cobrar, perder al ser golpeado)
-- [ ] Tragaperras repartidas por el mapa
 - [ ] Pactos de la Banca
 - [ ] Élites con afijos que sueltan cofres
 
 ## Hito 8 — Cierre de partida y meta
-- [ ] Jefe "La Banca" al minuto 10
+- [ ] Jefes de la Torre del Mago y la Mazmorra (el del Brosque llega en el Hito 3)
 - [ ] ¿Cobrar o Doblar? y mesas siguientes
 - [ ] Resumen de partida
 - [ ] Desbloqueos (personajes, armas, ventajas) y condiciones para conseguirlos
