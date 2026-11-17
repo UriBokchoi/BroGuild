@@ -802,3 +802,12 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - El jefe se invoca en un altar con llaves; al minuto 10 el altar se activa solo.
   - El Brosque es un gimnasio en el bosque.
   - Las tragaperras, las rarezas y los cofres se adelantan al Hito 3 para el Brosque.
+
+## 2026-11-17 · La dificultad es una stat
+- **Decisión:**
+  - La dificultad es la stat `difficulty` del jugador (`ProgressionData`), con base 0. El `WaveDirector` le suma la parte del tiempo: un modificador de +1 por minuto en marcha, que se actualiza cada segundo y se quita al parar. Objetos y runas podrán sumarle más (FLAT) o multiplicarla (PERCENT).
+  - Las curvas de `WaveData` (aparición, élites, escalado de stats y `WaveEnemy.from_difficulty`) van según la dificultad, no según los minutos. Sin bonus, dificultad = minutos, así que el balance de la ronda normal no cambia.
+  - Los picos y la duración de la ronda siguen yendo por el reloj.
+  - Calaveras y bolsitas dan `amount + amount_per_difficulty × dificultad`.
+  - El HUD la muestra con una calavera.
+- **Por qué:** el diseñador quiere que la dificultad suba sola y también con objetos y runas, con más riesgo y más recompensa. Al ser una stat, cualquier mejora la toca con el sistema de modificadores de siempre y sale en la pausa. Al medirla en «minutos equivalentes», los datos que ya había siguen valiendo.

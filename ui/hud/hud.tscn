@@ -9,6 +9,8 @@
 [ext_resource type="Script" path="res://ui/hud/loadout_bar.gd" id="7_loadout"]
 [ext_resource type="Resource" path="res://data/progression/level_up.tres" id="8_level_up"]
 [ext_resource type="Texture2D" path="res://assets/textures/icons/ui/lock.svg" id="9_lock"]
+[ext_resource type="Script" path="res://ui/hud/difficulty_counter.gd" id="10_difficulty"]
+[ext_resource type="Texture2D" path="res://assets/textures/icons/ui/difficulty.svg" id="11_skull"]
 
 [node name="HUD" type="CanvasLayer"]
 layer = 10
@@ -84,10 +86,29 @@ text = "0:00"
 horizontal_alignment = 1
 script = ExtResource("6_clock")
 
-[node name="Spacer" type="Control" parent="Margin/Top/InfoRow"]
+[node name="DifficultyCounter" type="HBoxContainer" parent="Margin/Top/InfoRow"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 2
+theme_type_variation = &"GoldRow"
+alignment = 2
+script = ExtResource("10_difficulty")
+
+[node name="DifficultyIcon" type="TextureRect" parent="Margin/Top/InfoRow/DifficultyCounter"]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+texture = ExtResource("11_skull")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="DifficultyLabel" type="Label" parent="Margin/Top/InfoRow/DifficultyCounter"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"DifficultyLabel"
+text = "0.0"
 
 [node name="LoadoutBar" type="VBoxContainer" parent="Margin/Top"]
 unique_name_in_owner = true

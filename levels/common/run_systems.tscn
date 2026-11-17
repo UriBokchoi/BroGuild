@@ -71,7 +71,8 @@ script = ExtResource("18_recorder")
 [node name="ResultsPanel" parent="." node_paths=PackedStringArray("recorder") instance=ExtResource("19_results")]
 recorder = NodePath("../RunRecorder")
 
-[node name="WaveDirector" type="Node" parent="." node_paths=PackedStringArray("swarm", "target")]
+[node name="WaveDirector" type="Node" parent="." node_paths=PackedStringArray("swarm", "target", "difficulty_stats")]
 script = ExtResource("10_director")
 swarm = NodePath("../EnemySwarm")
 target = NodePath("../Player")
+difficulty_stats = NodePath("../Player/Stats")

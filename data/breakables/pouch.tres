@@ -7,5 +7,6 @@
 script = ExtResource("1_data")
 reward = ExtResource("2_reward")
 amount = 4.0
+amount_per_difficulty = 2.0
 pieces = 3
 spread = 0.8

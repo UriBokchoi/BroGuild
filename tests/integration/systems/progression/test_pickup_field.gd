@@ -2,7 +2,8 @@ extends GutTest
 ## PickupField con física real: deja los recogibles en el suelo, vuelan hacia quien recoge al entrar
 ## en su radio (o nada más salir, el oro), al llegar avisan por el EventBus y vuelven al pool; los
 ## que esperan juntos se funden en uno de más nivel. El LootDropper suelta la gema de experiencia y
-## la moneda de oro de cada enemigo que muere, y el botín de cada rompible en trozos alrededor.
+## la moneda de oro de cada enemigo que muere, y el botín de cada rompible en trozos alrededor (más
+## cuanto mayor es la dificultad).
 
 const XP_GEM := preload("res://data/pickups/xp_gem.tres")
 const GOLD_COIN := preload("res://data/pickups/gold_coin.tres")
@@ -143,6 +144,18 @@ func test_broken_breakables_drop_their_loot_in_pieces() -> void:
 		total += pickup.amount
 		assert_lt(pickup.global_position.distance_to(Vector3(-5.0, pickup.global_position.y, 0.0)), SKULL.spread + 0.01)
 	assert_almost_eq(total, SKULL.amount, 0.001)
+
+
+func test_more_difficulty_more_loot_from_breakables() -> void:
+	var dropper := LootDropper.new()
+	dropper.field = _field
+	add_child_autofree(dropper)
+	EventBus.difficulty_changed.emit(10.0)
+	EventBus.breakable_broken.emit(SKULL, Vector3(-5.0, 0.0, 0.0))
+	var total := 0.0
+	for pickup: Pickup in _field.get_active():
+		total += pickup.amount
+	assert_almost_eq(total, SKULL.amount + SKULL.amount_per_difficulty * 10.0, 0.001)
 
 
 func _add_ground() -> void:

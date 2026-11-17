@@ -83,7 +83,7 @@ Toda apuesta tiene **anticipación** (giro, luces, sonido que sube), **revelado*
 - **Subir de nivel**: eliges 1 de 3 opciones (arma o runa nueva, o subir una que ya tengas). La ruleta de apuestas (§5) se monta encima de esta elección.
 - **Enemigos**: enjambre cuerpo a cuerpo (rápido, frágil) · tanque lento · tirador a distancia (te obliga a moverte) · élites: cualquier enemigo puede salir élite, con una probabilidad que sube con los minutos (más grande, más vida y daño, suelta más experiencia y oro); más adelante, con afijos y cofre.
 - **Cuerpos de los enemigos** (como en Megabonk): chocan con el mundo, con el jugador y entre ellos, y no se hacen daño entre ellos. El jugador no los atraviesa: le bloquean, le dañan al tocarle y puede saltar y quedarse de pie encima. Cuando se atascan, los de atrás trepan sobre los de delante: alrededor del jugador forman un montículo y, si está en alto, se apilan para alcanzarlo.
-- **Director de oleadas**: la densidad sube con el tiempo, con picos cada minuto, y los enemigos salen más fuertes cuanto más tarde (vida y daño); todo en curvas de datos. La ronda normal dura 10 min: a partir de ahí, los enemigos se disparan (hace falta buena build para aguantar un poco) hasta que llegue el jefe.
+- **Dificultad y director de oleadas**: la **dificultad** es una stat que sube sola (1 por minuto) y también con objetos o runas: **más riesgo, más recompensa**. De ella dependen cuántos enemigos salen, cuáles, cuántos élites y lo fuertes que son (vida y daño), todo en curvas de datos; los picos de cada minuto van por el reloj. También sube lo que sueltan calaveras y bolsitas. La ronda normal dura 10 min: hacia la dificultad 10 los enemigos se disparan (hace falta buena build para aguantar un poco) y en el minuto 10 el altar del jefe se activa solo.
 
 **Stats del personaje** (como en Megabonk o Vampire Survivors; todas mejorables, §5). Valores de partida en `data/player/`. Ya funcionan vida, regeneración, defensa, esquiva, daño y crítico; el resto de fórmulas son la intención de diseño y se confirman al implementar armas y enemigos (Hito 2). Al recibir un golpe, primero se tira la esquiva y luego la defensa reduce lo que entra.
 
@@ -103,6 +103,7 @@ Toda apuesta tiene **anticipación** (giro, luces, sonido que sube), **revelado*
 | Progresión | Experiencia ganada, oro ganado | 100 % | |
 | | Suerte | 0 | Desplaza los pesos de rareza hacia arriba |
 | | Radio de recogida | 3 m | Distancia a la que se recoge el botín |
+| | Dificultad | 0 (+1 por minuto) | Enemigos más numerosos y fuertes, más botín de los rompibles (sube con objetos o runas) |
 | Movimiento | Velocidad de carrera, saltos y dashes en el aire, stamina… | ver §4 | |
 
 Las mejoras de % («+10 % de daño») multiplican; las de puntos («+5 % de crítico», «+1 proyectil», «+1 salto en el aire») suman.

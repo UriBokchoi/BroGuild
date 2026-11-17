@@ -2,9 +2,9 @@ class_name Player
 extends CharacterBody3D
 ## Jugador: monta el contexto de movimiento, avanza la máquina de estados y mueve el cuerpo.
 ## Lleva un personaje ([CharacterData]: su base de stats, su arma inicial, su pasiva y su aspecto).
-## Avisa a la interfaz de su vida, su experiencia, su oro, sus armas y runas y su muerte (al morir se
-## queda quieto y sus armas paran); al subir de nivel aleja la cámara. Las mecánicas van en sus
-## estados y componentes, nunca aquí (CLAUDE.md, «Nunca»).
+## Avisa a la interfaz de su vida, su experiencia, su oro, su dificultad, sus armas y runas y su
+## muerte (al morir se queda quieto y sus armas paran); al subir de nivel aleja la cámara. Las
+## mecánicas van en sus estados y componentes, nunca aquí (CLAUDE.md, «Nunca»).
 
 ## Modelo que viste con el color y las piezas de su personaje.
 @export var model: CharacterModel
@@ -71,6 +71,7 @@ func _ready() -> void:
 	EventBus.player_health_changed.emit(health.get_current(), health.get_maximum())
 	EventBus.player_xp_changed.emit(experience.get_xp(), experience.needed(), experience.get_level())
 	EventBus.player_gold_changed.emit(wallet.get_gold())
+	EventBus.difficulty_changed.emit(stats.get_value(&"difficulty"))
 	_announce_loadout()
 	if character:
 		_equip(character)
@@ -145,9 +146,11 @@ func _announce_loadout() -> void:
 		EventBus.player_item_changed.emit(rune, runes.get_level(rune))
 
 
-func _on_stat_changed(stat: StringName, _value: float, _previous: float) -> void:
+func _on_stat_changed(stat: StringName, value: float, _previous: float) -> void:
 	if stat == &"weapon_slots" or stat == &"rune_slots":
 		EventBus.player_slots_changed.emit(stats.get_int(&"weapon_slots"), stats.get_int(&"rune_slots"))
+	elif stat == &"difficulty":
+		EventBus.difficulty_changed.emit(value)
 
 
 func _on_leveled_up(level: int) -> void:

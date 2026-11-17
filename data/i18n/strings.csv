@@ -93,6 +93,7 @@ STAT_XP_GAIN,Experiencia ganada,XP gain
 STAT_CURRENCY_GAIN,Oro ganado,Gold gained
 STAT_LUCK,Suerte,Luck
 STAT_PICKUP_RANGE,Radio de recogida,Pickup range
+STAT_DIFFICULTY,Dificultad,Difficulty
 STAT_GROUP_SLOTS,Ranuras,Slots
 STAT_WEAPON_SLOTS,Ranuras de armas,Weapon slots
 STAT_RUNE_SLOTS,Ranuras de runas,Rune slots

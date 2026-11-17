@@ -96,8 +96,8 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
   - Cada enemigo recalcula su rumbo cada `steering_slices` ticks; la física lo mueve en todos.
   - Tiene el `ProjectilePool` de los enemigos (`projectile_limit` en vuelo a la vez); `clear()` retira enemigos y proyectiles.
 - **Oleadas:**
-  - `WaveData` (en `data/waves/`) es la dificultad de una ronda: curva de enemigos por segundo según los minutos, picos, máximo a la vez, distancias de aparición, `WaveEnemy` con pesos y minuto de entrada, probabilidad de élite por minuto, duración de la ronda (`round_minutes`) y escalado (`StatScaling`: una stat de enemigo o de arma y su curva de multiplicador por minuto). `data/waves/test_gym.tres` y `brosque.tres` son la ronda normal.
-  - `WaveDirector` (en el nivel) los saca alrededor del jugador, en el suelo (un rayo por intento), con el escalado de su minuto (`boost`) y, a veces, élites. Es el reloj de la ronda: avisa cada segundo por `run_clock_changed`.
+  - `WaveData` (en `data/waves/`) es una ronda: curva de enemigos por segundo según la **dificultad** (la stat `difficulty` del jugador, que sube 1 por minuto y con objetos; sin bonus, dificultad = minutos), picos, máximo a la vez, distancias de aparición, `WaveEnemy` con pesos y dificultad de entrada, probabilidad de élite según la dificultad, duración de la ronda (`round_minutes`) y escalado (`StatScaling`: una stat de enemigo o de arma y su curva de multiplicador según la dificultad). `data/waves/test_gym.tres` y `brosque.tres` son la ronda normal.
+  - `WaveDirector` (en `RunSystems`) los saca alrededor del jugador, en el suelo (un rayo por intento), con el escalado de la dificultad de ese momento (`boost`) y, a veces, élites. Lleva la parte del tiempo de la dificultad: un modificador +1 por minuto en la stat `difficulty` de `difficulty_stats` (el jugador), que quita al parar. Es el reloj de la ronda: avisa cada segundo por `run_clock_changed`.
 - **`DamageReporter`** avisa de cada golpe con la posición de la cabeza (para los números).
 - **Tipos y escenas actuales:**
   - `swarmer/`: el esbirro, rápido y frágil, ataca al tocar;
@@ -138,7 +138,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 - **`LootDropper`** (en `RunSystems`): escucha `breakable_broken` y suelta el botín del rompible (`BreakableData`) en trozos alrededor (flujo `LOOT`); escucha `enemy_died` y suelta la gema con la `xp_reward` y la moneda con el `gold_reward` del enemigo. Los cofres y las probabilidades de botín irán aquí.
 - **`ExperienceComponent`** (en el jugador): suma la experiencia recogida × `xp_gain` y sube de nivel con la curva de `ExperienceData` (`data/progression/experience.tres`). El jugador aleja la cámara con el nivel.
 - **`WalletComponent`** (en el jugador): el oro de la partida (antes «fichas» en el GDD). Suma el recogido × `currency_gain` y lo gasta con `spend()`.
-- **Stats de progresión:** `ProgressionData` (experiencia y oro ganados, suerte, radio de recogida y ranuras abiertas de armas y runas).
+- **Stats de progresión:** `ProgressionData` (experiencia y oro ganados, suerte, radio de recogida, dificultad y ranuras abiertas de armas y runas).
 
 ### Juice y efectos — `vfx/`
 - **`juice/`**, efectos que solo escuchan señales:
@@ -149,7 +149,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 - **Shaders propios de una feature:** van con ella (tajo de la espada, teletransporte, líneas de velocidad).
 
 ### UI — `ui/`
-- **`hud/`:** vida, stamina, experiencia y nivel (arriba), oro (`GoldCounter`) y reloj de la ronda (`RunClock`, en rojo en la prórroga) debajo, armas y runas (`LoadoutBar`: una fila de `LoadoutSlot` por tipo, con icono y nivel; las ranuras sin abrir, con candado) y aviso de interacción. Escuchan el `EventBus`.
+- **`hud/`:** vida, stamina, experiencia y nivel (arriba), oro (`GoldCounter`) y reloj de la ronda (`RunClock`, en rojo en la prórroga) y dificultad (`DifficultyCounter`, una calavera y su valor) debajo, armas y runas (`LoadoutBar`: una fila de `LoadoutSlot` por tipo, con icono y nivel; las ranuras sin abrir, con candado) y aviso de interacción. Escuchan el `EventBus`.
 - **`menus/pause/`:** menú de pausa con todas las stats del jugador; «Opciones» abre el `OptionsPanel`; «Reintentar» y «Salir» (al menú principal) van por `RunFlow`.
 - **`menus/main/`:** `MainMenu`, el menú principal (Jugar, Opciones, Archivo —desactivado hasta su tarea— y Abandonar), con los personajes vestidos de fondo. Lo muestra `Game`.
 - **`menus/armory/`:** panel de la armería.
@@ -200,6 +200,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 | `pickup_collected` | `PickupField` | `ExperienceComponent` (la recompensa `experience`), `WalletComponent` (`gold`) |
 | `player_xp_changed` | `Player` | `XpBar` |
 | `player_gold_changed` | `Player` | `GoldCounter` |
+| `difficulty_changed` (la stat `difficulty` del jugador) | `Player` | `DifficultyCounter`, `LootDropper` |
 | `player_item_changed` (arma o runa y su nivel; 0 = quitada) | `Player` (de `WeaponInventory.weapon_changed` y `RuneInventory.rune_changed`) | `LoadoutBar` |
 | `player_slots_changed` (ranuras abiertas) | `Player` | `LoadoutBar` |
 | `run_clock_changed` (segundos, prórroga; negativo = sin ronda) | `WaveDirector` | `RunClock` |

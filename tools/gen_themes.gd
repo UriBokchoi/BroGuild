@@ -14,6 +14,7 @@ const SLATE_HOVER := Color("394152")
 const MODIFIED := Color("7cc7ff")
 const HEALTH := Color("c94a4a")
 const EXPERIENCE := Color("4fb6ff")
+const DIFFICULTY := Color("e0806e")
 const TOGGLE_ON := preload("res://assets/textures/icons/ui/toggle_on.svg")
 const TOGGLE_OFF := preload("res://assets/textures/icons/ui/toggle_off.svg")
 
@@ -172,6 +173,8 @@ func _add_hud(theme: Theme) -> void:
 	# Reloj de la ronda, arriba en el centro; en rojo pasada la ronda.
 	_label_variation(theme, &"ClockLabel", 28, INK)
 	_label_variation(theme, &"ClockLabelOvertime", 28, HEALTH)
+	# Dificultad, arriba a la derecha: una calavera y su valor.
+	_label_variation(theme, &"DifficultyLabel", 22, DIFFICULTY)
 	_add_loadout(theme)
 
 

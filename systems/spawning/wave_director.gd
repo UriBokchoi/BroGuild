@@ -1,11 +1,15 @@
 class_name WaveDirector
 extends Node
 ## Director de oleadas: mientras está en marcha, saca enemigos en un [EnemySwarm] alrededor de
-## [member target] al ritmo de su [WaveData] (que sube con el tiempo y tiene picos), sin pasar del
-## máximo a la vez. Cada enemigo aparece en el suelo, a una distancia al azar entre la mínima y la
-## máxima de los datos; si ahí no hay suelo (fuera del mapa), prueba otro punto. Cada uno sale con
-## las stats de su minuto ([method WaveData.scaling_at]) y puede salir élite con la probabilidad de
-## ese minuto ([method WaveData.elite_chance_at]). Mientras está en marcha, es el reloj de la ronda:
+## [member target] al ritmo de su [WaveData] (con picos), sin pasar del máximo a la vez. Cada enemigo
+## aparece en el suelo, a una distancia al azar entre la mínima y la máxima de los datos; si ahí no
+## hay suelo (fuera del mapa), prueba otro punto.
+##
+## Todo depende de la [b]dificultad[/b] ([method get_difficulty]): cuántos salen, cuáles, cuántos
+## élites ([method WaveData.elite_chance_at]) y con qué stats ([method WaveData.scaling_at]). Es la
+## stat [code]difficulty[/code] de [member difficulty_stats] (el jugador): el director le suma 1 por
+## minuto en marcha y los objetos o runas pueden subirla más. Mientras está en marcha, es también el
+## reloj de la ronda: avisa del tiempo cada segundo por [code]EventBus.run_clock_changed[/code].
 ## avisa del tiempo cada segundo por [code]EventBus.run_clock_changed[/code].
 
 signal started
@@ -21,6 +25,9 @@ signal stopped
 @export_flags_3d_physics var ground_mask: int = 1
 ## Altura sobre y bajo el objetivo en la que se busca suelo.
 @export_range(1.0, 200.0, 1.0, "suffix:m") var probe_height: float = 30.0
+## Stats donde vive la dificultad (las del jugador): el director le suma la parte del tiempo. Vacío:
+## la dificultad son los minutos en marcha.
+@export var difficulty_stats: StatsComponent
 ## Puntos que prueba para cada enemigo antes de dejarlo para el siguiente tick.
 @export_range(1, 32, 1) var placement_attempts: int = 6
 
@@ -32,6 +39,8 @@ var _running: bool = false
 var _elapsed: float = 0.0
 ## Enemigos que ya tocaba sacar y aún no han salido (fracción acumulada).
 var _pending: float = 0.0
+## Parte de la dificultad que sube con el tiempo (1 por minuto), sobre [member difficulty_stats].
+var _time_difficulty := StatModifier.create(&"difficulty", StatModifier.Kind.FLAT, 0.0)
 
 
 func _ready() -> void:
@@ -47,8 +56,8 @@ func _physics_process(delta: float) -> void:
 	var previous := _elapsed
 	_elapsed += delta
 	if floori(_elapsed) != floori(previous):
-		_announce_clock()
-	_pending += data.rate_at(_elapsed) * delta
+		_tick_second()
+	_pending += data.rate_at(get_difficulty(), _elapsed) * delta
 	while _pending >= 1.0:
 		if swarm.active_count() >= data.max_alive:
 			# En el máximo no se acumulan: al bajar, siguen al ritmo normal.
@@ -59,13 +68,13 @@ func _physics_process(delta: float) -> void:
 		_pending -= 1.0
 
 
-## Empieza (o vuelve a empezar) desde el minuto 0.
+## Empieza (o vuelve a empezar) desde el minuto 0 (la parte del tiempo de la dificultad, también).
 func start() -> void:
 	_elapsed = 0.0
 	_pending = 0.0
 	_running = true
 	started.emit()
-	_announce_clock()
+	_tick_second()
 
 
 ## Para. Con [param clear_enemies], retira también a los enemigos en juego.
@@ -73,6 +82,8 @@ func stop(clear_enemies: bool = true) -> void:
 	_running = false
 	if clear_enemies:
 		swarm.clear()
+	if difficulty_stats:
+		difficulty_stats.remove_modifiers_from(self)
 	stopped.emit()
 	EventBus.run_clock_changed.emit(-1.0, false)
 
@@ -81,23 +92,41 @@ func is_running() -> bool:
 	return _running
 
 
+## Dificultad ahora: la stat [code]difficulty[/code] de [member difficulty_stats] (con la parte del
+## tiempo) o, sin ellas, los minutos en marcha.
+func get_difficulty() -> float:
+	if difficulty_stats:
+		return difficulty_stats.get_value(&"difficulty")
+	return _elapsed / 60.0
+
+
 ## Segundos desde que empezó.
 func get_elapsed() -> float:
 	return _elapsed
 
 
 func _spawn_one() -> bool:
-	var enemy := data.pick_enemy(_elapsed, rng)
+	var difficulty := get_difficulty()
+	var enemy := data.pick_enemy(difficulty, rng)
 	if enemy == null:
 		return false
 	var feet := _find_spawn_point()
 	if not feet.is_finite():
 		return false
 	var spawned := swarm.spawn(enemy, feet)
-	spawned.boost(data.scaling_at(_elapsed))
-	if rng.randf() * 100.0 < data.elite_chance_at(_elapsed):
+	spawned.boost(data.scaling_at(difficulty))
+	if rng.randf() * 100.0 < data.elite_chance_at(difficulty):
 		spawned.promote(data.elite)
 	return true
+
+
+## Cada segundo: sube la parte del tiempo de la dificultad y avisa al HUD del reloj.
+func _tick_second() -> void:
+	if difficulty_stats:
+		difficulty_stats.remove_modifiers_from(self)
+		_time_difficulty.value = _elapsed / 60.0
+		difficulty_stats.add_modifier(_time_difficulty, self)
+	_announce_clock()
 
 
 ## Avisa al HUD del tiempo de la ronda (una vez por segundo).
