@@ -2,16 +2,18 @@ class_name LevelUpOffer
 extends RefCounted
 ## Elige las opciones de una subida de nivel (lógica pura, con el azar inyectado): de
 ## [param catalog], los objetos que ya lleva y no están al máximo (para subirlos) y los que no lleva
-## si le queda ranura de ese tipo (armas o runas). Todas distintas, al azar. De momento todas pesan
-## lo mismo; las rarezas y la ruleta llegarán en el Hito 4.
+## si le queda ranura abierta de ese tipo (armas o runas). Todas distintas, al azar. De momento
+## todas pesan lo mismo; las rarezas y la ruleta llegarán en el Hito 4.
 
 
-## Hasta [member LevelUpData.choices] opciones. [param levels] es el nivel de cada objeto que lleva
-## (por id).
+## Hasta [param choices] opciones. [param levels] es el nivel de cada objeto que lleva (por id);
+## [param weapon_slots] y [param rune_slots], sus ranuras abiertas de cada tipo.
 static func build(
 	catalog: Array[ItemData],
 	levels: Dictionary[StringName, int],
-	data: LevelUpData,
+	choices: int,
+	weapon_slots: int,
+	rune_slots: int,
 	rng: RandomNumberGenerator,
 ) -> Array[LevelUpOption]:
 	var weapons := _count_owned(catalog, levels, WeaponData)
@@ -22,12 +24,12 @@ static func build(
 		if level >= item.max_level():
 			continue
 		if level == 0:
-			var full := weapons >= data.weapon_slots if item is WeaponData else runes >= data.rune_slots
+			var full := weapons >= weapon_slots if item is WeaponData else runes >= rune_slots
 			if full:
 				continue
 		candidates.append(LevelUpOption.create(item, level + 1))
 	_shuffle(candidates, rng)
-	return candidates.slice(0, data.choices)
+	return candidates.slice(0, choices)
 
 
 static func _count_owned(catalog: Array[ItemData], levels: Dictionary[StringName, int], type: Script) -> int:

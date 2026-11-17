@@ -142,6 +142,24 @@ func _add_hud(theme: Theme) -> void:
 	# Reloj de la ronda, arriba en el centro; en rojo pasada la ronda.
 	_label_variation(theme, &"ClockLabel", 28, INK)
 	_label_variation(theme, &"ClockLabelOvertime", 28, HEALTH)
+	_add_loadout(theme)
+
+
+## Ranuras de armas y runas, debajo del oro: llenas, vacías y cerradas; el nivel en una esquina.
+func _add_loadout(theme: Theme) -> void:
+	_separation(theme, &"LoadoutBar", &"VBoxContainer", 6)
+	_separation(theme, &"LoadoutRow", &"HBoxContainer", 6)
+	var padding := Vector2(4, 4)
+	theme.set_type_variation(&"LoadoutSlot", &"PanelContainer")
+	theme.set_stylebox(&"panel", &"LoadoutSlot", _box(Color(SLATE, 0.88), 8, padding, Color(GOLD, 0.55), 2, 3))
+	theme.set_type_variation(&"LoadoutSlotEmpty", &"PanelContainer")
+	theme.set_stylebox(&"panel", &"LoadoutSlotEmpty", _box(Color(SLATE, 0.55), 8, padding, Color(GOLD, 0.2), 2, 2))
+	theme.set_type_variation(&"LoadoutSlotLocked", &"PanelContainer")
+	theme.set_stylebox(&"panel", &"LoadoutSlotLocked", _box(Color(SLATE, 0.35), 8, Vector2(10, 10), Color(MUTED, 0.12), 2, 2))
+	for variation: StringName in [&"LoadoutLevelLabel", &"LoadoutLevelMaxLabel"]:
+		_label_variation(theme, variation, 15, GOLD if variation == &"LoadoutLevelMaxLabel" else INK)
+		theme.set_constant(&"outline_size", variation, 5)
+		theme.set_color(&"font_outline_color", variation, SLATE)
 
 
 func _add_scrollbar(theme: Theme) -> void:

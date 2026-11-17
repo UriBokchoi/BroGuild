@@ -5,6 +5,7 @@
 [ext_resource type="Script" path="res://core/stats/stat_modifier_set.gd" id="3_set"]
 [ext_resource type="Script" path="res://core/stats/stat_modifier.gd" id="4_modifier"]
 [ext_resource type="PackedScene" path="res://systems/combat/weapons/sword/sword.tscn" id="5_scene"]
+[ext_resource type="Texture2D" path="res://assets/textures/icons/weapons/sword.svg" id="99_icon"]
 
 [sub_resource type="Resource" id="Resource_stats"]
 script = ExtResource("2_stats")
@@ -62,6 +63,7 @@ stat_modifiers = Array[ExtResource("4_modifier")]([SubResource("Resource_level5_
 [resource]
 script = ExtResource("1_data")
 id = &"sword"
+icon = ExtResource("99_icon")
 name_key = &"WEAPON_SWORD_NAME"
 description_key = &"WEAPON_SWORD_DESCRIPTION"
 scene = ExtResource("5_scene")

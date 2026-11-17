@@ -71,6 +71,11 @@ func get_value(stat: StringName) -> float:
 	return _block.get_value(stat)
 
 
+## Ver [method StatBlock.get_int].
+func get_int(stat: StringName) -> int:
+	return _block.get_int(stat)
+
+
 ## Ver [method StatBlock.get_base].
 func get_base(stat: StringName) -> float:
 	return _block.get_base(stat)

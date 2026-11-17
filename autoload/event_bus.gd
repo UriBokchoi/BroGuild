@@ -34,6 +34,10 @@ signal player_xp_changed(current: float, needed: float, level: int)
 signal player_leveled_up(level: int)
 ## Cambió el oro del jugador.
 signal player_gold_changed(gold: float)
+## Cambió el nivel de un arma o runa del jugador: al conseguirla (1), al subirla y al perderla (0).
+signal player_item_changed(item: ItemData, level: int)
+## Cambiaron las ranuras abiertas del jugador (sin limitar a las que hay: eso lo hace [LevelUpData]).
+signal player_slots_changed(weapon_slots: int, rune_slots: int)
 ## Pasó un segundo de la ronda: van [param seconds] y si ya pasó su duración ([param overtime]). Con
 ## [param seconds] negativo, no hay ronda en marcha.
 signal run_clock_changed(seconds: float, overtime: bool)

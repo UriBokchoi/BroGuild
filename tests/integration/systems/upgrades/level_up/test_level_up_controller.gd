@@ -1,7 +1,7 @@
 extends GutTest
 ## Elección al subir de nivel con el jugador de verdad: al subir, se pausa y salen las cartas; la
-## elegida se aplica; varios niveles de golpe dan varias elecciones; Esc no la salta; sin nada que
-## ofrecer, o muerto, no pregunta.
+## elegida se aplica; varios niveles de golpe dan varias elecciones; Esc no la salta; las armas
+## nuevas necesitan una ranura abierta; sin nada que ofrecer, o muerto, no pregunta.
 
 const PlayerScene := preload("res://entities/player/player.tscn")
 const PanelScene := preload("res://ui/menus/level_up/level_up_panel.tscn")
@@ -87,3 +87,25 @@ func test_a_dead_player_chooses_nothing() -> void:
 	EventBus.player_leveled_up.emit(2)
 	assert_false(_panel.is_open(), "las gemas que aún volaban no abren las cartas")
 	assert_eq(_controller.pending(), 0)
+
+
+func test_new_weapons_need_an_open_slot() -> void:
+	# Todas las runas al máximo y tantas armas al máximo como ranuras abiertas: no queda nada que
+	# ofrecer hasta que se abre otra ranura de armas.
+	for item: Resource in ResourceDir.load_all(LEVEL_UP.runes_dir, RuneData):
+		_player.runes.set_level(item as RuneData, (item as RuneData).max_level())
+	var weapons := ResourceDir.load_all(LEVEL_UP.weapons_dir, WeaponData)
+	for index: int in _player.stats.get_int(&"weapon_slots") - _player.weapons.get_weapons().size():
+		_player.weapons.add(weapons[index] as WeaponData)
+	for weapon: Weapon in _player.weapons.get_weapons():
+		weapon.set_level(weapon.data.max_level())
+	EventBus.player_leveled_up.emit(2)
+	assert_false(_panel.is_open(), "sin ranura, ninguna arma nueva")
+	var extra := StatModifier.new()
+	extra.stat = &"weapon_slots"
+	extra.value = 1.0
+	_player.stats.add_modifier(extra, self)
+	EventBus.player_leveled_up.emit(3)
+	assert_true(_panel.is_open(), "con otra ranura, sí")
+	for card: LevelUpCard in _panel.get_cards():
+		assert_true(card.option.is_new() and card.option.item is WeaponData)

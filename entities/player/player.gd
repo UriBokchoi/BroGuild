@@ -2,9 +2,9 @@ class_name Player
 extends CharacterBody3D
 ## Jugador: monta el contexto de movimiento, avanza la máquina de estados y mueve el cuerpo.
 ## Lleva un personaje ([CharacterData]: su base de stats, su arma inicial, su pasiva y su aspecto).
-## Avisa a la interfaz de su vida, su experiencia, su oro y su muerte (al morir se queda quieto y sus
-## armas paran); al subir de nivel aleja la cámara. Las mecánicas van en sus estados y componentes,
-## nunca aquí (CLAUDE.md, «Nunca»).
+## Avisa a la interfaz de su vida, su experiencia, su oro, sus armas y runas y su muerte (al morir se
+## queda quieto y sus armas paran); al subir de nivel aleja la cámara. Las mecánicas van en sus
+## estados y componentes, nunca aquí (CLAUDE.md, «Nunca»).
 
 ## Modelo que viste con el color y las piezas de su personaje.
 @export var model: CharacterModel
@@ -63,10 +63,15 @@ func _ready() -> void:
 	experience.xp_changed.connect(EventBus.player_xp_changed.emit)
 	experience.leveled_up.connect(_on_leveled_up)
 	wallet.gold_changed.connect(EventBus.player_gold_changed.emit)
-	# Vida y experiencia avisaron en su _ready, antes de estas conexiones: se repite para la interfaz.
+	weapons.weapon_changed.connect(EventBus.player_item_changed.emit)
+	runes.rune_changed.connect(EventBus.player_item_changed.emit)
+	stats.stat_changed.connect(_on_stat_changed)
+	# Vida, experiencia y armas iniciales avisaron en su _ready, antes de estas conexiones: se repite
+	# para la interfaz.
 	EventBus.player_health_changed.emit(health.get_current(), health.get_maximum())
 	EventBus.player_xp_changed.emit(experience.get_xp(), experience.needed(), experience.get_level())
 	EventBus.player_gold_changed.emit(wallet.get_gold())
+	_announce_loadout()
 	if character:
 		_equip(character)
 
@@ -129,6 +134,20 @@ func _unequip(data: CharacterData) -> void:
 		passive.process_mode = Node.PROCESS_MODE_DISABLED
 		passive.queue_free()
 		passive = null
+
+
+## Avisa a la interfaz de sus ranuras abiertas y de las armas y runas que ya lleva.
+func _announce_loadout() -> void:
+	EventBus.player_slots_changed.emit(stats.get_int(&"weapon_slots"), stats.get_int(&"rune_slots"))
+	for weapon: Weapon in weapons.get_weapons():
+		EventBus.player_item_changed.emit(weapon.data, weapon.level)
+	for rune: RuneData in runes.get_runes():
+		EventBus.player_item_changed.emit(rune, runes.get_level(rune))
+
+
+func _on_stat_changed(stat: StringName, _value: float, _previous: float) -> void:
+	if stat == &"weapon_slots" or stat == &"rune_slots":
+		EventBus.player_slots_changed.emit(stats.get_int(&"weapon_slots"), stats.get_int(&"rune_slots"))
 
 
 func _on_leveled_up(level: int) -> void:

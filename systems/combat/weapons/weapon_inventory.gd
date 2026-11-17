@@ -6,6 +6,8 @@ extends Node3D
 
 signal weapon_added(weapon: Weapon)
 signal weapon_removed(data: WeaponData)
+## Cambió el nivel del arma de [param data]: al añadirla (1), al subirla o bajarla y al quitarla (0).
+signal weapon_changed(data: WeaponData, level: int)
 
 ## Stats de quien lleva las armas (su daño %, crítico, velocidad de ataque…).
 @export var wielder_stats: StatsComponent
@@ -39,7 +41,9 @@ func add(weapon_data: WeaponData) -> Weapon:
 		shooter.shared_pool = projectile_pool
 	add_child(weapon)
 	_weapons.append(weapon)
+	weapon.level_changed.connect(func(level: int) -> void: weapon_changed.emit(weapon_data, level))
 	weapon_added.emit(weapon)
+	weapon_changed.emit(weapon_data, weapon.level)
 	return weapon
 
 
@@ -54,6 +58,7 @@ func remove(weapon_data: WeaponData) -> void:
 	weapon.process_mode = Node.PROCESS_MODE_DISABLED
 	weapon.queue_free()
 	weapon_removed.emit(weapon_data)
+	weapon_changed.emit(weapon_data, 0)
 
 
 ## El arma de [param weapon_data] que lleva, o [code]null[/code].
