@@ -7,6 +7,7 @@
 [ext_resource type="Resource" path="res://data/pickups/food.tres" id="5_food"]
 [ext_resource type="Resource" path="res://data/pickups/bomb.tres" id="6_bomb"]
 [ext_resource type="Resource" path="res://data/pickups/energy_drink.tres" id="7_energy"]
+[ext_resource type="Resource" path="res://data/pickups/time_stop.tres" id="8_time_stop"]
 
 [sub_resource type="Resource" id="Drop_magnet"]
 script = ExtResource("3_bonus")
@@ -32,6 +33,12 @@ weight = 3.0
 pickup = ExtResource("7_energy")
 amount = 10.0
 
+[sub_resource type="Resource" id="Drop_time_stop"]
+script = ExtResource("3_bonus")
+weight = 1.5
+pickup = ExtResource("8_time_stop")
+amount = 5.0
+
 [resource]
 script = ExtResource("1_table")
-entries = Array[ExtResource("2_entry")]([SubResource("Drop_magnet"), SubResource("Drop_food"), SubResource("Drop_bomb"), SubResource("Drop_energy")])
+entries = Array[ExtResource("2_entry")]([SubResource("Drop_magnet"), SubResource("Drop_food"), SubResource("Drop_bomb"), SubResource("Drop_energy"), SubResource("Drop_time_stop")])

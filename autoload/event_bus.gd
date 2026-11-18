@@ -88,3 +88,5 @@ signal boss_defeated(victory_key: StringName, seconds: float, bonus: float)
 signal announced(text_key: StringName, args: Array, color: Color)
 ## Se piden [param count] elecciones de mejora como al subir de nivel, sin subir (la tragaperras).
 signal upgrade_choice_requested(count: int)
+## Se paró el tiempo (los enemigos y sus disparos, quietos) o volvió a correr.
+signal time_stop_changed(active: bool)

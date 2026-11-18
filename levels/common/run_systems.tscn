@@ -27,6 +27,8 @@
 [ext_resource type="Resource" path="res://data/pickups/energy_drink_buff.tres" id="25_energy_buff"]
 [ext_resource type="Script" path="res://systems/progression/effects/upgrade_all_effect.gd" id="26_upgrade"]
 [ext_resource type="Script" path="res://systems/progression/effects/upgrade_choice_effect.gd" id="32_choice"]
+[ext_resource type="Script" path="res://systems/progression/effects/time_stop_effect.gd" id="33_time_stop"]
+[ext_resource type="PackedScene" path="res://vfx/time_stop/time_stop_filter.tscn" id="34_filter"]
 [ext_resource type="Script" path="res://systems/progression/effects/elite_wave_effect.gd" id="27_elite_wave"]
 [ext_resource type="Resource" path="res://data/slots/frailty_curse.tres" id="28_frailty"]
 [ext_resource type="Script" path="res://vfx/juice/slow_motion.gd" id="29_slow_motion"]
@@ -131,6 +133,11 @@ stats = NodePath("../../Player/Stats")
 script = ExtResource("32_choice")
 reward = &"upgrade"
 
+[node name="TimeStop" type="Node" parent="PickupEffects" node_paths=PackedStringArray("swarm")]
+script = ExtResource("33_time_stop")
+reward = &"time_stop"
+swarm = NodePath("../../EnemySwarm")
+
 [node name="Frailty" type="Node" parent="PickupEffects" node_paths=PackedStringArray("stats")]
 script = ExtResource("24_buff")
 reward = &"frailty"
@@ -151,3 +158,5 @@ director = NodePath("../WaveDirector")
 swarm = NodePath("../EnemySwarm")
 player_stats = NodePath("../Player/Stats")
 items = NodePath("../Player/Items")
+
+[node name="TimeStopFilter" parent="." instance=ExtResource("34_filter")]

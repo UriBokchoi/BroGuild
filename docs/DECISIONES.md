@@ -1030,3 +1030,10 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - **Trío de estrellas:** «¡JACKPOT! Todo mejorado». `UpgradeAllEffect` sube un nivel cada arma y runa que no esté al máximo, cada una con su mejora tirada con la Suerte. Cada subida sale en el HUD («Espada sube a nivel 4») del color de su rareza.
   - El viejo `UpgradeEffect` (al azar) pasa a ser `UpgradeAllEffect`.
 - **Por qué:** elegir es más interesante que el azar. El trío, más raro, recompensa con todo de golpe y enseña qué ha salido.
+
+## 2026-11-18 · Power-up: parar el tiempo
+- **Decisión:** nuevo power-up, el reloj de arena (`data/pickups/time_stop.tres`). Sale de la misma tabla que los demás (peso 1,5; la bomba tiene 2).
+  - Al cogerlo, el `EnemySwarm` para el tiempo 5 s (`freeze_for`). Cada enemigo se congela (`Enemy.set_frozen`): su cuerpo pasa a estático, sin daño al tocar ni armas, y se le puede seguir golpeando. Los que salen mientras nacen congelados.
+  - Los disparos enemigos se paran en el aire: su pool deja de procesarse.
+  - La pantalla se tiñe de azul (`TimeStopFilter`, una capa bajo el HUD con un shader que desatura y tiñe), y el HUD dice «¡Tiempo detenido!».
+- **Por qué:** lo pidió el diseñador. Congelar en vez de pausar deja que el jugador siga pegando y moviéndose: es un respiro y una ventana de daño. El director sigue sacando enemigos, que nacen congelados, y el reloj de la ronda no se para.

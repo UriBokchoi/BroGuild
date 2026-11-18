@@ -134,3 +134,25 @@ func test_hits_push_enemies_and_heavy_ones_less() -> void:
 	await wait_physics_frames(1)
 	assert_gt(light.linear_velocity.x, 3.0, "lo empuja")
 	assert_lt(heavy.linear_velocity.x, light.linear_velocity.x, "al élite, más pesado, menos")
+
+
+func test_time_stop_freezes_everyone_for_a_while() -> void:
+	_swarm.target = _target
+	_target.position = Vector3(20.0, 0.0, 0.0)
+	var enemy := _swarm.spawn(SWARMER, Vector3.ZERO)
+	await wait_physics_frames(2)
+	watch_signals(EventBus)
+	_swarm.freeze_for(0.3)
+	assert_true(_swarm.is_frozen())
+	assert_true(enemy.is_frozen())
+	assert_signal_emitted_with_parameters(EventBus, "time_stop_changed", [true])
+	var late := _swarm.spawn(SWARMER, Vector3(0.0, 0.0, 4.0))
+	assert_true(late.is_frozen(), "los que salen mientras, también")
+	assert_eq(_swarm.projectiles.process_mode, Node.PROCESS_MODE_DISABLED, "los disparos, parados en el aire")
+	var at := enemy.global_position
+	await wait_physics_frames(8)
+	assert_almost_eq(enemy.global_position, at, Vector3.ONE * 0.01, "quieto aunque tenga a quién perseguir")
+	await wait_seconds(0.3)
+	assert_false(_swarm.is_frozen())
+	assert_false(enemy.is_frozen())
+	assert_signal_emitted_with_parameters(EventBus, "time_stop_changed", [false])

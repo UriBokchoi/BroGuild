@@ -3,8 +3,8 @@ extends GutTest
 ## toda la experiencia del mapa y la bomba quita su parte de vida a los enemigos cercanos (no a los
 ## lejanos ni a los jefes), la bebida energética mejora stats un rato (otra lata no lo acumula), «todo
 ## mejorado» sube un nivel todo lo que se lleva (sin pasar del máximo, con un texto del color de su
-## rareza), la mejora a elegir pide elegir y la oleada de élites los saca. Solo reaccionan a su
-## recompensa.
+## rareza), la mejora a elegir pide elegir, la oleada de élites los saca y parar el tiempo los
+## congela. Solo reaccionan a su recompensa.
 
 const PlayerScene := preload("res://entities/player/player.tscn")
 const XP_GEM := preload("res://data/pickups/xp_gem.tres")
@@ -163,3 +163,15 @@ func test_the_elite_wave_brings_elites() -> void:
 	assert_eq(swarm.active_count(), 3)
 	for enemy: Enemy in swarm.get_active():
 		assert_true(enemy.is_elite())
+
+
+func test_the_time_stop_freezes_the_enemies() -> void:
+	var swarm := EnemySwarm.new()
+	add_child_autofree(swarm)
+	var enemy := swarm.spawn(SWARMER, Vector3.ZERO)
+	var time_stop := TimeStopEffect.new()
+	time_stop.reward = &"time_stop"
+	time_stop.swarm = swarm
+	add_child_autofree(time_stop)
+	time_stop.apply(5.0)
+	assert_true(enemy.is_frozen())

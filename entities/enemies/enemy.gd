@@ -109,6 +109,7 @@ func spawn(feet: Vector3) -> void:
 	# Primero vuelve a la física; luego se coloca, para que el cuerpo aparezca ahí.
 	process_mode = Node.PROCESS_MODE_INHERIT
 	visible = true
+	freeze = false
 	global_position = feet
 	linear_velocity = Vector3.ZERO
 	collision_layer = _rest_layer
@@ -120,9 +121,7 @@ func spawn(feet: Vector3) -> void:
 	hurtbox.monitorable = true
 	_dying_left = 0.0
 	_approach_angle = deg_to_rad(rng.randf_range(-_stats.approach_spread, _stats.approach_spread))
-	if weapons:
-		for weapon: Weapon in weapons.get_weapons():
-			weapon.rearm(weapon.cooldown() * rng.randf_range(first_attack_delay.x, first_attack_delay.y))
+	_rearm()
 	reset_physics_interpolation()
 
 
@@ -153,6 +152,25 @@ func is_elite() -> bool:
 ## ¿Es un jefe? (Ver [Boss]: no lo saca el director ni lo mata una bomba de golpe.)
 func is_boss() -> bool:
 	return false
+
+
+## Lo congela (el tiempo parado) o lo descongela. Congelado se queda quieto donde está (un cuerpo
+## estático: se le puede chocar y golpear), sin dañar al tocar ni atacar con sus armas.
+func set_frozen(frozen: bool) -> void:
+	if frozen == freeze:
+		return
+	freeze = frozen
+	if frozen:
+		linear_velocity = Vector3.ZERO
+		contact_hitbox.set_deferred(&"monitoring", false)
+		_disarm()
+	elif is_alive():
+		contact_hitbox.set_deferred(&"monitoring", true)
+		_rearm()
+
+
+func is_frozen() -> bool:
+	return freeze
 
 
 ## Lo saca del juego: invisible y fuera de la física hasta el siguiente [method spawn].
@@ -303,6 +321,14 @@ func _resize(factor: float) -> void:
 		node.transform = Transform3D(rest.basis.scaled(Vector3.ONE * factor), rest.origin * factor)
 	visual.scale = _rest_scale * factor
 	mass = _rest_mass * factor * factor * factor
+
+
+## Sus armas vuelven a atacar, cada una tras una parte al azar de su espera normal
+## ([member first_attack_delay]): no todos a la vez.
+func _rearm() -> void:
+	if weapons:
+		for weapon: Weapon in weapons.get_weapons():
+			weapon.rearm(weapon.cooldown() * rng.randf_range(first_attack_delay.x, first_attack_delay.y))
 
 
 ## Sus armas dejan de atacar.

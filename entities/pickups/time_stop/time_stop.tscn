@@ -1,0 +1,112 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://entities/pickups/pickup.gd" id="1_pickup"]
+[ext_resource type="Script" path="res://vfx/juice/spin_bob.gd" id="2_spin"]
+[ext_resource type="PackedScene" path="res://vfx/juice/drop_glow/drop_glow.tscn" id="90_glow"]
+
+[sub_resource type="StandardMaterial3D" id="Mat_frame"]
+albedo_color = Color(0.85, 0.66, 0.3, 1)
+metallic = 0.6
+roughness = 0.35
+
+[sub_resource type="StandardMaterial3D" id="Mat_glass"]
+transparency = 1
+albedo_color = Color(0.55, 0.85, 1, 0.55)
+emission_enabled = true
+emission = Color(0.4, 0.75, 1, 1)
+emission_energy_multiplier = 0.8
+roughness = 0.1
+
+[sub_resource type="StandardMaterial3D" id="Mat_sand"]
+albedo_color = Color(0.95, 0.85, 0.55, 1)
+emission_enabled = true
+emission = Color(1, 0.85, 0.5, 1)
+emission_energy_multiplier = 0.4
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_plate"]
+material = SubResource("Mat_frame")
+top_radius = 0.24
+bottom_radius = 0.24
+height = 0.05
+radial_segments = 12
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_bulb_top"]
+material = SubResource("Mat_glass")
+top_radius = 0.19
+bottom_radius = 0.03
+height = 0.24
+radial_segments = 12
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_bulb_bottom"]
+material = SubResource("Mat_glass")
+top_radius = 0.03
+bottom_radius = 0.19
+height = 0.24
+radial_segments = 12
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_sand"]
+material = SubResource("Mat_sand")
+top_radius = 0.05
+bottom_radius = 0.15
+height = 0.1
+radial_segments = 12
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_post"]
+material = SubResource("Mat_frame")
+top_radius = 0.02
+bottom_radius = 0.02
+height = 0.5
+radial_segments = 6
+rings = 1
+
+[node name="TimeStop" type="Node3D"]
+script = ExtResource("1_pickup")
+float_height = 0.6
+
+[node name="Model" type="Node3D" parent="."]
+
+[node name="PlateTop" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
+cast_shadow = 0
+mesh = SubResource("CylinderMesh_plate")
+
+[node name="PlateBottom" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25, 0)
+cast_shadow = 0
+mesh = SubResource("CylinderMesh_plate")
+
+[node name="BulbTop" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.11, 0)
+cast_shadow = 0
+mesh = SubResource("CylinderMesh_bulb_top")
+
+[node name="BulbBottom" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.11, 0)
+cast_shadow = 0
+mesh = SubResource("CylinderMesh_bulb_bottom")
+
+[node name="Sand" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.17, 0)
+cast_shadow = 0
+mesh = SubResource("CylinderMesh_sand")
+
+[node name="PostLeft" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, 0, 0)
+cast_shadow = 0
+mesh = SubResource("CylinderMesh_post")
+
+[node name="PostRight" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, 0, 0)
+cast_shadow = 0
+mesh = SubResource("CylinderMesh_post")
+
+[node name="SpinBob" type="Node" parent="." node_paths=PackedStringArray("target")]
+script = ExtResource("2_spin")
+target = NodePath("../Model")
+
+[node name="Glow" parent="." instance=ExtResource("90_glow")]
+color = Color(0.45, 0.75, 1, 1)
