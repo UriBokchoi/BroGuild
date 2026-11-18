@@ -1066,3 +1066,21 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - La mecánica es `HealShop` con `HealShopData`, así que otro nivel puede tener su propio sitio de curas.
   - Su sitio está reservado en el mapa generado (`LayoutData.reserved`: x, z y radio). Ahí no va ninguna pieza ni ningún árbol, tampoco los del anillo del borde y la banda de fuera, que antes no miraban nada.
 - **Por qué:** lo pidió el diseñador. Curar por oro compite con los cofres y las tragaperras: otra decisión de en qué gastar.
+
+## 2026-11-18 · Círculo de setas y objetos medievales
+- **Decisión:**
+  - **Círculo de setas** (`ChoiceShrine` con un `ItemPool`): hay dos por el Brosque, como piezas del mapa, con un aro y una columna de luz moradas.
+    - Al usarlo ofrece 3 objetos pasivos distintos, tirados con la Suerte (`ItemPool.roll_several`), y se elige uno en un panel que pausa (`ItemChoicePanel`).
+    - Se usa una vez y se apaga. Es gratis: el precio es ir a buscarlo.
+  - **8 objetos medievales** (ya hay 23):
+
+    | Rareza | Objetos |
+    |---|---|
+    | Común | herradura (+6 Suerte), hogaza de centeno (+0,5 vida/s), jarra de hidromiel (+10 % experiencia) |
+    | Rara | capa de viaje (+5 % carrera y sprint), antorcha (+10 % área) |
+    | Improbable | ballesta de bolsillo (+20 % velocidad de proyectil, +3 % crítico) |
+    | De leyenda | grial de latón (+1,2 vida/s, +10 % vida) |
+    | Mítica | Excalibro (+25 % daño, +10 % crítico) |
+
+  - Los paneles que pausan y obligan a elegir comparten base (`ModalPanel`) y piezas de carta (`CardParts`), sacadas del de subir de nivel.
+- **Por qué:** lo pidió el diseñador. Elegir entre tres premia explorar sin pagar.

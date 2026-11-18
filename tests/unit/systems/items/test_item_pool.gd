@@ -80,3 +80,15 @@ func _item(id: StringName, rarity: Rarity) -> PassiveItemData:
 	item.id = id
 	item.rarity = rarity
 	return item
+
+
+func test_rolls_several_different_items() -> void:
+	var catalog: Array[PassiveItemData] = [_item(&"a", COMMON), _item(&"b", COMMON), _item(&"c", RARE), _item(&"d", MYTHIC)]
+	var pool := _pool(RARITIES)
+	for _roll: int in 20:
+		var items := pool.roll_several(catalog, 3, 0.0, _rng)
+		assert_eq(items.size(), 3)
+		assert_ne(items[0], items[1])
+		assert_ne(items[1], items[2])
+		assert_ne(items[0], items[2])
+	assert_eq(pool.roll_several(catalog, 9, 0.0, _rng).size(), catalog.size(), "no más de los que hay")

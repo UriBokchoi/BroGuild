@@ -90,3 +90,5 @@ signal announced(text_key: StringName, args: Array, color: Color)
 signal upgrade_choice_requested(count: int)
 ## Se paró el tiempo (los enemigos y sus disparos, quietos) o volvió a correr.
 signal time_stop_changed(active: bool)
+## Se ofrece elegir uno de [param items] (el círculo de setas): lo atiende el [ItemChoicePanel].
+signal item_choice_offered(items: Array[PassiveItemData])

@@ -15,6 +15,7 @@
 [ext_resource type="PackedScene" path="res://levels/brosque/props/ruin_temple.tscn" id="13_temple"]
 [ext_resource type="PackedScene" path="res://levels/brosque/props/ruin_wall.tscn" id="14_wall"]
 [ext_resource type="PackedScene" path="res://levels/brosque/props/ruin_arch.tscn" id="15_arch"]
+[ext_resource type="PackedScene" path="res://entities/interactables/choice_shrine/mushroom_ring.tscn" id="16_mushrooms"]
 
 [sub_resource type="Resource" id="Piece_altar"]
 script = ExtResource("2_piece")
@@ -60,6 +61,13 @@ script = ExtResource("2_piece")
 scene = ExtResource("15_arch")
 count = 2
 footprint = 3.0
+avoid_clearing = true
+
+[sub_resource type="Resource" id="Piece_mushroom_ring"]
+script = ExtResource("2_piece")
+scene = ExtResource("16_mushrooms")
+count = 2
+footprint = 3.5
 avoid_clearing = true
 
 [sub_resource type="Resource" id="Piece_slots_ground"]
@@ -129,7 +137,7 @@ clearing_radius = 18.0
 spawn_radius = 6.0
 gap = 3.0
 attempts = 60
-pieces = Array[ExtResource("2_piece")]([SubResource("Piece_altar"), SubResource("Piece_high"), SubResource("Piece_low"), SubResource("Piece_ruin_temple"), SubResource("Piece_slots_ground"), SubResource("Piece_chest_ground"), SubResource("Piece_ruin_wall"), SubResource("Piece_ruin_arch"), SubResource("Piece_dumbbell"), SubResource("Piece_bench")])
+pieces = Array[ExtResource("2_piece")]([SubResource("Piece_altar"), SubResource("Piece_high"), SubResource("Piece_low"), SubResource("Piece_ruin_temple"), SubResource("Piece_slots_ground"), SubResource("Piece_chest_ground"), SubResource("Piece_mushroom_ring"), SubResource("Piece_ruin_wall"), SubResource("Piece_ruin_arch"), SubResource("Piece_dumbbell"), SubResource("Piece_bench")])
 top_pieces = Array[ExtResource("2_piece")]([SubResource("Piece_slots_top"), SubResource("Piece_chest_top")])
 reserved = Array[Vector3]([Vector3(0, -79.5, 9)])
 forest = SubResource("Forest_brosque")

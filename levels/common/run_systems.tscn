@@ -29,6 +29,7 @@
 [ext_resource type="Script" path="res://systems/progression/effects/upgrade_choice_effect.gd" id="32_choice"]
 [ext_resource type="Script" path="res://systems/progression/effects/time_stop_effect.gd" id="33_time_stop"]
 [ext_resource type="PackedScene" path="res://vfx/time_stop/time_stop_filter.tscn" id="34_filter"]
+[ext_resource type="PackedScene" path="res://ui/menus/item_choice/item_choice_panel.tscn" id="35_item_choice"]
 [ext_resource type="Script" path="res://systems/progression/effects/elite_wave_effect.gd" id="27_elite_wave"]
 [ext_resource type="Resource" path="res://data/slots/frailty_curse.tres" id="28_frailty"]
 [ext_resource type="Script" path="res://vfx/juice/slow_motion.gd" id="29_slow_motion"]
@@ -160,3 +161,6 @@ player_stats = NodePath("../Player/Stats")
 items = NodePath("../Player/Items")
 
 [node name="TimeStopFilter" parent="." instance=ExtResource("34_filter")]
+
+[node name="ItemChoicePanel" parent="." node_paths=PackedStringArray("inventory") instance=ExtResource("35_item_choice")]
+inventory = NodePath("../Player/Items")

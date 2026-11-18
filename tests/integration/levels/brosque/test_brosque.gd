@@ -109,3 +109,9 @@ func test_puddles_with_a_flower_are_only_decoration() -> void:
 	assert_gt(puddles.size(), 8, "repartidos por el suelo")
 	for puddle: Node in puddles:
 		assert_eq(puddle.find_children("*", "CollisionObject3D", true, false).size(), 0, "ni chocan ni se usan")
+
+
+func test_it_has_mushroom_rings() -> void:
+	var layout := _level.get_node(^"Layout") as LevelLayout
+	var rings := layout.get_pieces().filter(func(piece: Node3D) -> bool: return piece is ChoiceShrine)
+	assert_eq(rings.size(), 2)

@@ -32,3 +32,15 @@ func roll(catalog: Array[PassiveItemData], luck: float, rng: RandomNumberGenerat
 		if not matching.is_empty():
 			return matching[rng.randi_range(0, matching.size() - 1)]
 	return catalog[rng.randi_range(0, catalog.size() - 1)]
+
+
+## Hasta [param count] objetos distintos de [param catalog], cada uno tirado como en [method roll]
+## (con [param luck] puntos de Suerte). Menos si no hay tantos distintos.
+func roll_several(catalog: Array[PassiveItemData], count: int, luck: float, rng: RandomNumberGenerator) -> Array[PassiveItemData]:
+	var chosen: Array[PassiveItemData] = []
+	var left: Array[PassiveItemData] = catalog.duplicate()
+	while chosen.size() < count and not left.is_empty():
+		var item := roll(left, luck, rng)
+		chosen.append(item)
+		left.erase(item)
+	return chosen

@@ -308,3 +308,22 @@ INTERACT_TAVERN,"Tomar una jarra: cura la mitad (%d de oro)","Have a pint: heals
 TAVERN_HEALED,¡Salud!,Cheers!
 TAVERN_NO_GOLD,"Sin oro no hay jarra (%d de oro)","No gold, no pint (%d gold)"
 TAVERN_FULL,Ya estás como una rosa,You're already in top shape
+ITEM_HORSESHOE_NAME,Herradura,Horseshoe
+ITEM_HORSESHOE_DESCRIPTION,"Trae suerte, o eso dice el herrero.","Brings luck, or so the blacksmith says."
+ITEM_RYE_BREAD_NAME,Hogaza de centeno,Rye loaf
+ITEM_RYE_BREAD_DESCRIPTION,"Dura una semana y alimenta un mes.","Lasts a week and feeds you for a month."
+ITEM_MEAD_NAME,Jarra de hidromiel,Tankard of mead
+ITEM_MEAD_DESCRIPTION,Todo se aprende mejor con hidromiel.,Everything is easier to learn with mead.
+ITEM_TRAVEL_CLOAK_NAME,Capa de viaje,Travel cloak
+ITEM_TRAVEL_CLOAK_DESCRIPTION,Ondea al viento aunque no haga viento.,It flutters even when there's no wind.
+ITEM_TORCH_NAME,Antorcha,Torch
+ITEM_TORCH_DESCRIPTION,Ilumina un buen trozo de bosque.,Lights up a good chunk of forest.
+ITEM_POCKET_CROSSBOW_NAME,Ballesta de bolsillo,Pocket crossbow
+ITEM_POCKET_CROSSBOW_DESCRIPTION,Cabe en la riñonera.,Fits in your fanny pack.
+ITEM_BRASS_GRAIL_NAME,Grial de latón,Brass grail
+ITEM_BRASS_GRAIL_DESCRIPTION,"No es el de verdad, pero cura igual.","Not the real one, but it heals just the same."
+ITEM_EXCALIBRO_NAME,Excalibro,Excalibro
+ITEM_EXCALIBRO_DESCRIPTION,Solo un bro de verdad podía sacarla de la roca.,Only a true bro could pull it from the stone.
+ITEM_CHOICE_TITLE,El círculo de setas te ofrece…,The mushroom ring offers you…
+ITEM_CHOICE_SUBTITLE,Elige uno,Pick one
+INTERACT_MUSHROOM_RING,Entrar en el círculo de setas,Step into the mushroom ring
