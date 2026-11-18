@@ -56,7 +56,7 @@ func _explode(point: Vector3) -> void:
 	for target: Node3D in _finder.nearest(space, point, _blast_radius, max_targets):
 		var hurtbox := target as HurtboxComponent
 		if hurtbox:
-			strike(hurtbox)
+			strike(hurtbox, point)
 	orb.visible = false
 	blast.visible = true
 	_blast_age = 0.0

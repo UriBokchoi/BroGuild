@@ -9,8 +9,6 @@ extends Node3D
 ## mejoras de su nivel) con las del personaje ([OffenseData]). La monta un [WeaponInventory] con
 ## [method setup].
 
-## Empezó un ataque, antes de su primer golpe (con [method add_shots] se le pueden sumar golpes).
-signal attack_started
 ## Lanzó el golpe número [param index] (desde 0) de un ataque contra [param target].
 signal fired(target: Node3D, index: int)
 signal level_changed(level: int)
@@ -18,6 +16,8 @@ signal level_changed(level: int)
 ## Capas de física de los objetivos que busca ([code]enemy_hurtbox[/code] en las del jugador,
 ## [code]player_hurtbox[/code] en las de los enemigos).
 @export_flags_3d_physics var target_mask: int = 0
+## Capas que tapan la vista (el mundo): no busca objetivos que no se vean. 0 = ve a través de todo.
+@export_flags_3d_physics var sight_mask: int = 0
 ## Altura sobre los pies desde la que busca objetivos y apunta (el pecho de quien la lleva).
 @export_range(0.0, 3.0, 0.05, "suffix:m") var aim_height: float = 0.0
 ## Segundos entre búsquedas de objetivo mientras no encuentra ninguno (0 = en cada tick). Las armas
@@ -57,7 +57,7 @@ func _ready() -> void:
 	if wielder_stats:
 		# Opcional: un enemigo no tiene daño % ni crítico.
 		_offense = wielder_stats.find_resolved(OffenseData) as OffenseData
-	_finder = TargetFinder.new(target_mask)
+	_finder = TargetFinder.new(target_mask, sight_mask)
 
 
 func _physics_process(delta: float) -> void:
@@ -115,13 +115,6 @@ func rearm(wait: float) -> void:
 	set_physics_process(true)
 
 
-## Suma [param count] golpes al ataque en curso (p. ej. el Eco arcano del Mago, desde
-## [signal attack_started]). Sin ataque en curso, no hace nada.
-func add_shots(count: int) -> void:
-	if _shots_left > 0:
-		_shots_left += count
-
-
 ## Daño de cada golpe antes del daño % y el crítico del personaje (que se aplican al golpear).
 func damage() -> float:
 	return _weapon.damage
@@ -152,6 +145,11 @@ func duration() -> float:
 	return _weapon.duration * _percent(_offense.duration if _offense else 100.0)
 
 
+## Empuje de cada golpe antes del empuje % del personaje (que se aplica al golpear).
+func knockback() -> float:
+	return _weapon.knockback
+
+
 ## Distancia hasta la que busca objetivos. Un arma cuyo alcance crece con el área la cambia.
 func reach() -> float:
 	return _weapon.reach
@@ -180,7 +178,6 @@ func _start_attack() -> void:
 	_shots_left = projectile_count()
 	_shot_index = 0
 	_shot_timer = 0.0
-	attack_started.emit()
 	_fire_at(targets)
 
 

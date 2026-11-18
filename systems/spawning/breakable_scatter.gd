@@ -1,9 +1,9 @@
 class_name BreakableScatter
 extends Node3D
-## Reparte rompibles (calaveras, bolsitas…) por el nivel al empezar la partida, en sitios distintos
-## cada vez (con la semilla de la partida). Cada uno cae sobre el suelo o encima de una meseta,
-## nunca dentro de un árbol o un prop, y separado de los demás. Los que no encuentran sitio tras
-## varios intentos no salen.
+## Reparte rompibles (calaveras, bolsitas…) o las llaves del jefe por el nivel al empezar la
+## partida, en sitios distintos cada vez (con la semilla de la partida). Cada uno cae sobre el suelo
+## o encima de una meseta, nunca dentro de un árbol o un prop, y separado de los demás. Los que no
+## encuentran sitio tras varios intentos no salen.
 
 ## Qué repartir y cuántos.
 @export var entries: Array[ScatterEntry] = []
@@ -13,6 +13,8 @@ extends Node3D
 @export_range(0.1, 5.0, 0.05, "suffix:m") var clearance: float = 0.8
 ## Distancia mínima entre dos rompibles.
 @export_range(0.0, 20.0, 0.5, "suffix:m") var min_spacing: float = 3.0
+## Distancia mínima al centro de este nodo (las llaves del jefe, lejos del punto de aparición).
+@export_range(0.0, 200.0, 0.5, "suffix:m") var min_center_distance: float = 0.0
 ## Capas que cuentan como suelo y como obstáculo.
 @export_flags_3d_physics var world_mask: int = 1
 ## Altura desde la que se busca el suelo.
@@ -63,6 +65,8 @@ func _find_spot() -> Variant:
 	var space := get_world_3d().direct_space_state
 	for _attempt: int in attempts:
 		var local := Vector2(rng.randf_range(-half_extent.x, half_extent.x), rng.randf_range(-half_extent.y, half_extent.y))
+		if local.length() < min_center_distance:
+			continue
 		var top := global_position + Vector3(local.x, probe_height, local.y)
 		var hit := space.intersect_ray(PhysicsRayQueryParameters3D.create(top, top + Vector3.DOWN * probe_height * 2.0, world_mask))
 		if hit.is_empty():

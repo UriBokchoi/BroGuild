@@ -1,19 +1,24 @@
 class_name LevelUpController
 extends Node
 ## Al subir de nivel el jugador ([code]EventBus.player_leveled_up[/code]), le ofrece la elección
-## ([LevelUpPanel]) y aplica la opción elegida a sus armas o runas. Si sube varios niveles de golpe,
-## una elección tras otra. Si no queda nada que ofrecer, o el jugador ha muerto, no pregunta.
+## ([LevelUpPanel]) y aplica la opción elegida a sus armas o runas. También cuando se pide una mejora
+## gratis ([code]EventBus.upgrade_choice_requested[/code], la tragaperras), con su propio título. Si
+## llegan varias de golpe, una elección tras otra, por orden. Si no queda nada que ofrecer, o el
+## jugador ha muerto, no pregunta.
 
 @export var data: LevelUpData
 @export var player: Player
 @export var panel: LevelUpPanel
+## Título de las elecciones gratis (clave de traducción).
+@export var free_choice_title_key: StringName = &""
 
 ## Azar de las opciones. Si no se asigna antes de entrar en el árbol, el flujo de apuestas de
 ## [code]Rng[/code] (la ruleta del Hito 4 irá encima).
 var rng: RandomNumberGenerator
 
 var _catalog: Array[ItemData] = []
-var _pending: int = 0
+## Elecciones por hacer, por orden: [code]true[/code] si es gratis (no de subir de nivel).
+var _queue: Array[bool] = []
 
 
 func _ready() -> void:
@@ -22,12 +27,13 @@ func _ready() -> void:
 	_catalog.assign(ResourceDir.load_all(data.weapons_dir, WeaponData))
 	_catalog.append_array(ResourceDir.load_all(data.runes_dir, RuneData))
 	EventBus.player_leveled_up.connect(_on_leveled_up)
+	EventBus.upgrade_choice_requested.connect(_on_choice_requested)
 	panel.chosen.connect(_on_chosen)
 
 
 ## Elecciones que quedan por hacer.
 func pending() -> int:
-	return _pending
+	return _queue.size()
 
 
 ## Aplica [param option] al jugador: añade el objeto o lo sube de nivel.
@@ -47,18 +53,27 @@ func apply(option: LevelUpOption) -> void:
 
 
 func _on_leveled_up(_level: int) -> void:
+	_enqueue(false, 1)
+
+
+func _on_choice_requested(count: int) -> void:
+	_enqueue(true, count)
+
+
+func _enqueue(free: bool, count: int) -> void:
 	# Muerto, no elige: las gemas que aún volaban no le abren las cartas encima de los resultados.
 	if player.health.is_dead():
 		return
-	_pending += 1
+	for _choice: int in count:
+		_queue.append(free)
 	if not panel.is_open():
 		_offer()
 
 
 func _on_chosen(option: LevelUpOption) -> void:
 	apply(option)
-	_pending -= 1
-	if _pending > 0:
+	_queue.pop_front()
+	if not _queue.is_empty():
 		# Diferido: la carta pulsada está emitiendo su señal y la siguiente elección la reemplaza.
 		_offer.call_deferred()
 	else:
@@ -68,12 +83,17 @@ func _on_chosen(option: LevelUpOption) -> void:
 func _offer() -> void:
 	var weapon_slots := data.clamp_weapon_slots(player.stats.get_int(&"weapon_slots"))
 	var rune_slots := data.clamp_rune_slots(player.stats.get_int(&"rune_slots"))
-	var options := LevelUpOffer.build(_catalog, _owned_levels(), data.choices, weapon_slots, rune_slots, data.rarities, rng)
+	var luck := player.stats.get_value(&"luck")
+	var options := LevelUpOffer.build(
+		_catalog, _owned_levels(), data.choices, weapon_slots, rune_slots, data.rarities, rng, luck
+	)
 	if options.is_empty():
-		_pending = 0
+		_queue.clear()
 		panel.close()
 		return
-	panel.open(options, player.experience.get_level())
+	var free: bool = _queue.front()
+	var title := free_choice_title_key if free else &""
+	panel.open(options, player.experience.get_level(), title)
 
 
 func _owned_levels() -> Dictionary[StringName, int]:

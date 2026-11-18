@@ -5,6 +5,9 @@
 [ext_resource type="Script" path="res://entities/interactables/interactable.gd" id="3_interactable"]
 [ext_resource type="Material" path="res://assets/models/props/materials/gold.tres" id="4_gold"]
 [ext_resource type="Material" path="res://assets/models/props/materials/steel.tres" id="5_steel"]
+[ext_resource type="Script" path="res://vfx/juice/interact_hint/interact_hint.gd" id="91_hint"]
+[ext_resource type="Material" path="res://vfx/juice/interact_hint/interact_glint_idle.tres" id="92_idle"]
+[ext_resource type="Material" path="res://vfx/juice/interact_hint/interact_glint_focus.tres" id="93_focus"]
 
 [sub_resource type="StandardMaterial3D" id="Mat_cabinet"]
 albedo_color = Color(0.72, 0.12, 0.14, 1)
@@ -137,3 +140,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 visible = false
 cast_shadow = 0
 mesh = SubResource("SphereMesh_blast")
+
+[node name="InteractHint" type="Node" parent="." node_paths=PackedStringArray("interactable", "visual")]
+script = ExtResource("91_hint")
+interactable = NodePath("../Interactable")
+visual = NodePath("../Visual")
+idle_material = ExtResource("92_idle")
+focus_material = ExtResource("93_focus")

@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="HealShopData" format=3]
+
+[ext_resource type="Script" path="res://entities/interactables/heal_shop/heal_shop_data.gd" id="1_data"]
+
+[resource]
+script = ExtResource("1_data")
+heal_fraction = 0.5
+base_cost = 15.0
+cost_per_difficulty = 3.0
+cost_growth = 1.5

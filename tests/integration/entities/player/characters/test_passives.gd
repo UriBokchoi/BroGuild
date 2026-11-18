@@ -1,11 +1,11 @@
 extends GutTest
-## Pasivas de los personajes con el jugador de verdad: Aguante (daño por enemigos cerca), Eco arcano
-## (golpes extra cada tantos ataques), Letal (crítico por nivel) y el planeo del Mago.
+## Pasivas de los personajes con el jugador de verdad: cada inicial gana una stat por nivel (Veterano,
+## daño; Expansión arcana, área; Letal, crítico), que se va con la pasiva; y el planeo del Mago.
 
 const PlayerScene := preload("res://entities/player/player.tscn")
-const DummyScene := preload("res://entities/enemies/target_dummy/target_dummy.tscn")
+const WARRIOR := preload("res://data/characters/warrior.tres")
+const MAGE := preload("res://data/characters/mage.tres")
 const ROGUE := preload("res://data/characters/rogue.tres")
-const STAFF := preload("res://data/weapons/staff.tres")
 
 var _player: Player
 
@@ -21,48 +21,34 @@ func after_each() -> void:
 	Input.action_release(InputActions.JUMP)
 
 
-func test_endurance_adds_damage_per_enemy_nearby() -> void:
-	var base := _player.stats.get_value(&"damage")
-	var passive := _add_passive(_endurance()) as EndurancePassive
-	_add_dummy(Vector3(2.0, 0.0, 0.0))
-	_add_dummy(Vector3(-2.0, 0.0, 0.0))
-	_add_dummy(Vector3(30.0, 0.0, 0.0))
-	await wait_physics_frames(10)
-	assert_eq(passive.get_count(), 2, "solo los de cerca")
-	assert_almost_eq(_player.stats.get_value(&"damage"), base * 1.04, 0.01)
+func test_each_starting_character_grows_a_stat_per_level() -> void:
+	var expected_stats: Dictionary[CharacterData, StringName] = {
+		WARRIOR: &"damage", MAGE: &"area", ROGUE: &"crit_chance",
+	}
+	for character: CharacterData in expected_stats:
+		var player := PlayerScene.instantiate() as Player
+		add_child_autofree(player)
+		player.set_character(character)
+		var passive := player.passive as LevelStatPassive
+		assert_eq(passive.stat, expected_stats[character])
+		var at_level_1 := player.stats.get_value(passive.stat)
+		player.experience.add(player.experience.needed() + player.experience.data.needed_for(2))
+		assert_eq(player.experience.get_level(), 3)
+		var bonus := passive.bonus_at(3)
+		assert_gt(bonus, 0.0)
+		var expected := at_level_1 + bonus if passive.kind == StatModifier.Kind.FLAT else at_level_1 * (1.0 + bonus)
+		assert_almost_eq(player.stats.get_value(passive.stat), expected, 0.001, "%s sube con el nivel" % passive.stat)
 
 
-func test_endurance_bonus_goes_away_with_the_passive() -> void:
-	var base := _player.stats.get_value(&"damage")
-	var passive := _add_passive(_endurance())
-	_add_dummy(Vector3(2.0, 0.0, 0.0))
-	await wait_physics_frames(10)
-	assert_gt(_player.stats.get_value(&"damage"), base)
-	passive.free()
-	assert_eq(_player.stats.get_value(&"damage"), base)
-
-
-func test_arcane_echo_doubles_every_nth_attack() -> void:
-	var staff := _player.weapons.add(STAFF)
-	var passive := ArcaneEchoPassive.new()
-	passive.every = 1
-	_add_passive(passive)
-	_add_dummy(Vector3(0.0, 0.0, -6.0))
-	watch_signals(staff)
-	await wait_physics_frames(30)
-	assert_signal_emit_count(staff, "fired", 2, "un ataque de un orbe sale dos veces")
-
-
-func test_lethal_adds_crit_per_level() -> void:
-	var base := _player.stats.get_value(&"crit_chance")
+func test_the_bonus_goes_away_with_the_passive() -> void:
 	_player.set_character(ROGUE)
-	var lethal := _player.passive as LethalPassive
-	assert_not_null(lethal, "el Pícaro lleva Letal")
-	var at_level_1 := _player.stats.get_value(&"crit_chance")
-	assert_gt(at_level_1, base, "el Pícaro ya tiene más crítico")
-	_player.experience.add(_player.experience.needed() + _player.experience.data.needed_for(2))
-	assert_eq(_player.experience.get_level(), 3)
-	assert_almost_eq(_player.stats.get_value(&"crit_chance"), at_level_1 + 2.0 * lethal.crit_per_level, 0.001)
+	var passive := _player.passive as LevelStatPassive
+	var stat := passive.stat
+	var at_level_1 := _player.stats.get_value(stat)
+	_player.experience.add(_player.experience.needed())
+	assert_gt(_player.stats.get_value(stat), at_level_1)
+	passive.free()
+	assert_eq(_player.stats.get_value(stat), at_level_1)
 
 
 func test_glide_caps_the_fall_while_holding_jump() -> void:
@@ -74,25 +60,3 @@ func test_glide_caps_the_fall_while_holding_jump() -> void:
 	Input.action_release(InputActions.JUMP)
 	await wait_physics_frames(30)
 	assert_lt(_player.velocity.y, -6.0, "suelta el salto y cae")
-
-
-## Aguante como el del Guerrero (configurado antes de activarse).
-func _endurance() -> EndurancePassive:
-	var passive := EndurancePassive.new()
-	passive.enemy_mask = PhysicsLayers.mask(PhysicsLayers.ENEMY_HURTBOX)
-	passive.radius = 5.0
-	passive.damage_per_enemy = 0.02
-	passive.max_enemies = 15
-	return passive
-
-
-func _add_passive(passive: CharacterPassive) -> CharacterPassive:
-	_player.add_child(passive)
-	passive.activate(_player)
-	return passive
-
-
-func _add_dummy(at: Vector3) -> void:
-	var dummy := DummyScene.instantiate() as Node3D
-	dummy.position = at
-	add_child_autofree(dummy)

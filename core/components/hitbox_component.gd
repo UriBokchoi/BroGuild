@@ -13,6 +13,8 @@ signal hit(hurtbox: HurtboxComponent, amount: float)
 @export_range(0.0, 1000.0, 0.5, "or_greater") var base_damage: float = 0.0
 ## Segundos entre golpes al mismo objetivo mientras lo toca; 0 = una sola vez por objetivo.
 @export_range(0.0, 10.0, 0.05, "or_greater", "suffix:s") var rehit_interval: float = 0.0
+## Empuje de cada golpe, desde esta zona hacia quien recibe (lo multiplica el empuje % del atacante).
+@export_range(0.0, 50.0, 0.5, "or_greater", "suffix:m/s") var knockback: float = 0.0
 ## Stats de quien golpea, para su daño % y su crítico. Vacío: el daño va tal cual.
 @export var attacker_stats: StatsComponent
 
@@ -20,7 +22,7 @@ signal hit(hurtbox: HurtboxComponent, amount: float)
 var rng: RandomNumberGenerator
 
 ## Último golpe a cada objetivo (por id de instancia, para no retener nodos ya liberados), en
-## segundos de física (ver [method _now]).
+## segundos de física ([PhysicsClock]).
 var _last_hit_at: Dictionary[int, float] = {}
 ## Hurtbox que toca ahora, según las señales de entrada y salida. Solo se procesa mientras toca
 ## alguna: cientos de enemigos llevan una hitbox de contacto que casi nunca toca nada.
@@ -55,7 +57,7 @@ func _can_hit(hurtbox: HurtboxComponent) -> bool:
 	var id := hurtbox.get_instance_id()
 	if not _last_hit_at.has(id):
 		return true
-	return rehit_interval > 0.0 and _now() - _last_hit_at[id] >= rehit_interval
+	return rehit_interval > 0.0 and PhysicsClock.now() - _last_hit_at[id] >= rehit_interval
 
 
 func _on_area_entered(area: Area3D) -> void:
@@ -72,16 +74,12 @@ func _on_area_exited(area: Area3D) -> void:
 		set_physics_process(not _touching.is_empty())
 
 
-## Segundos de física desde que arrancó el juego: el reloj de los golpes repetidos, que no depende de
-## si esta hitbox se procesa o no.
-static func _now() -> float:
-	return float(Engine.get_physics_frames()) / Engine.physics_ticks_per_second
-
 
 func _hit(hurtbox: HurtboxComponent) -> void:
-	_last_hit_at[hurtbox.get_instance_id()] = _now()
+	_last_hit_at[hurtbox.get_instance_id()] = PhysicsClock.now()
 	var offense: OffenseData = null
 	if attacker_stats:
 		offense = attacker_stats.get_resolved(OffenseData) as OffenseData
-	var amount := hurtbox.receive(DamageCalc.attack(base_damage, offense, rng, self))
+	var push := DamageCalc.push(global_position, hurtbox.get_center(), knockback)
+	var amount := hurtbox.receive(DamageCalc.attack(base_damage, offense, rng, self, push))
 	hit.emit(hurtbox, amount)

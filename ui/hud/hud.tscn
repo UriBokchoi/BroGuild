@@ -13,6 +13,13 @@
 [ext_resource type="Texture2D" path="res://assets/textures/icons/ui/difficulty.svg" id="11_skull"]
 [ext_resource type="Script" path="res://ui/hud/slot_panel.gd" id="12_slots"]
 [ext_resource type="Script" path="res://ui/hud/level_intro.gd" id="13_intro"]
+[ext_resource type="Script" path="res://ui/hud/passive_bar.gd" id="14_passives"]
+[ext_resource type="Script" path="res://ui/hud/chest_panel.gd" id="15_chest"]
+[ext_resource type="Resource" path="res://data/rarities/rarities.tres" id="16_rarities"]
+[ext_resource type="Script" path="res://ui/hud/boss_key_counter.gd" id="17_keys"]
+[ext_resource type="Texture2D" path="res://assets/textures/icons/ui/membership_card.svg" id="18_card"]
+[ext_resource type="Script" path="res://ui/hud/boss_bar.gd" id="19_boss_bar"]
+[ext_resource type="Script" path="res://ui/hud/announcement_feed.gd" id="20_feed"]
 
 [node name="HUD" type="CanvasLayer"]
 layer = 10
@@ -112,6 +119,30 @@ layout_mode = 2
 theme_type_variation = &"DifficultyLabel"
 text = "0.0"
 
+[node name="BossKeyCounter" type="HBoxContainer" parent="Margin/Top"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 2
+theme_type_variation = &"GoldRow"
+script = ExtResource("17_keys")
+count_key = &"HUD_BOSS_KEYS"
+
+[node name="BossKeyIcon" type="TextureRect" parent="Margin/Top/BossKeyCounter"]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+texture = ExtResource("18_card")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="BossKeyLabel" type="Label" parent="Margin/Top/BossKeyCounter"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"BossKeyLabel"
+text = "0/0"
+
 [node name="LoadoutBar" type="VBoxContainer" parent="Margin/Top"]
 unique_name_in_owner = true
 layout_mode = 2
@@ -134,6 +165,64 @@ layout_mode = 2
 mouse_filter = 2
 theme_type_variation = &"LoadoutRow"
 
+[node name="PassiveBar" type="HFlowContainer" parent="Margin/Top"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(204, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 2
+theme_type_variation = &"PassiveBar"
+script = ExtResource("14_passives")
+
+[node name="BossBar" type="PanelContainer" parent="Margin"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+mouse_filter = 2
+theme_type_variation = &"BossBarFrame"
+script = ExtResource("19_boss_bar")
+
+[node name="Content" type="VBoxContainer" parent="Margin/BossBar"]
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"BossColumn"
+
+[node name="BossName" type="Label" parent="Margin/BossBar/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"BossNameLabel"
+horizontal_alignment = 1
+
+[node name="BossHealth" type="ProgressBar" parent="Margin/BossBar/Content"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(560, 18)
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"BossHealthBar"
+step = 0.0
+show_percentage = false
+
+[node name="BossShout" type="Label" parent="Margin/BossBar/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"BossShoutLabel"
+horizontal_alignment = 1
+
+[node name="AnnouncementFrame" type="PanelContainer" parent="Margin"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+mouse_filter = 2
+theme_type_variation = &"AnnouncementFrame"
+
+[node name="AnnouncementFeed" type="VBoxContainer" parent="Margin/AnnouncementFrame"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"BossColumn"
+script = ExtResource("20_feed")
+
 [node name="LevelIntro" type="VBoxContainer" parent="Margin"]
 unique_name_in_owner = true
 layout_mode = 2
@@ -149,6 +238,64 @@ size_flags_horizontal = 4
 size_flags_vertical = 8
 mouse_filter = 2
 theme_type_variation = &"HudColumn"
+
+[node name="ChestPanel" type="PanelContainer" parent="Margin/Column"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_filter = 2
+theme_type_variation = &"ChestPanel"
+script = ExtResource("15_chest")
+rarities = ExtResource("16_rarities")
+denied_key = &"CHEST_NOT_ENOUGH_GOLD"
+
+[node name="Content" type="VBoxContainer" parent="Margin/Column/ChestPanel"]
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"CardColumn"
+
+[node name="ChestTiles" type="HBoxContainer" parent="Margin/Column/ChestPanel/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_filter = 2
+theme_type_variation = &"LoadoutRow"
+
+[node name="ChestResult" type="HBoxContainer" parent="Margin/Column/ChestPanel/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_filter = 2
+theme_type_variation = &"PromptRow"
+
+[node name="ChestIcon" type="TextureRect" parent="Margin/Column/ChestPanel/Content/ChestResult"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(56, 56)
+layout_mode = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Text" type="VBoxContainer" parent="Margin/Column/ChestPanel/Content/ChestResult"]
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+
+[node name="ChestItemName" type="Label" parent="Margin/Column/ChestPanel/Content/ChestResult/Text"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"ChestItemLabel"
+
+[node name="ChestItemDescription" type="Label" parent="Margin/Column/ChestPanel/Content/ChestResult/Text"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"ChestDescriptionLabel"
+
+[node name="ChestMessage" type="Label" parent="Margin/Column/ChestPanel/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"SlotResultLabel"
+horizontal_alignment = 1
 
 [node name="SlotPanel" type="PanelContainer" parent="Margin/Column"]
 unique_name_in_owner = true
@@ -210,6 +357,7 @@ theme_type_variation = &"PromptLabel"
 unique_name_in_owner = true
 custom_minimum_size = Vector2(320, 16)
 layout_mode = 2
+size_flags_horizontal = 4
 mouse_filter = 2
 theme_type_variation = &"HealthBar"
 script = ExtResource("2_health")

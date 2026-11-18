@@ -1,7 +1,8 @@
 extends GutTest
 ## GameSettings: empieza con los valores de SettingsData, se guarda y se lee de un ConfigFile sin
 ## perder nada, ignora lo que no vale (y limita el volumen entre 0 y 1), pone el volumen de cada bus
-## en el AudioServer (a 0, silenciado) y se copia y compara sus opciones de pantalla.
+## en el AudioServer (a 0, silenciado), pone el idioma (de serie, el español) y se copia y compara
+## sus opciones de pantalla.
 
 const DATA := preload("res://data/settings/settings.tres")
 
@@ -30,6 +31,7 @@ func test_starts_with_the_data_defaults() -> void:
 	assert_eq(_settings.vsync, DATA.default_vsync)
 	assert_false(_settings.fullscreen)
 	assert_eq(_settings.resolution, Vector2i.ZERO, "sin tamaño elegido")
+	assert_eq(_settings.locale, "es", "el juego empieza en español")
 
 
 func test_round_trips_through_a_config_file() -> void:
@@ -89,3 +91,20 @@ func test_compares_and_takes_the_display_options() -> void:
 	assert_eq(_settings.resolution, Vector2i(1600, 900))
 	assert_eq(_settings.volumes[&"Music"], DATA.default_volume, "el volumen no es de pantalla")
 	assert_false(other.display_differs(_settings))
+
+
+func test_keeps_and_applies_the_language() -> void:
+	_settings.locale = "en"
+	var config := ConfigFile.new()
+	_settings.write_to(config)
+	var read := GameSettings.create(DATA)
+	read.read_from(config)
+	assert_eq(read.locale, "en")
+	config.set_value(GameSettings.SECTION_GENERAL, "locale", "")
+	read.read_from(config)
+	assert_eq(read.locale, "en", "vacío no vale")
+	var before := TranslationServer.get_locale()
+	read.apply_locale()
+	assert_eq(TranslationServer.get_locale(), "en")
+	TranslationServer.set_locale(before)
+	assert_eq(_settings.copy().locale, "en")

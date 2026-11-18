@@ -44,8 +44,8 @@ text_key = &"SLOT_WIN_UPGRADE"
 
 [sub_resource type="Resource" id="Upgrade_jackpot"]
 script = ExtResource("5_outcome")
-reward = &"upgrade"
-amount = 3.0
+reward = &"upgrade_all"
+amount = 1.0
 text_key = &"SLOT_JACKPOT_UPGRADE"
 
 [sub_resource type="Resource" id="Curse_pair"]

@@ -13,3 +13,8 @@ extends Resource
 @export_range(0.0, 50.0, 0.5, "suffix:m") var top_height: float = 0.0
 ## Si tiene que quedar fuera del claro donde aparece el jugador.
 @export var avoid_clearing: bool = false
+## Distancia al centro del mapa, entre x e y (el altar, al borde del claro). (0, 0): en cualquier
+## sitio del cuadrado.
+@export var ring: Vector2 = Vector2.ZERO
+## Mira hacia el centro del mapa (su −Z apunta al centro) en vez de girar al azar.
+@export var face_center: bool = false

@@ -58,6 +58,17 @@ func test_flies_to_the_collector_in_range_and_is_collected() -> void:
 	assert_signal_emitted_with_parameters(EventBus, "pickup_collected", [&"experience", 3.0])
 
 
+func test_a_power_up_announces_itself_when_collected() -> void:
+	_collector.position = Vector3(2.5, 0.0, 0.0)
+	_field.drop(BOMB, Vector3.ZERO, 1.0)
+	_field.drop(XP_GEM, Vector3(0.5, 0.0, 0.0), 1.0)
+	watch_signals(EventBus)
+	await wait_physics_frames(30)
+	assert_eq(_field.active_count(), 0)
+	assert_signal_emitted_with_parameters(EventBus, "announced", [BOMB.announce_key, [], BOMB.announce_color])
+	assert_signal_emit_count(EventBus, "announced", 1, "la gema no dice nada")
+
+
 func test_gold_flies_to_the_collector_from_anywhere() -> void:
 	var coin := _field.drop(GOLD_COIN, Vector3.ZERO, 2.0)
 	assert_true(coin.attracted, "vuela nada más salir")

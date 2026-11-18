@@ -1,0 +1,103 @@
+[gd_scene format=3]
+
+[ext_resource type="Material" path="res://levels/brosque/materials/ruin_stone.tres" id="1_stone"]
+[ext_resource type="Material" path="res://levels/brosque/materials/ruin_stone_dark.tres" id="2_dark"]
+[ext_resource type="Material" path="res://levels/brosque/materials/moss.tres" id="3_moss"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_plinth"]
+material = ExtResource("2_dark")
+size = Vector3(1.2, 0.3, 1.2)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_tall"]
+material = ExtResource("1_stone")
+top_radius = 0.42
+bottom_radius = 0.46
+height = 3.2
+radial_segments = 10
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_broken"]
+material = ExtResource("1_stone")
+top_radius = 0.44
+bottom_radius = 0.46
+height = 1.6
+radial_segments = 10
+rings = 1
+
+[sub_resource type="BoxMesh" id="BoxMesh_capital"]
+material = ExtResource("2_dark")
+size = Vector3(1.1, 0.3, 1.1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_lintel"]
+material = ExtResource("1_stone")
+size = Vector3(3.6, 0.5, 0.9)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_drum"]
+material = ExtResource("1_stone")
+top_radius = 0.44
+bottom_radius = 0.44
+height = 1.2
+radial_segments = 10
+rings = 1
+
+[sub_resource type="BoxMesh" id="BoxMesh_moss"]
+material = ExtResource("3_moss")
+size = Vector3(1.12, 0.06, 1.12)
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_tall"]
+height = 3.5
+radius = 0.46
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_broken"]
+height = 1.9
+radius = 0.46
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_lintel"]
+size = Vector3(3.6, 0.5, 0.9)
+
+[node name="RuinArch" type="StaticBody3D"]
+collision_mask = 0
+
+[node name="PlinthLeft" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6, 0.15, 0)
+mesh = SubResource("BoxMesh_plinth")
+
+[node name="PlinthRight" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6, 0.15, 0)
+mesh = SubResource("BoxMesh_plinth")
+
+[node name="ColumnLeft" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6, 1.9, 0)
+mesh = SubResource("CylinderMesh_tall")
+
+[node name="Capital" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6, 3.65, 0)
+mesh = SubResource("BoxMesh_capital")
+
+[node name="MossCapital" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6, 3.82, 0)
+mesh = SubResource("BoxMesh_moss")
+
+[node name="ColumnRight" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.995, -0.1, 0, 0.1, 0.995, 0, 0, 0, 1, 1.6, 1.1, 0)
+mesh = SubResource("CylinderMesh_broken")
+
+[node name="Lintel" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.985, 0, 0.174, 0, 1, 0, -0.174, 0, 0.985, 0.4, 0.25, 1.5)
+mesh = SubResource("BoxMesh_lintel")
+
+[node name="Drum" type="MeshInstance3D" parent="."]
+transform = Transform3D(0, -0.866, 0.5, 1, 0, 0, 0, 0.5, 0.866, 2.7, 0.44, -1)
+mesh = SubResource("CylinderMesh_drum")
+
+[node name="ShapeLeft" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6, 1.75, 0)
+shape = SubResource("CylinderShape3D_tall")
+
+[node name="ShapeRight" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6, 0.95, 0)
+shape = SubResource("CylinderShape3D_broken")
+
+[node name="ShapeLintel" type="CollisionShape3D" parent="."]
+transform = Transform3D(0.985, 0, 0.174, 0, 1, 0, -0.174, 0, 0.985, 0.4, 0.25, 1.5)
+shape = SubResource("BoxShape3D_lintel")

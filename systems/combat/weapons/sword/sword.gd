@@ -28,7 +28,7 @@ func reach() -> float:
 func _fire(target: Node3D, index: int) -> void:
 	var slash := _slashes.acquire() as SwordSlash
 	slash.position = Vector3.UP * aim_height
-	slash.swing(_aim_direction(target), reach(), duration(), damage(), wielder_stats, index % 2 == 1)
+	slash.swing(_aim_direction(target), reach(), duration(), damage(), wielder_stats, index % 2 == 1, knockback())
 
 
 ## Dirección del tajo hacia el centro de [param target], con la inclinación limitada a

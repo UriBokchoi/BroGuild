@@ -8,13 +8,14 @@
 
 [sub_resource type="Resource" id="Resource_stats"]
 script = ExtResource("2_stats")
-damage = 20.0
+damage = 18.0
 cooldown = 1.1
 projectiles = 1
 burst_interval = 0.15
 area = 100.0
 duration = 0.3
 reach = 2.8
+knockback = 7.0
 
 [sub_resource type="Resource" id="Upgrade_damage"]
 script = ExtResource("90_upgrade")
@@ -31,7 +32,7 @@ whole_numbers = true
 script = ExtResource("90_upgrade")
 stat = &"area"
 kind = 1
-value = 0.12
+value = 0.08
 
 [sub_resource type="Resource" id="Upgrade_cooldown"]
 script = ExtResource("90_upgrade")

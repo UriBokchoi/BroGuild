@@ -14,5 +14,8 @@ extends Resource
 @export_range(0.0, 500.0, 1.0, "or_greater") var armor: float = 0.0
 ## Probabilidad de evitar un golpe por completo (como mucho 90 %).
 @export_range(0.0, 90.0, 0.5, "suffix:%") var evasion: float = 0.0
+## Segundos sin recibir daño tras un golpe que hace daño (los «i-frames» del jugador; los
+## enemigos, 0).
+@export_range(0.0, 5.0, 0.01, "or_greater", "suffix:s") var invulnerability_time: float = 0.0
 ## Parte del daño que haces que te cura.
 @export_range(0.0, 100.0, 0.5, "or_greater", "suffix:%") var lifesteal: float = 0.0

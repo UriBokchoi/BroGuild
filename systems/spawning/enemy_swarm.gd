@@ -6,7 +6,10 @@ extends Node3D
 ## y dónde salen (el director de oleadas, el invocador de práctica) solo llama a [method spawn].
 ##
 ## Rendimiento: el rumbo de cada enemigo (perseguir, separarse, trepar) se recalcula cada
-## [member steering_slices] ticks, repartidos entre ticks; la física los mueve en todos.
+## [member steering_slices] ticks, repartidos entre ticks; la física los mueve en todos. Los que lo
+## piden ([member Enemy.steer_every_tick], un jefe) lo recalculan en todos.
+##
+## Se puede parar el tiempo ([method freeze_for]): todos quietos un rato, también sus disparos.
 
 signal enemy_spawned(enemy: Enemy)
 signal enemy_despawned(enemy: Enemy)
@@ -38,6 +41,8 @@ var _hash: SpatialHash
 ## Índice en [member _hash] de cada enemigo de [member _active] (−1 si no está apuntado).
 var _slots: PackedInt32Array = PackedInt32Array()
 var _tick: int = 0
+## Segundos que le quedan al tiempo parado (0 = corre).
+var _frozen_left: float = 0.0
 
 
 func _ready() -> void:
@@ -50,6 +55,10 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	_tick += 1
+	if _frozen_left > 0.0:
+		_frozen_left -= delta
+		if _frozen_left <= 0.0:
+			_set_frozen(false)
 	_index_enemies()
 	var has_target := target != null
 	var goal := target.global_position if has_target else Vector3.ZERO
@@ -65,7 +74,10 @@ func _physics_process(delta: float) -> void:
 		if not enemy.is_alive():
 			enemy.physics_step(delta, goal, has_target, PackedVector3Array(), PackedVector3Array())
 			continue
-		if index % steering_slices != slice:
+		if enemy.is_frozen():
+			continue
+		var every_tick := enemy.steer_every_tick
+		if not every_tick and index % steering_slices != slice:
 			continue
 		var neighbors := PackedVector3Array()
 		var footholds := PackedVector3Array()
@@ -74,7 +86,7 @@ func _physics_process(delta: float) -> void:
 			neighbors.append(spot)
 			if _hash.tag_at(near) == SETTLED_TAG:
 				footholds.append(spot)
-		enemy.physics_step(slice_delta, goal, has_target, neighbors, footholds)
+		enemy.physics_step(delta if every_tick else slice_delta, goal, has_target, neighbors, footholds)
 
 
 ## Apunta dónde está cada enemigo vivo y si está apoyado, como estaban al empezar el tick (así el
@@ -95,15 +107,35 @@ func spawn(enemy_data: EnemyData, feet: Vector3) -> Enemy:
 	var enemy := _pool_for(enemy_data).acquire() as Enemy
 	_active.append(enemy)
 	enemy.spawn(feet)
+	if is_frozen():
+		enemy.set_frozen(true)
 	enemy_spawned.emit(enemy)
 	return enemy
 
 
-## Retira a todos los enemigos en juego y sus proyectiles.
-func clear() -> void:
+## Retira a todos los enemigos en juego y sus proyectiles. Con [param keep_dying], los que están
+## muriendo terminan de encoger (el jefe vencido).
+func clear(keep_dying: bool = false) -> void:
 	for index: int in range(_active.size() - 1, -1, -1):
-		_retire(_active[index])
+		var enemy := _active[index]
+		if keep_dying and not enemy.is_alive():
+			continue
+		_retire(enemy)
 	projectiles.clear()
+
+
+## Para el tiempo [param seconds] segundos (o lo alarga): los enemigos, también los que salgan, se
+## quedan quietos sin dañar ni atacar, y sus disparos se paran en el aire. Avisa al empezar y al
+## acabar por [code]EventBus.time_stop_changed[/code].
+func freeze_for(seconds: float) -> void:
+	var was_frozen := is_frozen()
+	_frozen_left = maxf(_frozen_left, seconds)
+	if not was_frozen and is_frozen():
+		_set_frozen(true)
+
+
+func is_frozen() -> bool:
+	return _frozen_left > 0.0
 
 
 ## Enemigos en juego ahora mismo (vivos o terminando de morir).
@@ -113,6 +145,14 @@ func active_count() -> int:
 
 func get_active() -> Array[Enemy]:
 	return _active.duplicate()
+
+
+func _set_frozen(frozen: bool) -> void:
+	for enemy: Enemy in _active:
+		if enemy.is_alive():
+			enemy.set_frozen(frozen)
+	projectiles.process_mode = Node.PROCESS_MODE_DISABLED if frozen else Node.PROCESS_MODE_INHERIT
+	EventBus.time_stop_changed.emit(frozen)
 
 
 func _pool_for(enemy_data: EnemyData) -> NodePool:

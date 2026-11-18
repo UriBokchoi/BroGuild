@@ -5,10 +5,11 @@ extends RigidBody3D
 ## Megabonk. Persigue al objetivo separándose un poco de los que tiene al lado ([EnemySteering]), o
 ## se queda a su distancia si es de los que disparan ([member EnemyStats.keep_distance]). Hace daño
 ## al tocar (su hitbox de contacto) y con sus armas, si tiene ([member EnemyData.weapons]); al
-## morir, sus armas paran (sus disparos en vuelo siguen) y él encoge y desaparece. No se mueve solo:
-## un [EnemySwarm] lo saca de su pool con [method spawn], fija su velocidad horizontal con
-## [method physics_step] cada tick (la física pone la gravedad y los choques) y lo guarda cuando
-## avisa con [signal despawned]. Sus stats salen de su [EnemyData] ([method setup]).
+## morir, sus armas paran (sus disparos en vuelo siguen), su cuerpo deja de chocar con el jugador y
+## con los demás enemigos, y él encoge y desaparece. No se mueve solo: un [EnemySwarm] lo saca de su
+## pool con [method spawn], fija su velocidad horizontal con [method physics_step] cada tick (la
+## física pone la gravedad y los choques) y lo guarda cuando avisa con [signal despawned]. Sus stats
+## salen de su [EnemyData] ([method setup]).
 
 ## Acaba de morir (aún encogiéndose).
 signal died(enemy: Enemy)
@@ -29,6 +30,9 @@ signal despawned(enemy: Enemy)
 ## Al aparecer, sus armas esperan antes del primer ataque esta parte de su espera normal, al azar
 ## entre x e y: así no disparan nada más salir ni todos los que salen juntos a la vez.
 @export var first_attack_delay: Vector2 = Vector2(0.5, 1.0)
+## Recalcula su rumbo en cada tick (un jefe, que ataca con precisión); los demás lo hacen repartidos
+## entre ticks ([member EnemySwarm.steering_slices]).
+@export var steer_every_tick: bool = false
 
 ## Tipo de enemigo.
 var data: EnemyData
@@ -43,6 +47,9 @@ var elite: EliteData
 var _stats: EnemyStats
 var _rest_scale: Vector3 = Vector3.ONE
 var _rest_mass: float = 1.0
+## Capas y máscara de su cuerpo vivo (al morir deja de chocar con el jugador y con los demás).
+var _rest_layer: int = 0
+var _rest_mask: int = 0
 ## Tamaño de esta vida respecto al normal (ver [member EliteData.size]).
 var _size: float = 1.0
 ## Formas de colisión y marcadores que crecen con el tamaño, con su transform normal.
@@ -77,6 +84,8 @@ func _ready() -> void:
 	_stats = stats.get_resolved(EnemyStats) as EnemyStats
 	_rest_scale = visual.scale
 	_rest_mass = mass
+	_rest_layer = collision_layer
+	_rest_mask = collision_mask
 	for shape: Node in find_children("*", "CollisionShape3D", true, false):
 		_sized[shape as Node3D] = (shape as Node3D).transform
 	for child: Node in get_children():
@@ -90,6 +99,7 @@ func _ready() -> void:
 	if rng == null:
 		rng = Rng.stream(Rng.Stream.ENEMIES)
 	health.died.connect(_on_died)
+	hurtbox.hurt.connect(_on_hurt)
 	deactivate()
 
 
@@ -99,8 +109,11 @@ func spawn(feet: Vector3) -> void:
 	# Primero vuelve a la física; luego se coloca, para que el cuerpo aparezca ahí.
 	process_mode = Node.PROCESS_MODE_INHERIT
 	visible = true
+	freeze = false
 	global_position = feet
 	linear_velocity = Vector3.ZERO
+	collision_layer = _rest_layer
+	collision_mask = _rest_mask
 	angular_velocity = Vector3.ZERO
 	_clear_boosts()
 	contact_hitbox.reset_hits()
@@ -108,9 +121,7 @@ func spawn(feet: Vector3) -> void:
 	hurtbox.monitorable = true
 	_dying_left = 0.0
 	_approach_angle = deg_to_rad(rng.randf_range(-_stats.approach_spread, _stats.approach_spread))
-	if weapons:
-		for weapon: Weapon in weapons.get_weapons():
-			weapon.rearm(weapon.cooldown() * rng.randf_range(first_attack_delay.x, first_attack_delay.y))
+	_rearm()
 	reset_physics_interpolation()
 
 
@@ -120,11 +131,7 @@ func spawn(feet: Vector3) -> void:
 func boost(modifiers: StatModifierSet) -> void:
 	if modifiers == null:
 		return
-	_boosts.append(modifiers)
-	for modifier: StatModifier in modifiers.stat_modifiers:
-		for target_stats: StatsComponent in _all_stats():
-			if target_stats.has_stat(modifier.stat):
-				target_stats.add_modifier(modifier, modifiers)
+	_add_modifiers(modifiers)
 	_refresh()
 
 
@@ -140,6 +147,30 @@ func promote(elite_data: EliteData) -> void:
 
 func is_elite() -> bool:
 	return elite != null
+
+
+## ¿Es un jefe? (Ver [Boss]: no lo saca el director ni lo mata una bomba de golpe.)
+func is_boss() -> bool:
+	return false
+
+
+## Lo congela (el tiempo parado) o lo descongela. Congelado se queda quieto donde está (un cuerpo
+## estático: se le puede chocar y golpear), sin dañar al tocar ni atacar con sus armas.
+func set_frozen(frozen: bool) -> void:
+	if frozen == freeze:
+		return
+	freeze = frozen
+	if frozen:
+		linear_velocity = Vector3.ZERO
+		contact_hitbox.set_deferred(&"monitoring", false)
+		_disarm()
+	elif is_alive():
+		contact_hitbox.set_deferred(&"monitoring", true)
+		_rearm()
+
+
+func is_frozen() -> bool:
+	return freeze
 
 
 ## Lo saca del juego: invisible y fuera de la física hasta el siguiente [method spawn].
@@ -238,6 +269,16 @@ func _shrink(delta: float) -> void:
 	despawned.emit(self)
 
 
+## Aplica [param modifiers] hasta que vuelva al pool, a sus stats y a las de sus armas (cada uno
+## adonde exista su stat), sin tocar su vida (ver [method boost]).
+func _add_modifiers(modifiers: StatModifierSet) -> void:
+	_boosts.append(modifiers)
+	for modifier: StatModifier in modifiers.stat_modifiers:
+		for target_stats: StatsComponent in _all_stats():
+			if target_stats.has_stat(modifier.stat):
+				target_stats.add_modifier(modifier, modifiers)
+
+
 ## Stats suyas y de sus armas: adonde van las mejoras.
 func _all_stats() -> Array[StatsComponent]:
 	var all: Array[StatsComponent] = [stats]
@@ -269,6 +310,7 @@ func _refresh() -> void:
 	health.reset()
 	contact_hitbox.base_damage = _stats.contact_damage
 	contact_hitbox.rehit_interval = _stats.contact_interval
+	contact_hitbox.knockback = _stats.knockback
 
 
 ## Cambia su tamaño a [param factor] veces el normal: formas de colisión, marcadores, modelo y masa.
@@ -281,6 +323,14 @@ func _resize(factor: float) -> void:
 	mass = _rest_mass * factor * factor * factor
 
 
+## Sus armas vuelven a atacar, cada una tras una parte al azar de su espera normal
+## ([member first_attack_delay]): no todos a la vez.
+func _rearm() -> void:
+	if weapons:
+		for weapon: Weapon in weapons.get_weapons():
+			weapon.rearm(weapon.cooldown() * rng.randf_range(first_attack_delay.x, first_attack_delay.y))
+
+
 ## Sus armas dejan de atacar.
 func _disarm() -> void:
 	if weapons:
@@ -288,10 +338,21 @@ func _disarm() -> void:
 			weapon.disarm()
 
 
+## Un golpe lo empuja como un impulso: los más pesados (élites, jefes) se mueven menos. Se suma a su
+## velocidad (no con un impulso de la física, que el rumbo del enjambre pisaría antes de aplicarse).
+func _on_hurt(info: DamageInfo, _amount: float) -> void:
+	if not health.is_dead() and info.knockback != Vector3.ZERO:
+		linear_velocity += info.knockback / mass
+
+
 func _on_died() -> void:
 	# Ya no recibe ni hace daño; desaparece al terminar de encoger.
 	hurtbox.set_deferred(&"monitorable", false)
 	contact_hitbox.set_deferred(&"monitoring", false)
+	# Mientras encoge no frena a nadie (el sprint del jugador, los que vienen detrás): solo se apoya en
+	# el suelo.
+	collision_layer = 0
+	collision_mask = PhysicsLayers.mask(PhysicsLayers.WORLD)
 	_disarm()
 	_dying_left = death_time
 	EventBus.enemy_died.emit(self)

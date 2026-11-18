@@ -5,3 +5,4 @@
 [resource]
 script = ExtResource("1_brglw")
 max_health = 100.0
+invulnerability_time = 0.3

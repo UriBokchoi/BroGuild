@@ -850,7 +850,7 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - La recarga del arma mejora como multiplicador (×0,92 la común); la rareza escala lo que se aleja de 1. En % se acumularía sumando y podría llegar a 0.
   - Proyectiles y rebotes van en enteros y nunca suman menos de 1.
 - **Por qué:** lo pidió el diseñador (colores y que las raras toquen varias cosas). Todo va en datos: un arma nueva solo lista sus stats mejorables, y una rareza nueva es un `.tres`.
-- **Pendiente:** la Suerte desplazará los pesos de las rarezas. Con 20 niveles, Multiplicidad (+1 proyectil por mejora) puede quedar muy fuerte; habrá que mirarlo jugando.
+- **Pendiente:** con 20 niveles, Multiplicidad (+1 proyectil por mejora) puede quedar muy fuerte; habrá que mirarlo jugando.
 
 ## 2026-11-17 · Ritmo algo más lento y enemigos más duros
 - **Decisión** (lo pidió el diseñador):
@@ -868,3 +868,239 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - Se borran `tools/gen_brosque_forest.gd` y `forest.tscn`, que eran el bosque horneado.
 - **Por qué:** lo pidió el diseñador, y es más rejugable. Un nivel nuevo solo necesita su `LayoutData` con sus piezas.
 - **Coste:** generar 2.600 árboles y 300 colisiones al cargar es instantáneo. En el juego no cambia nada respecto al bosque horneado.
+
+## 2026-11-17 · Suerte
+- **Decisión:**
+  - Cada entrada de una `WeightedTable` lleva `luck_scaling`: el % de su peso que gana por cada punto de Suerte. Su peso con Suerte es `peso × (1 + Suerte × luck_scaling / 100)`. Con 0 no le afecta.
+  - Las rarezas lo llevan creciente: común 0, rara 1, improbable 2, de leyenda 3, mítica 5. Con 100 de Suerte, los pesos 60/25/10/4/1 pasan a 60/50/30/16/6: la común baja del 60 al 37 %, y la mítica sube del 1 al 3,7 %.
+  - Usan la Suerte del jugador (`ProgressionData.luck`, 0 de base) las cartas de subir de nivel y las mejoras gratis de la tragaperras. Los power-ups y los símbolos de la tragaperras no escalan, de momento.
+- **Por qué:** lo pide el GDD (§5). Va en la tabla genérica para que los cofres y los objetos la usen sin código nuevo. Escala con el peso, y no sumando, para que una entrada de peso 0 siga sin salir nunca.
+- **Pendiente:** aún no hay nada que dé Suerte; llegará con los objetos de los cofres.
+
+## 2026-11-17 · Cofres y objetos pasivos
+- **Decisión:**
+  - **Objetos pasivos:** `PassiveItemData` es un `StatModifierSet` con id, textos, icono y una rareza fija. Viven en `data/items/` y el jugador los lleva en `PassiveInventory`. Cada copia aplica sus modificadores con su propio origen: se apilan y se puede quitar una.
+  - **15 objetos de cultura bro** como propuesta inicial, para cambiar en datos. El gimnasio es solo un tema más (lo pidió el diseñador: «cosas de bro en general, no solo gym»):
+
+    | Rareza | Objetos |
+    |---|---|
+    | Común | batido de proteínas (+10 % vida), pizza fría de ayer (+0,4 vida/s), riñonera (+15 % oro), mando de consola (+8 % vel. ataque) |
+    | Rara | gorra hacia atrás (+10 % daño), chanclas con calcetines (+6 % carrera y sprint), rasca y gana (+10 Suerte), altavoz portátil (+12 % área) |
+    | Improbable | gafas de sol (+6 % crítico), aceite corporal (+5 % esquiva), cinturón de levantar (+10 defensa) |
+    | De leyenda | mancuerna de oro (+1 proyectil), batido sospechoso (+25 % daño y +3 dificultad), cadena de oro (+25 % oro y +10 Suerte) |
+    | Mítica | corona del Bro (+15 % daño, vel. ataque, vida y área) |
+
+  - **Cofres:** cuestan `(20 + 4 × dificultad) × 1,3^cofres abiertos` en la partida. Tiran una rareza de la tabla de siempre con la Suerte del jugador y sacan un objeto de esa rareza; si no hay ninguno, uno de la de debajo.
+  - El revelado dura 1,6 s en el HUD sin pausar: la luz recorre las cinco rarezas, frena y se para. Después llega el objeto y el cofre desaparece.
+  - En el Brosque hay 7: cinco en el suelo y dos encima de las mesetas que no tienen tragaperras.
+- **Por qué:** lo pide el GDD (§5.2 y §6) y es la segunda apuesta de la partida. No se usa el robo de vida porque aún no está implementado.
+- **Coste:** cada cofre cuenta los abiertos escuchando `chest_opened`. Un cofre que aparezca a mitad de partida (por ejemplo, soltado por un élite) empezaría a contar desde 0: habrá que pasarle la cuenta cuando lleguen.
+
+## 2026-11-17 · Jefe del Brosque: el Ent-renador
+- **Decisión:**
+  - **El jefe es un enemigo más:** `Boss` hereda de `Enemy` y sale del mismo `EnemySwarm` y su pool. Sus ataques son nodos hijos (`BossAttack`: salto con onda, embestidas, refuerzos), con sus números en `@export` de la escena del jefe. Un jefe nuevo es una escena con sus ataques, un `EnemyData` y un `BossData`; un ataque nuevo es un script que hereda de `BossAttack`.
+    - Recalcula su rumbo en cada tick (`Enemy.steer_every_tick`); los demás, cada tres.
+    - La bomba no le hace nada (`Enemy.is_boss()`): quita una parte de la vida máxima y mataría al jefe de golpe.
+  - **El encuentro** (`BossEncounter`, en `RunSystems`) lleva lo del nivel: cuenta las llaves, saca al jefe, pasa al HUD su vida y sus gritos, pone sus refuerzos por el director (`WaveDirector.spawn_around`, con el escalado del momento) y da la victoria. Cada nivel elige su `BossData` en `RunSystems.boss`, como sus oleadas.
+  - **Escalado:** el jefe sale con la dificultad del momento, con sus propias curvas en `BossData`. Vida ×1 con dificultad 0, ×1,6 con 5, ×2,6 con 10, ×5 con 15 y ×9 con 20, sobre una base de 5.000. Daño ×1, ×1,7 y ×3 con 0, 10 y 20. Las curvas de las oleadas se disparan en la prórroga (vida ×12 con 11): con ellas, el jefe del minuto 10 sería imposible.
+  - **El altar** es una pieza del mapa generado. Va la primera (siempre cabe), entre 24 y 28 m del centro, al borde del claro, y mirando hacia él: `LayoutPiece.ring` y `face_center`. Ahí la pelea es en terreno abierto. El altar pide el jefe al usarlo y, forzado, al empezar la prórroga: «al minuto 10 el altar se activa solo». El encuentro decide si hay llaves suficientes.
+  - **Las llaves** (tarjetas de socio en el Brosque): las reparte un `BreakableScatter`, 5 a más de 25 m del centro (`min_center_distance`) y a 25 m entre sí, para que haya que explorar. Hacen falta 3. Las tarjetas y el altar listo tienen una columna de luz que se ve desde lejos. El shader de la columna pasa a `vfx/shaders/light_beam.gdshader`, porque ahora lo usan tres escenas.
+  - **Ataques del Ent-renador** (cada 3,5 s, cada 2,2 s con rabia):
+    - **Burpee:** un aro marca adonde salta, hasta 20 m. Al caer, la onda llega a 13 m en 0,9 s con 1,6 × su daño al tocar. Solo daña a lo que está a menos de 1,3 m del suelo de la onda y en su borde: se esquiva saltando o alejándose.
+    - **Series:** tres embestidas de 16 m a 20 m/s, con una franja de aviso y 1,5 × daño al tocar mientras embiste.
+    - **Bro-tes:** 4 refuerzos, o 6 con rabia.
+    - La rabia empieza por debajo del 50 % de su vida: +35 % de velocidad y +20 % de daño al tocar, sin rellenarle la vida.
+  - **Premio:** oro × `early_bonus` según los minutos al vencerlo. Es ×3 en el 0, ×2,5 en el 4, ×1,7 en el 7 y ×1 desde el 10, sobre 150 de oro; llega como un recogible y cuenta el % de oro. Además, un objeto de un `ItemPool` solo con improbable, de leyenda y mítica.
+    - Lo que sale de un cofre se sacó a `ItemPool` para tirar igual en los dos sitios.
+    - El panel del cofre revela cualquier objeto por la señal nueva `item_revealed`; `chest_opened` queda para contar los cofres abiertos.
+  - **Victoria:** al caer el jefe paran las oleadas y se retiran los demás enemigos. El jefe termina de caer: `EnemySwarm.clear(keep_dying)`.
+    - Llega el premio y se avisa con `boss_defeated`. El `RunRecorder` deja de apuntar y la pantalla de resultados muestra la victoria a los 4 s, para ver caer al jefe y el revelado.
+    - Lo primero que pasa, muerte o victoria, manda.
+- **Por qué:**
+  - Lo pide el GDD (§9) y el diseñador aprobó el Ent-renador.
+  - Reutilizar `Enemy` da gratis el pool, el combate, los números de daño, el botín y el Archivo.
+  - Los ataques como nodos dejan cada jefe en su escena, sin `if` por jefe.
+- **Pendiente:**
+  - Los números son una primera propuesta que hay que probar jugando. Lo primero: la vida del jefe frente al daño de una build del minuto 5 al 10.
+  - El premio aún no sirve de mucho, porque la partida termina al vencerlo. Pesará cuando lleguen el bote y «¿Cobrar o Doblar?» (Hitos 7 y 8).
+  - El salto confía en la física: aterriza cuando deja de caer o, si algo lo frena, pasado el doble de su tiempo en el aire.
+  - Los refuerzos no cuentan para el máximo de enemigos a la vez.
+
+## 2026-11-17 · El juego empieza en español
+- **Decisión:** el idioma es una opción más (`GameSettings.locale`, guardada en `user://settings.cfg`). Un juego recién estrenado empieza en español (`SettingsData.default_locale = "es"`) aunque el sistema esté en otro idioma, y `Save` lo aplica al arrancar. El inglés sigue traducido.
+- **Por qué:** lo pidió el diseñador. Se hace en las opciones y no en `project.godot` para que un selector de idioma futuro solo tenga que cambiar esa opción.
+
+## 2026-11-18 · Equilibrio: menos escalado y personajes más parejos
+- **Problema** (del diseñador, jugando): todo escalaba demasiado (armas y mejoras); el Guerrero se disparaba y el Mago y el Pícaro se sentían flojos.
+- **Cómo se midió:** una simulación por terminal. Cada personaje, quieto, contra una horda de 104 esbirros inmortales a su alrededor y contra uno solo (un jefe). Al empezar, y con una build de mitad de partida: arma a nivel 10 con mejoras tiradas, Fuerza y Multiplicidad a nivel 8 (o su máximo) y nivel 25. Daño por segundo medio de 6 tiradas:
+
+  | | Horda antes | Horda ahora | Jefe antes | Jefe ahora |
+  |---|---|---|---|---|
+  | Guerrero | 172 → 12.480 (×72) | 133 → 4.950 (×37) | 20 → 493 | 20 → 328 |
+  | Mago | 116 → 4.060 (×35) | 177 → 5.160 (×29) | 14 → 259 | 17 → 239 |
+  | Pícaro | 16 → 1.940 (×124) | 69 → 1.840 (×27) | 17 → 529 | 22 → 384 |
+
+  Hacia el minuto 10 los enemigos tienen ×5 de vida y salen ×6 más a menudo (×30 en total): la build ya no los deja tan atrás.
+- **Decisión:**
+  - **Lo que más multiplicaba eran los proyectiles** (cada uno es un golpe entero más):
+    - Multiplicidad llega como mucho a nivel 3 (antes, 20).
+    - Al subir un arma, la mejora de proyectiles sale la mitad de veces: `UpgradeStat.weight` = 0,5 (el resto, 1).
+  - **Runas por nivel:** Fuerza y Amplitud, +6 % (antes +10 %); Prisa, +5 % (antes +8 %).
+  - **Rarezas:** de leyenda ×1,75 (antes ×2) y mítica ×2 (antes ×2,5).
+  - **Espada:** mejora de daño +3 (antes +5) y de área +5 % (antes +12 %), porque el área hace el arco más grande y le da enemigos en proporción al cuadrado; tiempo de recarga ×0,95 (antes ×0,92).
+  - **Bastón:** daño 26 (antes 18), proyectil a 15 m/s (antes 12), explosión de 2,2 m (antes 2); mejoras de daño +3,5, de radio +10 % y de recarga ×0,94.
+  - **Daga:** daño 15 (antes 12), recarga 0,7 s (antes 0,8) y empieza con 2 rebotes; mejoras de daño +2,5 y de recarga ×0,94.
+  - **Pasivas** (las pidió así el diseñador): todas suben una stat por nivel, como Letal. Son datos de `LevelStatPassive`:
+    - Veterano (Guerrero): +1 % de daño;
+    - Expansión arcana (Mago): +1 % de área;
+    - Letal (Pícaro): +1 % de crítico.
+    - Se quitan Aguante y Eco arcano. Con ellos se van `Weapon.attack_started` y `add_shots`, que solo usaba el Eco.
+- **Resultado:** el Guerrero y el Mago son los de la horda (de cerca y en área); el Pícaro, el mejor contra un solo enemigo.
+- **Pendiente:** el *feel* lo decide el diseñador jugando. La simulación no se mueve ni recibe daño, y los enemigos están quietos y muy juntos (favorece el área).
+
+## 2026-11-18 · Botín más llamativo
+- **Decisión:** los power-ups (comida, imán, bomba y bebida energética) llevan un `DropGlow`: una columna de luz corta y un aro que late en el suelo, del color de cada uno. Las gemas de experiencia laten y destellan en los bordes, y las monedas destellan al ponerse de cara. Todo en shaders, sin `_process`. El aro (`ground_ring.gdshader`) pasa a `vfx/shaders` porque lo usan el jefe y los power-ups.
+- **Por qué:** lo pidió el diseñador: entre la horda no se veía lo que soltaban los enemigos. Los power-ups son pocos (pueden llevar mallas propias); las gemas salen a cientos, así que solo cambia su shader.
+
+## 2026-11-18 · Aviso sutil de lo que se puede usar
+- **Decisión:** lo que se usa con «interactuar» destella encima de sus mallas (`material_overlay`). Lo hace `InteractHint`, que escucha a su `Interactable`:
+  - De siempre, un borde de luz muy suave y una franja que lo recorre de abajo arriba cada 3 s. La franja es un plano algo inclinado que barre el mundo: las piezas de un objeto destellan a la vez y cada objeto, a su momento.
+  - El elegido (el más cercano, el que se usaría con E) lleva un borde más marcado y franjas más seguidas: el `Interactor` se lo dice con `Interactable.set_focused`.
+  - Al desactivarse (cofre abierto, altar usado), nada.
+  - Solo en las mallas: con un texto (`Label3D`) encima se vería un rectángulo.
+- **Por qué:** lo pidió el diseñador, algo sutil. Un borde fijo en todo el mapa cansaría la vista; una franja de vez en cuando se nota sin molestar.
+
+## 2026-11-18 · Ruinas en el Brosque
+- **Decisión:** tres piezas nuevas de piedra con musgo, repartidas por el mapa generado fuera del claro: un templo de columnas rotas (1), muros caídos (3) y arcos medio derrumbados (2). Tienen colisión; sus bordes, de hasta 2,6 m, se pueden subir con el mantle. Solo mallas básicas y tres materiales (`ruin_stone`, `ruin_stone_dark` y `moss`).
+- **Por qué:** lo pidió el diseñador, para que el Brosque parezca más medieval. Como piezas del `LayoutData`, salen en sitios distintos en cada partida y no se pisan con lo demás.
+
+## 2026-11-18 · Ent-renador: las tarjetas justas y menos daño
+- **Decisión:** en el Brosque hay exactamente las tarjetas que pide el jefe (3; un test lo exige). El Ent-renador hace menos daño: al tocar, 16 (antes 22); la onda del Burpee, ×1,3 (antes ×1,6); las embestidas, ×1,25 (antes ×1,5).
+- **Por qué:** lo pidió el diseñador jugando: sobraban tarjetas y el jefe pegaba demasiado.
+
+## 2026-11-18 · Equilibrio, segunda vuelta: las comunes mejoran poco
+- **Corrección del diseñador:** sin topes nuevos (armas hasta 10 y runas hasta 20, también Multiplicidad: se podrán ampliar) y sin cambiar lo a menudo que sale cada mejora. El problema eran las cartas comunes, demasiado buenas.
+- **Decisión:**
+  - Se deshacen el tope 3 de Multiplicidad y el peso de las mejoras (`UpgradeStat.weight`).
+  - La rareza pesa más: la mejora base de cada stat es la de una carta rara, y cada rareza la multiplica así: común ×0,6, rara ×1, improbable ×1,4, de leyenda ×1,8 y mítica ×2,4 (antes 1 / 1,25 / 1,5 / 2 / 2,5).
+  - Las mejoras base vuelven a valores parecidos a los originales:
+    - Fuerza y Amplitud, +10 %; Prisa, +8 %;
+    - espada: +5 de daño, +8 % de área y ×0,92 de recarga;
+    - bastón: +5 de daño, +12 % de radio, +15 % de velocidad de proyectil y ×0,92;
+    - daga: +4 de daño, +12 % de velocidad de proyectil y ×0,92.
+  - Los enteros (proyectiles, rebotes) siguen dando como poco 1.
+  - Daño de base: espada 18 (antes 20) y daga 17 (antes 15).
+- **Resultado** (`tools/sim_balance.gd`, % de la media en su escenario):
+
+  | | Horda, build | Jefe, build | Media |
+  |---|---|---|---|
+  | Guerrero | 111 % | 97 % | 104 % |
+  | Mago | 132 % | 66 % | 99 % |
+  | Pícaro | 57 % | 136 % | 97 % |
+
+  Cada uno tiene su papel: el Mago, la horda; el Pícaro, el jefe; y el Guerrero, bueno en los dos.
+- **Para personajes nuevos:** la simulación toma todos los de `data/characters/`. Un personaje nuevo debería quedar cerca del 100 % en la media de los dos escenarios, fuerte en su papel y flojo en el otro. Se pasa al tocar armas, runas, rarezas o personajes.
+- **Pendiente:** con Multiplicidad hasta 20, una build que la suba mucho se dispara (cada proyectil es un golpe entero). Si al jugar se nota, el siguiente paso es que la carta común de enteros no siempre dé 1.
+
+## 2026-11-18 · «I-frames» del jugador
+- **Decisión:** nueva stat de vida, `invulnerability_time`: tras un golpe que hace daño, no se recibe más durante ese tiempo. El jugador tiene 0,3 s; los enemigos, 0. Se ve: el modelo del jugador parpadea (`InvulnerabilityBlink`).
+  - El tiempo se mide con el reloj de la física (`PhysicsClock`, sacado de la hitbox, que ya lo usaba): la vida no necesita `_process`.
+  - Un golpe esquivado no da invulnerabilidad.
+- **Por qué:** lo pidió el diseñador. Con la horda encima, varios golpes en el mismo instante quitaban la vida de golpe. Es una stat, así que algo podrá mejorarla.
+
+## 2026-11-18 · Los golpes empujan
+- **Decisión:** cada golpe (`DamageInfo`) lleva un empuje: una velocidad en el suelo, desde quien golpea hacia quien recibe.
+  - **Del jugador:** el de cada arma (`WeaponStats.knockback`: espada 7 m/s, bastón 6, daga 3) por su retroceso % (`OffenseData.knockback`, 100 %, mejorable más adelante). La explosión del bastón empuja hacia fuera desde su centro.
+  - **De los enemigos:** fijo, al tocar (`EnemyStats.knockback`: esbirro 4, tirador 3, Bro-te 3, Ent-renador 10; el disparo del tirador, 2). La embestida del Ent-renador empuja ×2 y su onda, 9 m/s hacia fuera.
+  - **Al recibirlo**, un enemigo lo suma a su velocidad dividido por su masa: los élites (más pesados) y el jefe (40) se mueven menos. Se suma a la velocidad y no con un impulso de la física, porque el rumbo del enjambre lo pisaría antes de aplicarse.
+  - **El jugador** lo recibe en `KnockbackReceiver`: lo suelta sobre el cuerpo y se frena a 40 m/s². Va aparte de la velocidad del movimiento, así que los estados no lo pisan. No le empuja un golpe esquivado.
+- **Por qué:** lo pidió el diseñador. El árbol atravesaba al jugador sin moverlo y quedaba raro, y pegar sin empujar se sentía plano.
+
+## 2026-11-18 · Textos breves en el HUD
+- **Decisión:** un aviso genérico, `AnnouncementFeed`, en el centro bajo la barra del jefe. Escucha `EventBus.announced` (clave, valores y color): cada texto sale con un pequeño salto, se ve 1,6 s, se desvanece, y se apilan hasta 5. Los power-ups dicen el suyo al recogerlos (`PickupData.announce_key` y `announce_color`, del color de su columna de luz):
+  - imán, «¡Succión activada!»;
+  - comida, «¡Pollito ñam ñam!»;
+  - bomba, «¡Nuclear activada!»;
+  - bebida energética, «¡Modo diablo activado!».
+- **Por qué:** lo pidió el diseñador. Es genérico porque también lo usan las mejoras de la tragaperras (de su rareza) y lo que venga.
+
+## 2026-11-18 · Mejoras de la tragaperras: elegir y «todo mejorado»
+- **Decisión** (elegida por el diseñador):
+  - **Pareja de estrellas:** se elige como al subir de nivel. `UpgradeChoiceEffect` pide la elección (`upgrade_choice_requested`). El `LevelUpController` la pone en la misma cola que las subidas de nivel y abre las cartas con el título «¡Mejora gratis!».
+  - **Trío de estrellas:** «¡JACKPOT! Todo mejorado». `UpgradeAllEffect` sube un nivel cada arma y runa que no esté al máximo, cada una con su mejora tirada con la Suerte. Cada subida sale en el HUD («Espada sube a nivel 4») del color de su rareza.
+  - El viejo `UpgradeEffect` (al azar) pasa a ser `UpgradeAllEffect`.
+- **Por qué:** elegir es más interesante que el azar. El trío, más raro, recompensa con todo de golpe y enseña qué ha salido.
+
+## 2026-11-18 · Power-up: parar el tiempo
+- **Decisión:** nuevo power-up, el reloj de arena (`data/pickups/time_stop.tres`). Sale de la misma tabla que los demás (peso 1,5; la bomba tiene 2).
+  - Al cogerlo, el `EnemySwarm` para el tiempo 5 s (`freeze_for`). Cada enemigo se congela (`Enemy.set_frozen`): su cuerpo pasa a estático, sin daño al tocar ni armas, y se le puede seguir golpeando. Los que salen mientras nacen congelados.
+  - Los disparos enemigos se paran en el aire: su pool deja de procesarse.
+  - La pantalla se tiñe de azul (`TimeStopFilter`, una capa bajo el HUD con un shader que desatura y tiñe), y el HUD dice «¡Tiempo detenido!».
+- **Por qué:** lo pidió el diseñador. Congelar en vez de pausar deja que el jugador siga pegando y moviéndose: es un respiro y una ventana de daño. El director sigue sacando enemigos, que nacen congelados, y el reloj de la ronda no se para.
+
+## 2026-11-18 · Selector de idioma en el menú principal
+- **Decisión:** abajo a la izquierda del menú principal, pequeño, un `LanguagePicker`: un desplegable con un globo y el idioma actual. Ofrece un idioma por cada traducción cargada, con su nombre en su propio idioma (la clave `LANGUAGE_NAME` de cada columna del CSV: «Español», «English»). Al elegir, lo pone al momento y lo guarda en las opciones (`GameSettings.locale`). Un idioma nuevo aparece solo al añadir su columna.
+- **Por qué:** lo pidió el diseñador, a mano y sin estorbar el menú. Va en `ui/widgets/` para poder ponerlo también en las opciones.
+
+## 2026-11-18 · Las armas solo apuntan a lo que se ve
+- **Decisión:** el `TargetFinder` descarta los objetivos que no se ven. Lanza un rayo desde el pecho de quien dispara hasta el centro del objetivo contra las capas que tapan la vista (`Weapon.sight_mask`: el mundo, con árboles, mesetas, ruinas y props). Los rayos se tiran del más cercano al más lejano y solo hasta tener los objetivos que hacen falta. Vale para todas las armas: el tirador tampoco dispara a través de un árbol.
+- **Por qué:** lo pidió el diseñador. Disparar a lo que no se ve gastaba ataques contra paredes y quedaba raro.
+- **Coste:** como mucho un rayo por candidato al buscar (una vez por ataque, o cada `search_interval` sin objetivo).
+
+## 2026-11-18 · Ritmo más tranquilo: menos enemigos, menos vida, todo algo más lento
+- **Petición del diseñador:** bajar la cantidad de enemigos y su vida, y que el jugador y los enemigos no vayan tan rápido.
+- **Decisión** (oleadas del Brosque y datos de enemigos y jugador):
+  - **Enemigos por segundo**, un 25 % menos en toda la curva: 0,6 al empezar (antes 0,8), 3,75 con dificultad 10 (antes 5), 9 con 15 (antes 12). Picos ×2 (antes ×2,5) y como mucho 180 a la vez (antes 250).
+  - **Vida de base:** esbirro 38 (antes 45), tirador 26 y Bro-te 26 (antes 30).
+  - **Vida por dificultad**, un 15-25 % menos: ×1,4 con 3, ×2,2 con 6, ×4,2 con 10 (antes ×5), ×9 con 11 y ×110 con 20 (antes 150).
+  - **Velocidad**, un 10 % menos:
+    - enemigos: esbirro 4,6, tirador 3,1, Bro-te 5,6, Ent-renador 3,8 y su embestida 18 m/s;
+    - jugador: correr 6,8, esprintar 8,8, dash 21,6 (salida 9,2) y slide de 4,6 a 16,8 m/s.
+  - **Experiencia y oro por enemigo**, un 30 % más (esbirro 1,3; tirador 2,6; Bro-te 0,65). Como salen un 25 % menos, se sube de nivel y se gana oro más o menos igual que antes.
+- **Pendiente:** el *feel* lo decide el diseñador jugando. Si la ronda se queda corta de presión hacia el minuto 8-10, lo primero es subir la curva de enemigos por segundo en ese tramo.
+
+## 2026-11-18 · Taberna en la pared del Brosque
+- **Decisión:** una taberna medieval en el centro de la pared norte, mirando hacia dentro y con media casa tras la pared invisible. No se entra.
+  - Al acercarse, «interactuar» cura la mitad de la vida máxima por oro: 15 + 3 × dificultad, ×1,5 por cada uso de esa taberna. Con la vida llena no cobra.
+  - Lo dice en el HUD: «¡Salud!», «Sin oro no hay jarra» o «Ya estás como una rosa».
+  - La mecánica es `HealShop` con `HealShopData`, así que otro nivel puede tener su propio sitio de curas.
+  - Su sitio está reservado en el mapa generado (`LayoutData.reserved`: x, z y radio). Ahí no va ninguna pieza ni ningún árbol, tampoco los del anillo del borde y la banda de fuera, que antes no miraban nada.
+- **Por qué:** lo pidió el diseñador. Curar por oro compite con los cofres y las tragaperras: otra decisión de en qué gastar.
+
+## 2026-11-18 · Círculo de setas y objetos medievales
+- **Decisión:**
+  - **Círculo de setas** (`ChoiceShrine` con un `ItemPool`): hay dos por el Brosque, como piezas del mapa, con un aro y una columna de luz moradas.
+    - Al usarlo ofrece 3 objetos pasivos distintos, tirados con la Suerte (`ItemPool.roll_several`), y se elige uno en un panel que pausa (`ItemChoicePanel`).
+    - Se usa una vez y se apaga. Es gratis: el precio es ir a buscarlo.
+  - **8 objetos medievales** (ya hay 23):
+
+    | Rareza | Objetos |
+    |---|---|
+    | Común | herradura (+6 Suerte), hogaza de centeno (+0,5 vida/s), jarra de hidromiel (+10 % experiencia) |
+    | Rara | capa de viaje (+5 % carrera y sprint), antorcha (+10 % área) |
+    | Improbable | ballesta de bolsillo (+20 % velocidad de proyectil, +3 % crítico) |
+    | De leyenda | grial de latón (+1,2 vida/s, +10 % vida) |
+    | Mítica | Excalibro (+25 % daño, +10 % crítico) |
+
+  - Los paneles que pausan y obligan a elegir comparten base (`ModalPanel`) y piezas de carta (`CardParts`), sacadas del de subir de nivel.
+- **Por qué:** lo pidió el diseñador. Elegir entre tres premia explorar sin pagar.
+
+## 2026-11-18 · Récords locales de partidas
+- **Decisión:**
+  - **Qué se guarda:** al morir o al vencer al jefe, `RunRecorder` apunta la partida (`RunRecord`): personaje, mapa, enemigos y élites derrotados, tiempo, nivel alcanzado, si se ganó y cuándo. La guarda `Save.record_run()` en `user://leaderboard.cfg`, una sola vez por partida. Abandonar desde la pausa no cuenta.
+  - **Orden:** `Leaderboard` ordena por enemigos derrotados. A igualdad, primero las victorias y luego las partidas más largas. Guarda las 20 mejores (`SettingsData.leaderboard_size`).
+  - **Dónde se ve:** «Récords», en el menú principal (`LeaderboardPanel`), con la última partida en azul. Al acabar una partida, los resultados dicen su puesto si entró.
+  - **Tests:** solo apunta el `RunRecorder` de `run_systems.tscn` (`record_runs`). Un hook de GUT previo (`tests/hooks/pre_run.gd`) lleva los récords a un archivo de pruebas durante toda la ejecución, así un test que mate al jugador en un nivel entero no ensucia los de verdad.
+  - **Personaje:** se guarda como el nombre del archivo (`warrior`) y su clave de nombre, ya que `CharacterData` no tiene id propio.
+- **Por qué:** lo pidió el diseñador: ver tus partidas ordenadas por enemigos y con qué personaje. Solo en local: no hay cuentas ni servidor.
+
+## 2026-11-18 · Enemigos de las oleadas algo más duros
+- **Decisión:** suben las stats de base del esbirro y del tirador. Como el escalado por dificultad las multiplica, también pegan más en los minutos altos.
+
+  | Enemigo | Vida | Daño |
+  |---|---|---|
+  | Esbirro | 38 → 46 | contacto 8 → 10 |
+  | Tirador | 26 → 32 | contacto 4 → 5, disparo 10 → 12 |
+
+  No cambian ni la velocidad ni la cantidad de enemigos (se bajaron a propósito en el cambio de ritmo). Tampoco el jefe ni sus Bro-tes.
+- **Por qué:** el diseñador vio que, tras el cambio de ritmo, la partida se había vuelto muy fácil y a los enemigos les costaba seguir el ritmo del jugador. Del jefe dijo que estaba bien así.

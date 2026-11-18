@@ -43,7 +43,7 @@ func test_a_mythic_upgrade_touches_every_stat_stronger() -> void:
 		assert_does_not_have(touched, modifier.stat, "sin repetir stat")
 		touched.append(modifier.stat)
 		if modifier.stat == &"damage":
-			assert_almost_eq(modifier.value, 5.0 * MYTHIC.power, 0.001)
+			assert_almost_eq(modifier.value, _common_value(SWORD, &"damage") * MYTHIC.power, 0.001)
 	assert_eq(touched.size(), SWORD.upgrade_stats.size())
 
 
@@ -63,3 +63,11 @@ func test_whole_numbers_are_rounded_and_multipliers_scale_from_one() -> void:
 
 func test_each_default_upgrade_is_a_new_one() -> void:
 	assert_ne(SWORD.default_upgrade(), SWORD.default_upgrade(), "se pueden quitar por separado")
+
+
+## Mejora de [param stat] de una carta común en [param item].
+func _common_value(item: ItemData, stat: StringName) -> float:
+	for upgrade_stat: UpgradeStat in item.upgrade_stats:
+		if upgrade_stat.stat == stat:
+			return upgrade_stat.value
+	return 0.0

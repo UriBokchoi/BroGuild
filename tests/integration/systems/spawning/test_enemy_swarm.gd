@@ -1,9 +1,10 @@
 extends GutTest
 ## EnemySwarm con física real y el esbirro: saca enemigos del pool, los lleva hacia el objetivo
-## chocando entre sí (pueden quedar apilados), los guarda al morir para reutilizarlos y retira a los
-## que caen del mapa.
+## chocando entre sí (pueden quedar apilados), los guarda al morir para reutilizarlos (mientras
+## mueren ya no chocan con nadie) y retira a los que caen del mapa.
 
 const SWARMER := preload("res://data/enemies/swarmer.tres")
+const ELITE := preload("res://data/enemies/elite.tres")
 
 var _swarm: EnemySwarm
 var _target: Node3D
@@ -81,11 +82,34 @@ func test_enemies_that_fall_off_are_retired() -> void:
 	assert_eq(_swarm.active_count(), 0)
 
 
+func test_a_dying_enemy_no_longer_blocks_anyone() -> void:
+	var enemy := _swarm.spawn(SWARMER, Vector3.ZERO)
+	var layer := enemy.collision_layer
+	var mask := enemy.collision_mask
+	enemy.health.take_damage(DamageInfo.create(enemy.health.get_maximum() * 10.0))
+	assert_eq(enemy.collision_layer, 0, "ni el jugador ni los demás chocan con él")
+	assert_eq(enemy.collision_mask, PhysicsLayers.mask(PhysicsLayers.WORLD), "solo se apoya en el suelo")
+	await wait_seconds(enemy.death_time + 0.1)
+	var again := _swarm.spawn(SWARMER, Vector3.ZERO)
+	assert_same(again, enemy, "el mismo, del pool")
+	assert_eq(again.collision_layer, layer, "vivo, vuelve a chocar")
+	assert_eq(again.collision_mask, mask)
+
+
 func test_clear_retires_everyone() -> void:
 	for index: int in 3:
 		_swarm.spawn(SWARMER, Vector3(index * 2.0, 0.0, 0.0))
 	_swarm.clear()
 	assert_eq(_swarm.active_count(), 0)
+
+
+func test_clear_can_let_the_dying_finish() -> void:
+	var dying := _swarm.spawn(SWARMER, Vector3(0.0, 0.0, 0.0))
+	var alive := _swarm.spawn(SWARMER, Vector3(3.0, 0.0, 0.0))
+	dying.health.take_damage(DamageInfo.create(dying.health.get_maximum() * 10.0))
+	_swarm.clear(true)
+	assert_eq(_swarm.get_active(), [dying] as Array[Enemy], "el que muere termina de encoger (el jefe vencido)")
+	assert_false(alive.visible)
 
 
 func _add_ground() -> void:
@@ -98,3 +122,37 @@ func _add_ground() -> void:
 	shape.position = Vector3(0.0, -0.5, 0.0)
 	ground.add_child(shape)
 	add_child_autofree(ground)
+
+
+func test_hits_push_enemies_and_heavy_ones_less() -> void:
+	var light := _swarm.spawn(SWARMER, Vector3(0.0, 0.0, 0.0))
+	var heavy := _swarm.spawn(SWARMER, Vector3(0.0, 0.0, 6.0))
+	heavy.promote(ELITE)
+	await wait_physics_frames(2)
+	for enemy: Enemy in [light, heavy]:
+		enemy.hurtbox.receive(DamageInfo.create(1.0, false, null, Vector3(8.0, 0.0, 0.0)))
+	await wait_physics_frames(1)
+	assert_gt(light.linear_velocity.x, 3.0, "lo empuja")
+	assert_lt(heavy.linear_velocity.x, light.linear_velocity.x, "al élite, más pesado, menos")
+
+
+func test_time_stop_freezes_everyone_for_a_while() -> void:
+	_swarm.target = _target
+	_target.position = Vector3(20.0, 0.0, 0.0)
+	var enemy := _swarm.spawn(SWARMER, Vector3.ZERO)
+	await wait_physics_frames(2)
+	watch_signals(EventBus)
+	_swarm.freeze_for(0.3)
+	assert_true(_swarm.is_frozen())
+	assert_true(enemy.is_frozen())
+	assert_signal_emitted_with_parameters(EventBus, "time_stop_changed", [true])
+	var late := _swarm.spawn(SWARMER, Vector3(0.0, 0.0, 4.0))
+	assert_true(late.is_frozen(), "los que salen mientras, también")
+	assert_eq(_swarm.projectiles.process_mode, Node.PROCESS_MODE_DISABLED, "los disparos, parados en el aire")
+	var at := enemy.global_position
+	await wait_physics_frames(8)
+	assert_almost_eq(enemy.global_position, at, Vector3.ONE * 0.01, "quieto aunque tenga a quién perseguir")
+	await wait_seconds(0.3)
+	assert_false(_swarm.is_frozen())
+	assert_false(enemy.is_frozen())
+	assert_signal_emitted_with_parameters(EventBus, "time_stop_changed", [false])

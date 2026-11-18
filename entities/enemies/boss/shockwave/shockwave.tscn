@@ -1,0 +1,26 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://entities/enemies/boss/shockwave/shockwave.gd" id="1_wave"]
+[ext_resource type="Shader" path="res://vfx/shaders/ground_ring.gdshader" id="2_ring"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ring"]
+render_priority = 0
+shader = ExtResource("2_ring")
+shader_parameter/color = Color(1, 0.55, 0.2, 1)
+shader_parameter/intensity = 1.6
+shader_parameter/pulse_rate = 0.0
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ring"]
+material = SubResource("ShaderMaterial_ring")
+size = Vector2(2, 2)
+
+[node name="Shockwave" type="Node3D" node_paths=PackedStringArray("ring")]
+top_level = true
+script = ExtResource("1_wave")
+hit_mask = 8
+ring = NodePath("Ring")
+
+[node name="Ring" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.08, 0)
+cast_shadow = 0
+mesh = SubResource("PlaneMesh_ring")

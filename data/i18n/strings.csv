@@ -1,7 +1,9 @@
 keys,es,en
 GAME_TITLE,Bro Guild,Bro Guild
+LANGUAGE_NAME,Español,English
 MENU_PLAY,Jugar,Play
 MENU_OPTIONS,Opciones,Options
+MENU_RECORDS,Récords,Records
 MENU_ARCHIVE,Archivo,Archive
 MENU_QUIT,Abandonar,Quit game
 LEVEL_BROSQUE_NAME,El Brosque,The Brorest
@@ -18,6 +20,8 @@ SELECT_PASSIVE,Habilidad pasiva,Passive ability
 BROSQUE_INTRO_WELCOME,Bienvenido al Brosque,Welcome to the Brorest
 BROSQUE_INTRO_NO_PAIN,"No pain, no gain","No pain, no gain"
 BROSQUE_INTRO_LEG_DAY,Hoy toca pierna,It's leg day
+BROSQUE_INTRO_KEYS,Junta tarjetas de socio para invocar al Ent-renador,Collect membership cards to summon the Ent Trainer
+BROSQUE_VICTORY,¡Brosque superado!,Brorest cleared!
 PAUSE_TITLE,Pausa,Paused
 PAUSE_CONTINUE,Continuar,Resume
 PAUSE_OPTIONS,Opciones,Options
@@ -36,6 +40,10 @@ RESULTS_KILLS,Enemigos derrotados,Enemies defeated
 RESULTS_ELITE_KILLS,Élites derrotados,Elites defeated
 RESULTS_GOLD,Oro ganado,Gold earned
 RESULTS_DAMAGE,Daño infligido,Damage dealt
+RESULTS_BOSS_BONUS,Premio por rapidez,Speed bonus
+RESULTS_BOSS_BONUS_VALUE,×%s,×%s
+RESULTS_RECORD_PLACE,Puesto en récords,Records place
+RESULTS_RECORD_PLACE_VALUE,#%d,#%d
 RESULTS_RETRY,Reintentar (%s),Retry (%s)
 RESULTS_QUIT,Salir al menú,Main menu
 PAUSE_STATS_TITLE,Estadísticas,Stats
@@ -43,12 +51,18 @@ INTERACT_SLOTS,"Jugar a la tragaperras (%d de oro, quedan %d)","Play the slot ma
 SLOT_MACHINE_SIGN,TRAGAPERRAS,SLOTS
 SLOT_NOT_ENOUGH_GOLD,Te falta oro: cuesta %d,Not enough gold: it costs %d
 SLOT_NOTHING,Nada… a la próxima,Nothing… next time
+INTERACT_CHEST,"Abrir el cofre (%d de oro)","Open the chest (%d gold)"
+INTERACT_BOSS_KEY,Coger la tarjeta de socio,Grab the membership card
+BOSS_ALTAR_LOCKED,Faltan tarjetas de socio (%d de %d),Membership cards missing (%d of %d)
+BOSS_ALTAR_READY,Invocar al Ent-renador,Summon the Ent Trainer
+HUD_BOSS_KEYS,%d/%d,%d/%d
+CHEST_NOT_ENOUGH_GOLD,Te falta oro: cuesta %d,Not enough gold: it costs %d
 SLOT_WIN_GOLD,¡+%d de oro!,+%d gold!
 SLOT_JACKPOT_GOLD,¡JACKPOT! +%d de oro,JACKPOT! +%d gold
 SLOT_WIN_HEAL,Te curas un poco,You heal a bit
 SLOT_JACKPOT_HEAL,¡JACKPOT! Vida al máximo,JACKPOT! Full health
 SLOT_WIN_UPGRADE,¡Mejora gratis!,Free upgrade!
-SLOT_JACKPOT_UPGRADE,¡JACKPOT! Tres mejoras gratis,JACKPOT! Three free upgrades
+SLOT_JACKPOT_UPGRADE,¡JACKPOT! Todo mejorado,JACKPOT! Everything upgraded
 SLOT_CURSE_FRAILTY,Maldición: −20 % de vida máxima un minuto,Curse: −20% max health for a minute
 SLOT_CURSE_ELITES,¡Maldición! Cinco élites a por ti,Curse! Five elites are coming
 BREAK_SKULL,Romper la calavera,Break the skull
@@ -101,6 +115,7 @@ STAT_MAX_HEALTH,Vida máxima,Max health
 STAT_HEALTH_REGEN,Regeneración de vida,Health regen
 STAT_ARMOR,Defensa,Armor
 STAT_EVASION,Esquiva,Evasion
+STAT_INVULNERABILITY_TIME,Invulnerabilidad tras un golpe,Invulnerability after a hit
 STAT_LIFESTEAL,Robo de vida,Lifesteal
 STAT_GROUP_OFFENSE,Ataque,Offense
 STAT_DAMAGE,Daño,Damage
@@ -185,6 +200,18 @@ ENEMY_SWARMER_NAME,Esbirro,Minion
 ENEMY_SWARMER_DESCRIPTION,"Rápido y frágil; llega en enjambre.","Fast and frail; comes in swarms."
 ENEMY_SHOOTER_NAME,Tirador,Shooter
 ENEMY_SHOOTER_DESCRIPTION,"Se queda a distancia y dispara bolas de fuego lentas; no te quedes quieto.","Keeps its distance and shoots slow fireballs; don't stand still."
+ENEMY_SAPLING_NAME,Bro-te,Sprout Bro
+ENEMY_SAPLING_DESCRIPTION,"Los alumnos del Ent-renador: pequeños, rápidos y con muchas ganas.","The Ent Trainer's students: small, fast and very eager."
+ENEMY_ENT_TRAINER_NAME,El Ent-renador,The Ent Trainer
+ENEMY_ENT_TRAINER_DESCRIPTION,"Jefe del Brosque: un árbol centenario con silbato y cinta en la frente. Nunca se salta el día de pierna.","Boss of the Brorest: an ancient tree with a whistle and a headband. Never skips leg day."
+ENT_TRAINER_ARRIVES,¡Llega el Ent-renador!,The Ent Trainer is here!
+ENT_TRAINER_ARRIVES_LINE,Hora de entrenar,Workout time
+ENT_TRAINER_SHOUT_BURPEE,"¡Burpees, ya!","Burpees, now!"
+ENT_TRAINER_SHOUT_ONE_MORE,¡Una más!,One more rep!
+ENT_TRAINER_SHOUT_SETS,¡Tres series!,Three sets!
+ENT_TRAINER_SHOUT_NO_EXCUSES,¡Sin excusas!,No excuses!
+ENT_TRAINER_SHOUT_SPROUTS,"¡Bro-tes, a calentar!","Sprouts, warm up!"
+ENT_TRAINER_SHOUT_ENRAGE,"¡Si no duele, no crece!","If it doesn't hurt, it doesn't grow!"
 ENEMY_ELITE_NAME,%s élite,Elite %s
 INTERACT_SUMMON,Invocar enemigos,Summon enemies
 INTERACT_WAVES_START,Empezar oleadas,Start waves
@@ -207,6 +234,8 @@ RUNE_MULTIPLICITY_DESCRIPTION,"Más proyectiles (también más tajos con la espa
 ARMORY_WEAPONS,Armas,Weapons
 ARMORY_RUNES,Runas,Runes
 LEVEL_UP_TITLE,¡Nivel %d!,Level %d!
+LEVEL_UP_FREE_TITLE,¡Mejora gratis!,Free upgrade!
+UPGRADE_ANNOUNCE,%s sube a nivel %d,%s up to level %d
 LEVEL_UP_CHOOSE,Elige una mejora,Choose an upgrade
 LOADOUT_MAX,MÁX,MAX
 RARITY_COMMON,Común,Common
@@ -214,6 +243,36 @@ RARITY_RARE,Rara,Rare
 RARITY_IMPROBABLE,Improbable,Improbable
 RARITY_LEGENDARY,De leyenda,Legendary
 RARITY_MYTHIC,Mítica,Mythic
+ITEM_PROTEIN_SHAKE_NAME,Batido de proteínas,Protein Shake
+ITEM_PROTEIN_SHAKE_DESCRIPTION,"+10 % de vida máxima.","+10% max health."
+ITEM_FANNY_PACK_NAME,Riñonera,Fanny Pack
+ITEM_FANNY_PACK_DESCRIPTION,"+15 % de oro.","+15% gold."
+ITEM_BODY_OIL_NAME,Aceite corporal,Body Oil
+ITEM_BODY_OIL_DESCRIPTION,"+5 % de esquiva: los golpes resbalan.","+5% evasion: hits slip right off."
+ITEM_LIFTING_BELT_NAME,Cinturón de levantar,Lifting Belt
+ITEM_LIFTING_BELT_DESCRIPTION,"+10 de defensa.","+10 armor."
+ITEM_GOLDEN_DUMBBELL_NAME,Mancuerna de oro,Golden Dumbbell
+ITEM_GOLDEN_DUMBBELL_DESCRIPTION,"+1 proyectil en todas las armas.","+1 projectile on every weapon."
+ITEM_SHADY_SHAKE_NAME,Batido sospechoso,Shady Shake
+ITEM_SHADY_SHAKE_DESCRIPTION,"+25 % de daño, pero +3 de dificultad.","+25% damage, but +3 difficulty."
+ITEM_BRO_CROWN_NAME,Corona del Bro,Bro Crown
+ITEM_BRO_CROWN_DESCRIPTION,"+15 % de daño, velocidad de ataque, vida máxima y área.","+15% damage, attack speed, max health and area."
+ITEM_COLD_PIZZA_NAME,Pizza fría de ayer,Last Night's Cold Pizza
+ITEM_COLD_PIZZA_DESCRIPTION,"+0,4 de vida por segundo. Mejor que recién hecha.","+0.4 health per second. Better than fresh."
+ITEM_GAME_CONTROLLER_NAME,Mando de consola,Game Controller
+ITEM_GAME_CONTROLLER_DESCRIPTION,"+8 % de velocidad de ataque: aporrear botones también es entrenar.","+8% attack speed: button mashing counts as training."
+ITEM_BACKWARDS_CAP_NAME,Gorra hacia atrás,Backwards Cap
+ITEM_BACKWARDS_CAP_DESCRIPTION,"+10 % de daño. Ahora va en serio.","+10% damage. Now it's serious."
+ITEM_SOCKS_AND_SANDALS_NAME,Chanclas con calcetines,Socks and Sandals
+ITEM_SOCKS_AND_SANDALS_DESCRIPTION,"+6 % de velocidad al correr y al esprintar. Comodidad ante todo.","+6% run and sprint speed. Comfort above all."
+ITEM_SCRATCH_CARD_NAME,Rasca y gana,Scratch Card
+ITEM_SCRATCH_CARD_DESCRIPTION,"+10 de Suerte: mejoras y cofres más raros.","+10 Luck: rarer upgrades and chests."
+ITEM_BLUETOOTH_SPEAKER_NAME,Altavoz portátil,Bluetooth Speaker
+ITEM_BLUETOOTH_SPEAKER_DESCRIPTION,"+12 % de área. Que se entere todo el bosque.","+12% area. Let the whole forest hear it."
+ITEM_SUNGLASSES_NAME,Gafas de sol,Sunglasses
+ITEM_SUNGLASSES_DESCRIPTION,"+6 % de crítico. También de noche.","+6% crit chance. Even at night."
+ITEM_GOLD_CHAIN_NAME,Cadena de oro,Gold Chain
+ITEM_GOLD_CHAIN_DESCRIPTION,"+25 % de oro y +10 de Suerte.","+25% gold and +10 Luck."
 LEVEL_UP_NEW,Nuevo,New
 LEVEL_UP_LEVEL,Nv. %d → %d,Lv. %d → %d
 ITEM_KIND_WEAPON,Arma,Weapon
@@ -236,10 +295,50 @@ CHARACTER_MAGE_NAME,Mago,Mage
 CHARACTER_MAGE_DESCRIPTION,"Frágil pero arrollador: más área y experiencia, y planea manteniendo el salto.","Frail but overwhelming: more area and experience, and glides while holding jump."
 CHARACTER_ROGUE_NAME,Pícaro,Rogue
 CHARACTER_ROGUE_DESCRIPTION,"Rápido y escurridizo: más velocidad, crítico y stamina, y un salto más en el aire.","Fast and slippery: more speed, crit and stamina, and an extra air jump."
-PASSIVE_ENDURANCE_NAME,Aguante,Endurance
-PASSIVE_ENDURANCE_DESCRIPTION,"+2 % de daño por cada enemigo a menos de 5 m (hasta +30 %).","+2% damage for each enemy within 5 m (up to +30%)."
-PASSIVE_ARCANE_ECHO_NAME,Eco arcano,Arcane echo
-PASSIVE_ARCANE_ECHO_DESCRIPTION,"Cada 4.º ataque de cada arma sale dos veces.","Every 4th attack of each weapon fires twice."
+PASSIVE_VETERAN_NAME,Veterano,Veteran
+PASSIVE_VETERAN_DESCRIPTION,"+1 % de daño por cada nivel.","+1% damage per level."
+PASSIVE_ARCANE_EXPANSION_NAME,Expansión arcana,Arcane expansion
+PASSIVE_ARCANE_EXPANSION_DESCRIPTION,"+1 % de área por cada nivel.","+1% area per level."
 PASSIVE_LETHAL_NAME,Letal,Lethal
 PASSIVE_LETHAL_DESCRIPTION,"+1 % de probabilidad de crítico por cada nivel.","+1% crit chance per level."
 INTERACT_CHOOSE_CHARACTER,Jugar con este personaje,Play as this character
+PICKUP_FOOD_ANNOUNCE,¡Pollito ñam ñam!,"Chicken, nom nom!"
+PICKUP_MAGNET_ANNOUNCE,¡Succión activada!,Suction on!
+PICKUP_BOMB_ANNOUNCE,¡Nuclear activada!,Going nuclear!
+PICKUP_ENERGY_ANNOUNCE,¡Modo diablo activado!,Devil mode on!
+PICKUP_TIME_STOP_ANNOUNCE,¡Tiempo detenido!,Time stop!
+INTERACT_TAVERN,"Tomar una jarra: cura la mitad (%d de oro)","Have a pint: heals half (%d gold)"
+TAVERN_HEALED,¡Salud!,Cheers!
+TAVERN_NO_GOLD,"Sin oro no hay jarra (%d de oro)","No gold, no pint (%d gold)"
+TAVERN_FULL,Ya estás como una rosa,You're already in top shape
+ITEM_HORSESHOE_NAME,Herradura,Horseshoe
+ITEM_HORSESHOE_DESCRIPTION,"Trae suerte, o eso dice el herrero.","Brings luck, or so the blacksmith says."
+ITEM_RYE_BREAD_NAME,Hogaza de centeno,Rye loaf
+ITEM_RYE_BREAD_DESCRIPTION,"Dura una semana y alimenta un mes.","Lasts a week and feeds you for a month."
+ITEM_MEAD_NAME,Jarra de hidromiel,Tankard of mead
+ITEM_MEAD_DESCRIPTION,Todo se aprende mejor con hidromiel.,Everything is easier to learn with mead.
+ITEM_TRAVEL_CLOAK_NAME,Capa de viaje,Travel cloak
+ITEM_TRAVEL_CLOAK_DESCRIPTION,Ondea al viento aunque no haga viento.,It flutters even when there's no wind.
+ITEM_TORCH_NAME,Antorcha,Torch
+ITEM_TORCH_DESCRIPTION,Ilumina un buen trozo de bosque.,Lights up a good chunk of forest.
+ITEM_POCKET_CROSSBOW_NAME,Ballesta de bolsillo,Pocket crossbow
+ITEM_POCKET_CROSSBOW_DESCRIPTION,Cabe en la riñonera.,Fits in your fanny pack.
+ITEM_BRASS_GRAIL_NAME,Grial de latón,Brass grail
+ITEM_BRASS_GRAIL_DESCRIPTION,"No es el de verdad, pero cura igual.","Not the real one, but it heals just the same."
+ITEM_EXCALIBRO_NAME,Excalibro,Excalibro
+ITEM_EXCALIBRO_DESCRIPTION,Solo un bro de verdad podía sacarla de la roca.,Only a true bro could pull it from the stone.
+ITEM_CHOICE_TITLE,El círculo de setas te ofrece…,The mushroom ring offers you…
+ITEM_CHOICE_SUBTITLE,Elige uno,Pick one
+INTERACT_MUSHROOM_RING,Entrar en el círculo de setas,Step into the mushroom ring
+RECORDS_TITLE,Récords,Records
+RECORDS_SUBTITLE,"Tus mejores partidas en este equipo, por enemigos derrotados. En azul, la última.","Your best runs on this computer, by enemies defeated. In blue, the latest one."
+RECORDS_EMPTY,Aún no hay partidas. ¡A repartir!,No runs yet. Go get 'em!
+RECORDS_RANK,#,#
+RECORDS_CHARACTER,Personaje,Character
+RECORDS_KILLS,Enemigos,Enemies
+RECORDS_TIME,Tiempo,Time
+RECORDS_LEVEL,Nivel,Level
+RECORDS_MAP,Mapa,Map
+RECORDS_RESULT,Resultado,Result
+RECORDS_WON,Victoria,Victory
+RECORDS_LOST,Derrota,Defeat

@@ -1,0 +1,126 @@
+[gd_scene format=3]
+
+[ext_resource type="Material" path="res://levels/brosque/materials/ruin_stone.tres" id="1_stone"]
+[ext_resource type="Material" path="res://levels/brosque/materials/ruin_stone_dark.tres" id="2_dark"]
+[ext_resource type="Material" path="res://levels/brosque/materials/moss.tres" id="3_moss"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_base"]
+material = ExtResource("2_dark")
+size = Vector3(6, 0.8, 0.9)
+
+[sub_resource type="BoxMesh" id="BoxMesh_left"]
+material = ExtResource("1_stone")
+size = Vector3(2.4, 0.7, 0.85)
+
+[sub_resource type="BoxMesh" id="BoxMesh_right"]
+material = ExtResource("1_stone")
+size = Vector3(1.6, 0.7, 0.85)
+
+[sub_resource type="BoxMesh" id="BoxMesh_upper"]
+material = ExtResource("1_stone")
+size = Vector3(1.6, 0.7, 0.8)
+
+[sub_resource type="BoxMesh" id="BoxMesh_stub"]
+material = ExtResource("2_dark")
+size = Vector3(0.8, 0.5, 0.8)
+
+[sub_resource type="BoxMesh" id="BoxMesh_upper_right"]
+material = ExtResource("2_dark")
+size = Vector3(0.9, 0.6, 0.8)
+
+[sub_resource type="BoxMesh" id="BoxMesh_fallen"]
+material = ExtResource("1_stone")
+size = Vector3(0.7, 0.5, 0.6)
+
+[sub_resource type="BoxMesh" id="BoxMesh_moss_base"]
+material = ExtResource("3_moss")
+size = Vector3(2, 0.06, 0.92)
+
+[sub_resource type="BoxMesh" id="BoxMesh_moss_top"]
+material = ExtResource("3_moss")
+size = Vector3(1.62, 0.06, 0.82)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_base"]
+size = Vector3(6, 0.8, 0.9)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_left"]
+size = Vector3(2.4, 0.7, 0.85)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_right"]
+size = Vector3(1.6, 0.7, 0.85)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_upper"]
+size = Vector3(1.6, 0.7, 0.8)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_stub"]
+size = Vector3(0.8, 0.5, 0.8)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_upper_right"]
+size = Vector3(0.9, 0.6, 0.8)
+
+[node name="RuinWall" type="StaticBody3D"]
+collision_mask = 0
+
+[node name="Base" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
+mesh = SubResource("BoxMesh_base")
+
+[node name="Left" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8, 1.15, 0)
+mesh = SubResource("BoxMesh_left")
+
+[node name="Right" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, 1.15, 0)
+mesh = SubResource("BoxMesh_right")
+
+[node name="Upper" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.2, 1.85, 0.02)
+mesh = SubResource("BoxMesh_upper")
+
+[node name="Stub" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.6, 2.45, 0)
+mesh = SubResource("BoxMesh_stub")
+
+[node name="UpperRight" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.45, 1.8, 0)
+mesh = SubResource("BoxMesh_upper_right")
+
+[node name="FallenA" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.906, 0, 0.423, 0, 1, 0, -0.423, 0, 0.906, 0.4, 0.25, 1.15)
+mesh = SubResource("BoxMesh_fallen")
+
+[node name="FallenB" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.966, 0, -0.259, 0, 1, 0, 0.259, 0, 0.966, -0.7, 0.25, -1.2)
+mesh = SubResource("BoxMesh_fallen")
+
+[node name="MossBase" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4, 0.82, 0)
+mesh = SubResource("BoxMesh_moss_base")
+
+[node name="MossTop" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.2, 2.22, 0.02)
+mesh = SubResource("BoxMesh_moss_top")
+
+[node name="ShapeBase" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
+shape = SubResource("BoxShape3D_base")
+
+[node name="ShapeLeft" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8, 1.15, 0)
+shape = SubResource("BoxShape3D_left")
+
+[node name="ShapeRight" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, 1.15, 0)
+shape = SubResource("BoxShape3D_right")
+
+[node name="ShapeUpper" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.2, 1.85, 0.02)
+shape = SubResource("BoxShape3D_upper")
+
+[node name="ShapeStub" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.6, 2.45, 0)
+shape = SubResource("BoxShape3D_stub")
+
+[node name="ShapeUpperRight" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.45, 1.8, 0)
+shape = SubResource("BoxShape3D_upper_right")

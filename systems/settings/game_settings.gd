@@ -1,13 +1,16 @@
 class_name GameSettings
 extends RefCounted
-## Opciones que ha elegido el jugador: volumen de cada bus, pantalla completa, tamaño de la ventana
-## y VSync. Se guardan en un [ConfigFile] ([method write_to] y [method read_from]) y se aplican al
-## motor ([method apply_audio] y [method apply_display]). El autoload [code]Save[/code] las carga y
+## Opciones que ha elegido el jugador: idioma, volumen de cada bus, pantalla completa, tamaño de la
+## ventana y VSync. Se guardan en un [ConfigFile] ([method write_to] y [method read_from]) y se
+## aplican al motor ([method apply_locale], [method apply_audio] y [method apply_display]). El autoload [code]Save[/code] las carga y
 ## las aplica al arrancar.
 
 const SECTION_AUDIO := "audio"
 const SECTION_DISPLAY := "display"
+const SECTION_GENERAL := "general"
 
+## Idioma (código de [TranslationServer]). Vacío: el del sistema.
+var locale: String = ""
 ## Volumen de cada bus, de 0 (silencio) a 1.
 var volumes: Dictionary[StringName, float] = {}
 var fullscreen: bool = false
@@ -23,6 +26,7 @@ static func create(data: SettingsData) -> GameSettings:
 	for bus: StringName in data.volume_buses:
 		settings.volumes[bus] = data.default_volume
 	settings.vsync = data.default_vsync
+	settings.locale = data.default_locale
 	return settings
 
 
@@ -42,6 +46,9 @@ func read_from(config: ConfigFile) -> void:
 	var saved_vsync: Variant = config.get_value(SECTION_DISPLAY, "vsync", vsync)
 	if saved_vsync is bool:
 		vsync = saved_vsync
+	var saved_locale: Variant = config.get_value(SECTION_GENERAL, "locale", locale)
+	if saved_locale is String and not (saved_locale as String).is_empty():
+		locale = saved_locale
 
 
 ## Escribe las opciones en [param config].
@@ -51,6 +58,13 @@ func write_to(config: ConfigFile) -> void:
 	config.set_value(SECTION_DISPLAY, "fullscreen", fullscreen)
 	config.set_value(SECTION_DISPLAY, "resolution", resolution)
 	config.set_value(SECTION_DISPLAY, "vsync", vsync)
+	config.set_value(SECTION_GENERAL, "locale", locale)
+
+
+## Pone el idioma (vacío: deja el del sistema).
+func apply_locale() -> void:
+	if not locale.is_empty():
+		TranslationServer.set_locale(locale)
 
 
 ## Pone el volumen de cada bus (a 0, silenciado). Los buses que no existen se ignoran.
@@ -85,6 +99,7 @@ func copy() -> GameSettings:
 	other.fullscreen = fullscreen
 	other.resolution = resolution
 	other.vsync = vsync
+	other.locale = locale
 	return other
 
 

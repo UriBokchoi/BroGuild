@@ -1,0 +1,53 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://vfx/juice/drop_glow/drop_glow.gd" id="1_glow"]
+[ext_resource type="Shader" path="res://vfx/shaders/light_beam.gdshader" id="2_beam"]
+[ext_resource type="Shader" path="res://vfx/shaders/ground_ring.gdshader" id="3_ring"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_beam"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("2_beam")
+shader_parameter/intensity = 2.2
+shader_parameter/height = 4.0
+shader_parameter/stripe_count = 4.0
+shader_parameter/stripe_speed = 1.0
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_beam"]
+top_radius = 0.24
+bottom_radius = 0.24
+height = 4.0
+radial_segments = 12
+rings = 1
+cap_top = false
+cap_bottom = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ring"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("3_ring")
+shader_parameter/intensity = 1.6
+shader_parameter/pulse_rate = 1.5
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ring"]
+size = Vector2(2, 2)
+center_offset = Vector3(0, 0.03, 0)
+
+[node name="DropGlow" type="Node3D" node_paths=PackedStringArray("beam", "ring")]
+script = ExtResource("1_glow")
+beam = NodePath("Beam")
+ring = NodePath("Ring")
+
+[node name="Beam" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+cast_shadow = 0
+material_override = SubResource("ShaderMaterial_beam")
+mesh = SubResource("CylinderMesh_beam")
+
+[node name="Ring" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.9, 0, 0, 0, 0.9, 0, 0, 0, 0.9, 0, 0, 0)
+cast_shadow = 0
+material_override = SubResource("ShaderMaterial_ring")
+instance_shader_parameters/progress = 0.75
+instance_shader_parameters/band = 0.4
+mesh = SubResource("PlaneMesh_ring")

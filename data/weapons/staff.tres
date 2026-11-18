@@ -8,20 +8,21 @@
 
 [sub_resource type="Resource" id="Resource_stats"]
 script = ExtResource("2_stats")
-damage = 18.0
+damage = 26.0
 cooldown = 1.5
 projectiles = 1
 burst_interval = 0.25
 area = 100.0
 duration = 2.5
 reach = 14.0
-projectile_speed = 12.0
-explosion_radius = 2.0
+knockback = 6.0
+projectile_speed = 15.0
+explosion_radius = 2.2
 
 [sub_resource type="Resource" id="Upgrade_damage"]
 script = ExtResource("90_upgrade")
 stat = &"damage"
-value = 4.0
+value = 5.0
 
 [sub_resource type="Resource" id="Upgrade_projectiles"]
 script = ExtResource("90_upgrade")
@@ -34,6 +35,12 @@ script = ExtResource("90_upgrade")
 stat = &"explosion_radius"
 kind = 1
 value = 0.12
+
+[sub_resource type="Resource" id="Upgrade_projectile_speed"]
+script = ExtResource("90_upgrade")
+stat = &"projectile_speed"
+kind = 1
+value = 0.15
 
 [sub_resource type="Resource" id="Upgrade_cooldown"]
 script = ExtResource("90_upgrade")
@@ -50,4 +57,4 @@ description_key = &"WEAPON_STAFF_DESCRIPTION"
 scene = ExtResource("5_scene")
 stats = SubResource("Resource_stats")
 level_cap = 10
-upgrade_stats = Array[ExtResource("90_upgrade")]([SubResource("Upgrade_damage"), SubResource("Upgrade_projectiles"), SubResource("Upgrade_explosion_radius"), SubResource("Upgrade_cooldown")])
+upgrade_stats = Array[ExtResource("90_upgrade")]([SubResource("Upgrade_damage"), SubResource("Upgrade_projectiles"), SubResource("Upgrade_explosion_radius"), SubResource("Upgrade_projectile_speed"), SubResource("Upgrade_cooldown")])

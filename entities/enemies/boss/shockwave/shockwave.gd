@@ -1,0 +1,97 @@
+class_name Shockwave
+extends Node3D
+## Onda que se abre por el suelo (la del salto del jefe): desde donde sale ([method start]) hasta
+## [member radius] en [member duration] segundos. Daña una vez a cada [HurtboxComponent] de
+## [member hit_mask] que alcanza su borde ([member band] de ancho), salvo si su centro está más alto
+## que [member reach_height] sobre el suelo de la onda: se esquiva saltándola o alejándose antes de
+## que llegue (lo que ya pasó no daña). Empuja hacia fuera ([member knockback]). Se ve como un aro
+## que se abre y se apaga ([member ring]).
+
+## Hurtbox que mira como mucho en cada tick.
+const MAX_RESULTS: int = 8
+
+## Radio final.
+@export_range(1.0, 100.0, 0.5, "suffix:m") var radius: float = 12.0
+## Segundos que tarda en llegar al radio final.
+@export_range(0.05, 5.0, 0.05, "suffix:s") var duration: float = 0.8
+## Ancho del borde que daña.
+@export_range(0.1, 5.0, 0.05, "suffix:m") var band: float = 1.5
+## Altura del centro de una hurtbox sobre el suelo de la onda hasta la que daña.
+@export_range(0.1, 5.0, 0.05, "suffix:m") var reach_height: float = 1.3
+## Empuje hacia fuera de lo que alcanza.
+@export_range(0.0, 50.0, 0.5, "or_greater", "suffix:m/s") var knockback: float = 0.0
+## A quién daña (capas de hurtbox).
+@export_flags_3d_physics var hit_mask: int = 0
+## Aro que se ve: un plano de 2 × 2 con [code]ground_ring.gdshader[/code] (se escala al radio).
+@export var ring: GeometryInstance3D
+
+## Azar del crítico (no tiene). Si no se asigna antes de entrar en el árbol, el flujo de combate de
+## [code]Rng[/code].
+var rng: RandomNumberGenerator
+
+var _damage: float = 0.0
+var _elapsed: float = 0.0
+## Hurtbox ya golpeadas en esta onda (por id de instancia).
+var _hit: Dictionary[int, bool] = {}
+var _sphere := SphereShape3D.new()
+var _query := PhysicsShapeQueryParameters3D.new()
+
+
+func _ready() -> void:
+	if rng == null:
+		rng = Rng.stream(Rng.Stream.COMBAT)
+	_query.shape = _sphere
+	_query.collide_with_areas = true
+	_query.collide_with_bodies = false
+	_query.collision_mask = hit_mask
+	ring.scale = Vector3.ONE * radius
+	ring.set_instance_shader_parameter(&"band", band / radius)
+	stop()
+
+
+func _physics_process(delta: float) -> void:
+	_elapsed += delta
+	var progress := minf(_elapsed / duration, 1.0)
+	ring.set_instance_shader_parameter(&"progress", progress)
+	ring.set_instance_shader_parameter(&"fade", 1.0 - progress * progress)
+	_hit_edge(radius * progress)
+	if progress >= 1.0:
+		stop()
+
+
+## Sale desde [param center] (en el suelo), con [param damage] de daño por golpe.
+func start(center: Vector3, damage: float) -> void:
+	global_position = center
+	_damage = damage
+	_elapsed = 0.0
+	_hit.clear()
+	visible = true
+	set_physics_process(true)
+
+
+## Se apaga (al terminar o si el jefe se retira).
+func stop() -> void:
+	visible = false
+	set_physics_process(false)
+
+
+func is_running() -> bool:
+	return is_physics_processing()
+
+
+## Daña a las hurtbox que toca el borde (a [param edge] del centro) y no han recibido ya.
+func _hit_edge(edge: float) -> void:
+	_sphere.radius = edge + band
+	_query.transform = Transform3D(Basis.IDENTITY, global_position)
+	for result: Dictionary in get_world_3d().direct_space_state.intersect_shape(_query, MAX_RESULTS):
+		var collider: Object = result["collider"]
+		var hurtbox := collider as HurtboxComponent
+		if hurtbox == null or _hit.has(hurtbox.get_instance_id()):
+			continue
+		var at := hurtbox.get_center()
+		var distance := Vector2(at.x - global_position.x, at.z - global_position.z).length()
+		if absf(distance - edge) > band * 0.5 or at.y - global_position.y > reach_height:
+			continue
+		_hit[hurtbox.get_instance_id()] = true
+		var push := DamageCalc.push(global_position, at, knockback)
+		hurtbox.receive(DamageCalc.attack(_damage, null, rng, self, push))

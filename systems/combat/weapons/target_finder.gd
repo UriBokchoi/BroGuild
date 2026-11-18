@@ -1,27 +1,34 @@
 class_name TargetFinder
 extends RefCounted
 ## Busca objetivos para un arma: las hurtbox de la capa indicada más cercanas a un punto, dentro de
-## un radio. Hace una sola consulta de física por búsqueda; con muchos enemigos dentro del radio,
-## solo mira los primeros [member max_candidates] que devuelve la física.
+## un radio, y (con [member sight_mask]) solo las que se ven desde ese punto: un rayo hasta su centro
+## no puede chocar antes con el mundo (un árbol, una meseta, una ruina). Hace una sola consulta de
+## física por búsqueda; con muchos enemigos dentro del radio, solo mira los primeros
+## [member max_candidates] que devuelve la física. Los rayos de vista se tiran del más cercano al
+## más lejano y solo hasta tener los que hacen falta.
 
 ## Capas de física de los objetivos (p. ej. [code]enemy_hurtbox[/code]).
 var mask: int = 0
+## Capas que tapan la vista (el mundo). 0 = no se mira si se ven.
+var sight_mask: int = 0
 ## Cuántos resultados pide a la física como mucho.
 var max_candidates: int = 64
 
 var _sphere := SphereShape3D.new()
 var _query := PhysicsShapeQueryParameters3D.new()
+var _ray := PhysicsRayQueryParameters3D.new()
 
 
-func _init(target_mask: int) -> void:
+func _init(target_mask: int, blocking_mask: int = 0) -> void:
 	mask = target_mask
+	sight_mask = blocking_mask
 	_query.shape = _sphere
 	_query.collide_with_areas = true
 	_query.collide_with_bodies = false
 
 
-## Hasta [param count] objetivos dentro de [param radius] alrededor de [param origin], del más
-## cercano al más lejano (en 3D: un enemigo en lo alto de una pila está más lejos).
+## Hasta [param count] objetivos dentro de [param radius] alrededor de [param origin] que se ven
+## desde ahí, del más cercano al más lejano (en 3D: un enemigo en lo alto de una pila está más lejos).
 func nearest(space: PhysicsDirectSpaceState3D, origin: Vector3, radius: float, count: int) -> Array[Node3D]:
 	_sphere.radius = radius
 	_query.transform = Transform3D(Basis.IDENTITY, origin)
@@ -33,7 +40,25 @@ func nearest(space: PhysicsDirectSpaceState3D, origin: Vector3, radius: float, c
 			found.append(target)
 	found.sort_custom(func(a: Node3D, b: Node3D) -> bool:
 		return origin.distance_squared_to(aim_point(a)) < origin.distance_squared_to(aim_point(b)))
-	return found.slice(0, count)
+	if sight_mask == 0:
+		return found.slice(0, count)
+	var seen: Array[Node3D] = []
+	for target: Node3D in found:
+		if can_see(space, origin, aim_point(target)):
+			seen.append(target)
+			if seen.size() >= count:
+				break
+	return seen
+
+
+## ¿Se ve [param to] desde [param from]? (Nada de [member sight_mask] en medio.)
+func can_see(space: PhysicsDirectSpaceState3D, from: Vector3, to: Vector3) -> bool:
+	if sight_mask == 0:
+		return true
+	_ray.from = from
+	_ray.to = to
+	_ray.collision_mask = sight_mask
+	return space.intersect_ray(_ray).is_empty()
 
 
 ## Punto al que apuntar en [param target]: el centro de su hurtbox (no sus pies), o su posición si

@@ -6,6 +6,7 @@
 [node name="ShooterGun" type="Node3D"]
 script = ExtResource("1_weapon")
 target_mask = 8
+sight_mask = 1
 aim_height = 1.15
 search_interval = 0.25
 projectile_scene = ExtResource("2_bolt")

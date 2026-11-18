@@ -25,7 +25,7 @@ func test_starts_with_its_character() -> void:
 	assert_eq(_player.health.get_maximum(), neutral.health.get_maximum() + _flat(WARRIOR, &"max_health"))
 	assert_eq(_player.health.get_current(), _player.health.get_maximum(), "con la vida llena")
 	assert_true(_player.weapons.has(WARRIOR.starting_weapon))
-	assert_true(_player.passive is EndurancePassive)
+	assert_eq((_player.passive as LevelStatPassive).stat, &"damage", "Veterano: daño por nivel")
 
 
 func test_its_model_wears_its_look() -> void:
@@ -45,7 +45,7 @@ func test_changing_character_swaps_everything() -> void:
 	assert_eq(_player.health.get_current(), _player.health.get_maximum())
 	assert_false(_player.weapons.has(WARRIOR.starting_weapon), "sin la espada del Guerrero")
 	assert_true(_player.weapons.has(MAGE.starting_weapon))
-	assert_true(_player.passive is ArcaneEchoPassive)
+	assert_eq((_player.passive as LevelStatPassive).stat, &"area", "Expansión arcana: área por nivel")
 	assert_eq(_player.stats.get_value(&"armor"), neutral.stats.get_value(&"armor"), "sin su defensa")
 	assert_same(RunState.character, MAGE, "la elección se guarda")
 	assert_eq(_player.model.get_color(), MAGE.color, "con el color del Mago")

@@ -1,6 +1,6 @@
 extends GutTest
 ## Hitbox y hurtbox con física real: al tocarse, la hitbox daña a la vida de la hurtbox, una vez o
-## repitiendo cada cierto tiempo.
+## repitiendo cada cierto tiempo, y lo empuja desde la hitbox hacia la hurtbox.
 
 const PLAYER_HURTBOX := 8
 const MAX_HEALTH := 100.0
@@ -35,6 +35,17 @@ func test_touching_hitbox_damages_once_without_rehit() -> void:
 	await wait_physics_frames(20)
 	assert_eq(_health.get_current(), MAX_HEALTH - 10.0, "un solo golpe")
 	assert_signal_emit_count(hitbox, "hit", 1)
+
+
+func test_the_hit_pushes_away_from_the_hitbox() -> void:
+	var hitbox := _add_hitbox(10.0, 0.0)
+	hitbox.knockback = 5.0
+	hitbox.position = Vector3(-0.3, 0.0, 0.0)
+	var pushes: Array[Vector3] = []
+	_hurtbox.hurt.connect(func(info: DamageInfo, _amount: float) -> void: pushes.append(info.knockback))
+	await wait_physics_frames(10)
+	assert_eq(pushes.size(), 1)
+	assert_almost_eq(pushes[0], Vector3(5.0, 0.0, 0.0), Vector3.ONE * 0.001, "hacia +X, lejos de la hitbox")
 
 
 func test_contact_damage_repeats_every_interval() -> void:

@@ -2,7 +2,7 @@ class_name BombEffect
 extends PickupEffect
 ## Bomba: a cada enemigo a menos de [member radius] del jugador le quita una parte de su vida máxima
 ## (lo que vale el recogible: 1 = toda), así que sirve igual al principio que con la dificultad
-## alta.
+## alta. A los jefes no les hace nada: si no, mataría de golpe a cualquier jefe.
 
 ## Enemigos que pueden recibir la explosión.
 @export var swarm: EnemySwarm
@@ -15,5 +15,5 @@ extends PickupEffect
 func apply(amount: float) -> void:
 	var at := center.global_position
 	for enemy: Enemy in swarm.get_active():
-		if enemy.global_position.distance_to(at) <= radius:
+		if not enemy.is_boss() and enemy.global_position.distance_to(at) <= radius:
 			enemy.health.take_damage(DamageInfo.create(enemy.health.get_maximum() * amount))

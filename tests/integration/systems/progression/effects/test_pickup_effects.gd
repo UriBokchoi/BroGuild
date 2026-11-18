@@ -1,14 +1,17 @@
 extends GutTest
 ## Efectos de los recogibles especiales: la comida cura una parte de la vida máxima, el imán atrae
 ## toda la experiencia del mapa y la bomba quita su parte de vida a los enemigos cercanos (no a los
-## lejanos), la bebida energética mejora stats un rato (otra lata no lo acumula), la mejora gratis
-## sube lo que se lleva sin pasar del máximo y la oleada de élites los saca. Solo reaccionan a
-## su recompensa.
+## lejanos ni a los jefes), la bebida energética mejora stats un rato (otra lata no lo acumula), «todo
+## mejorado» sube un nivel todo lo que se lleva (sin pasar del máximo, con un texto del color de su
+## rareza), la mejora a elegir pide elegir, la oleada de élites los saca y parar el tiempo los
+## congela. Solo reaccionan a su recompensa.
 
 const PlayerScene := preload("res://entities/player/player.tscn")
 const XP_GEM := preload("res://data/pickups/xp_gem.tres")
 const SWARMER := preload("res://data/enemies/swarmer.tres")
+const ENT_TRAINER := preload("res://data/enemies/ent_trainer.tres")
 const ENERGY_BUFF := preload("res://data/pickups/energy_drink_buff.tres")
+const RARITIES := preload("res://data/rarities/rarities.tres")
 
 
 func before_each() -> void:
@@ -61,6 +64,7 @@ func test_the_bomb_hits_only_nearby_enemies() -> void:
 	add_child_autofree(swarm)
 	var near := swarm.spawn(SWARMER, Vector3(5.0, 0.0, 0.0))
 	var far := swarm.spawn(SWARMER, Vector3(40.0, 0.0, 0.0))
+	var boss := swarm.spawn(ENT_TRAINER, Vector3(-5.0, 0.0, 0.0))
 	var bomb := BombEffect.new()
 	bomb.reward = &"bomb"
 	bomb.swarm = swarm
@@ -70,6 +74,7 @@ func test_the_bomb_hits_only_nearby_enemies() -> void:
 	bomb.apply(1.0)
 	assert_true(near.health.is_dead(), "a 5 m, toda su vida")
 	assert_false(far.health.is_dead(), "a 40 m, fuera de su alcance")
+	assert_eq(boss.health.get_current(), boss.health.get_maximum(), "al jefe no le hace nada")
 
 
 func test_the_energy_drink_boosts_stats_for_a_while() -> void:
@@ -91,21 +96,44 @@ func test_the_energy_drink_boosts_stats_for_a_while() -> void:
 	assert_eq(player.stats.get_value(&"run_speed"), speed, "se pasa el efecto")
 
 
-func test_a_free_upgrade_levels_up_something_owned() -> void:
+func test_everything_upgraded_levels_up_all_owned_in_their_rarity_color() -> void:
 	var player := PlayerScene.instantiate() as Player
 	player.character = preload("res://data/characters/warrior.tres")
 	add_child_autofree(player)
-	var upgrade := UpgradeEffect.new()
-	upgrade.reward = &"upgrade"
+	var strength := preload("res://data/runes/strength.tres")
+	player.runes.add(strength)
+	var upgrade := UpgradeAllEffect.new()
+	upgrade.reward = &"upgrade_all"
 	upgrade.weapons = player.weapons
 	upgrade.runes = player.runes
-	upgrade.rarities = preload("res://data/rarities/rarities.tres")
+	upgrade.rarities = RARITIES
+	upgrade.announce_key = &"UPGRADE_ANNOUNCE"
 	add_child_autofree(upgrade)
 	var sword := player.weapons.get_weapons()[0]
-	upgrade.apply(2.0)
-	assert_eq(sword.level, 3, "lo único que lleva es la espada: sube dos niveles")
+	var colors: Array[Color] = []
+	for entry: WeightedEntry in RARITIES.entries:
+		colors.append((entry as Rarity).color)
+	watch_signals(EventBus)
+	upgrade.apply(1.0)
+	assert_eq(sword.level, 2, "la espada")
+	assert_eq(player.runes.get_level(strength), 2, "y la runa")
+	assert_signal_emit_count(EventBus, "announced", 2, "un texto por cada una")
+	var params: Array = get_signal_parameters(EventBus, "announced")
+	var key: StringName = params[0]
+	var color: Color = params[2]
+	assert_eq(key, &"UPGRADE_ANNOUNCE")
+	assert_has(colors, color, "del color de una rareza")
 	upgrade.apply(99.0)
 	assert_eq(sword.level, sword.data.max_level(), "nunca pasa del máximo")
+
+
+func test_a_free_choice_asks_to_choose_like_a_level_up() -> void:
+	var choice := UpgradeChoiceEffect.new()
+	choice.reward = &"upgrade"
+	add_child_autofree(choice)
+	watch_signals(EventBus)
+	choice.apply(2.0)
+	assert_signal_emitted_with_parameters(EventBus, "upgrade_choice_requested", [2])
 
 
 func test_the_elite_wave_brings_elites() -> void:
@@ -135,3 +163,15 @@ func test_the_elite_wave_brings_elites() -> void:
 	assert_eq(swarm.active_count(), 3)
 	for enemy: Enemy in swarm.get_active():
 		assert_true(enemy.is_elite())
+
+
+func test_the_time_stop_freezes_the_enemies() -> void:
+	var swarm := EnemySwarm.new()
+	add_child_autofree(swarm)
+	var enemy := swarm.spawn(SWARMER, Vector3.ZERO)
+	var time_stop := TimeStopEffect.new()
+	time_stop.reward = &"time_stop"
+	time_stop.swarm = swarm
+	add_child_autofree(time_stop)
+	time_stop.apply(5.0)
+	assert_true(enemy.is_frozen())

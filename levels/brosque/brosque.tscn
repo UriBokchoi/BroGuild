@@ -10,6 +10,10 @@
 [ext_resource type="PackedScene" path="res://entities/breakables/pouch/pouch.tscn" id="14_pouch"]
 [ext_resource type="Script" path="res://levels/common/layout/level_layout.gd" id="16_layout"]
 [ext_resource type="Resource" path="res://data/layouts/brosque.tres" id="17_layout_data"]
+[ext_resource type="PackedScene" path="res://entities/interactables/boss_key/boss_key.tscn" id="18_key"]
+[ext_resource type="Resource" path="res://data/bosses/brosque.tres" id="19_boss"]
+[ext_resource type="PackedScene" path="res://entities/interactables/heal_shop/tavern.tscn" id="20_tavern"]
+[ext_resource type="PackedScene" path="res://levels/brosque/props/puddle.tscn" id="21_puddle"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_sky"]
 sky_top_color = Color(0.3, 0.52, 0.82, 1)
@@ -52,6 +56,16 @@ count = 30
 script = ExtResource("12_entry")
 scene = ExtResource("14_pouch")
 count = 20
+
+[sub_resource type="Resource" id="Resource_puddles"]
+script = ExtResource("12_entry")
+scene = ExtResource("21_puddle")
+count = 14
+
+[sub_resource type="Resource" id="Resource_keys"]
+script = ExtResource("12_entry")
+scene = ExtResource("18_key")
+count = 3
 
 [node name="Brosque" type="Node3D"]
 
@@ -97,10 +111,28 @@ shape = SubResource("BoxShape3D_bound_z")
 script = ExtResource("16_layout")
 data = ExtResource("17_layout_data")
 
+[node name="Tavern" parent="." instance=ExtResource("20_tavern")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, -79.5)
+
 [node name="Breakables" type="Node3D" parent="."]
 script = ExtResource("11_scatter")
 entries = Array[ExtResource("12_entry")]([SubResource("Resource_skulls"), SubResource("Resource_pouches")])
 half_extent = Vector2(70, 70)
+
+[node name="BossKeys" type="Node3D" parent="."]
+script = ExtResource("11_scatter")
+entries = Array[ExtResource("12_entry")]([SubResource("Resource_keys")])
+half_extent = Vector2(66, 66)
+clearance = 0.6
+min_spacing = 25.0
+min_center_distance = 25.0
+
+[node name="Puddles" type="Node3D" parent="."]
+script = ExtResource("11_scatter")
+entries = Array[ExtResource("12_entry")]([SubResource("Resource_puddles")])
+half_extent = Vector2(70, 70)
+clearance = 1.2
+min_spacing = 8.0
 
 [node name="PlayerSpawn" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3)
@@ -111,4 +143,5 @@ autostart_waves = true
 play_area = Rect2(-73, -73, 146, 146)
 default_character = ExtResource("10_warrior")
 spawn_point = NodePath("../PlayerSpawn")
-intro_keys = Array[StringName]([&"BROSQUE_INTRO_WELCOME", &"BROSQUE_INTRO_NO_PAIN", &"BROSQUE_INTRO_LEG_DAY"])
+intro_keys = Array[StringName]([&"BROSQUE_INTRO_WELCOME", &"BROSQUE_INTRO_NO_PAIN", &"BROSQUE_INTRO_LEG_DAY", &"BROSQUE_INTRO_KEYS"])
+boss = ExtResource("19_boss")

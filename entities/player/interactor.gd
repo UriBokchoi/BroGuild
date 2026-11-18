@@ -2,7 +2,8 @@ class_name Interactor
 extends Area3D
 ## Zona alrededor del jugador que detecta [Interactable]: elige el más cercano, avisa de qué se
 ## puede hacer ([code]EventBus.interaction_prompt_changed[/code], para el HUD; también si su texto
-## cambia mientras está cerca) y lo activa al pulsar «interactuar». Su máscara de física es
+## cambia mientras está cerca), le dice que es el elegido ([method Interactable.set_focused]) y lo
+## activa al pulsar «interactuar». Su máscara de física es
 ## [code]interactable[/code].
 
 ## Quien interactúa (el jugador): es lo que recibe el [Interactable].
@@ -18,7 +19,10 @@ func _ready() -> void:
 
 
 func _physics_process(_delta: float) -> void:
-	_focus = _find_nearest()
+	var nearest := _find_nearest()
+	# Si el elegido desapareció (un cofre abierto), también cambia.
+	if nearest != _focus or not is_instance_valid(_focus):
+		_set_focus(nearest)
 	var prompt := _focus.prompt_key if _focus else &""
 	if prompt != _shown_prompt:
 		_shown_prompt = prompt
@@ -32,7 +36,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _exit_tree() -> void:
-	_focus = null
+	_set_focus(null)
 	if not _shown_prompt.is_empty():
 		_shown_prompt = &""
 		EventBus.interaction_prompt_changed.emit(&"")
@@ -41,6 +45,15 @@ func _exit_tree() -> void:
 ## El [Interactable] que se activaría ahora, o [code]null[/code].
 func get_focus() -> Interactable:
 	return _focus
+
+
+## Cambia el que se usaría ahora y se lo dice a los dos (para su aviso visual).
+func _set_focus(target: Interactable) -> void:
+	if is_instance_valid(_focus):
+		_focus.set_focused(false)
+	_focus = target
+	if _focus:
+		_focus.set_focused(true)
 
 
 func _find_nearest() -> Interactable:

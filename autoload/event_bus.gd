@@ -35,6 +35,14 @@ signal slot_spun(data: SlotMachineData, results: Array[SlotSymbol])
 ## Una tragaperras dio su resultado (o no se pudo pagar): el texto (clave; si lleva [code]%d[/code],
 ## [param value]) y si fue jackpot.
 signal slot_resolved(text_key: StringName, value: float, jackpot: bool)
+## Se abrió un cofre (los cofres lo cuentan para subir su coste; lo que sale llega por
+## [signal item_revealed]).
+signal chest_opened
+## Sale un objeto pasivo (de un cofre, del jefe): el HUD revela [param item] durante
+## [param reveal_time] segundos y luego llega al jugador.
+signal item_revealed(item: PassiveItemData, reveal_time: float)
+## No se pudo abrir un cofre: falta oro (cuesta [param cost]).
+signal chest_denied(cost: int)
 ## Murió [param enemy] (aún en su sitio, con su tipo y sus stats): botín, experiencia, Archivo…
 signal enemy_died(enemy: Enemy)
 ## El jugador rompió un rompible (calavera, bolsita…) de [param data] en [param at].
@@ -51,8 +59,36 @@ signal player_gold_changed(gold: float)
 signal difficulty_changed(difficulty: float)
 ## Cambió el nivel de un arma o runa del jugador: al conseguirla (1), al subirla y al perderla (0).
 signal player_item_changed(item: ItemData, level: int)
+## Cambió cuántas copias lleva el jugador de un objeto pasivo (0 = ya no lo lleva).
+signal player_passive_changed(item: PassiveItemData, count: int)
 ## Cambiaron las ranuras abiertas del jugador (sin limitar a las que hay: eso lo hace [LevelUpData]).
 signal player_slots_changed(weapon_slots: int, rune_slots: int)
 ## Pasó un segundo de la ronda: van [param seconds] y si ya pasó su duración ([param overtime]). Con
 ## [param seconds] negativo, no hay ronda en marcha.
 signal run_clock_changed(seconds: float, overtime: bool)
+## El jugador cogió una llave del jefe (en el Brosque, una tarjeta de socio).
+signal boss_key_collected
+## Cambió cuántas llaves del jefe lleva el jugador ([param keys]) de las que hacen falta
+## ([param needed]) para invocarlo antes de tiempo.
+signal boss_keys_changed(keys: int, needed: int)
+## Un altar pide sacar al jefe en [param at]: con [param forced], aunque falten llaves (se acabó la
+## ronda).
+signal boss_summon_requested(at: Vector3, forced: bool)
+## Salió el jefe del nivel ([param name_key]: su nombre).
+signal boss_spawned(name_key: StringName)
+## Cambió la vida del jefe (actual y máxima).
+signal boss_health_changed(current: float, maximum: float)
+## El jefe gritó [param text_key] (clave de traducción).
+signal boss_shouted(text_key: StringName)
+## Vencieron al jefe: se pasa el nivel. [param victory_key] es el título de la victoria,
+## [param seconds] lo que duró la partida y [param bonus] el multiplicador del premio por rapidez.
+signal boss_defeated(victory_key: StringName, seconds: float, bonus: float)
+## Un texto breve en el HUD (un power-up recogido, una mejora): [param text_key] con sus valores
+## [param args] (los que son claves también se traducen), del color [param color].
+signal announced(text_key: StringName, args: Array, color: Color)
+## Se piden [param count] elecciones de mejora como al subir de nivel, sin subir (la tragaperras).
+signal upgrade_choice_requested(count: int)
+## Se paró el tiempo (los enemigos y sus disparos, quietos) o volvió a correr.
+signal time_stop_changed(active: bool)
+## Se ofrece elegir uno de [param items] (el círculo de setas): lo atiende el [ItemChoicePanel].
+signal item_choice_offered(items: Array[PassiveItemData])

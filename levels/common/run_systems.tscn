@@ -25,16 +25,22 @@
 [ext_resource type="Resource" path="res://data/loot/power_ups.tres" id="23_power_ups"]
 [ext_resource type="Script" path="res://systems/progression/effects/buff_effect.gd" id="24_buff"]
 [ext_resource type="Resource" path="res://data/pickups/energy_drink_buff.tres" id="25_energy_buff"]
-[ext_resource type="Script" path="res://systems/progression/effects/upgrade_effect.gd" id="26_upgrade"]
+[ext_resource type="Script" path="res://systems/progression/effects/upgrade_all_effect.gd" id="26_upgrade"]
+[ext_resource type="Script" path="res://systems/progression/effects/upgrade_choice_effect.gd" id="32_choice"]
+[ext_resource type="Script" path="res://systems/progression/effects/time_stop_effect.gd" id="33_time_stop"]
+[ext_resource type="PackedScene" path="res://vfx/time_stop/time_stop_filter.tscn" id="34_filter"]
+[ext_resource type="PackedScene" path="res://ui/menus/item_choice/item_choice_panel.tscn" id="35_item_choice"]
 [ext_resource type="Script" path="res://systems/progression/effects/elite_wave_effect.gd" id="27_elite_wave"]
 [ext_resource type="Resource" path="res://data/slots/frailty_curse.tres" id="28_frailty"]
 [ext_resource type="Script" path="res://vfx/juice/slow_motion.gd" id="29_slow_motion"]
 [ext_resource type="Resource" path="res://data/rarities/rarities.tres" id="30_rarities"]
+[ext_resource type="Script" path="res://systems/boss/boss_encounter.gd" id="31_encounter"]
 
-[node name="RunSystems" type="Node3D" node_paths=PackedStringArray("player", "director")]
+[node name="RunSystems" type="Node3D" node_paths=PackedStringArray("player", "director", "encounter")]
 script = ExtResource("1_run")
 player = NodePath("Player")
 director = NodePath("WaveDirector")
+encounter = NodePath("BossEncounter")
 
 [node name="MouseCapture" type="Node" parent="."]
 script = ExtResource("2_mouse")
@@ -74,12 +80,15 @@ enemy_drop_table = ExtResource("23_power_ups")
 
 [node name="LevelUpController" type="Node" parent="." node_paths=PackedStringArray("player", "panel")]
 script = ExtResource("15_level_up")
+free_choice_title_key = &"LEVEL_UP_FREE_TITLE"
 data = ExtResource("16_level_up_data")
 player = NodePath("../Player")
 panel = NodePath("../LevelUpPanel")
 
-[node name="RunRecorder" type="Node" parent="."]
+[node name="RunRecorder" type="Node" parent="." node_paths=PackedStringArray("player")]
 script = ExtResource("18_recorder")
+player = NodePath("../Player")
+record_runs = true
 
 [node name="ResultsPanel" parent="." node_paths=PackedStringArray("recorder") instance=ExtResource("19_results")]
 recorder = NodePath("../RunRecorder")
@@ -114,12 +123,23 @@ reward = &"energy"
 stats = NodePath("../../Player/Stats")
 buff = ExtResource("25_energy_buff")
 
-[node name="Upgrade" type="Node" parent="PickupEffects" node_paths=PackedStringArray("weapons", "runes")]
+[node name="UpgradeAll" type="Node" parent="PickupEffects" node_paths=PackedStringArray("weapons", "runes", "stats")]
 script = ExtResource("26_upgrade")
-reward = &"upgrade"
+reward = &"upgrade_all"
+announce_key = &"UPGRADE_ANNOUNCE"
 weapons = NodePath("../../Player/Weapons")
 runes = NodePath("../../Player/Runes")
 rarities = ExtResource("30_rarities")
+stats = NodePath("../../Player/Stats")
+
+[node name="UpgradeChoice" type="Node" parent="PickupEffects"]
+script = ExtResource("32_choice")
+reward = &"upgrade"
+
+[node name="TimeStop" type="Node" parent="PickupEffects" node_paths=PackedStringArray("swarm")]
+script = ExtResource("33_time_stop")
+reward = &"time_stop"
+swarm = NodePath("../../EnemySwarm")
 
 [node name="Frailty" type="Node" parent="PickupEffects" node_paths=PackedStringArray("stats")]
 script = ExtResource("24_buff")
@@ -134,3 +154,15 @@ director = NodePath("../../WaveDirector")
 
 [node name="SlowMotion" type="Node" parent="."]
 script = ExtResource("29_slow_motion")
+
+[node name="BossEncounter" type="Node" parent="." node_paths=PackedStringArray("director", "swarm", "player_stats", "items")]
+script = ExtResource("31_encounter")
+director = NodePath("../WaveDirector")
+swarm = NodePath("../EnemySwarm")
+player_stats = NodePath("../Player/Stats")
+items = NodePath("../Player/Items")
+
+[node name="TimeStopFilter" parent="." instance=ExtResource("34_filter")]
+
+[node name="ItemChoicePanel" parent="." node_paths=PackedStringArray("inventory") instance=ExtResource("35_item_choice")]
+inventory = NodePath("../Player/Items")

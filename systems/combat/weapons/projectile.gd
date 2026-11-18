@@ -69,9 +69,12 @@ func launch(from_weapon: ProjectileWeapon, origin: Vector3, direction: Vector3) 
 	_launched()
 
 
-## Golpea a [param hurtbox] con el daño del arma (y el daño % y el crítico de quien la lleva).
-func strike(hurtbox: HurtboxComponent) -> float:
-	return hurtbox.receive(DamageCalc.attack(weapon.damage(), weapon.offense(), _rng, self))
+## Golpea a [param hurtbox] con el daño del arma (y el daño %, el crítico y el empuje % de quien la
+## lleva), empujándolo desde [param origin] (por defecto, desde donde está el proyectil).
+func strike(hurtbox: HurtboxComponent, origin: Vector3 = Vector3.INF) -> float:
+	var from := global_position if origin == Vector3.INF else origin
+	var push := DamageCalc.push(from, hurtbox.get_center(), weapon.knockback())
+	return hurtbox.receive(DamageCalc.attack(weapon.damage(), weapon.offense(), _rng, self, push))
 
 
 ## A partir de ahora, el rayo ya no se para en [param hurtbox] (ya le dio).

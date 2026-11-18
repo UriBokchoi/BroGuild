@@ -1,19 +1,33 @@
 extends GutTest
 ## RunRecorder: apunta enemigos y élites derrotados, daño, oro ganado (no gastado), nivel y tiempo
-## (el del reloj de la ronda si la hay), y deja de apuntar al morir el jugador.
+## (el del reloj de la ronda si la hay), y deja de apuntar al morir el jugador o al vencer al jefe
+## (apuntando la victoria y su premio por rapidez). Si se le pide, al acabar apunta la partida en la
+## clasificación (una sola vez) y se queda con su puesto.
 
 const SWARMER := preload("res://data/enemies/swarmer.tres")
 const ELITE := preload("res://data/enemies/elite.tres")
+const LEADERBOARD_PATH := "user://test_run_recorder_leaderboard.cfg"
 
 var _recorder: RunRecorder
 var _swarm: EnemySwarm
+var _real_path: String
 
 
 func before_each() -> void:
+	_real_path = Save.leaderboard_path
+	Save.leaderboard_path = LEADERBOARD_PATH
+	Save.load_leaderboard()
 	_recorder = RunRecorder.new()
 	add_child_autofree(_recorder)
 	_swarm = EnemySwarm.new()
 	add_child_autofree(_swarm)
+
+
+func after_each() -> void:
+	Save.leaderboard_path = _real_path
+	Save.load_leaderboard()
+	if FileAccess.file_exists(LEADERBOARD_PATH):
+		DirAccess.remove_absolute(ProjectSettings.globalize_path(LEADERBOARD_PATH))
 
 
 func test_counts_kills_and_elites() -> void:
@@ -68,3 +82,37 @@ func test_stops_when_the_player_dies() -> void:
 
 func _kill(enemy: Enemy) -> void:
 	enemy.health.take_damage(DamageInfo.create(100000.0))
+
+
+func test_beating_the_boss_records_the_win_and_stops() -> void:
+	EventBus.boss_defeated.emit(&"BROSQUE_VICTORY", 75.0, 1.8)
+	assert_true(_recorder.stats.won)
+	assert_almost_eq(_recorder.stats.boss_bonus, 1.8, 0.001)
+	assert_almost_eq(_recorder.stats.seconds, 75.0, 0.001, "lo que duró de verdad")
+	assert_true(_recorder.is_stopped())
+
+
+func test_records_the_run_when_asked() -> void:
+	_recorder.record_runs = true
+	_recorder.stats.kills = 55
+	EventBus.player_died.emit()
+	var entries := Save.leaderboard.get_entries()
+	assert_eq(entries.size(), 1)
+	assert_eq(entries[0].kills, 55)
+	assert_false(entries[0].won)
+	assert_eq(_recorder.place, 0)
+
+
+func test_does_not_record_unless_asked() -> void:
+	EventBus.player_died.emit()
+	assert_eq(Save.leaderboard.get_entries().size(), 0)
+	assert_eq(_recorder.place, -1)
+
+
+func test_records_a_win_once() -> void:
+	_recorder.record_runs = true
+	EventBus.boss_defeated.emit(&"BROSQUE_VICTORY", 75.0, 1.8)
+	EventBus.player_died.emit()
+	var entries := Save.leaderboard.get_entries()
+	assert_eq(entries.size(), 1, "morir después no apunta otra")
+	assert_true(entries[0].won)

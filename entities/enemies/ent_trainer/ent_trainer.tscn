@@ -1,0 +1,404 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://entities/enemies/boss/boss.gd" id="1_boss"]
+[ext_resource type="Script" path="res://core/stats/stats_component.gd" id="2_stats"]
+[ext_resource type="Script" path="res://core/components/health/health_component.gd" id="3_health"]
+[ext_resource type="Resource" path="res://data/combat/rules.tres" id="4_rules"]
+[ext_resource type="Script" path="res://core/components/hurtbox_component.gd" id="5_hurtbox"]
+[ext_resource type="Script" path="res://core/components/hitbox_component.gd" id="6_hitbox"]
+[ext_resource type="Script" path="res://entities/enemies/damage_reporter.gd" id="7_reporter"]
+[ext_resource type="Script" path="res://core/stats/stat_modifier_set.gd" id="8_set"]
+[ext_resource type="Script" path="res://core/stats/stat_modifier.gd" id="9_modifier"]
+[ext_resource type="Shader" path="res://entities/enemies/elite/elite_glow.gdshader" id="10_glow"]
+[ext_resource type="Script" path="res://entities/enemies/boss/attacks/leap_attack.gd" id="11_leap"]
+[ext_resource type="Script" path="res://entities/enemies/boss/attacks/charge_attack.gd" id="12_charge"]
+[ext_resource type="Script" path="res://entities/enemies/boss/attacks/summon_attack.gd" id="13_summon"]
+[ext_resource type="PackedScene" path="res://entities/enemies/boss/shockwave/shockwave.tscn" id="14_shockwave"]
+[ext_resource type="Shader" path="res://vfx/shaders/ground_ring.gdshader" id="15_ring"]
+[ext_resource type="Resource" path="res://data/enemies/sapling.tres" id="16_sapling"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_body"]
+friction = 0.0
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_body"]
+radius = 1.2
+height = 4.2
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hurtbox"]
+radius = 1.5
+height = 4.8
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_contact"]
+radius = 1.45
+height = 4.2
+
+[sub_resource type="Resource" id="Modifier_speed"]
+script = ExtResource("9_modifier")
+stat = &"move_speed"
+kind = 2
+value = 1.35
+
+[sub_resource type="Resource" id="Modifier_contact"]
+script = ExtResource("9_modifier")
+stat = &"contact_damage"
+kind = 2
+value = 1.2
+
+[sub_resource type="Resource" id="Resource_enrage"]
+script = ExtResource("8_set")
+stat_modifiers = Array[ExtResource("9_modifier")]([SubResource("Modifier_speed"), SubResource("Modifier_contact")])
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rage"]
+render_priority = 0
+shader = ExtResource("10_glow")
+shader_parameter/color = Color(1, 0.25, 0.15, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bark"]
+albedo_color = Color(0.42, 0.28, 0.17, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_leaves"]
+albedo_color = Color(0.3, 0.62, 0.24, 1)
+roughness = 0.8
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_leaves_dark"]
+albedo_color = Color(0.22, 0.5, 0.2, 1)
+roughness = 0.8
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_shirt"]
+albedo_color = Color(0.12, 0.36, 0.85, 1)
+roughness = 0.7
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_band"]
+albedo_color = Color(0.9, 0.15, 0.15, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_eye"]
+albedo_color = Color(1, 1, 0.95, 1)
+emission_enabled = true
+emission = Color(1, 1, 0.9, 1)
+emission_energy_multiplier = 0.3
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dark"]
+albedo_color = Color(0.06, 0.05, 0.05, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_whistle"]
+albedo_color = Color(1, 0.82, 0.2, 1)
+metallic = 0.6
+roughness = 0.35
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_root"]
+material = SubResource("StandardMaterial3D_bark")
+top_radius = 0.35
+bottom_radius = 0.48
+height = 0.7
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_trunk"]
+material = SubResource("StandardMaterial3D_bark")
+top_radius = 0.85
+bottom_radius = 1.05
+height = 2.4
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_shirt"]
+material = SubResource("StandardMaterial3D_shirt")
+top_radius = 0.98
+bottom_radius = 1.08
+height = 1.1
+
+[sub_resource type="SphereMesh" id="SphereMesh_canopy"]
+material = SubResource("StandardMaterial3D_leaves")
+radius = 1.5
+height = 2.6
+
+[sub_resource type="SphereMesh" id="SphereMesh_tuft"]
+material = SubResource("StandardMaterial3D_leaves")
+radius = 0.9
+height = 1.6
+
+[sub_resource type="SphereMesh" id="SphereMesh_top"]
+material = SubResource("StandardMaterial3D_leaves_dark")
+radius = 1.0
+height = 1.7
+
+[sub_resource type="TorusMesh" id="TorusMesh_band"]
+material = SubResource("StandardMaterial3D_band")
+inner_radius = 1.3
+outer_radius = 1.6
+
+[sub_resource type="SphereMesh" id="SphereMesh_eye"]
+material = SubResource("StandardMaterial3D_eye")
+radius = 0.2
+height = 0.4
+
+[sub_resource type="SphereMesh" id="SphereMesh_pupil"]
+material = SubResource("StandardMaterial3D_dark")
+radius = 0.09
+height = 0.18
+
+[sub_resource type="BoxMesh" id="BoxMesh_brow"]
+material = SubResource("StandardMaterial3D_dark")
+size = Vector3(0.4, 0.09, 0.09)
+
+[sub_resource type="BoxMesh" id="BoxMesh_mouth"]
+material = SubResource("StandardMaterial3D_dark")
+size = Vector3(0.5, 0.14, 0.08)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_whistle"]
+material = SubResource("StandardMaterial3D_whistle")
+top_radius = 0.09
+bottom_radius = 0.09
+height = 0.28
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_upper_arm"]
+material = SubResource("StandardMaterial3D_bark")
+top_radius = 0.16
+bottom_radius = 0.24
+height = 1.4
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_forearm"]
+material = SubResource("StandardMaterial3D_bark")
+top_radius = 0.15
+bottom_radius = 0.18
+height = 1.0
+
+[sub_resource type="SphereMesh" id="SphereMesh_bicep"]
+material = SubResource("StandardMaterial3D_bark")
+radius = 0.32
+height = 0.6
+
+[sub_resource type="SphereMesh" id="SphereMesh_fist"]
+material = SubResource("StandardMaterial3D_leaves")
+radius = 0.32
+height = 0.6
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_marker"]
+render_priority = 0
+shader = ExtResource("15_ring")
+shader_parameter/color = Color(1, 0.22, 0.18, 1)
+shader_parameter/intensity = 1.4
+shader_parameter/pulse_rate = 3.0
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_marker"]
+material = SubResource("ShaderMaterial_marker")
+size = Vector2(2, 2)
+center_offset = Vector3(0, 0.04, 0)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lane"]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(1, 0.22, 0.18, 0.35)
+cull_mode = 2
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_lane"]
+material = SubResource("StandardMaterial3D_lane")
+size = Vector2(2.6, 1)
+center_offset = Vector3(0, 0.06, -0.5)
+
+[node name="EntTrainer" type="RigidBody3D" node_paths=PackedStringArray("stats", "health", "hurtbox", "contact_hitbox", "visual")]
+collision_layer = 4
+collision_mask = 7
+mass = 40.0
+physics_material_override = SubResource("PhysicsMaterial_body")
+can_sleep = false
+lock_rotation = true
+script = ExtResource("1_boss")
+attack_interval = 3.5
+enraged_attack_interval = 2.2
+enrage = SubResource("Resource_enrage")
+enrage_shouts = Array[StringName]([&"ENT_TRAINER_SHOUT_ENRAGE"])
+enrage_overlay = SubResource("ShaderMaterial_rage")
+stats = NodePath("Stats")
+health = NodePath("Health")
+hurtbox = NodePath("Hurtbox")
+contact_hitbox = NodePath("ContactHitbox")
+visual = NodePath("Visual")
+death_time = 1.2
+turn_speed = 6.0
+steer_every_tick = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.1, 0)
+shape = SubResource("CapsuleShape3D_body")
+
+[node name="Visual" type="Node3D" parent="."]
+
+[node name="RootLeft" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.55, 0.35, 0)
+mesh = SubResource("CylinderMesh_root")
+
+[node name="RootRight" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.55, 0.35, 0)
+mesh = SubResource("CylinderMesh_root")
+
+[node name="Trunk" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.9, 0)
+mesh = SubResource("CylinderMesh_trunk")
+
+[node name="Shirt" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.45, 0)
+mesh = SubResource("CylinderMesh_shirt")
+
+[node name="Whistle" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0.25, 1.85, -1.06)
+mesh = SubResource("CylinderMesh_whistle")
+
+[node name="Canopy" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.9, 0)
+mesh = SubResource("SphereMesh_canopy")
+
+[node name="TuftLeft" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 3.7, 0.35)
+mesh = SubResource("SphereMesh_tuft")
+
+[node name="TuftRight" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 3.8, 0.25)
+mesh = SubResource("SphereMesh_tuft")
+
+[node name="Top" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.75, 0.2)
+mesh = SubResource("SphereMesh_top")
+
+[node name="Headband" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.35, 0)
+mesh = SubResource("TorusMesh_band")
+
+[node name="EyeLeft" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.32, 2.55, -0.82)
+mesh = SubResource("SphereMesh_eye")
+
+[node name="EyeRight" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.32, 2.55, -0.82)
+mesh = SubResource("SphereMesh_eye")
+
+[node name="PupilLeft" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3, 2.53, -1)
+mesh = SubResource("SphereMesh_pupil")
+
+[node name="PupilRight" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, 2.53, -1)
+mesh = SubResource("SphereMesh_pupil")
+
+[node name="BrowLeft" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(0.94, 0.342, 0, -0.342, 0.94, 0, 0, 0, 1, -0.32, 2.84, -0.92)
+mesh = SubResource("BoxMesh_brow")
+
+[node name="BrowRight" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(0.94, -0.342, 0, 0.342, 0.94, 0, 0, 0, 1, 0.32, 2.84, -0.92)
+mesh = SubResource("BoxMesh_brow")
+
+[node name="Mouth" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2, -0.93)
+mesh = SubResource("BoxMesh_mouth")
+
+[node name="UpperArmLeft" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, -1.55, 2.3, 0)
+mesh = SubResource("CylinderMesh_upper_arm")
+
+[node name="BicepLeft" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6, 2.48, 0)
+mesh = SubResource("SphereMesh_bicep")
+
+[node name="ForearmLeft" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.2, 2.8, 0)
+mesh = SubResource("CylinderMesh_forearm")
+
+[node name="FistLeft" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.2, 3.35, 0)
+mesh = SubResource("SphereMesh_fist")
+
+[node name="UpperArmRight" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(0, 1, 0, -1, 0, 0, 0, 0, 1, 1.55, 2.3, 0)
+mesh = SubResource("CylinderMesh_upper_arm")
+
+[node name="BicepRight" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6, 2.48, 0)
+mesh = SubResource("SphereMesh_bicep")
+
+[node name="ForearmRight" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, 2.8, 0)
+mesh = SubResource("CylinderMesh_forearm")
+
+[node name="FistRight" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, 3.35, 0)
+mesh = SubResource("SphereMesh_fist")
+
+[node name="Stats" type="Node" parent="."]
+script = ExtResource("2_stats")
+
+[node name="Health" type="Node" parent="." node_paths=PackedStringArray("stats")]
+script = ExtResource("3_health")
+stats = NodePath("../Stats")
+rules = ExtResource("4_rules")
+
+[node name="Hurtbox" type="Area3D" parent="." node_paths=PackedStringArray("health")]
+collision_layer = 16
+collision_mask = 0
+script = ExtResource("5_hurtbox")
+health = NodePath("../Health")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hurtbox"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4, 0)
+shape = SubResource("CapsuleShape3D_hurtbox")
+
+[node name="ContactHitbox" type="Area3D" parent="."]
+collision_layer = 64
+collision_mask = 8
+monitorable = false
+script = ExtResource("6_hitbox")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ContactHitbox"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.1, 0)
+shape = SubResource("CapsuleShape3D_contact")
+
+[node name="DamageReporter" type="Node3D" parent="." node_paths=PackedStringArray("health")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.6, 0)
+script = ExtResource("7_reporter")
+health = NodePath("../Health")
+
+[node name="Burpee" type="Node" parent="." node_paths=PackedStringArray("shockwave", "landing_marker")]
+script = ExtResource("11_leap")
+windup = 0.9
+air_time = 0.95
+max_distance = 20.0
+recovery = 0.7
+crouch = 0.65
+damage_factor = 1.3
+shockwave = NodePath("Shockwave")
+landing_marker = NodePath("LandingMarker")
+shout_keys = Array[StringName]([&"ENT_TRAINER_SHOUT_BURPEE", &"ENT_TRAINER_SHOUT_ONE_MORE"])
+
+[node name="Shockwave" parent="Burpee" instance=ExtResource("14_shockwave")]
+knockback = 9.0
+radius = 13.0
+duration = 0.9
+band = 1.6
+
+[node name="LandingMarker" type="MeshInstance3D" parent="Burpee"]
+transform = Transform3D(2.6, 0, 0, 0, 2.6, 0, 0, 0, 2.6, 0, 0, 0)
+top_level = true
+cast_shadow = 0
+instance_shader_parameters/progress = 0.85
+instance_shader_parameters/band = 0.25
+mesh = SubResource("PlaneMesh_marker")
+
+[node name="Series" type="Node" parent="." node_paths=PackedStringArray("lane")]
+script = ExtResource("12_charge")
+knockback_factor = 2.0
+reps = 3
+windup = 0.9
+rep_windup = 0.5
+speed = 18.0
+distance = 16.0
+damage_factor = 1.25
+lane = NodePath("Lane")
+shout_keys = Array[StringName]([&"ENT_TRAINER_SHOUT_SETS", &"ENT_TRAINER_SHOUT_NO_EXCUSES"])
+
+[node name="Lane" type="MeshInstance3D" parent="Series"]
+top_level = true
+cast_shadow = 0
+mesh = SubResource("PlaneMesh_lane")
+
+[node name="BroTes" type="Node" parent="."]
+script = ExtResource("13_summon")
+enemy = ExtResource("16_sapling")
+weight = 0.7
+shout_keys = Array[StringName]([&"ENT_TRAINER_SHOUT_SPROUTS"])

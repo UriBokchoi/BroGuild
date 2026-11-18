@@ -10,7 +10,6 @@ extends Node
 ## stat [code]difficulty[/code] de [member difficulty_stats] (el jugador): el director le suma 1 por
 ## minuto en marcha y los objetos o runas pueden subirla más. Mientras está en marcha, es también el
 ## reloj de la ronda: avisa del tiempo cada segundo por [code]EventBus.run_clock_changed[/code].
-## avisa del tiempo cada segundo por [code]EventBus.run_clock_changed[/code].
 
 signal started
 signal stopped
@@ -123,6 +122,24 @@ func spawn_elites(count: int) -> int:
 	return spawned
 
 
+## Saca [param count] enemigos de [param enemy] en el suelo alrededor de [param center], entre
+## [param min_distance] y [param max_distance], con el escalado de la dificultad de ahora, aunque no
+## esté en marcha ni haya sitio en el máximo a la vez (los refuerzos de un jefe). Devuelve cuántos
+## salieron.
+func spawn_around(enemy: EnemyData, center: Vector3, count: int, min_distance: float, max_distance: float) -> int:
+	if enemy == null:
+		return 0
+	var modifiers := data.scaling_at(get_difficulty()) if data else null
+	var spawned := 0
+	for _index: int in count:
+		var feet := _find_ground(center, min_distance, max_distance)
+		if not feet.is_finite():
+			continue
+		swarm.spawn(enemy, feet).boost(modifiers)
+		spawned += 1
+	return spawned
+
+
 func _spawn_one() -> bool:
 	var difficulty := get_difficulty()
 	var spawned := _spawn_at_difficulty(difficulty)
@@ -139,7 +156,7 @@ func _spawn_at_difficulty(difficulty: float) -> Enemy:
 	var enemy := data.pick_enemy(difficulty, rng)
 	if enemy == null:
 		return null
-	var feet := _find_spawn_point()
+	var feet := _find_ground(target.global_position, data.min_spawn_distance, data.max_spawn_distance)
 	if not feet.is_finite():
 		return null
 	var spawned := swarm.spawn(enemy, feet)
@@ -161,13 +178,13 @@ func _announce_clock() -> void:
 	EventBus.run_clock_changed.emit(_elapsed, data.is_overtime(_elapsed))
 
 
-## Un punto en el suelo a la distancia de los datos, o [code]Vector3.INF[/code] si no lo encuentra.
-func _find_spawn_point() -> Vector3:
-	var center := target.global_position
+## Un punto en el suelo alrededor de [param center], entre [param min_distance] y [param max_distance]
+## (dentro de [member play_area]), o [code]Vector3.INF[/code] si no lo encuentra.
+func _find_ground(center: Vector3, min_distance: float, max_distance: float) -> Vector3:
 	var space := target.get_world_3d().direct_space_state
 	for _attempt: int in placement_attempts:
 		var angle := rng.randf() * TAU
-		var distance := rng.randf_range(data.min_spawn_distance, data.max_spawn_distance)
+		var distance := rng.randf_range(min_distance, max_distance)
 		var spot := center + Vector3(cos(angle), 0.0, sin(angle)) * distance
 		if play_area.has_area() and not play_area.has_point(Vector2(spot.x, spot.z)):
 			continue
