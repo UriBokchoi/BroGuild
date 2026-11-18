@@ -24,15 +24,16 @@ func _exit_tree() -> void:
 		_set_open(false)
 
 
-## Muestra [param options] para el nivel [param level].
-func open(options: Array[LevelUpOption], level: int) -> void:
+## Muestra [param options] para el nivel [param level], con el título de subir de nivel o, si se
+## da, [param title_key] (una mejora gratis).
+func open(options: Array[LevelUpOption], level: int, title_key: StringName = &"") -> void:
 	for card: Node in _cards.get_children():
 		card.free()
 	for option: LevelUpOption in options:
 		var card := LevelUpCard.new(option)
 		card.pressed.connect(_on_card_pressed.bind(option))
 		_cards.add_child(card)
-	_title.text = tr(&"LEVEL_UP_TITLE") % level
+	_title.text = tr(&"LEVEL_UP_TITLE") % level if title_key.is_empty() else tr(title_key)
 	_set_open(true)
 
 

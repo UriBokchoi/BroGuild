@@ -86,3 +86,5 @@ signal boss_defeated(victory_key: StringName, seconds: float, bonus: float)
 ## Un texto breve en el HUD (un power-up recogido, una mejora): [param text_key] con sus valores
 ## [param args] (los que son claves también se traducen), del color [param color].
 signal announced(text_key: StringName, args: Array, color: Color)
+## Se piden [param count] elecciones de mejora como al subir de nivel, sin subir (la tragaperras).
+signal upgrade_choice_requested(count: int)

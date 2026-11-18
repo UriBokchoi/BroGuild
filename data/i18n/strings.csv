@@ -58,7 +58,7 @@ SLOT_JACKPOT_GOLD,¡JACKPOT! +%d de oro,JACKPOT! +%d gold
 SLOT_WIN_HEAL,Te curas un poco,You heal a bit
 SLOT_JACKPOT_HEAL,¡JACKPOT! Vida al máximo,JACKPOT! Full health
 SLOT_WIN_UPGRADE,¡Mejora gratis!,Free upgrade!
-SLOT_JACKPOT_UPGRADE,¡JACKPOT! Tres mejoras gratis,JACKPOT! Three free upgrades
+SLOT_JACKPOT_UPGRADE,¡JACKPOT! Todo mejorado,JACKPOT! Everything upgraded
 SLOT_CURSE_FRAILTY,Maldición: −20 % de vida máxima un minuto,Curse: −20% max health for a minute
 SLOT_CURSE_ELITES,¡Maldición! Cinco élites a por ti,Curse! Five elites are coming
 BREAK_SKULL,Romper la calavera,Break the skull
@@ -230,6 +230,8 @@ RUNE_MULTIPLICITY_DESCRIPTION,"Más proyectiles (también más tajos con la espa
 ARMORY_WEAPONS,Armas,Weapons
 ARMORY_RUNES,Runas,Runes
 LEVEL_UP_TITLE,¡Nivel %d!,Level %d!
+LEVEL_UP_FREE_TITLE,¡Mejora gratis!,Free upgrade!
+UPGRADE_ANNOUNCE,%s sube a nivel %d,%s up to level %d
 LEVEL_UP_CHOOSE,Elige una mejora,Choose an upgrade
 LOADOUT_MAX,MÁX,MAX
 RARITY_COMMON,Común,Common

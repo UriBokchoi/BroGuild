@@ -1023,3 +1023,10 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - bomba, «¡Nuclear activada!»;
   - bebida energética, «¡Modo diablo activado!».
 - **Por qué:** lo pidió el diseñador. Es genérico porque también lo usan las mejoras de la tragaperras (de su rareza) y lo que venga.
+
+## 2026-11-18 · Mejoras de la tragaperras: elegir y «todo mejorado»
+- **Decisión** (elegida por el diseñador):
+  - **Pareja de estrellas:** se elige como al subir de nivel. `UpgradeChoiceEffect` pide la elección (`upgrade_choice_requested`). El `LevelUpController` la pone en la misma cola que las subidas de nivel y abre las cartas con el título «¡Mejora gratis!».
+  - **Trío de estrellas:** «¡JACKPOT! Todo mejorado». `UpgradeAllEffect` sube un nivel cada arma y runa que no esté al máximo, cada una con su mejora tirada con la Suerte. Cada subida sale en el HUD («Espada sube a nivel 4») del color de su rareza.
+  - El viejo `UpgradeEffect` (al azar) pasa a ser `UpgradeAllEffect`.
+- **Por qué:** elegir es más interesante que el azar. El trío, más raro, recompensa con todo de golpe y enseña qué ha salido.

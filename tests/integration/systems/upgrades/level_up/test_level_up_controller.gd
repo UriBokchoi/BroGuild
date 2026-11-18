@@ -21,6 +21,7 @@ func before_each() -> void:
 	_controller.data = LEVEL_UP
 	_controller.player = _player
 	_controller.panel = _panel
+	_controller.free_choice_title_key = &"LEVEL_UP_FREE_TITLE"
 	_controller.rng = RandomNumberGenerator.new()
 	_controller.rng.seed = 5
 	add_child_autofree(_controller)
@@ -109,3 +110,15 @@ func test_new_weapons_need_an_open_slot() -> void:
 	assert_true(_panel.is_open(), "con otra ranura, sí")
 	for card: LevelUpCard in _panel.get_cards():
 		assert_true(card.option.is_new() and card.option.item is WeaponData)
+
+
+func test_a_free_upgrade_offers_choices_with_its_own_title() -> void:
+	EventBus.upgrade_choice_requested.emit(1)
+	assert_true(_panel.is_open())
+	var title := _panel.get_node(^"%Title") as Label
+	assert_eq(title.text, tr(&"LEVEL_UP_FREE_TITLE"), "no dice «¡Nivel X!»")
+	EventBus.player_leveled_up.emit(2)
+	assert_eq(_controller.pending(), 2, "la subida de nivel espera su turno")
+	_panel.get_cards()[0].pressed.emit()
+	await get_tree().process_frame
+	assert_eq(title.text, tr(&"LEVEL_UP_TITLE") % _player.experience.get_level())
