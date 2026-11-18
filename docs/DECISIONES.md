@@ -1157,3 +1157,16 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - El hook previo de GUT lo usa con `test`.
   - El juego lo usa si arranca con `-- --no-save`. `validate.sh` lo pasa al arrancar el menú y los niveles.
 - **Por qué:** al validar, el paso que juega el Brosque unos segundos apuntó el Guerrero y la espada en el Archivo de verdad del jugador. Ese archivo se ha borrado, y los récords de verdad del diseñador no se tocaron.
+
+## 2026-11-18 · Feedback al recibir daño: temblor y borde rojo
+- **Decisión:**
+  - **Temblor de pantalla** (`ScreenShake`, en el jugador): cada golpe suma «trauma» según la parte de la vida que quita.
+    - Un golpe que quitara toda la vida da 2,5 de trauma; cualquier golpe, al menos 0,3. El trauma no pasa de 1 y baja 2,2 por segundo.
+    - La cámara se desplaza (`h_offset`, `v_offset`) hasta 0,15 m y se inclina hasta 1,5°, por el trauma al cuadrado y con ruido.
+    - Solo mueve la cámara, no el `CameraRig`: el giro, la puntería y el movimiento no cambian.
+  - **Borde rojo** (`DamageVignette`, en `RunSystems`, por debajo del HUD), con un shader de viñeta casi rectangular:
+    - al perder vida, un destello (0,6) que se apaga en 0,4 s;
+    - por debajo del 35 % de la vida, un rojo que no se apaga y late, de 0,35 a 0,8 de fuerza y de 1,1 a 2,2 latidos por segundo según lo poca que quede;
+    - curarse no destella.
+  - Todo son valores exportados en sus escenas, como el resto del juice.
+- **Por qué:** quienes lo han probado echaban en falta notar los golpes. El hit-stop y el flash al golpear siguen en el Hito 5.

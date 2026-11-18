@@ -88,7 +88,7 @@
 ## Hito 5 — Juice y look
 - [ ] Entorno según la dirección visual del GDD (luz, glow y tonemapping)
 - [ ] Materiales con color propio por tipo de enemigo y rareza
-- [ ] Hit-stop, screen shake y flash (los números de daño llegaron en el Hito 2)
+- [ ] Hit-stop y flash al golpear (los números de daño llegaron en el Hito 2; el temblor de pantalla y el borde rojo al recibir daño, adelantados tras el Hito 3)
 - [ ] Partículas: muertes, monedas, cofres, impactos
 - [ ] Sonidos con tono creciente y UI animada
 - [ ] Rendimiento: 300+ enemigos a 60 fps

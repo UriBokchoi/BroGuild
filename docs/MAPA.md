@@ -192,6 +192,8 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
   - `invulnerability_blink.gd` (`InvulnerabilityBlink`, en el jugador): el modelo parpadea mientras dura la invulnerabilidad tras un golpe;
   - `interact_hint/` (`InteractHint`): el destello de lo que se puede usar con «interactuar» (ver «Interacción»);
   - `drop_glow/` (`DropGlow`): columna de luz corta y aro que late en el suelo, del color de cada power-up, para verlos entre la horda.
+  - `screen_shake/` (`ScreenShake`, en el jugador): temblor de cámara por «trauma» al recibir daño, según la parte de la vida que quita el golpe (con un mínimo), que baja solo;
+  - `damage_vignette/` (`DamageVignette`, en `RunSystems`): borde rojo de la pantalla, con un destello al perder vida y, por debajo del 35 % de la vida, un rojo que late más fuerte y más rápido cuanta menos queda.
 - **`speed_lines/`:** líneas de velocidad en pantalla.
 - **`time_stop/`:** `TimeStopFilter`, la pantalla teñida de azul mientras el tiempo está parado (una capa por debajo del HUD, con su shader).
 - **`shaders/`:** shaders compartidos: desenfoque de los menús, rejilla del greybox y columna de luz (`light_beam`: teletransporte, altar, llaves del jefe y power-ups) , aro en el suelo (`ground_ring`: onda y aviso del jefe, power-ups) y destello de lo que se puede usar (`interact_glint`).

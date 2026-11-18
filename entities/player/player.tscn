@@ -43,6 +43,7 @@
 [ext_resource type="Script" path="res://systems/items/passive_inventory.gd" id="44_items"]
 [ext_resource type="Script" path="res://vfx/juice/invulnerability_blink.gd" id="45_blink"]
 [ext_resource type="Script" path="res://entities/player/knockback_receiver.gd" id="46_knockback"]
+[ext_resource type="Script" path="res://vfx/juice/screen_shake/screen_shake.gd" id="47_shake"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_interactor"]
 radius = 0.6
@@ -263,6 +264,17 @@ trail_states = [NodePath("../Movement/Dash"), NodePath("../Movement/DashJump"), 
 
 [node name="SpeedLines" parent="." node_paths=PackedStringArray("body") instance=ExtResource("32_speed_lines")]
 body = NodePath("..")
+
+[node name="ScreenShake" type="Node" parent="." node_paths=PackedStringArray("camera", "health")]
+script = ExtResource("47_shake")
+camera = NodePath("../CameraRig/SpringArm3D/Camera3D")
+health = NodePath("../Health")
+trauma_per_health = 2.5
+min_trauma = 0.3
+decay = 2.2
+max_offset = 0.15
+max_roll = 0.0262
+frequency = 22.0
 
 [node name="LedgeSensor" type="Node" parent="." node_paths=PackedStringArray("body", "body_shape")]
 script = ExtResource("29_ledge_sensor")
