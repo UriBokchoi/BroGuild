@@ -90,7 +90,8 @@ func _next() -> void:
 	var player := (load("res://entities/player/player.tscn") as PackedScene).instantiate() as Node3D
 	player.set(&"character", load("%s/%s.tres" % [CHARACTERS_DIR, scenario[0]]))
 	_world.add_child(player)
-	player.get(&"health").set(&"immortal", true)
+	var health: Object = player.get(&"health")
+	health.set(&"immortal", true)
 	if scenario[1] == "build":
 		var seed_value: int = scenario[3]
 		_build(player, seed_value)
@@ -146,7 +147,8 @@ func _build(player: Node3D, seed_value: int) -> void:
 	var rng := RandomNumberGenerator.new()
 	rng.seed = seed_value
 	var rarities: Resource = load("res://data/rarities/rarities.tres")
-	var weapon: Node = (player.get(&"weapons").call(&"get_weapons") as Array)[0]
+	var weapons: Object = player.get(&"weapons")
+	var weapon: Node = (weapons.call(&"get_weapons") as Array)[0]
 	var weapon_data: Resource = weapon.get(&"data")
 	for _level: int in (WEAPON_LEVEL - 1 if _parts.has("weapon") else 0):
 		weapon.call(&"add_upgrade", weapon_data.call(&"roll_upgrade", rarities.call(&"pick", rng), rng))
@@ -157,11 +159,15 @@ func _build(player: Node3D, seed_value: int) -> void:
 		for _level: int in RUNE_LEVEL - 1:
 			runes.call(&"upgrade", rune, rune.call(&"roll_upgrade", rarities.call(&"pick", rng), rng))
 	var experience: Node = player.get(&"experience")
-	while _parts.has("level") and int(experience.call(&"get_level")) < PLAYER_LEVEL:
-		experience.call(&"add", float(experience.call(&"needed")) * 2.0)
+	var level: int = experience.call(&"get_level")
+	while _parts.has("level") and level < PLAYER_LEVEL:
+		var needed: float = experience.call(&"needed")
+		experience.call(&"add", needed * 2.0)
+		level = experience.call(&"get_level")
 
 
 ## Un esbirro inmortal y quieto (el enjambre no tiene objetivo).
 func _dummy(swarm: Node3D, at: Vector3) -> void:
 	var enemy: Node = swarm.call(&"spawn", load("res://data/enemies/swarmer.tres"), at)
-	enemy.get(&"health").set(&"immortal", true)
+	var health: Object = enemy.get(&"health")
+	health.set(&"immortal", true)
