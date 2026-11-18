@@ -24,6 +24,9 @@ enum Wave { SQUARE, SAW, SINE, TRIANGLE, NOISE }
 ## Vibrato: cuánto oscila el tono (parte de él) y cuántas veces por segundo.
 @export_range(0.0, 1.0, 0.01) var vibrato_depth: float = 0.0
 @export_range(0.0, 60.0, 0.1, "suffix:Hz") var vibrato_speed: float = 0.0
+## Parciales que suenan a la vez, para timbres metálicos (una moneda): x = cuánto multiplica el tono
+## y y = su volumen. Vacío = solo la onda. Los de una moneda no son múltiplos exactos (inarmónicos).
+@export var partials: PackedVector2Array = PackedVector2Array()
 
 @export_group("envelope")
 ## Segundos que tarda en subir el volumen.
@@ -34,6 +37,9 @@ enum Wave { SQUARE, SAW, SINE, TRIANGLE, NOISE }
 @export_range(0.0, 1.0, 0.01) var punch: float = 0.0
 ## Segundos que tarda en apagarse.
 @export_range(0.0, 3.0, 0.001, "suffix:s") var decay: float = 0.1
+## Forma de la caída: 1 = recta; más, se apaga deprisa al principio y luego se arrastra (como el
+## metal al sonar).
+@export_range(0.25, 8.0, 0.05) var decay_curve: float = 1.0
 
 @export_group("color")
 ## Cuánto ruido se mezcla con la onda (0 = nada, 1 = solo ruido).

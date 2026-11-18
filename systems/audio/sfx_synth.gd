@@ -29,6 +29,12 @@ static func render(recipe: SfxRecipe) -> PackedByteArray:
 	var filtered := 0.0
 	var smoothing := 1.0 - exp(-TAU * recipe.low_pass / MIX_RATE) if recipe.low_pass > 0.0 else 1.0
 	var total := recipe.duration()
+	# Una fase por parcial; su volumen total, para que sumar parciales no suba el volumen.
+	var partial_phases := PackedFloat64Array()
+	partial_phases.resize(recipe.partials.size())
+	var partial_volume := 0.0
+	for partial: Vector2 in recipe.partials:
+		partial_volume += partial.y
 	for index: int in count:
 		var time := float(index) / MIX_RATE
 		var frequency := _frequency(recipe, time, total)
@@ -38,6 +44,13 @@ static func render(recipe: SfxRecipe) -> PackedByteArray:
 		if phase < previous_phase or (previous_phase < 0.5 and phase >= 0.5):
 			noise_value = rng.randf_range(-1.0, 1.0)
 		var value := _wave(recipe, phase, noise_value)
+		if partial_volume > 0.0:
+			value = 0.0
+			for partial_index: int in recipe.partials.size():
+				var partial := recipe.partials[partial_index]
+				partial_phases[partial_index] = fmod(partial_phases[partial_index] + frequency * partial.x / MIX_RATE, 1.0)
+				value += partial.y * _wave(recipe, partial_phases[partial_index], noise_value)
+			value /= partial_volume
 		value = lerpf(value, noise_value, recipe.noise)
 		filtered += smoothing * (value - filtered)
 		var sample := clampf(filtered * _envelope(recipe, time) * recipe.volume, -1.0, 1.0)
@@ -78,5 +91,5 @@ static func _envelope(recipe: SfxRecipe, time: float) -> float:
 		return 1.0 + recipe.punch * (1.0 - time / recipe.sustain)
 	time -= recipe.sustain
 	if time < recipe.decay:
-		return 1.0 - time / recipe.decay
+		return pow(1.0 - time / recipe.decay, recipe.decay_curve)
 	return 0.0

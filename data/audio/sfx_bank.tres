@@ -94,8 +94,8 @@ min_interval = 0.02
 [sub_resource type="Resource" id="Cue_pickup_gold"]
 script = ExtResource("2_cue")
 stream = ExtResource("24_pickup_gold")
-volume_db = -3.0
-pitch_variation = 0.05
+volume_db = -5.0
+pitch_variation = 0.08
 max_voices = 3
 min_interval = 0.03
 

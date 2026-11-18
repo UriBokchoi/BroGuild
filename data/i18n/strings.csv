@@ -223,6 +223,7 @@ STAT_GROUP_LOOT,Botín,Loot
 STAT_XP_REWARD,Experiencia que suelta,Experience dropped
 STAT_GOLD_REWARD,Oro que suelta,Gold dropped
 HUD_LEVEL,Nv. %d,Lv. %d
+HUD_HEALTH_VALUE,%d / %d,%d / %d
 RUNE_STRENGTH_NAME,Runa de Fuerza,Rune of Strength
 RUNE_STRENGTH_DESCRIPTION,"Más daño con todas las armas.","More damage with every weapon."
 RUNE_AMPLITUDE_NAME,Runa de Amplitud,Rune of Amplitude

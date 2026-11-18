@@ -156,6 +156,10 @@ func _add_hud(theme: Theme) -> void:
 	theme.set_type_variation(&"HealthBar", &"ProgressBar")
 	theme.set_stylebox(&"background", &"HealthBar", _box(Color(SLATE, 0.85), 6, Vector2(0, 0), Color(GOLD, 0.35), 2, 2))
 	theme.set_stylebox(&"fill", &"HealthBar", _box(HEALTH, 6, Vector2(0, 0), Color.TRANSPARENT, 0, 0))
+	# Vida en números dentro de la barra, con contorno para leerse sobre el rojo y sobre el fondo.
+	_label_variation(theme, &"HealthValueLabel", 15, INK)
+	theme.set_constant(&"outline_size", &"HealthValueLabel", 4)
+	theme.set_color(&"font_outline_color", &"HealthValueLabel", SLATE)
 	_separation(theme, &"HudColumn", &"VBoxContainer", 8)
 	# Aviso de «interactuar»: la tecla en una tecla dibujada y el texto al lado.
 	theme.set_type_variation(&"PromptPanel", &"PanelContainer")

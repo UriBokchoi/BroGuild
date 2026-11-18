@@ -1193,3 +1193,12 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
 - **Por qué:** quienes lo han probado echaban en falta sonido. Sintetizar deja todo en datos y sin licencias, y suena a arcade, a juego con el estilo.
   - Si un día hay sonidos grabados, basta con cambiar el audio de cada `SoundCue`.
   - Sin música por ahora: con síntesis sencilla quedaría pobre.
+
+## 2026-11-18 · Moneda de verdad y vida en números
+- **Decisión:**
+  - **Moneda:** el sonido de recoger oro pasa de un arpegio de juego de plataformas a un «clinc» metálico.
+    - El sintetizador gana parciales (`SfxRecipe.partials`): varios tonos a la vez, inarmónicos (×1; 1,47; 2,09; 2,56; 3,21), que es lo que hace sonar a metal.
+    - Gana también una caída curvada (`decay_curve`), que se apaga deprisa y luego se arrastra.
+    - La moneda suena a la mitad de antes y con más variación de tono (±8 %), para que muchas seguidas no suenen iguales.
+  - **Vida en números:** la barra de vida del HUD pasa de 16 a 24 px de alto y lleva dentro la vida y la máxima («85 / 120»), con contorno. La vida se redondea hacia arriba para no ver un 0 estando vivo.
+- **Por qué:** lo pidió el diseñador. La moneda sonaba muy alta y demasiado de juego de plataformas, y quería ver su vida exacta.
