@@ -342,3 +342,20 @@ RECORDS_MAP,Mapa,Map
 RECORDS_RESULT,Resultado,Result
 RECORDS_WON,Victoria,Victory
 RECORDS_LOST,Derrota,Defeat
+ARCHIVE_TITLE,Archivo,Archive
+ARCHIVE_TAB,%s  %d/%d,%s  %d/%d
+ARCHIVE_LOCKED,???,???
+ARCHIVE_CATEGORY_CHARACTERS,Personajes,Characters
+ARCHIVE_CATEGORY_WEAPONS,Armas,Weapons
+ARCHIVE_CATEGORY_RUNES,Runas,Runes
+ARCHIVE_CATEGORY_ITEMS,Objetos,Items
+ARCHIVE_CATEGORY_ENEMIES,Enemigos,Enemies
+ARCHIVE_HINT_CHARACTERS,Juega una partida con este personaje para descubrirlo.,Play a run with this character to discover it.
+ARCHIVE_HINT_WEAPONS,Consigue esta arma en una partida para descubrirla.,Get this weapon in a run to discover it.
+ARCHIVE_HINT_RUNES,Consigue esta runa en una partida para descubrirla.,Get this rune in a run to discover it.
+ARCHIVE_HINT_ITEMS,Consigue este objeto en una partida para descubrirlo.,Get this item in a run to discover it.
+ARCHIVE_HINT_ENEMIES,Derrota a este enemigo para descubrirlo.,Defeat this enemy to discover it.
+ARCHIVE_STARTING_WEAPON,Arma inicial: %s,Starting weapon: %s
+ARCHIVE_PASSIVE,Pasiva: %s,Passive: %s
+ARCHIVE_UPGRADES,Mejora: %s,Upgrades: %s
+ARCHIVE_STAT,%s: %s,%s: %s

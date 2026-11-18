@@ -1130,3 +1130,24 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
 
     Antes daba siempre +1, o +2 alguna vez.
 - **Por qué:** lo pidió el diseñador: que la común sea el +1 y las demás den más, con decimales. Solo con multiplicar por la rareza, la común (×0,6) se quedaría por debajo de 1 o la mítica muy por encima de 2,2. La parte fija junta las rarezas sin topes.
+
+## 2026-11-18 · Catálogo de contenido y Archivo
+- **Decisión:**
+  - **Catálogo:** `data/content.tres` (`ContentCatalog`) lista lo que se puede descubrir, por tipos (`ContentCategory`). Cada tipo lleva su nombre, la pista de cómo se descubre, las stats que enseña y sus entradas en orden: personajes, armas, runas, objetos (por rareza) y enemigos.
+    - Las pestañas del Archivo salen de los tipos, así que un tipo nuevo es solo datos.
+    - Un test avisa si un `.tres` de las carpetas de datos no está en el catálogo, con su id, nombre, frase e icono.
+  - **Ids e iconos:** personajes y enemigos ganan icono (SVG como los objetos) y los personajes, `id`. Los récords lo usan en vez del nombre del archivo.
+  - **Lo descubierto:** se guarda en `user://archive.cfg` (`Discoveries`, por tipo e id) en cuanto hay algo nuevo.
+    - Lo apunta `ArchiveRecorder`, que en las partidas escucha señales que ya existían.
+    - Un personaje se descubre al jugar con él; un arma, runa u objeto, al conseguirlo (la inicial también), y un enemigo, al derrotarlo. Un élite cuenta como su enemigo, y el jefe también entra.
+    - El muñeco del gimnasio no está en el catálogo y no cuenta.
+  - **Archivo** (menú principal): una pestaña por tipo con su cuenta («2/3»), casillas con el icono (o «?») y la ficha a la derecha.
+    - Personajes: diferencias de stats, arma inicial y pasiva.
+    - Objetos: rareza y modificadores.
+    - Runas: qué mejoran.
+    - Armas y enemigos: sus `shown_stats`.
+    - Lo no descubierto: «???» y la pista.
+  - El menú principal abre sus tres paneles igual (`_wire`).
+  - **Tests:** el hook previo de GUT también lleva el Archivo a un archivo de pruebas.
+- **Por qué:** cierra el Hito 3. El diseñador pidió que los objetos entraran también y que los personajes salgan como «???» hasta jugar con ellos.
+  - Los menús y la subida de nivel siguen sacando lo suyo de sus carpetas. Pasarán al catálogo cuando haya desbloqueos de verdad (Hito 8), que es cuando importa ofrecer solo lo desbloqueado.

@@ -148,7 +148,7 @@ WASD mover · Ratón cámara · Espacio saltar · Shift dash · Ctrl slide (dobl
   - *Círculo de setas:* hay dos por el Brosque, con una luz morada. Al entrar te ofrece elegir uno de tres objetos pasivos (la Suerte ayuda) y se apaga: una sola vez cada uno.
   - *Taberna:* en el centro de una pared del borde del Brosque, sin poder entrar. Al acercarte, «interactuar» te cura la mitad de la vida por oro, cada vez más caro (y más con la dificultad).
   - *Niveles*: el Brosque (en inglés, the Brorest), la Torre del Mago y la Mazmorra. El Brosque es un **gimnasio en el bosque**: bosque low-poly de colores vivos con humor (rocas con forma de pesas, troncos-banco, carteles de «No pain, no gain») y ruinas pequeñas de piedra con musgo (un templo de columnas, muros rotos y arcos) que le dan el toque medieval, y charquitos de agua con una flor (solo decorado), tragaperras entre los árboles y mesetas para moverse en vertical. Empieza sencillo y gana detalles con el tiempo.
-  - *Archivo*: personajes, armas, runas y enemigos. Cada entrada se desbloquea al conseguirla o al derrotar a ese enemigo; mientras tanto sale como «???».
+  - *Archivo*: personajes, armas, runas, objetos y enemigos, con cuántos llevas descubiertos de cada tipo. Un personaje se descubre al jugar con él; un arma, una runa o un objeto, al conseguirlo; un enemigo (también el jefe), al derrotarlo. Mientras tanto sale como «?» con una pista; descubierto, enseña su ficha con lo que hace.
 - **Reinicio**: de la muerte a una partida nueva en menos de 2 s.
 
 ## 10. Fuera de alcance por ahora

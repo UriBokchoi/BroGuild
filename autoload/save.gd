@@ -1,7 +1,7 @@
 extends Node
 ## Lo que dura entre partidas, guardado en [code]user://[/code]: las opciones ([GameSettings]), que
-## al arrancar carga y aplica, y la clasificación de partidas ([Leaderboard]). Los desbloqueos
-## llegarán más adelante.
+## al arrancar carga y aplica, la clasificación de partidas ([Leaderboard]) y lo descubierto para el
+## Archivo ([Discoveries]). Los desbloqueos llegarán más adelante.
 ## Sin lógica de gameplay.
 
 const SETTINGS_DATA := preload("res://data/settings/settings.tres")
@@ -14,6 +14,10 @@ var settings: GameSettings
 var leaderboard_path: String = "user://leaderboard.cfg"
 ## Las mejores partidas. Para añadir una, [method record_run].
 var leaderboard: Leaderboard
+## Archivo de lo descubierto (los tests usan otro).
+var archive_path: String = "user://archive.cfg"
+## Lo descubierto. Para apuntar algo, [method discover].
+var discoveries: Discoveries
 
 
 func _ready() -> void:
@@ -22,6 +26,7 @@ func _ready() -> void:
 	settings.apply_audio()
 	settings.apply_display(get_window())
 	load_leaderboard()
+	load_discoveries()
 
 
 ## Carga las opciones de [member settings_path]; sin archivo, las de un juego recién estrenado.
@@ -36,10 +41,7 @@ func load_settings() -> void:
 func save_settings() -> Error:
 	var config := ConfigFile.new()
 	settings.write_to(config)
-	var error := config.save(settings_path)
-	if error != OK:
-		push_error("Save: no se han podido guardar las opciones en %s (%s)." % [settings_path, error_string(error)])
-	return error
+	return _save(config, settings_path, "las opciones")
 
 
 ## Carga la clasificación de [member leaderboard_path] (sin archivo, vacía).
@@ -58,7 +60,33 @@ func record_run(record: RunRecord) -> int:
 	var place := leaderboard.add(record)
 	var config := ConfigFile.new()
 	leaderboard.write_to(config)
-	var error := config.save(leaderboard_path)
-	if error != OK:
-		push_error("Save: no se ha podido guardar la clasificación en %s (%s)." % [leaderboard_path, error_string(error)])
+	_save(config, leaderboard_path, "la clasificación")
 	return place
+
+
+## Carga lo descubierto de [member archive_path] (sin archivo, nada).
+func load_discoveries() -> void:
+	discoveries = Discoveries.new()
+	var config := ConfigFile.new()
+	if config.load(archive_path) == OK:
+		discoveries.read_from(config)
+
+
+## Apunta [param id] como descubierto en [param category] y, si es nuevo, lo guarda. Devuelve si
+## era nuevo.
+func discover(category: StringName, id: StringName) -> bool:
+	if discoveries == null:
+		load_discoveries()
+	if not discoveries.discover(category, id):
+		return false
+	var config := ConfigFile.new()
+	discoveries.write_to(config)
+	_save(config, archive_path, "el Archivo")
+	return true
+
+
+func _save(config: ConfigFile, path: String, what: String) -> Error:
+	var error := config.save(path)
+	if error != OK:
+		push_error("Save: no se ha podido guardar %s en %s (%s)." % [what, path, error_string(error)])
+	return error

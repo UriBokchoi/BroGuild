@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="CharacterData" format=3]
 
 [ext_resource type="Script" path="res://entities/player/characters/character_data.gd" id="1_data"]
+[ext_resource type="Texture2D" path="res://assets/textures/icons/characters/warrior.svg" id="98_icon"]
 [ext_resource type="Script" path="res://core/stats/stat_modifier.gd" id="2_modifier"]
 [ext_resource type="Resource" path="res://data/weapons/sword.tres" id="3_weapon"]
 [ext_resource type="PackedScene" path="res://entities/player/characters/passives/veteran.tscn" id="4_passive"]
@@ -56,9 +57,11 @@ value = 0.8
 [resource]
 script = ExtResource("1_data")
 stat_modifiers = Array[ExtResource("2_modifier")]([SubResource("Resource_health"), SubResource("Resource_armor"), SubResource("Resource_run"), SubResource("Resource_sprint"), SubResource("Resource_dash"), SubResource("Resource_regen")])
+id = &"warrior"
 name_key = &"CHARACTER_WARRIOR_NAME"
 description_key = &"CHARACTER_WARRIOR_DESCRIPTION"
 color = Color(0.85, 0.32, 0.25, 1)
+icon = ExtResource("98_icon")
 starting_weapon = ExtResource("3_weapon")
 passive = ExtResource("4_passive")
 passive_name_key = &"PASSIVE_VETERAN_NAME"

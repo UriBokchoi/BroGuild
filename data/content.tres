@@ -1,0 +1,83 @@
+[gd_resource type="Resource" script_class="ContentCatalog" format=3]
+
+[ext_resource type="Script" path="res://systems/content/content_catalog.gd" id="1_catalog"]
+[ext_resource type="Script" path="res://systems/content/content_category.gd" id="2_category"]
+[ext_resource type="Resource" path="res://data/characters/warrior.tres" id="10_warrior"]
+[ext_resource type="Resource" path="res://data/characters/mage.tres" id="11_mage"]
+[ext_resource type="Resource" path="res://data/characters/rogue.tres" id="12_rogue"]
+[ext_resource type="Resource" path="res://data/weapons/sword.tres" id="13_sword"]
+[ext_resource type="Resource" path="res://data/weapons/staff.tres" id="14_staff"]
+[ext_resource type="Resource" path="res://data/weapons/dagger.tres" id="15_dagger"]
+[ext_resource type="Resource" path="res://data/runes/strength.tres" id="16_strength"]
+[ext_resource type="Resource" path="res://data/runes/amplitude.tres" id="17_amplitude"]
+[ext_resource type="Resource" path="res://data/runes/haste.tres" id="18_haste"]
+[ext_resource type="Resource" path="res://data/runes/vigor.tres" id="19_vigor"]
+[ext_resource type="Resource" path="res://data/runes/multiplicity.tres" id="20_multiplicity"]
+[ext_resource type="Resource" path="res://data/items/cold_pizza.tres" id="21_cold_pizza"]
+[ext_resource type="Resource" path="res://data/items/fanny_pack.tres" id="22_fanny_pack"]
+[ext_resource type="Resource" path="res://data/items/game_controller.tres" id="23_game_controller"]
+[ext_resource type="Resource" path="res://data/items/horseshoe.tres" id="24_horseshoe"]
+[ext_resource type="Resource" path="res://data/items/mead.tres" id="25_mead"]
+[ext_resource type="Resource" path="res://data/items/protein_shake.tres" id="26_protein_shake"]
+[ext_resource type="Resource" path="res://data/items/rye_bread.tres" id="27_rye_bread"]
+[ext_resource type="Resource" path="res://data/items/backwards_cap.tres" id="28_backwards_cap"]
+[ext_resource type="Resource" path="res://data/items/bluetooth_speaker.tres" id="29_bluetooth_speaker"]
+[ext_resource type="Resource" path="res://data/items/scratch_card.tres" id="30_scratch_card"]
+[ext_resource type="Resource" path="res://data/items/socks_and_sandals.tres" id="31_socks_and_sandals"]
+[ext_resource type="Resource" path="res://data/items/torch.tres" id="32_torch"]
+[ext_resource type="Resource" path="res://data/items/travel_cloak.tres" id="33_travel_cloak"]
+[ext_resource type="Resource" path="res://data/items/body_oil.tres" id="34_body_oil"]
+[ext_resource type="Resource" path="res://data/items/lifting_belt.tres" id="35_lifting_belt"]
+[ext_resource type="Resource" path="res://data/items/pocket_crossbow.tres" id="36_pocket_crossbow"]
+[ext_resource type="Resource" path="res://data/items/sunglasses.tres" id="37_sunglasses"]
+[ext_resource type="Resource" path="res://data/items/brass_grail.tres" id="38_brass_grail"]
+[ext_resource type="Resource" path="res://data/items/gold_chain.tres" id="39_gold_chain"]
+[ext_resource type="Resource" path="res://data/items/golden_dumbbell.tres" id="40_golden_dumbbell"]
+[ext_resource type="Resource" path="res://data/items/shady_shake.tres" id="41_shady_shake"]
+[ext_resource type="Resource" path="res://data/items/bro_crown.tres" id="42_bro_crown"]
+[ext_resource type="Resource" path="res://data/items/excalibro.tres" id="43_excalibro"]
+[ext_resource type="Resource" path="res://data/enemies/swarmer.tres" id="44_swarmer"]
+[ext_resource type="Resource" path="res://data/enemies/shooter.tres" id="45_shooter"]
+[ext_resource type="Resource" path="res://data/enemies/sapling.tres" id="46_sapling"]
+[ext_resource type="Resource" path="res://data/enemies/ent_trainer.tres" id="47_ent_trainer"]
+
+[sub_resource type="Resource" id="Category_characters"]
+script = ExtResource("2_category")
+id = &"characters"
+name_key = &"ARCHIVE_CATEGORY_CHARACTERS"
+hint_key = &"ARCHIVE_HINT_CHARACTERS"
+entries = Array[Resource]([ExtResource("10_warrior"), ExtResource("11_mage"), ExtResource("12_rogue")])
+
+[sub_resource type="Resource" id="Category_weapons"]
+script = ExtResource("2_category")
+id = &"weapons"
+name_key = &"ARCHIVE_CATEGORY_WEAPONS"
+hint_key = &"ARCHIVE_HINT_WEAPONS"
+shown_stats = Array[StringName]([&"damage", &"cooldown", &"projectiles", &"area", &"reach"])
+entries = Array[Resource]([ExtResource("13_sword"), ExtResource("14_staff"), ExtResource("15_dagger")])
+
+[sub_resource type="Resource" id="Category_runes"]
+script = ExtResource("2_category")
+id = &"runes"
+name_key = &"ARCHIVE_CATEGORY_RUNES"
+hint_key = &"ARCHIVE_HINT_RUNES"
+entries = Array[Resource]([ExtResource("16_strength"), ExtResource("17_amplitude"), ExtResource("18_haste"), ExtResource("19_vigor"), ExtResource("20_multiplicity")])
+
+[sub_resource type="Resource" id="Category_items"]
+script = ExtResource("2_category")
+id = &"items"
+name_key = &"ARCHIVE_CATEGORY_ITEMS"
+hint_key = &"ARCHIVE_HINT_ITEMS"
+entries = Array[Resource]([ExtResource("21_cold_pizza"), ExtResource("22_fanny_pack"), ExtResource("23_game_controller"), ExtResource("24_horseshoe"), ExtResource("25_mead"), ExtResource("26_protein_shake"), ExtResource("27_rye_bread"), ExtResource("28_backwards_cap"), ExtResource("29_bluetooth_speaker"), ExtResource("30_scratch_card"), ExtResource("31_socks_and_sandals"), ExtResource("32_torch"), ExtResource("33_travel_cloak"), ExtResource("34_body_oil"), ExtResource("35_lifting_belt"), ExtResource("36_pocket_crossbow"), ExtResource("37_sunglasses"), ExtResource("38_brass_grail"), ExtResource("39_gold_chain"), ExtResource("40_golden_dumbbell"), ExtResource("41_shady_shake"), ExtResource("42_bro_crown"), ExtResource("43_excalibro")])
+
+[sub_resource type="Resource" id="Category_enemies"]
+script = ExtResource("2_category")
+id = &"enemies"
+name_key = &"ARCHIVE_CATEGORY_ENEMIES"
+hint_key = &"ARCHIVE_HINT_ENEMIES"
+shown_stats = Array[StringName]([&"max_health", &"contact_damage", &"move_speed"])
+entries = Array[Resource]([ExtResource("44_swarmer"), ExtResource("45_shooter"), ExtResource("46_sapling"), ExtResource("47_ent_trainer")])
+
+[resource]
+script = ExtResource("1_catalog")
+categories = Array[ExtResource("2_category")]([SubResource("Category_characters"), SubResource("Category_weapons"), SubResource("Category_runes"), SubResource("Category_items"), SubResource("Category_enemies")])

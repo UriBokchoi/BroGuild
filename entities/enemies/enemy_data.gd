@@ -10,6 +10,8 @@ extends Resource
 @export var name_key: StringName = &""
 ## Clave de traducción de la descripción.
 @export var description_key: StringName = &""
+## Icono (Archivo).
+@export var icon: Texture2D
 ## Escena del enemigo: su raíz es un [Enemy].
 @export var scene: PackedScene
 ## Resources de stats del enemigo ([HealthData], [EnemyStats]…): las fuentes de su [StatsComponent].

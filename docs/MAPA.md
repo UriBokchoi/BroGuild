@@ -29,7 +29,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 | `vfx/` | Efectos visuales: juice que reacciona a señales, shaders compartidos (desenfoque, rejilla y columna de luz) y líneas de velocidad. |
 | `levels/` | Escenas jugables: `common/` (`RunSystems`, los sistemas de partida que usa cada nivel, y `layout/`, los mapas generados: `LevelLayout`, `LayoutData`, `LayoutPiece`, `ForestBuilder`, `ForestData`), el Brosque (`brosque/`), el gimnasio de pruebas con su zona de combate y la prueba de estrés. |
 | `tools/` | Validación por terminal (`validate.sh`, `ci/`), generadores (`gen_themes.gd`) y la simulación de equilibrio (`sim_balance.gd`: daño por segundo de cada personaje contra una horda y contra un jefe, al empezar y con una build de mitad de partida). |
-| `tests/` | GUT: `unit/` y `integration/`, con la misma ruta que el código. `hooks/`: los scripts de antes (`pre_run.gd`: los récords van a un archivo de pruebas) y de después de la ejecución (`post_run.gd`). |
+| `tests/` | GUT: `unit/` y `integration/`, con la misma ruta que el código. `hooks/`: los scripts de antes (`pre_run.gd`: los récords y el Archivo van a archivos de pruebas) y de después de la ejecución (`post_run.gd`). |
 | `docs/` | GDD, ROADMAP, DECISIONES y este mapa. |
 | `assets/` | Assets reutilizables y `CREDITS.md`. `models/props/`: piezas hechas con mallas básicas (espada, escudo, bastón, sombrero de mago, daga) con sus materiales en `materials/`; las llevan los personajes y pueden servir para otras cosas (el Archivo, botín). `textures/icons/`: iconos SVG de armas, runas, objetos pasivos y de la interfaz (candado). Audio y fuentes, aún vacíos. |
 
@@ -85,7 +85,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 - **Daga** (`dagger/`): `DaggerBlade` da a uno y, si le quedan `bounces`, salta al más cercano dentro de `bounce_range` con todo su daño.
 
 ### Enemigos — `entities/enemies/` y `systems/spawning/`
-- **Tipos:** `EnemyData` (en `data/enemies/`) lleva escena, fuentes de stats (`HealthData` y `EnemyStats`: velocidad, contacto, separación, trepar y distancia que guarda) y armas (`weapons`, opcional).
+- **Tipos:** `EnemyData` (en `data/enemies/`) lleva id, nombre, frase, icono (el del Archivo), escena, fuentes de stats (`HealthData` y `EnemyStats`: velocidad, contacto, separación, trepar y distancia que guarda) y armas (`weapons`, opcional).
 - **`Enemy`** (base de las escenas):
   - Es un `RigidBody3D` sin rotación que choca con el mundo, con el jugador y con otros enemigos.
   - Fija su velocidad horizontal con `EnemySteering`: perseguir con desvío, separarse y decidir si trepa. Con `keep_distance` se queda a esa distancia (`keep_range`) mirando al objetivo.
@@ -201,10 +201,11 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 - **`hud/`:** bienvenida al nivel (`LevelIntro`, en el centro, se desvanece sola), vida, stamina, experiencia y nivel (arriba), oro (`GoldCounter`) y reloj de la ronda (`RunClock`, en rojo en la prórroga) y dificultad (`DifficultyCounter`, una calavera y su valor) debajo, las llaves del jefe (`BossKeyCounter`, «1/3», solo en niveles con jefe), armas y runas (`LoadoutBar`: una fila de `LoadoutSlot` por tipo, con icono y nivel; las ranuras sin abrir, con candado), objetos pasivos debajo (`PassiveBar`: icono con el borde de su rareza y «×N» si hay varias copias), el jefe (`BossBar`, arriba en el centro: su nombre, su vida y lo que grita), objetos que salen (`ChestPanel`, de un cofre o del premio del jefe por `item_revealed`, abajo en el centro: la luz recorre las rarezas, frena y se para en la del objeto, que se muestra con su nombre del color de la rareza, lo que hace (sus modificadores, por `ModifierFormat.describe_all`) y su frase), tragaperras (`SlotPanel`, también abajo: rodillos que paran uno tras otro y el resultado), textos breves (`AnnouncementFeed`, en el centro bajo la barra del jefe: un power-up recogido, una mejora; de su color, se apilan y se desvanecen) y aviso de interacción. Escuchan el `EventBus`.
 - **`menus/pause/`:** menú de pausa con todas las stats del jugador; «Opciones» abre el `OptionsPanel`; «Reintentar» y «Salir» (al menú principal) van por `RunFlow`.
 - **`menus/run_setup/`:** `RunSetup`, la selección antes de jugar: personajes a la izquierda, su modelo girando en el centro y, al pasar el ratón, su ficha a la derecha (nombre, diferencias de stats, arma principal y pasiva). Al elegir uno, la ficha se cambia por los niveles (`LevelData.is_available()`: sin escena, «próximamente» y desactivado). «Volver» o Esc retroceden. La muestra `Game` tras «Jugar».
-- **`menus/main/`:** `MainMenu`, el menú principal (Jugar, Opciones, Récords, Archivo —desactivado hasta su tarea— y Abandonar), con los personajes vestidos de fondo y, abajo a la izquierda y pequeño, el selector de idioma. Lo muestra `Game`.
+- **`menus/main/`:** `MainMenu`, el menú principal (Jugar, Opciones, Récords, Archivo y Abandonar; cada panel sustituye a la lista y vuelve a ella al cerrarse), con los personajes vestidos de fondo y, abajo a la izquierda y pequeño, el selector de idioma. Lo muestra `Game`.
 - **`widgets/`:** piezas de interfaz reutilizables. `ModalPanel`: base de los paneles que pausan y obligan a elegir (subir de nivel, objetos). `CardParts`: columna, icono, líneas y borde de rareza de las cartas. `LanguagePicker`: un idioma por cada traducción cargada, con su nombre en su propio idioma (`LANGUAGE_NAME`) y un globo; al elegir, lo pone y lo guarda en las opciones.
 - **`menus/armory/`:** panel de la armería.
 - **`menus/item_choice/`:** `ItemChoicePanel`, elegir uno de los objetos que ofrece un círculo de setas (cartas `ItemChoiceCard`: icono, rareza de su color, nombre, descripción y mejoras); el elegido va a los objetos del jugador.
+- **`menus/archive/`:** `ArchivePanel`, el Archivo: una pestaña por tipo del `ContentCatalog` con lo descubierto («1/3»), una casilla por entrada (su icono, o «?» si no se ha descubierto) y su ficha al pasar el ratón o el foco: nombre, frase y lo que hace (diferencias de stats, arma inicial y pasiva del personaje; rareza y modificadores del objeto; qué mejora la runa; las `shown_stats` de armas y enemigos). Lo no descubierto: «???» y cómo descubrirlo. Lo abre el menú principal.
 - **`menus/leaderboard/`:** `LeaderboardPanel`, los récords: las partidas de `Save.leaderboard`, de la mejor a la peor (puesto, personaje, enemigos, tiempo, nivel, mapa y resultado), con la última jugada en azul. «Volver» o Esc lo cierran. Lo abre el menú principal.
 - **`menus/level_up/`:** elección al subir de nivel (`LevelUpPanel` y sus `LevelUpCard`; una mejora lleva el borde y el nombre del color de su rareza).
 - **`menus/options/`:** `OptionsPanel`, opciones básicas: volumen de cada bus (`SettingsData.volume_buses`, en `default_bus_layout.tres`), pantalla completa, tamaño de la ventana y VSync. El volumen se aplica al momento; lo de pantalla espera a «Aplicar» (que lo aplica y lo guarda) y «Volver» descarta lo no aplicado. Trabaja sobre `Save.settings`. Dentro del editor (pestaña «Juego») avisa de que la ventana no se puede cambiar y desactiva esas opciones. Lo abren la pausa y el menú principal.
@@ -221,10 +222,15 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 - **`RunFlow`:** reintentar y volver al menú desde la pausa o los resultados. Dentro de `Game`, por el `EventBus` (`retry_requested`, `main_menu_requested`); con el nivel ejecutado solo (F6), recarga la escena o cierra el juego.
 - **Reinicio rápido:** reintentar vuelve a instanciar el nivel con otra semilla (unos 0,2 s en el gimnasio).
 
+### Archivo — `systems/content/`
+- **`ContentCatalog`** (`data/content.tres`): todo lo que se puede descubrir, por tipos (`ContentCategory`: id, nombre, pista de cómo se descubre, `shown_stats` y sus entradas en orden): personajes, armas, runas, objetos y enemigos. Un test avisa si falta algo de las carpetas de datos.
+- **`Discoveries`:** lo descubierto, por tipo e id. Lo carga `Save` (`user://archive.cfg`) y lo guarda en cuanto hay algo nuevo (`Save.discover`).
+- **`ArchiveRecorder`** (en `RunSystems`, con `record`): escucha el `EventBus` y apunta el personaje del jugador al empezar, las armas y runas al conseguirlas, los objetos pasivos y los enemigos derrotados (un élite cuenta como su enemigo). Solo lo que está en el catálogo.
+
 ### Opciones — `systems/settings/` y `autoload/save.gd`
 - **`SettingsData`** (`data/settings/settings.tres`): buses con volumen, valores al estrenar el juego (el idioma, español), tamaños de ventana que se ofrecen y cuántas partidas guardan los récords (`leaderboard_size`).
 - **`GameSettings`:** lo elegido (idioma, volúmenes, pantalla completa, tamaño de ventana, VSync). Se guarda en un `ConfigFile` (`user://settings.cfg`) y se aplica al motor (`apply_audio`, `apply_display`). Sin pantalla (headless) no toca nada; incrustado en el editor (`Engine.is_embedded_in_editor()`, ver `can_change_window`) solo el VSync.
-- **`Save`** (autoload) lo carga y lo aplica al arrancar (también el idioma: `TranslationServer.set_locale`); quien lo cambia llama a `Save.save_settings()`. También carga los récords (`user://leaderboard.cfg`) y apunta cada partida con `record_run()`. Los tests usan otros archivos (`settings_path`, `leaderboard_path`; el hook `tests/hooks/pre_run.gd` lleva los récords a uno de pruebas para toda la ejecución).
+- **`Save`** (autoload) lo carga y lo aplica al arrancar (también el idioma: `TranslationServer.set_locale`); quien lo cambia llama a `Save.save_settings()`. También carga los récords (`user://leaderboard.cfg`) y apunta cada partida con `record_run()`, y lo descubierto para el Archivo (`user://archive.cfg`, `discover()`). Los tests usan otros archivos (`settings_path`, `leaderboard_path`, `archive_path`; el hook `tests/hooks/pre_run.gd` lleva récords y Archivo a unos de pruebas para toda la ejecución).
 
 ### Niveles — `levels/`
 - **`common/run_systems.tscn`** (`RunSystems`): jugador, horda y oleadas, botín, subir de nivel, jefe (`BossEncounter`), HUD, pausa, resultados, números de daño y panel de depuración, ya conectados. Cada nivel pone una instancia con sus oleadas (`waves`), su jefe (`boss`, un `BossData`; vacío: sin jefe), si empiezan solas (`autostart_waves`), el personaje de serie y el punto de aparición (`spawn_point`).
@@ -253,13 +259,13 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 | `player_health_changed` | `Player` | `HealthBar` |
 | `player_died` | `Player` | `ResultsPanel`, `RunRecorder` |
 | `enemy_damaged` | `DamageReporter` | `DamageNumbers` |
-| `enemy_died` (el propio enemigo) | `Enemy` | `LootDropper` (y más adelante el Archivo) |
+| `enemy_died` (el propio enemigo) | `Enemy` | `LootDropper`, `RunRecorder`, `ArchiveRecorder` |
 | `breakable_broken` (sus datos y dónde) | `Breakable` | `LootDropper` |
 | `pickup_collected` | `PickupField` (y las tragaperras y el premio del jefe) | `ExperienceComponent` (la recompensa `experience`), `WalletComponent` (`gold`), los `PickupEffect` (`heal`, `magnet`, `bomb`) |
 | `player_xp_changed` | `Player` | `XpBar` |
 | `player_gold_changed` | `Player` | `GoldCounter` |
 | `difficulty_changed` (la stat `difficulty` del jugador) | `Player` | `DifficultyCounter`, `LootDropper` |
-| `player_item_changed` (arma o runa y su nivel; 0 = quitada) | `Player` (de `WeaponInventory.weapon_changed` y `RuneInventory.rune_changed`) | `LoadoutBar` |
+| `player_item_changed` (arma o runa y su nivel; 0 = quitada) | `Player` (de `WeaponInventory.weapon_changed` y `RuneInventory.rune_changed`) | `LoadoutBar`, `ArchiveRecorder` |
 | `player_slots_changed` (ranuras abiertas) | `Player` | `LoadoutBar` |
 | `run_clock_changed` (segundos, prórroga; negativo = sin ronda) | `WaveDirector` | `RunClock`, `RunRecorder`, `BossAltar` (al empezar la prórroga, pide el jefe) |
 | `player_leveled_up` | `Player` | `LevelUpController` |
@@ -267,7 +273,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 | `slot_spun`, `slot_resolved` | `SlotMachine` | `SlotPanel`, `SlowMotion` (el jackpot) |
 | `chest_opened`, `chest_denied` (coste) | `Chest` | los cofres cuentan los abiertos; `ChestPanel` (el aviso de que falta oro) |
 | `item_revealed` (objeto pasivo y segundos del revelado) | `Chest`, `BossEncounter` (el premio) | `ChestPanel` |
-| `player_passive_changed` (objeto pasivo y copias; 0 = quitado) | `Player` (de `PassiveInventory.item_changed`) | `PassiveBar` |
+| `player_passive_changed` (objeto pasivo y copias; 0 = quitado) | `Player` (de `PassiveInventory.item_changed`) | `PassiveBar`, `ArchiveRecorder` |
 | `announced` (clave, valores y color de un texto breve) | `PickupField` (los power-ups con `PickupData.announce_key`), `UpgradeAllEffect` | `AnnouncementFeed` |
 | `upgrade_choice_requested` (cuántas elecciones) | `UpgradeChoiceEffect` | `LevelUpController` |
 | `time_stop_changed` (si el tiempo está parado) | `EnemySwarm` | `TimeStopFilter` |
@@ -324,5 +330,6 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
   2. Haz que el sistema que lo usa escuche `EventBus.pickup_collected` con esa recompensa.
   3. Suéltalo con `PickupField.drop()`, normalmente desde `LootDropper`.
 - **Un efecto de juice:** escucha una señal (del componente o del `EventBus`) y no cambies el gameplay. Si hay muchos a la vez, usa `NodePool`.
+- **Contenido que sale en el Archivo** (personaje, arma, runa, objeto, enemigo): con id (el nombre de su archivo), nombre, frase e icono, y añadido a su pestaña en `data/content.tres`; un test avisa si falta.
 - **Un texto de interfaz:** pon la clave en `data/i18n/strings.csv` (es y en) y la clave como texto del control, o `tr()`.
 - **Una sección de depuración:** crea un `DebugSection` como hijo de las secciones del panel.
