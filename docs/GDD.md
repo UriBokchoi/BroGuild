@@ -69,7 +69,7 @@ Toda apuesta tiene **anticipación** (giro, luces, sonido que sube), **revelado*
 **Mejoras que tocan el azar** (ejemplos): Dado trucado (1 reroll gratis por nivel) · Amigo del crupier (las maldiciones de la tragaperras a veces son premio) · Mano caliente (cofres más baratos con racha alta).
 
 ## 6. Combate
-- **Armas automáticas** (como en Megabonk o Vampire Survivors): atacan solas al objetivo más cercano o al grupo más denso; tú te centras en moverte. Ranuras: 4 de armas y 4 de runas, hasta nivel 10 las armas y 20 las runas; al empezar solo hay 2 de cada abiertas y las otras 2 se desbloquearán (cómo, por decidir; en el HUD se ven cerradas). Todo en datos.
+- **Armas automáticas** (como en Megabonk o Vampire Survivors): atacan solas al objetivo más cercano o al grupo más denso que vean (no disparan a lo que hay detrás de un árbol o una pared); tú te centras en moverte. Ranuras: 4 de armas y 4 de runas, hasta nivel 10 las armas y 20 las runas; al empezar solo hay 2 de cada abiertas y las otras 2 se desbloquearán (cómo, por decidir; en el HUD se ven cerradas). Todo en datos.
 - **Armas iniciales**:
   - **Espada** (cuerpo a cuerpo): la cantidad de proyectiles también le afecta (más tajos).
   - **Bastón de mago**: proyectiles que explotan al contacto, con daño en área.

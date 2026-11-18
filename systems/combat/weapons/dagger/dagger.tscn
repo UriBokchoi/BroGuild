@@ -6,6 +6,7 @@
 [node name="Dagger" type="Node3D"]
 script = ExtResource("1_weapon")
 target_mask = 16
+sight_mask = 1
 aim_height = 1.0
 projectile_scene = ExtResource("2_blade")
 prewarm_projectiles = 6

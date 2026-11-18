@@ -1041,3 +1041,8 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
 ## 2026-11-18 · Selector de idioma en el menú principal
 - **Decisión:** abajo a la izquierda del menú principal, pequeño, un `LanguagePicker`: un desplegable con un globo y el idioma actual. Ofrece un idioma por cada traducción cargada, con su nombre en su propio idioma (la clave `LANGUAGE_NAME` de cada columna del CSV: «Español», «English»). Al elegir, lo pone al momento y lo guarda en las opciones (`GameSettings.locale`). Un idioma nuevo aparece solo al añadir su columna.
 - **Por qué:** lo pidió el diseñador, a mano y sin estorbar el menú. Va en `ui/widgets/` para poder ponerlo también en las opciones.
+
+## 2026-11-18 · Las armas solo apuntan a lo que se ve
+- **Decisión:** el `TargetFinder` descarta los objetivos que no se ven. Lanza un rayo desde el pecho de quien dispara hasta el centro del objetivo contra las capas que tapan la vista (`Weapon.sight_mask`: el mundo, con árboles, mesetas, ruinas y props). Los rayos se tiran del más cercano al más lejano y solo hasta tener los objetivos que hacen falta. Vale para todas las armas: el tirador tampoco dispara a través de un árbol.
+- **Por qué:** lo pidió el diseñador. Disparar a lo que no se ve gastaba ataques contra paredes y quedaba raro.
+- **Coste:** como mucho un rayo por candidato al buscar (una vez por ataque, o cada `search_interval` sin objetivo).

@@ -1,6 +1,6 @@
 extends GutTest
 ## Espada e inventario de armas con física real: ataca sola al muñeco que está a su alcance, ignora
-## lo que queda lejos, sus niveles aplican las mejoras de sus datos y las stats de quien la lleva
+## lo que queda lejos o detrás de una pared (no lo ve), sus niveles aplican las mejoras de sus datos y las stats de quien la lleva
 ## escalan cadencia, tajos y alcance.
 
 const SWORD := preload("res://data/weapons/sword.tres")
@@ -98,6 +98,25 @@ func test_ignores_dummies_out_of_reach() -> void:
 	watch_signals(sword)
 	await wait_physics_frames(15)
 	assert_signal_not_emitted(sword, "fired")
+
+
+func test_ignores_dummies_it_cannot_see() -> void:
+	_add_dummy(Vector3(0.0, 0.0, -2.0))
+	var wall := StaticBody3D.new()
+	var shape := CollisionShape3D.new()
+	var box := BoxShape3D.new()
+	box.size = Vector3(4.0, 4.0, 0.2)
+	shape.shape = box
+	wall.add_child(shape)
+	wall.position = Vector3(0.0, 1.0, -1.0)
+	add_child(wall)
+	var sword := _inventory.add(SWORD)
+	watch_signals(sword)
+	await wait_physics_frames(15)
+	assert_signal_not_emitted(sword, "fired", "detrás de la pared no lo ve")
+	wall.free()
+	await wait_physics_frames(80)
+	assert_signal_emitted(sword, "fired", "sin la pared, sí")
 
 
 func test_extra_projectiles_are_extra_slashes() -> void:

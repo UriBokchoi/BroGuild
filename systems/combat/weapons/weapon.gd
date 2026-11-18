@@ -16,6 +16,8 @@ signal level_changed(level: int)
 ## Capas de física de los objetivos que busca ([code]enemy_hurtbox[/code] en las del jugador,
 ## [code]player_hurtbox[/code] en las de los enemigos).
 @export_flags_3d_physics var target_mask: int = 0
+## Capas que tapan la vista (el mundo): no busca objetivos que no se vean. 0 = ve a través de todo.
+@export_flags_3d_physics var sight_mask: int = 0
 ## Altura sobre los pies desde la que busca objetivos y apunta (el pecho de quien la lleva).
 @export_range(0.0, 3.0, 0.05, "suffix:m") var aim_height: float = 0.0
 ## Segundos entre búsquedas de objetivo mientras no encuentra ninguno (0 = en cada tick). Las armas
@@ -55,7 +57,7 @@ func _ready() -> void:
 	if wielder_stats:
 		# Opcional: un enemigo no tiene daño % ni crítico.
 		_offense = wielder_stats.find_resolved(OffenseData) as OffenseData
-	_finder = TargetFinder.new(target_mask)
+	_finder = TargetFinder.new(target_mask, sight_mask)
 
 
 func _physics_process(delta: float) -> void:
