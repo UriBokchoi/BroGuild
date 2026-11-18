@@ -1058,3 +1058,11 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
     - jugador: correr 6,8, esprintar 8,8, dash 21,6 (salida 9,2) y slide de 4,6 a 16,8 m/s.
   - **Experiencia y oro por enemigo**, un 30 % más (esbirro 1,3; tirador 2,6; Bro-te 0,65). Como salen un 25 % menos, se sube de nivel y se gana oro más o menos igual que antes.
 - **Pendiente:** el *feel* lo decide el diseñador jugando. Si la ronda se queda corta de presión hacia el minuto 8-10, lo primero es subir la curva de enemigos por segundo en ese tramo.
+
+## 2026-11-18 · Taberna en la pared del Brosque
+- **Decisión:** una taberna medieval en el centro de la pared norte, mirando hacia dentro y con media casa tras la pared invisible. No se entra.
+  - Al acercarse, «interactuar» cura la mitad de la vida máxima por oro: 15 + 3 × dificultad, ×1,5 por cada uso de esa taberna. Con la vida llena no cobra.
+  - Lo dice en el HUD: «¡Salud!», «Sin oro no hay jarra» o «Ya estás como una rosa».
+  - La mecánica es `HealShop` con `HealShopData`, así que otro nivel puede tener su propio sitio de curas.
+  - Su sitio está reservado en el mapa generado (`LayoutData.reserved`: x, z y radio). Ahí no va ninguna pieza ni ningún árbol, tampoco los del anillo del borde y la banda de fuera, que antes no miraban nada.
+- **Por qué:** lo pidió el diseñador. Curar por oro compite con los cofres y las tragaperras: otra decisión de en qué gastar.

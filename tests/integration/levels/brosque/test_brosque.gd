@@ -93,3 +93,11 @@ func test_it_has_small_ruins() -> void:
 	assert_eq(ruins.size(), 6, "un templo, tres muros y dos arcos")
 	for ruin: Node3D in ruins:
 		assert_gt(Vector2(ruin.position.x, ruin.position.z).length(), 18.0, "fuera del claro")
+
+
+func test_the_tavern_stands_in_the_middle_of_a_wall_facing_inside() -> void:
+	var tavern := _level.get_node(^"Tavern") as HealShop
+	assert_not_null(tavern)
+	assert_almost_eq(tavern.position.x, 0.0, 0.01, "en el centro de la pared")
+	assert_gt(absf(tavern.position.z), 75.0, "en la pared del borde")
+	assert_gt((-tavern.basis.z).dot(-tavern.position.normalized()), 0.99, "mirando hacia dentro")

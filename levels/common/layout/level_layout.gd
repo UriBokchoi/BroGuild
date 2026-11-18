@@ -32,6 +32,7 @@ func generate() -> void:
 	_occupied.clear()
 	_tops.clear()
 	_occupied.append(Vector3(0.0, 0.0, data.spawn_radius))
+	_occupied.append_array(data.reserved)
 	for piece: LayoutPiece in data.pieces:
 		for _index: int in piece.count:
 			_place_on_ground(piece)

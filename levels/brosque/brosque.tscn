@@ -12,6 +12,7 @@
 [ext_resource type="Resource" path="res://data/layouts/brosque.tres" id="17_layout_data"]
 [ext_resource type="PackedScene" path="res://entities/interactables/boss_key/boss_key.tscn" id="18_key"]
 [ext_resource type="Resource" path="res://data/bosses/brosque.tres" id="19_boss"]
+[ext_resource type="PackedScene" path="res://entities/interactables/heal_shop/tavern.tscn" id="20_tavern"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_sky"]
 sky_top_color = Color(0.3, 0.52, 0.82, 1)
@@ -103,6 +104,9 @@ shape = SubResource("BoxShape3D_bound_z")
 [node name="Layout" type="Node3D" parent="."]
 script = ExtResource("16_layout")
 data = ExtResource("17_layout_data")
+
+[node name="Tavern" parent="." instance=ExtResource("20_tavern")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, -79.5)
 
 [node name="Breakables" type="Node3D" parent="."]
 script = ExtResource("11_scatter")

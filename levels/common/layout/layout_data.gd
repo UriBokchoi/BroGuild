@@ -16,6 +16,9 @@ extends Resource
 @export_range(1, 1000, 1) var attempts: int = 1
 ## Piezas que van por el suelo (mesetas, pesas, bancos, tragaperras…), en orden: las grandes primero.
 @export var pieces: Array[LayoutPiece] = []
+## Zonas reservadas (x, z, radio) para lo que el nivel pone a mano (una taberna en la pared): ahí no
+## va ninguna pieza ni ningún árbol.
+@export var reserved: Array[Vector3] = []
 ## Piezas que van encima de otras (las que tienen [member LayoutPiece.top_height]): una por pieza.
 @export var top_pieces: Array[LayoutPiece] = []
 @export var forest: ForestData

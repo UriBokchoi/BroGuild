@@ -23,8 +23,8 @@ static func build(
 	rng: RandomNumberGenerator,
 ) -> void:
 	var trees := _scatter(forest, half_size, clearing, occupied, rng)
-	trees.append_array(_border(forest, rng))
-	trees.append_array(_outer_band(forest, rng))
+	trees.append_array(_border(forest, occupied, rng))
+	trees.append_array(_outer_band(forest, occupied, rng))
 	var root := Node3D.new()
 	root.name = "Forest"
 	parent.add_child(root)
@@ -45,8 +45,8 @@ static func _scatter(forest: ForestData, half: float, clearing: float, occupied:
 	return trees
 
 
-## Anillo denso junto a las paredes, en los cuatro lados.
-static func _border(forest: ForestData, rng: RandomNumberGenerator) -> Array[Dictionary]:
+## Anillo denso junto a las paredes, en los cuatro lados (sin pisar lo reservado, como una taberna).
+static func _border(forest: ForestData, occupied: Array[Vector3], rng: RandomNumberGenerator) -> Array[Dictionary]:
 	var trees: Array[Dictionary] = []
 	var steps := floori(forest.border * 2.0 / forest.border_step)
 	for side: int in 4:
@@ -56,12 +56,14 @@ static func _border(forest: ForestData, rng: RandomNumberGenerator) -> Array[Dic
 			var at := Vector2(along, depth) if side < 2 else Vector2(depth, along)
 			if side % 2 == 1:
 				at = -at
-			trees.append(_tree(forest, at, forest.scale_range, true, rng))
+			if not _blocked(at, occupied, forest.piece_margin):
+				trees.append(_tree(forest, at, forest.scale_range, true, rng))
 	return trees
 
 
-## Banda de fuera: rejilla con temblor, solo más allá de [member ForestData.outer_start].
-static func _outer_band(forest: ForestData, rng: RandomNumberGenerator) -> Array[Dictionary]:
+## Banda de fuera: rejilla con temblor, solo más allá de [member ForestData.outer_start] (sin pisar lo
+## reservado).
+static func _outer_band(forest: ForestData, occupied: Array[Vector3], rng: RandomNumberGenerator) -> Array[Dictionary]:
 	var trees: Array[Dictionary] = []
 	var steps := floori(forest.outer_end * 2.0 / forest.outer_step)
 	var jitter := forest.outer_step * 0.4
@@ -71,7 +73,8 @@ static func _outer_band(forest: ForestData, rng: RandomNumberGenerator) -> Array
 			if maxf(absf(spot.x), absf(spot.y)) < forest.outer_start:
 				continue
 			spot += Vector2(rng.randf_range(-jitter, jitter), rng.randf_range(-jitter, jitter))
-			trees.append(_tree(forest, spot, forest.outer_scale_range, false, rng))
+			if not _blocked(spot, occupied, forest.piece_margin):
+				trees.append(_tree(forest, spot, forest.outer_scale_range, false, rng))
 	return trees
 
 

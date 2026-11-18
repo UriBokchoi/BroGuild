@@ -304,3 +304,7 @@ PICKUP_MAGNET_ANNOUNCE,¡Succión activada!,Suction on!
 PICKUP_BOMB_ANNOUNCE,¡Nuclear activada!,Going nuclear!
 PICKUP_ENERGY_ANNOUNCE,¡Modo diablo activado!,Devil mode on!
 PICKUP_TIME_STOP_ANNOUNCE,¡Tiempo detenido!,Time stop!
+INTERACT_TAVERN,"Tomar una jarra: cura la mitad (%d de oro)","Have a pint: heals half (%d gold)"
+TAVERN_HEALED,¡Salud!,Cheers!
+TAVERN_NO_GOLD,"Sin oro no hay jarra (%d de oro)","No gold, no pint (%d gold)"
+TAVERN_FULL,Ya estás como una rosa,You're already in top shape

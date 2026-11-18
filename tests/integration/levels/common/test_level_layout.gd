@@ -1,8 +1,9 @@
 extends GutTest
 ## Mapa generado (con los datos del Brosque): las piezas no se pisan, quedan dentro del cuadrado y
 ## las mesetas fuera del claro; las tragaperras de arriba van encima de una meseta; ningún árbol
-## suelto pisa una pieza; el altar del jefe queda al borde del claro mirándolo; con la misma semilla
-## sale el mismo mapa y con otra, otro.
+## suelto pisa una pieza; el altar del jefe queda al borde del claro mirándolo; en lo reservado (la
+## taberna) no hay ni piezas ni árboles, tampoco los del borde; con la misma semilla sale el mismo
+## mapa y con otra, otro.
 
 const DATA := preload("res://data/layouts/brosque.tres")
 
@@ -12,7 +13,8 @@ func test_pieces_do_not_overlap_and_stay_inside() -> void:
 	var zones := layout.get_occupied()
 	for index: int in zones.size():
 		var zone := zones[index]
-		assert_lte(maxf(absf(zone.x), absf(zone.y)) + zone.z, DATA.half_size + 0.01, "dentro del cuadrado")
+		if not DATA.reserved.has(zone):
+			assert_lte(maxf(absf(zone.x), absf(zone.y)) + zone.z, DATA.half_size + 0.01, "dentro del cuadrado")
 		for other: int in range(index + 1, zones.size()):
 			var distance := Vector2(zone.x, zone.y).distance_to(Vector2(zones[other].x, zones[other].y))
 			assert_gte(distance, zone.z + zones[other].z, "sin pisarse")
@@ -65,3 +67,14 @@ func _make_layout(seed_value: int) -> LevelLayout:
 	layout.rng.seed = seed_value
 	add_child_autofree(layout)
 	return layout
+
+
+func test_nothing_grows_on_reserved_ground() -> void:
+	var layout := _make_layout(4)
+	var colliders := layout.get_node(^"Forest/TreeColliders").get_children()
+	for zone: Vector3 in DATA.reserved:
+		for collider: Node in colliders:
+			var at := (collider as Node3D).position
+			assert_gt(Vector2(at.x, at.z).distance_to(Vector2(zone.x, zone.y)), zone.z, "ningún árbol en lo reservado")
+		for piece: Node3D in layout.get_pieces():
+			assert_gt(Vector2(piece.position.x, piece.position.z).distance_to(Vector2(zone.x, zone.y)), zone.z)
