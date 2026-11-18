@@ -1181,3 +1181,15 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - Antes solo trepaban encima de otros enemigos, y contra una roca o un muro empujaban y se quedaban quietos.
   - Las pesas eran la peor trampa: discos de 2 m con un hueco bajo la barra donde se encajaban.
   - La consulta de física solo para los atascados mantiene el coste bajo con cientos de enemigos (sin navegación por enemigo).
+
+## 2026-11-18 · Efectos de sonido sintetizados
+- **Decisión:** los efectos de sonido se sintetizan en el proyecto, sin descargar nada.
+  - **Recetas:** cada sonido es una receta en datos (`SfxRecipe`, `data/audio/sfx/`, al estilo de sfxr): onda, tono que se desliza, arpegio, vibrato, ruido, filtro de graves y envolvente.
+  - **Generación:** `tools/gen_sfx.gd` la convierte en un `.wav` (`SfxSynth`, 44,1 kHz, 16 bits, mono) en `assets/audio/sfx/`. Hay 24.
+  - **Qué suena con qué:** lo dice `data/audio/sfx_bank.tres` (`SfxBank` de `SoundCue`): golpe al jugador y su muerte, subir de nivel, golpe y muerte de enemigos, jefe (aparece y cae), cada recogible por su recompensa, rompibles, cofres (abrir, revelar, sin oro), tragaperras (giro, premio, nada, maldición, jackpot) y botones.
+  - **Saturación:** cada `SoundCue` limita sus voces a la vez y su separación mínima, para que cien muertes a la vez no saturen. La variación de tono sale del azar cosmético de `Rng`.
+  - **Racha de experiencia:** la experiencia recogida seguida sube un semitono cada vez, hasta una octava. Solo sube con lo que suena, para que con el imán se oiga cada escalón.
+  - **Reproductor:** `Sfx`, un autoload nuevo, porque los sonidos cruzan pantallas (menú, selección y partida). Escucha el `EventBus` y cualquier botón que entre en el árbol, y suena por el bus `Effects`, que ya tenía volumen en las opciones, también en pausa.
+- **Por qué:** quienes lo han probado echaban en falta sonido. Sintetizar deja todo en datos y sin licencias, y suena a arcade, a juego con el estilo.
+  - Si un día hay sonidos grabados, basta con cambiar el audio de cada `SoundCue`.
+  - Sin música por ahora: con síntesis sencilla quedaría pobre.

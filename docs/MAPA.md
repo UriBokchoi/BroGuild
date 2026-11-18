@@ -20,18 +20,18 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 
 | Carpeta | Qué va ahí |
 |---|---|
-| `autoload/` | Los únicos singletons: `EventBus` (solo señales), `Rng` (todo el azar, un generador por sistema), `RunState` (partida en curso: personaje, nivel y semilla) y `Save` (lo que dura entre partidas, en `user://`: las opciones y los récords). Sin lógica de gameplay. |
+| `autoload/` | Los únicos singletons: `EventBus` (solo señales), `Rng` (todo el azar, un generador por sistema), `RunState` (partida en curso: personaje, nivel y semilla) , `Save` (lo que dura entre partidas, en `user://`: las opciones, los récords y el Archivo) y `Sfx` (los efectos de sonido: escucha el `EventBus` y los botones). Sin lógica de gameplay. |
 | `core/` | Piezas genéricas que no saben de este juego: stats, máquina de estados, componentes de combate, pool (`NodePool`), rejilla espacial (`SpatialHash`, con marcas y tope de resultados), carga de carpetas de datos (`ResourceDir`), tabla ponderada (`WeightedTable` de `WeightedEntry`: cada uso hereda su entrada; la Suerte sube el peso de cada entrada según su `luck_scaling`), nombres de acciones y capas. |
 | `entities/` | Lo que existe en el mundo: el jugador, los enemigos (y los jefes), los interactuables y los rompibles. |
-| `systems/` | Reglas y sistemas que reparten trabajo entre entidades: combate (fórmulas y armas), progresión, aparición de enemigos, armas y runas (`upgrades/`), objetos pasivos (`items/`), el jefe del nivel (`boss/`), la partida (`run/`) y las opciones (`settings/`). Vacía, para más adelante: `gamble/`. |
+| `systems/` | Reglas y sistemas que reparten trabajo entre entidades: combate (fórmulas y armas), progresión, aparición de enemigos, armas y runas (`upgrades/`), objetos pasivos (`items/`), el jefe del nivel (`boss/`), la partida (`run/`) y las opciones (`settings/`), lo que se puede descubrir (`content/`) y el sonido (`audio/`). Vacía, para más adelante: `gamble/`. |
 | `data/` | Los `.tres` de balance y la traducción. Nada de código. |
 | `ui/` | HUD, menús, panel de depuración, vista de stats, tema global y dueño del ratón. |
 | `vfx/` | Efectos visuales: juice que reacciona a señales, shaders compartidos (desenfoque, rejilla y columna de luz) y líneas de velocidad. |
 | `levels/` | Escenas jugables: `common/` (`RunSystems`, los sistemas de partida que usa cada nivel, y `layout/`, los mapas generados: `LevelLayout`, `LayoutData`, `LayoutPiece`, `ForestBuilder`, `ForestData`), el Brosque (`brosque/`), el gimnasio de pruebas con su zona de combate y la prueba de estrés. |
-| `tools/` | Validación por terminal (`validate.sh`, `ci/`), generadores (`gen_themes.gd`) y la simulación de equilibrio (`sim_balance.gd`: daño por segundo de cada personaje contra una horda y contra un jefe, al empezar y con una build de mitad de partida). |
+| `tools/` | Validación por terminal (`validate.sh`, `ci/`), generadores (`gen_themes.gd`, el tema; `gen_sfx.gd`, los efectos de sonido) y la simulación de equilibrio (`sim_balance.gd`: daño por segundo de cada personaje contra una horda y contra un jefe, al empezar y con una build de mitad de partida). |
 | `tests/` | GUT: `unit/` y `integration/`, con la misma ruta que el código. `hooks/`: los scripts de antes (`pre_run.gd`: los récords y el Archivo van a archivos de pruebas) y de después de la ejecución (`post_run.gd`). |
 | `docs/` | GDD, ROADMAP, DECISIONES y este mapa. |
-| `assets/` | Assets reutilizables y `CREDITS.md`. `models/props/`: piezas hechas con mallas básicas (espada, escudo, bastón, sombrero de mago, daga) con sus materiales en `materials/`; las llevan los personajes y pueden servir para otras cosas (el Archivo, botín). `textures/icons/`: iconos SVG de armas, runas, objetos pasivos y de la interfaz (candado). Audio y fuentes, aún vacíos. |
+| `assets/` | Assets reutilizables y `CREDITS.md`. `models/props/`: piezas hechas con mallas básicas (espada, escudo, bastón, sombrero de mago, daga) con sus materiales en `materials/`; las llevan los personajes y pueden servir para otras cosas (el Archivo, botín). `textures/icons/`: iconos SVG de armas, runas, objetos pasivos , personajes, enemigos y de la interfaz (candado). `audio/sfx/`: efectos de sonido generados por `tools/gen_sfx.gd` (no se tocan a mano). Fuentes, aún vacías. |
 
 ## Sistemas
 
@@ -230,6 +230,13 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 - **`Discoveries`:** lo descubierto, por tipo e id. Lo carga `Save` (`user://archive.cfg`) y lo guarda en cuanto hay algo nuevo (`Save.discover`).
 - **`ArchiveRecorder`** (en `RunSystems`, con `record`): escucha el `EventBus` y apunta el personaje del jugador al empezar, las armas y runas al conseguirlas, los objetos pasivos y los enemigos derrotados (un élite cuenta como su enemigo). Solo lo que está en el catálogo.
 
+### Sonido — `systems/audio/` y `autoload/sfx.gd`
+- **`SfxRecipe`** (`data/audio/sfx/`, una por sonido): receta de un efecto sintetizado al estilo de sfxr: onda, tono que se desliza, arpegio, vibrato, ruido, filtro de graves y envolvente.
+- **`SfxSynth`:** la convierte en muestras de 16 bits (lógica pura, sin azar externo). `tools/gen_sfx.gd` guarda cada receta como `assets/audio/sfx/<nombre>.wav`.
+- **`SoundCue`:** un sonido del juego: su audio, volumen, variación de tono y cuánto se deja repetir (voces a la vez y separación mínima).
+- **`SfxBank`** (`data/audio/sfx_bank.tres`): qué suena con cada cosa (golpes, muertes, recogibles por recompensa, cofres, tragaperras por resultado, jefe, botones) y la racha de la experiencia (sube un semitono cada recogida seguida).
+- **`Sfx`** (autoload): escucha el `EventBus` y los botones (`node_added`) y hace sonar el banco con un grupo de `AudioStreamPlayer` en el bus `Effects`, también en pausa.
+
 ### Opciones — `systems/settings/` y `autoload/save.gd`
 - **`SettingsData`** (`data/settings/settings.tres`): buses con volumen, valores al estrenar el juego (el idioma, español), tamaños de ventana que se ofrecen y cuántas partidas guardan los récords (`leaderboard_size`).
 - **`GameSettings`:** lo elegido (idioma, volúmenes, pantalla completa, tamaño de ventana, VSync). Se guarda en un `ConfigFile` (`user://settings.cfg`) y se aplica al motor (`apply_audio`, `apply_display`). Sin pantalla (headless) no toca nada; incrustado en el editor (`Engine.is_embedded_in_editor()`, ver `can_change_window`) solo el VSync.
@@ -334,5 +341,6 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
   3. Suéltalo con `PickupField.drop()`, normalmente desde `LootDropper`.
 - **Un efecto de juice:** escucha una señal (del componente o del `EventBus`) y no cambies el gameplay. Si hay muchos a la vez, usa `NodePool`.
 - **Contenido que sale en el Archivo** (personaje, arma, runa, objeto, enemigo): con id (el nombre de su archivo), nombre, frase e icono, y añadido a su pestaña en `data/content.tres`; un test avisa si falta.
+- **Un sonido:** crea su `SfxRecipe` en `data/audio/sfx/`, genera con `tools/gen_sfx.gd` (e importa), ponlo como `SoundCue` en `data/audio/sfx_bank.tres` y, si es un evento nuevo, haz que `Sfx` lo escuche. Para cambiar un sonido, retoca su receta y vuelve a generar; si alguna vez hay sonidos grabados, basta con cambiar el audio del `SoundCue`.
 - **Un texto de interfaz:** pon la clave en `data/i18n/strings.csv` (es y en) y la clave como texto del control, o `tr()`.
 - **Una sección de depuración:** crea un `DebugSection` como hijo de las secciones del panel.

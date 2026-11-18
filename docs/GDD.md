@@ -115,7 +115,7 @@ Las mejoras de % («+10 % de daño») multiplican; las de puntos («+5 % de crí
 Dirección: **medieval con humor moderno**, nada realista; los anacronismos son bienvenidos (p. ej., tragaperras repartidas por un mundo medieval). Formas simples (primitivas o low-poly) que luzcan sin necesitar artista. *Pendiente: concretar la dirección visual (sustituye a la anterior «casino-arcade neón»).*
 - **Color con significado**: cada tipo de enemigo con su color; las rarezas, iguales en cofres, cartas, números y luces.
 - **Juice**: hit-stop en golpes grandes · screen shake por trauma al recibir daño · borde rojo al recibir daño y con poca vida (late como un corazón) · números de daño (críticos grandes y dorados) · flash al golpear · explosión de monedas al matar · imán de pickups · estela en dash y slide · FOV que se abre con la velocidad y líneas de velocidad · cámara lenta en el jackpot.
-- **Sonido**: cada recompensa sube de tono; la racha sube el pitch de todo; los rodillos hacen tic-tic-tic al frenar.
+- **Sonido**: efectos sintetizados de estilo arcade (recetas en datos). La experiencia recogida seguida sube de tono, hasta una octava. Más adelante, la racha subirá el pitch de todo y los rodillos harán tic-tic-tic al frenar.
 - **UI**: tipografía gruesa, animada con tweens, legible en mitad del caos.
 - **Assets**: primitivas + shaders propios; si hace falta, packs CC0 (Kenney, Quaternius).
 

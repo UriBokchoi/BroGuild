@@ -90,7 +90,7 @@
 - [ ] Materiales con color propio por tipo de enemigo y rareza
 - [ ] Hit-stop y flash al golpear (los números de daño llegaron en el Hito 2; el temblor de pantalla y el borde rojo al recibir daño, adelantados tras el Hito 3)
 - [ ] Partículas: muertes, monedas, cofres, impactos
-- [ ] Sonidos con tono creciente y UI animada
+- [ ] UI animada (los sonidos, con la experiencia que sube de tono si se recoge seguida, adelantados tras el Hito 3)
 - [ ] Rendimiento: 300+ enemigos a 60 fps
 
 ## Hito 6 — Niveles
