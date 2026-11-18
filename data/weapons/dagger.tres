@@ -15,6 +15,7 @@ burst_interval = 0.1
 area = 100.0
 duration = 1.2
 reach = 16.0
+knockback = 3.0
 projectile_speed = 30.0
 bounce_range = 6.0
 bounces = 2

@@ -99,6 +99,7 @@ func _ready() -> void:
 	if rng == null:
 		rng = Rng.stream(Rng.Stream.ENEMIES)
 	health.died.connect(_on_died)
+	hurtbox.hurt.connect(_on_hurt)
 	deactivate()
 
 
@@ -291,6 +292,7 @@ func _refresh() -> void:
 	health.reset()
 	contact_hitbox.base_damage = _stats.contact_damage
 	contact_hitbox.rehit_interval = _stats.contact_interval
+	contact_hitbox.knockback = _stats.knockback
 
 
 ## Cambia su tamaño a [param factor] veces el normal: formas de colisión, marcadores, modelo y masa.
@@ -308,6 +310,13 @@ func _disarm() -> void:
 	if weapons:
 		for weapon: Weapon in weapons.get_weapons():
 			weapon.disarm()
+
+
+## Un golpe lo empuja como un impulso: los más pesados (élites, jefes) se mueven menos. Se suma a su
+## velocidad (no con un impulso de la física, que el rumbo del enjambre pisaría antes de aplicarse).
+func _on_hurt(info: DamageInfo, _amount: float) -> void:
+	if not health.is_dead() and info.knockback != Vector3.ZERO:
+		linear_velocity += info.knockback / mass
 
 
 func _on_died() -> void:

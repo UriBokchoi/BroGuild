@@ -15,6 +15,7 @@ move_speed = 4.2
 acceleration = 25.0
 contact_damage = 16.0
 contact_interval = 0.9
+knockback = 10.0
 separation_radius = 2.0
 
 [resource]

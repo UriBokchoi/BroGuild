@@ -15,6 +15,7 @@ burst_interval = 0.15
 area = 100.0
 duration = 0.3
 reach = 2.8
+knockback = 7.0
 
 [sub_resource type="Resource" id="Upgrade_damage"]
 script = ExtResource("90_upgrade")

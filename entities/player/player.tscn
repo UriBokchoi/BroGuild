@@ -42,6 +42,7 @@
 [ext_resource type="Script" path="res://entities/player/feedback/body_flip.gd" id="43_flip"]
 [ext_resource type="Script" path="res://systems/items/passive_inventory.gd" id="44_items"]
 [ext_resource type="Script" path="res://vfx/juice/invulnerability_blink.gd" id="45_blink"]
+[ext_resource type="Script" path="res://entities/player/knockback_receiver.gd" id="46_knockback"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_interactor"]
 radius = 0.6
@@ -308,3 +309,9 @@ flip_states = [NodePath("../Movement/DoubleJump")]
 script = ExtResource("45_blink")
 health = NodePath("../Health")
 target = NodePath("../Body")
+
+[node name="KnockbackReceiver" type="Node" parent="." node_paths=PackedStringArray("body", "hurtbox", "health")]
+script = ExtResource("46_knockback")
+body = NodePath("..")
+hurtbox = NodePath("../Hurtbox")
+health = NodePath("../Health")

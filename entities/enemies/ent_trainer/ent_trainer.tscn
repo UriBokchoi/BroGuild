@@ -367,6 +367,7 @@ landing_marker = NodePath("LandingMarker")
 shout_keys = Array[StringName]([&"ENT_TRAINER_SHOUT_BURPEE", &"ENT_TRAINER_SHOUT_ONE_MORE"])
 
 [node name="Shockwave" parent="Burpee" instance=ExtResource("14_shockwave")]
+knockback = 9.0
 radius = 13.0
 duration = 0.9
 band = 1.6
@@ -381,6 +382,7 @@ mesh = SubResource("PlaneMesh_marker")
 
 [node name="Series" type="Node" parent="." node_paths=PackedStringArray("lane")]
 script = ExtResource("12_charge")
+knockback_factor = 2.0
 reps = 3
 windup = 0.9
 rep_windup = 0.5

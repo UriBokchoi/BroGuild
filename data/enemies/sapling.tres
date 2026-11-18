@@ -15,6 +15,7 @@ move_speed = 6.2
 acceleration = 35.0
 contact_damage = 6.0
 contact_interval = 0.8
+knockback = 3.0
 separation_radius = 1.0
 separation_weight = 0.3
 climb_speed = 3.5

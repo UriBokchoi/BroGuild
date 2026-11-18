@@ -17,6 +17,7 @@ move_speed = 3.4
 acceleration = 20.0
 contact_damage = 4.0
 contact_interval = 0.8
+knockback = 3.0
 separation_radius = 1.4
 separation_weight = 0.6
 approach_spread = 40.0

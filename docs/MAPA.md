@@ -60,13 +60,14 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 | `player_input.gd` | Convierte el InputMap en acciones de la máquina y en la dirección pedida, relativa a la cámara. |
 | `interactor.gd` | Zona que encuentra el `Interactable` más cercano y lo activa con E. |
 | Nodos `Health`, `Hurtbox` y `Weapons` | Vida, zona donde recibe daño y `WeaponInventory` con sus armas. |
+| `knockback_receiver.gd` | `KnockbackReceiver`: el empuje de los golpes que recibe (contacto, embestida, onda del jefe). Lo suelta sobre el cuerpo y se frena solo, aparte de la velocidad del movimiento. |
 
 ### Combate — `core/components/` y `systems/combat/`
 - **Golpe:** una `HitboxComponent` toca una `HurtboxComponent`, que pasa el golpe a su `HealthComponent`.
   - La hitbox apunta con señales lo que toca y solo se procesa mientras toca algo.
   - `DamageCalc.attack()` aplica el daño % y el crítico del atacante (`OffenseData`).
   - La vida tira la esquiva y aplica la defensa (`CombatRules`, `data/combat/rules.tres`).
-  - Cada golpe es un `DamageInfo`.
+  - Cada golpe es un `DamageInfo`, con su empuje (`knockback`, m/s en el suelo): el de la hitbox o el proyectil (`WeaponStats.knockback` por el empuje % del atacante; los enemigos, su `EnemyStats.knockback` fijo), desde quien golpea hacia quien recibe (`DamageCalc.push`). Un enemigo lo suma a su velocidad dividido por su masa (élites y jefes se mueven menos); el jugador, con su `KnockbackReceiver`.
 - **`HealthComponent`:** muere una sola vez, puede ser inmortal (el muñeco) y `reset()` la rellena (enemigos reutilizados). Tras un golpe que hace daño, no recibe más durante su `invulnerability_time` (los «i-frames»: el jugador, 0,3 s; los enemigos, 0) y lo avisa con `invulnerability_started`; el reloj es `PhysicsClock` (`core/`), sin `_process`. Solo se procesa si regenera.
 - **Armas** (`systems/combat/weapons/`):
   - `WeaponData` lleva el `.tres` del arma con sus `WeaponStats` de nivel 1; sus mejoras por nivel son tiradas (ver «Objetos y runas»). `Weapon` guarda las que lleva (`add_upgrade`, `get_upgrades`); `set_level` sube con la mejora estándar o quita las últimas (la armería).

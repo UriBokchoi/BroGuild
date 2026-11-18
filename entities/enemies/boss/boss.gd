@@ -77,6 +77,11 @@ func get_contact_damage() -> float:
 	return _stats.contact_damage
 
 
+## Empuje al tocar: la base del de sus ataques.
+func get_contact_knockback() -> float:
+	return _stats.knockback
+
+
 ## Cambia su velocidad horizontal (la vertical es de la física).
 func move_flat(velocity: Vector3) -> void:
 	linear_velocity = Vector3(velocity.x, linear_velocity.y, velocity.z)

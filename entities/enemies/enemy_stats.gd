@@ -13,6 +13,8 @@ extends Resource
 @export_range(0.0, 1000.0, 0.5, "or_greater") var contact_damage: float = 0.0
 ## Segundos entre golpes mientras sigue tocando.
 @export_range(0.05, 10.0, 0.05, "or_greater", "suffix:s") var contact_interval: float = 0.0
+## Empuje de cada golpe al tocar (fijo: no lo cambian las mejoras del jugador).
+@export_range(0.0, 50.0, 0.5, "or_greater", "suffix:m/s") var knockback: float = 0.0
 
 @export_group("steering")
 ## Distancia a la que empieza a apartarse de otros enemigos.

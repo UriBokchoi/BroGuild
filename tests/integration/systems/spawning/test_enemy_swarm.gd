@@ -4,6 +4,7 @@ extends GutTest
 ## mueren ya no chocan con nadie) y retira a los que caen del mapa.
 
 const SWARMER := preload("res://data/enemies/swarmer.tres")
+const ELITE := preload("res://data/enemies/elite.tres")
 
 var _swarm: EnemySwarm
 var _target: Node3D
@@ -121,3 +122,15 @@ func _add_ground() -> void:
 	shape.position = Vector3(0.0, -0.5, 0.0)
 	ground.add_child(shape)
 	add_child_autofree(ground)
+
+
+func test_hits_push_enemies_and_heavy_ones_less() -> void:
+	var light := _swarm.spawn(SWARMER, Vector3(0.0, 0.0, 0.0))
+	var heavy := _swarm.spawn(SWARMER, Vector3(0.0, 0.0, 6.0))
+	heavy.promote(ELITE)
+	await wait_physics_frames(2)
+	for enemy: Enemy in [light, heavy]:
+		enemy.hurtbox.receive(DamageInfo.create(1.0, false, null, Vector3(8.0, 0.0, 0.0)))
+	await wait_physics_frames(1)
+	assert_gt(light.linear_velocity.x, 3.0, "lo empuja")
+	assert_lt(heavy.linear_velocity.x, light.linear_velocity.x, "al élite, más pesado, menos")

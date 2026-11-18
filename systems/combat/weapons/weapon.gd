@@ -143,6 +143,11 @@ func duration() -> float:
 	return _weapon.duration * _percent(_offense.duration if _offense else 100.0)
 
 
+## Empuje de cada golpe antes del empuje % del personaje (que se aplica al golpear).
+func knockback() -> float:
+	return _weapon.knockback
+
+
 ## Distancia hasta la que busca objetivos. Un arma cuyo alcance crece con el área la cambia.
 func reach() -> float:
 	return _weapon.reach

@@ -13,6 +13,8 @@ signal hit(hurtbox: HurtboxComponent, amount: float)
 @export_range(0.0, 1000.0, 0.5, "or_greater") var base_damage: float = 0.0
 ## Segundos entre golpes al mismo objetivo mientras lo toca; 0 = una sola vez por objetivo.
 @export_range(0.0, 10.0, 0.05, "or_greater", "suffix:s") var rehit_interval: float = 0.0
+## Empuje de cada golpe, desde esta zona hacia quien recibe (lo multiplica el empuje % del atacante).
+@export_range(0.0, 50.0, 0.5, "or_greater", "suffix:m/s") var knockback: float = 0.0
 ## Stats de quien golpea, para su daño % y su crítico. Vacío: el daño va tal cual.
 @export var attacker_stats: StatsComponent
 
@@ -78,5 +80,6 @@ func _hit(hurtbox: HurtboxComponent) -> void:
 	var offense: OffenseData = null
 	if attacker_stats:
 		offense = attacker_stats.get_resolved(OffenseData) as OffenseData
-	var amount := hurtbox.receive(DamageCalc.attack(base_damage, offense, rng, self))
+	var push := DamageCalc.push(global_position, hurtbox.get_center(), knockback)
+	var amount := hurtbox.receive(DamageCalc.attack(base_damage, offense, rng, self, push))
 	hit.emit(hurtbox, amount)

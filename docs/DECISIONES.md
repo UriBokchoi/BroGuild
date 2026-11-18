@@ -1007,3 +1007,11 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - El tiempo se mide con el reloj de la física (`PhysicsClock`, sacado de la hitbox, que ya lo usaba): la vida no necesita `_process`.
   - Un golpe esquivado no da invulnerabilidad.
 - **Por qué:** lo pidió el diseñador. Con la horda encima, varios golpes en el mismo instante quitaban la vida de golpe. Es una stat, así que algo podrá mejorarla.
+
+## 2026-11-18 · Los golpes empujan
+- **Decisión:** cada golpe (`DamageInfo`) lleva un empuje: una velocidad en el suelo, desde quien golpea hacia quien recibe.
+  - **Del jugador:** el de cada arma (`WeaponStats.knockback`: espada 7 m/s, bastón 6, daga 3) por su retroceso % (`OffenseData.knockback`, 100 %, mejorable más adelante). La explosión del bastón empuja hacia fuera desde su centro.
+  - **De los enemigos:** fijo, al tocar (`EnemyStats.knockback`: esbirro 4, tirador 3, Bro-te 3, Ent-renador 10; el disparo del tirador, 2). La embestida del Ent-renador empuja ×2 y su onda, 9 m/s hacia fuera.
+  - **Al recibirlo**, un enemigo lo suma a su velocidad dividido por su masa: los élites (más pesados) y el jefe (40) se mueven menos. Se suma a la velocidad y no con un impulso de la física, porque el rumbo del enjambre lo pisaría antes de aplicarse.
+  - **El jugador** lo recibe en `KnockbackReceiver`: lo suelta sobre el cuerpo y se frena a 40 m/s². Va aparte de la velocidad del movimiento, así que los estados no lo pisan. No le empuja un golpe esquivado.
+- **Por qué:** lo pidió el diseñador. El árbol atravesaba al jugador sin moverlo y quedaba raro, y pegar sin empujar se sentía plano.

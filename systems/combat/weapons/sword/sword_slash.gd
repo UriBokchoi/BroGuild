@@ -38,7 +38,8 @@ func _process(_delta: float) -> void:
 
 ## Lanza el tajo hacia [param direction] (normalizada; puede ir inclinada hacia arriba o abajo, pero
 ## no vertical) con [param reach] metros de alcance. [param attacker] son las stats de quien golpea
-## (daño % y crítico); [param mirrored] barre al revés.
+## (daño %, crítico y empuje %); [param mirrored] barre al revés y [param knockback] es el empuje de
+## cada golpe.
 func swing(
 	direction: Vector3,
 	reach: float,
@@ -46,10 +47,12 @@ func swing(
 	damage: float,
 	attacker: StatsComponent,
 	mirrored: bool,
+	knockback: float = 0.0,
 ) -> void:
 	global_basis = Basis.looking_at(direction, Vector3.UP).scaled(Vector3.ONE * reach)
 	reset_physics_interpolation()
 	hitbox.base_damage = damage
+	hitbox.knockback = knockback
 	hitbox.attacker_stats = attacker
 	hitbox.reset_hits()
 	hitbox.monitoring = true

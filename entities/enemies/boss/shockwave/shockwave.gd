@@ -4,7 +4,8 @@ extends Node3D
 ## [member radius] en [member duration] segundos. Daña una vez a cada [HurtboxComponent] de
 ## [member hit_mask] que alcanza su borde ([member band] de ancho), salvo si su centro está más alto
 ## que [member reach_height] sobre el suelo de la onda: se esquiva saltándola o alejándose antes de
-## que llegue (lo que ya pasó no daña). Se ve como un aro que se abre y se apaga ([member ring]).
+## que llegue (lo que ya pasó no daña). Empuja hacia fuera ([member knockback]). Se ve como un aro
+## que se abre y se apaga ([member ring]).
 
 ## Hurtbox que mira como mucho en cada tick.
 const MAX_RESULTS: int = 8
@@ -17,6 +18,8 @@ const MAX_RESULTS: int = 8
 @export_range(0.1, 5.0, 0.05, "suffix:m") var band: float = 1.5
 ## Altura del centro de una hurtbox sobre el suelo de la onda hasta la que daña.
 @export_range(0.1, 5.0, 0.05, "suffix:m") var reach_height: float = 1.3
+## Empuje hacia fuera de lo que alcanza.
+@export_range(0.0, 50.0, 0.5, "or_greater", "suffix:m/s") var knockback: float = 0.0
 ## A quién daña (capas de hurtbox).
 @export_flags_3d_physics var hit_mask: int = 0
 ## Aro que se ve: un plano de 2 × 2 con [code]ground_ring.gdshader[/code] (se escala al radio).
@@ -90,4 +93,5 @@ func _hit_edge(edge: float) -> void:
 		if absf(distance - edge) > band * 0.5 or at.y - global_position.y > reach_height:
 			continue
 		_hit[hurtbox.get_instance_id()] = true
-		hurtbox.receive(DamageCalc.attack(_damage, null, rng, self))
+		var push := DamageCalc.push(global_position, at, knockback)
+		hurtbox.receive(DamageCalc.attack(_damage, null, rng, self, push))

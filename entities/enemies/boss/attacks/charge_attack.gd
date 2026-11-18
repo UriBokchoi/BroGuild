@@ -2,7 +2,8 @@ class_name ChargeAttack
 extends BossAttack
 ## Embestidas (las «Series» del Ent-renador): se para y apunta al objetivo mientras una franja en el
 ## suelo marca por dónde va a ir; luego sale disparado en línea recta [member distance] metros. Lo
-## repite [member reps] veces. Mientras embiste, su contacto daña × [member damage_factor].
+## repite [member reps] veces. Mientras embiste, su contacto daña × [member damage_factor] y empuja
+## × [member knockback_factor].
 
 enum Phase { AIM, CHARGE }
 
@@ -18,6 +19,8 @@ enum Phase { AIM, CHARGE }
 @export_range(1.0, 100.0, 0.5, "suffix:m") var distance: float = 16.0
 ## Daño al tocar durante la embestida: el normal por esto.
 @export_range(0.0, 20.0, 0.05) var damage_factor: float = 1.5
+## Empuje al tocar durante la embestida: el normal por esto (aparta al jugador de su camino).
+@export_range(0.0, 20.0, 0.05) var knockback_factor: float = 1.0
 ## Franja que marca por dónde va a ir: mide 1 de largo hacia −Z desde su origen y se estira al largo
 ## de la embestida.
 @export var lane: Node3D
@@ -85,9 +88,11 @@ func _charge() -> void:
 	_left = distance / speed
 	lane.visible = false
 	boss.contact_hitbox.base_damage = boss.get_contact_damage() * damage_factor
+	boss.contact_hitbox.knockback = boss.get_contact_knockback() * knockback_factor
 	# Cada embestida puede volver a dar aunque acabe de dar la anterior.
 	boss.contact_hitbox.reset_hits()
 
 
 func _restore_contact() -> void:
 	boss.contact_hitbox.base_damage = boss.get_contact_damage()
+	boss.contact_hitbox.knockback = boss.get_contact_knockback()

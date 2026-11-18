@@ -22,3 +22,5 @@ extends Resource
 @export_range(0.05, 30.0, 0.01, "or_greater", "suffix:s") var duration: float = 0.0
 ## Distancia hasta la que busca objetivos.
 @export_range(0.5, 100.0, 0.1, "or_greater", "suffix:m") var reach: float = 0.0
+## Empuje de cada golpe (lo multiplica el empuje % de quien la lleva).
+@export_range(0.0, 50.0, 0.5, "or_greater", "suffix:m/s") var knockback: float = 0.0
