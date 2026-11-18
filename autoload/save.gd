@@ -2,9 +2,14 @@ extends Node
 ## Lo que dura entre partidas, guardado en [code]user://[/code]: las opciones ([GameSettings]), que
 ## al arrancar carga y aplica, la clasificación de partidas ([Leaderboard]) y lo descubierto para el
 ## Archivo ([Discoveries]). Los desbloqueos llegarán más adelante.
+## Arrancado con [code]-- --no-save[/code] (lo hace [code]tools/validate.sh[/code] al jugar un nivel),
+## récords y Archivo van a archivos de prueba ([method use_scratch_files]): probar el juego no
+## ensucia lo de verdad.
 ## Sin lógica de gameplay.
 
 const SETTINGS_DATA := preload("res://data/settings/settings.tres")
+## Argumento de línea de órdenes (tras [code]--[/code]) para no tocar récords ni Archivo.
+const NO_SAVE_ARG := "--no-save"
 
 ## Archivo de las opciones (los tests usan otro).
 var settings_path: String = "user://settings.cfg"
@@ -25,6 +30,21 @@ func _ready() -> void:
 	settings.apply_locale()
 	settings.apply_audio()
 	settings.apply_display(get_window())
+	if OS.get_cmdline_user_args().has(NO_SAVE_ARG):
+		use_scratch_files("validate")
+	else:
+		load_leaderboard()
+		load_discoveries()
+
+
+## Lleva récords y Archivo a [code]user://<prefix>_leaderboard.cfg[/code] y
+## [code]user://<prefix>_archive.cfg[/code], que empiezan vacíos (los tests y la validación).
+func use_scratch_files(prefix: String) -> void:
+	leaderboard_path = "user://%s_leaderboard.cfg" % prefix
+	archive_path = "user://%s_archive.cfg" % prefix
+	for path: String in [leaderboard_path, archive_path]:
+		if FileAccess.file_exists(path):
+			DirAccess.remove_absolute(ProjectSettings.globalize_path(path))
 	load_leaderboard()
 	load_discoveries()
 

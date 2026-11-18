@@ -3,6 +3,8 @@
 # Uso:   GODOT="/ruta/Godot_v4.7.2-stable_win64_console.exe" tools/validate.sh [proyecto]
 # Pasos: import -> project (scripts, escenas, recursos y shaders) -> smoke (escena
 #        principal: el menú) -> level-* (cada nivel jugándose) -> gut (si existe).
+#        Menú y niveles arrancan con "-- --no-save": récords y Archivo van a archivos
+#        de prueba (Save.use_scratch_files), no a los del jugador.
 # Falla si un paso sale con código != 0 o si su salida contiene ERROR/WARNING:
 # Godot suele salir con 0 aunque haya errores de script o de shader.
 set -uo pipefail
@@ -84,10 +86,10 @@ else
   echo "==> project  FAIL (falta $CHECK_SCRIPT)"
   FAILED+=(project)
 fi
-run_step smoke "$STRICT_PATTERN" --quit-after "$SMOKE_FRAMES" -d --ignore-error-breaks
+run_step smoke "$STRICT_PATTERN" --quit-after "$SMOKE_FRAMES" -d --ignore-error-breaks -- --no-save
 for scene in $LEVEL_SCENES; do
   level_name="$(basename "$scene" .tscn)"
-  run_step "level-$level_name" "$STRICT_PATTERN" "$scene" --quit-after "$SMOKE_FRAMES" -d --ignore-error-breaks
+  run_step "level-$level_name" "$STRICT_PATTERN" "$scene" --quit-after "$SMOKE_FRAMES" -d --ignore-error-breaks -- --no-save
 done
 if [[ -d "$PROJECT_DIR/addons/gut" ]]; then
   if [[ ! -f "$PROJECT_DIR/.gutconfig.json" ]]; then

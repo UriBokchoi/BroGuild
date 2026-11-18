@@ -1151,3 +1151,9 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - **Tests:** el hook previo de GUT también lleva el Archivo a un archivo de pruebas.
 - **Por qué:** cierra el Hito 3. El diseñador pidió que los objetos entraran también y que los personajes salgan como «???» hasta jugar con ellos.
   - Los menús y la subida de nivel siguen sacando lo suyo de sus carpetas. Pasarán al catálogo cuando haya desbloqueos de verdad (Hito 8), que es cuando importa ofrecer solo lo desbloqueado.
+
+## 2026-11-18 · La validación no toca récords ni Archivo
+- **Decisión:** `Save.use_scratch_files(prefijo)` lleva récords y Archivo a `user://<prefijo>_*.cfg`, que empiezan vacíos.
+  - El hook previo de GUT lo usa con `test`.
+  - El juego lo usa si arranca con `-- --no-save`. `validate.sh` lo pasa al arrancar el menú y los niveles.
+- **Por qué:** al validar, el paso que juega el Brosque unos segundos apuntó el Guerrero y la espada en el Archivo de verdad del jugador. Ese archivo se ha borrado, y los récords de verdad del diseñador no se tocaron.
