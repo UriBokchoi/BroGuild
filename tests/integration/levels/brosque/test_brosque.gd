@@ -101,3 +101,11 @@ func test_the_tavern_stands_in_the_middle_of_a_wall_facing_inside() -> void:
 	assert_almost_eq(tavern.position.x, 0.0, 0.01, "en el centro de la pared")
 	assert_gt(absf(tavern.position.z), 75.0, "en la pared del borde")
 	assert_gt((-tavern.basis.z).dot(-tavern.position.normalized()), 0.99, "mirando hacia dentro")
+
+
+func test_puddles_with_a_flower_are_only_decoration() -> void:
+	await wait_physics_frames(2)
+	var puddles := _level.get_node(^"Puddles").get_children()
+	assert_gt(puddles.size(), 8, "repartidos por el suelo")
+	for puddle: Node in puddles:
+		assert_eq(puddle.find_children("*", "CollisionObject3D", true, false).size(), 0, "ni chocan ni se usan")

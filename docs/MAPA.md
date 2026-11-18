@@ -225,6 +225,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 ### Niveles — `levels/`
 - **`common/run_systems.tscn`** (`RunSystems`): jugador, horda y oleadas, botín, subir de nivel, jefe (`BossEncounter`), HUD, pausa, resultados, números de daño y panel de depuración, ya conectados. Cada nivel pone una instancia con sus oleadas (`waves`), su jefe (`boss`, un `BossData`; vacío: sin jefe), si empiezan solas (`autostart_waves`), el personaje de serie y el punto de aparición (`spawn_point`).
 - **`brosque/brosque.tscn`:** el Brosque (`data/levels/brosque.tres`), un gimnasio en el bosque de unos 150 × 150 m rodeado de paredes invisibles (a 81 m; también para los enemigos, que solo salen dentro de `RunSystems.play_area`):
+  - charquitos de agua con una flor, solo decorativos (`props/puddle.tscn`, 14 repartidos por `Puddles`, otro `BreakableScatter`);
   - la taberna, en el centro de la pared norte mirando hacia dentro (no se entra: cura la mitad de la vida por oro). Su sitio está reservado en el mapa (`LayoutData.reserved`): ahí no va ninguna pieza ni ningún árbol;
   - claro central con el punto de aparición; al empezar, el HUD da la bienvenida (`RunSystems.intro_keys` → `EventBus.level_intro` → `LevelIntro`);
   - piezas: mesetas con rampa (`props/plateau_low.tscn` y `plateau_high.tscn`), pesas de piedra, bancos de tronco, ruinas pequeñas de piedra con musgo (`ruin_temple`, `ruin_wall` y `ruin_arch`, fuera del claro), tragaperras, cofres y el altar del jefe;
