@@ -230,7 +230,7 @@ RUNE_HASTE_DESCRIPTION,"Más velocidad de ataque.","More attack speed."
 RUNE_VIGOR_NAME,Runa de Vigor,Rune of Vigor
 RUNE_VIGOR_DESCRIPTION,"Más vida máxima.","More max health."
 RUNE_MULTIPLICITY_NAME,Runa de Multiplicidad,Rune of Multiplicity
-RUNE_MULTIPLICITY_DESCRIPTION,"Más proyectiles (también más tajos con la espada).","More projectiles (also more sword slashes)."
+RUNE_MULTIPLICITY_DESCRIPTION,"Más proyectiles (también más tajos con la espada). Con decimales, a veces sale uno más.","More projectiles (also more sword slashes). With decimals, sometimes one more comes out."
 ARMORY_WEAPONS,Armas,Weapons
 ARMORY_RUNES,Runas,Runes
 LEVEL_UP_TITLE,¡Nivel %d!,Level %d!

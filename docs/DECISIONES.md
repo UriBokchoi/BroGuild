@@ -1117,3 +1117,16 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - `StatFormat.range_hint(stat)` recorre una vez las clases de datos del proyecto (los `Resource`, sin addons ni tests).
   - Si dos clases declaran la misma stat con unidades distintas, se queda sin unidad, porque depende de a quién se aplique. Les pasa a `damage`, `projectile_speed`, `duration` y `knockback`: en el jugador son un %, y en las armas un número, m/s o segundos.
 - **Por qué:** el diseñador vio «+10 Probabilidad de crítico» sin el %, como si fueran puntos sueltos. Sacarlo de los datos evita una lista de unidades a mano que se desfase.
+
+## 2026-11-18 · Multiplicidad con decimales
+- **Decisión:**
+  - **Proyectiles con decimales:** `OffenseData.projectile_count` pasa a ser decimal. Cada ataque lanza la parte entera y, con la probabilidad de la parte decimal, un golpe más (`Weapon.roll_shots`, con el azar de combate). Con 2,3 salen dos golpes y un 30 % de veces tres. Los proyectiles propios de cada arma siguen siendo enteros.
+  - **Mejora con parte fija:** `UpgradeStat` gana una parte fija que no cambia con la rareza (`fixed`) y un redondeo (`step`). La mejora es `fixed + value × fuerza`.
+  - **La runa de Multiplicidad** (parte fija 0,56, `value` 0,68, a un decimal) da:
+
+    | Común | Rara | Improbable | De leyenda | Mítica |
+    |---|---|---|---|---|
+    | +1 | +1,2 | +1,5 | +1,8 | +2,2 |
+
+    Antes daba siempre +1, o +2 alguna vez.
+- **Por qué:** lo pidió el diseñador: que la común sea el +1 y las demás den más, con decimales. Solo con multiplicar por la rareza, la común (×0,6) se quedaría por debajo de 1 o la mítica muy por encima de 2,2. La parte fija junta las rarezas sin topes.

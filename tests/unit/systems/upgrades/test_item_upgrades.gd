@@ -61,6 +61,18 @@ func test_whole_numbers_are_rounded_and_multipliers_scale_from_one() -> void:
 	assert_almost_eq(cooldown.modifier(2.0).value, 0.84, 0.0001)
 
 
+func test_a_fixed_part_brings_rarities_closer_and_step_rounds() -> void:
+	var extra := UpgradeStat.new()
+	extra.stat = &"projectile_count"
+	extra.value = 0.5
+	extra.fixed = 1.0
+	extra.step = 0.1
+	assert_almost_eq(extra.modifier(0.6).value, 1.3, 1e-4, "1 + 0,5 × 0,6")
+	assert_almost_eq(extra.modifier(2.0).value, 2.0, 1e-4)
+	extra.value = 0.33
+	assert_almost_eq(extra.modifier(1.0).value, 1.3, 1e-4, "1,33 redondeado a un decimal")
+
+
 func test_each_default_upgrade_is_a_new_one() -> void:
 	assert_ne(SWORD.default_upgrade(), SWORD.default_upgrade(), "se pueden quitar por separado")
 

@@ -2,9 +2,9 @@
 class_name Weapon
 extends Node3D
 ## Arma automática (GDD §6): ataca sola en cuanto acaba su espera y tiene un objetivo a su alcance.
-## Cada ataque son [method projectile_count] golpes separados por
-## [member WeaponStats.burst_interval]; el primero va al enemigo más cercano, el segundo al segundo
-## más cercano, y así (si hay menos enemigos que golpes, se repiten). Qué es un golpe (un tajo, un
+## Cada ataque son [method roll_shots] golpes (los de [method projectile_count]; si tiene decimales,
+## a veces uno más) separados por [member WeaponStats.burst_interval]; el primero va al enemigo más
+## cercano, el segundo al segundo más cercano, y así (si hay menos enemigos que golpes, se repiten). Qué es un golpe (un tajo, un
 ## proyectil…) lo decide cada arma en [method _fire]. Combina sus stats ([WeaponStats], con las
 ## mejoras de su nivel) con las del personaje ([OffenseData]). La monta un [WeaponInventory] con
 ## [method setup].
@@ -31,6 +31,9 @@ var stats: StatsComponent
 ## Stats de quien la lleva. Vacío: el arma usa solo las suyas.
 var wielder_stats: StatsComponent
 var level: int = 1
+## Azar del golpe de más (la parte decimal de los proyectiles). Sin asignar, el de combate de
+## [code]Rng[/code].
+var rng: RandomNumberGenerator
 
 var _weapon: WeaponStats
 var _offense: OffenseData
@@ -58,6 +61,8 @@ func _ready() -> void:
 		# Opcional: un enemigo no tiene daño % ni crítico.
 		_offense = wielder_stats.find_resolved(OffenseData) as OffenseData
 	_finder = TargetFinder.new(target_mask, sight_mask)
+	if rng == null:
+		rng = Rng.stream(Rng.Stream.COMBAT)
 
 
 func _physics_process(delta: float) -> void:
@@ -130,9 +135,18 @@ func cooldown() -> float:
 	return _weapon.cooldown / _percent(_offense.attack_speed if _offense else 100.0)
 
 
-## Golpes de cada ataque: los del arma más los proyectiles extra del personaje.
-func projectile_count() -> int:
-	return _weapon.projectiles + (_offense.projectile_count if _offense else 0)
+## Golpes de cada ataque: los del arma más los proyectiles extra del personaje. Puede llevar
+## decimales: la parte decimal es la probabilidad de un golpe más (ver [method roll_shots]).
+func projectile_count() -> float:
+	return _weapon.projectiles + (_offense.projectile_count if _offense else 0.0)
+
+
+## Golpes de un ataque: la parte entera de [method projectile_count] y, con la probabilidad de su
+## parte decimal, uno más.
+func roll_shots() -> int:
+	var count := projectile_count()
+	var whole := floori(count)
+	return whole + (1 if rng.randf() < count - whole else 0)
 
 
 ## Tamaño de los golpes respecto al normal (1 = el de la escena): área del arma × del personaje.
@@ -175,7 +189,7 @@ func _start_attack() -> void:
 		_cooldown_left = search_interval
 		return
 	_cooldown_left = cooldown()
-	_shots_left = projectile_count()
+	_shots_left = roll_shots()
 	_shot_index = 0
 	_shot_timer = 0.0
 	_fire_at(targets)
@@ -201,7 +215,7 @@ func _fire_at(targets: Array[Node3D]) -> void:
 
 func _find_targets() -> Array[Node3D]:
 	var space := get_world_3d().direct_space_state
-	return _finder.nearest(space, aim_origin(), reach(), projectile_count())
+	return _finder.nearest(space, aim_origin(), reach(), ceili(projectile_count()))
 
 
 static func _percent(value: float) -> float:

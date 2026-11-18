@@ -7,8 +7,9 @@
 [sub_resource type="Resource" id="Upgrade_projectile_count"]
 script = ExtResource("90_upgrade")
 stat = &"projectile_count"
-value = 1.0
-whole_numbers = true
+value = 0.68
+fixed = 0.56
+step = 0.1
 
 [resource]
 script = ExtResource("1_rune")
