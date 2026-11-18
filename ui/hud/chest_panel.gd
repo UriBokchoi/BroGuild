@@ -111,8 +111,7 @@ func _show_item() -> void:
 	_name.text = tr(_item.name_key)
 	if _item.rarity:
 		_name.add_theme_color_override(&"font_color", _item.rarity.color)
-	_effects.text = "
-".join(ModifierFormat.describe_all(_item.stat_modifiers))
+	_effects.text = "\n".join(ModifierFormat.describe_all(_item.stat_modifiers))
 	_description.text = tr(_item.description_key)
 	_result.visible = true
 	_hide_left = linger

@@ -1111,3 +1111,9 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - **Descripciones:** pasan a ser solo una frase con gracia, sin cifras. Las 15 que llevaban el efecto escrito se han reescrito.
   - **Test:** uno de datos falla si la descripción de un objeto lleva cifras en algún idioma.
 - **Por qué:** el diseñador vio objetos que al conseguirlos solo enseñaban la descripción. Los 8 medievales tienen frase, no efecto, y el revelado no enseñaba los modificadores. Con el efecto escrito en la frase, además, salía repetido en las cartas del círculo de setas y se quedaría desfasado al cambiar un valor.
+
+## 2026-11-18 · Los modificadores que suman llevan la unidad de su stat
+- **Decisión:** `ModifierFormat` pone la unidad de la stat cuando el modificador suma. La saca de su `@export_range`, como el panel de stats, y salen «+10 % Probabilidad de crítico» o «+0.5 m/s Velocidad al correr».
+  - `StatFormat.range_hint(stat)` recorre una vez las clases de datos del proyecto (los `Resource`, sin addons ni tests).
+  - Si dos clases declaran la misma stat con unidades distintas, se queda sin unidad, porque depende de a quién se aplique. Les pasa a `damage`, `projectile_speed`, `duration` y `knockback`: en el jugador son un %, y en las armas un número, m/s o segundos.
+- **Por qué:** el diseñador vio «+10 Probabilidad de crítico» sin el %, como si fueran puntos sueltos. Sacarlo de los datos evita una lista de unidades a mano que se desfase.
