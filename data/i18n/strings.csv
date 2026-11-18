@@ -194,6 +194,8 @@ STAT_SEPARATION_RADIUS,Distancia de separación,Separation distance
 STAT_SEPARATION_WEIGHT,Fuerza de separación,Separation strength
 STAT_CLIMB_SPEED,Velocidad al trepar,Climb speed
 STAT_CLIMB_HEIGHT,Altura a la que trepa sobre el objetivo,Climb height above the target
+STAT_WALL_CLIMB_DELAY,Espera para trepar muros,Wait before climbing walls
+STAT_WALL_CLIMB_TIME,Tiempo trepando muros,Wall climbing time
 STAT_APPROACH_SPREAD,Desvío al acercarse,Approach spread
 STAT_KEEP_DISTANCE,Distancia que guarda,Distance kept
 ENEMY_SWARMER_NAME,Esbirro,Minion

@@ -26,6 +26,11 @@ extends Resource
 ## Altura sobre los pies del objetivo hasta la que trepa: alrededor del jugador forman un montículo;
 ## si el jugador está en alto, se apilan para alcanzarlo.
 @export_range(0.0, 20.0, 0.1, "or_greater", "suffix:m") var climb_height: float = 0.0
+## Segundos que espera atascado contra el mundo (una roca, un muro: no otro enemigo) antes de trepar
+## por él, a [member climb_speed].
+@export_range(0.0, 5.0, 0.05, "or_greater", "suffix:s") var wall_climb_delay: float = 0.0
+## Segundos seguidos que trepa por el mundo antes de volver a esperar (0 = no trepa por el mundo).
+@export_range(0.0, 5.0, 0.05, "or_greater", "suffix:s") var wall_climb_time: float = 0.0
 ## Desvío máximo con el que se acerca al objetivo; cada enemigo saca el suyo al aparecer.
 @export_range(0.0, 90.0, 1.0, "suffix:°") var approach_spread: float = 0.0
 ## Distancia a la que se queda del objetivo (un tirador): más lejos se acerca, más cerca se aleja y

@@ -1170,3 +1170,14 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
     - curarse no destella.
   - Todo son valores exportados en sus escenas, como el resto del juice.
 - **Por qué:** quienes lo han probado echaban en falta notar los golpes. El hit-stop y el flash al golpear siguen en el Hito 5.
+
+## 2026-11-18 · Los enemigos trepan por el escenario
+- **Decisión:** un enemigo que lleva un rato queriendo avanzar sin poder mira si tiene delante el mundo.
+  - **Cuándo:** `EnemyStats.wall_climb_delay`, 0,35 s en esbirros y Bro-tes.
+  - **Cómo lo mira:** una esfera pequeña delante, a la altura del cuerpo, con una sola consulta de física y solo cuando va atascado.
+  - **Si hay mundo:** trepa por él a su `climb_speed` durante `wall_climb_time` (0,8 s, unos 2,8 m). Si sigue atascado, espera y lo vuelve a intentar.
+  - Trepar encima de otros enemigos sigue igual.
+- **Por qué:** quienes lo han probado vieron enemigos atascados en las pesas del Brosque.
+  - Antes solo trepaban encima de otros enemigos, y contra una roca o un muro empujaban y se quedaban quietos.
+  - Las pesas eran la peor trampa: discos de 2 m con un hueco bajo la barra donde se encajaban.
+  - La consulta de física solo para los atascados mantiene el coste bajo con cientos de enemigos (sin navegación por enemigo).

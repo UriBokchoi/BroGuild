@@ -89,6 +89,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 - **`Enemy`** (base de las escenas):
   - Es un `RigidBody3D` sin rotación que choca con el mundo, con el jugador y con otros enemigos.
   - Fija su velocidad horizontal con `EnemySteering`: perseguir con desvío, separarse y decidir si trepa. Con `keep_distance` se queda a esa distancia (`keep_range`) mirando al objetivo.
+  - Trepa encima de otros enemigos apoyados que le tapan el paso (hasta `climb_height` sobre el objetivo). Y si lleva `wall_climb_delay` atascado contra el mundo (una esfera delante, `wall_probe_*`, solo cuando va atascado), trepa por él `wall_climb_time` y, si sigue atascado, lo vuelve a intentar: así pasa por encima de pesas, troncos y muros bajos.
   - Daña al tocar y con sus armas, si tiene: las crea al prepararse, esperan un poco al aparecer (`first_attack_delay`) y paran al morir (sus disparos en vuelo siguen). Avisa de su muerte y encoge.
   - Mejoras de una vida (se quitan al volver a salir del pool): `boost(StatModifierSet)` aplica modificadores a sus stats y a las de sus armas (cada uno adonde exista su stat) y le llena la vida; `promote(EliteData)` lo hace élite.
   - Recalcula su rumbo repartido entre ticks, salvo con `steer_every_tick` (los jefes, en todos). `is_boss()` dice si es un jefe.
