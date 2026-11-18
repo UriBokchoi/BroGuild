@@ -6,7 +6,7 @@
 
 [sub_resource type="Resource" id="Resource_stats"]
 script = ExtResource("2_stats")
-damage = 10.0
+damage = 12.0
 cooldown = 2.5
 projectiles = 1
 burst_interval = 0.2

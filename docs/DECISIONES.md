@@ -1093,3 +1093,14 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - **Tests:** solo apunta el `RunRecorder` de `run_systems.tscn` (`record_runs`). Un hook de GUT previo (`tests/hooks/pre_run.gd`) lleva los récords a un archivo de pruebas durante toda la ejecución, así un test que mate al jugador en un nivel entero no ensucia los de verdad.
   - **Personaje:** se guarda como el nombre del archivo (`warrior`) y su clave de nombre, ya que `CharacterData` no tiene id propio.
 - **Por qué:** lo pidió el diseñador: ver tus partidas ordenadas por enemigos y con qué personaje. Solo en local: no hay cuentas ni servidor.
+
+## 2026-11-18 · Enemigos de las oleadas algo más duros
+- **Decisión:** suben las stats de base del esbirro y del tirador. Como el escalado por dificultad las multiplica, también pegan más en los minutos altos.
+
+  | Enemigo | Vida | Daño |
+  |---|---|---|
+  | Esbirro | 38 → 46 | contacto 8 → 10 |
+  | Tirador | 26 → 32 | contacto 4 → 5, disparo 10 → 12 |
+
+  No cambian ni la velocidad ni la cantidad de enemigos (se bajaron a propósito en el cambio de ritmo). Tampoco el jefe ni sus Bro-tes.
+- **Por qué:** el diseñador vio que, tras el cambio de ritmo, la partida se había vuelto muy fácil y a los enemigos les costaba seguir el ritmo del jugador. Del jefe dijo que estaba bien así.
