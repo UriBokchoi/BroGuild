@@ -1046,3 +1046,15 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
 - **Decisión:** el `TargetFinder` descarta los objetivos que no se ven. Lanza un rayo desde el pecho de quien dispara hasta el centro del objetivo contra las capas que tapan la vista (`Weapon.sight_mask`: el mundo, con árboles, mesetas, ruinas y props). Los rayos se tiran del más cercano al más lejano y solo hasta tener los objetivos que hacen falta. Vale para todas las armas: el tirador tampoco dispara a través de un árbol.
 - **Por qué:** lo pidió el diseñador. Disparar a lo que no se ve gastaba ataques contra paredes y quedaba raro.
 - **Coste:** como mucho un rayo por candidato al buscar (una vez por ataque, o cada `search_interval` sin objetivo).
+
+## 2026-11-18 · Ritmo más tranquilo: menos enemigos, menos vida, todo algo más lento
+- **Petición del diseñador:** bajar la cantidad de enemigos y su vida, y que el jugador y los enemigos no vayan tan rápido.
+- **Decisión** (oleadas del Brosque y datos de enemigos y jugador):
+  - **Enemigos por segundo**, un 25 % menos en toda la curva: 0,6 al empezar (antes 0,8), 3,75 con dificultad 10 (antes 5), 9 con 15 (antes 12). Picos ×2 (antes ×2,5) y como mucho 180 a la vez (antes 250).
+  - **Vida de base:** esbirro 38 (antes 45), tirador 26 y Bro-te 26 (antes 30).
+  - **Vida por dificultad**, un 15-25 % menos: ×1,4 con 3, ×2,2 con 6, ×4,2 con 10 (antes ×5), ×9 con 11 y ×110 con 20 (antes 150).
+  - **Velocidad**, un 10 % menos:
+    - enemigos: esbirro 4,6, tirador 3,1, Bro-te 5,6, Ent-renador 3,8 y su embestida 18 m/s;
+    - jugador: correr 6,8, esprintar 8,8, dash 21,6 (salida 9,2) y slide de 4,6 a 16,8 m/s.
+  - **Experiencia y oro por enemigo**, un 30 % más (esbirro 1,3; tirador 2,6; Bro-te 0,65). Como salen un 25 % menos, se sube de nivel y se gana oro más o menos igual que antes.
+- **Pendiente:** el *feel* lo decide el diseñador jugando. Si la ronda se queda corta de presión hacia el minuto 8-10, lo primero es subir la curva de enemigos por segundo en ese tramo.

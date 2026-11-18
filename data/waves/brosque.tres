@@ -9,7 +9,7 @@
 
 [sub_resource type="Curve" id="Curve_rate"]
 _limits = [0.0, 20.0, 0.0, 20.0]
-_data = [Vector2(0, 0.8), 0.0, 0.35, 1, 1, Vector2(2, 1.5), 0.35, 0.3333333, 1, 1, Vector2(5, 2.5), 0.3333333, 0.5, 1, 1, Vector2(8, 4), 0.5, 0.5, 1, 1, Vector2(10, 5), 0.5, 6.0, 1, 1, Vector2(10.5, 8), 6.0, 0.8888889, 1, 1, Vector2(15, 12), 0.8888889, 0.4, 1, 1, Vector2(20, 14), 0.4, 0.0, 1, 1]
+_data = [Vector2(0, 0.6), 0.0, 0.25, 1, 1, Vector2(2, 1.1), 0.25, 0.2666667, 1, 1, Vector2(5, 1.9), 0.2666667, 0.3666667, 1, 1, Vector2(8, 3), 0.3666667, 0.375, 1, 1, Vector2(10, 3.75), 0.375, 4.5, 1, 1, Vector2(10.5, 6), 4.5, 0.6666667, 1, 1, Vector2(15, 9), 0.6666667, 0.3, 1, 1, Vector2(20, 10.5), 0.3, 0.0, 1, 1]
 point_count = 8
 
 [sub_resource type="Curve" id="Curve_elite"]
@@ -19,7 +19,7 @@ point_count = 6
 
 [sub_resource type="Curve" id="Curve_health"]
 _limits = [0.0, 200.0, 0.0, 20.0]
-_data = [Vector2(0, 1), 0.0, 0.1666667, 1, 1, Vector2(3, 1.5), 0.1666667, 0.3333333, 1, 1, Vector2(6, 2.5), 0.3333333, 0.5, 1, 1, Vector2(9, 4), 0.5, 1.0, 1, 1, Vector2(10, 5), 1.0, 7.0, 1, 1, Vector2(11, 12), 7.0, 9.0, 1, 1, Vector2(13, 30), 9.0, 15.0, 1, 1, Vector2(15, 60), 15.0, 18.0, 1, 1, Vector2(20, 150), 18.0, 0.0, 1, 1]
+_data = [Vector2(0, 1), 0.0, 0.1333333, 1, 1, Vector2(3, 1.4), 0.1333333, 0.2666667, 1, 1, Vector2(6, 2.2), 0.2666667, 0.4, 1, 1, Vector2(9, 3.4), 0.4, 0.8, 1, 1, Vector2(10, 4.2), 0.8, 4.8, 1, 1, Vector2(11, 9), 4.8, 6.5, 1, 1, Vector2(13, 22), 6.5, 11.5, 1, 1, Vector2(15, 45), 11.5, 13.0, 1, 1, Vector2(20, 110), 13.0, 0.0, 1, 1]
 point_count = 9
 
 [sub_resource type="Curve" id="Curve_damage"]
@@ -59,8 +59,8 @@ round_minutes = 10.0
 spawn_rate = SubResource("Curve_rate")
 peak_interval = 60.0
 peak_duration = 10.0
-peak_multiplier = 2.5
-max_alive = 250
+peak_multiplier = 2.0
+max_alive = 180
 min_spawn_distance = 16.0
 max_spawn_distance = 24.0
 enemies = Array[ExtResource("2_entry")]([SubResource("Resource_swarmer"), SubResource("Resource_shooter")])
