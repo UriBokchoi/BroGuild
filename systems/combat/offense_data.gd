@@ -15,8 +15,9 @@ extends Resource
 @export_range(100.0, 1000.0, 1.0, "or_greater", "suffix:%") var crit_damage: float = 0.0
 ## Cadencia de todas las armas: a más, menos tiempo entre ataques.
 @export_range(10.0, 1000.0, 1.0, "or_greater", "suffix:%") var attack_speed: float = 0.0
-## Proyectiles que se suman a los de cada arma.
-@export_range(0, 20, 1, "or_greater") var projectile_count: int = 0
+## Proyectiles que se suman a los de cada arma. La parte decimal es la probabilidad de uno más en
+## cada ataque: 1,4 son uno y un 40 % de dos.
+@export_range(0.0, 20.0, 0.1, "or_greater") var projectile_count: float = 0.0
 ## Velocidad de los proyectiles.
 @export_range(10.0, 1000.0, 1.0, "or_greater", "suffix:%") var projectile_speed: float = 0.0
 ## Tamaño de proyectiles y áreas.

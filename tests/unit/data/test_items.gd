@@ -41,6 +41,18 @@ func test_every_item_is_complete() -> void:
 			assert_has(_stats, modifier.stat, "%s: «%s» no es una stat del jugador" % [file, modifier.stat])
 
 
+func test_descriptions_leave_the_numbers_to_the_modifiers() -> void:
+	# Las cifras salen de los modificadores (en cofres y cartas): si estuvieran también en la frase,
+	# se verían repetidas y mentirían al cambiar un valor.
+	var digits := RegEx.create_from_string("\\d")
+	for locale: String in TranslationServer.get_loaded_locales():
+		var translation := TranslationServer.get_translation_object(locale)
+		for item: PassiveItemData in _items:
+			var text := String(translation.get_message(item.description_key))
+			assert_ne(text, "", "%s (%s): sin frase" % [item.id, locale])
+			assert_null(digits.search(text), "%s (%s): «%s» lleva cifras" % [item.id, locale, text])
+
+
 func test_every_rarity_has_items() -> void:
 	for entry: WeightedEntry in RARITIES.entries:
 		var rarity := entry as Rarity

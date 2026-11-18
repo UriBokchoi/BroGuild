@@ -1,8 +1,9 @@
 class_name MainMenu
 extends Node3D
 ## Menú principal: Jugar, Opciones ([OptionsPanel]), Récords ([LeaderboardPanel]), Archivo
-## (desactivado hasta que exista) y Abandonar (cierra el juego). Detrás, los personajes con su
-## aspecto. Lo muestra [Game], que escucha [signal play_requested].
+## ([ArchivePanel]) y Abandonar (cierra el juego). Cada panel sustituye a la lista y, al cerrarse,
+## vuelve a ella. Detrás, los personajes con su aspecto. Lo muestra [Game], que escucha
+## [signal play_requested].
 
 ## Se pulsó «Jugar».
 signal play_requested
@@ -14,11 +15,10 @@ signal play_requested
 
 @onready var _menu: Control = %Menu
 @onready var _play: Button = %Play
-@onready var _options_button: Button = %Options
-@onready var _records_button: Button = %Records
 @onready var _quit: Button = %Quit
 @onready var _options: OptionsPanel = %OptionsPanel
 @onready var _records: LeaderboardPanel = %LeaderboardPanel
+@onready var _archive: ArchivePanel = %ArchivePanel
 
 
 func _ready() -> void:
@@ -27,32 +27,22 @@ func _ready() -> void:
 	for index: int in mini(characters.size(), models.size()):
 		models[index].dress(characters[index])
 	_play.pressed.connect(play_requested.emit)
-	_options_button.pressed.connect(_open_options)
-	_options.closed.connect(_on_options_closed)
-	_records_button.pressed.connect(_open_records)
-	_records.closed.connect(_on_records_closed)
+	_wire(%Options as Button, _options.open, _options.closed)
+	_wire(%Records as Button, _records.open, _records.closed)
+	_wire(%Archive as Button, _archive.open, _archive.closed)
 	_quit.pressed.connect(_quit_game)
 	_play.grab_focus()
 
 
-func _open_options() -> void:
-	_menu.visible = false
-	_options.open()
-
-
-func _on_options_closed() -> void:
-	_menu.visible = true
-	_options_button.grab_focus()
-
-
-func _open_records() -> void:
-	_menu.visible = false
-	_records.open()
-
-
-func _on_records_closed() -> void:
-	_menu.visible = true
-	_records_button.grab_focus()
+## [param button] cambia la lista por un panel ([param open_panel]); cuando se cierra
+## ([param closed]), la lista vuelve con el foco en el botón.
+func _wire(button: Button, open_panel: Callable, closed: Signal) -> void:
+	button.pressed.connect(func() -> void:
+		_menu.visible = false
+		open_panel.call())
+	closed.connect(func() -> void:
+		_menu.visible = true
+		button.grab_focus())
 
 
 func _quit_game() -> void:

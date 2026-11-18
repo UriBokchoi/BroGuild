@@ -75,8 +75,8 @@
 - [x] Récords: las 20 mejores partidas en local, por enemigos derrotados, con personaje, tiempo, nivel, mapa y resultado; en el menú principal y, al acabar, el puesto en los resultados
 - [x] Selección de personaje: lista a la izquierda, modelo 3D en el centro, a la derecha (al pasar el ratón) nombre, stats, arma principal y habilidad pasiva
 - [x] Selección de nivel (sustituye al panel de info al elegir personaje): el Brosque; la Torre del Mago y la Mazmorra salen como «próximamente» hasta que existan
-- [ ] Catálogo de contenido (`data/content.tres`) y `Save` con desbloqueos persistentes
-- [ ] Archivo: personajes, armas, runas y enemigos; se desbloquean al conseguirlos o al derrotar al enemigo («???» mientras tanto)
+- [x] Catálogo de contenido (`data/content.tres`) y `Save` con lo descubierto entre partidas (los desbloqueos de personajes y armas, en el Hito 8)
+- [x] Archivo: personajes, armas, runas, objetos y enemigos; se descubren al jugar con el personaje, al conseguirlos o al derrotar al enemigo («?» y una pista mientras tanto); ficha con lo que hace cada uno
 
 ## Hito 4 — Apuestas v1
 - [ ] GDD adaptado a la temática medieval (pendientes de §11)

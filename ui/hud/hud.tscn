@@ -286,6 +286,11 @@ unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"ChestItemLabel"
 
+[node name="ChestItemEffects" type="Label" parent="Margin/Column/ChestPanel/Content/ChestResult/Text"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"ChestEffectLabel"
+
 [node name="ChestItemDescription" type="Label" parent="Margin/Column/ChestPanel/Content/ChestResult/Text"]
 unique_name_in_owner = true
 layout_mode = 2

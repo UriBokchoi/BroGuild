@@ -1,7 +1,7 @@
 extends GutTest
 ## Cofres en el HUD: al abrirse uno, la luz recorre las rarezas y se para en la del objeto, que se
-## muestra con su nombre del color de su rareza; sin oro, solo el aviso. Debajo de las runas, los
-## objetos que lleva, con las copias si son más de una.
+## muestra con su nombre del color de su rareza, lo que hace (sus modificadores) y su frase; sin oro,
+## solo el aviso. Debajo de las runas, los objetos que lleva, con las copias si son más de una.
 
 const HudScene := preload("res://ui/hud/hud.tscn")
 const RARITIES := preload("res://data/rarities/rarities.tres")
@@ -28,6 +28,11 @@ func test_the_light_stops_on_the_item_rarity() -> void:
 	assert_true((_hud.get_node(^"%ChestResult") as Control).visible)
 	assert_eq(item_name.text, tr(CROWN.name_key))
 	assert_eq(item_name.get_theme_color(&"font_color"), CROWN.rarity.color)
+	var effects := (_hud.get_node(^"%ChestItemEffects") as Label).text
+	var lines := ModifierFormat.describe_all(CROWN.stat_modifiers)
+	assert_eq(lines.size(), CROWN.stat_modifiers.size())
+	assert_eq(effects, "\n".join(lines), "lo que hace, de sus modificadores")
+	assert_eq((_hud.get_node(^"%ChestItemDescription") as Label).text, tr(CROWN.description_key), "y su frase")
 
 
 func test_without_gold_only_the_warning() -> void:

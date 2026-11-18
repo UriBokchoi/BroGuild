@@ -1104,3 +1104,56 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
 
   No cambian ni la velocidad ni la cantidad de enemigos (se bajaron a propósito en el cambio de ritmo). Tampoco el jefe ni sus Bro-tes.
 - **Por qué:** el diseñador vio que, tras el cambio de ritmo, la partida se había vuelto muy fácil y a los enemigos les costaba seguir el ritmo del jugador. Del jefe dijo que estaba bien así.
+
+## 2026-11-18 · Los objetos dicen lo que hacen a partir de sus datos
+- **Decisión:**
+  - **Revelado:** el revelado de un cofre o del premio del jefe (`ChestPanel`) enseña lo que hace el objeto debajo del nombre, una línea por modificador (`ModifierFormat.describe_all`, como las cartas). Después, en gris, su frase.
+  - **Descripciones:** pasan a ser solo una frase con gracia, sin cifras. Las 15 que llevaban el efecto escrito se han reescrito.
+  - **Test:** uno de datos falla si la descripción de un objeto lleva cifras en algún idioma.
+- **Por qué:** el diseñador vio objetos que al conseguirlos solo enseñaban la descripción. Los 8 medievales tienen frase, no efecto, y el revelado no enseñaba los modificadores. Con el efecto escrito en la frase, además, salía repetido en las cartas del círculo de setas y se quedaría desfasado al cambiar un valor.
+
+## 2026-11-18 · Los modificadores que suman llevan la unidad de su stat
+- **Decisión:** `ModifierFormat` pone la unidad de la stat cuando el modificador suma. La saca de su `@export_range`, como el panel de stats, y salen «+10 % Probabilidad de crítico» o «+0.5 m/s Velocidad al correr».
+  - `StatFormat.range_hint(stat)` recorre una vez las clases de datos del proyecto (los `Resource`, sin addons ni tests).
+  - Si dos clases declaran la misma stat con unidades distintas, se queda sin unidad, porque depende de a quién se aplique. Les pasa a `damage`, `projectile_speed`, `duration` y `knockback`: en el jugador son un %, y en las armas un número, m/s o segundos.
+- **Por qué:** el diseñador vio «+10 Probabilidad de crítico» sin el %, como si fueran puntos sueltos. Sacarlo de los datos evita una lista de unidades a mano que se desfase.
+
+## 2026-11-18 · Multiplicidad con decimales
+- **Decisión:**
+  - **Proyectiles con decimales:** `OffenseData.projectile_count` pasa a ser decimal. Cada ataque lanza la parte entera y, con la probabilidad de la parte decimal, un golpe más (`Weapon.roll_shots`, con el azar de combate). Con 2,3 salen dos golpes y un 30 % de veces tres. Los proyectiles propios de cada arma siguen siendo enteros.
+  - **Mejora con parte fija:** `UpgradeStat` gana una parte fija que no cambia con la rareza (`fixed`) y un redondeo (`step`). La mejora es `fixed + value × fuerza`.
+  - **La runa de Multiplicidad** (parte fija 0,56, `value` 0,68, a un decimal) da:
+
+    | Común | Rara | Improbable | De leyenda | Mítica |
+    |---|---|---|---|---|
+    | +1 | +1,2 | +1,5 | +1,8 | +2,2 |
+
+    Antes daba siempre +1, o +2 alguna vez.
+- **Por qué:** lo pidió el diseñador: que la común sea el +1 y las demás den más, con decimales. Solo con multiplicar por la rareza, la común (×0,6) se quedaría por debajo de 1 o la mítica muy por encima de 2,2. La parte fija junta las rarezas sin topes.
+
+## 2026-11-18 · Catálogo de contenido y Archivo
+- **Decisión:**
+  - **Catálogo:** `data/content.tres` (`ContentCatalog`) lista lo que se puede descubrir, por tipos (`ContentCategory`). Cada tipo lleva su nombre, la pista de cómo se descubre, las stats que enseña y sus entradas en orden: personajes, armas, runas, objetos (por rareza) y enemigos.
+    - Las pestañas del Archivo salen de los tipos, así que un tipo nuevo es solo datos.
+    - Un test avisa si un `.tres` de las carpetas de datos no está en el catálogo, con su id, nombre, frase e icono.
+  - **Ids e iconos:** personajes y enemigos ganan icono (SVG como los objetos) y los personajes, `id`. Los récords lo usan en vez del nombre del archivo.
+  - **Lo descubierto:** se guarda en `user://archive.cfg` (`Discoveries`, por tipo e id) en cuanto hay algo nuevo.
+    - Lo apunta `ArchiveRecorder`, que en las partidas escucha señales que ya existían.
+    - Un personaje se descubre al jugar con él; un arma, runa u objeto, al conseguirlo (la inicial también), y un enemigo, al derrotarlo. Un élite cuenta como su enemigo, y el jefe también entra.
+    - El muñeco del gimnasio no está en el catálogo y no cuenta.
+  - **Archivo** (menú principal): una pestaña por tipo con su cuenta («2/3»), casillas con el icono (o «?») y la ficha a la derecha.
+    - Personajes: diferencias de stats, arma inicial y pasiva.
+    - Objetos: rareza y modificadores.
+    - Runas: qué mejoran.
+    - Armas y enemigos: sus `shown_stats`.
+    - Lo no descubierto: «???» y la pista.
+  - El menú principal abre sus tres paneles igual (`_wire`).
+  - **Tests:** el hook previo de GUT también lleva el Archivo a un archivo de pruebas.
+- **Por qué:** cierra el Hito 3. El diseñador pidió que los objetos entraran también y que los personajes salgan como «???» hasta jugar con ellos.
+  - Los menús y la subida de nivel siguen sacando lo suyo de sus carpetas. Pasarán al catálogo cuando haya desbloqueos de verdad (Hito 8), que es cuando importa ofrecer solo lo desbloqueado.
+
+## 2026-11-18 · La validación no toca récords ni Archivo
+- **Decisión:** `Save.use_scratch_files(prefijo)` lleva récords y Archivo a `user://<prefijo>_*.cfg`, que empiezan vacíos.
+  - El hook previo de GUT lo usa con `test`.
+  - El juego lo usa si arranca con `-- --no-save`. `validate.sh` lo pasa al arrancar el menú y los niveles.
+- **Por qué:** al validar, el paso que juega el Brosque unos segundos apuntó el Guerrero y la espada en el Archivo de verdad del jugador. Ese archivo se ha borrado, y los récords de verdad del diseñador no se tocaron.

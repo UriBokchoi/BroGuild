@@ -230,7 +230,7 @@ RUNE_HASTE_DESCRIPTION,"Más velocidad de ataque.","More attack speed."
 RUNE_VIGOR_NAME,Runa de Vigor,Rune of Vigor
 RUNE_VIGOR_DESCRIPTION,"Más vida máxima.","More max health."
 RUNE_MULTIPLICITY_NAME,Runa de Multiplicidad,Rune of Multiplicity
-RUNE_MULTIPLICITY_DESCRIPTION,"Más proyectiles (también más tajos con la espada).","More projectiles (also more sword slashes)."
+RUNE_MULTIPLICITY_DESCRIPTION,"Más proyectiles (también más tajos con la espada). Con decimales, a veces sale uno más.","More projectiles (also more sword slashes). With decimals, sometimes one more comes out."
 ARMORY_WEAPONS,Armas,Weapons
 ARMORY_RUNES,Runas,Runes
 LEVEL_UP_TITLE,¡Nivel %d!,Level %d!
@@ -244,35 +244,35 @@ RARITY_IMPROBABLE,Improbable,Improbable
 RARITY_LEGENDARY,De leyenda,Legendary
 RARITY_MYTHIC,Mítica,Mythic
 ITEM_PROTEIN_SHAKE_NAME,Batido de proteínas,Protein Shake
-ITEM_PROTEIN_SHAKE_DESCRIPTION,"+10 % de vida máxima.","+10% max health."
+ITEM_PROTEIN_SHAKE_DESCRIPTION,Sabe a vainilla y a esfuerzo.,Tastes like vanilla and hard work.
 ITEM_FANNY_PACK_NAME,Riñonera,Fanny Pack
-ITEM_FANNY_PACK_DESCRIPTION,"+15 % de oro.","+15% gold."
+ITEM_FANNY_PACK_DESCRIPTION,Donde un bro guarda lo importante.,Where a bro keeps what matters.
 ITEM_BODY_OIL_NAME,Aceite corporal,Body Oil
-ITEM_BODY_OIL_DESCRIPTION,"+5 % de esquiva: los golpes resbalan.","+5% evasion: hits slip right off."
+ITEM_BODY_OIL_DESCRIPTION,Los golpes resbalan.,Hits slip right off.
 ITEM_LIFTING_BELT_NAME,Cinturón de levantar,Lifting Belt
-ITEM_LIFTING_BELT_DESCRIPTION,"+10 de defensa.","+10 armor."
+ITEM_LIFTING_BELT_DESCRIPTION,"Aprieta, pero sujeta.","Tight, but it holds."
 ITEM_GOLDEN_DUMBBELL_NAME,Mancuerna de oro,Golden Dumbbell
-ITEM_GOLDEN_DUMBBELL_DESCRIPTION,"+1 proyectil en todas las armas.","+1 projectile on every weapon."
+ITEM_GOLDEN_DUMBBELL_DESCRIPTION,"Pesa lo mismo, pero brilla más.","Weighs the same, but shines brighter."
 ITEM_SHADY_SHAKE_NAME,Batido sospechoso,Shady Shake
-ITEM_SHADY_SHAKE_DESCRIPTION,"+25 % de daño, pero +3 de dificultad.","+25% damage, but +3 difficulty."
+ITEM_SHADY_SHAKE_DESCRIPTION,"Funciona, pero no preguntes qué lleva.","It works, but don't ask what's in it."
 ITEM_BRO_CROWN_NAME,Corona del Bro,Bro Crown
-ITEM_BRO_CROWN_DESCRIPTION,"+15 % de daño, velocidad de ataque, vida máxima y área.","+15% damage, attack speed, max health and area."
+ITEM_BRO_CROWN_DESCRIPTION,Para el rey de los bros.,For the king of bros.
 ITEM_COLD_PIZZA_NAME,Pizza fría de ayer,Last Night's Cold Pizza
-ITEM_COLD_PIZZA_DESCRIPTION,"+0,4 de vida por segundo. Mejor que recién hecha.","+0.4 health per second. Better than fresh."
+ITEM_COLD_PIZZA_DESCRIPTION,Mejor que recién hecha.,Better than fresh.
 ITEM_GAME_CONTROLLER_NAME,Mando de consola,Game Controller
-ITEM_GAME_CONTROLLER_DESCRIPTION,"+8 % de velocidad de ataque: aporrear botones también es entrenar.","+8% attack speed: button mashing counts as training."
+ITEM_GAME_CONTROLLER_DESCRIPTION,Aporrear botones también es entrenar.,Button mashing counts as training.
 ITEM_BACKWARDS_CAP_NAME,Gorra hacia atrás,Backwards Cap
-ITEM_BACKWARDS_CAP_DESCRIPTION,"+10 % de daño. Ahora va en serio.","+10% damage. Now it's serious."
+ITEM_BACKWARDS_CAP_DESCRIPTION,Ahora va en serio.,Now it's serious.
 ITEM_SOCKS_AND_SANDALS_NAME,Chanclas con calcetines,Socks and Sandals
-ITEM_SOCKS_AND_SANDALS_DESCRIPTION,"+6 % de velocidad al correr y al esprintar. Comodidad ante todo.","+6% run and sprint speed. Comfort above all."
+ITEM_SOCKS_AND_SANDALS_DESCRIPTION,Comodidad ante todo.,Comfort above all.
 ITEM_SCRATCH_CARD_NAME,Rasca y gana,Scratch Card
-ITEM_SCRATCH_CARD_DESCRIPTION,"+10 de Suerte: mejoras y cofres más raros.","+10 Luck: rarer upgrades and chests."
+ITEM_SCRATCH_CARD_DESCRIPTION,Hoy sí que toca.,Today's the day.
 ITEM_BLUETOOTH_SPEAKER_NAME,Altavoz portátil,Bluetooth Speaker
-ITEM_BLUETOOTH_SPEAKER_DESCRIPTION,"+12 % de área. Que se entere todo el bosque.","+12% area. Let the whole forest hear it."
+ITEM_BLUETOOTH_SPEAKER_DESCRIPTION,Que se entere todo el bosque.,Let the whole forest hear it.
 ITEM_SUNGLASSES_NAME,Gafas de sol,Sunglasses
-ITEM_SUNGLASSES_DESCRIPTION,"+6 % de crítico. También de noche.","+6% crit chance. Even at night."
+ITEM_SUNGLASSES_DESCRIPTION,También de noche.,Even at night.
 ITEM_GOLD_CHAIN_NAME,Cadena de oro,Gold Chain
-ITEM_GOLD_CHAIN_DESCRIPTION,"+25 % de oro y +10 de Suerte.","+25% gold and +10 Luck."
+ITEM_GOLD_CHAIN_DESCRIPTION,Para que se vea desde lejos.,So they can see it from afar.
 LEVEL_UP_NEW,Nuevo,New
 LEVEL_UP_LEVEL,Nv. %d → %d,Lv. %d → %d
 ITEM_KIND_WEAPON,Arma,Weapon
@@ -342,3 +342,20 @@ RECORDS_MAP,Mapa,Map
 RECORDS_RESULT,Resultado,Result
 RECORDS_WON,Victoria,Victory
 RECORDS_LOST,Derrota,Defeat
+ARCHIVE_TITLE,Archivo,Archive
+ARCHIVE_TAB,%s  %d/%d,%s  %d/%d
+ARCHIVE_LOCKED,???,???
+ARCHIVE_CATEGORY_CHARACTERS,Personajes,Characters
+ARCHIVE_CATEGORY_WEAPONS,Armas,Weapons
+ARCHIVE_CATEGORY_RUNES,Runas,Runes
+ARCHIVE_CATEGORY_ITEMS,Objetos,Items
+ARCHIVE_CATEGORY_ENEMIES,Enemigos,Enemies
+ARCHIVE_HINT_CHARACTERS,Juega una partida con este personaje para descubrirlo.,Play a run with this character to discover it.
+ARCHIVE_HINT_WEAPONS,Consigue esta arma en una partida para descubrirla.,Get this weapon in a run to discover it.
+ARCHIVE_HINT_RUNES,Consigue esta runa en una partida para descubrirla.,Get this rune in a run to discover it.
+ARCHIVE_HINT_ITEMS,Consigue este objeto en una partida para descubrirlo.,Get this item in a run to discover it.
+ARCHIVE_HINT_ENEMIES,Derrota a este enemigo para descubrirlo.,Defeat this enemy to discover it.
+ARCHIVE_STARTING_WEAPON,Arma inicial: %s,Starting weapon: %s
+ARCHIVE_PASSIVE,Pasiva: %s,Passive: %s
+ARCHIVE_UPGRADES,Mejora: %s,Upgrades: %s
+ARCHIVE_STAT,%s: %s,%s: %s

@@ -1,5 +1,5 @@
 extends GutTest
-## StatFormat: valores con su unidad y claves de traducción.
+## StatFormat: valores con su unidad, la unidad de cada stat según sus datos y claves de traducción.
 
 
 func test_float_with_suffix_drops_trailing_zeros() -> void:
@@ -28,3 +28,13 @@ func test_translation_keys() -> void:
 
 func _property(type: int, hint_string: String) -> Dictionary:
 	return {"type": type, "hint": PROPERTY_HINT_RANGE, "hint_string": hint_string}
+
+
+func test_range_hint_finds_the_unit_in_the_data() -> void:
+	assert_eq(StatFormat.range_hint(&"crit_chance").suffix, "%")
+	assert_eq(StatFormat.range_hint(&"run_speed").suffix, "m/s")
+
+
+func test_range_hint_of_an_unknown_or_ambiguous_stat_has_no_unit() -> void:
+	assert_eq(StatFormat.range_hint(&"no_such_stat").suffix, "")
+	assert_eq(StatFormat.range_hint(&"damage").suffix, "", "número en las armas, % en el jugador")

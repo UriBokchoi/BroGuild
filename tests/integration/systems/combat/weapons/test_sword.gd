@@ -1,7 +1,7 @@
 extends GutTest
 ## Espada e inventario de armas con física real: ataca sola al muñeco que está a su alcance, ignora
-## lo que queda lejos o detrás de una pared (no lo ve), sus niveles aplican las mejoras de sus datos y las stats de quien la lleva
-## escalan cadencia, tajos y alcance.
+## lo que queda lejos o detrás de una pared (no lo ve), sus niveles aplican las mejoras de sus datos
+## y las stats de quien la lleva escalan cadencia, tajos (con decimales, a veces uno más) y alcance.
 
 const SWORD := preload("res://data/weapons/sword.tres")
 const DummyScene := preload("res://entities/enemies/target_dummy/target_dummy.tscn")
@@ -42,14 +42,14 @@ func test_levels_add_and_remove_upgrades() -> void:
 	sword.set_level(2)
 	var base := SWORD.stats as WeaponStats
 	assert_almost_eq(sword.damage(), base.damage + _common(&"damage"), 1e-4, "la mejora estándar: todas sus stats")
-	assert_eq(sword.projectile_count(), 2)
+	assert_eq(sword.projectile_count(), 2.0)
 	assert_almost_eq(sword.cooldown(), base.cooldown * _common(&"cooldown"), 1e-4)
 	sword.set_level(99)
 	assert_eq(sword.level, SWORD.max_level(), "no pasa del máximo")
 	assert_eq(sword.get_upgrades().size(), SWORD.max_level() - 1)
 	sword.set_level(1)
 	assert_eq(sword.damage(), (SWORD.stats as WeaponStats).damage, "bajar de nivel quita las mejoras")
-	assert_eq(sword.projectile_count(), 1)
+	assert_eq(sword.projectile_count(), 1.0)
 
 
 func test_a_rolled_upgrade_adds_its_modifiers() -> void:
@@ -67,8 +67,23 @@ func test_wielder_stats_scale_the_weapon() -> void:
 	_wielder.add_modifier(StatModifier.create(&"projectile_count", StatModifier.Kind.FLAT, 1.0), self)
 	_wielder.add_modifier(StatModifier.create(&"area", StatModifier.Kind.PERCENT, 0.5), self)
 	assert_almost_eq(sword.cooldown(), 0.55, 1e-4, "el doble de rápida")
-	assert_eq(sword.projectile_count(), 2, "un tajo más")
+	assert_eq(sword.projectile_count(), 2.0, "un tajo más")
 	assert_almost_eq(sword.reach(), 4.2, 1e-4, "el área alarga el tajo")
+
+
+func test_decimal_projectiles_sometimes_add_a_slash() -> void:
+	var sword := _inventory.add(SWORD)
+	sword.rng = RandomNumberGenerator.new()
+	sword.rng.seed = 7
+	_wielder.add_modifier(StatModifier.create(&"projectile_count", StatModifier.Kind.FLAT, 1.3), self)
+	assert_almost_eq(sword.projectile_count(), 2.3, 1e-4)
+	var rolls := 2000
+	var total := 0
+	for _roll: int in rolls:
+		var shots := sword.roll_shots()
+		assert_true(shots == 2 or shots == 3, "dos tajos o, a veces, tres")
+		total += shots
+	assert_almost_eq(float(total) / rolls, 2.3, 0.05, "de media, los decimales")
 
 
 func test_slashes_a_dummy_in_reach() -> void:

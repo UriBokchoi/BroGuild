@@ -58,7 +58,7 @@ func define(
 func define_from_resource(data: Resource) -> Array[StringName]:
 	var defined: Array[StringName] = []
 	for property: Dictionary in data.get_property_list():
-		if not _is_stat_property(property):
+		if not is_stat_property(property):
 			continue
 		var stat: StringName = property["name"]
 		var hint_string: String = property["hint_string"]
@@ -183,7 +183,9 @@ static func _combine(state: StatState, start: float, base_layer: bool) -> float:
 	return roundf(value) if state.is_integer else value
 
 
-static func _is_stat_property(property: Dictionary) -> bool:
+## ¿[param property] (de [method Object.get_property_list]) es una stat? Un número exportado, con
+## rango o sin él.
+static func is_stat_property(property: Dictionary) -> bool:
 	var usage: int = property["usage"]
 	var type: int = property["type"]
 	var hint: int = property["hint"]

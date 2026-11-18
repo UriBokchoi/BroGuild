@@ -23,7 +23,7 @@ var finished_at: float = 0.0
 static func create(stats: RunStats, character: CharacterData, level: LevelData) -> RunRecord:
 	var record := RunRecord.new()
 	if character:
-		record.character_id = StringName(character.resource_path.get_file().get_basename())
+		record.character_id = character.id
 		record.character_name_key = character.name_key
 	if level:
 		record.level_name_key = level.name_key

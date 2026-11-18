@@ -7,6 +7,7 @@ const STRINGS_PATH := "res://data/i18n/strings.csv"
 const PlayerScene := preload("res://entities/player/player.tscn")
 ## Nivel máximo de partida de las runas (GDD §6).
 const MAX_LEVEL := 20
+const RARITIES := preload("res://data/rarities/rarities.tres")
 
 var _keys := PackedStringArray()
 var _runes: Array[RuneData] = []
@@ -47,3 +48,13 @@ func test_upgrades_touch_player_stats_up_to_level_20() -> void:
 		assert_false(rune.upgrade_stats.is_empty(), "%s: sin stats que mejorar" % rune.id)
 		for upgrade_stat: UpgradeStat in rune.upgrade_stats:
 			assert_true(player.stats.has_stat(upgrade_stat.stat), "%s: «%s» no es una stat" % [rune.id, upgrade_stat.stat])
+
+
+func test_multiplicity_gives_one_on_a_common_card_and_up_to_two_point_two() -> void:
+	var multiplicity: RuneData = load("res://data/runes/multiplicity.tres")
+	var upgrade_stat := multiplicity.upgrade_stats[0]
+	var expected: Dictionary[StringName, float] = {&"common": 1.0, &"rare": 1.2, &"improbable": 1.5, &"legendary": 1.8, &"mythic": 2.2}
+	for entry: WeightedEntry in RARITIES.entries:
+		var rarity := entry as Rarity
+		var amount := upgrade_stat.modifier(rarity.power).value
+		assert_almost_eq(amount, expected[rarity.id], 1e-4, "%s" % rarity.id)

@@ -1,6 +1,6 @@
 extends GutTest
-## Menú principal: viste a los personajes de fondo, «Jugar» lo pide, «Opciones» y «Récords» cambian
-## el menú por su panel (y al cerrarlo vuelve) y «Archivo» está desactivado hasta que exista.
+## Menú principal: viste a los personajes de fondo, «Jugar» lo pide y «Opciones», «Récords» y
+## «Archivo» cambian el menú por su panel (y al cerrarlo vuelve).
 
 const MenuScene := preload("res://ui/menus/main/main_menu.tscn")
 
@@ -38,5 +38,10 @@ func test_records_replace_the_menu_and_come_back() -> void:
 	assert_true((_menu.get_node(^"%Menu") as Control).visible)
 
 
-func test_the_archive_is_not_ready_yet() -> void:
-	assert_true((_menu.get_node(^"%Archive") as Button).disabled)
+func test_the_archive_replaces_the_menu_and_comes_back() -> void:
+	var archive := _menu.get_node(^"%ArchivePanel") as ArchivePanel
+	(_menu.get_node(^"%Archive") as Button).pressed.emit()
+	assert_true(archive.visible)
+	assert_false((_menu.get_node(^"%Menu") as Control).visible)
+	archive.close()
+	assert_true((_menu.get_node(^"%Menu") as Control).visible)

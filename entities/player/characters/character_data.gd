@@ -8,12 +8,16 @@ extends StatModifierSet
 ## [code]data/characters/[/code] con sus textos traducidos (y, si su pasiva es nueva, su escena en
 ## [code]entities/player/characters/passives/[/code]).
 
+## Identificador estable (récords, Archivo).
+@export var id: StringName = &""
 ## Clave de traducción del nombre (p. ej. [code]CHARACTER_WARRIOR_NAME[/code]).
 @export var name_key: StringName = &""
 ## Clave de traducción de la descripción de su gimmick.
 @export var description_key: StringName = &""
 ## Color con el que se le reconoce: el de su modelo, sus pedestales y la selección de personaje.
 @export var color: Color = Color.WHITE
+## Icono (Archivo).
+@export var icon: Texture2D
 ## Arma con la que empieza.
 @export var starting_weapon: WeaponData
 
