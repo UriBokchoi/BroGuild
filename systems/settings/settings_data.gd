@@ -15,5 +15,7 @@ extends Resource
 @export var default_vsync: bool = false
 ## Tamaños de ventana que se ofrecen (solo los que caben en la pantalla).
 @export var resolutions: Array[Vector2i] = []
+## Partidas que guarda la clasificación (las mejores).
+@export_range(1, 200, 1) var leaderboard_size: int = 0
 ## Idioma al estrenar el juego (código de [TranslationServer]: [code]es[/code], [code]en[/code]…).
 @export var default_locale: String = ""

@@ -1084,3 +1084,12 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
 
   - Los paneles que pausan y obligan a elegir comparten base (`ModalPanel`) y piezas de carta (`CardParts`), sacadas del de subir de nivel.
 - **Por qué:** lo pidió el diseñador. Elegir entre tres premia explorar sin pagar.
+
+## 2026-11-18 · Récords locales de partidas
+- **Decisión:**
+  - **Qué se guarda:** al morir o al vencer al jefe, `RunRecorder` apunta la partida (`RunRecord`): personaje, mapa, enemigos y élites derrotados, tiempo, nivel alcanzado, si se ganó y cuándo. La guarda `Save.record_run()` en `user://leaderboard.cfg`, una sola vez por partida. Abandonar desde la pausa no cuenta.
+  - **Orden:** `Leaderboard` ordena por enemigos derrotados. A igualdad, primero las victorias y luego las partidas más largas. Guarda las 20 mejores (`SettingsData.leaderboard_size`).
+  - **Dónde se ve:** «Récords», en el menú principal (`LeaderboardPanel`), con la última partida en azul. Al acabar una partida, los resultados dicen su puesto si entró.
+  - **Tests:** solo apunta el `RunRecorder` de `run_systems.tscn` (`record_runs`). Un hook de GUT previo (`tests/hooks/pre_run.gd`) lleva los récords a un archivo de pruebas durante toda la ejecución, así un test que mate al jugador en un nivel entero no ensucia los de verdad.
+  - **Personaje:** se guarda como el nombre del archivo (`warrior`) y su clave de nombre, ya que `CharacterData` no tiene id propio.
+- **Por qué:** lo pidió el diseñador: ver tus partidas ordenadas por enemigos y con qué personaje. Solo en local: no hay cuentas ni servidor.

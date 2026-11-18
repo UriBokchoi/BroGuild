@@ -1,0 +1,50 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ui/menus/leaderboard/leaderboard_panel.gd" id="1_records"]
+
+[node name="LeaderboardPanel" type="PanelContainer"]
+custom_minimum_size = Vector2(560, 0)
+size_flags_horizontal = 4
+size_flags_vertical = 4
+script = ExtResource("1_records")
+
+[node name="Content" type="VBoxContainer" parent="."]
+layout_mode = 2
+theme_type_variation = &"MenuList"
+
+[node name="Title" type="Label" parent="Content"]
+layout_mode = 2
+theme_type_variation = &"HeaderLabel"
+text = "RECORDS_TITLE"
+
+[node name="Subtitle" type="Label" parent="Content"]
+layout_mode = 2
+theme_type_variation = &"StatBaseLabel"
+text = "RECORDS_SUBTITLE"
+
+[node name="Scroll" type="ScrollContainer" parent="Content"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 360)
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="Rows" type="GridContainer" parent="Content/Scroll"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"OptionsGrid"
+
+[node name="Empty" type="Label" parent="Content"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 2
+theme_type_variation = &"StatNameLabel"
+text = "RECORDS_EMPTY"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Back" type="Button" parent="Content"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+text = "OPTIONS_BACK"

@@ -1,7 +1,8 @@
 extends GutTest
 ## Pantalla de resultados: al morir el jugador y tras su espera, pausa y muestra lo apuntado por el
 ## RunRecorder bajo una frase de muerte al azar, con el foco en «Reintentar» (que lleva su tecla);
-## Esc no la cierra. Al vencer al jefe, tras su espera, la victoria con su premio por rapidez.
+## Esc no la cierra. Al vencer al jefe, tras su espera, la victoria con su premio por rapidez. Si
+## la partida entró en los récords, su puesto.
 ## Reintentar y Salir van por el flujo del juego (RunFlow).
 
 const PanelScene := preload("res://ui/menus/results/results_panel.tscn")
@@ -52,6 +53,13 @@ func test_shows_what_the_recorder_saw() -> void:
 	assert_eq(rows["RESULTS_ELITE_KILLS"], "4")
 	assert_eq(rows["RESULTS_GOLD"], "57")
 	assert_eq(rows["RESULTS_DAMAGE"], "9876")
+	assert_false(rows.has("RESULTS_RECORD_PLACE"), "sin puesto en los récords, no sale")
+
+
+func test_shows_the_records_place() -> void:
+	_recorder.place = 2
+	_panel.open()
+	assert_eq(_panel.get_rows()["RESULTS_RECORD_PLACE"], tr(&"RESULTS_RECORD_PLACE_VALUE") % 3)
 
 
 func test_retry_has_focus_and_shows_its_key() -> void:

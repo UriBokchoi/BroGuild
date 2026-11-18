@@ -9,5 +9,6 @@
   "hide_orphans": false,
   "disable_colors": true,
   "double_strategy": "SCRIPT_ONLY",
+  "pre_run_script": "res://tests/hooks/pre_run.gd",
   "post_run_script": "res://tests/hooks/post_run.gd"
 }

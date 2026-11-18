@@ -1,6 +1,7 @@
 extends GutTest
 ## RunSystems: pone al jugador en el punto de aparición con el personaje de serie del nivel, da sus
-## oleadas al director y las empieza solas si el nivel lo pide.
+## oleadas al director y las empieza solas si el nivel lo pide. Su RunRecorder apunta las partidas
+## en los récords, con el personaje del jugador.
 
 const SystemsScene := preload("res://levels/common/run_systems.tscn")
 const WAVES := preload("res://data/waves/brosque.tres")
@@ -40,3 +41,9 @@ func test_the_player_gets_the_level_character() -> void:
 func test_the_waves_are_the_level_ones_and_start_alone() -> void:
 	assert_same(_systems.director.data, WAVES)
 	assert_true(_systems.director.is_running())
+
+
+func test_the_recorder_writes_down_real_runs_with_the_player() -> void:
+	var recorder := _systems.get_node(^"RunRecorder") as RunRecorder
+	assert_true(recorder.record_runs, "las partidas de verdad van a los récords")
+	assert_same(recorder.player, _systems.player, "con el personaje del jugador")

@@ -4,7 +4,7 @@ extends CanvasLayer
 ## o al vencer al jefe y pasar el nivel ([code]EventBus.boss_defeated[/code]), tras su espera, pausa
 ## el juego, pide el cursor y muestra lo que pasó en la partida (según su [RunRecorder]): tiempo,
 ## nivel, enemigos y élites derrotados, oro ganado y daño infligido (y, en la victoria, el premio
-## por rapidez). Arriba, una frase de muerte al azar o el título de la victoria. Lo primero que pasa
+## por rapidez; si entró en los récords, su puesto). Arriba, una frase de muerte al azar o el título de la victoria. Lo primero que pasa
 ## manda: si el jugador muere tras vencer al jefe (o al revés), no cambia. «Reintentar» (o su tecla,
 ## [code]retry[/code]) empieza otra partida al momento; «Salir» vuelve al menú principal
 ## ([RunFlow]). Esc no la cierra. Funciona con el juego en pausa ([code]process_mode = ALWAYS[/code]
@@ -123,6 +123,8 @@ func _fill(stats: RunStats) -> void:
 	_add_row(&"RESULTS_ELITE_KILLS", str(stats.elite_kills))
 	_add_row(&"RESULTS_GOLD", str(floori(stats.gold_earned)))
 	_add_row(&"RESULTS_DAMAGE", str(floori(stats.damage_dealt)))
+	if recorder and recorder.place >= 0:
+		_add_row(&"RESULTS_RECORD_PLACE", tr(&"RESULTS_RECORD_PLACE_VALUE") % (recorder.place + 1))
 
 
 func _add_row(name_key: StringName, value: String) -> void:

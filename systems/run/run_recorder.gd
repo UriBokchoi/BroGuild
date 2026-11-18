@@ -5,9 +5,18 @@ extends Node
 ## ronda mientras hay una en marcha; si no, el que lleva el nivel. Deja de apuntar al morir el
 ## jugador o al vencer al jefe (con su premio por rapidez), así los resultados se quedan como estaban
 ## en ese momento.
+## Al acabar la partida (si [member record_runs]), la apunta en la clasificación ([code]Save[/code]).
+
+## Jugador de la partida (su personaje, para la clasificación).
+@export var player: Player
+## Si al acabar apunta la partida en la clasificación (sí el de las partidas de verdad, en
+## [code]run_systems.tscn[/code]; los tests la llevan a otro archivo: [code]tests/hooks/pre_run.gd[/code]).
+@export var record_runs: bool = false
 
 ## Lo apuntado hasta ahora.
 var stats := RunStats.new()
+## Puesto que sacó en la clasificación (desde 0), o −1 si no entró o aún no se apuntó.
+var place: int = -1
 
 ## Último oro conocido del jugador, para sumar solo lo que gana.
 var _gold: float = 0.0
@@ -75,7 +84,10 @@ func _on_clock_changed(seconds: float, _overtime: bool) -> void:
 
 
 func _on_player_died() -> void:
+	if _stopped:
+		return
 	_stopped = true
+	_record()
 
 
 func _on_boss_defeated(_victory_key: StringName, seconds: float, bonus: float) -> void:
@@ -85,3 +97,12 @@ func _on_boss_defeated(_victory_key: StringName, seconds: float, bonus: float) -
 	stats.boss_bonus = bonus
 	stats.seconds = seconds
 	_stopped = true
+	_record()
+
+
+## Apunta la partida en la clasificación (si se pide).
+func _record() -> void:
+	if not record_runs:
+		return
+	var character: CharacterData = player.character if is_instance_valid(player) else null
+	place = Save.record_run(RunRecord.create(stats, character, RunState.level))

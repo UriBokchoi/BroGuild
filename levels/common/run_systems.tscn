@@ -85,8 +85,10 @@ data = ExtResource("16_level_up_data")
 player = NodePath("../Player")
 panel = NodePath("../LevelUpPanel")
 
-[node name="RunRecorder" type="Node" parent="."]
+[node name="RunRecorder" type="Node" parent="." node_paths=PackedStringArray("player")]
 script = ExtResource("18_recorder")
+player = NodePath("../Player")
+record_runs = true
 
 [node name="ResultsPanel" parent="." node_paths=PackedStringArray("recorder") instance=ExtResource("19_results")]
 recorder = NodePath("../RunRecorder")

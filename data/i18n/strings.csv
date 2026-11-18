@@ -3,6 +3,7 @@ GAME_TITLE,Bro Guild,Bro Guild
 LANGUAGE_NAME,Español,English
 MENU_PLAY,Jugar,Play
 MENU_OPTIONS,Opciones,Options
+MENU_RECORDS,Récords,Records
 MENU_ARCHIVE,Archivo,Archive
 MENU_QUIT,Abandonar,Quit game
 LEVEL_BROSQUE_NAME,El Brosque,The Brorest
@@ -41,6 +42,8 @@ RESULTS_GOLD,Oro ganado,Gold earned
 RESULTS_DAMAGE,Daño infligido,Damage dealt
 RESULTS_BOSS_BONUS,Premio por rapidez,Speed bonus
 RESULTS_BOSS_BONUS_VALUE,×%s,×%s
+RESULTS_RECORD_PLACE,Puesto en récords,Records place
+RESULTS_RECORD_PLACE_VALUE,#%d,#%d
 RESULTS_RETRY,Reintentar (%s),Retry (%s)
 RESULTS_QUIT,Salir al menú,Main menu
 PAUSE_STATS_TITLE,Estadísticas,Stats
@@ -327,3 +330,15 @@ ITEM_EXCALIBRO_DESCRIPTION,Solo un bro de verdad podía sacarla de la roca.,Only
 ITEM_CHOICE_TITLE,El círculo de setas te ofrece…,The mushroom ring offers you…
 ITEM_CHOICE_SUBTITLE,Elige uno,Pick one
 INTERACT_MUSHROOM_RING,Entrar en el círculo de setas,Step into the mushroom ring
+RECORDS_TITLE,Récords,Records
+RECORDS_SUBTITLE,"Tus mejores partidas en este equipo, por enemigos derrotados. En azul, la última.","Your best runs on this computer, by enemies defeated. In blue, the latest one."
+RECORDS_EMPTY,Aún no hay partidas. ¡A repartir!,No runs yet. Go get 'em!
+RECORDS_RANK,#,#
+RECORDS_CHARACTER,Personaje,Character
+RECORDS_KILLS,Enemigos,Enemies
+RECORDS_TIME,Tiempo,Time
+RECORDS_LEVEL,Nivel,Level
+RECORDS_MAP,Mapa,Map
+RECORDS_RESULT,Resultado,Result
+RECORDS_WON,Victoria,Victory
+RECORDS_LOST,Derrota,Defeat
