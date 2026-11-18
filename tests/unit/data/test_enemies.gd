@@ -5,6 +5,7 @@ extends GutTest
 
 const ENEMIES_DIR := "res://data/enemies"
 const STRINGS_PATH := "res://data/i18n/strings.csv"
+const EnemyStatNames := preload("res://tests/unit/data/enemy_stat_names.gd")
 
 var _keys := PackedStringArray()
 var _enemies: Array[EnemyData] = []
@@ -70,8 +71,5 @@ func test_elite_modifiers_change_enemy_or_weapon_stats() -> void:
 	var elite := load("res://data/enemies/elite.tres") as EliteData
 	assert_not_null(elite.stat_modifiers, "élite sin mejoras")
 	assert_not_null(elite.overlay, "élite sin brillo")
-	var block := StatBlock.new()
-	for source: Resource in [HealthData.new(), EnemyStats.new(), ProjectileStats.new()]:
-		block.define_from_resource(source)
 	for modifier: StatModifier in elite.stat_modifiers.stat_modifiers:
-		assert_true(block.has_stat(modifier.stat), "élite: «%s» no es una stat de enemigo ni de arma" % modifier.stat)
+		assert_true(EnemyStatNames.has(modifier.stat), "élite: «%s» no es una stat de enemigo ni de arma" % modifier.stat)

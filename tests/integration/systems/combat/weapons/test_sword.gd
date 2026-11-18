@@ -48,7 +48,7 @@ func test_levels_add_and_remove_upgrades() -> void:
 	assert_eq(sword.level, SWORD.max_level(), "no pasa del máximo")
 	assert_eq(sword.get_upgrades().size(), SWORD.max_level() - 1)
 	sword.set_level(1)
-	assert_eq(sword.damage(), 20.0, "bajar de nivel quita las mejoras")
+	assert_eq(sword.damage(), (SWORD.stats as WeaponStats).damage, "bajar de nivel quita las mejoras")
 	assert_eq(sword.projectile_count(), 1)
 
 
@@ -58,7 +58,7 @@ func test_a_rolled_upgrade_adds_its_modifiers() -> void:
 	upgrade.stat_modifiers.append(StatModifier.create(&"damage", StatModifier.Kind.FLAT, 7.0))
 	sword.add_upgrade(upgrade)
 	assert_eq(sword.level, 2)
-	assert_eq(sword.damage(), 27.0)
+	assert_eq(sword.damage(), (SWORD.stats as WeaponStats).damage + 7.0)
 
 
 func test_wielder_stats_scale_the_weapon() -> void:
@@ -79,7 +79,7 @@ func test_slashes_a_dummy_in_reach() -> void:
 	await wait_physics_frames(15)
 	assert_signal_emit_count(health, "damaged", 1, "un tajo, un golpe")
 	var amount: float = get_signal_parameters(health, "damaged")[0]
-	assert_eq(amount, 20.0)
+	assert_eq(amount, (SWORD.stats as WeaponStats).damage, "su daño de base (el personaje, al 100 %)")
 
 
 func test_aims_up_at_a_dummy_above() -> void:
