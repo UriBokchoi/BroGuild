@@ -111,6 +111,7 @@ STAT_MAX_HEALTH,Vida máxima,Max health
 STAT_HEALTH_REGEN,Regeneración de vida,Health regen
 STAT_ARMOR,Defensa,Armor
 STAT_EVASION,Esquiva,Evasion
+STAT_INVULNERABILITY_TIME,Invulnerabilidad tras un golpe,Invulnerability after a hit
 STAT_LIFESTEAL,Robo de vida,Lifesteal
 STAT_GROUP_OFFENSE,Ataque,Offense
 STAT_DAMAGE,Daño,Damage

@@ -67,7 +67,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
   - `DamageCalc.attack()` aplica el daño % y el crítico del atacante (`OffenseData`).
   - La vida tira la esquiva y aplica la defensa (`CombatRules`, `data/combat/rules.tres`).
   - Cada golpe es un `DamageInfo`.
-- **`HealthComponent`:** muere una sola vez, puede ser inmortal (el muñeco) y `reset()` la rellena (enemigos reutilizados). Solo se procesa si regenera.
+- **`HealthComponent`:** muere una sola vez, puede ser inmortal (el muñeco) y `reset()` la rellena (enemigos reutilizados). Tras un golpe que hace daño, no recibe más durante su `invulnerability_time` (los «i-frames»: el jugador, 0,3 s; los enemigos, 0) y lo avisa con `invulnerability_started`; el reloj es `PhysicsClock` (`core/`), sin `_process`. Solo se procesa si regenera.
 - **Armas** (`systems/combat/weapons/`):
   - `WeaponData` lleva el `.tres` del arma con sus `WeaponStats` de nivel 1; sus mejoras por nivel son tiradas (ver «Objetos y runas»). `Weapon` guarda las que lleva (`add_upgrade`, `get_upgrades`); `set_level` sube con la mejora estándar o quita las últimas (la armería).
   - `Weapon` es la base: ataca sola por cadencia al más cercano desde `aim_height` y combina sus stats con las del personaje (si las tiene: un enemigo no). `disarm()` la para y retira lo que tenga en juego; `rearm(espera)` la vuelve a poner en marcha. Sin objetivo, busca cada `search_interval`.
@@ -185,6 +185,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
   - `slow_motion.gd` (`SlowMotion`, en `RunSystems`): cámara lenta en el jackpot de la tragaperras (`slot_resolved`), en segundos reales;
   - `spin_bob.gd` (`SpinBob`): giro y balanceo de los recogibles especiales y las llaves del jefe (pocos; los que salen a cientos lo hacen en su shader);
   - `pop_out.gd` (`PopOut`): estallido al desaparecer (rompibles y llaves del jefe).
+  - `invulnerability_blink.gd` (`InvulnerabilityBlink`, en el jugador): el modelo parpadea mientras dura la invulnerabilidad tras un golpe;
   - `interact_hint/` (`InteractHint`): el destello de lo que se puede usar con «interactuar» (ver «Interacción»);
   - `drop_glow/` (`DropGlow`): columna de luz corta y aro que late en el suelo, del color de cada power-up, para verlos entre la horda.
 - **`speed_lines/`:** líneas de velocidad en pantalla.

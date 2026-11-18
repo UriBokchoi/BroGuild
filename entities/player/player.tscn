@@ -41,6 +41,7 @@
 [ext_resource type="PackedScene" path="res://entities/player/characters/model/character_model.tscn" id="42_model"]
 [ext_resource type="Script" path="res://entities/player/feedback/body_flip.gd" id="43_flip"]
 [ext_resource type="Script" path="res://systems/items/passive_inventory.gd" id="44_items"]
+[ext_resource type="Script" path="res://vfx/juice/invulnerability_blink.gd" id="45_blink"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_interactor"]
 radius = 0.6
@@ -302,3 +303,8 @@ machine = NodePath("../Movement")
 player = NodePath("..")
 visual = NodePath("../Body")
 flip_states = [NodePath("../Movement/DoubleJump")]
+
+[node name="InvulnerabilityBlink" type="Node" parent="." node_paths=PackedStringArray("health", "target")]
+script = ExtResource("45_blink")
+health = NodePath("../Health")
+target = NodePath("../Body")

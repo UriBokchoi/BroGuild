@@ -1001,3 +1001,9 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   Cada uno tiene su papel: el Mago, la horda; el Pícaro, el jefe; y el Guerrero, bueno en los dos.
 - **Para personajes nuevos:** la simulación toma todos los de `data/characters/`. Un personaje nuevo debería quedar cerca del 100 % en la media de los dos escenarios, fuerte en su papel y flojo en el otro. Se pasa al tocar armas, runas, rarezas o personajes.
 - **Pendiente:** con Multiplicidad hasta 20, una build que la suba mucho se dispara (cada proyectil es un golpe entero). Si al jugar se nota, el siguiente paso es que la carta común de enteros no siempre dé 1.
+
+## 2026-11-18 · «I-frames» del jugador
+- **Decisión:** nueva stat de vida, `invulnerability_time`: tras un golpe que hace daño, no se recibe más durante ese tiempo. El jugador tiene 0,3 s; los enemigos, 0. Se ve: el modelo del jugador parpadea (`InvulnerabilityBlink`).
+  - El tiempo se mide con el reloj de la física (`PhysicsClock`, sacado de la hitbox, que ya lo usaba): la vida no necesita `_process`.
+  - Un golpe esquivado no da invulnerabilidad.
+- **Por qué:** lo pidió el diseñador. Con la horda encima, varios golpes en el mismo instante quitaban la vida de golpe. Es una stat, así que algo podrá mejorarla.

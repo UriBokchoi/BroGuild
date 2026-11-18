@@ -20,7 +20,7 @@ signal hit(hurtbox: HurtboxComponent, amount: float)
 var rng: RandomNumberGenerator
 
 ## Último golpe a cada objetivo (por id de instancia, para no retener nodos ya liberados), en
-## segundos de física (ver [method _now]).
+## segundos de física ([PhysicsClock]).
 var _last_hit_at: Dictionary[int, float] = {}
 ## Hurtbox que toca ahora, según las señales de entrada y salida. Solo se procesa mientras toca
 ## alguna: cientos de enemigos llevan una hitbox de contacto que casi nunca toca nada.
@@ -55,7 +55,7 @@ func _can_hit(hurtbox: HurtboxComponent) -> bool:
 	var id := hurtbox.get_instance_id()
 	if not _last_hit_at.has(id):
 		return true
-	return rehit_interval > 0.0 and _now() - _last_hit_at[id] >= rehit_interval
+	return rehit_interval > 0.0 and PhysicsClock.now() - _last_hit_at[id] >= rehit_interval
 
 
 func _on_area_entered(area: Area3D) -> void:
@@ -72,14 +72,9 @@ func _on_area_exited(area: Area3D) -> void:
 		set_physics_process(not _touching.is_empty())
 
 
-## Segundos de física desde que arrancó el juego: el reloj de los golpes repetidos, que no depende de
-## si esta hitbox se procesa o no.
-static func _now() -> float:
-	return float(Engine.get_physics_frames()) / Engine.physics_ticks_per_second
-
 
 func _hit(hurtbox: HurtboxComponent) -> void:
-	_last_hit_at[hurtbox.get_instance_id()] = _now()
+	_last_hit_at[hurtbox.get_instance_id()] = PhysicsClock.now()
 	var offense: OffenseData = null
 	if attacker_stats:
 		offense = attacker_stats.get_resolved(OffenseData) as OffenseData

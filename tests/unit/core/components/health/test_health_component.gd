@@ -1,6 +1,6 @@
 extends GutTest
-## HealthComponent: recibe golpes con defensa y esquiva, muere una sola vez, regenera y sube con la
-## vida máxima.
+## HealthComponent: recibe golpes con defensa y esquiva, muere una sola vez, regenera, sube con la
+## vida máxima y, si tiene invulnerabilidad, no recibe daño un momento tras cada golpe.
 
 const TICK := 1.0 / 60.0
 
@@ -104,3 +104,26 @@ func test_raising_max_health_heals_the_difference() -> void:
 	_stats.add_modifier(StatModifier.create(&"max_health", StatModifier.Kind.FLAT, 20.0), self)
 	assert_eq(_health.get_maximum(), 120.0)
 	assert_eq(_health.get_current(), 70.0, "50 + los 20 nuevos")
+
+
+func test_after_a_hit_it_ignores_hits_for_a_moment() -> void:
+	var data := HealthData.new()
+	data.max_health = 100.0
+	data.invulnerability_time = 0.1
+	var stats := StatsComponent.new()
+	stats.sources.append(data)
+	add_child_autofree(stats)
+	var health := HealthComponent.new()
+	health.stats = stats
+	health.rules = CombatRules.new()
+	health.rules.armor_for_half_damage = 100.0
+	add_child_autofree(health)
+	watch_signals(health)
+	assert_eq(health.take_damage(DamageInfo.create(10.0)), 10.0)
+	assert_signal_emitted_with_parameters(health, "invulnerability_started", [0.1])
+	assert_true(health.is_invulnerable())
+	assert_eq(health.take_damage(DamageInfo.create(10.0)), 0.0, "aún invulnerable")
+	assert_eq(health.get_current(), 90.0)
+	await wait_physics_frames(12)
+	assert_false(health.is_invulnerable())
+	assert_eq(health.take_damage(DamageInfo.create(10.0)), 10.0, "pasado el momento, sí")

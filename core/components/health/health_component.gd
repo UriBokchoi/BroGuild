@@ -13,6 +13,9 @@ signal damaged(amount: float, info: DamageInfo)
 ## Esquivó el golpe entero.
 signal evaded(info: DamageInfo)
 signal died
+## Recibió daño: durante [param seconds] no recibirá más
+## ([member HealthData.invulnerability_time]).
+signal invulnerability_started(seconds: float)
 
 @export var stats: StatsComponent
 @export var rules: CombatRules
@@ -25,6 +28,8 @@ var rng: RandomNumberGenerator
 var _data: HealthData
 var _current: float = 0.0
 var _dead: bool = false
+## Hasta cuándo no recibe daño, en segundos de [PhysicsClock].
+var _invulnerable_until: float = -1.0
 
 
 func _ready() -> void:
@@ -55,10 +60,15 @@ func is_dead() -> bool:
 	return _dead
 
 
-## Recibe un golpe. Devuelve la vida que quitó de verdad (0 si lo esquiva, si ya estaba muerto o si
-## es inmortal).
+## ¿Está en sus segundos sin recibir daño tras un golpe?
+func is_invulnerable() -> bool:
+	return PhysicsClock.now() < _invulnerable_until
+
+
+## Recibe un golpe. Devuelve la vida que quitó de verdad (0 si lo esquiva, si ya estaba muerto, si
+## es inmortal o si está en sus segundos de invulnerabilidad tras otro golpe).
 func take_damage(info: DamageInfo) -> float:
-	if _dead:
+	if _dead or is_invulnerable():
 		return 0.0
 	if DamageCalc.evades(_data.evasion, rng):
 		evaded.emit(info)
@@ -72,6 +82,9 @@ func take_damage(info: DamageInfo) -> float:
 	if _current <= 0.0:
 		_dead = true
 		died.emit()
+	elif amount > 0.0 and _data.invulnerability_time > 0.0:
+		_invulnerable_until = PhysicsClock.now() + _data.invulnerability_time
+		invulnerability_started.emit(_data.invulnerability_time)
 	return removed
 
 
@@ -88,6 +101,7 @@ func heal(amount: float) -> void:
 ## Vuelve a la vida máxima, vivo (un enemigo que sale otra vez del pool).
 func reset() -> void:
 	_dead = false
+	_invulnerable_until = -1.0
 	_current = _data.max_health
 	health_changed.emit(_current, _data.max_health)
 
