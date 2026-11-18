@@ -1037,3 +1037,7 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - Los disparos enemigos se paran en el aire: su pool deja de procesarse.
   - La pantalla se tiñe de azul (`TimeStopFilter`, una capa bajo el HUD con un shader que desatura y tiñe), y el HUD dice «¡Tiempo detenido!».
 - **Por qué:** lo pidió el diseñador. Congelar en vez de pausar deja que el jugador siga pegando y moviéndose: es un respiro y una ventana de daño. El director sigue sacando enemigos, que nacen congelados, y el reloj de la ronda no se para.
+
+## 2026-11-18 · Selector de idioma en el menú principal
+- **Decisión:** abajo a la izquierda del menú principal, pequeño, un `LanguagePicker`: un desplegable con un globo y el idioma actual. Ofrece un idioma por cada traducción cargada, con su nombre en su propio idioma (la clave `LANGUAGE_NAME` de cada columna del CSV: «Español», «English»). Al elegir, lo pone al momento y lo guarda en las opciones (`GameSettings.locale`). Un idioma nuevo aparece solo al añadir su columna.
+- **Por qué:** lo pidió el diseñador, a mano y sin estorbar el menú. Va en `ui/widgets/` para poder ponerlo también en las opciones.

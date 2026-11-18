@@ -102,6 +102,11 @@ func _add_small_buttons(theme: Theme) -> void:
 	theme.set_type_variation(&"SmallButton", &"Button")
 	_button_boxes(theme, &"SmallButton", Vector2(16, 6), 8)
 	theme.set_font_size(&"font_size", &"SmallButton", 18)
+	# El selector de idioma del menú principal, igual de pequeño.
+	theme.set_type_variation(&"SmallOptionButton", &"OptionButton")
+	_button_boxes(theme, &"SmallOptionButton", Vector2(12, 6), 8)
+	theme.set_font_size(&"font_size", &"SmallOptionButton", 18)
+	theme.set_constant(&"icon_max_width", &"SmallOptionButton", 26)
 
 
 ## Cartas de la elección al subir de nivel: un botón grande con su contenido en columna.

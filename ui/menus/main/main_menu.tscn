@@ -6,6 +6,8 @@
 [ext_resource type="Resource" path="res://data/characters/rogue.tres" id="4_rogue"]
 [ext_resource type="PackedScene" path="res://entities/player/characters/model/character_model.tscn" id="5_model"]
 [ext_resource type="PackedScene" path="res://ui/menus/options/options_panel.tscn" id="6_options"]
+[ext_resource type="Script" path="res://ui/widgets/language_picker.gd" id="7_language"]
+[ext_resource type="Texture2D" path="res://assets/textures/icons/ui/language.svg" id="8_globe"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_sky"]
 sky_top_color = Color(0.32, 0.45, 0.68, 1)
@@ -116,3 +118,14 @@ text = "MENU_QUIT"
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
+
+[node name="LanguagePicker" type="OptionButton" parent="UI/Margin"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
+theme_type_variation = &"SmallOptionButton"
+icon = ExtResource("8_globe")
+expand_icon = true
+script = ExtResource("7_language")
+name_key = &"LANGUAGE_NAME"
