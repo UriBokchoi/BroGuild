@@ -19,6 +19,7 @@
 [ext_resource type="Script" path="res://ui/hud/boss_key_counter.gd" id="17_keys"]
 [ext_resource type="Texture2D" path="res://assets/textures/icons/ui/membership_card.svg" id="18_card"]
 [ext_resource type="Script" path="res://ui/hud/boss_bar.gd" id="19_boss_bar"]
+[ext_resource type="Script" path="res://ui/hud/announcement_feed.gd" id="20_feed"]
 
 [node name="HUD" type="CanvasLayer"]
 layer = 10
@@ -207,6 +208,20 @@ unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"BossShoutLabel"
 horizontal_alignment = 1
+
+[node name="AnnouncementFrame" type="PanelContainer" parent="Margin"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+mouse_filter = 2
+theme_type_variation = &"AnnouncementFrame"
+
+[node name="AnnouncementFeed" type="VBoxContainer" parent="Margin/AnnouncementFrame"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"BossColumn"
+script = ExtResource("20_feed")
 
 [node name="LevelIntro" type="VBoxContainer" parent="Margin"]
 unique_name_in_owner = true

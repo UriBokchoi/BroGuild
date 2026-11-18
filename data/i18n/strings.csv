@@ -296,3 +296,7 @@ PASSIVE_ARCANE_EXPANSION_DESCRIPTION,"+1 % de área por cada nivel.","+1% area p
 PASSIVE_LETHAL_NAME,Letal,Lethal
 PASSIVE_LETHAL_DESCRIPTION,"+1 % de probabilidad de crítico por cada nivel.","+1% crit chance per level."
 INTERACT_CHOOSE_CHARACTER,Jugar con este personaje,Play as this character
+PICKUP_FOOD_ANNOUNCE,¡Pollito ñam ñam!,"Chicken, nom nom!"
+PICKUP_MAGNET_ANNOUNCE,¡Succión activada!,Suction on!
+PICKUP_BOMB_ANNOUNCE,¡Nuclear activada!,Going nuclear!
+PICKUP_ENERGY_ANNOUNCE,¡Modo diablo activado!,Devil mode on!

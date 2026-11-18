@@ -310,3 +310,9 @@ func _add_boss(theme: Theme) -> void:
 	_label_variation(theme, &"BossKeyLabel", 22, INK)
 	_label_variation(theme, &"BossKeyReadyLabel", 22, BOSS_KEY)
 	_label_variation(theme, &"VictoryLabel", 64, BOSS_KEY)
+	# Textos breves (power-ups, mejoras): en el centro, por debajo de la barra del jefe.
+	theme.set_type_variation(&"AnnouncementFrame", &"PanelContainer")
+	var announcements := StyleBoxEmpty.new()
+	announcements.content_margin_top = 210
+	theme.set_stylebox(&"panel", &"AnnouncementFrame", announcements)
+	_label_variation(theme, &"AnnouncementLabel", 32, INK)

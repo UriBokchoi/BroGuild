@@ -83,3 +83,6 @@ signal boss_shouted(text_key: StringName)
 ## Vencieron al jefe: se pasa el nivel. [param victory_key] es el título de la victoria,
 ## [param seconds] lo que duró la partida y [param bonus] el multiplicador del premio por rapidez.
 signal boss_defeated(victory_key: StringName, seconds: float, bonus: float)
+## Un texto breve en el HUD (un power-up recogido, una mejora): [param text_key] con sus valores
+## [param args] (los que son claves también se traducen), del color [param color].
+signal announced(text_key: StringName, args: Array, color: Color)

@@ -167,7 +167,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 
 ### Botín y progresión — `entities/pickups/` y `systems/progression/`
 - **Recogibles:**
-  - `PickupData` (en `data/pickups/`) lleva escena, recompensa (p. ej. `experience`, `gold`), vuelo hacia quien recoge (`auto_collect`: vuela nada más salir, esté donde esté), cómo se juntan y sus niveles por valor (`tiers`).
+  - `PickupData` (en `data/pickups/`) lleva escena, recompensa (p. ej. `experience`, `gold`), texto breve al recogerlo (`announce_key` y su color; los power-ups), vuelo hacia quien recoge (`auto_collect`: vuela nada más salir, esté donde esté), cómo se juntan y sus niveles por valor (`tiers`).
   - `Pickup` es el nodo: tipo, valor y si ya vuela. Su giro y su balanceo van en el shader, sin `_process` por nodo.
   - `xp_gem/`: la gema de experiencia; su color (parámetro de instancia del shader) y su tamaño salen de su nivel (`PickupTier`: azul, verde desde 5, roja desde 25, morada desde 100); su brillo late y sus bordes destellan.
   - `gold_coin/`: la moneda de oro (de recogida automática), que destella al ponerse de cara;
@@ -194,7 +194,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 - **Shaders propios de una feature:** van con ella (tajo de la espada, plataforma del teletransporte, líneas de velocidad).
 
 ### UI — `ui/`
-- **`hud/`:** bienvenida al nivel (`LevelIntro`, en el centro, se desvanece sola), vida, stamina, experiencia y nivel (arriba), oro (`GoldCounter`) y reloj de la ronda (`RunClock`, en rojo en la prórroga) y dificultad (`DifficultyCounter`, una calavera y su valor) debajo, las llaves del jefe (`BossKeyCounter`, «1/3», solo en niveles con jefe), armas y runas (`LoadoutBar`: una fila de `LoadoutSlot` por tipo, con icono y nivel; las ranuras sin abrir, con candado), objetos pasivos debajo (`PassiveBar`: icono con el borde de su rareza y «×N» si hay varias copias), el jefe (`BossBar`, arriba en el centro: su nombre, su vida y lo que grita), objetos que salen (`ChestPanel`, de un cofre o del premio del jefe por `item_revealed`, abajo en el centro: la luz recorre las rarezas, frena y se para en la del objeto, que se muestra con su nombre del color de la rareza), tragaperras (`SlotPanel`, también abajo: rodillos que paran uno tras otro y el resultado) y aviso de interacción. Escuchan el `EventBus`.
+- **`hud/`:** bienvenida al nivel (`LevelIntro`, en el centro, se desvanece sola), vida, stamina, experiencia y nivel (arriba), oro (`GoldCounter`) y reloj de la ronda (`RunClock`, en rojo en la prórroga) y dificultad (`DifficultyCounter`, una calavera y su valor) debajo, las llaves del jefe (`BossKeyCounter`, «1/3», solo en niveles con jefe), armas y runas (`LoadoutBar`: una fila de `LoadoutSlot` por tipo, con icono y nivel; las ranuras sin abrir, con candado), objetos pasivos debajo (`PassiveBar`: icono con el borde de su rareza y «×N» si hay varias copias), el jefe (`BossBar`, arriba en el centro: su nombre, su vida y lo que grita), objetos que salen (`ChestPanel`, de un cofre o del premio del jefe por `item_revealed`, abajo en el centro: la luz recorre las rarezas, frena y se para en la del objeto, que se muestra con su nombre del color de la rareza), tragaperras (`SlotPanel`, también abajo: rodillos que paran uno tras otro y el resultado), textos breves (`AnnouncementFeed`, en el centro bajo la barra del jefe: un power-up recogido, una mejora; de su color, se apilan y se desvanecen) y aviso de interacción. Escuchan el `EventBus`.
 - **`menus/pause/`:** menú de pausa con todas las stats del jugador; «Opciones» abre el `OptionsPanel`; «Reintentar» y «Salir» (al menú principal) van por `RunFlow`.
 - **`menus/run_setup/`:** `RunSetup`, la selección antes de jugar: personajes a la izquierda, su modelo girando en el centro y, al pasar el ratón, su ficha a la derecha (nombre, diferencias de stats, arma principal y pasiva). Al elegir uno, la ficha se cambia por los niveles (`LevelData.is_available()`: sin escena, «próximamente» y desactivado). «Volver» o Esc retroceden. La muestra `Game` tras «Jugar».
 - **`menus/main/`:** `MainMenu`, el menú principal (Jugar, Opciones, Archivo —desactivado hasta su tarea— y Abandonar), con los personajes vestidos de fondo. Lo muestra `Game`.
@@ -258,6 +258,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 | `chest_opened`, `chest_denied` (coste) | `Chest` | los cofres cuentan los abiertos; `ChestPanel` (el aviso de que falta oro) |
 | `item_revealed` (objeto pasivo y segundos del revelado) | `Chest`, `BossEncounter` (el premio) | `ChestPanel` |
 | `player_passive_changed` (objeto pasivo y copias; 0 = quitado) | `Player` (de `PassiveInventory.item_changed`) | `PassiveBar` |
+| `announced` (clave, valores y color de un texto breve) | `PickupField` (los power-ups con `PickupData.announce_key`) | `AnnouncementFeed` |
 | `boss_key_collected` | `BossKey` | `BossEncounter` |
 | `boss_keys_changed` (llaves que lleva y que hacen falta) | `BossEncounter` | `BossAltar`, `BossKeyCounter` |
 | `boss_summon_requested` (dónde y si es forzado) | `BossAltar` | `BossEncounter` |

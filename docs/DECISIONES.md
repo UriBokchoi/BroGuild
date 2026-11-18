@@ -1015,3 +1015,11 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - **Al recibirlo**, un enemigo lo suma a su velocidad dividido por su masa: los élites (más pesados) y el jefe (40) se mueven menos. Se suma a la velocidad y no con un impulso de la física, porque el rumbo del enjambre lo pisaría antes de aplicarse.
   - **El jugador** lo recibe en `KnockbackReceiver`: lo suelta sobre el cuerpo y se frena a 40 m/s². Va aparte de la velocidad del movimiento, así que los estados no lo pisan. No le empuja un golpe esquivado.
 - **Por qué:** lo pidió el diseñador. El árbol atravesaba al jugador sin moverlo y quedaba raro, y pegar sin empujar se sentía plano.
+
+## 2026-11-18 · Textos breves en el HUD
+- **Decisión:** un aviso genérico, `AnnouncementFeed`, en el centro bajo la barra del jefe. Escucha `EventBus.announced` (clave, valores y color): cada texto sale con un pequeño salto, se ve 1,6 s, se desvanece, y se apilan hasta 5. Los power-ups dicen el suyo al recogerlos (`PickupData.announce_key` y `announce_color`, del color de su columna de luz):
+  - imán, «¡Succión activada!»;
+  - comida, «¡Pollito ñam ñam!»;
+  - bomba, «¡Nuclear activada!»;
+  - bebida energética, «¡Modo diablo activado!».
+- **Por qué:** lo pidió el diseñador. Es genérico porque también lo usan las mejoras de la tragaperras (de su rareza) y lo que venga.

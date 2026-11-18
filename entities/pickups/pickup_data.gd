@@ -11,6 +11,9 @@ extends Resource
 ## Qué da al recogerlo. Lo escucha el sistema que lo usa por [code]EventBus.pickup_collected[/code]
 ## (p. ej. [code]experience[/code] → [ExperienceComponent]).
 @export var reward: StringName = &""
+## Texto breve que sale en el HUD al recogerlo (clave de traducción; vacía: nada) y su color.
+@export var announce_key: StringName = &""
+@export var announce_color: Color = Color.WHITE
 
 @export_group("magnet")
 ## Vuela hacia quien lo recoge nada más salir, esté donde esté (el oro: se cobra solo al matar).

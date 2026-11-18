@@ -4,10 +4,11 @@ extends Node3D
 ## y los deja en el suelo. Cuando [member collector] (el jugador) está a menos de su radio de
 ## recogida (su stat [code]pickup_range[/code]), o nada más salir si son de recogida automática
 ## ([member PickupData.auto_collect]), vuelan hacia él acelerando y, al llegar, se recogen: avisa por
-## [code]EventBus.pickup_collected[/code] y vuelven al pool. Todos se mueven en un único bucle; no
-## usan física. Cada [member merge_interval] segundos junta los del mismo tipo que esperan juntos en
-## el suelo ([member PickupData.merge_radius]): el de más valor se queda con la suma y los demás
-## vuelven al pool.
+## [code]EventBus.pickup_collected[/code] (y, si tienen texto, [code]EventBus.announced[/code]) y
+## vuelven al pool. Todos se mueven en un único bucle; no usan física. Cada [member merge_interval]
+## segundos junta los del mismo tipo que esperan juntos en el suelo
+## ([member PickupData.merge_radius]): el de más valor se queda con la suma y los demás vuelven al
+## pool.
 
 ## Quien recoge (el jugador).
 @export var collector: Node3D
@@ -134,6 +135,8 @@ func _merge(group: Array) -> void:
 func _collect(index: int) -> void:
 	var pickup := _active[index]
 	EventBus.pickup_collected.emit(pickup.data.reward, pickup.amount)
+	if not pickup.data.announce_key.is_empty():
+		EventBus.announced.emit(pickup.data.announce_key, [], pickup.data.announce_color)
 	_release(index)
 
 
