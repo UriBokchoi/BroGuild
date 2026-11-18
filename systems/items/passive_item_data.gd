@@ -9,7 +9,8 @@ extends StatModifierSet
 @export var id: StringName = &""
 ## Clave de traducción del nombre (p. ej. [code]ITEM_PROTEIN_SHAKE_NAME[/code]).
 @export var name_key: StringName = &""
-## Clave de traducción de lo que hace.
+## Clave de traducción de su frase (con gracia y sin cifras: lo que hace lo dicen sus modificadores,
+## que se muestran aparte).
 @export var description_key: StringName = &""
 @export var icon: Texture2D
 ## Rareza: decide cuánto sale de los cofres y el color con que se ve.

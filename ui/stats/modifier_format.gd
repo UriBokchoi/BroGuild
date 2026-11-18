@@ -15,5 +15,13 @@ static func describe(modifier: StatModifier) -> String:
 			return "×%s %s" % [StatFormat.number(modifier.value), stat_name]
 
 
+## Una línea por modificador de [param modifiers], en su orden.
+static func describe_all(modifiers: Array[StatModifier]) -> PackedStringArray:
+	var lines := PackedStringArray()
+	for modifier: StatModifier in modifiers:
+		lines.append(describe(modifier))
+	return lines
+
+
 static func _signed(value: float) -> String:
 	return ("+" if value >= 0.0 else "−") + StatFormat.number(absf(value))

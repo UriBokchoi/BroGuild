@@ -1104,3 +1104,10 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
 
   No cambian ni la velocidad ni la cantidad de enemigos (se bajaron a propósito en el cambio de ritmo). Tampoco el jefe ni sus Bro-tes.
 - **Por qué:** el diseñador vio que, tras el cambio de ritmo, la partida se había vuelto muy fácil y a los enemigos les costaba seguir el ritmo del jugador. Del jefe dijo que estaba bien así.
+
+## 2026-11-18 · Los objetos dicen lo que hacen a partir de sus datos
+- **Decisión:**
+  - **Revelado:** el revelado de un cofre o del premio del jefe (`ChestPanel`) enseña lo que hace el objeto debajo del nombre, una línea por modificador (`ModifierFormat.describe_all`, como las cartas). Después, en gris, su frase.
+  - **Descripciones:** pasan a ser solo una frase con gracia, sin cifras. Las 15 que llevaban el efecto escrito se han reescrito.
+  - **Test:** uno de datos falla si la descripción de un objeto lleva cifras en algún idioma.
+- **Por qué:** el diseñador vio objetos que al conseguirlos solo enseñaban la descripción. Los 8 medievales tienen frase, no efecto, y el revelado no enseñaba los modificadores. Con el efecto escrito en la frase, además, salía repetido en las cartas del círculo de setas y se quedaría desfasado al cambiar un valor.

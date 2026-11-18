@@ -3,9 +3,10 @@ extends PanelContainer
 ## El revelado de un objeto pasivo en el HUD, sin pausar el juego (GDD §5.2, «case opening»): al
 ## salir uno ([signal EventBus.item_revealed]: un cofre, el premio del jefe) una luz recorre las
 ## rarezas, cada vez más despacio, y se para en la del objeto; entonces lo muestra (icono, nombre del
-## color de su rareza y lo que hace) un rato y se oculta. Si falta oro para un cofre
-## ([signal EventBus.chest_denied]), solo el aviso. Estilo: variaciones [code]ChestPanel[/code],
-## [code]ChestTile[/code], [code]ChestItemLabel[/code] y [code]ChestDescriptionLabel[/code].
+## color de su rareza, lo que hace según sus modificadores y su frase) un rato y se oculta. Si falta
+## oro para un cofre ([signal EventBus.chest_denied]), solo el aviso. Estilo: variaciones
+## [code]ChestPanel[/code], [code]ChestTile[/code], [code]ChestItemLabel[/code],
+## [code]ChestEffectLabel[/code] y [code]ChestDescriptionLabel[/code].
 
 ## Rarezas, en el orden de las casillas (la de cada una, de su color).
 @export var rarities: WeightedTable
@@ -32,6 +33,7 @@ var _hide_left: float = 0.0
 @onready var _result: HBoxContainer = %ChestResult
 @onready var _icon: TextureRect = %ChestIcon
 @onready var _name: Label = %ChestItemName
+@onready var _effects: Label = %ChestItemEffects
 @onready var _description: Label = %ChestItemDescription
 @onready var _message: Label = %ChestMessage
 
@@ -109,6 +111,8 @@ func _show_item() -> void:
 	_name.text = tr(_item.name_key)
 	if _item.rarity:
 		_name.add_theme_color_override(&"font_color", _item.rarity.color)
+	_effects.text = "
+".join(ModifierFormat.describe_all(_item.stat_modifiers))
 	_description.text = tr(_item.description_key)
 	_result.visible = true
 	_hide_left = linger
