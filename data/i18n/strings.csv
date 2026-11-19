@@ -240,6 +240,8 @@ LEVEL_UP_TITLE,¡Nivel %d!,Level %d!
 LEVEL_UP_FREE_TITLE,¡Mejora gratis!,Free upgrade!
 UPGRADE_ANNOUNCE,%s sube a nivel %d,%s up to level %d
 LEVEL_UP_CHOOSE,Elige una mejora,Choose an upgrade
+LEVEL_UP_SPINNING,Clic o Espacio para parar la ruleta,Click or Space to stop the wheel
+LEVEL_UP_REROLL,Volver a tirar (%d oro),Reroll (%d gold)
 LOADOUT_MAX,MÁX,MAX
 RARITY_COMMON,Común,Common
 RARITY_RARE,Rara,Rare

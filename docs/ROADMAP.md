@@ -80,7 +80,7 @@
 
 ## Hito 4 — Apuestas v1
 - [ ] GDD adaptado a la temática medieval (pendientes de §11)
-- [ ] Ruleta de nivel: las 3 opciones de subir de nivel giran como rodillos; reroll de coste creciente
+- [x] Ruleta de nivel: las cartas de mejora giran por las rarezas y se paran una tras otra (clic o Espacio para pararlas); «volver a tirar» por oro, 10 y ×1,5 cada vez en la partida
 - [ ] Doble o nada sobre la opción elegida
 - [ ] Más armas y runas en `.tres` (3 con sinergia de movimiento)
 - [ ] Pantalla de estadísticas (Tab), reutilizando la lista de stats de la pausa

@@ -1,7 +1,8 @@
 extends GutTest
 ## Elección al subir de nivel con el jugador de verdad: al subir, se pausa y salen las cartas; la
 ## elegida se aplica; varios niveles de golpe dan varias elecciones; Esc no la salta; las armas
-## nuevas necesitan una ranura abierta; sin nada que ofrecer, o muerto, no pregunta.
+## nuevas necesitan una ranura abierta; sin nada que ofrecer, o muerto, no pregunta. Volver a tirar
+## cobra oro (cada vez más) y ofrece otras cartas; sin oro, no hace nada.
 
 const PlayerScene := preload("res://entities/player/player.tscn")
 const PanelScene := preload("res://ui/menus/level_up/level_up_panel.tscn")
@@ -122,3 +123,22 @@ func test_a_free_upgrade_offers_choices_with_its_own_title() -> void:
 	_panel.get_cards()[0].pressed.emit()
 	await get_tree().process_frame
 	assert_eq(title.text, tr(&"LEVEL_UP_TITLE") % _player.experience.get_level())
+
+
+func test_rerolling_costs_more_each_time_and_offers_new_cards() -> void:
+	_player.wallet.add(100.0)
+	EventBus.player_leveled_up.emit(2)
+	var first_cost := _controller.reroll_cost()
+	_panel.reroll_requested.emit()
+	assert_eq(_player.wallet.get_gold(), 100.0 - first_cost)
+	assert_true(_panel.is_open(), "sigue la misma elección")
+	assert_eq(_controller.pending(), 1)
+	assert_gt(_controller.reroll_cost(), first_cost, "la siguiente, más cara")
+
+
+func test_without_gold_rerolling_does_nothing() -> void:
+	EventBus.player_leveled_up.emit(2)
+	var cards := _panel.get_cards()
+	_panel.reroll_requested.emit()
+	assert_eq(_panel.get_cards(), cards, "las mismas cartas")
+	assert_eq(_controller.reroll_cost(), LEVEL_UP.reroll_cost_at(0))

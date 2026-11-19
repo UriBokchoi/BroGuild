@@ -4,7 +4,8 @@ extends Node
 ## ([LevelUpPanel]) y aplica la opción elegida a sus armas o runas. También cuando se pide una mejora
 ## gratis ([code]EventBus.upgrade_choice_requested[/code], la tragaperras), con su propio título. Si
 ## llegan varias de golpe, una elección tras otra, por orden. Si no queda nada que ofrecer, o el
-## jugador ha muerto, no pregunta.
+## jugador ha muerto, no pregunta. «Volver a tirar» cobra oro al jugador (cada vez más en la
+## partida, [method LevelUpData.reroll_cost_at]) y ofrece otras cartas para la misma elección.
 
 @export var data: LevelUpData
 @export var player: Player
@@ -13,12 +14,14 @@ extends Node
 @export var free_choice_title_key: StringName = &""
 
 ## Azar de las opciones. Si no se asigna antes de entrar en el árbol, el flujo de apuestas de
-## [code]Rng[/code] (la ruleta del Hito 4 irá encima).
+## [code]Rng[/code].
 var rng: RandomNumberGenerator
 
 var _catalog: Array[ItemData] = []
 ## Elecciones por hacer, por orden: [code]true[/code] si es gratis (no de subir de nivel).
 var _queue: Array[bool] = []
+## Veces que ha vuelto a tirar en la partida (sube el coste).
+var _rerolls: int = 0
 
 
 func _ready() -> void:
@@ -29,11 +32,17 @@ func _ready() -> void:
 	EventBus.player_leveled_up.connect(_on_leveled_up)
 	EventBus.upgrade_choice_requested.connect(_on_choice_requested)
 	panel.chosen.connect(_on_chosen)
+	panel.reroll_requested.connect(_on_reroll_requested)
 
 
 ## Elecciones que quedan por hacer.
 func pending() -> int:
 	return _queue.size()
+
+
+## Lo que cuesta ahora volver a tirar.
+func reroll_cost() -> int:
+	return data.reroll_cost_at(_rerolls)
 
 
 ## Aplica [param option] al jugador: añade el objeto o lo sube de nivel.
@@ -93,7 +102,15 @@ func _offer() -> void:
 		return
 	var free: bool = _queue.front()
 	var title := free_choice_title_key if free else &""
-	panel.open(options, player.experience.get_level(), title)
+	var cost := reroll_cost()
+	panel.open(options, player.experience.get_level(), title, cost, player.wallet.get_gold() >= cost)
+
+
+func _on_reroll_requested() -> void:
+	if _queue.is_empty() or not player.wallet.spend(reroll_cost()):
+		return
+	_rerolls += 1
+	_offer()
 
 
 func _owned_levels() -> Dictionary[StringName, int]:

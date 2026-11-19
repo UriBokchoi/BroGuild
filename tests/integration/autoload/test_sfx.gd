@@ -75,3 +75,13 @@ func test_a_cue_does_not_pass_its_voices() -> void:
 	assert_true(Sfx.play(cue))
 	assert_false(Sfx.play(cue), "ya suena una vez")
 	assert_eq(Sfx.voices_of(cue), 1)
+
+
+func test_the_wheel_ticks_and_rarer_cards_ring_higher() -> void:
+	EventBus.upgrade_spin_ticked.emit()
+	assert_eq(Sfx.last_cue, _bank.upgrade_spin_tick)
+	EventBus.upgrade_revealed.emit(load("res://data/rarities/common.tres"))
+	var common := Sfx.last_pitch
+	assert_eq(Sfx.last_cue, _bank.upgrade_revealed)
+	EventBus.upgrade_revealed.emit(load("res://data/rarities/mythic.tres"))
+	assert_gt(Sfx.last_pitch, common)

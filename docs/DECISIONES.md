@@ -1202,3 +1202,21 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
     - La moneda suena a la mitad de antes y con más variación de tono (±8 %), para que muchas seguidas no suenen iguales.
   - **Vida en números:** la barra de vida del HUD pasa de 16 a 24 px de alto y lleva dentro la vida y la máxima («85 / 120»), con contorno. La vida se redondea hacia arriba para no ver un 0 estando vivo.
 - **Por qué:** lo pidió el diseñador. La moneda sonaba muy alta y demasiado de juego de plataformas, y quería ver su vida exacta.
+
+## 2026-11-19 · Ruleta al subir de nivel y volver a tirar
+- **Decisión:**
+  - **La ruleta** (GDD §5): al abrirse la elección, cada carta de mejora gira por las rarezas, cada vez más despacio, y se para en la suya, una tras otra.
+    - La primera gira 0,9 s, cada siguiente 0,35 s más, con 2 vueltas enteras (`LevelUpData`).
+    - Mientras gira, la carta no se puede elegir y esconde lo que mejora; el borde y el nombre van cambiando de color.
+    - Un clic o «aceptar» (Espacio, Intro) las para todas, para no frenar una partida de horda.
+    - Las cartas de un objeto nuevo no giran (no tienen rareza).
+    - Suena un tic en cada paso y, al pararse, una campanilla más aguda cuanto más rara (`EventBus.upgrade_spin_ticked` y `upgrade_revealed`, que escucha `Sfx`).
+  - **Volver a tirar:** un botón debajo de las cartas pide otras 3 para la misma elección.
+    - Cuesta 10 de oro y ×1,5 cada vez en la partida (10, 15, 23…: `LevelUpData.reroll_cost_at`).
+    - Lo cobra `LevelUpController` y sirve también en las mejoras gratis de la tragaperras.
+    - Mientras giran las cartas o sin oro suficiente, está desactivado.
+  - **Al cerrarse**, el panel quita sus cartas: antes seguían girando (y sonando) por detrás.
+  - **`Sfx` sin pantalla:** sin pantalla (tests y validación) lleva la cuenta de lo que suena pero no reproduce, y las voces se cuentan por lo que dura cada sonido.
+    - Godot deja viva la reproducción de un sonido a medias al salir y avisa de fugas, lo que hacía fallar al azar los tests sueltos.
+    - Al cerrar el juego, `Sfx` para y suelta lo que suena.
+- **Por qué:** es el primer paso del Hito 4: la apuesta con anticipación (giro, tic-tic), revelado por color y coste creciente que pide el GDD.

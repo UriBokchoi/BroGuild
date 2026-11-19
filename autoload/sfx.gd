@@ -3,6 +3,10 @@ extends Node
 ## que dice su [SfxBank] con un grupo de [AudioStreamPlayer] en el bus de efectos. Respeta las voces
 ## y la separación de cada [SoundCue], y sube de tono la experiencia recogida seguida. Suena también
 ## en pausa (los menús). Sin lógica de gameplay.
+##
+## Sin pantalla (tests y validación, [code]--headless[/code]) lleva la cuenta igual pero no reproduce
+## nada: no hay audio que oír, y salir con un sonido a medias deja su reproducción viva (Godot avisa
+## de fugas al cerrar). Las voces se cuentan por lo que dura cada sonido, no por el reproductor.
 
 const BANK := preload("res://data/audio/sfx_bank.tres")
 ## Multiplicador de tono de un semitono.
@@ -16,6 +20,10 @@ var bank: SfxBank = BANK
 
 var _players: Array[AudioStreamPlayer] = []
 var _cue_of: Dictionary[AudioStreamPlayer, SoundCue] = {}
+## Hasta cuándo suena cada reproductor (segundos desde que arrancó el juego).
+var _busy_until: Dictionary[AudioStreamPlayer, float] = {}
+## Si hay audio que oír (no en [code]--headless[/code]).
+var _audible: bool = true
 var _last_time: Dictionary[SoundCue, float] = {}
 var _health: float = -1.0
 var _streak: int = 0
@@ -25,6 +33,7 @@ var _rng: RandomNumberGenerator
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	_audible = DisplayServer.get_name() != "headless"
 	_rng = Rng.stream(Rng.Stream.COSMETIC)
 	for index: int in bank.voices:
 		var player := AudioStreamPlayer.new()
@@ -45,7 +54,17 @@ func _ready() -> void:
 	EventBus.item_revealed.connect(_on_item_revealed)
 	EventBus.slot_spun.connect(func(_data: SlotMachineData, _results: Array[SlotSymbol]) -> void: play(bank.slot_spun))
 	EventBus.slot_resolved.connect(_on_slot_resolved)
+	EventBus.upgrade_spin_ticked.connect(func() -> void: play(bank.upgrade_spin_tick))
+	EventBus.upgrade_revealed.connect(_on_upgrade_revealed)
 	get_tree().node_added.connect(_on_node_added)
+
+
+func _exit_tree() -> void:
+	# Al cerrar el juego, nada sonando ni guardado: si no, la reproducción y su audio quedan vivos al
+	# salir (Godot avisa de fugas).
+	for player: AudioStreamPlayer in _players:
+		player.stop()
+		player.stream = null
 
 
 ## Hace sonar [param cue] con el tono [param pitch] (y su variación al azar), si sus voces y su
@@ -58,14 +77,16 @@ func play(cue: SoundCue, pitch: float = 1.0) -> bool:
 		return false
 	if cue.max_voices > 0 and voices_of(cue) >= cue.max_voices:
 		return false
-	var player := _free_player()
+	var player := _free_player(now)
 	if player == null:
 		return false
 	player.stream = cue.stream
 	player.volume_db = cue.volume_db
 	player.pitch_scale = pitch * (1.0 + _rng.randf_range(-cue.pitch_variation, cue.pitch_variation))
-	player.play()
+	if _audible:
+		player.play()
 	_cue_of[player] = cue
+	_busy_until[player] = now + cue.stream.get_length() / player.pitch_scale
 	_last_time[cue] = now
 	last_cue = cue
 	last_pitch = player.pitch_scale
@@ -74,9 +95,10 @@ func play(cue: SoundCue, pitch: float = 1.0) -> bool:
 
 ## Cuántas veces está sonando [param cue] ahora.
 func voices_of(cue: SoundCue) -> int:
+	var now := Time.get_ticks_msec() / 1000.0
 	var count := 0
 	for player: AudioStreamPlayer in _players:
-		if player.playing and _cue_of.get(player) == cue:
+		if _is_busy(player, now) and _cue_of.get(player) == cue:
 			count += 1
 	return count
 
@@ -86,6 +108,7 @@ func reset() -> void:
 	for player: AudioStreamPlayer in _players:
 		player.stop()
 	_cue_of.clear()
+	_busy_until.clear()
 	_last_time.clear()
 	_health = -1.0
 	_streak = 0
@@ -94,11 +117,15 @@ func reset() -> void:
 	last_pitch = 1.0
 
 
-func _free_player() -> AudioStreamPlayer:
+func _free_player(now: float) -> AudioStreamPlayer:
 	for player: AudioStreamPlayer in _players:
-		if not player.playing:
+		if not _is_busy(player, now):
 			return player
 	return null
+
+
+func _is_busy(player: AudioStreamPlayer, now: float) -> bool:
+	return _busy_until.get(player, 0.0) > now
 
 
 func _on_player_health_changed(current: float, maximum: float) -> void:
@@ -134,6 +161,11 @@ func _on_slot_resolved(text_key: StringName, _value: float, jackpot: bool) -> vo
 		play(bank.slot_results[text_key])
 	else:
 		play(bank.slot_won)
+
+
+func _on_upgrade_revealed(rarity: Rarity) -> void:
+	var pitch: float = bank.reveal_pitches.get(rarity.id, 1.0) if rarity else 1.0
+	play(bank.upgrade_revealed, pitch)
 
 
 func _on_node_added(node: Node) -> void:

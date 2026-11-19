@@ -26,6 +26,8 @@
 [ext_resource type="AudioStream" path="res://assets/audio/sfx/slot_lost.wav" id="31_slot_lost"]
 [ext_resource type="AudioStream" path="res://assets/audio/sfx/slot_spun.wav" id="32_slot_spun"]
 [ext_resource type="AudioStream" path="res://assets/audio/sfx/slot_won.wav" id="33_slot_won"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/upgrade_spin_tick.wav" id="40_upgrade_spin_tick"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/upgrade_revealed.wav" id="41_upgrade_revealed"]
 
 [sub_resource type="Resource" id="Cue_player_hurt"]
 script = ExtResource("2_cue")
@@ -219,6 +221,22 @@ pitch_variation = 0.0
 max_voices = 2
 min_interval = 0.02
 
+[sub_resource type="Resource" id="Cue_upgrade_spin_tick"]
+script = ExtResource("2_cue")
+stream = ExtResource("40_upgrade_spin_tick")
+volume_db = -6.0
+pitch_variation = 0.0
+max_voices = 3
+min_interval = 0.02
+
+[sub_resource type="Resource" id="Cue_upgrade_revealed"]
+script = ExtResource("2_cue")
+stream = ExtResource("41_upgrade_revealed")
+volume_db = 0.0
+pitch_variation = 0.0
+max_voices = 3
+min_interval = 0.0
+
 [resource]
 script = ExtResource("1_bank")
 bus = &"Effects"
@@ -255,4 +273,13 @@ slot_results = Dictionary[StringName, ExtResource("2_cue")]({
 })
 slot_won = SubResource("Cue_slot_won")
 slot_jackpot = SubResource("Cue_slot_jackpot")
+upgrade_spin_tick = SubResource("Cue_upgrade_spin_tick")
+upgrade_revealed = SubResource("Cue_upgrade_revealed")
+reveal_pitches = Dictionary[StringName, float]({
+&"common": 1.0,
+&"rare": 1.1225,
+&"improbable": 1.2599,
+&"legendary": 1.4983,
+&"mythic": 2.0
+})
 button_pressed = SubResource("Cue_button_pressed")

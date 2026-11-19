@@ -53,8 +53,8 @@ Toda apuesta tiene **anticipación** (giro, luces, sonido que sube), **revelado*
 
 **Rarezas** (mismo color en todo el juego): Común (gris) · Rara (verde) · Improbable (azul) · De leyenda (amarillo) · Mítica (rojo). Pesos de partida 60/25/10/4/1; la **Suerte** sube el peso de las altas (cada punto, +1 / +2 / +3 / +5 % del suyo a rara, improbable, de leyenda y mítica).
 
-1. **Ruleta de nivel** — al subir de nivel, 3 cartas giran como rodillos y caen en una rareza; eliges una.
-   - *Reroll:* cuesta oro y el coste sube con cada uso en la partida.
+1. **Ruleta de nivel** — al subir de nivel, 3 cartas giran como rodillos y caen en una rareza, una tras otra (con un tic-tic y una campanilla más aguda cuanto más rara); un clic las para todas; eliges una.
+   - *Volver a tirar:* otras 3 cartas por oro; cuesta 10 y ×1,5 con cada uso en la partida (10, 15, 23…).
    - *Doble o nada:* tras elegir, puedes apostar la carta: ~50 % sube una rareza, ~50 % la pierdes. La Suerte mejora las probabilidades.
 2. **Cofres** — repartidos por el nivel y soltados por élites. Abrirlos cuesta oro (sube con la dificultad y con cada cofre abierto en la partida). Revelado tipo "case opening": la luz recorre las rarezas antes de pararse. Dan **objetos pasivos** (§6).
 3. **Tragaperras** — máquinas repartidas por el nivel (también en sitios a los que hay que subir). Pagas oro (sube con la dificultad y cada vez que usas esa máquina) y giran 3 rodillos sin pausar el juego. Cada máquina aguanta 5 tiradas y luego revienta. Símbolos: moneda (pareja: oro ×2 de lo pagado; trío: ×10), corazón (cura un 30 %; trío: vida al máximo), estrella (pareja: eliges una mejora como al subir de nivel, con el título «¡Mejora gratis!»; trío: sube un nivel todas tus armas y runas, cada una con un texto del color de la rareza que le sale) y calavera, la **maldición** (pareja: −20 % de vida máxima un minuto; trío: cinco élites). Sin dos iguales, nada. El trío (jackpot) va con cámara lenta.

@@ -42,6 +42,14 @@ extends Resource
 @export var slot_won: SoundCue
 @export var slot_jackpot: SoundCue
 
+@export_group("roulette")
+## Cada paso de una carta de la ruleta al girar (el tic-tic).
+@export var upgrade_spin_tick: SoundCue
+## Una carta de la ruleta se para en su rareza.
+@export var upgrade_revealed: SoundCue
+## Tono de [member upgrade_revealed] por rareza (su id): cuanto más rara, más agudo.
+@export var reveal_pitches: Dictionary[StringName, float] = {}
+
 @export_group("ui")
 ## Cualquier botón de la interfaz al pulsarlo.
 @export var button_pressed: SoundCue

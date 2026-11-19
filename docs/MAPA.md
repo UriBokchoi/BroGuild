@@ -155,8 +155,9 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
   - `RuneData` (en `data/runes/`): al conseguirla da su mejora estándar y cada subida, una tirada.
   - `RuneInventory` (en el jugador) guarda las mejoras de cada runa (`add`, `upgrade`, `set_level`, `remove`) y aplica o quita sus modificadores; su nivel es cuántas lleva.
 - **Subir de nivel** (`level_up/`):
-  - `LevelUpData` (`data/progression/level_up.tres`): número de opciones, tabla de rarezas, ranuras de armas y de runas que hay (4 y 4) y carpetas de las que salen. Cuántas están abiertas lo dicen las stats del jugador `weapon_slots` y `rune_slots` (2 y 2 al empezar; desbloquear una es un modificador +1).
+  - `LevelUpData` (`data/progression/level_up.tres`): número de opciones, tabla de rarezas, ranuras de armas y de runas que hay (4 y 4) y carpetas de las que salen. También cómo gira la ruleta (`spin_time`, `spin_stagger`, `spin_loops`) y cuánto cuesta volver a tirar (`reroll_cost`, ×`reroll_growth` por cada uso en la partida: 10, 15, 23…). Cuántas están abiertas lo dicen las stats del jugador `weapon_slots` y `rune_slots` (2 y 2 al empezar; desbloquear una es un modificador +1).
   - `LevelUpOffer` (lógica pura, con el azar inyectado) elige las opciones: subir lo que lleva sin pasar del máximo (con una mejora tirada con rareza), o algo nuevo si queda ranura abierta de su tipo.
+  - Volver a tirar: `LevelUpController` cobra el oro (`WalletComponent.spend`) y vuelve a ofrecer la misma elección con otras cartas.
   - `LevelUpController` (en el nivel) escucha `player_leveled_up`, y también `upgrade_choice_requested` (mejoras gratis de la tragaperras, en la misma cola y con su título), abre `LevelUpPanel` (pausa y cartas, en `ui/menus/level_up/`) y aplica la elegida a las armas o runas del jugador. Usa el flujo `GAMBLE` de `Rng`: la ruleta del Hito 4 irá encima.
 
 ### Objetos pasivos — `systems/items/`
@@ -210,7 +211,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 - **`menus/item_choice/`:** `ItemChoicePanel`, elegir uno de los objetos que ofrece un círculo de setas (cartas `ItemChoiceCard`: icono, rareza de su color, nombre, descripción y mejoras); el elegido va a los objetos del jugador.
 - **`menus/archive/`:** `ArchivePanel`, el Archivo: una pestaña por tipo del `ContentCatalog` con lo descubierto («1/3»), una casilla por entrada (su icono, o «?» si no se ha descubierto) y su ficha al pasar el ratón o el foco: nombre, frase y lo que hace (diferencias de stats, arma inicial y pasiva del personaje; rareza y modificadores del objeto; qué mejora la runa; las `shown_stats` de armas y enemigos). Lo no descubierto: «???» y cómo descubrirlo. Lo abre el menú principal.
 - **`menus/leaderboard/`:** `LeaderboardPanel`, los récords: las partidas de `Save.leaderboard`, de la mejor a la peor (puesto, personaje, enemigos, tiempo, nivel, mapa y resultado), con la última jugada en azul. «Volver» o Esc lo cierran. Lo abre el menú principal.
-- **`menus/level_up/`:** elección al subir de nivel (`LevelUpPanel` y sus `LevelUpCard`; una mejora lleva el borde y el nombre del color de su rareza).
+- **`menus/level_up/`:** elección al subir de nivel (`LevelUpPanel` y sus `LevelUpCard`; una mejora lleva el borde y el nombre del color de su rareza). Con la ruleta, las cartas de mejora giran por las rarezas y se paran una tras otra (`LevelUpCard.spin`, sin dejarse elegir ni enseñar lo que mejoran); un clic o «aceptar» las para todas. «Volver a tirar» pide otras cartas (`reroll_requested`); al cerrarse, el panel quita sus cartas.
 - **`menus/options/`:** `OptionsPanel`, opciones básicas: volumen de cada bus (`SettingsData.volume_buses`, en `default_bus_layout.tres`), pantalla completa, tamaño de la ventana y VSync. El volumen se aplica al momento; lo de pantalla espera a «Aplicar» (que lo aplica y lo guarda) y «Volver» descarta lo no aplicado. Trabaja sobre `Save.settings`. Dentro del editor (pestaña «Juego») avisa de que la ventana no se puede cambiar y desactiva esas opciones. Lo abren la pausa y el menú principal.
 - **`menus/results/`:** `ResultsPanel`, la pantalla de resultados al acabar la partida: al morir, una frase de muerte al azar (`death_lines`, claves `DEATH_LINE_*`); al vencer al jefe (`boss_defeated`, tras `victory_delay`), el título de la victoria («¡Brosque superado!») y el premio por rapidez. Debajo, tiempo, nivel, enemigos y élites derrotados, oro y daño (del `RunRecorder`) y, si entró en los récords, su puesto. Lo primero que pasa manda. «Reintentar» (R) empieza otra partida y «Salir» vuelve al menú (`RunFlow`).
 - **`stats/`:** `StatsView`, la lista de stats de cualquier `StatsComponent` (la usan la pausa y la armería); `StatFormat`, el formato de un valor y la unidad de cada stat según sus datos (`range_hint`); y `ModifierFormat`, que describe un modificador («+10 % Daño», «+10 % Probabilidad de crítico», «+0.5 m/s Velocidad al correr»).
@@ -235,7 +236,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 - **`SfxSynth`:** la convierte en muestras de 16 bits (lógica pura, sin azar externo). `tools/gen_sfx.gd` guarda cada receta como `assets/audio/sfx/<nombre>.wav`.
 - **`SoundCue`:** un sonido del juego: su audio, volumen, variación de tono y cuánto se deja repetir (voces a la vez y separación mínima).
 - **`SfxBank`** (`data/audio/sfx_bank.tres`): qué suena con cada cosa (golpes, muertes, recogibles por recompensa, cofres, tragaperras por resultado, jefe, botones) y la racha de la experiencia (sube un semitono cada recogida seguida).
-- **`Sfx`** (autoload): escucha el `EventBus` y los botones (`node_added`) y hace sonar el banco con un grupo de `AudioStreamPlayer` en el bus `Effects`, también en pausa.
+- **`Sfx`** (autoload): escucha el `EventBus` y los botones (`node_added`) y hace sonar el banco con un grupo de `AudioStreamPlayer` en el bus `Effects`, también en pausa. Las voces se cuentan por lo que dura cada sonido. Sin pantalla (`--headless`: tests y validación) lleva la cuenta pero no reproduce, para no dejar reproducciones vivas al salir.
 
 ### Opciones — `systems/settings/` y `autoload/save.gd`
 - **`SettingsData`** (`data/settings/settings.tres`): buses con volumen, valores al estrenar el juego (el idioma, español), tamaños de ventana que se ofrecen y cuántas partidas guardan los récords (`leaderboard_size`).
@@ -278,7 +279,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 | `player_item_changed` (arma o runa y su nivel; 0 = quitada) | `Player` (de `WeaponInventory.weapon_changed` y `RuneInventory.rune_changed`) | `LoadoutBar`, `ArchiveRecorder` |
 | `player_slots_changed` (ranuras abiertas) | `Player` | `LoadoutBar` |
 | `run_clock_changed` (segundos, prórroga; negativo = sin ronda) | `WaveDirector` | `RunClock`, `RunRecorder`, `BossAltar` (al empezar la prórroga, pide el jefe) |
-| `player_leveled_up` | `Player` | `LevelUpController` |
+| `player_leveled_up` | `Player` | `LevelUpController`, `Sfx` |
 | `interaction_prompt_changed` | `Interactor` | `InteractionPrompt` |
 | `slot_spun`, `slot_resolved` | `SlotMachine` | `SlotPanel`, `SlowMotion` (el jackpot) |
 | `chest_opened`, `chest_denied` (coste) | `Chest` | los cofres cuentan los abiertos; `ChestPanel` (el aviso de que falta oro) |
@@ -286,6 +287,8 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 | `player_passive_changed` (objeto pasivo y copias; 0 = quitado) | `Player` (de `PassiveInventory.item_changed`) | `PassiveBar`, `ArchiveRecorder` |
 | `announced` (clave, valores y color de un texto breve) | `PickupField` (los power-ups con `PickupData.announce_key`), `UpgradeAllEffect` | `AnnouncementFeed` |
 | `upgrade_choice_requested` (cuántas elecciones) | `UpgradeChoiceEffect` | `LevelUpController` |
+| `upgrade_spin_ticked` | `LevelUpCard` (cada paso de la ruleta) | `Sfx` (el tic-tic) |
+| `upgrade_revealed` (la rareza) | `LevelUpCard` (al pararse) | `Sfx` (más agudo cuanto más rara) |
 | `time_stop_changed` (si el tiempo está parado) | `EnemySwarm` | `TimeStopFilter` |
 | `item_choice_offered` (los objetos para elegir) | `ChoiceShrine` | `ItemChoicePanel` |
 | `boss_key_collected` | `BossKey` | `BossEncounter` |
