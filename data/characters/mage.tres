@@ -1,13 +1,25 @@
-[gd_resource type="Resource" script_class="CharacterData" format=3]
+[gd_resource type="Resource" script_class="CharacterData" format=3 uid="uid://bnbf3vkh7m48a"]
 
-[ext_resource type="Script" path="res://entities/player/characters/character_data.gd" id="1_data"]
-[ext_resource type="Texture2D" path="res://assets/textures/icons/characters/mage.svg" id="98_icon"]
-[ext_resource type="Script" path="res://core/stats/stat_modifier.gd" id="2_modifier"]
-[ext_resource type="Resource" path="res://data/weapons/staff.tres" id="3_weapon"]
+[ext_resource type="Script" uid="uid://bft5d5wh4tyqk" path="res://entities/player/characters/character_data.gd" id="1_data"]
+[ext_resource type="Script" uid="uid://is4y31g1paml" path="res://core/stats/stat_modifier.gd" id="2_modifier"]
+[ext_resource type="Resource" uid="uid://dmx62swsas3tv" path="res://data/weapons/staff.tres" id="3_weapon"]
 [ext_resource type="PackedScene" path="res://entities/player/characters/passives/arcane_expansion.tscn" id="4_passive"]
-[ext_resource type="Script" path="res://entities/player/characters/model/model_attachment.gd" id="5_attachment"]
+[ext_resource type="Script" uid="uid://0j8d013ejauu" path="res://entities/player/characters/model/model_attachment.gd" id="5_attachment"]
 [ext_resource type="PackedScene" path="res://assets/models/props/staff.tscn" id="6_staff"]
 [ext_resource type="PackedScene" path="res://assets/models/props/wizard_hat.tscn" id="7_hat"]
+[ext_resource type="Texture2D" uid="uid://cqor4vhvnnku8" path="res://assets/textures/icons/characters/mage.svg" id="98_icon"]
+
+[sub_resource type="Resource" id="Resource_staff"]
+script = ExtResource("5_attachment")
+scene = ExtResource("6_staff")
+socket = &"HandRight"
+transform = Transform3D(1, 0, 0, 0, 0.985, 0.174, 0, -0.174, 0.985, 0, 0, 0)
+
+[sub_resource type="Resource" id="Resource_hat"]
+script = ExtResource("5_attachment")
+scene = ExtResource("7_hat")
+socket = &"Head"
+transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 0, 0, 0)
 
 [sub_resource type="Resource" id="Resource_health"]
 script = ExtResource("2_modifier")
@@ -31,18 +43,6 @@ script = ExtResource("2_modifier")
 stat = &"glide_fall_speed"
 value = 3.0
 
-[sub_resource type="Resource" id="Resource_staff"]
-script = ExtResource("5_attachment")
-scene = ExtResource("6_staff")
-socket = &"HandRight"
-transform = Transform3D(1, 0, 0, 0, 0.985, 0.174, 0, -0.174, 0.985, 0, 0, 0)
-
-[sub_resource type="Resource" id="Resource_hat"]
-script = ExtResource("5_attachment")
-scene = ExtResource("7_hat")
-socket = &"Head"
-transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 0, 0, 0)
-
 [sub_resource type="Resource" id="Resource_regen"]
 script = ExtResource("2_modifier")
 stat = &"health_regen"
@@ -50,7 +50,6 @@ value = 0.4
 
 [resource]
 script = ExtResource("1_data")
-stat_modifiers = Array[ExtResource("2_modifier")]([SubResource("Resource_health"), SubResource("Resource_area"), SubResource("Resource_xp"), SubResource("Resource_glide"), SubResource("Resource_regen")])
 id = &"mage"
 name_key = &"CHARACTER_MAGE_NAME"
 description_key = &"CHARACTER_MAGE_DESCRIPTION"
@@ -61,3 +60,4 @@ passive = ExtResource("4_passive")
 passive_name_key = &"PASSIVE_ARCANE_EXPANSION_NAME"
 passive_description_key = &"PASSIVE_ARCANE_EXPANSION_DESCRIPTION"
 attachments = Array[ExtResource("5_attachment")]([SubResource("Resource_staff"), SubResource("Resource_hat")])
+stat_modifiers = Array[ExtResource("2_modifier")]([SubResource("Resource_health"), SubResource("Resource_area"), SubResource("Resource_xp"), SubResource("Resource_glide"), SubResource("Resource_regen")])

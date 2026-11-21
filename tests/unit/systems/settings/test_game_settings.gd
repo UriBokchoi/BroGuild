@@ -108,3 +108,16 @@ func test_keeps_and_applies_the_language() -> void:
 	assert_eq(TranslationServer.get_locale(), "en")
 	TranslationServer.set_locale(before)
 	assert_eq(_settings.copy().locale, "en")
+
+
+func test_screen_shake_is_saved_and_clamped() -> void:
+	assert_eq(_settings.screen_shake, DATA.default_screen_shake, "el de serie")
+	_settings.screen_shake = 0.4
+	var config := ConfigFile.new()
+	_settings.write_to(config)
+	var loaded := GameSettings.create(DATA)
+	loaded.read_from(config)
+	assert_almost_eq(loaded.screen_shake, 0.4, 0.0001)
+	config.set_value(GameSettings.SECTION_DISPLAY, "screen_shake", 7.0)
+	loaded.read_from(config)
+	assert_eq(loaded.screen_shake, 1.0, "nunca más que lo normal")

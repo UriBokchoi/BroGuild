@@ -1,0 +1,49 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ui/hud/stats_overlay.gd" id="1_overlay"]
+[ext_resource type="Script" path="res://ui/stats/stats_view.gd" id="2_stats"]
+
+[node name="StatsOverlay" type="CanvasLayer"]
+layer = 20
+script = ExtResource("1_overlay")
+
+[node name="Margin" type="MarginContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_type_variation = &"ScreenMargin"
+
+[node name="Panel" type="PanelContainer" parent="Margin"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(380, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+mouse_filter = 2
+
+[node name="Content" type="VBoxContainer" parent="Margin/Panel"]
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"MenuList"
+
+[node name="Header" type="Label" parent="Margin/Panel/Content"]
+layout_mode = 2
+theme_type_variation = &"HeaderLabel"
+text = "PAUSE_STATS_TITLE"
+
+[node name="Scroll" type="ScrollContainer" parent="Margin/Panel/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 3
+
+[node name="StatsView" type="VBoxContainer" parent="Margin/Panel/Content/Scroll"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"StatList"
+script = ExtResource("2_stats")

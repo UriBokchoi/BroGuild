@@ -8,6 +8,8 @@
 [ext_resource type="Script" path="res://entities/enemies/damage_reporter.gd" id="6_reporter"]
 [ext_resource type="Script" path="res://entities/enemies/target_dummy/dps_meter.gd" id="7_dps"]
 [ext_resource type="Script" path="res://vfx/juice/hit_wobble.gd" id="8_wobble"]
+[ext_resource type="Script" path="res://vfx/juice/hit_flash/hit_flash.gd" id="90_hit_flash"]
+[ext_resource type="Material" path="res://vfx/juice/hit_flash/hit_flash_material.tres" id="91_hit_flash_material"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_body"]
 radius = 0.4
@@ -161,3 +163,10 @@ health = NodePath("../Health")
 script = ExtResource("8_wobble")
 health = NodePath("../Health")
 target = NodePath("../Visual")
+
+[node name="HitFlash" type="Node" parent="." node_paths=PackedStringArray("health", "visual", "meshes")]
+script = ExtResource("90_hit_flash")
+health = NodePath("../Health")
+visual = NodePath("../Visual")
+material = ExtResource("91_hit_flash_material")
+meshes = [NodePath("../Visual/Body")]

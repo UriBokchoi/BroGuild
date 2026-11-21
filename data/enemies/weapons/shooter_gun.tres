@@ -1,12 +1,14 @@
-[gd_resource type="Resource" script_class="WeaponData" format=3]
+[gd_resource type="Resource" script_class="WeaponData" format=3 uid="uid://cr33fj3fvuukr"]
 
-[ext_resource type="Script" path="res://systems/combat/weapons/weapon_data.gd" id="1_data"]
-[ext_resource type="Script" path="res://systems/combat/weapons/projectile_stats.gd" id="2_stats"]
+[ext_resource type="Script" uid="uid://dym5cqjgo8xu4" path="res://systems/combat/weapons/weapon_data.gd" id="1_data"]
+[ext_resource type="Script" uid="uid://c4c5shncw1l7s" path="res://systems/combat/weapons/projectile_stats.gd" id="2_stats"]
 [ext_resource type="PackedScene" path="res://entities/enemies/shooter/shooter_gun.tscn" id="3_scene"]
+[ext_resource type="Script" uid="uid://dyvb1ciy45s8b" path="res://systems/upgrades/upgrade_stat.gd" id="4_50wjj"]
 
 [sub_resource type="Resource" id="Resource_stats"]
 script = ExtResource("2_stats")
-damage = 12.0
+projectile_speed = 9.4
+damage = 14.0
 cooldown = 2.5
 projectiles = 1
 burst_interval = 0.2
@@ -14,12 +16,11 @@ area = 100.0
 duration = 4.7
 reach = 18.0
 knockback = 2.0
-projectile_speed = 9.4
 
 [resource]
 script = ExtResource("1_data")
+scene = ExtResource("3_scene")
+stats = SubResource("Resource_stats")
 id = &"shooter_gun"
 name_key = &"WEAPON_SHOOTER_GUN_NAME"
 description_key = &"WEAPON_SHOOTER_GUN_DESCRIPTION"
-scene = ExtResource("3_scene")
-stats = SubResource("Resource_stats")

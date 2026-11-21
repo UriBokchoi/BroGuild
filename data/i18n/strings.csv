@@ -1,5 +1,6 @@
 keys,es,en
 GAME_TITLE,Bro Guild,Bro Guild
+NUMBER_DECIMAL_SEPARATOR,",",.
 LANGUAGE_NAME,Español,English
 MENU_PLAY,Jugar,Play
 MENU_OPTIONS,Opciones,Options
@@ -78,6 +79,7 @@ OPTIONS_FULLSCREEN,Pantalla completa,Fullscreen
 OPTIONS_RESOLUTION,Resolución,Resolution
 OPTIONS_RESOLUTION_VALUE,%d × %d,%d × %d
 OPTIONS_VSYNC,VSync,VSync
+OPTIONS_SCREEN_SHAKE,Temblor de pantalla,Screen shake
 OPTIONS_APPLY,Aplicar,Apply
 OPTIONS_BACK,Volver,Back
 OPTIONS_WINDOW_LOCKED,"Dentro del editor (pestaña Juego), la ventana es del editor: para cambiar pantalla completa o resolución, ejecuta el juego en su propia ventana.","Inside the editor (Game tab) the window belongs to the editor: run the game in its own window to change fullscreen or resolution."
@@ -194,6 +196,8 @@ STAT_SEPARATION_RADIUS,Distancia de separación,Separation distance
 STAT_SEPARATION_WEIGHT,Fuerza de separación,Separation strength
 STAT_CLIMB_SPEED,Velocidad al trepar,Climb speed
 STAT_CLIMB_HEIGHT,Altura a la que trepa sobre el objetivo,Climb height above the target
+STAT_WALL_CLIMB_DELAY,Espera para trepar muros,Wait before climbing walls
+STAT_WALL_CLIMB_TIME,Tiempo trepando muros,Wall climbing time
 STAT_APPROACH_SPREAD,Desvío al acercarse,Approach spread
 STAT_KEEP_DISTANCE,Distancia que guarda,Distance kept
 ENEMY_SWARMER_NAME,Esbirro,Minion
@@ -221,6 +225,8 @@ STAT_GROUP_LOOT,Botín,Loot
 STAT_XP_REWARD,Experiencia que suelta,Experience dropped
 STAT_GOLD_REWARD,Oro que suelta,Gold dropped
 HUD_LEVEL,Nv. %d,Lv. %d
+HUD_HEALTH_VALUE,%d / %d,%d / %d
+HORDE_INCOMING,¡Viene una horda!,A horde is coming!
 RUNE_STRENGTH_NAME,Runa de Fuerza,Rune of Strength
 RUNE_STRENGTH_DESCRIPTION,"Más daño con todas las armas.","More damage with every weapon."
 RUNE_AMPLITUDE_NAME,Runa de Amplitud,Rune of Amplitude
@@ -237,6 +243,12 @@ LEVEL_UP_TITLE,¡Nivel %d!,Level %d!
 LEVEL_UP_FREE_TITLE,¡Mejora gratis!,Free upgrade!
 UPGRADE_ANNOUNCE,%s sube a nivel %d,%s up to level %d
 LEVEL_UP_CHOOSE,Elige una mejora,Choose an upgrade
+LEVEL_UP_SPINNING,Clic o Espacio para parar la ruleta,Click or Space to stop the wheel
+LEVEL_UP_REROLL,Volver a tirar (%d oro),Reroll (%d gold)
+LEVEL_UP_BET,¿Te la quedas o te la juegas?,Keep it or bet it?
+LEVEL_UP_KEEP,Quedármela,Keep it
+LEVEL_UP_DOUBLE,Doble o nada (%d %%),Double or nothing (%d%%)
+LEVEL_UP_DOUBLE_LOST,¡Nada!,Nothing!
 LOADOUT_MAX,MÁX,MAX
 RARITY_COMMON,Común,Common
 RARITY_RARE,Rara,Rare

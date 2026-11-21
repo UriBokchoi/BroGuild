@@ -4,7 +4,7 @@ extends GutTest
 
 func test_float_with_suffix_drops_trailing_zeros() -> void:
 	assert_eq(StatFormat.format(9.0, _property(TYPE_FLOAT, "0.0,30.0,0.1,suffix:m/s")), "9 m/s")
-	assert_eq(StatFormat.format(0.125, _property(TYPE_FLOAT, "0.0,1.0,0.01,suffix:s")), "0.13 s")
+	assert_eq(StatFormat.format(0.125, _property(TYPE_FLOAT, "0.0,1.0,0.01,suffix:s")), StatFormat.localize_decimals("0.13 s"))
 
 
 func test_radians_are_shown_in_degrees() -> void:
@@ -18,7 +18,7 @@ func test_integers_have_no_decimals() -> void:
 
 func test_without_range_there_is_no_unit() -> void:
 	var property := {"type": TYPE_FLOAT, "hint": PROPERTY_HINT_NONE, "hint_string": ""}
-	assert_eq(StatFormat.format(2.5, property), "2.5")
+	assert_eq(StatFormat.format(2.5, property), StatFormat.localize_decimals("2.5"))
 
 
 func test_translation_keys() -> void:
@@ -38,3 +38,20 @@ func test_range_hint_finds_the_unit_in_the_data() -> void:
 func test_range_hint_of_an_unknown_or_ambiguous_stat_has_no_unit() -> void:
 	assert_eq(StatFormat.range_hint(&"no_such_stat").suffix, "")
 	assert_eq(StatFormat.range_hint(&"damage").suffix, "", "número en las armas, % en el jugador")
+
+
+func test_warming_up_leaves_the_units_ready() -> void:
+	StatFormat.warm_up()
+	var start := Time.get_ticks_usec()
+	StatFormat.range_hint(&"crit_chance")
+	assert_lt(Time.get_ticks_usec() - start, 1000, "ya está hecho: menos de 1 ms")
+
+
+func test_decimals_use_the_language_separator() -> void:
+	var locale := TranslationServer.get_locale()
+	TranslationServer.set_locale("es")
+	assert_eq(StatFormat.number(2.5), "2,5", "coma en español")
+	assert_eq(StatFormat.fixed(3.0, 1), "3,0", "con sus ceros")
+	TranslationServer.set_locale("en")
+	assert_eq(StatFormat.number(2.5), "2.5", "punto en inglés")
+	TranslationServer.set_locale(locale)

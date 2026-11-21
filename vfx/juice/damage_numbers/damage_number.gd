@@ -5,6 +5,9 @@ extends Label3D
 
 signal finished
 
+## Todos los dígitos: los que puede escribir.
+const DIGITS := "0123456789"
+
 var _style: DamageNumberStyle
 var _velocity: Vector3 = Vector3.ZERO
 var _age: float = 0.0
@@ -37,6 +40,15 @@ func _process(delta: float) -> void:
 	_animate()
 
 
+## Le pone la fuente y el tamaño de [param style] y escribe todos los dígitos una vez: así la
+## fuente ya los tiene dibujados y [method launch] solo cambia el texto.
+func prepare(style: DamageNumberStyle) -> void:
+	if style == null:
+		return
+	_apply_font(style)
+	text = DIGITS
+
+
 ## Muestra [param amount] en [param at]: en el color de crítico si [param critical].
 ## [param rng] decide la dirección del salto (azar cosmético).
 func launch(
@@ -48,10 +60,7 @@ func launch(
 ) -> void:
 	_style = style
 	text = str(maxi(roundi(amount), 1))
-	font = style.font
-	font_size = style.font_size
-	outline_size = style.outline_size
-	pixel_size = style.pixel_size
+	_apply_font(style)
 	_color = style.critical_color if critical else style.normal_color
 	_size = style.critical_scale if critical else 1.0
 	var side := Vector3.RIGHT.rotated(Vector3.UP, rng.randf() * TAU)
@@ -75,6 +84,18 @@ func _animate() -> void:
 	var fade := 1.0 - smoothstep(_style.fade_start, 1.0, _age / _style.lifetime)
 	modulate = Color(_color, _color.a * fade)
 	outline_modulate = Color(_style.outline_color, _style.outline_color.a * fade)
+
+
+## La fuente de [param style] (solo lo que cambia: cambiar la fuente obliga a recomponer el texto).
+func _apply_font(style: DamageNumberStyle) -> void:
+	if font != style.font:
+		font = style.font
+	if font_size != style.font_size:
+		font_size = style.font_size
+	if outline_size != style.outline_size:
+		outline_size = style.outline_size
+	if pixel_size != style.pixel_size:
+		pixel_size = style.pixel_size
 
 
 func _hide() -> void:

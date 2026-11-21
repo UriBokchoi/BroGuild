@@ -1,6 +1,6 @@
 extends SceneTree
 ## Simulación de equilibrio (herramienta, sin traducir): cada personaje de [code]data/characters/[/code]
-## (también los nuevos), quieto, contra una horda de esbirros inmortales a su alrededor y contra uno
+## (también los nuevos), quieto, contra una horda de esbirros inmortales que le persiguen y contra uno
 ## solo (un jefe), al empezar (nivel 1) y con una build de mitad de partida: su arma a nivel 10 con
 ## mejoras tiradas, [constant RUNES] a nivel [constant RUNE_LEVEL] y el jugador a nivel
 ## [constant PLAYER_LEVEL]. Mide el daño por segundo (media de [constant SEEDS]) y lo compara con la
@@ -34,6 +34,7 @@ var _scenarios: Array = []
 var _index: int = -1
 var _frame: int = 0
 var _world: Node3D
+var _swarm: Node3D
 var _damage: float = 0.0
 var _results: Dictionary = {}
 
@@ -92,6 +93,8 @@ func _next() -> void:
 	_world.add_child(player)
 	var health: Object = player.get(&"health")
 	health.set(&"immortal", true)
+	# Persiguen al personaje, como en la partida: los golpes los empujan y vuelven.
+	_swarm.set(&"target", player)
 	if scenario[1] == "build":
 		var seed_value: int = scenario[3]
 		_build(player, seed_value)
@@ -133,6 +136,7 @@ func _build_world(crowd: bool) -> void:
 	_world.add_child(ground)
 	var swarm: Node3D = (load("res://systems/spawning/enemy_swarm.gd") as GDScript).new()
 	_world.add_child(swarm)
+	_swarm = swarm
 	if not crowd:
 		_dummy(swarm, LONE_TARGET)
 		return
@@ -166,7 +170,7 @@ func _build(player: Node3D, seed_value: int) -> void:
 		level = experience.call(&"get_level")
 
 
-## Un esbirro inmortal y quieto (el enjambre no tiene objetivo).
+## Un esbirro inmortal que persigue al personaje (los golpes lo empujan y vuelve, como en la partida).
 func _dummy(swarm: Node3D, at: Vector3) -> void:
 	var enemy: Node = swarm.call(&"spawn", load("res://data/enemies/swarmer.tres"), at)
 	var health: Object = enemy.get(&"health")

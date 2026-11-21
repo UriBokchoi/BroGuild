@@ -1,22 +1,22 @@
-[gd_resource type="Resource" script_class="EnemyData" format=3]
+[gd_resource type="Resource" script_class="EnemyData" format=3 uid="uid://ctcnxdbqncola"]
 
-[ext_resource type="Script" path="res://entities/enemies/enemy_data.gd" id="1_data"]
-[ext_resource type="Texture2D" path="res://assets/textures/icons/enemies/shooter.svg" id="98_icon"]
-[ext_resource type="Script" path="res://core/components/health/health_data.gd" id="2_health"]
-[ext_resource type="Script" path="res://entities/enemies/enemy_stats.gd" id="3_stats"]
+[ext_resource type="Script" uid="uid://dnqvr6od7bms" path="res://entities/enemies/enemy_data.gd" id="1_data"]
+[ext_resource type="Script" uid="uid://b2n3cb0mb38a0" path="res://core/components/health/health_data.gd" id="2_health"]
+[ext_resource type="Script" uid="uid://brmo8blx17xed" path="res://entities/enemies/enemy_stats.gd" id="3_stats"]
 [ext_resource type="PackedScene" path="res://entities/enemies/shooter/shooter.tscn" id="4_scene"]
-[ext_resource type="Script" path="res://systems/combat/weapons/weapon_data.gd" id="5_weapon_data"]
-[ext_resource type="Resource" path="res://data/enemies/weapons/shooter_gun.tres" id="6_gun"]
+[ext_resource type="Script" uid="uid://dym5cqjgo8xu4" path="res://systems/combat/weapons/weapon_data.gd" id="5_weapon_data"]
+[ext_resource type="Resource" uid="uid://cr33fj3fvuukr" path="res://data/enemies/weapons/shooter_gun.tres" id="6_gun"]
+[ext_resource type="Texture2D" uid="uid://b2nhweu687mqq" path="res://assets/textures/icons/enemies/shooter.svg" id="98_icon"]
 
 [sub_resource type="Resource" id="Resource_health"]
 script = ExtResource("2_health")
-max_health = 32.0
+max_health = 37.0
 
 [sub_resource type="Resource" id="Resource_stats"]
 script = ExtResource("3_stats")
 move_speed = 3.1
 acceleration = 20.0
-contact_damage = 5.0
+contact_damage = 6.0
 contact_interval = 0.8
 knockback = 3.0
 separation_radius = 1.4

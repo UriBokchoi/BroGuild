@@ -1,6 +1,6 @@
-[gd_resource type="Resource" script_class="CameraData" format=3]
+[gd_resource type="Resource" script_class="CameraData" format=3 uid="uid://b51cywft8hu0c"]
 
-[ext_resource type="Script" path="res://entities/player/camera/camera_data.gd" id="1_s5y5c"]
+[ext_resource type="Script" uid="uid://ho87y4t483mn" path="res://entities/player/camera/camera_data.gd" id="1_s5y5c"]
 
 [sub_resource type="Curve" id="Curve_t0pyk"]
 _limits = [0.0, 2.0, 1.0, 100.0]

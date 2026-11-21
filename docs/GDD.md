@@ -2,7 +2,7 @@
 
 > Documento vivo: si el diseño cambia, se cambia aquí.
 >
-> **Temática: medieval con humor moderno** (definitiva). Este documento aún conserva nombres de la temática anterior (casino); los que hay que adaptar están en §11. Las tragaperras se quedan.
+> **Temática: medieval con humor moderno** (definitiva). Los nombres que venían del casino ya están adaptados: botín, el Gremio, el tahúr, el torneo y «¿Retirarse o seguir?». Las tragaperras se quedan.
 
 ## 1. Pitch
 Roguelike de hordas en 3D donde **moverte bien es dinero**: la velocidad alimenta tu racha, la racha multiplica tu oro y el oro se apuesta. Partidas de ~10 minutos, caos constante, reinicio instantáneo y el clásico "una más".
@@ -21,8 +21,8 @@ Si una idea no sirve al menos a uno, se descarta.
 |---|---|
 | Segundos | Moverte (dash, slide, saltos); las armas disparan solas; recoges XP y el oro vuela solo hacia ti; rompes calaveras y bolsitas con E |
 | Minutos | Subes de nivel (ruleta), abres cofres, juegas a la tragaperras, aceptas o rechazas pactos, cobras tu racha |
-| Partida | Exploras el nivel juntando llaves; invocas al jefe en su altar (al minuto 10 se activa solo) → lo vences → **¿Cobrar o Doblar?** |
-| Entre partidas | Gastas el bote en desbloqueos y vuelves a entrar |
+| Partida | Exploras el nivel juntando llaves; invocas al jefe en su altar (al minuto 10 se activa solo) → lo vences → **¿Retirarse o seguir?** |
+| Entre partidas | Gastas el botín en desbloqueos y vuelves a entrar |
 
 ## 4. Movimiento
 Cámara en tercera persona a una distancia moderada que crece muy poco a poco con el nivel del personaje: de un nivel a otro casi no se nota, pero hacia el nivel 100 sí hay diferencia (curva en datos). Correr es gratis; casi todo lo demás gasta **stamina** en cargas que se regeneran. Decidir cuándo gastar la última carga es la habilidad.
@@ -53,20 +53,20 @@ Toda apuesta tiene **anticipación** (giro, luces, sonido que sube), **revelado*
 
 **Rarezas** (mismo color en todo el juego): Común (gris) · Rara (verde) · Improbable (azul) · De leyenda (amarillo) · Mítica (rojo). Pesos de partida 60/25/10/4/1; la **Suerte** sube el peso de las altas (cada punto, +1 / +2 / +3 / +5 % del suyo a rara, improbable, de leyenda y mítica).
 
-1. **Ruleta de nivel** — al subir de nivel, 3 cartas giran como rodillos y caen en una rareza; eliges una.
-   - *Reroll:* cuesta oro y el coste sube con cada uso en la partida.
-   - *Doble o nada:* tras elegir, puedes apostar la carta: ~50 % sube una rareza, ~50 % la pierdes. La Suerte mejora las probabilidades.
+1. **Ruleta de nivel** — al subir de nivel, 3 cartas giran como rodillos y caen en una rareza, una tras otra (con un tic-tic y una campanilla más aguda cuanto más rara); un clic las para todas; eliges una.
+   - *Volver a tirar:* otras 3 cartas por oro; cuesta 10 y ×1,5 con cada uso en la partida (10, 15, 23…).
+   - *Doble o nada:* tras elegir una mejora que aún puede subir, «Quedármela» o «Doble o nada»: un 50 % sube una rareza (la mejora se vuelve a tirar con su fuerza) y si no, la pierdes y esa subida no da nada. La Suerte mejora las probabilidades sin llegar nunca al 100 % (con 200 de Suerte, un 75 %). Las míticas no se apuestan.
 2. **Cofres** — repartidos por el nivel y soltados por élites. Abrirlos cuesta oro (sube con la dificultad y con cada cofre abierto en la partida). Revelado tipo "case opening": la luz recorre las rarezas antes de pararse. Dan **objetos pasivos** (§6).
 3. **Tragaperras** — máquinas repartidas por el nivel (también en sitios a los que hay que subir). Pagas oro (sube con la dificultad y cada vez que usas esa máquina) y giran 3 rodillos sin pausar el juego. Cada máquina aguanta 5 tiradas y luego revienta. Símbolos: moneda (pareja: oro ×2 de lo pagado; trío: ×10), corazón (cura un 30 %; trío: vida al máximo), estrella (pareja: eliges una mejora como al subir de nivel, con el título «¡Mejora gratis!»; trío: sube un nivel todas tus armas y runas, cada una con un texto del color de la rareza que le sale) y calavera, la **maldición** (pareja: −20 % de vida máxima un minuto; trío: cinco élites). Sin dos iguales, nada. El trío (jackpot) va con cámara lenta.
-4. **Racha y bote** — matar encadenado y moverte rápido sube la racha (×1 → ×2 → ×3 → ×5), que multiplica oro, XP y Suerte. Lo ganado con racha va a un **bote** que hay que **cobrar** (mantener E un segundo quedando vulnerable, o en una tragaperras). Si te golpean con el bote lleno, pierdes la mitad y bajas un nivel. Quedarte quieto la enfría.
-5. **Pactos de la Banca** — de vez en cuando, una oferta: aceptas una maldición para el resto de la partida (más enemigos, menos curación…) a cambio de Suerte o multiplicador. Se puede rechazar.
-6. **¿Cobrar o Doblar?** — al vencer al jefe: *Cobrar* termina la partida y guarda el bote. *Doblar* abre la siguiente mesa, más dura, con el bote ×2; si mueres ahí, te llevas solo la mitad.
+4. **Racha y botín** — matar encadenado y moverte rápido sube la racha (×1 → ×2 → ×3 → ×5), que multiplica oro, XP y Suerte. Lo ganado con racha va a un **botín** que hay que **guardar** (mantener E un segundo quedando vulnerable, o en una tragaperras). Si te golpean con el botín lleno, pierdes la mitad y bajas un nivel. Quedarte quieto la enfría.
+5. **Pactos del Gremio** — de vez en cuando, una oferta: aceptas una maldición para el resto de la partida (más enemigos, menos curación…) a cambio de Suerte o multiplicador. Se puede rechazar.
+6. **¿Retirarse o seguir?** — al vencer al jefe: *Retirarse* termina la partida y guarda el botín. *Seguir* abre el siguiente torneo, más duro, con el botín ×2; si mueres ahí, te llevas solo la mitad.
 
 **Stats mejorables:** como en Megabonk, cualquier stat del personaje se puede subir o bajar con mejoras, rasgos de personaje y maldiciones: velocidad de carrera, altura de salto, control aéreo, stamina, daño… Una stat nueva es mejorable desde que existe.
 
 **Mejoras con sinergia de movimiento** (ejemplos): el slide deja un rastro de fuego · cada dash suelta una onda que empuja y daña · más daño mientras estás en el aire · la caída rápida explota al aterrizar · cada carga de stamina sin gastar da crítico extra.
 
-**Mejoras que tocan el azar** (ejemplos): Dado trucado (1 reroll gratis por nivel) · Amigo del crupier (las maldiciones de la tragaperras a veces son premio) · Mano caliente (cofres más baratos con racha alta).
+**Mejoras que tocan el azar** (ejemplos): Dado trucado (1 reroll gratis por nivel) · Amigo del tahúr (las maldiciones de la tragaperras a veces son premio) · Mano caliente (cofres más baratos con racha alta).
 
 ## 6. Combate
 - **Armas automáticas** (como en Megabonk o Vampire Survivors): atacan solas al objetivo más cercano o al grupo más denso que vean (no disparan a lo que hay detrás de un árbol o una pared); tú te centras en moverte. Ranuras: 4 de armas y 4 de runas, hasta nivel 10 las armas y 20 las runas; al empezar solo hay 2 de cada abiertas y las otras 2 se desbloquearán (cómo, por decidir; en el HUD se ven cerradas). Todo en datos.
@@ -84,8 +84,8 @@ Toda apuesta tiene **anticipación** (giro, luces, sonido que sube), **revelado*
 - **Subir de nivel**: eliges 1 de 3 opciones (arma o runa nueva, o subir una que ya tengas). Cada mejora tiene **rareza**, que se ve en el color del borde de la carta: común (gris), rara (verde), improbable (azul), de leyenda (amarilla) y mítica (roja). Cada arma tiene varias stats que puede mejorar (la espada: daño, cantidad, área y velocidad de ataque) y la rareza decide cuántas toca y cuánto: una común, una; las raras, varias; la mítica, todas, y más fuertes. La ruleta de apuestas (§5) se monta encima de esta elección.
 - **Enemigos**: enjambre cuerpo a cuerpo (rápido, frágil) · tanque lento · tirador a distancia (te obliga a moverte) · jefes (uno por nivel, §9) · élites: cualquier enemigo puede salir élite, con una probabilidad que sube con los minutos (más grande, más vida y daño, suelta más experiencia y oro); más adelante, con afijos y cofre.
 - **Empuje:** los golpes empujan. Cada arma tiene el suyo (la espada, más; la daga, poco), que multiplica el retroceso del personaje (mejorable). Los enemigos empujan al jugador al tocarle con un empuje fijo; el Ent-renador, mucho al embestir y con su onda. A los enemigos pesados (élites, jefes) se les mueve menos.
-- **Cuerpos de los enemigos** (como en Megabonk): chocan con el mundo, con el jugador y entre ellos, y no se hacen daño entre ellos. El jugador no los atraviesa: le bloquean, le dañan al tocarle y puede saltar y quedarse de pie encima. Cuando se atascan, los de atrás trepan sobre los de delante: alrededor del jugador forman un montículo y, si está en alto, se apilan para alcanzarlo.
-- **Dificultad y director de oleadas**: la **dificultad** es una stat que sube sola (1 por minuto) y también con objetos o runas: **más riesgo, más recompensa**. De ella dependen cuántos enemigos salen, cuáles, cuántos élites y lo fuertes que son (vida y daño), todo en curvas de datos; los picos de cada minuto van por el reloj. También sube lo que sueltan calaveras y bolsitas. La ronda normal dura 10 min: hacia la dificultad 10 los enemigos se disparan (hace falta buena build para aguantar un poco) y en el minuto 10 el altar del jefe se activa solo.
+- **Cuerpos de los enemigos** (como en Megabonk): chocan con el mundo, con el jugador y entre ellos, y no se hacen daño entre ellos. El jugador no los atraviesa: le bloquean, le dañan al tocarle y puede saltar y quedarse de pie encima. Cuando se atascan, los de atrás trepan sobre los de delante: alrededor del jugador forman un montículo y, si está en alto, se apilan para alcanzarlo. Si lo que les tapa el paso es el escenario (unas pesas, un tronco, un muro bajo), trepan por encima.
+- **Dificultad y director de oleadas**: la **dificultad** es una stat que sube sola (1 por minuto) y también con objetos o runas: **más riesgo, más recompensa**. De ella dependen cuántos enemigos salen, cuáles, cuántos élites y lo fuertes que son (vida y daño), todo en curvas de datos; los picos de cada minuto van por el reloj. También sube lo que sueltan calaveras y bolsitas. La ronda normal dura 10 min: hacia la dificultad 10 los enemigos se disparan (hace falta buena build para aguantar un poco) y en el minuto 10 el altar del jefe se activa solo. **Hordas:** en minutos marcados de la ronda (en el Brosque, el 3 y el 6) llega una horda grande alrededor del jugador durante 30 segundos, avisada unos segundos antes con un cuerno y un texto.
 
 **Stats del personaje** (como en Megabonk o Vampire Survivors; todas mejorables, §5). Valores de partida en `data/player/`. Ya funcionan vida, regeneración, defensa, esquiva, daño y crítico; el resto de fórmulas son la intención de diseño y se confirman al implementar armas y enemigos (Hito 2). Al recibir un golpe, primero se tira la esquiva y luego la defensa reduce lo que entra. Tras un golpe que hace daño, el jugador es invulnerable 0,3 s (su modelo parpadea).
 
@@ -112,24 +112,24 @@ Toda apuesta tiene **anticipación** (giro, luces, sonido que sube), **revelado*
 Las mejoras de % («+10 % de daño») multiplican; las de puntos («+5 % de crítico», «+1 proyectil», «+1 salto en el aire») suman.
 
 ## 7. Estética: sencilla pero llamativa
-Dirección: **medieval con humor moderno**, nada realista; los anacronismos son bienvenidos (p. ej., tragaperras repartidas por un mundo medieval). Formas simples (primitivas o low-poly) que luzcan sin necesitar artista. *Pendiente: concretar la dirección visual (sustituye a la anterior «casino-arcade neón»).*
+Dirección: **medieval con humor moderno**, nada realista; los anacronismos son bienvenidos (p. ej., tragaperras repartidas por un mundo medieval). Formas simples (primitivas o low-poly) que luzcan sin necesitar artista. Luz de antorchas y faroles: cálida, con brillos de color donde hay algo que apostar o recoger (sustituye a la anterior «casino-arcade neón»).
 - **Color con significado**: cada tipo de enemigo con su color; las rarezas, iguales en cofres, cartas, números y luces.
-- **Juice**: hit-stop en golpes grandes · screen shake por trauma · números de daño (críticos grandes y dorados) · flash al golpear · explosión de monedas al matar · imán de pickups · estela en dash y slide · FOV que se abre con la velocidad y líneas de velocidad · cámara lenta en el jackpot.
-- **Sonido**: cada recompensa sube de tono; la racha sube el pitch de todo; los rodillos hacen tic-tic-tic al frenar.
+- **Juice**: hit-stop en golpes grandes · screen shake por trauma al recibir daño · borde rojo al recibir daño y con poca vida (late como un corazón) · números de daño (críticos grandes y dorados) · destello blanco y sutil al golpear (sin parón) · explosión de monedas al matar · imán de pickups · estela en dash y slide · FOV que se abre con la velocidad y líneas de velocidad · cámara lenta en el jackpot.
+- **Sonido**: efectos sintetizados de estilo arcade (recetas en datos). La experiencia recogida seguida sube de tono, hasta una octava. Más adelante, la racha subirá el pitch de todo y los rodillos harán tic-tic-tic al frenar.
 - **UI**: tipografía gruesa, animada con tweens, legible en mitad del caos.
 - **Assets**: primitivas + shaders propios; si hace falta, packs CC0 (Kenney, Quaternius).
 
 ## 8. Controles
-WASD mover · Ratón cámara · Espacio saltar · Shift dash · Ctrl slide (doble Ctrl en el aire: caída rápida) · E interactuar / cobrar · Tab estadísticas · Esc pausa · R reintentar (en los resultados). Todo remapeable.
+WASD mover · Ratón cámara · Espacio saltar · Shift dash · Ctrl slide (doble Ctrl en el aire: caída rápida) · E interactuar / cobrar · Tab estadísticas (mientras se mantiene, sin pausar; la rueda las desplaza) · Esc pausa · R reintentar (en los resultados). Todo remapeable.
 
 **Menú de pausa (Esc):** a la izquierda, Continuar, Opciones, Reintentar y Salir; a la derecha, un panel fijo con todas las stats del personaje, resaltando las que han cambiado mejoras o maldiciones. Mando: más adelante.
 
 ## 9. Partida y progresión
-- **Mesa**: ~10 min (dificultad normal; nivel ~30 al minuto 10 si se mata casi todo). Élites por probabilidad, cada vez más a menudo.
+- **Ronda**: ~10 min (dificultad normal; nivel ~30 al minuto 10 si se mata casi todo). Élites por probabilidad, cada vez más a menudo.
 - **Jefe**: cada nivel tiene el suyo en un **altar**. Se invoca con las llaves del nivel cuando te veas fuerte; al minuto 10 el altar se activa solo. Vencerlo antes da más recompensa, y vencerlo pasa el nivel. Mientras tanto siguen las oleadas (desde el minuto 10, la prórroga, muy fuertes). Sale más fuerte cuanto más alta esté la dificultad.
-  - *Premio:* oro por un multiplicador que baja con los minutos (×3 al empezar, ×1 desde el minuto 10) y un objeto pasivo de rareza alta (improbable o más), revelado en el HUD. Luego, la pantalla de victoria con las estadísticas y el premio por rapidez. Hasta que exista «¿Cobrar o Doblar?» (Hito 8), la partida termina ahí.
+  - *Premio:* oro por un multiplicador que baja con los minutos (×3 al empezar, ×1 desde el minuto 10) y un objeto pasivo de rareza alta (improbable o más), revelado en el HUD. Luego, la pantalla de victoria con las estadísticas y el premio por rapidez. Hasta que exista «¿Retirarse o seguir?» (Hito 8), la partida termina ahí.
   - *El Ent-renador* (jefe del Brosque): un árbol enorme vestido de entrenador personal (polo, cinta en la frente y silbato), con su barra de vida y sus gritos en el HUD («¡Una más!», «¡Sin excusas!»). Su altar está al borde del claro. Ataques: *Burpee* (se agacha, salta adonde estabas —un aro marca dónde cae— y suelta una onda por el suelo que se esquiva saltándola o alejándote), *Series* (apunta con una franja en el suelo y embiste en línea recta tres veces) y *Bro-tes* (llama a unos arbolitos rápidos y frágiles que te persiguen). Por debajo de la mitad de su vida entra en rabia: más rápido, ataca más a menudo y llama más Bro-tes.
-- **Monedas**: XP (niveles) · Oro (en partida, se apuesta; lo suelta cada enemigo y llega solo al matarlo) · Bote (sale de la partida y se gasta fuera).
+- **Monedas**: XP (niveles) · Oro (en partida, se apuesta; lo suelta cada enemigo y llega solo al matarlo) · Botín (sale de la partida y se gasta fuera).
 - **Meta-progresión**: desbloquear personajes (cada uno con un rasgo de movimiento: triple salto, dash más largo, slide más rápido…), armas iniciales y ventajas pequeñas. Nunca más poder bruto que el que da jugar bien.
 - **Personajes**: todos parten de las mismas stats básicas y cada uno cambia unas pocas según su gimmick (p. ej., +1 salto en el aire y −10 % de vida). Esas diferencias son su base: en el menú no salen como mejoras. Cada uno tiene un arma principal y una habilidad pasiva. Iniciales:
 
@@ -152,7 +152,7 @@ WASD mover · Ratón cámara · Espacio saltar · Shift dash · Ctrl slide (dobl
 - **Reinicio**: de la muerte a una partida nueva en menos de 2 s.
 
 ## 10. Fuera de alcance por ahora
-Multijugador · historia · generación procedural de mapas (de momento, arenas hechas a mano) · consolas.
+Multijugador · historia · consolas. (Los mapas ya se generan: el Brosque cambia cada partida.)
 
 ## 11. Decisiones abiertas
-- Adaptar a la temática medieval los nombres y elementos que vienen del casino: bote, La Banca, crupier, mesa, «¿Cobrar o Doblar?» y estética neón (§7). Las tragaperras se quedan. Las fichas ya son oro.
+- Ninguna ahora mismo. (Los nombres del casino ya están adaptados: bote → botín, La Banca → el Gremio, crupier → tahúr, mesa → torneo, «¿Cobrar o Doblar?» → «¿Retirarse o seguir?» y estética neón → antorchas y faroles.)

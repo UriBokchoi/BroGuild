@@ -1,8 +1,8 @@
-[gd_resource type="Resource" script_class="RuneData" format=3]
+[gd_resource type="Resource" script_class="RuneData" format=3 uid="uid://dd167hn1w21r5"]
 
-[ext_resource type="Script" path="res://systems/upgrades/runes/rune_data.gd" id="1_rune"]
-[ext_resource type="Texture2D" path="res://assets/textures/icons/runes/vigor.svg" id="99_icon"]
-[ext_resource type="Script" path="res://systems/upgrades/upgrade_stat.gd" id="90_upgrade"]
+[ext_resource type="Script" uid="uid://b4bfv1ny1pdnn" path="res://systems/upgrades/runes/rune_data.gd" id="1_rune"]
+[ext_resource type="Script" uid="uid://dyvb1ciy45s8b" path="res://systems/upgrades/upgrade_stat.gd" id="90_upgrade"]
+[ext_resource type="Texture2D" uid="uid://d25vt6rafh2jb" path="res://assets/textures/icons/runes/vigor.svg" id="99_icon"]
 
 [sub_resource type="Resource" id="Upgrade_max_health"]
 script = ExtResource("90_upgrade")
@@ -12,8 +12,8 @@ value = 20.0
 [resource]
 script = ExtResource("1_rune")
 id = &"vigor"
-icon = ExtResource("99_icon")
 name_key = &"RUNE_VIGOR_NAME"
 description_key = &"RUNE_VIGOR_DESCRIPTION"
+icon = ExtResource("99_icon")
 level_cap = 20
 upgrade_stats = Array[ExtResource("90_upgrade")]([SubResource("Upgrade_max_health")])

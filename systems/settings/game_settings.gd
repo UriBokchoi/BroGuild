@@ -1,9 +1,10 @@
 class_name GameSettings
 extends RefCounted
 ## Opciones que ha elegido el jugador: idioma, volumen de cada bus, pantalla completa, tamaño de la
-## ventana y VSync. Se guardan en un [ConfigFile] ([method write_to] y [method read_from]) y se
-## aplican al motor ([method apply_locale], [method apply_audio] y [method apply_display]). El autoload [code]Save[/code] las carga y
-## las aplica al arrancar.
+## ventana, VSync y cuánto tiembla la pantalla. Se guardan en un [ConfigFile] ([method write_to] y
+## [method read_from]) y se aplican al motor ([method apply_locale], [method apply_audio] y
+## [method apply_display]); el temblor lo lee [ScreenShake]. El autoload [code]Save[/code] las carga
+## y las aplica al arrancar.
 
 const SECTION_AUDIO := "audio"
 const SECTION_DISPLAY := "display"
@@ -18,6 +19,8 @@ var fullscreen: bool = false
 ## el que tenga).
 var resolution: Vector2i = Vector2i.ZERO
 var vsync: bool = false
+## Cuánto tiembla la pantalla al recibir golpes, de 0 (nada) a 1 (lo normal).
+var screen_shake: float = 1.0
 
 
 ## Opciones de un juego recién estrenado, según [param data].
@@ -27,6 +30,7 @@ static func create(data: SettingsData) -> GameSettings:
 		settings.volumes[bus] = data.default_volume
 	settings.vsync = data.default_vsync
 	settings.locale = data.default_locale
+	settings.screen_shake = data.default_screen_shake
 	return settings
 
 
@@ -46,6 +50,10 @@ func read_from(config: ConfigFile) -> void:
 	var saved_vsync: Variant = config.get_value(SECTION_DISPLAY, "vsync", vsync)
 	if saved_vsync is bool:
 		vsync = saved_vsync
+	var saved_shake: Variant = config.get_value(SECTION_DISPLAY, "screen_shake", screen_shake)
+	if saved_shake is float or saved_shake is int:
+		var shake: float = saved_shake
+		screen_shake = clampf(shake, 0.0, 1.0)
 	var saved_locale: Variant = config.get_value(SECTION_GENERAL, "locale", locale)
 	if saved_locale is String and not (saved_locale as String).is_empty():
 		locale = saved_locale
@@ -58,6 +66,7 @@ func write_to(config: ConfigFile) -> void:
 	config.set_value(SECTION_DISPLAY, "fullscreen", fullscreen)
 	config.set_value(SECTION_DISPLAY, "resolution", resolution)
 	config.set_value(SECTION_DISPLAY, "vsync", vsync)
+	config.set_value(SECTION_DISPLAY, "screen_shake", screen_shake)
 	config.set_value(SECTION_GENERAL, "locale", locale)
 
 
@@ -100,6 +109,7 @@ func copy() -> GameSettings:
 	other.resolution = resolution
 	other.vsync = vsync
 	other.locale = locale
+	other.screen_shake = screen_shake
 	return other
 
 

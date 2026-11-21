@@ -4,8 +4,9 @@ class_name CardParts
 
 ## Grosor del borde de color de la rareza.
 const RARITY_BORDER := 4
-## Estados del botón que llevan el borde de la rareza.
-const RARITY_STATES: Array[StringName] = [&"normal", &"hover", &"pressed", &"hover_pressed"]
+## Estados del botón que llevan el borde de la rareza (también desactivado: la carta que gira en la
+## ruleta).
+const RARITY_STATES: Array[StringName] = [&"normal", &"hover", &"pressed", &"hover_pressed", &"disabled"]
 
 
 ## Una línea de [param text_value] con el estilo [param variation], que no recibe el ratón (la carta

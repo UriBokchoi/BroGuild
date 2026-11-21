@@ -4,7 +4,8 @@ extends GutTest
 ## que esperan juntos se funden en uno de más nivel. El LootDropper suelta la gema de experiencia y
 ## la moneda de oro de cada enemigo que muere, y el botín de cada rompible en trozos alrededor (más
 ## cuanto mayor es la dificultad) y, con la probabilidad de botín (por el multiplicador de élites y
-## rompibles), un extra de su tabla.
+## rompibles), un extra de su tabla. Muchas muertes a la vez sueltan su botín repartido en unos
+## pocos ticks, y los recogibles preparados de antemano esperan ocultos.
 
 const XP_GEM := preload("res://data/pickups/xp_gem.tres")
 const GOLD_COIN := preload("res://data/pickups/gold_coin.tres")
@@ -199,6 +200,36 @@ func test_elites_and_breakables_multiply_the_drop_chance() -> void:
 	promoted.promote(elite)
 	promoted.health.take_damage(DamageInfo.create(100000.0))
 	assert_eq(_bombs(), 2, "10 % × 10 del élite")
+
+
+func test_prewarmed_pickups_wait_out_of_the_world() -> void:
+	_field.prewarm(XP_GEM, 5)
+	assert_eq(_field.active_count(), 0)
+	var waiting := _field.get_children().filter(func(child: Node) -> bool: return child is Pickup)
+	assert_eq(waiting.size(), 5)
+	for pickup: Pickup in waiting:
+		assert_false(pickup.visible, "ocultos hasta que se suelten")
+	var gem := _field.drop(XP_GEM, Vector3.ZERO, 1.0)
+	assert_true(waiting.has(gem), "sale de los preparados")
+	assert_true(gem.visible)
+
+
+func test_a_mass_kill_drops_over_a_few_ticks() -> void:
+	var dropper := LootDropper.new()
+	dropper.field = _field
+	dropper.xp_gem = XP_GEM
+	dropper.max_drops_per_tick = 4
+	add_child_autofree(dropper)
+	var swarm := EnemySwarm.new()
+	add_child_autofree(swarm)
+	for index: int in 7:
+		var enemy := swarm.spawn(SWARMER, Vector3(-5.0 - index * 2.0, 0.0, 0.0))
+		enemy.health.take_damage(DamageInfo.create(1000.0))
+	assert_eq(_field.active_count(), 4, "como mucho los de un tick")
+	assert_eq(dropper.queued_count(), 3)
+	await wait_physics_frames(2)
+	assert_eq(_field.active_count(), 7, "el resto, en los siguientes")
+	assert_eq(dropper.queued_count(), 0)
 
 
 func _make_dropper(stats: StatsComponent) -> void:

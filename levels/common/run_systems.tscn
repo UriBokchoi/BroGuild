@@ -37,6 +37,8 @@
 [ext_resource type="Script" path="res://systems/boss/boss_encounter.gd" id="31_encounter"]
 [ext_resource type="Script" path="res://systems/content/archive_recorder.gd" id="40_archive"]
 [ext_resource type="Resource" path="res://data/content.tres" id="41_content"]
+[ext_resource type="PackedScene" path="res://vfx/juice/damage_vignette/damage_vignette.tscn" id="42_vignette"]
+[ext_resource type="PackedScene" path="res://ui/hud/stats_overlay.tscn" id="43_stats_overlay"]
 
 [node name="RunSystems" type="Node3D" node_paths=PackedStringArray("player", "director", "encounter")]
 script = ExtResource("1_run")
@@ -56,6 +58,9 @@ player = NodePath("../Player")
 player = NodePath("../Player")
 
 [node name="HUD" parent="." instance=ExtResource("6_hud")]
+
+[node name="StatsOverlay" parent="." node_paths=PackedStringArray("player") instance=ExtResource("43_stats_overlay")]
+player = NodePath("../Player")
 
 [node name="DamageNumbers" type="Node3D" parent="."]
 script = ExtResource("7_damage_numbers")
@@ -171,6 +176,8 @@ player_stats = NodePath("../Player/Stats")
 items = NodePath("../Player/Items")
 
 [node name="TimeStopFilter" parent="." instance=ExtResource("34_filter")]
+
+[node name="DamageVignette" parent="." instance=ExtResource("42_vignette")]
 
 [node name="ItemChoicePanel" parent="." node_paths=PackedStringArray("inventory") instance=ExtResource("35_item_choice")]
 inventory = NodePath("../Player/Items")

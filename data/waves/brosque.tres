@@ -6,6 +6,7 @@
 [ext_resource type="Resource" path="res://data/enemies/shooter.tres" id="4_shooter"]
 [ext_resource type="Resource" path="res://data/enemies/elite.tres" id="5_elite"]
 [ext_resource type="Script" path="res://systems/spawning/stat_scaling.gd" id="6_scaling"]
+[ext_resource type="Script" path="res://systems/spawning/horde_data.gd" id="9_horde"]
 
 [sub_resource type="Curve" id="Curve_rate"]
 _limits = [0.0, 20.0, 0.0, 20.0]
@@ -53,6 +54,25 @@ enemy = ExtResource("4_shooter")
 weight = 0.12
 from_difficulty = 0.5
 
+[sub_resource type="Resource" id="Horde_minute_3"]
+script = ExtResource("9_horde")
+at_minute = 3.0
+count = 150
+spawn_seconds = 30.0
+warning_seconds = 3.0
+announce_key = &"HORDE_INCOMING"
+announce_color = Color(0.88, 0.38, 0.28, 1)
+
+[sub_resource type="Resource" id="Horde_minute_6"]
+script = ExtResource("9_horde")
+at_minute = 6.0
+count = 240
+elites = 6
+spawn_seconds = 30.0
+warning_seconds = 3.0
+announce_key = &"HORDE_INCOMING"
+announce_color = Color(0.88, 0.38, 0.28, 1)
+
 [resource]
 script = ExtResource("1_data")
 round_minutes = 10.0
@@ -67,3 +87,4 @@ enemies = Array[ExtResource("2_entry")]([SubResource("Resource_swarmer"), SubRes
 elite_chance = SubResource("Curve_elite")
 elite = ExtResource("5_elite")
 stat_scaling = Array[ExtResource("6_scaling")]([SubResource("Resource_scale_health"), SubResource("Resource_scale_contact"), SubResource("Resource_scale_weapon")])
+hordes = Array[ExtResource("9_horde")]([SubResource("Horde_minute_3"), SubResource("Horde_minute_6")])

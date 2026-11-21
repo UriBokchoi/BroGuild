@@ -19,3 +19,5 @@ extends Resource
 @export_range(1, 200, 1) var leaderboard_size: int = 0
 ## Idioma al estrenar el juego (código de [TranslationServer]: [code]es[/code], [code]en[/code]…).
 @export var default_locale: String = ""
+## Temblor de pantalla al estrenar el juego (0 = nada, 1 = lo normal).
+@export_range(0.0, 1.0, 0.05) var default_screen_shake: float = 0.0
