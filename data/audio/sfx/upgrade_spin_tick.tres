@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="SfxRecipe" format=3]
+
+[ext_resource type="Script" path="res://systems/audio/sfx_recipe.gd" id="1_recipe"]
+
+[resource]
+script = ExtResource("1_recipe")
+wave = 0
+duty = 0.5
+start_frequency = 1900.0
+end_frequency = 1700.0
+attack = 0.0
+sustain = 0.006
+decay = 0.022
+decay_curve = 2.0
+low_pass = 6000.0
+volume = 0.12
+noise_seed = 25

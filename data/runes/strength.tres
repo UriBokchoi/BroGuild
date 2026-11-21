@@ -1,8 +1,8 @@
-[gd_resource type="Resource" script_class="RuneData" format=3]
+[gd_resource type="Resource" script_class="RuneData" format=3 uid="uid://chu8r7o3b5arl"]
 
-[ext_resource type="Script" path="res://systems/upgrades/runes/rune_data.gd" id="1_rune"]
-[ext_resource type="Texture2D" path="res://assets/textures/icons/runes/strength.svg" id="99_icon"]
-[ext_resource type="Script" path="res://systems/upgrades/upgrade_stat.gd" id="90_upgrade"]
+[ext_resource type="Script" uid="uid://b4bfv1ny1pdnn" path="res://systems/upgrades/runes/rune_data.gd" id="1_rune"]
+[ext_resource type="Script" uid="uid://dyvb1ciy45s8b" path="res://systems/upgrades/upgrade_stat.gd" id="90_upgrade"]
+[ext_resource type="Texture2D" uid="uid://c78byi8hvit4s" path="res://assets/textures/icons/runes/strength.svg" id="99_icon"]
 
 [sub_resource type="Resource" id="Upgrade_damage"]
 script = ExtResource("90_upgrade")
@@ -13,8 +13,8 @@ value = 0.1
 [resource]
 script = ExtResource("1_rune")
 id = &"strength"
-icon = ExtResource("99_icon")
 name_key = &"RUNE_STRENGTH_NAME"
 description_key = &"RUNE_STRENGTH_DESCRIPTION"
+icon = ExtResource("99_icon")
 level_cap = 20
 upgrade_stats = Array[ExtResource("90_upgrade")]([SubResource("Upgrade_damage")])

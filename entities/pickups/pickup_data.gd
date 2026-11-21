@@ -8,6 +8,8 @@ extends Resource
 @export var id: StringName = &""
 ## Escena del recogible: su raíz es un [Pickup].
 @export var scene: PackedScene
+## Cuántos se crean al empezar el nivel (para no crearlos en pleno combate; 0 = según hagan falta).
+@export_range(0, 1000, 1, "or_greater") var prewarm: int = 0
 ## Qué da al recogerlo. Lo escucha el sistema que lo usa por [code]EventBus.pickup_collected[/code]
 ## (p. ej. [code]experience[/code] → [ExperienceComponent]).
 @export var reward: StringName = &""

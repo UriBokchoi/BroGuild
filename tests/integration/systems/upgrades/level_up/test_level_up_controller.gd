@@ -1,7 +1,9 @@
 extends GutTest
 ## Elección al subir de nivel con el jugador de verdad: al subir, se pausa y salen las cartas; la
 ## elegida se aplica; varios niveles de golpe dan varias elecciones; Esc no la salta; las armas
-## nuevas necesitan una ranura abierta; sin nada que ofrecer, o muerto, no pregunta.
+## nuevas necesitan una ranura abierta; sin nada que ofrecer, o muerto, no pregunta. Volver a tirar
+## cobra oro (cada vez más) y ofrece otras cartas; sin oro, no hace nada. El doble o nada ganado sube
+## la mejora a la rareza siguiente; perdido, esa subida no da nada.
 
 const PlayerScene := preload("res://entities/player/player.tscn")
 const PanelScene := preload("res://ui/menus/level_up/level_up_panel.tscn")
@@ -122,3 +124,67 @@ func test_a_free_upgrade_offers_choices_with_its_own_title() -> void:
 	_panel.get_cards()[0].pressed.emit()
 	await get_tree().process_frame
 	assert_eq(title.text, tr(&"LEVEL_UP_TITLE") % _player.experience.get_level())
+
+
+func test_rerolling_costs_more_each_time_and_offers_new_cards() -> void:
+	_player.wallet.add(100.0)
+	EventBus.player_leveled_up.emit(2)
+	var first_cost := _controller.reroll_cost()
+	_panel.reroll_requested.emit()
+	assert_eq(_player.wallet.get_gold(), 100.0 - first_cost)
+	assert_true(_panel.is_open(), "sigue la misma elección")
+	assert_eq(_controller.pending(), 1)
+	assert_gt(_controller.reroll_cost(), first_cost, "la siguiente, más cara")
+
+
+func test_without_gold_rerolling_does_nothing() -> void:
+	EventBus.player_leveled_up.emit(2)
+	var cards := _panel.get_cards()
+	_panel.reroll_requested.emit()
+	assert_eq(_panel.get_cards(), cards, "las mismas cartas")
+	assert_eq(_controller.reroll_cost(), LEVEL_UP.reroll_cost_at(0))
+
+
+func test_a_won_double_upgrades_with_the_next_rarity() -> void:
+	var data := LEVEL_UP.duplicate() as LevelUpData
+	data.double_chance = 1.0
+	_controller.data = data
+	EventBus.player_leveled_up.emit(2)
+	var card := _upgrade_card()
+	var option := card.option
+	var next := data.next_rarity(option.rarity())
+	card.pressed.emit()
+	(_panel.get_node(^"%Double") as Button).pressed.emit()
+	await get_tree().create_timer(data.double_spin_time + data.double_result_time + 0.2, true).timeout
+	var weapon := _player.weapons.get_weapon(option.item as WeaponData)
+	assert_eq(weapon.level, 2, "sube")
+	assert_eq(weapon.get_upgrades()[0].rarity, next, "con la rareza siguiente")
+
+
+func test_a_lost_double_gives_nothing() -> void:
+	var data := LEVEL_UP.duplicate() as LevelUpData
+	data.double_chance = 0.0
+	data.double_luck_half = 1.0e9
+	_controller.data = data
+	EventBus.player_leveled_up.emit(2)
+	var card := _upgrade_card()
+	var option := card.option
+	card.pressed.emit()
+	(_panel.get_node(^"%Double") as Button).pressed.emit()
+	await get_tree().create_timer(data.double_spin_time + data.double_result_time + 0.2, true).timeout
+	var weapon := _player.weapons.get_weapon(option.item as WeaponData)
+	assert_eq(weapon.level, 1, "no sube")
+	assert_false(_panel.is_open(), "esa elección se acabó")
+
+
+## Una carta de mejora rara de la espada (que se le da al jugador), con la ruleta parada. La
+## elección sigue siendo la de la subida de nivel que se acaba de pedir.
+func _upgrade_card() -> LevelUpCard:
+	var sword: WeaponData = load("res://data/weapons/sword.tres")
+	if not _player.weapons.has(sword):
+		_player.weapons.add(sword)
+	var rare: Rarity = load("res://data/rarities/rare.tres")
+	var option := LevelUpOption.create_upgrade(sword, 2, sword.roll_upgrade(rare, _controller.rng))
+	_panel.open([option], 2, &"", 10, false, 0.5)
+	_panel.stop_spins()
+	return _panel.get_cards()[0]

@@ -10,6 +10,10 @@ extends Node
 ## stat [code]difficulty[/code] de [member difficulty_stats] (el jugador): el director le suma 1 por
 ## minuto en marcha y los objetos o runas pueden subirla más. Mientras está en marcha, es también el
 ## reloj de la ronda: avisa del tiempo cada segundo por [code]EventBus.run_clock_changed[/code].
+##
+## Las [b]hordas[/b] ([member WaveData.hordes]): a su minuto avisa ([code]EventBus.horde_incoming[/code]
+## y su texto en el HUD) y saca muchos enemigos repartidos en unos segundos, sin contar para el
+## máximo a la vez.
 
 signal started
 signal stopped
@@ -43,6 +47,14 @@ var _elapsed: float = 0.0
 var _pending: float = 0.0
 ## Parte de la dificultad que sube con el tiempo (1 por minuto), sobre [member difficulty_stats].
 var _time_difficulty := StatModifier.create(&"difficulty", StatModifier.Kind.FLAT, 0.0)
+## Siguiente horda de [member WaveData.hordes] por avisar o sacar, y si ya se avisó.
+var _horde_index: int = 0
+var _horde_warned: bool = false
+## Horda que está saliendo: enemigos y élites que le quedan y la fracción acumulada.
+var _horde: HordeData
+var _horde_left: int = 0
+var _horde_elites_left: int = 0
+var _horde_pending: float = 0.0
 
 
 func _ready() -> void:
@@ -59,6 +71,7 @@ func _physics_process(delta: float) -> void:
 	_elapsed += delta
 	if floori(_elapsed) != floori(previous):
 		_tick_second()
+	_update_hordes(delta)
 	_pending += data.rate_at(get_difficulty(), _elapsed) * delta
 	while _pending >= 1.0:
 		if swarm.active_count() >= data.max_alive:
@@ -74,6 +87,9 @@ func _physics_process(delta: float) -> void:
 func start() -> void:
 	_elapsed = 0.0
 	_pending = 0.0
+	_horde_index = 0
+	_horde_warned = false
+	_horde_left = 0
 	_running = true
 	started.emit()
 	_tick_second()
@@ -138,6 +154,41 @@ func spawn_around(enemy: EnemyData, center: Vector3, count: int, min_distance: f
 		swarm.spawn(enemy, feet).boost(modifiers)
 		spawned += 1
 	return spawned
+
+
+## Avisa de la siguiente horda a su hora y la saca repartida en su tiempo.
+func _update_hordes(delta: float) -> void:
+	if _horde_index < data.hordes.size():
+		var next := data.hordes[_horde_index]
+		if not _horde_warned and _elapsed >= next.at_seconds() - next.warning_seconds:
+			_horde_warned = true
+			EventBus.horde_incoming.emit(next, maxf(next.at_seconds() - _elapsed, 0.0))
+			if not next.announce_key.is_empty():
+				EventBus.announced.emit(next.announce_key, [], next.announce_color)
+		if _elapsed >= next.at_seconds():
+			_horde = next
+			_horde_left = next.count
+			_horde_elites_left = mini(next.elites, next.count)
+			_horde_pending = 0.0
+			_horde_index += 1
+			_horde_warned = false
+	if _horde_left <= 0:
+		return
+	# Sin tiempo de salida, sale entera en este tick.
+	var rate := _horde.count / _horde.spawn_seconds if _horde.spawn_seconds > 0.0 else INF
+	_horde_pending = minf(_horde_pending + rate * delta, _horde_left)
+	while _horde_pending >= 1.0 and _horde_left > 0:
+		_horde_pending -= 1.0
+		_horde_left -= 1
+		var enemy := _spawn_at_difficulty(get_difficulty())
+		if enemy and _horde_elites_left > 0 and data.elite:
+			enemy.promote(data.elite)
+			_horde_elites_left -= 1
+
+
+## Enemigos de la horda que aún no han salido.
+func horde_left() -> int:
+	return _horde_left
 
 
 func _spawn_one() -> bool:

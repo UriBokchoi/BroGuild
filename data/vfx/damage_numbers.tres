@@ -1,6 +1,6 @@
-[gd_resource type="Resource" script_class="DamageNumberStyle" format=3]
+[gd_resource type="Resource" script_class="DamageNumberStyle" format=3 uid="uid://cago7aitcq4yj"]
 
-[ext_resource type="Script" path="res://vfx/juice/damage_numbers/damage_number_style.gd" id="1_style"]
+[ext_resource type="Script" uid="uid://fphlkd3cg5rt" path="res://vfx/juice/damage_numbers/damage_number_style.gd" id="1_style"]
 
 [sub_resource type="FontVariation" id="FontVariation_numbers"]
 variation_embolden = 1.0

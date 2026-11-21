@@ -1,13 +1,16 @@
-[gd_resource type="Resource" script_class="WeaponData" format=3]
+[gd_resource type="Resource" script_class="WeaponData" format=3 uid="uid://bgr8qck2uon1n"]
 
-[ext_resource type="Script" path="res://systems/combat/weapons/weapon_data.gd" id="1_data"]
-[ext_resource type="Script" path="res://systems/combat/weapons/dagger/dagger_stats.gd" id="2_stats"]
+[ext_resource type="Script" uid="uid://dym5cqjgo8xu4" path="res://systems/combat/weapons/weapon_data.gd" id="1_data"]
+[ext_resource type="Script" uid="uid://j4fwujxeesd1" path="res://systems/combat/weapons/dagger/dagger_stats.gd" id="2_stats"]
 [ext_resource type="PackedScene" path="res://systems/combat/weapons/dagger/dagger.tscn" id="5_scene"]
-[ext_resource type="Texture2D" path="res://assets/textures/icons/weapons/dagger.svg" id="99_icon"]
-[ext_resource type="Script" path="res://systems/upgrades/upgrade_stat.gd" id="90_upgrade"]
+[ext_resource type="Script" uid="uid://dyvb1ciy45s8b" path="res://systems/upgrades/upgrade_stat.gd" id="90_upgrade"]
+[ext_resource type="Texture2D" uid="uid://coo6c8vxdtaen" path="res://assets/textures/icons/weapons/dagger.svg" id="99_icon"]
 
 [sub_resource type="Resource" id="Resource_stats"]
 script = ExtResource("2_stats")
+bounces = 2
+bounce_range = 6.0
+projectile_speed = 30.0
 damage = 17.0
 cooldown = 0.7
 projectiles = 1
@@ -16,9 +19,6 @@ area = 100.0
 duration = 1.2
 reach = 16.0
 knockback = 3.0
-projectile_speed = 30.0
-bounce_range = 6.0
-bounces = 2
 
 [sub_resource type="Resource" id="Upgrade_damage"]
 script = ExtResource("90_upgrade")
@@ -51,11 +51,11 @@ value = 0.92
 
 [resource]
 script = ExtResource("1_data")
-id = &"dagger"
-icon = ExtResource("99_icon")
-name_key = &"WEAPON_DAGGER_NAME"
-description_key = &"WEAPON_DAGGER_DESCRIPTION"
 scene = ExtResource("5_scene")
 stats = SubResource("Resource_stats")
+id = &"dagger"
+name_key = &"WEAPON_DAGGER_NAME"
+description_key = &"WEAPON_DAGGER_DESCRIPTION"
+icon = ExtResource("99_icon")
 level_cap = 10
 upgrade_stats = Array[ExtResource("90_upgrade")]([SubResource("Upgrade_damage"), SubResource("Upgrade_projectiles"), SubResource("Upgrade_bounces"), SubResource("Upgrade_projectile_speed"), SubResource("Upgrade_cooldown")])

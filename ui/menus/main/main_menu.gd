@@ -24,6 +24,8 @@ signal play_requested
 func _ready() -> void:
 	# Sin partida no hay nada que mirar con la cámara: el ratón, libre.
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	# Al cargar el menú: la selección de personaje enseña sus stats con unidades.
+	StatFormat.warm_up()
 	for index: int in mini(characters.size(), models.size()):
 		models[index].dress(characters[index])
 	_play.pressed.connect(play_requested.emit)

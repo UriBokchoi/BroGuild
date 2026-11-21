@@ -1,13 +1,15 @@
-[gd_resource type="Resource" script_class="WeaponData" format=3]
+[gd_resource type="Resource" script_class="WeaponData" format=3 uid="uid://dmx62swsas3tv"]
 
-[ext_resource type="Script" path="res://systems/combat/weapons/weapon_data.gd" id="1_data"]
-[ext_resource type="Script" path="res://systems/combat/weapons/staff/staff_stats.gd" id="2_stats"]
+[ext_resource type="Script" uid="uid://dym5cqjgo8xu4" path="res://systems/combat/weapons/weapon_data.gd" id="1_data"]
+[ext_resource type="Script" uid="uid://b0e4uw8cdxuxg" path="res://systems/combat/weapons/staff/staff_stats.gd" id="2_stats"]
 [ext_resource type="PackedScene" path="res://systems/combat/weapons/staff/staff.tscn" id="5_scene"]
-[ext_resource type="Texture2D" path="res://assets/textures/icons/weapons/staff.svg" id="99_icon"]
-[ext_resource type="Script" path="res://systems/upgrades/upgrade_stat.gd" id="90_upgrade"]
+[ext_resource type="Script" uid="uid://dyvb1ciy45s8b" path="res://systems/upgrades/upgrade_stat.gd" id="90_upgrade"]
+[ext_resource type="Texture2D" uid="uid://qom6w5b8ci6j" path="res://assets/textures/icons/weapons/staff.svg" id="99_icon"]
 
 [sub_resource type="Resource" id="Resource_stats"]
 script = ExtResource("2_stats")
+explosion_radius = 2.2
+projectile_speed = 15.0
 damage = 26.0
 cooldown = 1.5
 projectiles = 1
@@ -16,8 +18,6 @@ area = 100.0
 duration = 2.5
 reach = 14.0
 knockback = 6.0
-projectile_speed = 15.0
-explosion_radius = 2.2
 
 [sub_resource type="Resource" id="Upgrade_damage"]
 script = ExtResource("90_upgrade")
@@ -50,11 +50,11 @@ value = 0.92
 
 [resource]
 script = ExtResource("1_data")
-id = &"staff"
-icon = ExtResource("99_icon")
-name_key = &"WEAPON_STAFF_NAME"
-description_key = &"WEAPON_STAFF_DESCRIPTION"
 scene = ExtResource("5_scene")
 stats = SubResource("Resource_stats")
+id = &"staff"
+name_key = &"WEAPON_STAFF_NAME"
+description_key = &"WEAPON_STAFF_DESCRIPTION"
+icon = ExtResource("99_icon")
 level_cap = 10
 upgrade_stats = Array[ExtResource("90_upgrade")]([SubResource("Upgrade_damage"), SubResource("Upgrade_projectiles"), SubResource("Upgrade_explosion_radius"), SubResource("Upgrade_projectile_speed"), SubResource("Upgrade_cooldown")])

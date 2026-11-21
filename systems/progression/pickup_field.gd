@@ -58,6 +58,14 @@ func _physics_process(delta: float) -> void:
 		pickup.global_position += offset / distance * step
 
 
+## Crea de antemano [param count] recogibles de [param pickup_data] (menos los que ya haya), para no
+## crearlos en pleno combate.
+func prewarm(pickup_data: PickupData, count: int) -> void:
+	var pool := _pool_for(pickup_data)
+	if count > pool.size():
+		pool.prewarm(count - pool.size())
+
+
 ## Suelta un recogible de [param pickup_data] que vale [param amount] en el suelo bajo [param at]
 ## (o en [param at], si debajo no hay suelo) y lo devuelve.
 func drop(pickup_data: PickupData, at: Vector3, amount: float) -> Pickup:
@@ -167,4 +175,6 @@ func _pool_for(pickup_data: PickupData) -> NodePool:
 func _create(pickup_data: PickupData) -> Node:
 	var pickup := pickup_data.scene.instantiate() as Pickup
 	pickup.data = pickup_data
+	# Fuera del mundo hasta que se suelte (los preparados de antemano esperan así en el pool).
+	pickup.deactivate()
 	return pickup

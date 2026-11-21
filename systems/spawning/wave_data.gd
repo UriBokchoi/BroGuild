@@ -41,6 +41,10 @@ extends Resource
 ## Cómo son los élites.
 @export var elite: EliteData
 
+@export_group("hordes")
+## Hordas de la ronda (en el orden en que salen).
+@export var hordes: Array[HordeData] = []
+
 @export_group("scaling")
 ## Stats de los enemigos que se multiplican con la dificultad (vida, daño…): cada enemigo sale con
 ## los multiplicadores de la dificultad de ese momento.

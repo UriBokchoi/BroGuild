@@ -2,7 +2,8 @@ extends GutTest
 ## WaveDirector con física real: en marcha saca enemigos en el suelo a la distancia de sus datos,
 ## sin pasar del máximo y con la probabilidad de élite de sus datos; parado no saca ninguno y puede
 ## retirar a los que hay. La dificultad (stat del jugador) sube 1 por minuto en marcha y, con más
-## dificultad, los enemigos salen más fuertes.
+## dificultad, los enemigos salen más fuertes. Las hordas avisan antes y salen enteras, repartidas en
+## sus segundos y sin contar para el máximo a la vez, con sus élites.
 
 const SWARMER := preload("res://data/enemies/swarmer.tres")
 const ELITE := preload("res://data/enemies/elite.tres")
@@ -155,6 +156,47 @@ func test_enemies_only_spawn_inside_the_play_area() -> void:
 	assert_gt(_swarm.active_count(), 0)
 	for enemy: Enemy in _swarm.get_active():
 		assert_gte(enemy.global_position.x, 0.0)
+
+
+func test_a_horde_warns_first_and_then_comes_all_together() -> void:
+	_director.data = _wave_data(0.0, 5)
+	var horde := _horde(0.01, 12, 2)
+	_director.data.hordes = [horde]
+	_director.data.elite = ELITE
+	watch_signals(EventBus)
+	_director.start()
+	# Entre el aviso y la salida.
+	await wait_seconds(horde.at_seconds() - horde.warning_seconds / 2.0)
+	assert_signal_emitted(EventBus, "horde_incoming", "avisa antes")
+	assert_signal_emitted_with_parameters(EventBus, "announced", [horde.announce_key, [], horde.announce_color])
+	assert_eq(_swarm.active_count(), 0, "aún no ha salido")
+	await wait_seconds(horde.warning_seconds + horde.spawn_seconds + 0.2)
+	assert_eq(_swarm.active_count(), horde.count, "entera, aunque pase del máximo a la vez")
+	var elites := _swarm.get_active().filter(func(enemy: Enemy) -> bool: return enemy.is_elite())
+	assert_eq(elites.size(), horde.elites)
+
+
+func test_a_horde_comes_out_spread_over_its_seconds() -> void:
+	_director.data = _wave_data(0.0, 5)
+	var horde := _horde(0.0, 30, 0)
+	horde.spawn_seconds = 1.0
+	_director.data.hordes = [horde]
+	_director.start()
+	await wait_physics_frames(3)
+	assert_between(_swarm.active_count(), 1, horde.count - 1, "a poco a poco, no de golpe")
+	assert_gt(_director.horde_left(), 0)
+
+
+func _horde(at_minute: float, count: int, elites: int) -> HordeData:
+	var horde := HordeData.new()
+	horde.at_minute = at_minute
+	horde.count = count
+	horde.elites = elites
+	horde.spawn_seconds = 0.3
+	horde.warning_seconds = 0.3
+	horde.announce_key = &"HORDE_INCOMING"
+	horde.announce_color = Color.RED
+	return horde
 
 
 func _wave_data(rate: float, max_alive: int) -> WaveData:

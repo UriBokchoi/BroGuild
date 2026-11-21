@@ -1,7 +1,7 @@
-[gd_resource type="Theme" format=3]
+[gd_resource type="Theme" format=3 uid="uid://b45d2e3pvavsq"]
 
-[ext_resource type="Texture2D" path="res://assets/textures/icons/ui/toggle_on.svg" id="1_muu7h"]
-[ext_resource type="Texture2D" path="res://assets/textures/icons/ui/toggle_off.svg" id="2_6dn1j"]
+[ext_resource type="Texture2D" uid="uid://briwqwja0fs1k" path="res://assets/textures/icons/ui/toggle_on.svg" id="1_muu7h"]
+[ext_resource type="Texture2D" uid="uid://d2txkpo7kuyck" path="res://assets/textures/icons/ui/toggle_off.svg" id="2_6dn1j"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_muu7h"]
 content_margin_top = 210.0
@@ -935,6 +935,11 @@ HeaderLabel/font_sizes/font_size = 30
 HealthBar/base_type = &"ProgressBar"
 HealthBar/styles/background = SubResource("StyleBoxFlat_55tm3")
 HealthBar/styles/fill = SubResource("StyleBoxFlat_4vl7x")
+HealthValueLabel/base_type = &"Label"
+HealthValueLabel/colors/font_color = Color(0.9254902, 0.9019608, 0.8509804, 1)
+HealthValueLabel/colors/font_outline_color = Color(0.105882354, 0.12156863, 0.16078432, 1)
+HealthValueLabel/constants/outline_size = 4
+HealthValueLabel/font_sizes/font_size = 15
 HudColumn/base_type = &"VBoxContainer"
 HudColumn/constants/separation = 8
 HudTop/base_type = &"VBoxContainer"

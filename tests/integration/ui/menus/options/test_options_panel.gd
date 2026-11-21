@@ -110,3 +110,11 @@ func test_escape_closes() -> void:
 	event.pressed = true
 	_panel._unhandled_input(event)
 	assert_false(_panel.visible)
+
+
+func test_the_shake_slider_changes_the_setting_at_once() -> void:
+	var slider := _panel.get_node(^"%ScreenShake") as HSlider
+	assert_eq(slider.value, Save.settings.screen_shake, "muestra el actual")
+	slider.value = 0.25
+	assert_almost_eq(Save.settings.screen_shake, 0.25, 0.0001)
+	assert_eq((_panel.get_node(^"%ScreenShakeValue") as Label).text, tr(&"OPTIONS_VOLUME_VALUE") % 25)

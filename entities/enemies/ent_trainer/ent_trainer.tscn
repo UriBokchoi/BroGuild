@@ -16,6 +16,8 @@
 [ext_resource type="PackedScene" path="res://entities/enemies/boss/shockwave/shockwave.tscn" id="14_shockwave"]
 [ext_resource type="Shader" path="res://vfx/shaders/ground_ring.gdshader" id="15_ring"]
 [ext_resource type="Resource" path="res://data/enemies/sapling.tres" id="16_sapling"]
+[ext_resource type="Script" path="res://vfx/juice/hit_flash/hit_flash.gd" id="90_hit_flash"]
+[ext_resource type="Material" path="res://vfx/juice/hit_flash/hit_flash_material.tres" id="91_hit_flash_material"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_body"]
 friction = 0.0
@@ -402,3 +404,9 @@ script = ExtResource("13_summon")
 enemy = ExtResource("16_sapling")
 weight = 0.7
 shout_keys = Array[StringName]([&"ENT_TRAINER_SHOUT_SPROUTS"])
+
+[node name="HitFlash" type="Node" parent="." node_paths=PackedStringArray("health", "visual")]
+script = ExtResource("90_hit_flash")
+health = NodePath("../Health")
+visual = NodePath("../Visual")
+material = ExtResource("91_hit_flash_material")

@@ -7,6 +7,8 @@
 [ext_resource type="Script" path="res://core/components/hurtbox_component.gd" id="5_hurtbox"]
 [ext_resource type="Script" path="res://core/components/hitbox_component.gd" id="6_hitbox"]
 [ext_resource type="Script" path="res://entities/enemies/damage_reporter.gd" id="7_reporter"]
+[ext_resource type="Script" path="res://vfx/juice/hit_flash/hit_flash.gd" id="90_hit_flash"]
+[ext_resource type="Material" path="res://vfx/juice/hit_flash/hit_flash_material.tres" id="91_hit_flash_material"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_body"]
 friction = 0.0
@@ -123,3 +125,10 @@ shape = SubResource("CapsuleShape3D_contact")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
 script = ExtResource("7_reporter")
 health = NodePath("../Health")
+
+[node name="HitFlash" type="Node" parent="." node_paths=PackedStringArray("health", "visual", "meshes")]
+script = ExtResource("90_hit_flash")
+health = NodePath("../Health")
+visual = NodePath("../Visual")
+material = ExtResource("91_hit_flash_material")
+meshes = [NodePath("../Visual/Body")]

@@ -1,0 +1,32 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://vfx/juice/damage_vignette/damage_vignette.gd" id="1_vignette"]
+[ext_resource type="Shader" path="res://vfx/juice/damage_vignette/damage_vignette.gdshader" id="2_shader"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_border"]
+resource_local_to_scene = true
+shader = ExtResource("2_shader")
+shader_parameter/color = Color(0.62, 0, 0.03, 1)
+shader_parameter/strength = 0.0
+shader_parameter/inner = 0.55
+shader_parameter/squareness = 5.0
+
+[node name="DamageVignette" type="CanvasLayer"]
+layer = 6
+script = ExtResource("1_vignette")
+low_health = 0.35
+low_strength = Vector2(0.35, 0.8)
+pulse_depth = 0.45
+pulse_rate = Vector2(1.1, 2.2)
+flash_strength = 0.6
+flash_time = 0.4
+
+[node name="Border" type="ColorRect" parent="."]
+unique_name_in_owner = true
+material = SubResource("ShaderMaterial_border")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2

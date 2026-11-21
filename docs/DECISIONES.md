@@ -1157,3 +1157,205 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - El hook previo de GUT lo usa con `test`.
   - El juego lo usa si arranca con `-- --no-save`. `validate.sh` lo pasa al arrancar el menú y los niveles.
 - **Por qué:** al validar, el paso que juega el Brosque unos segundos apuntó el Guerrero y la espada en el Archivo de verdad del jugador. Ese archivo se ha borrado, y los récords de verdad del diseñador no se tocaron.
+
+## 2026-11-18 · Feedback al recibir daño: temblor y borde rojo
+- **Decisión:**
+  - **Temblor de pantalla** (`ScreenShake`, en el jugador): cada golpe suma «trauma» según la parte de la vida que quita.
+    - Un golpe que quitara toda la vida da 2,5 de trauma; cualquier golpe, al menos 0,3. El trauma no pasa de 1 y baja 2,2 por segundo.
+    - La cámara se desplaza (`h_offset`, `v_offset`) hasta 0,15 m y se inclina hasta 1,5°, por el trauma al cuadrado y con ruido.
+    - Solo mueve la cámara, no el `CameraRig`: el giro, la puntería y el movimiento no cambian.
+  - **Borde rojo** (`DamageVignette`, en `RunSystems`, por debajo del HUD), con un shader de viñeta casi rectangular:
+    - al perder vida, un destello (0,6) que se apaga en 0,4 s;
+    - por debajo del 35 % de la vida, un rojo que no se apaga y late, de 0,35 a 0,8 de fuerza y de 1,1 a 2,2 latidos por segundo según lo poca que quede;
+    - curarse no destella.
+  - Todo son valores exportados en sus escenas, como el resto del juice.
+- **Por qué:** quienes lo han probado echaban en falta notar los golpes. El hit-stop y el flash al golpear siguen en el Hito 5.
+
+## 2026-11-18 · Los enemigos trepan por el escenario
+- **Decisión:** un enemigo que lleva un rato queriendo avanzar sin poder mira si tiene delante el mundo.
+  - **Cuándo:** `EnemyStats.wall_climb_delay`, 0,35 s en esbirros y Bro-tes.
+  - **Cómo lo mira:** una esfera pequeña delante, a la altura del cuerpo, con una sola consulta de física y solo cuando va atascado.
+  - **Si hay mundo:** trepa por él a su `climb_speed` durante `wall_climb_time` (0,8 s, unos 2,8 m). Si sigue atascado, espera y lo vuelve a intentar.
+  - Trepar encima de otros enemigos sigue igual.
+- **Por qué:** quienes lo han probado vieron enemigos atascados en las pesas del Brosque.
+  - Antes solo trepaban encima de otros enemigos, y contra una roca o un muro empujaban y se quedaban quietos.
+  - Las pesas eran la peor trampa: discos de 2 m con un hueco bajo la barra donde se encajaban.
+  - La consulta de física solo para los atascados mantiene el coste bajo con cientos de enemigos (sin navegación por enemigo).
+
+## 2026-11-18 · Efectos de sonido sintetizados
+- **Decisión:** los efectos de sonido se sintetizan en el proyecto, sin descargar nada.
+  - **Recetas:** cada sonido es una receta en datos (`SfxRecipe`, `data/audio/sfx/`, al estilo de sfxr): onda, tono que se desliza, arpegio, vibrato, ruido, filtro de graves y envolvente.
+  - **Generación:** `tools/gen_sfx.gd` la convierte en un `.wav` (`SfxSynth`, 44,1 kHz, 16 bits, mono) en `assets/audio/sfx/`. Hay 24.
+  - **Qué suena con qué:** lo dice `data/audio/sfx_bank.tres` (`SfxBank` de `SoundCue`): golpe al jugador y su muerte, subir de nivel, golpe y muerte de enemigos, jefe (aparece y cae), cada recogible por su recompensa, rompibles, cofres (abrir, revelar, sin oro), tragaperras (giro, premio, nada, maldición, jackpot) y botones.
+  - **Saturación:** cada `SoundCue` limita sus voces a la vez y su separación mínima, para que cien muertes a la vez no saturen. La variación de tono sale del azar cosmético de `Rng`.
+  - **Racha de experiencia:** la experiencia recogida seguida sube un semitono cada vez, hasta una octava. Solo sube con lo que suena, para que con el imán se oiga cada escalón.
+  - **Reproductor:** `Sfx`, un autoload nuevo, porque los sonidos cruzan pantallas (menú, selección y partida). Escucha el `EventBus` y cualquier botón que entre en el árbol, y suena por el bus `Effects`, que ya tenía volumen en las opciones, también en pausa.
+- **Por qué:** quienes lo han probado echaban en falta sonido. Sintetizar deja todo en datos y sin licencias, y suena a arcade, a juego con el estilo.
+  - Si un día hay sonidos grabados, basta con cambiar el audio de cada `SoundCue`.
+  - Sin música por ahora: con síntesis sencilla quedaría pobre.
+
+## 2026-11-18 · Moneda de verdad y vida en números
+- **Decisión:**
+  - **Moneda:** el sonido de recoger oro pasa de un arpegio de juego de plataformas a un «clinc» metálico.
+    - El sintetizador gana parciales (`SfxRecipe.partials`): varios tonos a la vez, inarmónicos (×1; 1,47; 2,09; 2,56; 3,21), que es lo que hace sonar a metal.
+    - Gana también una caída curvada (`decay_curve`), que se apaga deprisa y luego se arrastra.
+    - La moneda suena a la mitad de antes y con más variación de tono (±8 %), para que muchas seguidas no suenen iguales.
+  - **Vida en números:** la barra de vida del HUD pasa de 16 a 24 px de alto y lleva dentro la vida y la máxima («85 / 120»), con contorno. La vida se redondea hacia arriba para no ver un 0 estando vivo.
+- **Por qué:** lo pidió el diseñador. La moneda sonaba muy alta y demasiado de juego de plataformas, y quería ver su vida exacta.
+
+## 2026-11-19 · Ruleta al subir de nivel y volver a tirar
+- **Decisión:**
+  - **La ruleta** (GDD §5): al abrirse la elección, cada carta de mejora gira por las rarezas, cada vez más despacio, y se para en la suya, una tras otra.
+    - La primera gira 0,9 s, cada siguiente 0,35 s más, con 2 vueltas enteras (`LevelUpData`).
+    - Mientras gira, la carta no se puede elegir y esconde lo que mejora; el borde y el nombre van cambiando de color.
+    - Un clic o «aceptar» (Espacio, Intro) las para todas, para no frenar una partida de horda.
+    - Las cartas de un objeto nuevo no giran (no tienen rareza).
+    - Suena un tic en cada paso y, al pararse, una campanilla más aguda cuanto más rara (`EventBus.upgrade_spin_ticked` y `upgrade_revealed`, que escucha `Sfx`).
+  - **Volver a tirar:** un botón debajo de las cartas pide otras 3 para la misma elección.
+    - Cuesta 10 de oro y ×1,5 cada vez en la partida (10, 15, 23…: `LevelUpData.reroll_cost_at`).
+    - Lo cobra `LevelUpController` y sirve también en las mejoras gratis de la tragaperras.
+    - Mientras giran las cartas o sin oro suficiente, está desactivado.
+  - **Al cerrarse**, el panel quita sus cartas: antes seguían girando (y sonando) por detrás.
+  - **`Sfx` sin pantalla:** sin pantalla (tests y validación) lleva la cuenta de lo que suena pero no reproduce, y las voces se cuentan por lo que dura cada sonido.
+    - Godot deja viva la reproducción de un sonido a medias al salir y avisa de fugas, lo que hacía fallar al azar los tests sueltos.
+    - Al cerrar el juego, `Sfx` para y suelta lo que suena.
+- **Por qué:** es el primer paso del Hito 4: la apuesta con anticipación (giro, tic-tic), revelado por color y coste creciente que pide el GDD.
+
+## 2026-11-19 · Algo más de vida para los enemigos de las oleadas
+- **Decisión:** vida de base un 15 % más: esbirro 46 → 53 y tirador 32 → 37. El daño, la velocidad y la cantidad no cambian, ni el jefe ni sus Bro-tes.
+- **Por qué:** lo pidió el diseñador: los enemigos aún caían demasiado rápido. El escalado por dificultad multiplica la base, así que se nota en toda la partida.
+
+## 2026-11-19 · Hordas en los minutos 3 y 6
+- **Decisión:** las rondas pueden tener hordas (`WaveData.hordes`, de `HordeData`).
+  - **Cuándo y cuántos:** cada horda tiene su minuto, cuántos enemigos, cuántos de ellos élites, en cuántos segundos salen y cuánto aviso.
+  - **Aviso:** `WaveDirector` avisa unos segundos antes, con el texto en el HUD (`announced`) y un cuerno de guerra (`EventBus.horde_incoming`, que escucha `Sfx`).
+  - **Salida:** saca los enemigos repartidos en su tiempo alrededor del jugador, con el escalado de la dificultad. No cuentan para el máximo a la vez, para que la horda llegue entera.
+  - **Brosque:**
+
+    | Minuto | Enemigos | Élites | Sale en | Aviso |
+    |---|---|---|---|---|
+    | 3 | 35 | 0 | 2 s | 3 s |
+    | 6 | 55 | 3 | 2,5 s | 3 s |
+
+- **Por qué:** lo pidió el diseñador: momentos de presión marcados en la ronda, además de los picos de cada minuto.
+  - Repartir la salida evita el tirón de sacar 50 enemigos en el mismo fotograma.
+  - Con aviso, el jugador se prepara (se coloca, guarda el dash), que es parte de la gracia.
+
+## 2026-11-19 · Sin tirones al golpear a muchos a la vez
+- **Decisión:** medido con un banco (cargar el Brosque, 120 o 200 esbirros pegados al jugador y matarlos de un golpe), aparecieron tres causas.
+
+  | Causa | Antes | Arreglo |
+  |---|---|---|
+  | Números de daño: un golpe a 120 creaba 90 etiquetas 3D nuevas y las dibujaba | 196 ms la 1.ª vez | Como mucho 24 nuevos por fotograma (`max_per_frame`); 96 preparados al empezar, con la fuente y los dígitos ya escritos |
+  | Botín: 240 recogibles en el mismo fotograma, creando escenas si se acababa el pool | ~10 ms por golpe | Como mucho 40 por tick de física (`LootDropper.max_drops_per_tick`), el resto en los siguientes; 150 de experiencia y 150 de oro preparados al empezar (`PickupData.prewarm`) |
+  | `StatFormat.range_hint` cargaba todos los scripts del proyecto la primera vez que una carta mostraba una mejora que suma (al azar: según la carta) | 180 ms en partida, 1,3 s en frío | Solo carga los scripts de recursos (lo dice la lista de clases globales) y se hace al cargar el menú y el nivel (`warm_up`) |
+
+  - **Resultado con 120 muertes de un golpe:** el golpe pasa de 21 a 6,5 ms, y el peor fotograma de 196 a 15 ms la 1.ª vez y de 46 a 11 ms después.
+  - **Subir de nivel justo después** pasa de 209 a 50 ms; queda el primer dibujo del panel, con el juego ya en pausa.
+- **Por qué:** a quien lo probó le daba tirones al pegar a muchos a la vez.
+  - El tercero era un fallo nuevo de cuando los modificadores ganaron unidades. Además, cien números de daño a la vez no se leen.
+  - Pendiente para el Hito 5: preparar el desenfoque del panel al cargar y medir 300 enemigos.
+
+## 2026-11-19 · Decimales con coma en español
+- **Decisión:** el separador decimal es una traducción (`NUMBER_DECIMAL_SEPARATOR`: «,» en español y «.» en inglés). Lo usan los números de la interfaz:
+  - `StatFormat.number` y `format`: el panel de stats, los efectos de mejoras y objetos («+0,5 m/s», «×1,5») y el premio por rapidez;
+  - `StatFormat.fixed`: el contador de dificultad, con sus ceros («0,0»).
+
+  El panel de depuración sigue con punto (no se traduce).
+- **Por qué:** en español se escribe «0,5». Como traducción, un idioma nuevo pone el suyo sin tocar código.
+
+## 2026-11-19 · Destello blanco al golpear, sin parón
+- **Decisión:** cada golpe a un enemigo lo ilumina un instante (`HitFlash`, en las escenas de los enemigos y del muñeco).
+  - **Cómo:** una capa blanca aditiva y suave (18 %) encima de su cuerpo durante 0,08 s. Cada golpe la vuelve a encender.
+  - **Qué se ilumina:** solo el cuerpo (el tronco y la copa en el Bro-te); los ojos y los cuernos no hace falta. El jefe, entero.
+  - **Élites:** al acabar, devuelve la capa que hubiera, el brillo del élite.
+  - **Coste:** solo trabaja mientras destella. Con 120 golpes a la vez, el golpe sigue en unos 7 ms.
+  - **Sin hit-stop:** el diseñador prefiere que el juego no se pare al golpear.
+- **Por qué:** pegar se sentía plano. El destello confirma el golpe sin tapar al enemigo (al 35 % se quedaban casi blancos).
+
+## 2026-11-19 · La simulación de equilibrio, con enemigos que persiguen
+- **Decisión:** en `tools/sim_balance.gd` los esbirros inmortales persiguen al personaje. Antes estaban quietos.
+- **Por qué:** desde que los golpes empujan, la espada mandaba a los muñecos quietos fuera de su alcance y no volvían; el Guerrero salía con un 2 % de la media. En la partida, los enemigos vuelven.
+- **Lo que mide ahora:**
+  - **Horda pegada al jugador quieto:** gana el área. Mago 184 %, Guerrero 104 %, Pícaro 12 % al empezar; con build 133 %, 144 % y 23 %.
+  - **Jefe:** al empezar, 87 %, 85 % y 128 %; con build, 86 %, 51 % y 163 %.
+- **Cómo leerlo:** la daga del Pícaro da a 3 enemigos por lanzamiento, frente al arco de la espada o la explosión del bastón. El escenario quieto exagera la ventaja del área, porque jugando te mueves y la horda va detrás. El «jefe» de la simulación es un esbirro ligero que la espada aparta; el Ent-renador pesa más.
+- **Pendiente:** la decisión del diseñador sobre el Pícaro en horda.
+
+## 2026-11-19 · Doble o nada al subir de nivel
+- **Decisión:** al elegir una carta de mejora que aún puede subir de rareza (no una mítica ni un objeto nuevo), salen «Quedármela» y «Doble o nada (X %)».
+  - **Ganar:** la mejora se vuelve a tirar con la rareza siguiente (`LevelUpData.next_rarity`), así que sale más fuerte.
+  - **Perder:** esa subida no da nada.
+  - **Probabilidad:** 50 % de base. La Suerte da una parte de lo que falta hasta el 100 % (`double_luck_half`: con 200 de Suerte, la mitad, un 75 %) y nunca llega a él.
+  - **Animación:** la carta gira 1 s entre su rareza y la siguiente (la misma ruleta) y cae en la ganadora, que la sustituye, o se queda en gris con «¡Nada!». El resultado se ve 0,7 s, con su sonido (el del jackpot o el de la nada de la tragaperras). Un clic lo acelera.
+  - **Quién decide:** el resultado lo tira `LevelUpController` con el azar de apuestas; el panel solo lo enseña.
+- **Por qué:** es el segundo paso del Hito 4 (GDD §5): la apuesta sobre la carta elegida, con anticipación y revelado por color.
+
+## 2026-11-19 · Estadísticas con Tab
+- **Decisión:** mientras se mantiene Tab (`show_stats`) sale a la derecha la misma lista de stats que en la pausa (`StatsOverlay`, con su `StatsView`).
+  - No pausa, y se actualiza cada 0,25 s.
+  - Como el ratón está capturado, la rueda desplaza la lista.
+  - Mide 380 px de ancho, para no tapar al jugador.
+  - En pausa no sale: allí ya están.
+- **Por qué:** es el último punto de interfaz del Hito 4. Mantener en vez de alternar evita dejarla abierta encima de la partida sin querer.
+
+## 2026-11-19 · Opción de temblor de pantalla
+- **Decisión:** las opciones ganan «Temblor de pantalla», de 0 a 100 %. Por defecto, 100 % (`SettingsData.default_screen_shake`).
+  - Se guarda con las demás (`GameSettings.screen_shake`) y se aplica al momento, como el volumen.
+  - `ScreenShake` multiplica el trauma de cada golpe por ella: a 0 %, la pantalla no tiembla.
+  - El borde rojo no cambia.
+- **Por qué:** el temblor marea a algunos jugadores, y es la opción de accesibilidad habitual en juegos con temblor.
+
+## 2026-11-19 · El panel de subir de nivel, preparado al cargar
+- **Decisión:** al cargar el nivel, `LevelUpController` prepara el panel (`LevelUpPanel.warm_up`).
+  - Lo dibuja dos fotogramas casi transparente (1 %), sin pausar ni pedir el cursor, con una carta de ejemplo: una mejora mítica, que toca todas sus stats, y un objeto nuevo.
+  - La carta de ejemplo sale de su propio azar, no del de las apuestas.
+  - Mientras tanto no cuenta como abierto (`is_open`), y una subida de nivel de verdad lo cancela.
+- **Por qué:** la primera vez que se dibujaba (el desenfoque y los textos de las cartas) costaba unos 40 ms más en dos fotogramas. Medido: el primer panel pasa de 11 + 38 + 27 ms a 9 + 18 + 12 ms, y el tirón queda escondido en la carga.
+
+## 2026-11-19 · Nombres medievales en vez de los del casino
+- **Decisión:** el GDD y el ROADMAP dejan los nombres que venían del casino:
+
+  | Antes | Ahora |
+  |---|---|
+  | Bote | Botín |
+  | La Banca | El Gremio (encaja con *Bro Guild*) |
+  | Crupier | Tahúr |
+  | Mesa (la siguiente) | Torneo; una partida es una ronda |
+  | «¿Cobrar o Doblar?» | «¿Retirarse o seguir?» |
+  | Estética neón | Luz de antorchas y faroles, con brillos de color donde hay algo que apostar o recoger |
+
+  Las tragaperras se quedan, como anacronismo con gracia. El Hito 7 pasa a llamarse «El torneo».
+- **De paso:** el GDD ya no pone los mapas generados como fuera de alcance, porque el Brosque cambia cada partida.
+- **Por qué:** el plan del Hito 4 lo proponía y el diseñador lo aprobó. Así no quedan decisiones abiertas en el §11.
+
+## 2026-11-19 · Medida de rendimiento: 300 enemigos
+- **Medida:** la escena de estrés (`levels/stress/`, con ventana, sin V-Sync y la semilla fija) con todo lo de hoy: sonidos, destello, hordas y números limitados.
+
+  | Enemigos a la vez | Media | El 1 % más lento | Física |
+  |---|---|---|---|
+  | 300 | 8,3 ms (120 fps) | 13,2 ms (~76 fps) | 9,5 ms |
+  | 500 | 15,8 ms (63 fps) | 27,3 ms | 13,8 ms |
+
+- **Lectura:** el objetivo del Hito 5 (300 enemigos a 60 fps) se cumple en el equipo de desarrollo. Con 500, la media aguanta 60 fps, pero el 1 % más lento baja. El máximo de la oleada es 180 y las hordas suben un poco más. Queda por medir en un equipo más modesto.
+
+## 2026-11-21 · Hordas de 30 segundos, enemigos que pegan más y efectos más bajos
+- **Hordas:** cada horda dura 30 s, saliendo poco a poco alrededor del jugador, y trae muchos más enemigos.
+
+  | Minuto | Antes | Ahora |
+  |---|---|---|
+  | 3 | 35 enemigos en 2 s | 150 en 30 s |
+  | 6 | 55 enemigos con 3 élites, en 2,5 s | 240 con 6 élites, en 30 s |
+
+  Siguen sin contar para el máximo a la vez. Con lo que mata el jugador, quedan muy por debajo de los 500 medidos.
+- **Daño de los enemigos, un 15 % más:**
+
+  | Enemigo | Antes | Ahora |
+  |---|---|---|
+  | Esbirro | 10 | 11,5 |
+  | Tirador (contacto / disparo) | 5 / 12 | 6 / 14 |
+  | Bro-te | 6 | 7 |
+
+  El jefe no cambia.
+- **Efectos de sonido:** toda la mezcla baja 6 dB, la mitad de fuerte (`SfxBank.volume_db`), sin cambiar las proporciones entre sonidos. La barra de «Efectos» de las opciones sigue encima.
+- **Por qué:** lo pidió el diseñador: hordas que sean un momento de aguante, no una ola, que todo pegue un poco más (los enemigos) y efectos algo más suaves de base.

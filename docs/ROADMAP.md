@@ -3,7 +3,7 @@
 - La tarea actual es la **primera casilla sin marcar**. Claude la marca `[x]` al terminarla.
 - Cada hito acaba con algo jugable. **Hecho** = validación sin errores + lo he probado y me convence.
 - Si una tarea es grande, se parte aquí en subtareas antes de empezarla.
-- Los nombres que vienen del casino (bote, La Banca, mesa…) están pendientes de adaptar a la temática medieval (GDD §11). Las fichas ya son oro.
+- Los nombres del casino ya están adaptados a la temática medieval (GDD §11): botín, el Gremio, el tahúr, el torneo y «¿Retirarse o seguir?».
 
 ## Hito 0 — Cimientos
 - [x] Proyecto Godot 4.7 (Forward+) con `.gitignore` y `.gitattributes`; git y GitHub funcionando (push y PR)
@@ -79,18 +79,18 @@
 - [x] Archivo: personajes, armas, runas, objetos y enemigos; se descubren al jugar con el personaje, al conseguirlos o al derrotar al enemigo («?» y una pista mientras tanto); ficha con lo que hace cada uno
 
 ## Hito 4 — Apuestas v1
-- [ ] GDD adaptado a la temática medieval (pendientes de §11)
-- [ ] Ruleta de nivel: las 3 opciones de subir de nivel giran como rodillos; reroll de coste creciente
-- [ ] Doble o nada sobre la opción elegida
+- [x] GDD adaptado a la temática medieval: botín, el Gremio, el tahúr, el torneo, «¿Retirarse o seguir?» y luz de antorchas
+- [x] Ruleta de nivel: las cartas de mejora giran por las rarezas y se paran una tras otra (clic o Espacio para pararlas); «volver a tirar» por oro, 10 y ×1,5 cada vez en la partida
+- [x] Doble o nada sobre la opción elegida: 50 % de subirla una rareza (más con Suerte) o perderla; la carta gira entre las dos rarezas
 - [ ] Más armas y runas en `.tres` (3 con sinergia de movimiento)
-- [ ] Pantalla de estadísticas (Tab), reutilizando la lista de stats de la pausa
+- [x] Pantalla de estadísticas (Tab, mientras se mantiene y sin pausar), reutilizando la lista de stats de la pausa
 
 ## Hito 5 — Juice y look
 - [ ] Entorno según la dirección visual del GDD (luz, glow y tonemapping)
 - [ ] Materiales con color propio por tipo de enemigo y rareza
-- [ ] Hit-stop, screen shake y flash (los números de daño llegaron en el Hito 2)
+- [ ] Hit-stop (los números de daño llegaron en el Hito 2; el temblor de pantalla, el borde rojo al recibir daño y el destello blanco al golpear, adelantados tras el Hito 3)
 - [ ] Partículas: muertes, monedas, cofres, impactos
-- [ ] Sonidos con tono creciente y UI animada
+- [ ] UI animada (los sonidos, con la experiencia que sube de tono si se recoge seguida, adelantados tras el Hito 3)
 - [ ] Rendimiento: 300+ enemigos a 60 fps
 
 ## Hito 6 — Niveles
@@ -98,14 +98,14 @@
 - [ ] La Torre del Mago
 - [ ] La Mazmorra
 
-## Hito 7 — La mesa de juego
-- [ ] Racha y bote (niveles, multiplicador, cobrar, perder al ser golpeado)
-- [ ] Pactos de la Banca
+## Hito 7 — El torneo
+- [ ] Racha y botín (niveles, multiplicador, guardar, perder al ser golpeado)
+- [ ] Pactos del Gremio
 - [ ] Élites con afijos que sueltan cofres
 
 ## Hito 8 — Cierre de partida y meta
 - [ ] Jefes de la Torre del Mago y la Mazmorra (el del Brosque llega en el Hito 3)
-- [ ] ¿Cobrar o Doblar? y mesas siguientes
+- [ ] ¿Retirarse o seguir? y torneos siguientes
 - [ ] Resumen de partida
 - [ ] Desbloqueos (personajes, armas, ventajas) y condiciones para conseguirlos
 - [ ] Más opciones (sensibilidad, remapeo)

@@ -1,11 +1,11 @@
 class_name OptionsPanel
 extends PanelContainer
-## Opciones básicas: volumen de cada bus, pantalla completa, tamaño de la ventana y VSync. El volumen
-## se aplica al momento (para oírlo); las de pantalla quedan pendientes hasta «Aplicar», que las
-## aplica y las guarda. «Volver» o Esc guardan el volumen, descartan lo de pantalla sin aplicar y
-## cierran. Trabaja sobre [code]Save.settings[/code]. Lo abre la pausa (y, más adelante, el menú
-## principal). Ejecutado dentro del editor, la ventana no se puede cambiar: lo avisa y desactiva
-## esas opciones.
+## Opciones básicas: volumen de cada bus, pantalla completa, tamaño de la ventana, VSync y temblor de
+## pantalla. El volumen y el temblor se aplican al momento (para oírlo o notarlo); las de pantalla
+## quedan pendientes hasta «Aplicar», que las aplica y las guarda. «Volver» o Esc guardan el volumen
+## y el temblor, descartan lo de pantalla sin aplicar y cierran. Trabaja sobre
+## [code]Save.settings[/code]. Lo abren la pausa y el menú principal. Ejecutado dentro del editor, la
+## ventana no se puede cambiar: lo avisa y desactiva esas opciones.
 
 ## Se cerró (ya guardado).
 signal closed
@@ -23,6 +23,8 @@ var _pending: GameSettings
 @onready var _fullscreen: CheckButton = %Fullscreen
 @onready var _resolution: OptionButton = %Resolution
 @onready var _vsync: CheckButton = %VSync
+@onready var _shake: HSlider = %ScreenShake
+@onready var _shake_value: Label = %ScreenShakeValue
 @onready var _window_note: Label = %WindowNote
 @onready var _apply: Button = %Apply
 @onready var _back: Button = %Back
@@ -34,6 +36,7 @@ func _ready() -> void:
 	_fullscreen.toggled.connect(_on_fullscreen_toggled)
 	_resolution.item_selected.connect(_on_resolution_selected)
 	_vsync.toggled.connect(_on_vsync_toggled)
+	_shake.value_changed.connect(_on_shake_changed)
 	_apply.pressed.connect(apply)
 	_back.pressed.connect(close)
 	visible = false
@@ -112,6 +115,8 @@ func _show_settings() -> void:
 	var can_change := GameSettings.can_change_window()
 	_window_note.visible = not can_change
 	_fullscreen.disabled = not can_change
+	_shake.set_value_no_signal(Save.settings.screen_shake)
+	_show_shake()
 	_fullscreen.set_pressed_no_signal(_pending.fullscreen)
 	_vsync.set_pressed_no_signal(_pending.vsync)
 	_fill_resolutions()
@@ -167,6 +172,15 @@ func _on_fullscreen_toggled(on: bool) -> void:
 func _on_resolution_selected(index: int) -> void:
 	_pending.resolution = _resolutions[index]
 	_refresh_apply()
+
+
+func _show_shake() -> void:
+	_shake_value.text = tr(&"OPTIONS_VOLUME_VALUE") % roundi(_shake.value * 100.0)
+
+
+func _on_shake_changed(value: float) -> void:
+	Save.settings.screen_shake = value
+	_show_shake()
 
 
 func _on_vsync_toggled(on: bool) -> void:

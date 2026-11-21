@@ -1,10 +1,12 @@
 extends GutTest
 ## EnemySwarm con física real y el esbirro: saca enemigos del pool, los lleva hacia el objetivo
 ## chocando entre sí (pueden quedar apilados), los guarda al morir para reutilizarlos (mientras
-## mueren ya no chocan con nadie) y retira a los que caen del mapa.
+## mueren ya no chocan con nadie) y retira a los que caen del mapa. Un enemigo atascado contra el
+## mundo (las pesas de piedra) trepa por encima; en campo abierto, no.
 
 const SWARMER := preload("res://data/enemies/swarmer.tres")
 const ELITE := preload("res://data/enemies/elite.tres")
+const DUMBBELL := preload("res://levels/brosque/props/dumbbell_rock.tscn")
 
 var _swarm: EnemySwarm
 var _target: Node3D
@@ -60,6 +62,28 @@ func test_a_crowd_piles_up_around_the_target_without_flying_off() -> void:
 		highest = maxf(highest, enemy.global_position.y)
 	assert_gt(highest, 1.0, "se suben unos encima de otros")
 	assert_lt(highest, 10.0, "no hacen torres hasta el cielo")
+
+
+func test_an_enemy_climbs_over_the_dumbbells_in_its_way() -> void:
+	# Las pesas de piedra del Brosque, atravesadas en su camino (los discos miden 2 m).
+	var dumbbell := DUMBBELL.instantiate() as Node3D
+	dumbbell.position = Vector3(4.0, 0.0, 0.0)
+	dumbbell.rotation.y = PI / 2.0
+	add_child_autofree(dumbbell)
+	_swarm.target = _target
+	var enemy := _swarm.spawn(SWARMER, Vector3(8.0, 0.0, 0.0))
+	await wait_seconds(6.0)
+	assert_lt(enemy.global_position.x, 2.5, "ha pasado al otro lado")
+
+
+func test_an_enemy_on_open_ground_does_not_climb() -> void:
+	_swarm.target = _target
+	var enemy := _swarm.spawn(SWARMER, Vector3(8.0, 0.0, 0.0))
+	var highest := 0.0
+	for frame: int in 90:
+		await wait_physics_frames(1)
+		highest = maxf(highest, enemy.global_position.y)
+	assert_lt(highest, 0.3, "sin nada delante, no trepa")
 
 
 func test_dead_enemies_vanish_and_are_reused_full() -> void:

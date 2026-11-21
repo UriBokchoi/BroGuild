@@ -21,6 +21,6 @@ func test_follows_the_player_difficulty() -> void:
 	var player := PlayerScene.instantiate() as Player
 	add_child_autofree(player)
 	var label := _hud.get_node(^"%DifficultyLabel") as Label
-	assert_eq(label.text, "0.0")
+	assert_eq(label.text, StatFormat.localize_decimals("0.0"))
 	player.stats.add_modifier(StatModifier.create(&"difficulty", StatModifier.Kind.FLAT, 2.5), self)
-	assert_eq(label.text, "2.5")
+	assert_eq(label.text, StatFormat.localize_decimals("2.5"))

@@ -33,6 +33,11 @@ signal despawned(enemy: Enemy)
 ## Recalcula su rumbo en cada tick (un jefe, que ataca con precisión); los demás lo hacen repartidos
 ## entre ticks ([member EnemySwarm.steering_slices]).
 @export var steer_every_tick: bool = false
+## Dónde mira si le tapa el paso el mundo (una roca, un muro) para trepar por él: una esfera de este
+## radio, a esta altura sobre los pies y a esta distancia hacia donde va. Todo crece con su tamaño.
+@export_range(0.05, 2.0, 0.01, "suffix:m") var wall_probe_radius: float = 0.3
+@export_range(0.0, 3.0, 0.01, "suffix:m") var wall_probe_height: float = 0.75
+@export_range(0.0, 3.0, 0.01, "suffix:m") var wall_probe_reach: float = 0.55
 
 ## Tipo de enemigo.
 var data: EnemyData
@@ -63,6 +68,11 @@ var _dying_left: float = 0.0
 var _fallback: Vector3 = Vector3.RIGHT
 ## Desvío con el que se acerca al objetivo en esta vida, en radianes.
 var _approach_angle: float = 0.0
+## Segundos seguidos que lleva queriendo avanzar sin poder (para trepar por el mundo).
+var _stuck_time: float = 0.0
+## Lo que usa [method _wall_ahead] (compartido: se rellena en cada consulta).
+static var _probe_shape := SphereShape3D.new()
+static var _probe_query := PhysicsShapeQueryParameters3D.new()
 
 
 ## Prepara el enemigo antes de añadirlo al árbol. Sus armas disparan desde [param projectiles] (el
@@ -119,6 +129,7 @@ func spawn(feet: Vector3) -> void:
 	contact_hitbox.reset_hits()
 	contact_hitbox.monitoring = true
 	hurtbox.monitorable = true
+	_stuck_time = 0.0
 	_dying_left = 0.0
 	_approach_angle = deg_to_rad(rng.randf_range(-_stats.approach_spread, _stats.approach_spread))
 	_rearm()
@@ -230,7 +241,9 @@ func physics_step(
 	var desired := (chase + push * _stats.separation_weight * _stats.move_speed).limit_length(_stats.move_speed)
 	var current := Vector3(linear_velocity.x, 0.0, linear_velocity.z)
 	var vertical := linear_velocity.y
-	if _is_stuck_behind(current, chase, target, footholds):
+	# Primero el mundo: así su espera cuenta aunque luego trepe por encima de otro enemigo.
+	var over_obstacle := _climbs_obstacle(delta, current, chase)
+	if over_obstacle or _is_stuck_behind(current, chase, target, footholds):
 		vertical = maxf(vertical, _stats.climb_speed)
 	var horizontal := current.move_toward(desired, _stats.acceleration * delta)
 	linear_velocity = Vector3(horizontal.x, vertical, horizontal.z)
@@ -249,6 +262,35 @@ func _is_stuck_behind(current: Vector3, chase: Vector3, target: Vector3, foothol
 		return false
 	var reach := _stats.separation_radius
 	return EnemySteering.blocked_ahead(global_position, chase.normalized(), target, footholds, reach)
+
+
+## ¿Lleva [member EnemyStats.wall_climb_delay] segundos queriendo avanzar sin poder y le tapa el paso
+## el mundo ([method _wall_ahead])? Entonces trepa por ello [member EnemyStats.wall_climb_time]
+## segundos; si sigue atascado (un muro alto), espera y lo vuelve a intentar. Con las pesas de
+## piedra o un tronco, pasa por encima; contra el muro del borde no avanza, pero no se queda pegado
+## quieto.
+func _climbs_obstacle(delta: float, current: Vector3, chase: Vector3) -> bool:
+	var slow := current.length() <= _stats.move_speed * EnemySteering.STUCK_SPEED
+	if _stats.climb_speed <= 0.0 or _stats.wall_climb_time <= 0.0 or chase.is_zero_approx() or not slow:
+		_stuck_time = 0.0
+		return false
+	_stuck_time += delta
+	var cycle := _stats.wall_climb_delay + _stats.wall_climb_time
+	if fmod(_stuck_time, cycle) < _stats.wall_climb_delay:
+		return false
+	return _wall_ahead(chase.normalized())
+
+
+## ¿Hay mundo (capa [code]world[/code]) justo delante, hacia [param direction], a la altura del cuerpo?
+func _wall_ahead(direction: Vector3) -> bool:
+	_probe_shape.radius = wall_probe_radius * _size
+	_probe_query.shape = _probe_shape
+	_probe_query.collision_mask = PhysicsLayers.mask(PhysicsLayers.WORLD)
+	_probe_query.transform = Transform3D(
+		Basis.IDENTITY,
+		global_position + (Vector3.UP * wall_probe_height + direction * wall_probe_reach) * _size
+	)
+	return not get_world_3d().direct_space_state.intersect_shape(_probe_query, 1).is_empty()
 
 
 func _face(direction: Vector3, delta: float) -> void:

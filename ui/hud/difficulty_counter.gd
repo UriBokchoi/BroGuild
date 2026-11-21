@@ -13,4 +13,4 @@ func _enter_tree() -> void:
 
 ## Muestra [param difficulty].
 func show_difficulty(difficulty: float) -> void:
-	(%DifficultyLabel as Label).text = "%.1f" % difficulty
+	(%DifficultyLabel as Label).text = StatFormat.fixed(difficulty, 1)

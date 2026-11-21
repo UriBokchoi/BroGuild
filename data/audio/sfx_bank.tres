@@ -1,0 +1,246 @@
+[gd_resource type="Resource" script_class="SfxBank" format=3 uid="uid://xsou8xovoulm"]
+
+[ext_resource type="Script" uid="uid://bb75boa73vkjq" path="res://systems/audio/sfx_bank.gd" id="1_bank"]
+[ext_resource type="Script" uid="uid://b0s06m50g3557" path="res://systems/audio/sound_cue.gd" id="2_cue"]
+[ext_resource type="AudioStream" uid="uid://dx1hmdvbseh8j" path="res://assets/audio/sfx/boss_defeated.wav" id="10_boss_defeated"]
+[ext_resource type="AudioStream" uid="uid://bl2kdv13ayb6w" path="res://assets/audio/sfx/boss_spawned.wav" id="11_boss_spawned"]
+[ext_resource type="AudioStream" uid="uid://dwcjmm67n4cqy" path="res://assets/audio/sfx/breakable_broken.wav" id="12_breakable_broken"]
+[ext_resource type="AudioStream" uid="uid://b46yab704aw7x" path="res://assets/audio/sfx/button_pressed.wav" id="13_button_pressed"]
+[ext_resource type="AudioStream" uid="uid://4vcfsa53202m" path="res://assets/audio/sfx/chest_opened.wav" id="14_chest_opened"]
+[ext_resource type="AudioStream" uid="uid://dv1cc708lwjb3" path="res://assets/audio/sfx/curse.wav" id="15_curse"]
+[ext_resource type="AudioStream" uid="uid://q7p1b2d1nife" path="res://assets/audio/sfx/denied.wav" id="16_denied"]
+[ext_resource type="AudioStream" uid="uid://ceyti15hrsad3" path="res://assets/audio/sfx/enemy_died.wav" id="17_enemy_died"]
+[ext_resource type="AudioStream" uid="uid://rcgvn8qq0o2m" path="res://assets/audio/sfx/enemy_hit.wav" id="18_enemy_hit"]
+[ext_resource type="AudioStream" uid="uid://choqtpq2sqh2y" path="res://assets/audio/sfx/item_revealed.wav" id="19_item_revealed"]
+[ext_resource type="AudioStream" uid="uid://bpfdo8oxtnacy" path="res://assets/audio/sfx/level_up.wav" id="20_level_up"]
+[ext_resource type="AudioStream" uid="uid://3hsru75e5u7c" path="res://assets/audio/sfx/pickup_bomb.wav" id="21_pickup_bomb"]
+[ext_resource type="AudioStream" uid="uid://b6i10580jw7k1" path="res://assets/audio/sfx/pickup_energy.wav" id="22_pickup_energy"]
+[ext_resource type="AudioStream" uid="uid://cmbmie2i8mcqa" path="res://assets/audio/sfx/pickup_experience.wav" id="23_pickup_experience"]
+[ext_resource type="AudioStream" uid="uid://b110a3v8v2ayj" path="res://assets/audio/sfx/pickup_gold.wav" id="24_pickup_gold"]
+[ext_resource type="AudioStream" uid="uid://cot3mv3jjlckg" path="res://assets/audio/sfx/pickup_heal.wav" id="25_pickup_heal"]
+[ext_resource type="AudioStream" uid="uid://ckfotkftvm2l1" path="res://assets/audio/sfx/pickup_magnet.wav" id="26_pickup_magnet"]
+[ext_resource type="AudioStream" uid="uid://ueni1rambb22" path="res://assets/audio/sfx/pickup_time_stop.wav" id="27_pickup_time_stop"]
+[ext_resource type="AudioStream" uid="uid://d4mwj15fwskyy" path="res://assets/audio/sfx/player_died.wav" id="28_player_died"]
+[ext_resource type="AudioStream" uid="uid://w4pk8a35w516" path="res://assets/audio/sfx/player_hurt.wav" id="29_player_hurt"]
+[ext_resource type="AudioStream" uid="uid://dcplej6bg0b70" path="res://assets/audio/sfx/slot_jackpot.wav" id="30_slot_jackpot"]
+[ext_resource type="AudioStream" uid="uid://dd74egta6wsfm" path="res://assets/audio/sfx/slot_lost.wav" id="31_slot_lost"]
+[ext_resource type="AudioStream" uid="uid://dwhxmdgklvjap" path="res://assets/audio/sfx/slot_spun.wav" id="32_slot_spun"]
+[ext_resource type="AudioStream" uid="uid://dy3xs4el1mwpw" path="res://assets/audio/sfx/slot_won.wav" id="33_slot_won"]
+[ext_resource type="AudioStream" uid="uid://bc0aaxwphpo1a" path="res://assets/audio/sfx/upgrade_spin_tick.wav" id="40_upgrade_spin_tick"]
+[ext_resource type="AudioStream" uid="uid://fhesjvrxn2st" path="res://assets/audio/sfx/upgrade_revealed.wav" id="41_upgrade_revealed"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/horde_incoming.wav" id="42_horde_incoming"]
+
+[sub_resource type="Resource" id="Cue_boss_defeated"]
+script = ExtResource("2_cue")
+stream = ExtResource("10_boss_defeated")
+max_voices = 1
+
+[sub_resource type="Resource" id="Cue_boss_spawned"]
+script = ExtResource("2_cue")
+stream = ExtResource("11_boss_spawned")
+max_voices = 1
+
+[sub_resource type="Resource" id="Cue_breakable_broken"]
+script = ExtResource("2_cue")
+stream = ExtResource("12_breakable_broken")
+volume_db = -2.0
+pitch_variation = 0.1
+max_voices = 3
+min_interval = 0.03
+
+[sub_resource type="Resource" id="Cue_button_pressed"]
+script = ExtResource("2_cue")
+stream = ExtResource("13_button_pressed")
+volume_db = -4.0
+max_voices = 2
+min_interval = 0.02
+
+[sub_resource type="Resource" id="Cue_denied"]
+script = ExtResource("2_cue")
+stream = ExtResource("16_denied")
+max_voices = 1
+min_interval = 0.15
+
+[sub_resource type="Resource" id="Cue_chest_opened"]
+script = ExtResource("2_cue")
+stream = ExtResource("14_chest_opened")
+max_voices = 1
+
+[sub_resource type="Resource" id="Cue_enemy_died"]
+script = ExtResource("2_cue")
+stream = ExtResource("17_enemy_died")
+volume_db = -3.0
+pitch_variation = 0.12
+max_voices = 5
+min_interval = 0.035
+
+[sub_resource type="Resource" id="Cue_enemy_hit"]
+script = ExtResource("2_cue")
+stream = ExtResource("18_enemy_hit")
+volume_db = -6.0
+pitch_variation = 0.15
+max_voices = 4
+min_interval = 0.03
+
+[sub_resource type="Resource" id="Cue_item_revealed"]
+script = ExtResource("2_cue")
+stream = ExtResource("19_item_revealed")
+max_voices = 1
+
+[sub_resource type="Resource" id="Cue_level_up"]
+script = ExtResource("2_cue")
+stream = ExtResource("20_level_up")
+max_voices = 1
+
+[sub_resource type="Resource" id="Cue_pickup_experience"]
+script = ExtResource("2_cue")
+stream = ExtResource("23_pickup_experience")
+volume_db = -4.0
+max_voices = 4
+min_interval = 0.02
+
+[sub_resource type="Resource" id="Cue_pickup_gold"]
+script = ExtResource("2_cue")
+stream = ExtResource("24_pickup_gold")
+volume_db = -5.0
+pitch_variation = 0.08
+max_voices = 3
+min_interval = 0.03
+
+[sub_resource type="Resource" id="Cue_pickup_heal"]
+script = ExtResource("2_cue")
+stream = ExtResource("25_pickup_heal")
+max_voices = 1
+
+[sub_resource type="Resource" id="Cue_pickup_magnet"]
+script = ExtResource("2_cue")
+stream = ExtResource("26_pickup_magnet")
+max_voices = 1
+
+[sub_resource type="Resource" id="Cue_pickup_bomb"]
+script = ExtResource("2_cue")
+stream = ExtResource("21_pickup_bomb")
+max_voices = 1
+
+[sub_resource type="Resource" id="Cue_pickup_energy"]
+script = ExtResource("2_cue")
+stream = ExtResource("22_pickup_energy")
+max_voices = 1
+
+[sub_resource type="Resource" id="Cue_pickup_time_stop"]
+script = ExtResource("2_cue")
+stream = ExtResource("27_pickup_time_stop")
+max_voices = 1
+
+[sub_resource type="Resource" id="Cue_player_died"]
+script = ExtResource("2_cue")
+stream = ExtResource("28_player_died")
+max_voices = 1
+
+[sub_resource type="Resource" id="Cue_player_hurt"]
+script = ExtResource("2_cue")
+stream = ExtResource("29_player_hurt")
+pitch_variation = 0.05
+max_voices = 1
+min_interval = 0.1
+
+[sub_resource type="Resource" id="Cue_slot_jackpot"]
+script = ExtResource("2_cue")
+stream = ExtResource("30_slot_jackpot")
+max_voices = 1
+
+[sub_resource type="Resource" id="Cue_slot_lost"]
+script = ExtResource("2_cue")
+stream = ExtResource("31_slot_lost")
+max_voices = 1
+
+[sub_resource type="Resource" id="Cue_curse"]
+script = ExtResource("2_cue")
+stream = ExtResource("15_curse")
+max_voices = 1
+
+[sub_resource type="Resource" id="Cue_slot_spun"]
+script = ExtResource("2_cue")
+stream = ExtResource("32_slot_spun")
+max_voices = 2
+
+[sub_resource type="Resource" id="Cue_slot_won"]
+script = ExtResource("2_cue")
+stream = ExtResource("33_slot_won")
+max_voices = 1
+
+[sub_resource type="Resource" id="Cue_upgrade_revealed"]
+script = ExtResource("2_cue")
+stream = ExtResource("41_upgrade_revealed")
+max_voices = 3
+
+[sub_resource type="Resource" id="Cue_upgrade_spin_tick"]
+script = ExtResource("2_cue")
+stream = ExtResource("40_upgrade_spin_tick")
+volume_db = -6.0
+max_voices = 3
+min_interval = 0.02
+
+[sub_resource type="Resource" id="Cue_horde_incoming"]
+script = ExtResource("2_cue")
+stream = ExtResource("42_horde_incoming")
+max_voices = 1
+
+[sub_resource type="Resource" id="Cue_double_won"]
+script = ExtResource("2_cue")
+stream = ExtResource("30_slot_jackpot")
+max_voices = 1
+
+[sub_resource type="Resource" id="Cue_double_lost"]
+script = ExtResource("2_cue")
+stream = ExtResource("31_slot_lost")
+max_voices = 1
+
+[resource]
+script = ExtResource("1_bank")
+volume_db = -6.0
+player_hurt = SubResource("Cue_player_hurt")
+player_died = SubResource("Cue_player_died")
+level_up = SubResource("Cue_level_up")
+enemy_hit = SubResource("Cue_enemy_hit")
+enemy_died = SubResource("Cue_enemy_died")
+boss_spawned = SubResource("Cue_boss_spawned")
+boss_defeated = SubResource("Cue_boss_defeated")
+pickups = Dictionary[StringName, ExtResource("2_cue")]({
+&"bomb": SubResource("Cue_pickup_bomb"),
+&"energy": SubResource("Cue_pickup_energy"),
+&"experience": SubResource("Cue_pickup_experience"),
+&"gold": SubResource("Cue_pickup_gold"),
+&"heal": SubResource("Cue_pickup_heal"),
+&"magnet": SubResource("Cue_pickup_magnet"),
+&"time_stop": SubResource("Cue_pickup_time_stop")
+})
+streak_reward = &"experience"
+streak_window = 0.4
+streak_max_semitones = 12
+breakable_broken = SubResource("Cue_breakable_broken")
+chest_opened = SubResource("Cue_chest_opened")
+item_revealed = SubResource("Cue_item_revealed")
+chest_denied = SubResource("Cue_denied")
+slot_spun = SubResource("Cue_slot_spun")
+slot_results = Dictionary[StringName, ExtResource("2_cue")]({
+&"SLOT_CURSE_ELITES": SubResource("Cue_curse"),
+&"SLOT_CURSE_FRAILTY": SubResource("Cue_curse"),
+&"SLOT_NOTHING": SubResource("Cue_slot_lost"),
+&"SLOT_NOT_ENOUGH_GOLD": SubResource("Cue_denied")
+})
+slot_won = SubResource("Cue_slot_won")
+slot_jackpot = SubResource("Cue_slot_jackpot")
+upgrade_spin_tick = SubResource("Cue_upgrade_spin_tick")
+upgrade_revealed = SubResource("Cue_upgrade_revealed")
+reveal_pitches = Dictionary[StringName, float]({
+&"common": 1.0,
+&"improbable": 1.2599,
+&"legendary": 1.4983,
+&"mythic": 2.0,
+&"rare": 1.1225
+})
+button_pressed = SubResource("Cue_button_pressed")
+horde_incoming = SubResource("Cue_horde_incoming")
+double_won = SubResource("Cue_double_won")
+double_lost = SubResource("Cue_double_lost")

@@ -1,9 +1,9 @@
-[gd_resource type="Resource" script_class="PassiveItemData" format=3]
+[gd_resource type="Resource" script_class="PassiveItemData" format=3 uid="uid://pa60djh24hpw"]
 
-[ext_resource type="Script" path="res://systems/items/passive_item_data.gd" id="1_item"]
-[ext_resource type="Script" path="res://core/stats/stat_modifier.gd" id="2_modifier"]
+[ext_resource type="Script" uid="uid://bxvisp1obhnj1" path="res://systems/items/passive_item_data.gd" id="1_item"]
+[ext_resource type="Script" uid="uid://is4y31g1paml" path="res://core/stats/stat_modifier.gd" id="2_modifier"]
 [ext_resource type="Resource" path="res://data/rarities/legendary.tres" id="3_rarity"]
-[ext_resource type="Texture2D" path="res://assets/textures/icons/items/brass_grail.svg" id="4_icon"]
+[ext_resource type="Texture2D" uid="uid://bvfy4biv2a4p3" path="res://assets/textures/icons/items/brass_grail.svg" id="4_icon"]
 
 [sub_resource type="Resource" id="Modifier_1"]
 script = ExtResource("2_modifier")
@@ -18,9 +18,9 @@ value = 0.1
 
 [resource]
 script = ExtResource("1_item")
-stat_modifiers = Array[ExtResource("2_modifier")]([SubResource("Modifier_1"), SubResource("Modifier_2")])
 id = &"brass_grail"
 name_key = &"ITEM_BRASS_GRAIL_NAME"
 description_key = &"ITEM_BRASS_GRAIL_DESCRIPTION"
 icon = ExtResource("4_icon")
 rarity = ExtResource("3_rarity")
+stat_modifiers = Array[ExtResource("2_modifier")]([SubResource("Modifier_1"), SubResource("Modifier_2")])

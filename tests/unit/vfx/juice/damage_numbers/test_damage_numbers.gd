@@ -1,6 +1,7 @@
 extends GutTest
 ## Números de daño: cada golpe a un enemigo (EventBus.enemy_damaged) saca un número del pool con el
 ## daño redondeado, blanco o del color de crítico y más grande; al acabar se oculta y se reutiliza.
+## En un mismo fotograma salen como mucho max_per_frame.
 
 const STYLE := preload("res://data/vfx/damage_numbers.tres")
 
@@ -71,3 +72,13 @@ func _advance(number: DamageNumber, seconds: float) -> void:
 	for _frame: int in ceili(seconds / step):
 		if number.is_showing():
 			number._process(step)
+
+
+func test_a_hit_on_many_shows_only_some_numbers_per_frame() -> void:
+	_numbers.max_per_frame = 2
+	for hit: int in 3:
+		EventBus.enemy_damaged.emit(Vector3.ZERO, 5.0, DamageInfo.create(5.0))
+	assert_eq(_showing().size(), 2, "como mucho los de un fotograma")
+	await wait_process_frames(1)
+	EventBus.enemy_damaged.emit(Vector3.ZERO, 5.0, DamageInfo.create(5.0))
+	assert_eq(_showing().size(), 3, "en el siguiente, otro")

@@ -11,3 +11,4 @@ default_vsync = true
 resolutions = Array[Vector2i]([Vector2i(1280, 720), Vector2i(1600, 900), Vector2i(1920, 1080), Vector2i(2560, 1440), Vector2i(3840, 2160)])
 default_locale = "es"
 leaderboard_size = 20
+default_screen_shake = 1.0
