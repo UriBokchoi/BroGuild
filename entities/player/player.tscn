@@ -50,6 +50,7 @@
 [ext_resource type="Script" path="res://entities/player/synergy/synergy_wave.gd" id="51_synergy_wave"]
 [ext_resource type="PackedScene" path="res://entities/player/synergy/dash_wave.tscn" id="52_dash_wave"]
 [ext_resource type="PackedScene" path="res://entities/player/synergy/slam_blast.tscn" id="53_slam_blast"]
+[ext_resource type="Script" path="res://entities/player/feedback/body_bob.gd" id="54_bob"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_interactor"]
 radius = 0.6
@@ -363,3 +364,11 @@ body = NodePath("..")
 slam_state = NodePath("../Movement/FastFall")
 wave_scene = ExtResource("53_slam_blast")
 trauma = 0.35
+
+[node name="BodyBob" type="Node" parent="." node_paths=PackedStringArray("body", "stats", "machine", "walk_states", "parts")]
+script = ExtResource("54_bob")
+body = NodePath("..")
+stats = NodePath("../Stats")
+machine = NodePath("../Movement")
+walk_states = [NodePath("../Movement/Ground")]
+parts = [NodePath("../Body/Skin"), NodePath("../Body/Sockets")]

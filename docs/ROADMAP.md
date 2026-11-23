@@ -89,10 +89,12 @@
 ## Hito 5 — Juice y look
 - [ ] Entorno según la dirección visual del GDD (luz, glow y tonemapping)
 - [ ] Materiales con color propio por tipo de enemigo y rareza
-- [ ] Hit-stop (los números de daño llegaron en el Hito 2; el temblor de pantalla, el borde rojo al recibir daño y el destello blanco al golpear, adelantados tras el Hito 3)
+- [x] Feedback al golpear y al recibir: números de daño (Hito 2), temblor de pantalla, borde rojo y destello blanco (tras el Hito 3). Hit-stop descartado: el diseñador no quiere parones al golpear
+- [x] Balanceo al andar y correr: el cuerpo rebota a cada paso y se mece, más cuanto más rápido vas
 - [ ] Partículas: muertes, monedas, cofres, impactos
+- [ ] Polvo pequeño a cada paso (con el aviso de pasos del balanceo)
 - [ ] UI animada (los sonidos, con la experiencia que sube de tono si se recoge seguida, adelantados tras el Hito 3)
-- [ ] Rendimiento: 300+ enemigos a 60 fps
+- [x] Rendimiento: 300+ enemigos a 60 fps (medido: 300 a 120 fps de media en el equipo de desarrollo)
 
 ## Hito 6 — Niveles
 - [ ] El Brosque: más detalle (decoración, variedad del suelo, props de gimnasio, sonido ambiente); la v1 llegó en el Hito 3

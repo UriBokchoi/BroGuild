@@ -1415,3 +1415,17 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
 - **Por qué:** lo pidió el diseñador; el GDD ya hablaba de armas que van al grupo más denso.
   - **Papeles distintos:** la colonia es la espada de la horda (fuerte encima, nula lejos), el martillo castiga los grupos apretados y el hacha va a media distancia contra filas.
   - **Equilibrio:** ninguna pasa de lo que ya hacían espada y bastón a nivel 1. Las mejoras son las de siempre, con las comunes flojas.
+
+## 2026-11-23 · Balanceo al andar
+- **Decisión:** en el suelo, el cuerpo del jugador rebota a cada paso y se mece un poco de lado a lado (`BodyBob`). Rebota más alto y da más pasos cuanto más rápido va respecto a su carrera:
+
+  | | Rebote | Pasos por segundo |
+  |---|---|---|
+  | Despacio | casi nada | 1,8 |
+  | A la carrera | 8 cm | 3,2 |
+  | Por encima de la carrera (mejoras) | hasta 12 cm (×1,5) | 3,2 |
+
+  En el slide, en el aire o parado no rebota, y vuelve a su sitio suavemente.
+- **Cómo:** mueve las partes del modelo (`Skin` y `Sockets`), no el modelo entero, porque el modelo ya lo agachan, giran y voltean otros nodos (`BodyCrouch`, `BodyFacing`, `BodyFlip`) y se pisarían. Va en el tick de física, con la interpolación del proyecto, para que sea igual a cualquier tasa de fotogramas. Avisa de cada paso (`stepped`): ahí saldrá el polvo de los pasos.
+- **Hit-stop, descartado:** el diseñador no quiere parones al golpear. El GDD ya no lo lista; el golpe se nota con el destello blanco, los números y el sonido.
+- **Por qué:** lo pidió el diseñador, para que correr se sienta como correr.
