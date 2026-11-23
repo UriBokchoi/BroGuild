@@ -136,7 +136,7 @@ func _add_layouts(theme: Theme) -> void:
 	theme.set_constant(&"margin_left", &"ScreenMargin", 64)
 	theme.set_constant(&"margin_right", &"ScreenMargin", 64)
 	theme.set_constant(&"margin_top", &"ScreenMargin", 48)
-	theme.set_constant(&"margin_bottom", &"ScreenMargin", 48)
+	theme.set_constant(&"margin_bottom", &"ScreenMargin", 24)
 	_separation(theme, &"MenuList", &"VBoxContainer", 14)
 	_separation(theme, &"StatList", &"VBoxContainer", 4)
 	_separation(theme, &"ArmoryBody", &"HBoxContainer", 28)
@@ -179,12 +179,14 @@ func _add_hud(theme: Theme) -> void:
 	_label_variation(theme, &"KeyCapLabel", 20, GOLD)
 	_label_variation(theme, &"PromptLabel", 20, INK)
 	# Experiencia y nivel, arriba.
+	# Experiencia abajo del todo, a lo ancho: una franja fina sin borde y el nivel pequeño a su izquierda.
 	theme.set_type_variation(&"XpBar", &"ProgressBar")
-	theme.set_stylebox(&"background", &"XpBar", _box(Color(SLATE, 0.85), 6, Vector2(0, 0), Color(EXPERIENCE, 0.35), 2, 2))
-	theme.set_stylebox(&"fill", &"XpBar", _box(EXPERIENCE, 6, Vector2(0, 0), Color.TRANSPARENT, 0, 0))
-	_separation(theme, &"XpRow", &"HBoxContainer", 12)
-	_label_variation(theme, &"LevelLabel", 22, EXPERIENCE)
-	# Oro, debajo de la experiencia: una moneda dibujada y la cantidad.
+	theme.set_stylebox(&"background", &"XpBar", _box(Color(SLATE, 0.6), 3, Vector2(0, 0), Color.TRANSPARENT, 0, 0))
+	theme.set_stylebox(&"fill", &"XpBar", _box(EXPERIENCE, 3, Vector2(0, 0), Color.TRANSPARENT, 0, 0))
+	_separation(theme, &"XpRow", &"HBoxContainer", 10)
+	_label_variation(theme, &"LevelLabel", 16, EXPERIENCE)
+	_separation(theme, &"HudBottom", &"VBoxContainer", 14)
+	# Oro, arriba a la izquierda: una moneda dibujada y la cantidad.
 	_separation(theme, &"HudTop", &"VBoxContainer", 6)
 	_separation(theme, &"GoldRow", &"HBoxContainer", 8)
 	theme.set_type_variation(&"CoinIcon", &"PanelContainer")
@@ -319,23 +321,24 @@ func _add_boss(theme: Theme) -> void:
 	# Columna arriba en el centro: la barra del jefe, la del miniboss debajo y los textos breves.
 	theme.set_type_variation(&"BossBarFrame", &"PanelContainer")
 	var frame := StyleBoxEmpty.new()
-	frame.content_margin_top = 84
+	frame.content_margin_top = 56
 	theme.set_stylebox(&"panel", &"BossBarFrame", frame)
-	_separation(theme, &"BossBars", &"VBoxContainer", 14)
+	_separation(theme, &"BossBars", &"VBoxContainer", 8)
 	theme.set_type_variation(&"BossBarPanel", &"PanelContainer")
 	theme.set_stylebox(&"panel", &"BossBarPanel", StyleBoxEmpty.new())
-	_separation(theme, &"BossColumn", &"VBoxContainer", 4)
-	_label_variation(theme, &"BossNameLabel", 26, INK)
+	_separation(theme, &"BossColumn", &"VBoxContainer", 2)
+	# Nombre a la izquierda y vida en números a la derecha, sobre una barra fina: se lee sin tapar.
+	_label_variation(theme, &"BossNameLabel", 18, INK)
+	_label_variation(theme, &"BossValueLabel", 18, BOSS)
 	theme.set_type_variation(&"BossHealthBar", &"ProgressBar")
-	theme.set_stylebox(&"background", &"BossHealthBar", _box(Color(SLATE, 0.85), 6, Vector2.ZERO, Color(BOSS, 0.5), 2, 2))
-	theme.set_stylebox(&"fill", &"BossHealthBar", _box(BOSS, 6, Vector2.ZERO, Color.TRANSPARENT, 0, 0))
-	_label_variation(theme, &"BossShoutLabel", 24, GOLD)
-	# El miniboss: lo mismo, más pequeño y en naranja.
-	_label_variation(theme, &"MiniBossNameLabel", 20, INK)
+	theme.set_stylebox(&"background", &"BossHealthBar", _box(Color(SLATE, 0.8), 4, Vector2.ZERO, Color.TRANSPARENT, 0, 0))
+	theme.set_stylebox(&"fill", &"BossHealthBar", _box(BOSS, 4, Vector2.ZERO, Color.TRANSPARENT, 0, 0))
+	# El miniboss: lo mismo, más pequeño y en verde.
+	_label_variation(theme, &"MiniBossNameLabel", 15, INK)
+	_label_variation(theme, &"MiniBossValueLabel", 15, MINI_BOSS)
 	theme.set_type_variation(&"MiniBossHealthBar", &"ProgressBar")
-	theme.set_stylebox(&"background", &"MiniBossHealthBar", _box(Color(SLATE, 0.85), 5, Vector2.ZERO, Color(MINI_BOSS, 0.5), 2, 2))
-	theme.set_stylebox(&"fill", &"MiniBossHealthBar", _box(MINI_BOSS, 5, Vector2.ZERO, Color.TRANSPARENT, 0, 0))
-	_label_variation(theme, &"MiniBossShoutLabel", 20, GOLD)
+	theme.set_stylebox(&"background", &"MiniBossHealthBar", _box(Color(SLATE, 0.8), 3, Vector2.ZERO, Color.TRANSPARENT, 0, 0))
+	theme.set_stylebox(&"fill", &"MiniBossHealthBar", _box(MINI_BOSS, 3, Vector2.ZERO, Color.TRANSPARENT, 0, 0))
 	_label_variation(theme, &"BossKeyLabel", 22, INK)
 	_label_variation(theme, &"BossKeyReadyLabel", 22, BOSS_KEY)
 	_label_variation(theme, &"VictoryLabel", 64, BOSS_KEY)

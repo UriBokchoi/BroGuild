@@ -4,12 +4,10 @@ extends Enemy
 ## [member attack_interval] segundos, hace uno de sus ataques ([BossAttack], sus nodos hijos),
 ## elegido al azar según su peso. Mientras ataca no persigue: el ataque mueve el cuerpo. Por debajo
 ## de [member enrage_below] de su vida entra en rabia: aplica [member enrage] (más rápido), ataca más
-## a menudo y puede hacer los ataques de rabia. Grita al empezar cada ataque ([signal shouted]) y
-## pide refuerzos con [signal summon_requested]: quien lo saca ([BossEncounter]) los pone en juego.
-## No lo saca el director de oleadas ni lo mata una bomba de golpe.
+## a menudo y puede hacer los ataques de rabia. Pide refuerzos con [signal summon_requested]: quien
+## lo saca ([BossEncounter]) los pone en juego. No lo saca el director de oleadas ni lo mata una bomba
+## de golpe. No habla: sin gritos.
 
-## Gritó [param text_key] (clave de traducción): al empezar un ataque o al entrar en rabia.
-signal shouted(text_key: StringName)
 ## Pide [param count] enemigos de [param enemy] alrededor de [param center], entre
 ## [param min_distance] y [param max_distance].
 signal summon_requested(enemy: EnemyData, count: int, center: Vector3, min_distance: float, max_distance: float)
@@ -22,8 +20,6 @@ signal summon_requested(enemy: EnemyData, count: int, center: Vector3, min_dista
 @export_range(0.0, 1.0, 0.05) var enrage_below: float = 0.5
 ## Mejoras de la rabia (hasta que vuelva a salir).
 @export var enrage: StatModifierSet
-## Lo que grita al entrar en rabia (claves de traducción; una al azar).
-@export var enrage_shouts: Array[StringName] = []
 ## Material encima de sus mallas con rabia.
 @export var enrage_overlay: Material
 ## Cuánto más ancho se pone al aplastarse, por cada parte de alto que pierde ([method squash]).
@@ -98,12 +94,6 @@ func squash(factor: float) -> void:
 	visual.scale = _rest_scale * _size * Vector3(widen, factor, widen)
 
 
-## Grita una de [param keys] al azar (si hay).
-func shout(keys: Array[StringName]) -> void:
-	if not keys.is_empty():
-		shouted.emit(keys[rng.randi_range(0, keys.size() - 1)])
-
-
 ## Pide refuerzos (ver [signal summon_requested]).
 func summon(enemy: EnemyData, count: int, min_distance: float, max_distance: float) -> void:
 	summon_requested.emit(enemy, count, global_position, min_distance, max_distance)
@@ -146,7 +136,6 @@ func _start_attack(target: Vector3) -> void:
 	if _attack == null:
 		_until_attack = attack_interval
 		return
-	shout(_attack.shout_keys)
 	_attack.begin(target)
 
 
@@ -169,4 +158,3 @@ func _on_health_changed(current: float, maximum: float) -> void:
 	if enrage:
 		_add_modifiers(enrage)
 	_set_overlay(enrage_overlay)
-	shout(enrage_shouts)

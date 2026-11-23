@@ -5,7 +5,7 @@ extends Node
 ## ([signal EventBus.boss_keys_changed]). Cuando el altar lo pide
 ## ([signal EventBus.boss_summon_requested]) con las llaves suficientes, o sin ellas al acabar la
 ## ronda, saca al jefe ahí con el escalado de la dificultad de ese momento, lo anuncia y pasa al HUD
-## su vida y sus gritos; sus refuerzos salen por el director ([method WaveDirector.spawn_around]).
+## su vida; sus refuerzos salen por el director ([method WaveDirector.spawn_around]).
 ## Al vencerlo: paran las oleadas, se retiran los demás enemigos, llega el premio (oro × lo pronto
 ## que cayó, como un recogible, y un objeto pasivo de rareza alta que el HUD revela) y se avisa de la
 ## victoria ([signal EventBus.boss_defeated]). Sin [member data], el nivel no tiene jefe.
@@ -71,7 +71,6 @@ func summon(at: Vector3) -> bool:
 		return false
 	_summoned = true
 	_boss.health.health_changed.connect(EventBus.boss_health_changed.emit)
-	_boss.shouted.connect(EventBus.boss_shouted.emit)
 	_boss.summon_requested.connect(_on_summon_minions)
 	_boss.died.connect(_on_boss_died, CONNECT_ONE_SHOT)
 	EventBus.boss_spawned.emit(data.enemy.name_key)

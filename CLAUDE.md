@@ -4,6 +4,7 @@ Roguelike de hordas en 3D, frenético y con apuestas en cada decisión: el bucle
 Proyecto a largo plazo: se va a ampliar durante meses, así que la arquitectura manda sobre la prisa.
 
 - Diseño: `docs/GDD.md` — léelo antes de tocar gameplay.
+- Lore: `docs/LORE.md` — la historia y el tono del juego (lo escribe el diseñador). Al tocar textos de lore del juego, que casen con él.
 - Plan: `docs/ROADMAP.md` — la tarea actual es la primera casilla sin marcar.
 - Decisiones de arquitectura: `docs/DECISIONES.md` (créalo si no existe; fecha, decisión y por qué).
 - Mapa del código: `docs/MAPA.md` — para qué sirve cada carpeta y sistema, cómo se conectan (señales, capas) y cómo añadir contenido. Léelo para orientarte y actualízalo en el mismo commit cuando crees, muevas o quites un sistema o una carpeta.

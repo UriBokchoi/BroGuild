@@ -1,8 +1,8 @@
 extends GutTest
-## El jefe en el HUD: su barra aparece al salir con su nombre y su vida, muestra sus gritos un rato y
-## se va al vencerlo. La del miniboss va con sus propias señales, debajo de la del jefe y sin
-## solaparse con ella. Las llaves, debajo del oro: solo en niveles con jefe, «1/3», de otro color con
-## todas, y se van cuando sale el jefe.
+## El jefe en el HUD: su barra aparece al salir con su nombre, su vida en números (la actual, hacia
+## arriba) y su barra, y se va al vencerlo. La del miniboss va con sus propias señales, debajo de la del
+## jefe y sin solaparse con ella. Las llaves, debajo del oro: solo en niveles con jefe, «1/3», de otro
+## color con todas, y se van cuando sale el jefe.
 
 const HudScene := preload("res://ui/hud/hud.tscn")
 
@@ -14,7 +14,7 @@ func before_each() -> void:
 	add_child_autofree(_hud)
 
 
-func test_the_bar_shows_name_health_and_shouts() -> void:
+func test_the_bar_shows_name_and_health() -> void:
 	var bar := _hud.get_node(^"%BossBar") as BossBar
 	assert_false(bar.visible)
 	EventBus.boss_spawned.emit(&"ENEMY_ENT_TRAINER_NAME")
@@ -24,11 +24,9 @@ func test_the_bar_shows_name_health_and_shouts() -> void:
 	var health := bar.get_node(^"%BossHealth") as ProgressBar
 	assert_eq(health.max_value, 120.0)
 	assert_eq(health.value, 30.0)
-	bar.shout_time = 0.2
-	EventBus.boss_shouted.emit(&"ENT_TRAINER_SHOUT_ONE_MORE")
-	assert_eq(bar.get_shout(), "ENT_TRAINER_SHOUT_ONE_MORE")
-	await wait_seconds(0.3)
-	assert_eq(bar.get_shout(), "", "el grito se va")
+	assert_eq(bar.get_value_text(), tr(&"HUD_HEALTH_VALUE") % [30, 120])
+	EventBus.boss_health_changed.emit(0.5, 120.0)
+	assert_eq(bar.get_value_text(), tr(&"HUD_HEALTH_VALUE") % [1, 120], "vivo, nunca 0")
 	EventBus.boss_defeated.emit(&"BROSQUE_VICTORY", 60.0, 2.0)
 	assert_false(bar.visible)
 
@@ -57,8 +55,7 @@ func test_the_mini_boss_bar_follows_its_own_signals() -> void:
 	assert_eq((mini_bar.get_node(^"%BossName") as Label).text, "ENEMY_TROLLEADOR_NAME")
 	EventBus.mini_boss_health_changed.emit(500.0, 2000.0)
 	assert_eq((mini_bar.get_node(^"%BossHealth") as ProgressBar).value, 500.0)
-	EventBus.mini_boss_shouted.emit(&"TROLLEADOR_SHOUT_SMASH")
-	assert_eq(mini_bar.get_shout(), "TROLLEADOR_SHOUT_SMASH")
+	assert_eq(mini_bar.get_value_text(), tr(&"HUD_HEALTH_VALUE") % [500, 2000])
 	EventBus.mini_boss_defeated.emit(&"ENEMY_TROLLEADOR_NAME")
 	assert_false(mini_bar.visible)
 
@@ -66,8 +63,6 @@ func test_the_mini_boss_bar_follows_its_own_signals() -> void:
 func test_with_both_bosses_the_bars_do_not_overlap() -> void:
 	EventBus.boss_spawned.emit(&"ENEMY_ENT_TRAINER_NAME")
 	EventBus.mini_boss_spawned.emit(&"ENEMY_TROLLEADOR_NAME")
-	EventBus.boss_shouted.emit(&"ENT_TRAINER_SHOUT_ONE_MORE")
-	EventBus.mini_boss_shouted.emit(&"TROLLEADOR_SHOUT_SMASH")
 	await wait_process_frames(3)
 	var boss_rect := (_hud.get_node(^"%BossBar") as Control).get_global_rect()
 	var mini_rect := (_hud.get_node(^"%MiniBossBar") as Control).get_global_rect()

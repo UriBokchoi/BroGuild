@@ -8,6 +8,8 @@ MENU_RECORDS,Récords,Records
 MENU_ARCHIVE,Archivo,Archive
 MENU_QUIT,Abandonar,Quit game
 LEVEL_BROSQUE_NAME,El Brosque,The Brorest
+LEVEL_BROSQUE_GOAL,Objetivo: vence al Ent-renador.,Goal: defeat the Ent Trainer.
+LEVEL_BROSQUE_LORE,"Un bosque viejísimo convertido en gimnasio al aire libre: pesas de piedra entre los robles, bancos de tronco y una taberna para recuperar fuerzas. Lo lleva el Ent-renador, un árbol centenario que nunca se salta el día de pierna y entrena a sus Bro-tes a golpe de silbato. Junta tres tarjetas de socio y llámalo… si te ves con fuerzas.","An ancient forest turned into an open-air gym: stone weights among the oaks, log benches and a tavern to get your strength back. It is run by the Ent Trainer, a centuries-old tree who never skips leg day and drills his Bro-saplings with a whistle. Collect three membership cards and call him out… if you feel strong enough."
 LEVEL_WIZARD_TOWER_NAME,La Torre del Mago,The Wizard's Tower
 LEVEL_DUNGEON_NAME,La Mazmorra,The Dungeon
 LEVEL_COMING_SOON,"%s (próximamente)","%s (coming soon)"
@@ -214,19 +216,8 @@ ENEMY_ENT_TRAINER_NAME,El Ent-renador,The Ent Trainer
 ENEMY_ENT_TRAINER_DESCRIPTION,"Jefe del Brosque: un árbol centenario con silbato y cinta en la frente. Nunca se salta el día de pierna.","Boss of the Brorest: an ancient tree with a whistle and a headband. Never skips leg day."
 ENT_TRAINER_ARRIVES,¡Llega el Ent-renador!,The Ent Trainer is here!
 ENT_TRAINER_ARRIVES_LINE,Hora de entrenar,Workout time
-ENT_TRAINER_SHOUT_BURPEE,"¡Burpees, ya!","Burpees, now!"
-ENT_TRAINER_SHOUT_ONE_MORE,¡Una más!,One more rep!
-ENT_TRAINER_SHOUT_SETS,¡Tres series!,Three sets!
-ENT_TRAINER_SHOUT_NO_EXCUSES,¡Sin excusas!,No excuses!
-ENT_TRAINER_SHOUT_SPROUTS,"¡Bro-tes, a calentar!","Sprouts, warm up!"
-ENT_TRAINER_SHOUT_ENRAGE,"¡Si no duele, no crece!","If it doesn't hurt, it doesn't grow!"
 ENEMY_TROLLEADOR_NAME,Trolleador Cara,Trollface
 ENEMY_TROLLEADOR_DESCRIPTION,"Miniboss del Brosque: un troll con porra y una sonrisa que da mala espina. Sus primos se quedaron de piedra al amanecer.","Miniboss of the Brorest: a troll with a club and a grin you can't trust. His cousins were turned to stone at dawn."
-TROLLEADOR_SHOUT_SMASH,¡PORRAZO!,SMASH!
-TROLLEADOR_SHOUT_PROBLEM,¿Algún problema?,Problem?
-TROLLEADOR_SHOUT_SURPRISE,¡Sorpresa!,Surprise!
-TROLLEADOR_SHOUT_MAD,"¿Te enfadas, bro?","U mad, bro?"
-TROLLEADOR_SHOUT_ENRAGE,¡Ahora va en serio!,Now it's personal!
 TROLLEADOR_INCOMING,¡Se acerca el Trolleador Cara!,Trollface is coming!
 ENEMY_ELITE_NAME,%s élite,Elite %s
 INTERACT_SUMMON,Invocar enemigos,Summon enemies
@@ -238,6 +229,7 @@ STAT_XP_REWARD,Experiencia que suelta,Experience dropped
 STAT_GOLD_REWARD,Oro que suelta,Gold dropped
 HUD_LEVEL,Nv. %d,Lv. %d
 HUD_HEALTH_VALUE,%d / %d,%d / %d
+HUD_STATS_HINT,Mantén %s: tus estadísticas,Hold %s: your stats
 HORDE_INCOMING,¡Viene una horda!,A horde is coming!
 RUNE_STRENGTH_NAME,Runa de Fuerza,Rune of Strength
 RUNE_STRENGTH_DESCRIPTION,"Más daño con todas las armas.","More damage with every weapon."

@@ -1483,3 +1483,15 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   | Vida | Al perderla, la barra baja de golpe y deja un rastro claro que se vacía tras 0,35 s, en 0,45 s; al curarse, sube suave |
 
 - **Por qué:** el GDD pide una UI animada y legible en mitad del caos. El rastro de la vida dice cuánto quitó el golpe sin leer números. La vida baja al momento para no esconder el peligro.
+
+## 2026-11-23 · Pulido tras las pruebas (Hito 5b)
+- **Decisión:** arreglos y cambios tras una partida de prueba del diseñador.
+  - **Opciones:** en pantalla completa, la resolución que se ve es la de la pantalla. Antes salía el tamaño de ventana guardado, que no era el real.
+  - **Taberna:** el tejado y la chimenea chocan (dos cajas inclinadas y una recta). Antes la caja del edificio llegaba a 4,2 m y el tejado, que llega a unos 6 m, se atravesaba.
+  - **Jefes sin gritos:** se quitan del todo: la señal, los textos, la línea de la barra y las frases de los datos. Solo queda el aviso de llegada del nivel («¡Llega el Ent-renador!»), que es del narrador, no del jefe.
+  - **Barras de jefe:** nombre a la izquierda, vida en números a la derecha y barra fina. Antes eran el nombre grande centrado, una barra gruesa y una línea de gritos; ocupan menos y se leen mejor. Las dos barras juntas ya no tapan la pantalla.
+  - **Experiencia:** baja a una franja fina a lo ancho, abajo del todo, con el nivel pequeño a la izquierda (como en Megabonk). Arriba quedan el oro, el reloj y la dificultad.
+  - **Stats al elegir:** la vista de Tab también funciona con el panel de subir de nivel o el de elegir objeto abiertos (el juego está en pausa), por encima de ellos, y los dos lo recuerdan con un texto. En el menú de pausa sigue sin salir, porque la pausa ya las enseña.
+  - **Elegir nivel:** cada nivel lleva su objetivo y su lore (`LevelData.goal_key` y `lore_key`), y la ficha del nivel señalado sale debajo de la lista. El lore completo vive en `docs/LORE.md`, que escribe el diseñador y que dice qué claves del CSV le tocan.
+  - **Hacha arrojadiza:** gira tumbada (en horizontal, como un aspa), su modelo es 1,7 veces más grande, crece con el área y su filo llega a 1,2 m (antes 0,9 m). Corta a más gente por pasada.
+- **Por qué:** lo pidió el diseñador tras probar la partida.

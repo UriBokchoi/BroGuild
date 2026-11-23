@@ -3,23 +3,20 @@ extends GutTest
 ## cada tick. El Burpee marca dónde va a caer (a lo sumo a su distancia máxima) y salta hacia ahí;
 ## las Series apuntan con su franja, embisten en línea recta con más daño y repiten; los Bro-tes
 ## piden refuerzos tras llamarlos (más con rabia). Por debajo de la mitad de su vida entra en rabia
-## una sola vez (más rápido, grita) sin rellenarse la vida; al volver a salir es el de siempre.
+## una sola vez (más rápido) sin rellenarse la vida; al volver a salir es el de siempre.
 
 const ENT_TRAINER := preload("res://data/enemies/ent_trainer.tres")
 const SAPLING := preload("res://data/enemies/sapling.tres")
 
 var _boss: Boss
-var _shouts: Array[StringName] = []
 var _calls: Array = []
 
 
 func before_each() -> void:
-	_shouts.clear()
 	_calls.clear()
 	var swarm := EnemySwarm.new()
 	add_child_autofree(swarm)
 	_boss = swarm.spawn(ENT_TRAINER, Vector3.ZERO) as Boss
-	_boss.shouted.connect(_on_shout)
 	_boss.summon_requested.connect(_on_summon)
 	# La física calcula su gravedad en el primer tick (la usa el salto).
 	await wait_physics_frames(2)
@@ -91,9 +88,8 @@ func test_enrages_once_below_half_health() -> void:
 	assert_true(_boss.is_enraged())
 	assert_gt(_boss.stats.get_value(&"move_speed"), speed, "más rápido")
 	assert_almost_eq(_boss.health.get_current(), maximum * 0.4, 1.0, "la rabia no le rellena la vida")
-	assert_eq(_shouts, _boss.enrage_shouts)
 	_boss.health.take_damage(DamageInfo.create(maximum * 0.1))
-	assert_eq(_shouts.size(), 1, "una sola vez")
+	assert_true(_boss.is_enraged(), "sigue con rabia")
 
 
 func test_spawning_again_clears_the_rage() -> void:
@@ -108,9 +104,6 @@ func test_spawning_again_clears_the_rage() -> void:
 func _enrage() -> void:
 	_boss.health.take_damage(DamageInfo.create(_boss.health.get_maximum() * 0.6))
 
-
-func _on_shout(text_key: StringName) -> void:
-	_shouts.append(text_key)
 
 
 func _on_summon(enemy: EnemyData, count: int, _center: Vector3, _min_distance: float, _max_distance: float) -> void:

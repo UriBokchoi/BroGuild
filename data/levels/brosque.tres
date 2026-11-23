@@ -7,4 +7,6 @@
 script = ExtResource("1_data")
 id = &"brosque"
 name_key = &"LEVEL_BROSQUE_NAME"
+goal_key = &"LEVEL_BROSQUE_GOAL"
+lore_key = &"LEVEL_BROSQUE_LORE"
 scene = ExtResource("2_scene")

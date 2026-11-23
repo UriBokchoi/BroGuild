@@ -123,13 +123,11 @@ func _show_settings() -> void:
 	_refresh_apply()
 
 
-## Lista los tamaños que caben en la pantalla (sin la barra de tareas) y el de la ventana ahora, si
-## no está entre ellos.
+## Lista los tamaños que caben en la pantalla (sin la barra de tareas) y el que hay ahora, si no está
+## entre ellos.
 func _fill_resolutions() -> void:
 	var usable := DisplayServer.screen_get_usable_rect().size
-	var current := _pending.resolution
-	if current == Vector2i.ZERO:
-		current = get_window().size
+	var current := shown_resolution()
 	_resolutions.clear()
 	for option: Vector2i in data.resolutions:
 		# Sin pantalla (headless), el área es cero: se ofrecen todos.
@@ -142,6 +140,16 @@ func _fill_resolutions() -> void:
 		_resolution.add_item(tr(&"OPTIONS_RESOLUTION_VALUE") % [option.x, option.y])
 	_resolution.select(_resolutions.find(current))
 	_refresh_resolution()
+
+
+## El tamaño que enseña la lista: en pantalla completa, el de la pantalla (el de verdad, aunque haya
+## un tamaño de ventana guardado); en ventana, el elegido o, si no hay, el de la ventana ahora.
+func shown_resolution() -> Vector2i:
+	if _pending.fullscreen:
+		return DisplayServer.screen_get_size(get_window().current_screen)
+	if _pending.resolution != Vector2i.ZERO:
+		return _pending.resolution
+	return get_window().size
 
 
 ## Sin tamaño de ventana en pantalla completa ni dentro del editor.
@@ -165,7 +173,8 @@ func _on_volume_changed(value: float, bus: StringName) -> void:
 
 func _on_fullscreen_toggled(on: bool) -> void:
 	_pending.fullscreen = on
-	_refresh_resolution()
+	# Cambia el tamaño que se enseña (el de la pantalla o el de la ventana).
+	_fill_resolutions()
 	_refresh_apply()
 
 

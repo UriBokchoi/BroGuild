@@ -14,23 +14,27 @@ layout_mode = 2
 mouse_filter = 2
 theme_type_variation = &"BossColumn"
 
-[node name="BossName" type="Label" parent="Content"]
+[node name="Header" type="HBoxContainer" parent="Content"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="BossName" type="Label" parent="Content/Header"]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 3
 theme_type_variation = &"BossNameLabel"
-horizontal_alignment = 1
+
+[node name="BossValue" type="Label" parent="Content/Header"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"BossValueLabel"
+horizontal_alignment = 2
 
 [node name="BossHealth" type="ProgressBar" parent="Content"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(560, 18)
+custom_minimum_size = Vector2(420, 10)
 layout_mode = 2
 mouse_filter = 2
 theme_type_variation = &"BossHealthBar"
 step = 0.0
 show_percentage = false
-
-[node name="BossShout" type="Label" parent="Content"]
-unique_name_in_owner = true
-layout_mode = 2
-theme_type_variation = &"BossShoutLabel"
-horizontal_alignment = 1

@@ -3,7 +3,7 @@ extends Node
 ## Los minibosses de la ronda ([member WaveData.mini_bosses] de las oleadas de [member director]).
 ## A su minuto avisa con un texto unos segundos antes ([signal EventBus.announced]) y saca a cada uno
 ## cerca del jugador, con el escalado de la dificultad de ese momento
-## ([method WaveDirector.spawn_one_around]). Pasa al HUD su vida y sus gritos
+## ([method WaveDirector.spawn_one_around]). Pasa al HUD su vida
 ## ([signal EventBus.mini_boss_spawned] y compañía) y, al vencerlo, da su premio: oro (como un
 ## recogible) y un objeto pasivo que el HUD revela y llega al acabar de revelarse. El tiempo solo corre
 ## con las oleadas en marcha. Si el jefe del nivel sale mientras tanto, los dos conviven (el HUD
@@ -62,7 +62,6 @@ func summon(data: MiniBossData) -> Boss:
 		return null
 	_alive[boss] = data
 	boss.health.health_changed.connect(_on_health_changed)
-	boss.shouted.connect(_on_shouted)
 	boss.died.connect(_on_died, CONNECT_ONE_SHOT)
 	EventBus.mini_boss_spawned.emit(data.enemy.name_key)
 	EventBus.mini_boss_health_changed.emit(boss.health.get_current(), boss.health.get_maximum())
@@ -80,10 +79,6 @@ func _on_health_changed(current: float, maximum: float) -> void:
 	EventBus.mini_boss_health_changed.emit(current, maximum)
 
 
-func _on_shouted(text_key: StringName) -> void:
-	EventBus.mini_boss_shouted.emit(text_key)
-
-
 func _on_died(enemy: Enemy) -> void:
 	var boss := enemy as Boss
 	if not _alive.has(boss):
@@ -92,7 +87,6 @@ func _on_died(enemy: Enemy) -> void:
 	_alive.erase(boss)
 	# Sale del pool y podría volver a usarse: ya no es nuestro.
 	boss.health.health_changed.disconnect(_on_health_changed)
-	boss.shouted.disconnect(_on_shouted)
 	EventBus.mini_boss_defeated.emit(data.enemy.name_key)
 	_give_reward(data)
 

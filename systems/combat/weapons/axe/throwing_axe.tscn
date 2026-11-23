@@ -22,11 +22,11 @@ height = 0.7
 
 [sub_resource type="BoxMesh" id="Mesh_blade"]
 material = SubResource("Mat_steel")
-size = Vector3(0.05, 0.3, 0.32)
+size = Vector3(0.32, 0.05, 0.3)
 
 [sub_resource type="BoxMesh" id="Mesh_edge"]
 material = SubResource("Mat_steel")
-size = Vector3(0.03, 0.42, 0.08)
+size = Vector3(0.08, 0.04, 0.42)
 
 [node name="ThrowingAxe" type="Node3D" node_paths=PackedStringArray("spin")]
 script = ExtResource("1_axe")
@@ -36,15 +36,16 @@ hit_mask = 17
 [node name="Spin" type="Node3D" parent="."]
 
 [node name="Handle" type="MeshInstance3D" parent="Spin"]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0, 0)
 cast_shadow = 0
 mesh = SubResource("Mesh_handle")
 
 [node name="Blade" type="MeshInstance3D" parent="Spin"]
-position = Vector3(0, 0.25, -0.16)
+position = Vector3(0.16, 0, -0.25)
 cast_shadow = 0
 mesh = SubResource("Mesh_blade")
 
 [node name="Edge" type="MeshInstance3D" parent="Spin"]
-position = Vector3(0, 0.25, -0.34)
+position = Vector3(0.34, 0, -0.25)
 cast_shadow = 0
 mesh = SubResource("Mesh_edge")

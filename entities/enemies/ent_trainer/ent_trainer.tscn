@@ -206,7 +206,6 @@ script = ExtResource("1_boss")
 attack_interval = 3.5
 enraged_attack_interval = 2.2
 enrage = SubResource("Resource_enrage")
-enrage_shouts = Array[StringName]([&"ENT_TRAINER_SHOUT_ENRAGE"])
 enrage_overlay = SubResource("ShaderMaterial_rage")
 stats = NodePath("Stats")
 health = NodePath("Health")
@@ -369,7 +368,6 @@ crouch = 0.65
 damage_factor = 1.3
 shockwave = NodePath("Shockwave")
 landing_marker = NodePath("LandingMarker")
-shout_keys = Array[StringName]([&"ENT_TRAINER_SHOUT_BURPEE", &"ENT_TRAINER_SHOUT_ONE_MORE"])
 
 [node name="Shockwave" parent="Burpee" instance=ExtResource("14_shockwave")]
 knockback = 9.0
@@ -395,7 +393,6 @@ speed = 18.0
 distance = 16.0
 damage_factor = 1.25
 lane = NodePath("Lane")
-shout_keys = Array[StringName]([&"ENT_TRAINER_SHOUT_SETS", &"ENT_TRAINER_SHOUT_NO_EXCUSES"])
 
 [node name="Lane" type="MeshInstance3D" parent="Series"]
 top_level = true
@@ -406,7 +403,6 @@ mesh = SubResource("PlaneMesh_lane")
 script = ExtResource("13_summon")
 enemy = ExtResource("16_sapling")
 weight = 0.7
-shout_keys = Array[StringName]([&"ENT_TRAINER_SHOUT_SPROUTS"])
 
 [node name="HitFlash" type="Node" parent="." node_paths=PackedStringArray("health", "visual")]
 script = ExtResource("90_hit_flash")

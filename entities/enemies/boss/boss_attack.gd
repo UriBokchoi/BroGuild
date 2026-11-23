@@ -1,17 +1,15 @@
 class_name BossAttack
 extends Node
 ## Un ataque de un [Boss] (un nodo hijo suyo). El jefe lo elige al azar según [member weight] entre
-## los que puede hacer, grita una de sus frases, lo empieza con [method begin] y lo avanza con
-## [method step] en cada tick de física hasta que termina; mientras, no persigue: el ataque mueve el
-## cuerpo. Si el jefe muere o se retira, [method cancel] quita lo que haya dejado a la vista. Un
-## ataque nuevo es un script que hereda de este, con sus números en [code]@export[/code].
+## los que puede hacer, lo empieza con [method begin] y lo avanza con [method step] en cada tick de
+## física hasta que termina; mientras, no persigue: el ataque mueve el cuerpo. Si el jefe muere o se
+## retira, [method cancel] quita lo que haya dejado a la vista. Un ataque nuevo es un script que
+## hereda de este, con sus números en [code]@export[/code].
 
 ## Peso al elegir el siguiente ataque.
 @export_range(0.0, 100.0, 0.1) var weight: float = 1.0
 ## Solo lo hace con rabia.
 @export var enraged_only: bool = false
-## Lo que grita al empezarlo (claves de traducción; una al azar). Vacío: nada.
-@export var shout_keys: Array[StringName] = []
 
 ## Quien lo hace (lo pone el jefe al prepararse).
 var boss: Boss

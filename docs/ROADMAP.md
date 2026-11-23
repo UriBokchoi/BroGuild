@@ -92,11 +92,29 @@
 - [x] Feedback al golpear y al recibir: números de daño (Hito 2), temblor de pantalla, borde rojo y destello blanco (tras el Hito 3). Hit-stop descartado: el diseñador no quiere parones al golpear
 - [x] Balanceo al andar y correr: el cuerpo rebota a cada paso y se mece, más cuanto más rápido vas
 - [x] Partículas: humo al morir (del color del enemigo), chispas al golpear, restos al romper, destellos al abrir un cofre y polvo de las ondas de suelo (las monedas ya saltaban como botín)
-- [ ] Polvo pequeño a cada paso (con el aviso de pasos del balanceo)
+- [ ] Alcance de la nube de colonia: un dibujo en el suelo que gira despacio (como en Megabonk), en vez de la burbuja
+- [ ] Límite del mapa: un muro que solo se ve al acercarte
+- [ ] Power-ups con su efecto al cogerlos: la bomba, una explosión nuclear (destello, hongo y onda); el imán, la comida, la bebida energética y el reloj de arena, el suyo
+- [ ] Enemigos que aparecen con una animación
+- [ ] Hojitas que caen de las copas de los árboles al meterte dentro
+- [ ] Polvo pequeño a cada paso (con el aviso de pasos del balanceo). Lo último del hito, a petición del diseñador
 - [x] UI animada: botones que crecen y se hunden, paneles que aparecen, contadores y casillas que saltan, experiencia que se llena suave y vida con rastro de lo perdido (los sonidos llegaron tras el Hito 3)
 - [x] Rendimiento: 300+ enemigos a 60 fps (medido: 300 a 120 fps de media en el equipo de desarrollo)
 
+## Hito 5b — Pulido tras las pruebas (2026-11-23)
+Lo que salió al probar la partida; va antes que el resto de hitos.
+- [x] Opciones: la resolución que se ve es la de verdad (en pantalla completa, la de la pantalla)
+- [x] El tejado de la taberna choca (se podía atravesar subiendo encima)
+- [x] Los jefes no hablan: fuera sus gritos
+- [x] Barras de jefe más pequeñas y claras: nombre a la izquierda, vida en números («4530 / 5000») a la derecha y una barra fina
+- [x] Barra de experiencia abajo, fina y minimalista
+- [x] Ver tus stats al subir de nivel y al elegir un objeto
+- [x] Elegir nivel: su objetivo (en el Brosque, vencer al Ent-renador) y una descripción con su lore
+- [x] `docs/LORE.md`: el lore del juego en un archivo para leerlo y cambiarlo a mano (los textos del juego, con su clave en `data/i18n/strings.csv`, se apuntan ahí)
+- [x] Hacha arrojadiza: gira tumbada (en horizontal) y es más grande (×1,7 y su filo, 1,2 m); crece con el área
+
 ## Hito 6 — Niveles
+- [ ] El Brosque más grande
 - [ ] El Brosque: más detalle (decoración, variedad del suelo, props de gimnasio, sonido ambiente); la v1 llegó en el Hito 3
 - [x] Brosque: el miniboss Trolleador Cara a los 4:30 (barra propia bajo la del jefe, porrazo en área y salto) y dos trolls de piedra fuera de la pared este (guiño a El Hobbit); los jefes ya trepan por las pesas
 - [ ] La Torre del Mago
@@ -106,13 +124,27 @@
 - [ ] Racha y botín (niveles, multiplicador, guardar, perder al ser golpeado)
 - [ ] Pactos del Gremio
 - [ ] Élites con afijos que sueltan cofres
+- [ ] Objetos con efectos además de stats: veneno con probabilidad al golpear, y más del estilo
 
 ## Hito 8 — Cierre de partida y meta
+- [ ] Portal del jefe en lugar del altar: el jefe se invoca en él y, tras vencerlo, hay que cruzarlo para pasar el nivel. Al vencerlo, un texto lo explica y una flecha amarilla señala el portal unos 3 s
+- [ ] Pasado el minuto 10, con el jefe vencido, morir también cuenta como victoria
 - [ ] Jefes de la Torre del Mago y la Mazmorra (el del Brosque llega en el Hito 3)
 - [ ] ¿Retirarse o seguir? y torneos siguientes
 - [ ] Resumen de partida
 - [ ] Desbloqueos (personajes, armas, ventajas) y condiciones para conseguirlos
 - [ ] Más opciones (sensibilidad, remapeo)
+
+## Mantenimiento (siempre)
+- [ ] Repaso del código para que se lea como escrito a mano: comentarios que expliquen el porqué en lo que no se entiende solo, comentarios de documentación más cortos y sin jerga
+
+## Orden de trabajo acordado (2026-11-23)
+1. Hito 5b (pulido tras las pruebas).
+2. Del Hito 8: el portal del jefe y la victoria al morir tras el minuto 10.
+3. Del Hito 5: colonia, límite del mapa, power-ups, aparición de enemigos y hojas.
+4. Del Hito 6: el Brosque más grande.
+5. Del Hito 7: objetos con efectos.
+6. Polvo de los pasos (Hito 5) y repaso del código.
 
 ## Backlog (sin orden)
 - Raíles/ziplines y plataformas de salto

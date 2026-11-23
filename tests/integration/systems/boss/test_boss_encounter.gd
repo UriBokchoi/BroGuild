@@ -1,7 +1,7 @@
 extends GutTest
 ## BossEncounter con física real y el jefe del Brosque: cuenta las llaves y lo avisa; el altar solo
 ## lo saca con las llaves (o al acabar la ronda, aunque falten), una vez por partida y más fuerte con
-## la dificultad; pasa al HUD su vida y sus gritos y sus refuerzos salen por el director. Al vencerlo
+## la dificultad; pasa al HUD su vida y sus refuerzos salen por el director. Al vencerlo
 ## paran las oleadas, se retiran los demás, llega el premio (oro × rapidez y un objeto que el HUD
 ## revela y llega al acabar) y se avisa de la victoria.
 
@@ -18,7 +18,6 @@ var _encounter: BossEncounter
 var _keys: Array[Vector2i] = []
 var _spawned: Array[StringName] = []
 var _healths: Array[float] = []
-var _shouts: Array[StringName] = []
 var _revealed: Array[PassiveItemData] = []
 var _gold: float = 0.0
 var _victories: Array = []
@@ -28,7 +27,6 @@ func before_each() -> void:
 	_keys.clear()
 	_spawned.clear()
 	_healths.clear()
-	_shouts.clear()
 	_revealed.clear()
 	_victories.clear()
 	_gold = 0.0
@@ -51,7 +49,6 @@ func before_each() -> void:
 	EventBus.boss_keys_changed.connect(_on_keys)
 	EventBus.boss_spawned.connect(_on_spawned)
 	EventBus.boss_health_changed.connect(_on_health)
-	EventBus.boss_shouted.connect(_on_shout)
 	EventBus.item_revealed.connect(_on_revealed)
 	EventBus.pickup_collected.connect(_on_pickup)
 	EventBus.boss_defeated.connect(_on_defeated)
@@ -62,7 +59,6 @@ func after_each() -> void:
 	EventBus.boss_keys_changed.disconnect(_on_keys)
 	EventBus.boss_spawned.disconnect(_on_spawned)
 	EventBus.boss_health_changed.disconnect(_on_health)
-	EventBus.boss_shouted.disconnect(_on_shout)
 	EventBus.item_revealed.disconnect(_on_revealed)
 	EventBus.pickup_collected.disconnect(_on_pickup)
 	EventBus.boss_defeated.disconnect(_on_defeated)
@@ -110,11 +106,9 @@ func test_it_comes_stronger_with_the_difficulty() -> void:
 	assert_almost_eq(shown, base * factor, 1.0, "el HUD sabe su vida")
 
 
-func test_its_shouts_and_reinforcements_go_through() -> void:
+func test_its_reinforcements_go_through() -> void:
 	_encounter.summon(Vector3.ZERO)
 	var boss := _encounter.get_boss()
-	boss.shout([&"ENT_TRAINER_SHOUT_ONE_MORE"] as Array[StringName])
-	assert_eq(_shouts, [&"ENT_TRAINER_SHOUT_ONE_MORE"] as Array[StringName])
 	boss.summon(SAPLING, 3, 2.0, 4.0)
 	assert_eq(_swarm.active_count(), 4, "el jefe y tres refuerzos")
 
@@ -203,6 +197,3 @@ func _on_defeated(victory_key: StringName, _seconds: float, bonus: float) -> voi
 func _on_spawned(name_key: StringName) -> void:
 	_spawned.append(name_key)
 
-
-func _on_shout(text_key: StringName) -> void:
-	_shouts.append(text_key)

@@ -3,8 +3,9 @@ extends Node3D
 ## Selección de personaje y de nivel antes de jugar (GDD §9, «Menús»): a la izquierda, la lista de
 ## personajes; en el centro, el modelo del que se mira, girando; a la derecha, al pasar el ratón, su
 ## nombre, sus diferencias de stats, su arma principal y su habilidad pasiva. Al elegir uno, ese
-## panel se cambia por la lista de niveles (los que aún no existen salen desactivados) y la lista de
-## personajes se oculta. Esc o «Volver» retroceden: de los niveles a los personajes y de ahí al menú.
+## panel se cambia por la lista de niveles (los que aún no existen salen desactivados), con la ficha
+## del nivel señalado debajo (su nombre, cómo se gana y su lore), y la lista de personajes se oculta.
+## Esc o «Volver» retroceden: de los niveles a los personajes y de ahí al menú.
 ## Lo muestra [Game].
 
 ## Se eligió personaje y nivel.
@@ -27,6 +28,9 @@ var _chosen: CharacterData
 @onready var _info: Control = %Info
 @onready var _level_panel: Control = %LevelPanel
 @onready var _level_list: VBoxContainer = %LevelList
+@onready var _level_name: Label = %LevelName
+@onready var _level_goal: Label = %LevelGoal
+@onready var _level_lore: Label = %LevelLore
 @onready var _name: Label = %CharacterName
 @onready var _description: Label = %CharacterDescription
 @onready var _stats: VBoxContainer = %CharacterStats
@@ -83,6 +87,9 @@ func choose(character: CharacterData) -> void:
 	show_character(character)
 	_chosen = character
 	_show_levels(true)
+	# De entrada, la ficha del primer nivel (luego, la del que se señale).
+	if not levels.is_empty():
+		show_level(levels[0])
 
 
 ## Juega [param level] con el personaje elegido (si el nivel ya existe).
@@ -125,11 +132,23 @@ func _character_button(character: CharacterData) -> Button:
 	return button
 
 
+## Muestra la ficha de [param level]: su nombre, cómo se gana y su lore (lo que no tenga, no sale).
+func show_level(level: LevelData) -> void:
+	_level_name.text = level.name_key
+	_level_goal.text = level.goal_key
+	_level_goal.visible = not level.goal_key.is_empty()
+	_level_lore.text = level.lore_key
+	_level_lore.visible = not level.lore_key.is_empty()
+
+
 func _level_button(level: LevelData) -> Button:
 	var button := Button.new()
 	button.text = String(level.name_key) if level.is_available() else tr(&"LEVEL_COMING_SOON") % tr(level.name_key)
 	button.disabled = not level.is_available()
 	button.pressed.connect(play.bind(level))
+	# Su ficha, al pasar por encima o con el foco (también los que aún no se pueden jugar).
+	button.mouse_entered.connect(show_level.bind(level))
+	button.focus_entered.connect(show_level.bind(level))
 	return button
 
 

@@ -76,6 +76,9 @@ func test_fullscreen_disables_the_resolution() -> void:
 	var resolution := _panel.get_node(^"%Resolution") as OptionButton
 	fullscreen.button_pressed = true
 	assert_true(resolution.disabled)
+	var screen := DisplayServer.screen_get_size(get_window().current_screen)
+	assert_eq(_panel.shown_resolution(), screen, "en pantalla completa, la de la pantalla")
+	assert_eq(resolution.get_item_text(resolution.selected), tr(&"OPTIONS_RESOLUTION_VALUE") % [screen.x, screen.y])
 	fullscreen.button_pressed = false
 	assert_false(resolution.disabled)
 
