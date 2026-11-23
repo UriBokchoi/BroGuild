@@ -1429,3 +1429,19 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
 - **Cómo:** mueve las partes del modelo (`Skin` y `Sockets`), no el modelo entero, porque el modelo ya lo agachan, giran y voltean otros nodos (`BodyCrouch`, `BodyFacing`, `BodyFlip`) y se pisarían. Va en el tick de física, con la interpolación del proyecto, para que sea igual a cualquier tasa de fotogramas. Avisa de cada paso (`stepped`): ahí saldrá el polvo de los pasos.
 - **Hit-stop, descartado:** el diseñador no quiere parones al golpear. El GDD ya no lo lista; el golpe se nota con el destello blanco, los números y el sonido.
 - **Por qué:** lo pidió el diseñador, para que correr se sienta como correr.
+
+## 2026-11-23 · Luz del Brosque: media tarde cálida
+- **Decisión:** el Brosque deja el aspecto plano y lavado por una luz de media tarde, siguiendo el GDD (cálida, con brillo en lo que se recoge). El entorno vive en `levels/brosque/environment.tres` y lo comparte el menú principal.
+
+  | | Antes | Ahora |
+  |---|---|---|
+  | Sol | Blanco, energía 1 | Cálido (1; 0,89; 0,72), energía 1,25 |
+  | Cielo | Azul verdoso | Azul más profundo arriba y horizonte cálido |
+  | Niebla | Verdosa, tiñe el cielo | Dorada, con algo de dispersión del sol, sin tapar el cielo (20 %) |
+  | Tonemap | Filmic | ACES, contraste ×1,06 y saturación ×1,15 |
+  | Glow | Por defecto | Intensidad 0,7, umbral 0,95: brillan las gemas, los ojos y las luces |
+  | Sombras de contacto | No | SSAO |
+  | Hierba | Un verde plano | Manchas grandes claras y oscuras, calvas secas y grano fino (`grass.gdshader`) |
+
+- **Coste:** con 300 esbirros vivos alrededor del jugador en el Brosque (1280 × 720, sin V-Sync, equipo de desarrollo), el SSAO no se nota: 8,0 ms con él y 7,8 ms sin él. Ese fotograma lo limita la física, no la gráfica. En gráficas flojas podría pesar más; si hace falta, irá como opción en «Opciones».
+- **Por qué:** el diseñador pidió perfeccionar el aspecto. Antes todo era un verde pastel uniforme y la niebla verdosa apagaba la distancia: costaba leer el suelo y faltaba calidez.

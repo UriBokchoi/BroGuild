@@ -87,7 +87,7 @@
 - [x] Pantalla de estadísticas (Tab, mientras se mantiene y sin pausar), reutilizando la lista de stats de la pausa
 
 ## Hito 5 — Juice y look
-- [ ] Entorno según la dirección visual del GDD (luz, glow y tonemapping)
+- [x] Entorno según la dirección visual del GDD: sol de media tarde, cielo azul con horizonte cálido, niebla dorada, ACES, glow, SSAO y hierba con manchas (compartido por el Brosque y el menú)
 - [ ] Materiales con color propio por tipo de enemigo y rareza
 - [x] Feedback al golpear y al recibir: números de daño (Hito 2), temblor de pantalla, borde rojo y destello blanco (tras el Hito 3). Hit-stop descartado: el diseñador no quiere parones al golpear
 - [x] Balanceo al andar y correr: el cuerpo rebota a cada paso y se mece, más cuanto más rápido vas

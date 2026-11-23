@@ -1,0 +1,38 @@
+[gd_resource type="Environment" format=3]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_sky"]
+sky_top_color = Color(0.2, 0.44, 0.84, 1)
+sky_horizon_color = Color(0.88, 0.86, 0.76, 1)
+sky_curve = 0.07
+ground_bottom_color = Color(0.16, 0.22, 0.14, 1)
+ground_horizon_color = Color(0.86, 0.78, 0.6, 1)
+sun_angle_max = 20.0
+
+[sub_resource type="Sky" id="Sky_brosque"]
+sky_material = SubResource("ProceduralSkyMaterial_sky")
+
+[resource]
+background_mode = 2
+sky = SubResource("Sky_brosque")
+ambient_light_source = 3
+ambient_light_sky_contribution = 0.85
+ambient_light_energy = 0.9
+tonemap_mode = 3
+tonemap_white = 6.0
+ssao_enabled = true
+ssao_radius = 1.2
+ssao_intensity = 1.6
+ssao_power = 1.4
+glow_enabled = true
+glow_intensity = 0.7
+glow_bloom = 0.04
+glow_hdr_threshold = 0.95
+fog_enabled = true
+fog_light_color = Color(0.86, 0.8, 0.66, 1)
+fog_sun_scatter = 0.25
+fog_density = 0.0035
+fog_aerial_perspective = 0.35
+fog_sky_affect = 0.2
+adjustment_enabled = true
+adjustment_contrast = 1.06
+adjustment_saturation = 1.15
