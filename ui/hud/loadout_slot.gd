@@ -3,7 +3,8 @@ extends PanelContainer
 ## Una ranura del HUD de armas y runas ([LoadoutBar]): vacía, cerrada (con un candado: aún no se ha
 ## desbloqueado) o con el icono de lo que lleva y su nivel. Estilo: variaciones
 ## [code]LoadoutSlot[/code], [code]LoadoutSlotEmpty[/code], [code]LoadoutSlotLocked[/code],
-## [code]LoadoutLevelLabel[/code] y [code]LoadoutLevelMaxLabel[/code] del Theme global.
+## [code]LoadoutLevelLabel[/code] y [code]LoadoutLevelMaxLabel[/code] del Theme global. Salta al
+## entrar algo o subir de nivel ([UiMotion]).
 
 ## Qué muestra.
 enum Content { EMPTY, LOCKED, ITEM }
@@ -12,6 +13,8 @@ var _icon: TextureRect
 var _level: Label
 var _content: Content = Content.EMPTY
 var _item: ItemData
+## Nivel que muestra (para saltar solo cuando cambia).
+var _shown_level: int = 0
 
 
 func _init(side: float) -> void:
@@ -33,11 +36,16 @@ func _init(side: float) -> void:
 
 ## Muestra [param item] a [param level].
 func show_item(item: ItemData, level: int) -> void:
+	var changed := item != get_item() or level != _shown_level
 	_show(Content.ITEM, item, &"LoadoutSlot")
 	_icon.texture = item.icon
 	var maxed := level >= item.max_level()
 	_level.text = tr(&"LOADOUT_MAX") if maxed else str(level)
 	_level.theme_type_variation = &"LoadoutLevelMaxLabel" if maxed else &"LoadoutLevelLabel"
+	_shown_level = level
+	# Salta al entrar o subir de nivel lo que lleva (no al volver a pintar lo mismo).
+	if changed and is_inside_tree():
+		UiMotion.pop(self)
 
 
 ## Ranura abierta sin nada.

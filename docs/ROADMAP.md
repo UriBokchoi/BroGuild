@@ -88,12 +88,12 @@
 
 ## Hito 5 — Juice y look
 - [x] Entorno según la dirección visual del GDD: sol de media tarde, cielo azul con horizonte cálido, niebla dorada, ACES, glow, SSAO y hierba con manchas (compartido por el Brosque y el menú)
-- [ ] Materiales con color propio por tipo de enemigo y rareza
+- [x] Color propio por tipo de enemigo y por rareza: cada enemigo con el suyo (también en sus datos, `EnemyData.color`, para sus efectos), élites con brillo y rarezas iguales en cartas, cofres, HUD y Archivo
 - [x] Feedback al golpear y al recibir: números de daño (Hito 2), temblor de pantalla, borde rojo y destello blanco (tras el Hito 3). Hit-stop descartado: el diseñador no quiere parones al golpear
 - [x] Balanceo al andar y correr: el cuerpo rebota a cada paso y se mece, más cuanto más rápido vas
 - [x] Partículas: humo al morir (del color del enemigo), chispas al golpear, restos al romper, destellos al abrir un cofre y polvo de las ondas de suelo (las monedas ya saltaban como botín)
 - [ ] Polvo pequeño a cada paso (con el aviso de pasos del balanceo)
-- [ ] UI animada (los sonidos, con la experiencia que sube de tono si se recoge seguida, adelantados tras el Hito 3)
+- [x] UI animada: botones que crecen y se hunden, paneles que aparecen, contadores y casillas que saltan, experiencia que se llena suave y vida con rastro de lo perdido (los sonidos llegaron tras el Hito 3)
 - [x] Rendimiento: 300+ enemigos a 60 fps (medido: 300 a 120 fps de media en el equipo de desarrollo)
 
 ## Hito 6 — Niveles

@@ -92,7 +92,7 @@ Objetivo: 60 fps estables con 300+ enemigos. Enemigos con steering simple (sin `
 CLAUDE.md
 docs/        GDD.md, ROADMAP.md, DECISIONES.md
 addons/      solo GUT (tests)
-autoload/    EventBus, RunState, Rng, Audio, Save
+autoload/    EventBus, RunState, Rng, Save, Sfx, UiJuice
 core/        piezas genéricas: state_machine/, stats/, components/, pooling/, weighted_table.gd
 entities/    player/ (movement/ con states/, feedback/, camera/, stamina/, characters/), enemies/, pickups/, interactables/
 systems/     combat/, gamble/, upgrades/, spawning/, progression/

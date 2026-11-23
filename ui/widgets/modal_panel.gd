@@ -2,7 +2,11 @@ class_name ModalPanel
 extends CanvasLayer
 ## Base de los paneles que se abren encima de la partida y obligan a elegir (subir de nivel, un
 ## objeto): mientras están abiertos el juego está en pausa, piden el cursor y Esc no los salta (ni abre
-## la pausa debajo, que al cerrarse reanudaría el juego bajo las cartas).
+## la pausa debajo, que al cerrarse reanudaría el juego bajo las cartas). Al abrirse, su contenido
+## ([member appear_root]) aparece con [method UiMotion.appear].
+
+## Lo que aparece al abrirse (vacío: nada se anima).
+@export var appear_root: Control
 
 
 func _ready() -> void:
@@ -30,5 +34,7 @@ func is_open() -> bool:
 
 func _set_open(open_panel: bool) -> void:
 	visible = open_panel
+	if open_panel and appear_root:
+		UiMotion.appear(appear_root)
 	get_tree().paused = open_panel
 	EventBus.cursor_requested.emit(self, open_panel)

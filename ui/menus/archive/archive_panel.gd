@@ -46,7 +46,7 @@ func open() -> void:
 	_build_tabs()
 	if not catalog.categories.is_empty():
 		show_category(catalog.categories[0])
-	visible = true
+	UiMotion.reveal(self)
 	_back.grab_focus()
 
 

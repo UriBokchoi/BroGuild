@@ -62,6 +62,8 @@ func close() -> void:
 
 func _set_open(open_menu: bool) -> void:
 	visible = open_menu
+	if open_menu:
+		UiMotion.appear(_layout)
 	get_tree().paused = open_menu
 	EventBus.cursor_requested.emit(self, open_menu)
 

@@ -30,6 +30,7 @@ var _ended: bool = false
 var _death_tint: Color = Color.BLACK
 
 @onready var _blur: ColorRect = %Blur
+@onready var _content: Control = $Center/Content
 @onready var _title: Label = %Title
 @onready var _rows: GridContainer = %Rows
 @onready var _retry: Button = %Retry
@@ -143,6 +144,8 @@ func _add_row(name_key: StringName, value: String) -> void:
 
 func _set_open(open_panel: bool) -> void:
 	visible = open_panel
+	if open_panel:
+		UiMotion.appear(_content)
 	get_tree().paused = open_panel
 	EventBus.cursor_requested.emit(self, open_panel)
 

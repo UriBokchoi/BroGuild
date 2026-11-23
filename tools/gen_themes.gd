@@ -13,6 +13,8 @@ const SLATE_LIGHT := Color("2b313e")
 const SLATE_HOVER := Color("394152")
 const MODIFIED := Color("7cc7ff")
 const HEALTH := Color("c94a4a")
+## El rastro de la vida perdida: un rosa claro que se vacía detrás de la barra.
+const HEALTH_TRAIL := Color("f2c6b8")
 const EXPERIENCE := Color("4fb6ff")
 const DIFFICULTY := Color("e0806e")
 const BOSS := Color("e0602f")
@@ -155,9 +157,14 @@ func _add_hud(theme: Theme) -> void:
 	theme.set_stylebox(&"fill", &"ChargeBar", _box(GOLD, 5, Vector2(0, 0), Color.TRANSPARENT, 0, 0))
 	_separation(theme, &"ChargeRow", &"HBoxContainer", 8)
 	# Barra de vida y columna que la apila con la stamina.
+	# La vida dibuja solo su relleno: el fondo y el rastro de lo perdido (claro, que se vacía con
+	# retraso) los dibuja HealthTrailBar, detrás.
 	theme.set_type_variation(&"HealthBar", &"ProgressBar")
-	theme.set_stylebox(&"background", &"HealthBar", _box(Color(SLATE, 0.85), 6, Vector2(0, 0), Color(GOLD, 0.35), 2, 2))
+	theme.set_stylebox(&"background", &"HealthBar", StyleBoxEmpty.new())
 	theme.set_stylebox(&"fill", &"HealthBar", _box(HEALTH, 6, Vector2(0, 0), Color.TRANSPARENT, 0, 0))
+	theme.set_type_variation(&"HealthTrailBar", &"ProgressBar")
+	theme.set_stylebox(&"background", &"HealthTrailBar", _box(Color(SLATE, 0.85), 6, Vector2(0, 0), Color(GOLD, 0.35), 2, 2))
+	theme.set_stylebox(&"fill", &"HealthTrailBar", _box(HEALTH_TRAIL, 6, Vector2(0, 0), Color.TRANSPARENT, 0, 0))
 	# Vida en números dentro de la barra, con contorno para leerse sobre el rojo y sobre el fondo.
 	_label_variation(theme, &"HealthValueLabel", 15, INK)
 	theme.set_constant(&"outline_size", &"HealthValueLabel", 4)

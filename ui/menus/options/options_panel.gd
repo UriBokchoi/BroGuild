@@ -52,7 +52,7 @@ func _unhandled_input(event: InputEvent) -> void:
 func open() -> void:
 	_pending = Save.settings.copy()
 	_show_settings()
-	visible = true
+	UiMotion.reveal(self)
 	_back.grab_focus()
 
 

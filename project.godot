@@ -24,6 +24,7 @@ Rng="*res://autoload/rng.gd"
 RunState="*res://autoload/run_state.gd"
 Save="*res://autoload/save.gd"
 Sfx="*res://autoload/sfx.gd"
+UiJuice="*res://autoload/ui_juice.gd"
 
 [debug]
 

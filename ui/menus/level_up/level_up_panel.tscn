@@ -9,10 +9,11 @@ shader = ExtResource("2_blur")
 shader_parameter/blur_lod = 2.5
 shader_parameter/tint = Color(0.05, 0.06, 0.09, 0.55)
 
-[node name="LevelUpPanel" type="CanvasLayer"]
+[node name="LevelUpPanel" type="CanvasLayer" node_paths=PackedStringArray("appear_root")]
 process_mode = 3
 layer = 30
 script = ExtResource("1_panel")
+appear_root = NodePath("Center/Content")
 data = ExtResource("3_data")
 
 [node name="Blur" type="ColorRect" parent="."]

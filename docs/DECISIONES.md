@@ -1470,3 +1470,16 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
 
   El pico de ~20 ms sale igual sin partículas: viene de la física de los 120 apilados tras el empuje.
 - **Por qué:** era lo que faltaba del juice del GDD. Cada golpe, muerte o premio se lee de un vistazo en mitad de la horda.
+
+## 2026-11-23 · UI animada
+- **Decisión:** la interfaz se mueve con tweens cortos, todos con sus tiempos en `data/ui/motion.tres` (`UiMotionData`):
+
+  | Qué | Cómo |
+  |---|---|
+  | Botones | Crecen un 4 % con el ratón o el foco y se hunden al 96 % al pulsarlos, en 0,08 s. Los engancha todos el autoload `UiJuice` al entrar en el árbol, salvo las cartas de mejora, que tienen su propia animación |
+  | Paneles | Aparecen en 0,16 s, de transparentes y al 94 % a su tamaño |
+  | Contadores y casillas | Saltan al 118 % y vuelven en 0,22 s: el oro al ganar, la casilla de un arma, runa u objeto al llegar o subir de nivel, el número de nivel |
+  | Experiencia | La barra se llena suave en 0,18 s; al subir de nivel empieza de nuevo al momento |
+  | Vida | Al perderla, la barra baja de golpe y deja un rastro claro que se vacía tras 0,35 s, en 0,45 s; al curarse, sube suave |
+
+- **Por qué:** el GDD pide una UI animada y legible en mitad del caos. El rastro de la vida dice cuánto quitó el golpe sin leer números. La vida baja al momento para no esconder el peligro.

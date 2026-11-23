@@ -39,7 +39,7 @@ func open() -> void:
 	if Save.leaderboard:
 		entries = Save.leaderboard.get_entries()
 	_fill(entries)
-	visible = true
+	UiMotion.reveal(self)
 	_back.grab_focus()
 
 

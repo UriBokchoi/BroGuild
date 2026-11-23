@@ -47,7 +47,7 @@ func show_spin(data: SlotMachineData, results: Array[SlotSymbol]) -> void:
 	_build_reels(results.size())
 	_reels.visible = true
 	_result.visible = false
-	visible = true
+	UiMotion.reveal(self)
 	set_process(true)
 
 
@@ -60,7 +60,7 @@ func show_result(text_key: StringName, value: float, jackpot: bool) -> void:
 	if _data == null:
 		# Sin tirada (no había oro): solo el aviso.
 		_reels.visible = false
-	visible = true
+	UiMotion.reveal(self)
 	_hide_left = linger
 	set_process(true)
 

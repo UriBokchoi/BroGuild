@@ -62,7 +62,7 @@ func show_opening(item: PassiveItemData, reveal_time: float) -> void:
 	_message.visible = false
 	_revealing = true
 	_hide_left = 0.0
-	visible = true
+	UiMotion.reveal(self)
 	set_process(true)
 
 
@@ -74,7 +74,7 @@ func show_denied(cost: int) -> void:
 	_message.visible = true
 	_tiles.visible = false
 	_result.visible = false
-	visible = true
+	UiMotion.reveal(self)
 	_hide_left = linger
 	set_process(true)
 

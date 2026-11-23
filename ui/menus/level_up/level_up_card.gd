@@ -35,6 +35,8 @@ var _pop: Tween
 
 
 func _init(offered: LevelUpOption) -> void:
+	# Se anima por su cuenta (ruleta y salto): los botones de UiJuice no la tocan.
+	add_to_group(UiJuice.SKIP_GROUP)
 	option = offered
 	theme_type_variation = &"CardButton"
 	var extra_lines := maxi(option.modifiers().size() - 1, 0) + (1 if option.rarity() else 0)
