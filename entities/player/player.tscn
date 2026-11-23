@@ -44,6 +44,12 @@
 [ext_resource type="Script" path="res://vfx/juice/invulnerability_blink.gd" id="45_blink"]
 [ext_resource type="Script" path="res://entities/player/knockback_receiver.gd" id="46_knockback"]
 [ext_resource type="Script" path="res://vfx/juice/screen_shake/screen_shake.gd" id="47_shake"]
+[ext_resource type="Resource" path="res://data/player/movement_synergy.tres" id="48_synergy_data"]
+[ext_resource type="Script" path="res://entities/player/synergy/fire_trail.gd" id="49_fire_trail"]
+[ext_resource type="Mesh" path="res://entities/player/synergy/fire_patch.tres" id="50_fire_patch"]
+[ext_resource type="Script" path="res://entities/player/synergy/synergy_wave.gd" id="51_synergy_wave"]
+[ext_resource type="PackedScene" path="res://entities/player/synergy/dash_wave.tscn" id="52_dash_wave"]
+[ext_resource type="PackedScene" path="res://entities/player/synergy/slam_blast.tscn" id="53_slam_blast"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_interactor"]
 radius = 0.6
@@ -130,7 +136,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
 
 [node name="Stats" type="Node" parent="."]
 script = ExtResource("3_stats")
-sources = Array[Resource]([ExtResource("16_health_data"), ExtResource("17_offense_data"), ExtResource("18_progression_data"), ExtResource("4_movement"), ExtResource("11_stamina_data")])
+sources = Array[Resource]([ExtResource("16_health_data"), ExtResource("17_offense_data"), ExtResource("18_progression_data"), ExtResource("4_movement"), ExtResource("11_stamina_data"), ExtResource("48_synergy_data")])
 
 [node name="Health" type="Node" parent="." node_paths=PackedStringArray("stats")]
 script = ExtResource("33_health")
@@ -265,10 +271,11 @@ trail_states = [NodePath("../Movement/Dash"), NodePath("../Movement/DashJump"), 
 [node name="SpeedLines" parent="." node_paths=PackedStringArray("body") instance=ExtResource("32_speed_lines")]
 body = NodePath("..")
 
-[node name="ScreenShake" type="Node" parent="." node_paths=PackedStringArray("camera", "health")]
+[node name="ScreenShake" type="Node" parent="." node_paths=PackedStringArray("camera", "health", "blasts")]
 script = ExtResource("47_shake")
 camera = NodePath("../CameraRig/SpringArm3D/Camera3D")
 health = NodePath("../Health")
+blasts = [NodePath("../SlamBlast")]
 trauma_per_health = 2.5
 min_trauma = 0.3
 decay = 2.2
@@ -327,3 +334,32 @@ script = ExtResource("46_knockback")
 body = NodePath("..")
 hurtbox = NodePath("../Hurtbox")
 health = NodePath("../Health")
+
+[node name="FireTrail" type="Node3D" parent="." node_paths=PackedStringArray("stats", "body", "machine", "trail_state")]
+top_level = true
+script = ExtResource("49_fire_trail")
+stats = NodePath("../Stats")
+body = NodePath("..")
+machine = NodePath("../Movement")
+trail_state = NodePath("../Movement/Slide")
+hit_mask = 16
+patch_mesh = ExtResource("50_fire_patch")
+
+[node name="DashWave" type="Node" parent="." node_paths=PackedStringArray("stats", "body", "machine", "enter_state")]
+script = ExtResource("51_synergy_wave")
+stats = NodePath("../Stats")
+damage_stat = &"dash_wave_damage"
+body = NodePath("..")
+machine = NodePath("../Movement")
+enter_state = NodePath("../Movement/Dash")
+wave_scene = ExtResource("52_dash_wave")
+pool_size = 3
+
+[node name="SlamBlast" type="Node" parent="." node_paths=PackedStringArray("stats", "body", "slam_state")]
+script = ExtResource("51_synergy_wave")
+stats = NodePath("../Stats")
+damage_stat = &"slam_damage"
+body = NodePath("..")
+slam_state = NodePath("../Movement/FastFall")
+wave_scene = ExtResource("53_slam_blast")
+trauma = 0.35

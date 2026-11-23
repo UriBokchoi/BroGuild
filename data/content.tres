@@ -13,6 +13,9 @@
 [ext_resource type="Resource" uid="uid://xuxj6iplgu0e" path="res://data/runes/haste.tres" id="18_haste"]
 [ext_resource type="Resource" uid="uid://dd167hn1w21r5" path="res://data/runes/vigor.tres" id="19_vigor"]
 [ext_resource type="Resource" uid="uid://c0xh45lit48bm" path="res://data/runes/multiplicity.tres" id="20_multiplicity"]
+[ext_resource type="Resource" path="res://data/runes/embers.tres" id="20a_embers"]
+[ext_resource type="Resource" path="res://data/runes/gale.tres" id="20b_gale"]
+[ext_resource type="Resource" path="res://data/runes/quake.tres" id="20c_quake"]
 [ext_resource type="Resource" uid="uid://cftr4ua7gn2io" path="res://data/items/cold_pizza.tres" id="21_cold_pizza"]
 [ext_resource type="Resource" uid="uid://b543ag8ww3tkn" path="res://data/items/fanny_pack.tres" id="22_fanny_pack"]
 [ext_resource type="Resource" uid="uid://c0dc8m2qrwdkn" path="res://data/items/game_controller.tres" id="23_game_controller"]
@@ -61,7 +64,7 @@ script = ExtResource("2_category")
 id = &"runes"
 name_key = &"ARCHIVE_CATEGORY_RUNES"
 hint_key = &"ARCHIVE_HINT_RUNES"
-entries = Array[Resource]([ExtResource("16_strength"), ExtResource("17_amplitude"), ExtResource("18_haste"), ExtResource("19_vigor"), ExtResource("20_multiplicity")])
+entries = Array[Resource]([ExtResource("16_strength"), ExtResource("17_amplitude"), ExtResource("18_haste"), ExtResource("19_vigor"), ExtResource("20_multiplicity"), ExtResource("20a_embers"), ExtResource("20b_gale"), ExtResource("20c_quake")])
 
 [sub_resource type="Resource" id="Category_items"]
 script = ExtResource("2_category")

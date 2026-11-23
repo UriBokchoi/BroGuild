@@ -29,6 +29,8 @@
 [ext_resource type="AudioStream" uid="uid://bc0aaxwphpo1a" path="res://assets/audio/sfx/upgrade_spin_tick.wav" id="40_upgrade_spin_tick"]
 [ext_resource type="AudioStream" uid="uid://fhesjvrxn2st" path="res://assets/audio/sfx/upgrade_revealed.wav" id="41_upgrade_revealed"]
 [ext_resource type="AudioStream" path="res://assets/audio/sfx/horde_incoming.wav" id="42_horde_incoming"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/synergy_dash_wave.wav" id="43_synergy_dash_wave"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/synergy_slam.wav" id="44_synergy_slam"]
 
 [sub_resource type="Resource" id="Cue_boss_defeated"]
 script = ExtResource("2_cue")
@@ -186,6 +188,20 @@ script = ExtResource("2_cue")
 stream = ExtResource("42_horde_incoming")
 max_voices = 1
 
+[sub_resource type="Resource" id="Cue_synergy_dash_wave"]
+script = ExtResource("2_cue")
+stream = ExtResource("43_synergy_dash_wave")
+volume_db = -3.0
+pitch_variation = 0.08
+max_voices = 2
+min_interval = 0.05
+
+[sub_resource type="Resource" id="Cue_synergy_slam"]
+script = ExtResource("2_cue")
+stream = ExtResource("44_synergy_slam")
+pitch_variation = 0.05
+max_voices = 1
+
 [sub_resource type="Resource" id="Cue_double_won"]
 script = ExtResource("2_cue")
 stream = ExtResource("30_slot_jackpot")
@@ -242,5 +258,9 @@ reveal_pitches = Dictionary[StringName, float]({
 })
 button_pressed = SubResource("Cue_button_pressed")
 horde_incoming = SubResource("Cue_horde_incoming")
+synergies = Dictionary[StringName, ExtResource("2_cue")]({
+&"dash_wave_damage": SubResource("Cue_synergy_dash_wave"),
+&"slam_damage": SubResource("Cue_synergy_slam")
+})
 double_won = SubResource("Cue_double_won")
 double_lost = SubResource("Cue_double_lost")

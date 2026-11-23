@@ -110,3 +110,11 @@ func test_the_whole_mix_follows_the_bank_volume() -> void:
 		if (player as AudioStreamPlayer).stream == cue.stream:
 			loudest = maxf(loudest, (player as AudioStreamPlayer).volume_db)
 	assert_eq(loudest, -8.0, "el del sonido más el de todos")
+
+
+func test_movement_synergies_sound_by_their_damage_stat() -> void:
+	EventBus.synergy_released.emit(&"slam_damage", Vector3.ZERO)
+	assert_eq(Sfx.last_cue, _bank.synergies[&"slam_damage"], "la explosión de la caída")
+	Sfx.reset()
+	EventBus.synergy_released.emit(&"dash_wave_damage", Vector3.ZERO)
+	assert_eq(Sfx.last_cue, _bank.synergies[&"dash_wave_damage"], "la onda del dash")

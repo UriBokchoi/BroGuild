@@ -1,0 +1,23 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://entities/enemies/boss/shockwave/shockwave.tscn" id="1_wave"]
+[ext_resource type="Shader" path="res://vfx/shaders/ground_ring.gdshader" id="2_ring"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dash"]
+render_priority = 0
+shader = ExtResource("2_ring")
+shader_parameter/color = Color(0.45, 0.85, 1, 1)
+shader_parameter/intensity = 1.4
+shader_parameter/pulse_rate = 0.0
+
+[node name="DashWave" instance=ExtResource("1_wave")]
+radius = 4.5
+duration = 0.3
+band = 1.2
+reach_height = 1.6
+knockback = 9.0
+hit_mask = 16
+max_results = 128
+
+[node name="Ring" parent="." index="0"]
+material_override = SubResource("ShaderMaterial_dash")

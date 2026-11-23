@@ -49,6 +49,11 @@ extends Resource
 ## Aviso de que viene una horda (un cuerno de guerra).
 @export var horde_incoming: SoundCue
 
+@export_group("movement")
+## El golpe de una mejora de movimiento, por la stat de su daño ([signal EventBus.synergy_released]:
+## dash_wave_damage, slam_damage).
+@export var synergies: Dictionary[StringName, SoundCue] = {}
+
 @export_group("roulette")
 ## Doble o nada ganado y perdido.
 @export var double_won: SoundCue

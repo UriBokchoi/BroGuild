@@ -58,6 +58,7 @@ func _ready() -> void:
 	EventBus.upgrade_revealed.connect(_on_upgrade_revealed)
 	EventBus.double_or_nothing_resolved.connect(_on_double_resolved)
 	EventBus.horde_incoming.connect(func(_horde: HordeData, _seconds: float) -> void: play(bank.horde_incoming))
+	EventBus.synergy_released.connect(_on_synergy_released)
 	get_tree().node_added.connect(_on_node_added)
 
 
@@ -182,3 +183,8 @@ func _on_node_added(node: Node) -> void:
 
 func _on_button_pressed() -> void:
 	play(bank.button_pressed)
+
+
+func _on_synergy_released(damage_stat: StringName, _at: Vector3) -> void:
+	if bank.synergies.has(damage_stat):
+		play(bank.synergies[damage_stat])

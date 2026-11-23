@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="RuneData" format=3]
+
+[ext_resource type="Script" path="res://systems/upgrades/runes/rune_data.gd" id="1_rune"]
+[ext_resource type="Script" path="res://systems/upgrades/upgrade_stat.gd" id="90_upgrade"]
+[ext_resource type="Texture2D" path="res://assets/textures/icons/runes/quake.svg" id="99_icon"]
+
+[sub_resource type="Resource" id="Upgrade_slam_damage"]
+script = ExtResource("90_upgrade")
+stat = &"slam_damage"
+value = 45.0
+
+[resource]
+script = ExtResource("1_rune")
+id = &"quake"
+name_key = &"RUNE_QUAKE_NAME"
+description_key = &"RUNE_QUAKE_DESCRIPTION"
+icon = ExtResource("99_icon")
+level_cap = 20
+upgrade_stats = Array[ExtResource("90_upgrade")]([SubResource("Upgrade_slam_damage")])

@@ -55,6 +55,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 | `movement/` | `MovementContext` (estado compartido entre estados), `MovementData` (sus stats), `WallSensor` y `LedgeSensor` (rayos que solo miran el mundo) y `states/`: suelo, aire, salto, doble salto, dash, dash-jump, slide, slide-jump, salto en pared, caída rápida y mantle. Base común: `MovementState`. |
 | `feedback/` | Lo que el cuerpo muestra: `BodyCrouch` (agacha el modelo y baja la hurtbox en el slide), `BodyFlip` (mortal hacia delante en el doble salto si el personaje lo tiene, `CharacterData.air_jump_flip`), `BodyFacing` (gira el modelo), `DashJumpCue` (aro de la ventana del dash-jump) y `SpeedTrail` (estela). |
 | `stamina/` | Cargas de stamina: `StaminaPool` (lógica pura), `StaminaComponent` (nodo que recarga y avisa por EventBus) y `StaminaData`. |
+| `synergy/` | Mejoras con sinergia de movimiento, que dañan con el daño % y el crítico del jugador y crecen con su área %. `MovementSynergyData` (`data/player/movement_synergy.tres`): su daño, 0 sin su runa (entonces no hacen nada). `FireTrail` (nodo `FireTrail`): en el slide deja manchas de fuego cada metro que queman cada 0,5 s a lo que las pisa (una vez por quemadura aunque pise varias; duran 3 s, más con la duración %), dibujadas con `vfx/shaders/ground_fire.gdshader`. `SynergyWave`: suelta una `Shockwave` desde los pies al entrar en el dash (nodo `DashWave`, `dash_wave.tscn`: aro azul de 4,5 m) o al aterrizar de la caída rápida (nodo `SlamBlast`, `slam_blast.tscn`: aro naranja de 5,5 m, más rápido, con temblor de pantalla); lo avisa por `synergy_released` (el sonido). |
 | `camera/` | `CameraRig` (tercera persona, se mueve en `_process` siguiendo la posición interpolada) y `CameraData`. |
 | `characters/` | `CharacterData`: las diferencias de un personaje sobre las stats básicas (su base), su color, su arma inicial, su pasiva y las piezas de su modelo. `model/`: `CharacterModel` (cuerpo que toma el color del personaje y puntos de anclaje: manos, cabeza y espalda; lo usan el jugador y los pedestales) y `ModelAttachment` (qué pieza, en qué punto y cómo colocada). `passives/`: `CharacterPassive` (base: un nodo que el jugador añade al elegir el personaje; sus modificadores se van con él) y `LevelStatPassive`, la de los iniciales: una stat que sube por cada nivel (Veterano, daño, Guerrero; Expansión arcana, área, Mago; Letal, crítico, Pícaro), cada una con su escena y sus números. |
 | `player_input.gd` | Convierte el InputMap en acciones de la máquina y en la dirección pedida, relativa a la cámara. |
@@ -122,7 +123,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
   - `ChargeAttack` (apunta con una franja en el suelo y embiste en línea recta, varias veces, con más daño al tocar);
   - `SummonAttack` (pide refuerzos de un `EnemyData`, más con rabia).
   - El daño de sus ataques es su daño al tocar (con el escalado) por un factor.
-- **`Shockwave`** (`shockwave/`): onda que se abre hasta su radio y daña una vez a lo que alcanza su borde a ras de suelo (se esquiva saltándola o alejándose). Se ve con `vfx/shaders/ground_ring.gdshader`, que también dibuja el aro de aviso.
+- **`Shockwave`** (`shockwave/`): onda que se abre hasta su radio y daña una vez a lo que alcanza su borde a ras de suelo (se esquiva saltándola o alejándose). Se ve con `vfx/shaders/ground_ring.gdshader`, que también dibuja el aro de aviso. La usan también la onda del dash y la explosión de la caída del jugador: `start` acepta las stats de ataque de quien la lanza (daño %, crítico y empuje %) y un tamaño (el área %); `max_results` dice cuántas hurtbox mira por tick (8 contra el jugador, 128 contra la horda).
 - **`BossData`** (`systems/boss/`, en `data/bosses/`): qué enemigo es, llaves que hacen falta, mensajes al salir, título de la victoria, sus curvas de escalado con la dificultad y el premio (oro × `early_bonus` según los minutos al vencerlo, y un objeto de su `ItemPool` de rarezas altas).
 - **`BossEncounter`** (en `RunSystems`, con el `BossData` del nivel: `RunSystems.boss`):
   - cuenta las llaves (`boss_key_collected` → `boss_keys_changed`);
@@ -197,11 +198,11 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
   - `interact_hint/` (`InteractHint`): el destello de lo que se puede usar con «interactuar» (ver «Interacción»);
   - `drop_glow/` (`DropGlow`): columna de luz corta y aro que late en el suelo, del color de cada power-up, para verlos entre la horda.
   - `hit_flash/` (`HitFlash`, en cada enemigo): destello blanco y suave (capa aditiva al 18 %) de 0,08 s al recibir un golpe, solo en el cuerpo (`meshes`; vacío: todo el modelo) y devolviendo la capa que hubiera (el brillo de un élite). Solo trabaja mientras destella;
-  - `screen_shake/` (`ScreenShake`, en el jugador): temblor de cámara por «trauma» al recibir daño, según la parte de la vida que quita el golpe (con un mínimo), que baja solo;
+  - `screen_shake/` (`ScreenShake`, en el jugador): temblor de cámara por «trauma» al recibir daño, según la parte de la vida que quita el golpe (con un mínimo), que baja solo; también con los golpes fuertes del jugador (`blasts`: la explosión de la caída rápida, con el trauma de su `SynergyWave`);
   - `damage_vignette/` (`DamageVignette`, en `RunSystems`): borde rojo de la pantalla, con un destello al perder vida y, por debajo del 35 % de la vida, un rojo que late más fuerte y más rápido cuanta menos queda.
 - **`speed_lines/`:** líneas de velocidad en pantalla.
 - **`time_stop/`:** `TimeStopFilter`, la pantalla teñida de azul mientras el tiempo está parado (una capa por debajo del HUD, con su shader).
-- **`shaders/`:** shaders compartidos: desenfoque de los menús, rejilla del greybox y columna de luz (`light_beam`: teletransporte, altar, llaves del jefe y power-ups) , aro en el suelo (`ground_ring`: onda y aviso del jefe, power-ups) y destello de lo que se puede usar (`interact_glint`).
+- **`shaders/`:** shaders compartidos: desenfoque de los menús, rejilla del greybox y columna de luz (`light_beam`: teletransporte, altar, llaves del jefe y power-ups), aro en el suelo (`ground_ring`: onda y aviso del jefe, onda del dash y explosión de la caída del jugador, power-ups), fuego en el suelo (`ground_fire`: el rastro ardiente del slide) y destello de lo que se puede usar (`interact_glint`).
 - **Shaders propios de una feature:** van con ella (tajo de la espada, plataforma del teletransporte, líneas de velocidad).
 
 ### UI — `ui/`
@@ -239,7 +240,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 - **`SfxRecipe`** (`data/audio/sfx/`, una por sonido): receta de un efecto sintetizado al estilo de sfxr: onda, tono que se desliza, arpegio, vibrato, parciales (varios tonos a la vez, para timbres metálicos como la moneda), ruido, filtro de graves y envolvente (con la caída recta o curvada, como el metal).
 - **`SfxSynth`:** la convierte en muestras de 16 bits (lógica pura, sin azar externo). `tools/gen_sfx.gd` guarda cada receta como `assets/audio/sfx/<nombre>.wav`.
 - **`SoundCue`:** un sonido del juego: su audio, volumen, variación de tono y cuánto se deja repetir (voces a la vez y separación mínima).
-- **`SfxBank`** (`data/audio/sfx_bank.tres`): qué suena con cada cosa (golpes, muertes, recogibles por recompensa, cofres, tragaperras por resultado, jefe, botones) y la racha de la experiencia (sube un semitono cada recogida seguida).
+- **`SfxBank`** (`data/audio/sfx_bank.tres`): qué suena con cada cosa (golpes, muertes, recogibles por recompensa, cofres, tragaperras por resultado, jefe, botones, la onda del dash y la explosión de la caída por la stat de su daño) y la racha de la experiencia (sube un semitono cada recogida seguida).
 - **`Sfx`** (autoload): escucha el `EventBus` y los botones (`node_added`) y hace sonar el banco con un grupo de `AudioStreamPlayer` en el bus `Effects`, también en pausa; el banco lleva un volumen de toda la mezcla (`SfxBank.volume_db`, −6 dB). Las voces se cuentan por lo que dura cada sonido. Sin pantalla (`--headless`: tests y validación) lleva la cuenta pero no reproduce, para no dejar reproducciones vivas al salir.
 
 ### Opciones — `systems/settings/` y `autoload/save.gd`
@@ -297,6 +298,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 | `double_or_nothing_resolved` (si se ganó) | `LevelUpPanel` | `Sfx` (premio o fallo) |
 | `time_stop_changed` (si el tiempo está parado) | `EnemySwarm` | `TimeStopFilter` |
 | `item_choice_offered` (los objetos para elegir) | `ChoiceShrine` | `ItemChoicePanel` |
+| `synergy_released` (la stat del daño y dónde) | `SynergyWave` (onda del dash, explosión de la caída) | `Sfx` |
 | `boss_key_collected` | `BossKey` | `BossEncounter` |
 | `boss_keys_changed` (llaves que lleva y que hacen falta) | `BossEncounter` | `BossAltar`, `BossKeyCounter` |
 | `boss_summon_requested` (dónde y si es forzado) | `BossAltar` | `BossEncounter` |

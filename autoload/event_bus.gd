@@ -98,5 +98,8 @@ signal upgrade_revealed(rarity: Rarity)
 signal double_or_nothing_resolved(won: bool)
 ## Se paró el tiempo (los enemigos y sus disparos, quietos) o volvió a correr.
 signal time_stop_changed(active: bool)
+## Una mejora de movimiento soltó su golpe en [param at]: la onda del dash o la explosión de la caída
+## rápida ([SynergyWave]), por la stat de su daño ([param damage_stat]).
+signal synergy_released(damage_stat: StringName, at: Vector3)
 ## Se ofrece elegir uno de [param items] (el círculo de setas): lo atiende el [ItemChoicePanel].
 signal item_choice_offered(items: Array[PassiveItemData])
