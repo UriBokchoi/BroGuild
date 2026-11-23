@@ -45,7 +45,7 @@ func test_every_enemy_stat_and_group_has_a_name() -> void:
 
 
 func test_every_weapon_stat_and_group_has_a_name() -> void:
-	for stats: Resource in [WeaponStats.new(), ProjectileStats.new(), StaffStats.new(), DaggerStats.new()]:
+	for stats: Resource in [WeaponStats.new(), ProjectileStats.new(), StaffStats.new(), DaggerStats.new(), HammerStats.new()]:
 		_assert_stat_names(stats)
 
 

@@ -8,6 +8,9 @@
 [ext_resource type="Resource" uid="uid://d3gftqdyp8ot8" path="res://data/weapons/sword.tres" id="13_sword"]
 [ext_resource type="Resource" uid="uid://dmx62swsas3tv" path="res://data/weapons/staff.tres" id="14_staff"]
 [ext_resource type="Resource" uid="uid://bgr8qck2uon1n" path="res://data/weapons/dagger.tres" id="15_dagger"]
+[ext_resource type="Resource" path="res://data/weapons/axe.tres" id="15a_axe"]
+[ext_resource type="Resource" path="res://data/weapons/cologne.tres" id="15b_cologne"]
+[ext_resource type="Resource" path="res://data/weapons/hammer.tres" id="15c_hammer"]
 [ext_resource type="Resource" uid="uid://chu8r7o3b5arl" path="res://data/runes/strength.tres" id="16_strength"]
 [ext_resource type="Resource" uid="uid://ci1nk4q4cpleo" path="res://data/runes/amplitude.tres" id="17_amplitude"]
 [ext_resource type="Resource" uid="uid://xuxj6iplgu0e" path="res://data/runes/haste.tres" id="18_haste"]
@@ -58,7 +61,7 @@ id = &"weapons"
 name_key = &"ARCHIVE_CATEGORY_WEAPONS"
 hint_key = &"ARCHIVE_HINT_WEAPONS"
 shown_stats = Array[StringName]([&"damage", &"cooldown", &"projectiles", &"area", &"reach"])
-entries = Array[Resource]([ExtResource("13_sword"), ExtResource("14_staff"), ExtResource("15_dagger")])
+entries = Array[Resource]([ExtResource("13_sword"), ExtResource("14_staff"), ExtResource("15_dagger"), ExtResource("15a_axe"), ExtResource("15b_cologne"), ExtResource("15c_hammer")])
 
 [sub_resource type="Resource" id="Category_runes"]
 script = ExtResource("2_category")

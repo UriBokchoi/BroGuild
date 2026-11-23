@@ -1390,3 +1390,28 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
 - **Trolls de piedra:** el mismo modelo del troll en dos posturas, pintado de piedra con `StoneStatue`, con musgo y una olla. Están fuera de la pared este, en un claro reservado del bosque (`LayoutData.reserved`) para que se vean desde dentro, y algo más grandes que el vivo para que destaquen de lejos.
 - **Escalado sin ciclos:** el cálculo del escalado con la dificultad pasa de `WaveData.scaling_for` a `StatScaling.modifiers_for`. `WaveData` ahora lleva `MiniBossData` dentro y, si `MiniBossData` llamara a `WaveData`, los dos scripts se referenciarían en círculo. Ese ciclo dejaba memoria sin liberar al salir, y la validación lo detectó.
 - **Por qué:** lo pidió el diseñador. El miniboss rompe la espera entre hordas con un enemigo que hay que esquivar, no solo golpear, y da un objeto a mitad de ronda. Los trolls de piedra anticipan al vivo.
+
+## 2026-11-23 · Tres armas nuevas: hacha, colonia y martillo
+- **Decisión:** tres armas que atacan de formas que aún no había. Cada una usa los proyectiles extra a su manera:
+
+  | Arma | Cómo ataca | Proyectiles extra | Base |
+  |---|---|---|---|
+  | Hacha arrojadiza | Va y vuelve atravesando. Corta lo que cruza y lo que pasa a menos de 0,9 m × área de su filo; vuelve antes si choca con una pared | Más hachas | 16 de daño cada 1,5 s |
+  | Nube de colonia | Aura de 3,2 m × área. Con alguien dentro, pulso a todos los de dentro con un empuje leve; no necesita verlos | Más pulsos seguidos | 7 cada 0,7 s |
+  | Martillo de guerra | Cae del cielo sobre el grupo más denso a su alcance (16 m) y aplasta a todos en 2,6 m × área | Más martillos, cada uno sobre otro grupo | 30 cada 2 s |
+
+- **Medida** (nivel 1, sin mejoras del personaje, DPS contra muñecos durante 12 s):
+
+  | Arma | Horda pegada (24 a 1,8–4 m) | Sueltos (10 a 6–12 m) |
+  |---|---|---|
+  | Espada | 231 | 0 |
+  | Bastón | 191 | 17 |
+  | Daga | 75 | 72 |
+  | Hacha | 93 con 14 de daño (ahora 16: unos 107) | 19 |
+  | Colonia | 241 | 0 |
+  | Martillo | 180 | 15 |
+
+  Con un rayo fino, el hacha solo daba a uno por pasada (19 en la horda). Por eso corta también a lo ancho con su filo.
+- **Por qué:** lo pidió el diseñador; el GDD ya hablaba de armas que van al grupo más denso.
+  - **Papeles distintos:** la colonia es la espada de la horda (fuerte encima, nula lejos), el martillo castiga los grupos apretados y el hacha va a media distancia contra filas.
+  - **Equilibrio:** ninguna pasa de lo que ya hacían espada y bastón a nivel 1. Las mejoras son las de siempre, con las comunes flojas.

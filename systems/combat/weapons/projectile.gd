@@ -87,6 +87,11 @@ func ignores(hurtbox: HurtboxComponent) -> bool:
 	return _exclude.has(hurtbox.get_rid())
 
 
+## Olvida a quién le dio: puede volver a dar a todos (el hacha, al volver).
+func clear_ignored() -> void:
+	_exclude.clear()
+
+
 ## Cambia de rumbo hacia [param direction], a la misma velocidad.
 func redirect(direction: Vector3) -> void:
 	velocity = direction.normalized() * velocity.length()

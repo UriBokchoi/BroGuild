@@ -305,6 +305,12 @@ WEAPON_STAFF_NAME,Bastón de mago,Mage staff
 WEAPON_STAFF_DESCRIPTION,"Orbes que explotan al tocar algo y dañan a todos los enemigos cercanos.","Orbs that explode on contact and hit every nearby enemy."
 WEAPON_DAGGER_NAME,Daga,Dagger
 WEAPON_DAGGER_DESCRIPTION,"Dagas rápidas a un solo enemigo; al mejorarla rebotan al más cercano con todo su daño.","Fast daggers at a single enemy; upgraded, they bounce to the nearest one with full damage."
+WEAPON_AXE_NAME,Hacha arrojadiza,Throwing axe
+WEAPON_AXE_DESCRIPTION,"Sale girando, atraviesa a todos los que pilla y vuelve a tu mano (y vuelve a cortar).","Spins out, cuts through everyone in its path and comes back to your hand (cutting again)."
+WEAPON_COLOGNE_NAME,Nube de colonia,Cologne cloud
+WEAPON_COLOGNE_DESCRIPTION,"Un aura de spray corporal: cada poco daña a todos los que se te acercan. Crece con el área.","A body-spray aura: every so often it hurts everyone who gets close. Grows with area."
+WEAPON_HAMMER_NAME,Martillo de guerra,War hammer
+WEAPON_HAMMER_DESCRIPTION,"Cae del cielo sobre el grupo de enemigos más apretado y aplasta a todos los de debajo.","Falls from the sky on the tightest group of enemies and crushes everyone under it."
 WEAPON_SHOOTER_GUN_NAME,Bola de fuego,Fireball
 WEAPON_SHOOTER_GUN_DESCRIPTION,"Disparo lento del tirador: da al primero que toca.","The shooter's slow shot: hits the first thing it touches."
 STAT_GROUP_PROJECTILE,Proyectil,Projectile
@@ -313,6 +319,8 @@ STAT_EXPLOSION_RADIUS,Radio de explosión,Explosion radius
 STAT_GROUP_DAGGER,Daga,Dagger
 STAT_BOUNCES,Rebotes,Bounces
 STAT_BOUNCE_RANGE,Distancia de rebote,Bounce range
+STAT_GROUP_HAMMER,Martillo,Hammer
+STAT_IMPACT_RADIUS,Radio del golpe,Impact radius
 CHARACTER_WARRIOR_NAME,Guerrero,Warrior
 CHARACTER_WARRIOR_DESCRIPTION,"Aguanta en primera línea: más vida y defensa, algo más lento y con un dash más largo.","Holds the front line: more health and armor, a bit slower, with a longer dash."
 CHARACTER_MAGE_NAME,Mago,Mage
