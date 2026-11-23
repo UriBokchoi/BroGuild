@@ -3,7 +3,7 @@ extends Node3D
 ## Rastro ardiente: mientras el jugador está en [member trail_state] (el slide), deja manchas de fuego
 ## en el suelo cada [member spacing] metros. Cada [member burn_interval] segundos, lo que pisa alguna
 ## mancha (hurtbox de [member hit_mask]) se quema: recibe [code]fire_trail_damage[/code] de su
-## [MovementSynergyData] (0 sin la runa: entonces no deja nada), con el daño % y el crítico del
+## [MovementSynergyData] (0 sin su objeto: entonces no deja nada), con el daño % y el crítico del
 ## jugador. Una sola quemadura por tick aunque pise varias manchas. Las manchas crecen con el área %
 ## y duran más con la duración %. Son [member max_patches] como mucho: si hacen falta más, se
 ## reutiliza la más vieja. Va con [code]top_level[/code]: las manchas se quedan donde caen.

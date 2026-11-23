@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d38aqypqa8xoj"
-path="res://.godot/imported/quake.svg-3fa51b551e4643b665ea7e6260d81185.ctex"
+uid="uid://cia1usnbuhmbb"
+path="res://.godot/imported/flaming_sneakers.svg-522f50f4973cab9de76d62843c2c13fc.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/icons/runes/quake.svg"
-dest_files=["res://.godot/imported/quake.svg-3fa51b551e4643b665ea7e6260d81185.ctex"]
+source_file="res://assets/textures/icons/items/flaming_sneakers.svg"
+dest_files=["res://.godot/imported/flaming_sneakers.svg-522f50f4973cab9de76d62843c2c13fc.ctex"]
 
 [params]
 

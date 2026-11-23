@@ -58,15 +58,3 @@ func test_multiplicity_gives_one_on_a_common_card_and_up_to_two_point_two() -> v
 		var rarity := entry as Rarity
 		var amount := upgrade_stat.modifier(rarity.power).value
 		assert_almost_eq(amount, expected[rarity.id], 1e-4, "%s" % rarity.id)
-
-
-func test_the_three_movement_synergy_runes_raise_their_damage() -> void:
-	var expected: Dictionary[StringName, StringName] = {
-		&"embers": &"fire_trail_damage", &"gale": &"dash_wave_damage", &"quake": &"slam_damage"
-	}
-	for rune: RuneData in _runes:
-		if expected.has(rune.id):
-			assert_eq(rune.upgrade_stats[0].stat, expected[rune.id], "%s" % rune.id)
-			assert_gt(rune.upgrade_stats[0].modifier(0.6).value, 0.0, "%s: la común ya daña" % rune.id)
-			expected.erase(rune.id)
-	assert_true(expected.is_empty(), "faltan: %s" % [expected.keys()])

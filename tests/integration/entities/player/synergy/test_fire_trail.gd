@@ -1,7 +1,7 @@
 extends GutTest
 ## FireTrail con física real: en el slide deja manchas de fuego cada tantos metros; lo que pisa
 ## alguna se quema cada poco, una sola vez por quemadura aunque pise varias; las manchas se apagan al
-## acabar su vida. Sin daño (sin la runa) no deja nada.
+## acabar su vida. Sin daño (sin su objeto) no deja nada.
 
 const Target := preload("res://tests/integration/entities/player/synergy/synergy_target.gd")
 const FakeState := preload("res://tests/unit/core/state_machine/fake_state.gd")

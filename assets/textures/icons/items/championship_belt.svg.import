@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://p5hi1h5iq4ua"
-path="res://.godot/imported/embers.svg-31d9182e775610eeed037447f869ff22.ctex"
+uid="uid://2j3mttgph8p4"
+path="res://.godot/imported/championship_belt.svg-e3c943ccd27113095a2f7151d30ee7b9.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/icons/runes/embers.svg"
-dest_files=["res://.godot/imported/embers.svg-31d9182e775610eeed037447f869ff22.ctex"]
+source_file="res://assets/textures/icons/items/championship_belt.svg"
+dest_files=["res://.godot/imported/championship_belt.svg-e3c943ccd27113095a2f7151d30ee7b9.ctex"]
 
 [params]
 

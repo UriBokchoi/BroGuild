@@ -65,3 +65,15 @@ func test_the_chest_finds_every_item() -> void:
 	assert_same(CHEST.items.rarities, RARITIES)
 	assert_gt(CHEST.cost_at(0.0, 0), 0)
 	assert_gt(CHEST.reveal_time, 0.0)
+
+
+func test_three_items_turn_movement_into_damage() -> void:
+	var expected: Dictionary[StringName, StringName] = {
+		&"flaming_sneakers": &"fire_trail_damage", &"air_horn": &"dash_wave_damage", &"championship_belt": &"slam_damage"
+	}
+	for item: PassiveItemData in _items:
+		if expected.has(item.id):
+			assert_eq(item.stat_modifiers[0].stat, expected[item.id], "%s" % item.id)
+			assert_gt(item.stat_modifiers[0].value, 0.0, "%s: ya daña con una copia" % item.id)
+			expected.erase(item.id)
+	assert_true(expected.is_empty(), "faltan: %s" % [expected.keys()])

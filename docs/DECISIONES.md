@@ -1360,17 +1360,18 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
 - **Efectos de sonido:** toda la mezcla baja 6 dB, la mitad de fuerte (`SfxBank.volume_db`), sin cambiar las proporciones entre sonidos. La barra de «Efectos» de las opciones sigue encima.
 - **Por qué:** lo pidió el diseñador: hordas que sean un momento de aguante, no una ola, que todo pegue un poco más (los enemigos) y efectos algo más suaves de base.
 
-## 2026-11-23 · Tres runas con sinergia de movimiento
-- **Decisión:** el movimiento daña solo con su runa. Cada runa sube una stat de daño de `MovementSynergyData`, que es 0 sin ella. Las tres pasan por el daño % y el crítico del jugador y crecen con su área %:
+## 2026-11-23 · Tres objetos con sinergia de movimiento
+- **Decisión:** el movimiento daña solo con su objeto pasivo. Cada objeto sube una stat de daño de `MovementSynergyData`, que es 0 sin él, y cada copia suma otra vez. Los tres pasan por el daño % y el crítico del jugador y crecen con su área %:
 
-  | Runa | Qué hace | Daño (común / rara) | Tamaño |
-  |---|---|---|---|
-  | Brasas | El slide deja manchas de fuego cada metro; queman cada 0,5 s | 6 / 10 por quemadura | 1,2 m de radio, 3 s |
-  | Vendaval | Cada dash suelta una onda que empuja | 18 / 30 | 4,5 m en 0,3 s |
-  | Terremoto | La caída rápida explota al aterrizar, con temblor de pantalla | 27 / 45 | 5,5 m en 0,22 s |
+  | Objeto | Rareza | Qué hace | Daño por copia | Tamaño |
+  |---|---|---|---|---|
+  | Zapatillas en llamas | Rara | El slide deja manchas de fuego cada metro; queman cada 0,5 s | 8 por quemadura | 1,2 m de radio, 3 s |
+  | Bocina de estadio | Rara | Cada dash suelta una onda que empuja | 24 | 4,5 m en 0,3 s |
+  | Cinturón de campeón | Improbable | La caída rápida explota al aterrizar, con temblor de pantalla | 40 | 5,5 m en 0,22 s |
 
 - **Cómo:**
   - **Ondas:** el dash y la caída reutilizan la `Shockwave` del jefe. Ahora acepta las stats de ataque de quien la lanza y un tamaño, y su número de resultados por tick (`max_results`) es un dato: el jugador mira 128 hurtbox para no dejarse enemigos en una horda.
   - **Fuego:** el rastro vive en un solo nodo (`FireTrail`), con manchas en un búfer circular; si hacen falta más, reutiliza la más vieja. Cada quemadura es una consulta de física por mancha. Un enemigo se quema una vez por tick aunque pise varias manchas, y encadenar slides no adelanta el ritmo.
   - **Sonido:** viento para la onda y golpe grave para la explosión. El fuego no suena, para no llenar la mezcla.
-- **Por qué:** el GDD pide mejoras que premien moverse bien. Que el daño dependa de la runa deja el movimiento base igual y hace de la sinergia una elección de build. Que la onda del dash sea más débil que la explosión compensa su frecuencia: el dash recarga stamina y la caída exige estar en el aire. Las comunes, flojas: el salto de daño lo da la rareza. No se pueden medir con `tools/sim_balance.gd`, porque allí el jugador no se mueve; habrá que probarlas jugando.
+- **Por qué objetos y no runas:** primero fueron runas (Brasas, Vendaval, Terremoto), pero el diseñador las prefirió como objetos. Así no ocupan una de las 4 ranuras de runa, salen de cofres, del jefe y del círculo de setas, y se apilan como el resto de pasivos.
+- **Por qué así:** el GDD pide mejoras que premien moverse bien. Que el daño dependa del objeto deja el movimiento base igual y hace de la sinergia una elección de build. La onda del dash es más débil que la explosión porque sale más a menudo: el dash recarga stamina y la caída exige estar en el aire. No se pueden medir con `tools/sim_balance.gd`, porque allí el jugador no se mueve; habrá que probarlas jugando.

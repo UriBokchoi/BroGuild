@@ -1,7 +1,7 @@
 extends GutTest
 ## SynergyWave con física real: suelta su onda desde los pies del jugador al entrar en su estado
 ## (el dash) o al aterrizar de la caída rápida, con el daño de su stat pasado por las stats de ataque
-## y el radio agrandado por el área %. Sin daño (sin la runa) no suelta nada. En el jugador, el dash y
+## y el radio agrandado por el área %. Sin daño (sin su objeto) no suelta nada. En el jugador, el dash y
 ## la caída rápida la sueltan.
 
 const Target := preload("res://tests/integration/entities/player/synergy/synergy_target.gd")
@@ -74,7 +74,7 @@ func test_the_player_dash_and_slam_release_their_waves() -> void:
 	var slam := player.get_node("SlamBlast") as SynergyWave
 	var fast_fall := player.get_node("Movement/FastFall") as FastFallState
 	fast_fall.slammed.emit(45.0)
-	assert_eq(slam.running(), 0, "sin la runa, nada")
+	assert_eq(slam.running(), 0, "sin su objeto, nada")
 	player.stats.add_modifier(StatModifier.create(&"slam_damage", StatModifier.Kind.FLAT, 30.0), self)
 	player.stats.add_modifier(StatModifier.create(&"dash_wave_damage", StatModifier.Kind.FLAT, 20.0), self)
 	fast_fall.slammed.emit(45.0)
@@ -91,11 +91,11 @@ func test_the_player_slide_leaves_fire_with_its_rune() -> void:
 	var trail := player.get_node("FireTrail") as FireTrail
 	var slide := player.get_node("Movement/Slide") as State
 	player.movement.state_changed.emit(null, slide)
-	assert_false(trail.is_trailing(), "sin la runa, nada")
+	assert_false(trail.is_trailing(), "sin su objeto, nada")
 	player.stats.add_modifier(StatModifier.create(&"fire_trail_damage", StatModifier.Kind.FLAT, 6.0), self)
 	player.movement.state_changed.emit(slide, player.get_node("Movement/Ground") as State)
 	player.movement.state_changed.emit(null, slide)
-	assert_true(trail.is_trailing(), "con la runa, deja fuego")
+	assert_true(trail.is_trailing(), "con su objeto, deja fuego")
 	assert_eq(trail.active_patches(), 1)
 
 

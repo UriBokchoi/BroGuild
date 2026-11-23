@@ -82,7 +82,7 @@
 - [x] GDD adaptado a la temática medieval: botín, el Gremio, el tahúr, el torneo, «¿Retirarse o seguir?» y luz de antorchas
 - [x] Ruleta de nivel: las cartas de mejora giran por las rarezas y se paran una tras otra (clic o Espacio para pararlas); «volver a tirar» por oro, 10 y ×1,5 cada vez en la partida
 - [x] Doble o nada sobre la opción elegida: 50 % de subirla una rareza (más con Suerte) o perderla; la carta gira entre las dos rarezas
-- [x] Más runas en `.tres`: 3 con sinergia de movimiento (Brasas: rastro de fuego al deslizarte; Vendaval: onda al hacer dash; Terremoto: explosión al caer). Las armas nuevas siguen en el backlog
+- [x] 3 mejoras con sinergia de movimiento, como objetos pasivos: Zapatillas en llamas (rastro de fuego al deslizarte), Bocina de estadio (onda al hacer dash) y Cinturón de campeón (explosión al caer)
 - [x] Pantalla de estadísticas (Tab, mientras se mantiene y sin pausar), reutilizando la lista de stats de la pausa
 
 ## Hito 5 — Juice y look

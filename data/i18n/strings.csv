@@ -241,12 +241,6 @@ RUNE_VIGOR_NAME,Runa de Vigor,Rune of Vigor
 RUNE_VIGOR_DESCRIPTION,"Más vida máxima.","More max health."
 RUNE_MULTIPLICITY_NAME,Runa de Multiplicidad,Rune of Multiplicity
 RUNE_MULTIPLICITY_DESCRIPTION,"Más proyectiles (también más tajos con la espada). Con decimales, a veces sale uno más.","More projectiles (also more sword slashes). With decimals, sometimes one more comes out."
-RUNE_EMBERS_NAME,Runa de Brasas,Rune of Embers
-RUNE_EMBERS_DESCRIPTION,"El slide deja un rastro de fuego que quema a quien lo pisa.","Sliding leaves a trail of fire that burns whoever steps on it."
-RUNE_GALE_NAME,Runa del Vendaval,Rune of the Gale
-RUNE_GALE_DESCRIPTION,"Cada dash suelta una onda que daña y empuja.","Every dash sends out a wave that damages and pushes."
-RUNE_QUAKE_NAME,Runa del Terremoto,Rune of the Quake
-RUNE_QUAKE_DESCRIPTION,"La caída rápida explota al tocar el suelo.","The fast fall explodes when it hits the ground."
 ARMORY_WEAPONS,Armas,Weapons
 ARMORY_RUNES,Runas,Runes
 LEVEL_UP_TITLE,¡Nivel %d!,Level %d!
@@ -345,6 +339,12 @@ ITEM_TORCH_NAME,Antorcha,Torch
 ITEM_TORCH_DESCRIPTION,Ilumina un buen trozo de bosque.,Lights up a good chunk of forest.
 ITEM_POCKET_CROSSBOW_NAME,Ballesta de bolsillo,Pocket crossbow
 ITEM_POCKET_CROSSBOW_DESCRIPTION,Cabe en la riñonera.,Fits in your fanny pack.
+ITEM_FLAMING_SNEAKERS_NAME,Zapatillas en llamas,Flaming sneakers
+ITEM_FLAMING_SNEAKERS_DESCRIPTION,Derrapan tan fuerte que el suelo arde.,They skid so hard the ground catches fire.
+ITEM_AIR_HORN_NAME,Bocina de estadio,Stadium air horn
+ITEM_AIR_HORN_DESCRIPTION,Cada arrancada suena a gol.,Every burst sounds like a goal.
+ITEM_CHAMPIONSHIP_BELT_NAME,Cinturón de campeón,Championship belt
+ITEM_CHAMPIONSHIP_BELT_DESCRIPTION,Para saltar desde la tercera cuerda.,For jumping off the top rope.
 ITEM_BRASS_GRAIL_NAME,Grial de latón,Brass grail
 ITEM_BRASS_GRAIL_DESCRIPTION,"No es el de verdad, pero cura igual.","Not the real one, but it heals just the same."
 ITEM_EXCALIBRO_NAME,Excalibro,Excalibro

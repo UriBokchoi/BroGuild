@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cukhx6su33tee"
-path="res://.godot/imported/gale.svg-67f8a85816c62125688e038c8a648df9.ctex"
+uid="uid://b7e723nogquey"
+path="res://.godot/imported/air_horn.svg-09945ed7ab1d5f73c0c86233bcfddfa3.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/icons/runes/gale.svg"
-dest_files=["res://.godot/imported/gale.svg-67f8a85816c62125688e038c8a648df9.ctex"]
+source_file="res://assets/textures/icons/items/air_horn.svg"
+dest_files=["res://.godot/imported/air_horn.svg-09945ed7ab1d5f73c0c86233bcfddfa3.ctex"]
 
 [params]
 
