@@ -69,7 +69,7 @@
 - [x] Rarezas de las mejoras (común gris, rara verde, improbable azul, de leyenda amarilla y mítica roja) en datos: cada subida de nivel es una mejora tirada que toca de 1 a todas las stats del arma o runa, más fuerte cuanto más rara; borde de la carta del color de la rareza. Nivel máximo: armas 10, runas 20
 - [x] Suerte (stat): cada entrada de una tabla ponderada gana peso con ella según su `luck_scaling`; las rarezas altas suben más (con 100, la mítica pasa del 1 al 3,7 %). La usan las cartas de subir de nivel y las mejoras gratis
 - [x] Cofres y objetos pasivos: cofres por el nivel (5 en el suelo y 2 en mesetas del Brosque) que cuestan oro (sube con la dificultad y con cada cofre abierto) y dan un objeto pasivo con rareza (la Suerte ayuda), revelado en el HUD sin pausar; 15 objetos de cultura bro que se apilan, a la vista bajo las runas
-- [x] Jefe del Brosque, el Ent-renador (un árbol entrenador personal): altar al borde del claro que lo invoca con las 3 tarjetas de socio del mapa (las justas) o se activa solo al minuto 10; ataques Burpee (salto con onda), Series (embestidas) y Bro-tes (refuerzos) y rabia por debajo de la mitad de su vida; su barra y sus gritos en el HUD; vencerlo da oro × rapidez (×3 al empezar, ×1 desde el minuto 10) y un objeto de rareza alta, y pasa el nivel (pantalla de victoria «¡Brosque superado!»)
+- [x] Jefe del Brosque, el Ent-renador (un árbol entrenador personal): altar (hoy portal) al borde del claro que lo invoca con las 3 tarjetas de socio del mapa (las justas) o se activa solo al minuto 10; ataques Burpee (salto con onda), Series (embestidas) y Bro-tes (refuerzos) y rabia por debajo de la mitad de su vida; su barra y sus gritos en el HUD; vencerlo da oro × rapidez (×3 al empezar, ×1 desde el minuto 10) y un objeto de rareza alta, y pasa el nivel (pantalla de victoria «¡Brosque superado!»)
 - [x] Taberna en el centro de la pared norte del Brosque (no se entra): cura la mitad de la vida por oro, cada vez más cara y más con la dificultad. Charquitos de agua con una flor por el suelo, de decorado
 - [x] Círculo de setas (2 por el Brosque): elegir 1 de 3 objetos pasivos (la Suerte ayuda), una vez cada uno. 8 objetos medievales más (23 en total)
 - [x] Récords: las 20 mejores partidas en local, por enemigos derrotados, con personaje, tiempo, nivel, mapa y resultado; en el menú principal y, al acabar, el puesto en los resultados
@@ -112,6 +112,7 @@ Lo que salió al probar la partida; va antes que el resto de hitos.
 - [x] Elegir nivel: su objetivo (en el Brosque, vencer al Ent-renador) y una descripción con su lore
 - [x] `docs/LORE.md`: el lore del juego en un archivo para leerlo y cambiarlo a mano (los textos del juego, con su clave en `data/i18n/strings.csv`, se apuntan ahí)
 - [x] Hacha arrojadiza: gira tumbada (en horizontal) y es más grande (×1,7 y su filo, 1,2 m); crece con el área
+- [ ] Mejoras con el valor actual y el que queda (p. ej. «Daño 18 → 22»), para ver cuánto se gana
 
 ## Hito 6 — Niveles
 - [ ] El Brosque más grande
@@ -127,8 +128,8 @@ Lo que salió al probar la partida; va antes que el resto de hitos.
 - [ ] Objetos con efectos además de stats: veneno con probabilidad al golpear, y más del estilo
 
 ## Hito 8 — Cierre de partida y meta
-- [ ] Portal del jefe en lugar del altar: el jefe se invoca en él y, tras vencerlo, hay que cruzarlo para pasar el nivel. Al vencerlo, un texto lo explica y una flecha amarilla señala el portal unos 3 s
-- [ ] Pasado el minuto 10, con el jefe vencido, morir también cuenta como victoria
+- [x] Portal del jefe en lugar del altar: el jefe se invoca en él y, tras vencerlo, hay que cruzarlo para pasar el nivel. Al vencerlo, un texto lo explica y una flecha amarilla señala el portal unos 3 s
+- [x] Pasado el minuto 10, con el jefe vencido, morir también cuenta como victoria
 - [ ] Jefes de la Torre del Mago y la Mazmorra (el del Brosque llega en el Hito 3)
 - [ ] ¿Retirarse o seguir? y torneos siguientes
 - [ ] Resumen de partida

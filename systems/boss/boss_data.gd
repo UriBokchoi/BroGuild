@@ -12,6 +12,9 @@ extends Resource
 @export_range(0, 20, 1) var keys_needed: int = 0
 ## Mensajes al salir (claves de traducción; el primero, grande).
 @export var arrival_keys: Array[StringName] = []
+## Mensajes al vencerlo, que explican que ahora hay que cruzar su portal (claves de traducción; el
+## primero, grande).
+@export var defeated_keys: Array[StringName] = []
 ## Título de la pantalla de victoria (clave de traducción).
 @export var victory_key: StringName = &""
 

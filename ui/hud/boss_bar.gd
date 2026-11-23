@@ -3,7 +3,7 @@ extends PanelContainer
 ## La barra de un jefe en el HUD, arriba en el centro: su nombre a la izquierda, su vida en números
 ## a la derecha («4530 / 5000») y una barra fina debajo. La del jefe del nivel aparece al salir
 ## ([signal EventBus.boss_spawned]) y se va al vencerlo ([signal EventBus.boss_defeated]); la del
-## miniboss ([member mini_boss]) va con sus propias señales y también se va si se pasa el nivel. Las
+## miniboss ([member mini_boss]) va con sus propias señales; las dos se van al ganar la partida. Las
 ## dos van en una columna, una bajo la otra. Estilo: variaciones [code]BossBarPanel[/code],
 ## [code]BossNameLabel[/code], [code]BossValueLabel[/code] y [code]BossHealthBar[/code] del Theme
 ## global (las del miniboss, más pequeñas y en verde, se ponen en el HUD).
@@ -19,9 +19,10 @@ extends PanelContainer
 
 
 func _enter_tree() -> void:
-	if EventBus.boss_defeated.is_connected(_on_boss_defeated):
+	if EventBus.run_won.is_connected(_on_run_won):
 		return
-	EventBus.boss_defeated.connect(_on_boss_defeated)
+	# Al ganar la partida se van las dos (el miniboss puede seguir vivo tras vencer al jefe).
+	EventBus.run_won.connect(_on_run_won)
 	if mini_boss:
 		EventBus.mini_boss_spawned.connect(show_boss)
 		EventBus.mini_boss_health_changed.connect(show_health)
@@ -29,6 +30,7 @@ func _enter_tree() -> void:
 	else:
 		EventBus.boss_spawned.connect(show_boss)
 		EventBus.boss_health_changed.connect(show_health)
+		EventBus.boss_defeated.connect(_on_boss_defeated)
 
 
 func _ready() -> void:
@@ -61,4 +63,8 @@ func _on_boss_defeated(_victory_key: StringName, _seconds: float, _bonus: float)
 
 
 func _on_mini_boss_defeated(_name_key: StringName) -> void:
+	visible = false
+
+
+func _on_run_won(_victory_key: StringName, _seconds: float, _bonus: float) -> void:
 	visible = false

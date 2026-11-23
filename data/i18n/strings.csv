@@ -23,7 +23,7 @@ SELECT_PASSIVE,Habilidad pasiva,Passive ability
 BROSQUE_INTRO_WELCOME,Bienvenido al Brosque,Welcome to the Brorest
 BROSQUE_INTRO_NO_PAIN,"No pain, no gain","No pain, no gain"
 BROSQUE_INTRO_LEG_DAY,Hoy toca pierna,It's leg day
-BROSQUE_INTRO_KEYS,Junta tarjetas de socio para invocar al Ent-renador,Collect membership cards to summon the Ent Trainer
+BROSQUE_INTRO_KEYS,Junta tarjetas de socio para abrir el portal del Ent-renador,Collect membership cards to open the Ent Trainer's portal
 BROSQUE_VICTORY,¡Brosque superado!,Brorest cleared!
 PAUSE_TITLE,Pausa,Paused
 PAUSE_CONTINUE,Continuar,Resume
@@ -56,8 +56,8 @@ SLOT_NOT_ENOUGH_GOLD,Te falta oro: cuesta %d,Not enough gold: it costs %d
 SLOT_NOTHING,Nada… a la próxima,Nothing… next time
 INTERACT_CHEST,"Abrir el cofre (%d de oro)","Open the chest (%d gold)"
 INTERACT_BOSS_KEY,Coger la tarjeta de socio,Grab the membership card
-BOSS_ALTAR_LOCKED,Faltan tarjetas de socio (%d de %d),Membership cards missing (%d of %d)
-BOSS_ALTAR_READY,Invocar al Ent-renador,Summon the Ent Trainer
+BOSS_PORTAL_LOCKED,Faltan tarjetas de socio (%d de %d),Membership cards missing (%d of %d)
+BOSS_PORTAL_READY,Abrir el portal del Ent-renador,Open the Ent Trainer's portal
 HUD_BOSS_KEYS,%d/%d,%d/%d
 CHEST_NOT_ENOUGH_GOLD,Te falta oro: cuesta %d,Not enough gold: it costs %d
 SLOT_WIN_GOLD,¡+%d de oro!,+%d gold!
@@ -216,6 +216,8 @@ ENEMY_ENT_TRAINER_NAME,El Ent-renador,The Ent Trainer
 ENEMY_ENT_TRAINER_DESCRIPTION,"Jefe del Brosque: un árbol centenario con silbato y cinta en la frente. Nunca se salta el día de pierna.","Boss of the Brorest: an ancient tree with a whistle and a headband. Never skips leg day."
 ENT_TRAINER_ARRIVES,¡Llega el Ent-renador!,The Ent Trainer is here!
 ENT_TRAINER_ARRIVES_LINE,Hora de entrenar,Workout time
+BROSQUE_BOSS_DEFEATED,¡Ent-renador vencido!,Ent Trainer defeated!
+BROSQUE_PORTAL_HINT,Cruza su portal para pasar el nivel,Go through his portal to clear the level
 ENEMY_TROLLEADOR_NAME,Trolleador Cara,Trollface
 ENEMY_TROLLEADOR_DESCRIPTION,"Miniboss del Brosque: un troll con porra y una sonrisa que da mala espina. Sus primos se quedaron de piedra al amanecer.","Miniboss of the Brorest: a troll with a club and a grin you can't trust. His cousins were turned to stone at dawn."
 TROLLEADOR_INCOMING,¡Se acerca el Trolleador Cara!,Trollface is coming!

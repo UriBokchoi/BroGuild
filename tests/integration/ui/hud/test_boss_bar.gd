@@ -56,8 +56,13 @@ func test_the_mini_boss_bar_follows_its_own_signals() -> void:
 	EventBus.mini_boss_health_changed.emit(500.0, 2000.0)
 	assert_eq((mini_bar.get_node(^"%BossHealth") as ProgressBar).value, 500.0)
 	assert_eq(mini_bar.get_value_text(), tr(&"HUD_HEALTH_VALUE") % [500, 2000])
+	EventBus.boss_defeated.emit(&"BROSQUE_VICTORY", 60.0, 2.0)
+	assert_true(mini_bar.visible, "vencer al jefe no se lleva la del miniboss")
 	EventBus.mini_boss_defeated.emit(&"ENEMY_TROLLEADOR_NAME")
 	assert_false(mini_bar.visible)
+	EventBus.mini_boss_spawned.emit(&"ENEMY_TROLLEADOR_NAME")
+	EventBus.run_won.emit(&"BROSQUE_VICTORY", 60.0, 2.0)
+	assert_false(mini_bar.visible, "al ganar la partida se van las dos")
 
 
 func test_with_both_bosses_the_bars_do_not_overlap() -> void:

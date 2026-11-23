@@ -1495,3 +1495,12 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - **Elegir nivel:** cada nivel lleva su objetivo y su lore (`LevelData.goal_key` y `lore_key`), y la ficha del nivel señalado sale debajo de la lista. El lore completo vive en `docs/LORE.md`, que escribe el diseñador y que dice qué claves del CSV le tocan.
   - **Hacha arrojadiza:** gira tumbada (en horizontal, como un aspa), su modelo es 1,7 veces más grande, crece con el área y su filo llega a 1,2 m (antes 0,9 m). Corta a más gente por pasada.
 - **Por qué:** lo pidió el diseñador tras probar la partida.
+
+## 2026-11-23 · Portal del jefe y cómo se gana
+- **Decisión:** el altar del jefe pasa a ser un **portal** (`BossPortal`), y vencer al jefe ya no termina la partida.
+  - **El portal:** un aro de piedra con un remolino (`portal_vortex.gdshader`) y un pedestal delante con las ranuras de las llaves. Se invoca igual que antes: con las llaves o, forzado, al empezar la prórroga. El remolino dice en qué punto está: violeta y tenue sin llaves, más vivo con ellas y dorado al abrirse.
+  - **Al vencer al jefe:** llega el premio como antes, pero las oleadas siguen. El portal se abre, salen dos textos («¡Ent-renador vencido!» y «Cruza su portal para pasar el nivel», de `BossData.defeated_keys`) y una flecha amarilla junto al jugador lo señala 3 s (`PortalArrow`).
+  - **Victoria** (`EventBus.run_won`, la emite `BossEncounter` una sola vez): al cruzar el portal abierto (`level_exit_reached`) o al morir en la prórroga con el jefe vencido. Solo entonces paran las oleadas y se retiran los enemigos. La pantalla de resultados y el `RunRecorder` escuchan `run_won` en vez de `boss_defeated`.
+  - **Morir y ganar a la vez:** la muerte llega por `player_died` y, en la prórroga, `BossEncounter` responde con `run_won` en el mismo aviso. Los resultados y el `RunRecorder` atienden la muerte al final del fotograma (`call_deferred`), así que la victoria llega antes y manda.
+  - El premio por rapidez es el del momento en que cae el jefe, no el de cruzar el portal: no se pierde por recoger lo que quede.
+- **Por qué:** lo pidió el diseñador. Pasar el nivel es una decisión del jugador (cruzar) y deja un rato para recoger el botín. Morir en la prórroga con el jefe vencido ya no castiga a quien hizo lo difícil.

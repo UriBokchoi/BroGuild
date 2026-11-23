@@ -3,8 +3,9 @@ extends Node
 ## Apunta lo que pasa en la partida en un [RunStats], escuchando el [code]EventBus[/code]: enemigos
 ## y élites derrotados, daño infligido, oro ganado, nivel y tiempo. El tiempo es el del reloj de la
 ## ronda mientras hay una en marcha; si no, el que lleva el nivel. Deja de apuntar al morir el
-## jugador o al vencer al jefe (con su premio por rapidez), así los resultados se quedan como estaban
-## en ese momento.
+## jugador o al ganar la partida ([signal EventBus.run_won], con el premio por rapidez del jefe), así
+## los resultados se quedan como estaban en ese momento. La muerte se apunta al final del fotograma:
+## si esa muerte cuenta como victoria (prórroga con el jefe vencido), se apunta la victoria.
 ## Al acabar la partida (si [member record_runs]), la apunta en la clasificación ([code]Save[/code]).
 
 ## Jugador de la partida (su personaje, para la clasificación).
@@ -33,7 +34,7 @@ func _enter_tree() -> void:
 	_connect(EventBus.player_xp_changed, _on_xp_changed)
 	_connect(EventBus.run_clock_changed, _on_clock_changed)
 	_connect(EventBus.player_died, _on_player_died)
-	_connect(EventBus.boss_defeated, _on_boss_defeated)
+	_connect(EventBus.run_won, _on_run_won)
 
 
 func _physics_process(delta: float) -> void:
@@ -84,13 +85,18 @@ func _on_clock_changed(seconds: float, _overtime: bool) -> void:
 
 
 func _on_player_died() -> void:
+	# Al final del fotograma: si morir cuenta como victoria, el aviso llega mientras tanto y manda.
+	_stop_with_death.call_deferred()
+
+
+func _stop_with_death() -> void:
 	if _stopped:
 		return
 	_stopped = true
 	_record()
 
 
-func _on_boss_defeated(_victory_key: StringName, seconds: float, bonus: float) -> void:
+func _on_run_won(_victory_key: StringName, seconds: float, bonus: float) -> void:
 	if _stopped:
 		return
 	stats.won = true

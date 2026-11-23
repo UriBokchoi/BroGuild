@@ -49,6 +49,7 @@ script = ExtResource("1_boss")
 enemy = ExtResource("2_enemy")
 keys_needed = 3
 arrival_keys = Array[StringName]([&"ENT_TRAINER_ARRIVES", &"ENT_TRAINER_ARRIVES_LINE"])
+defeated_keys = Array[StringName]([&"BROSQUE_BOSS_DEFEATED", &"BROSQUE_PORTAL_HINT"])
 victory_key = &"BROSQUE_VICTORY"
 stat_scaling = Array[ExtResource("3_scaling")]([SubResource("Resource_scale_health"), SubResource("Resource_scale_contact")])
 reward_gold = 150.0

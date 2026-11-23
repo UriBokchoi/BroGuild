@@ -22,9 +22,11 @@ Claves en el juego: `LEVEL_BROSQUE_NAME`, `LEVEL_BROSQUE_GOAL`, `LEVEL_BROSQUE_L
 
 Un bosque viejísimo convertido en gimnasio al aire libre. Entre los robles hay pesas de piedra que nadie es capaz de levantar, bancos de tronco y ruinas cubiertas de musgo. Al norte, pegada a la muralla, la taberna cura a cualquiera que pague (y cada vez cobra más). Por el bosque crecen círculos de setas que ofrecen un objeto a elegir, y el tahúr ha dejado tragaperras por todas partes.
 
-Las tarjetas de socio están repartidas por el bosque. Con tres, se puede llamar al dueño del gimnasio.
+Las tarjetas de socio están repartidas por el bosque. Con tres, el viejo portal de piedra del borde del claro despierta y llama al dueño del gimnasio. Vencido el dueño, el portal se vuelve dorado: es la salida del Brosque.
 
-**Cómo se gana:** vencer al Ent-renador.
+**Cómo se gana:** vencer al Ent-renador y cruzar su portal.
+
+Claves del portal: `BOSS_PORTAL_*`, `BROSQUE_BOSS_DEFEATED` y `BROSQUE_PORTAL_HINT`.
 
 ### El Ent-renador (jefe)
 

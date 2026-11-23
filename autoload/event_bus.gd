@@ -71,16 +71,26 @@ signal boss_key_collected
 ## Cambió cuántas llaves del jefe lleva el jugador ([param keys]) de las que hacen falta
 ## ([param needed]) para invocarlo antes de tiempo.
 signal boss_keys_changed(keys: int, needed: int)
-## Un altar pide sacar al jefe en [param at]: con [param forced], aunque falten llaves (se acabó la
-## ronda).
+## El portal del jefe pide sacarlo en [param at]: con [param forced], aunque falten llaves (se acabó
+## la ronda).
 signal boss_summon_requested(at: Vector3, forced: bool)
 ## Salió el jefe del nivel ([param name_key]: su nombre).
 signal boss_spawned(name_key: StringName)
 ## Cambió la vida del jefe (actual y máxima).
 signal boss_health_changed(current: float, maximum: float)
-## Vencieron al jefe: se pasa el nivel. [param victory_key] es el título de la victoria,
-## [param seconds] lo que duró la partida y [param bonus] el multiplicador del premio por rapidez.
+## Vencieron al jefe: se abre su portal (cruzarlo pasa el nivel). [param victory_key] es el título de la
+## victoria, [param seconds] lo que duró la partida y [param bonus] el multiplicador del premio por
+## rapidez.
 signal boss_defeated(victory_key: StringName, seconds: float, bonus: float)
+## El portal del jefe se abrió (jefe vencido) en [param at]: cruzarlo pasa el nivel (la flecha lo
+## señala).
+signal boss_portal_opened(at: Vector3)
+## El jugador cruzó el portal abierto del jefe.
+signal level_exit_reached
+## Se ganó la partida: se cruzó el portal del jefe, o se murió pasado el final de la ronda con el jefe
+## ya vencido. [param victory_key] es el título de la victoria, [param seconds] lo que duró y
+## [param bonus] el multiplicador del premio por rapidez (el del momento en que cayó el jefe).
+signal run_won(victory_key: StringName, seconds: float, bonus: float)
 ## Salió un miniboss ([param name_key]: su nombre; ver [MiniBossEncounter]).
 signal mini_boss_spawned(name_key: StringName)
 ## Cambió la vida del miniboss (actual y máxima).
