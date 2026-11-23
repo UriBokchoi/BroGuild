@@ -1512,3 +1512,7 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - **Cofre:** el texto se escribe al empezar el revelado, porque al acabar el objeto puede haber llegado ya y el «antes» lo contaría.
   - **Paneles que no caben:** con el aviso de Tab (Hito 5b) y cartas de tres mejoras, el panel de subir de nivel medía 698 px de alto en una pantalla de 648 y cortaba el título. `ModalPanel.fit_to_screen` encoge su contenedor lo justo cuando no cabe; lo llevan subir de nivel y elegir objeto.
 - **Por qué:** lo pidió el diseñador. «+10 %» no dice cuánto es; con los dos números se ve la ganancia real y se comparan cartas de un vistazo.
+
+## 2026-11-23 · El alcance de la colonia, en el suelo
+- **Decisión:** la burbuja de la nube de colonia se cambia por un dibujo en el suelo, como en Megabonk: un aro de trazos en el borde del aura, otro fino por dentro con ocho marcas y un velo muy tenue que se aclara hacia el centro. Gira a 12 °/s y se aviva en cada pulso. Va en un plano suelto (`top_level`) que un rayo pone en el suelo bajo el jugador, así que al saltar se queda abajo, que es donde están los enemigos. Se borra `cologne_cloud.gdshader`.
+- **Por qué:** lo pidió el diseñador: la burbuja tapaba al jugador y no dejaba ver hasta dónde llegaba. En el suelo el borde se lee de un vistazo y no tapa nada.

@@ -82,6 +82,19 @@ func test_the_cologne_grows_with_area() -> void:
 	assert_almost_eq(cologne.reach(), base * 2.0, 0.001)
 
 
+func test_the_cologne_reach_lies_on_the_ground_and_turns() -> void:
+	_add_floor(-1.0)
+	var cologne := _add_single_shot(COLOGNE) as CologneCloud
+	await wait_physics_frames(2)
+	await wait_process_frames(1)
+	var ring := cologne.ring
+	assert_almost_eq(ring.global_position.y, -1.0 + cologne.ground_lift, 0.01, "en el suelo, no a la altura del cuerpo")
+	assert_almost_eq(ring.global_basis.x.length(), cologne.reach(), 0.01, "del tamaño del aura")
+	var before := ring.global_basis.x
+	await wait_seconds(0.5)
+	assert_gt(before.angle_to(ring.global_basis.x), 0.0, "gira despacio")
+
+
 func test_the_hammer_falls_on_the_densest_group() -> void:
 	var lone := _dummy_health(Vector3(0.0, 0.0, -5.0))
 	var group: Array[HealthComponent] = [
@@ -142,6 +155,19 @@ func _add_wall(at: Vector3) -> void:
 	shape.shape = box
 	wall.add_child(shape)
 	add_child_autofree(wall)
+
+
+## Un suelo grande con la cara de arriba a [param height].
+func _add_floor(height: float) -> void:
+	var ground := StaticBody3D.new()
+	ground.collision_layer = PhysicsLayers.mask(PhysicsLayers.WORLD)
+	ground.position = Vector3(0.0, height - 0.5, 0.0)
+	var box := BoxShape3D.new()
+	box.size = Vector3(20.0, 1.0, 20.0)
+	var shape := CollisionShape3D.new()
+	shape.shape = box
+	ground.add_child(shape)
+	add_child_autofree(ground)
 
 
 ## Todos los nodos bajo [param root].
