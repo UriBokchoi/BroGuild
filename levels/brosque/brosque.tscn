@@ -16,6 +16,7 @@
 [ext_resource type="PackedScene" path="res://levels/brosque/props/puddle.tscn" id="21_puddle"]
 [ext_resource type="PackedScene" path="res://levels/brosque/props/stone_trolls.tscn" id="22_stone_trolls"]
 [ext_resource type="Environment" path="res://levels/brosque/environment.tres" id="23_environment"]
+[ext_resource type="PackedScene" path="res://levels/common/boundary/map_boundary.tscn" id="24_boundary"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_ground"]
 material = ExtResource("1_grass")
@@ -90,6 +91,9 @@ shape = SubResource("BoxShape3D_bound_z")
 [node name="East" type="CollisionShape3D" parent="Bounds"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 81, 15, 0)
 shape = SubResource("BoxShape3D_bound_z")
+
+[node name="MapBoundary" parent="." node_paths=PackedStringArray("target") instance=ExtResource("24_boundary")]
+target = NodePath("../RunSystems/Player")
 
 [node name="Layout" type="Node3D" parent="."]
 script = ExtResource("16_layout")

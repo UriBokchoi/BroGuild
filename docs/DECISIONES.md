@@ -1516,3 +1516,9 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
 ## 2026-11-23 · El alcance de la colonia, en el suelo
 - **Decisión:** la burbuja de la nube de colonia se cambia por un dibujo en el suelo, como en Megabonk: un aro de trazos en el borde del aura, otro fino por dentro con ocho marcas y un velo muy tenue que se aclara hacia el centro. Gira a 12 °/s y se aviva en cada pulso. Va en un plano suelto (`top_level`) que un rayo pone en el suelo bajo el jugador, así que al saltar se queda abajo, que es donde están los enemigos. Se borra `cologne_cloud.gdshader`.
 - **Por qué:** lo pidió el diseñador: la burbuja tapaba al jugador y no dejaba ver hasta dónde llegaba. En el suelo el borde se lee de un vistazo y no tapa nada.
+
+## 2026-11-23 · El borde del mapa se ve al acercarse
+- **Decisión:** las paredes de choque del borde (invisibles hasta ahora) llevan delante una pared de malla de rombos (`MapBoundary`, `boundary_wall.gdshader`). Solo se ve en un círculo alrededor del jugador: del todo a 3 m y nada a 11 m. Los rombos suben despacio, hay una franja más marcada abajo y por arriba se apaga. A más de 11 m de todos los bordes, las paredes ni se dibujan.
+  - Es solo visual. Lo que choca siguen siendo las cajas `Bounds` del nivel; un test comprueba que su cara de dentro coincide con `MapBoundary.half_extent`.
+  - El brillo es una esfera alrededor del jugador: se ve igual al saltar o en una meseta pegada al borde.
+- **Por qué:** lo pidió el diseñador. Chocar con un muro invisible parecía un fallo, y ver el borde desde lejos rompería el bosque. Así avisa solo cuando hace falta.

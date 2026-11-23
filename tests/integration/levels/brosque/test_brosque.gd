@@ -60,6 +60,19 @@ func test_the_trees_inside_the_walls_collide_and_the_outer_forest_hides_the_edge
 		assert_lt(maxf(absf(at.x), absf(at.z)), 81.0, "solo chocan los de dentro de las paredes")
 
 
+func test_the_visible_edge_lies_on_the_inner_face_of_the_walls() -> void:
+	var boundary := _level.get_node(^"MapBoundary") as MapBoundary
+	assert_same(boundary.target, _level.get_node(^"RunSystems/Player"), "brilla alrededor del jugador")
+	for wall: Node in _level.get_node(^"Bounds").get_children():
+		var shape := wall as CollisionShape3D
+		var size := (shape.shape as BoxShape3D).size
+		var at := shape.position
+		if absf(at.x) > absf(at.z):
+			assert_almost_eq(absf(at.x) - size.x / 2.0, boundary.half_extent.x, 0.01, "%s" % wall.name)
+		else:
+			assert_almost_eq(absf(at.z) - size.z / 2.0, boundary.half_extent.y, 0.01, "%s" % wall.name)
+
+
 func test_enemies_only_spawn_inside_the_walls() -> void:
 	var systems := _level.get_node(^"RunSystems") as RunSystems
 	assert_true(systems.director.play_area.has_area())
