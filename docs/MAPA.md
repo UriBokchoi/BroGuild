@@ -210,7 +210,8 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
   - `hit_flash/` (`HitFlash`, en cada enemigo): destello blanco y suave (capa aditiva al 18 %) de 0,08 s al recibir un golpe, solo en el cuerpo (`meshes`; vacío: todo el modelo) y devolviendo la capa que hubiera (el brillo de un élite). Solo trabaja mientras destella;
   - `screen_shake/` (`ScreenShake`, en el jugador): temblor de cámara por «trauma» al recibir daño, según la parte de la vida que quita el golpe (con un mínimo), que baja solo; también con los golpes fuertes del jugador (`blasts`: la explosión de la caída rápida, con el trauma de su `SynergyWave`);
   - `damage_vignette/` (`DamageVignette`, en `RunSystems`): borde rojo de la pantalla, con un destello al perder vida y, por debajo del 35 % de la vida, un rojo que late más fuerte y más rápido cuanta menos queda;
-  - `portal_arrow/` (`PortalArrow`, en `RunSystems`): al abrirse el portal del jefe (`boss_portal_opened`), una flecha amarilla flota junto al jugador apuntando hacia él durante 3 s y se desvanece.
+  - `portal_arrow/` (`PortalArrow`, en `RunSystems`): al abrirse el portal del jefe (`boss_portal_opened`), una flecha amarilla flota junto al jugador apuntando hacia él durante 3 s y se desvanece;
+  - `power_up_fx/` (`PowerUpFx`, en `RunSystems`): lo que se ve al coger un power-up (`pickup_collected`), en el suelo bajo el jugador. Cada recompensa tiene su escena (`effects`), un `FxBurst`: partículas que vuelven a salir, aros en el suelo que se abren (`ground_ring`), lo que sube (`risers`), y el temblor y el destello de pantalla que pide. La bomba es una explosión nuclear (`nuke.tscn`: destello, bola de fuego, columna y sombrero de humo que sube, polvo y una onda hasta los 15 m de su daño); el imán, chispas que van hacia el jugador; la comida, chispas verdes que suben; la bebida, un estallido lima; el reloj de arena, una onda azul de 22 m. Se crean al cargar.
 - **`particles/`:** estallidos de un solo disparo (`GPUParticles3D` con `soft_dot_quad.tres`, un punto suave en billboard): `death_puff`, `hit_sparks`, `debris`, `gold_sparkles` y `slam_dust`. `BurstEmitter` (en `RunSystems/Particles`, uno por efecto) escucha el `EventBus` (`enemy_died`, `enemy_damaged`, `breakable_broken`) y los saca de una reserva circular, con un tope por fotograma; el humo se tiñe del `EnemyData.color` del enemigo. Los propios de una escena van en ella, conectados por señal: los destellos del cofre (`Chest.opened`) y el polvo de la `Shockwave` (`started`; en la onda del dash está oculto).
 - **`speed_lines/`:** líneas de velocidad en pantalla.
 - **`time_stop/`:** `TimeStopFilter`, la pantalla teñida de azul mientras el tiempo está parado (una capa por debajo del HUD, con su shader).
@@ -293,7 +294,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 | `enemy_damaged` | `DamageReporter` | `DamageNumbers` |
 | `enemy_died` (el propio enemigo) | `Enemy` | `LootDropper`, `RunRecorder`, `ArchiveRecorder` |
 | `breakable_broken` (sus datos y dónde) | `Breakable` | `LootDropper` |
-| `pickup_collected` | `PickupField` (y las tragaperras y el premio del jefe) | `ExperienceComponent` (la recompensa `experience`), `WalletComponent` (`gold`), los `PickupEffect` (`heal`, `magnet`, `bomb`) |
+| `pickup_collected` | `PickupField` (y las tragaperras y el premio del jefe) | `ExperienceComponent` (la recompensa `experience`), `WalletComponent` (`gold`), los `PickupEffect` (`heal`, `magnet`, `bomb`), `PowerUpFx` (lo que se ve) |
 | `player_xp_changed` | `Player` | `XpBar` |
 | `player_gold_changed` | `Player` | `GoldCounter` |
 | `difficulty_changed` (la stat `difficulty` del jugador) | `Player` | `DifficultyCounter`, `LootDropper` |

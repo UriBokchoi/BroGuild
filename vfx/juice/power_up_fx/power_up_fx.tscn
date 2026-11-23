@@ -1,0 +1,31 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://vfx/juice/power_up_fx/power_up_fx.gd" id="1_fx"]
+[ext_resource type="PackedScene" path="res://vfx/juice/power_up_fx/nuke.tscn" id="2_nuke"]
+[ext_resource type="PackedScene" path="res://vfx/juice/power_up_fx/magnet_pull.tscn" id="3_magnet"]
+[ext_resource type="PackedScene" path="res://vfx/juice/power_up_fx/heal_sparkles.tscn" id="4_heal"]
+[ext_resource type="PackedScene" path="res://vfx/juice/power_up_fx/energy_burst.tscn" id="5_energy"]
+[ext_resource type="PackedScene" path="res://vfx/juice/power_up_fx/time_wave.tscn" id="6_time"]
+
+[node name="PowerUpFx" type="Node3D" node_paths=PackedStringArray("flash")]
+script = ExtResource("1_fx")
+effects = Dictionary[StringName, PackedScene]({
+&"bomb": ExtResource("2_nuke"),
+&"energy": ExtResource("5_energy"),
+&"heal": ExtResource("4_heal"),
+&"magnet": ExtResource("3_magnet"),
+&"time_stop": ExtResource("6_time")
+})
+flash = NodePath("FlashLayer/Flash")
+
+[node name="FlashLayer" type="CanvasLayer" parent="."]
+layer = 5
+
+[node name="Flash" type="ColorRect" parent="FlashLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(1, 1, 1, 0)

@@ -94,7 +94,7 @@
 - [x] Partículas: humo al morir (del color del enemigo), chispas al golpear, restos al romper, destellos al abrir un cofre y polvo de las ondas de suelo (las monedas ya saltaban como botín)
 - [x] Alcance de la nube de colonia: un dibujo en el suelo que gira despacio (como en Megabonk), en vez de la burbuja
 - [x] Límite del mapa: un muro que solo se ve al acercarte
-- [ ] Power-ups con su efecto al cogerlos: la bomba, una explosión nuclear (destello, hongo y onda); el imán, la comida, la bebida energética y el reloj de arena, el suyo
+- [x] Power-ups con su efecto al cogerlos: la bomba, una explosión nuclear (destello, hongo y onda); el imán, la comida, la bebida energética y el reloj de arena, el suyo
 - [ ] Enemigos que aparecen con una animación
 - [ ] Hojitas que caen de las copas de los árboles al meterte dentro
 - [ ] Polvo pequeño a cada paso (con el aviso de pasos del balanceo). Lo último del hito, a petición del diseñador

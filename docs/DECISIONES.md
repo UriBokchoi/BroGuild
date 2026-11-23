@@ -1522,3 +1522,19 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - Es solo visual. Lo que choca siguen siendo las cajas `Bounds` del nivel; un test comprueba que su cara de dentro coincide con `MapBoundary.half_extent`.
   - El brillo es una esfera alrededor del jugador: se ve igual al saltar o en una meseta pegada al borde.
 - **Por qué:** lo pidió el diseñador. Chocar con un muro invisible parecía un fallo, y ver el borde desde lejos rompería el bosque. Así avisa solo cuando hace falta.
+
+## 2026-11-23 · Los power-ups se ven al cogerlos
+- **Decisión:** cada power-up tiene un efecto en el suelo bajo el jugador al cogerlo (`PowerUpFx`). Escucha `pickup_collected`, igual que los `PickupEffect`, pero solo es visual.
+
+  | Power-up | Efecto |
+  |---|---|
+  | Bomba | Explosión nuclear: destello blanco de 0,45 s, temblor fuerte, bola de fuego, columna de humo, sombrero que sube hasta unos 3,8 m, polvo hacia fuera y una onda en el suelo hasta 15 m, el alcance de su daño (un test lo comprueba) |
+  | Imán | Onda azul de 10 m y chispas que van hacia el jugador |
+  | Comida | Chispas verdes que suben y un destello verde muy suave |
+  | Bebida energética | Estallido lima, rayas que suben y un temblor pequeño |
+  | Reloj de arena | Onda azul de 22 m, escarcha y un destello azul, junto con el tinte que ya tenía |
+
+  - **Piezas:** cada efecto es una escena `FxBurst`, con partículas de un solo disparo, aros en el suelo con el shader `ground_ring` y nodos que suben (el sombrero del hongo). Dice qué temblor y qué destello quiere, y `PowerUpFx` los aplica. Las escenas sencillas se generaron con los mismos parámetros; la bomba está hecha a mano.
+  - **Altura del hongo:** con la cámara detrás del jugador, lo que pasa de unos 4 m queda fuera de plano. Por eso el sombrero no sube de ahí: se ve como una cúpula de humo encima. La columna es semitransparente para no tapar al jugador más de un segundo.
+  - **En el suelo:** si se coge en el aire, un rayo pone el efecto en el suelo, igual que el aro de la colonia.
+- **Por qué:** lo pidió el diseñador. Coger un power-up ya decía algo en texto, pero no se sentía. La bomba tenía que parecer una bomba.

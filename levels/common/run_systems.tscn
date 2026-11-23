@@ -45,6 +45,7 @@
 [ext_resource type="PackedScene" path="res://vfx/particles/hit_sparks.tscn" id="47_hit_sparks"]
 [ext_resource type="PackedScene" path="res://vfx/particles/debris.tscn" id="48_debris"]
 [ext_resource type="PackedScene" path="res://vfx/juice/portal_arrow/portal_arrow.tscn" id="49_portal_arrow"]
+[ext_resource type="PackedScene" path="res://vfx/juice/power_up_fx/power_up_fx.tscn" id="50_power_up_fx"]
 
 [node name="RunSystems" type="Node3D" node_paths=PackedStringArray("player", "director", "encounter")]
 script = ExtResource("1_run")
@@ -224,3 +225,7 @@ offset = Vector3(0, 0.4, 0)
 
 [node name="PortalArrow" parent="." node_paths=PackedStringArray("target") instance=ExtResource("49_portal_arrow")]
 target = NodePath("../Player")
+
+[node name="PowerUpFx" parent="." node_paths=PackedStringArray("anchor", "shake") instance=ExtResource("50_power_up_fx")]
+anchor = NodePath("../Player")
+shake = NodePath("../Player/ScreenShake")

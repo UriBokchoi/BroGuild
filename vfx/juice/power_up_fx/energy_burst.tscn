@@ -1,0 +1,101 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://vfx/juice/power_up_fx/fx_burst.gd" id="1_burst"]
+[ext_resource type="Shader" path="res://vfx/shaders/ground_ring.gdshader" id="2_ring"]
+[ext_resource type="QuadMesh" path="res://vfx/particles/soft_dot_quad.tres" id="3_dot"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ring"]
+render_priority = 0
+shader = ExtResource("2_ring")
+shader_parameter/color = Color(0.65, 1, 0.35, 1)
+shader_parameter/intensity = 1.8
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ring"]
+material = SubResource("ShaderMaterial_ring")
+size = Vector2(2, 2)
+
+[sub_resource type="Gradient" id="Gradient_Burst"]
+offsets = PackedFloat32Array(0, 1)
+colors = PackedColorArray(0.75, 1, 0.4, 1, 1, 1, 0.7, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_Burst"]
+gradient = SubResource("Gradient_Burst")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_Burst"]
+emission_shape = 1
+emission_sphere_radius = 0.4
+direction = Vector3(0, 1, 0)
+spread = 180.0
+initial_velocity_min = 5.0
+initial_velocity_max = 8.0
+gravity = Vector3(0, 0, 0)
+damping_min = 8.0
+damping_max = 10.0
+scale_min = 0.18
+scale_max = 0.3
+color_ramp = SubResource("GradientTexture1D_Burst")
+
+[sub_resource type="Gradient" id="Gradient_Streaks"]
+offsets = PackedFloat32Array(0, 1)
+colors = PackedColorArray(0.75, 1, 0.4, 1, 1, 1, 0.7, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_Streaks"]
+gradient = SubResource("Gradient_Streaks")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_Streaks"]
+emission_shape = 6
+emission_ring_axis = Vector3(0, 1, 0)
+emission_ring_height = 0.1
+emission_ring_radius = 0.7
+emission_ring_inner_radius = 0.4
+direction = Vector3(0, 1, 0)
+spread = 5.0
+initial_velocity_min = 6.0
+initial_velocity_max = 9.0
+gravity = Vector3(0, 0, 0)
+damping_min = 2.0
+damping_max = 3.0
+scale_min = 0.15
+scale_max = 0.25
+color_ramp = SubResource("GradientTexture1D_Streaks")
+
+[node name="EnergyBurst" type="Node3D" node_paths=PackedStringArray("rings")]
+script = ExtResource("1_burst")
+rings = [NodePath("Ring")]
+ring_radius = 3.5
+ring_time = 0.35
+ring_band = 0.1
+trauma = 0.1
+
+[node name="Ring" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.06, 0)
+cast_shadow = 0
+mesh = SubResource("PlaneMesh_ring")
+
+[node name="Burst" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+cast_shadow = 0
+emitting = false
+amount = 30
+lifetime = 0.45
+one_shot = true
+explosiveness = 1
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-4, -2, -4, 8, 6, 8)
+process_material = SubResource("ParticleProcessMaterial_Burst")
+draw_pass_1 = ExtResource("3_dot")
+
+[node name="Streaks" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
+cast_shadow = 0
+emitting = false
+amount = 20
+lifetime = 0.5
+one_shot = true
+explosiveness = 0.9
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-2, -1, -2, 4, 7, 4)
+process_material = SubResource("ParticleProcessMaterial_Streaks")
+draw_pass_1 = ExtResource("3_dot")
