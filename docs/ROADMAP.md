@@ -91,7 +91,7 @@
 - [ ] Materiales con color propio por tipo de enemigo y rareza
 - [x] Feedback al golpear y al recibir: números de daño (Hito 2), temblor de pantalla, borde rojo y destello blanco (tras el Hito 3). Hit-stop descartado: el diseñador no quiere parones al golpear
 - [x] Balanceo al andar y correr: el cuerpo rebota a cada paso y se mece, más cuanto más rápido vas
-- [ ] Partículas: muertes, monedas, cofres, impactos
+- [x] Partículas: humo al morir (del color del enemigo), chispas al golpear, restos al romper, destellos al abrir un cofre y polvo de las ondas de suelo (las monedas ya saltaban como botín)
 - [ ] Polvo pequeño a cada paso (con el aviso de pasos del balanceo)
 - [ ] UI animada (los sonidos, con la experiencia que sube de tono si se recoge seguida, adelantados tras el Hito 3)
 - [x] Rendimiento: 300+ enemigos a 60 fps (medido: 300 a 120 fps de media en el equipo de desarrollo)

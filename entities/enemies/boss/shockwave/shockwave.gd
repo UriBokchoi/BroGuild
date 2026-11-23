@@ -6,7 +6,10 @@ extends Node3D
 ## ([member band] de ancho), salvo si su centro está más alto que [member reach_height] sobre el
 ## suelo de la onda: se esquiva saltándola o alejándose antes de que llegue (lo que ya pasó no
 ## daña). Empuja hacia fuera ([member knockback]). Se ve como un aro que se abre y se apaga
-## ([member ring]).
+## ([member ring]). Al salir avisa ([signal started]): ahí levanta su polvo.
+
+## Salió desde [param center].
+signal started(center: Vector3)
 
 ## Radio final (sin agrandar: ver [method start]).
 @export_range(0.5, 100.0, 0.5, "suffix:m") var radius: float = 12.0
@@ -75,6 +78,7 @@ func start(center: Vector3, damage: float, offense: OffenseData = null, size: fl
 	_hit.clear()
 	visible = true
 	set_physics_process(true)
+	started.emit(center)
 
 
 ## Se apaga (al terminar o si el jefe se retira).

@@ -47,6 +47,7 @@ func test_pays_and_the_item_arrives_after_the_reveal() -> void:
 	assert_eq(_opened.size(), 1, "avisa de lo que sale")
 	assert_not_null(_opened[0])
 	assert_eq(_items.total(), 0, "aún revelándose")
+	assert_true((_chest.get_node(^"Sparkles") as GPUParticles3D).emitting, "suelta sus destellos")
 	assert_false(_chest.interactable.enabled)
 	assert_false(_chest.open(_wallet, _items), "abierto no se vuelve a abrir")
 	await wait_seconds(_chest.data.reveal_time + 0.1)

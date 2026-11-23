@@ -4,7 +4,11 @@ extends Node3D
 ## pasivo con rareza (la Suerte del jugador sube las altas). El HUD lo revela
 ## ([signal EventBus.item_revealed]) y, al acabar el revelado, el objeto pasa al jugador y el cofre
 ## desaparece. El coste sube con la dificultad y con cada cofre abierto en la partida: todos los
-## cofres cuentan los que se abren por el [code]EventBus[/code]. No pausa el juego.
+## cofres cuentan los que se abren por el [code]EventBus[/code]. No pausa el juego. Al abrirse avisa
+## ([signal opened]): en la escena, sus destellos dorados.
+
+## Se abrió (con su objeto ya tirado).
+signal opened
 
 ## Coste, rarezas, objetos y ritmo.
 @export var data: ChestData
@@ -70,6 +74,7 @@ func open(wallet: WalletComponent, items: PassiveInventory, luck: float = 0.0) -
 	interactable.enabled = false
 	body.process_mode = Node.PROCESS_MODE_DISABLED
 	var item := data.items.roll(_catalog, luck, rng)
+	opened.emit()
 	EventBus.chest_opened.emit()
 	EventBus.item_revealed.emit(item, data.reveal_time)
 	# La bisagra está detrás (+Z) y el cierre delante (−Z): girar en +X levanta el frente.

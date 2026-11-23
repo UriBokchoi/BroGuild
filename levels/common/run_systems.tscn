@@ -40,6 +40,10 @@
 [ext_resource type="PackedScene" path="res://vfx/juice/damage_vignette/damage_vignette.tscn" id="42_vignette"]
 [ext_resource type="PackedScene" path="res://ui/hud/stats_overlay.tscn" id="43_stats_overlay"]
 [ext_resource type="Script" path="res://systems/boss/mini_boss_encounter.gd" id="44_mini_boss"]
+[ext_resource type="Script" path="res://vfx/particles/burst_emitter.gd" id="45_bursts"]
+[ext_resource type="PackedScene" path="res://vfx/particles/death_puff.tscn" id="46_death_puff"]
+[ext_resource type="PackedScene" path="res://vfx/particles/hit_sparks.tscn" id="47_hit_sparks"]
+[ext_resource type="PackedScene" path="res://vfx/particles/debris.tscn" id="48_debris"]
 
 [node name="RunSystems" type="Node3D" node_paths=PackedStringArray("player", "director", "encounter")]
 script = ExtResource("1_run")
@@ -188,3 +192,28 @@ items = NodePath("../Player/Items")
 
 [node name="ItemChoicePanel" parent="." node_paths=PackedStringArray("inventory") instance=ExtResource("35_item_choice")]
 inventory = NodePath("../Player/Items")
+
+[node name="Particles" type="Node3D" parent="."]
+
+[node name="DeathPuffs" type="Node3D" parent="Particles"]
+script = ExtResource("45_bursts")
+effect = ExtResource("46_death_puff")
+pool_size = 32
+max_per_frame = 10
+offset = Vector3(0, 0.7, 0)
+tint_by_enemy = true
+
+[node name="HitSparks" type="Node3D" parent="Particles"]
+script = ExtResource("45_bursts")
+trigger = 1
+effect = ExtResource("47_hit_sparks")
+pool_size = 32
+max_per_frame = 8
+
+[node name="Debris" type="Node3D" parent="Particles"]
+script = ExtResource("45_bursts")
+trigger = 2
+effect = ExtResource("48_debris")
+pool_size = 6
+max_per_frame = 3
+offset = Vector3(0, 0.4, 0)

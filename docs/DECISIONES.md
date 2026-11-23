@@ -1445,3 +1445,28 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
 
 - **Coste:** con 300 esbirros vivos alrededor del jugador en el Brosque (1280 × 720, sin V-Sync, equipo de desarrollo), el SSAO no se nota: 8,0 ms con él y 7,8 ms sin él. Ese fotograma lo limita la física, no la gráfica. En gráficas flojas podría pesar más; si hace falta, irá como opción en «Opciones».
 - **Por qué:** el diseñador pidió perfeccionar el aspecto. Antes todo era un verde pastel uniforme y la niebla verdosa apagaba la distancia: costaba leer el suelo y faltaba calidez.
+
+## 2026-11-23 · Partículas
+- **Decisión:** estallidos cortos de puntos suaves (un mismo `soft_dot_quad.tres`), sin texturas ni artista:
+
+  | Efecto | Cuándo | Cómo se ve |
+  |---|---|---|
+  | Humo | Muere un enemigo | 18 puntos de su color (`EnemyData.color`, nuevo) que se abren y se apagan |
+  | Chispas | Golpe a un enemigo | 6 chispas cálidas, rápidas, que caen |
+  | Restos | Se rompe una calavera o una bolsita | 12 trocitos claros que saltan y caen |
+  | Destellos | Se abre un cofre | 26 puntos dorados que suben |
+  | Polvo | Una onda golpea el suelo (porrazo y salto del troll, Burpee, la caída del jugador) | Un anillo de polvo que se abre a ras de suelo |
+
+- **Cómo:**
+  - **Efectos globales:** los tres primeros los lanza un `BurstEmitter` que escucha el `EventBus`. Lleva una reserva circular y un tope por fotograma (10 humos, 8 chispas, 3 restos): una bomba o un tajo a cien enemigos no lanza cien estallidos a la vez.
+  - **Efectos de escena:** destellos y polvo van dentro de su escena, conectados a una señal nueva (`Chest.opened`, `Shockwave.started`). En la onda del dash el polvo está oculto, porque el dash puede ser en el aire.
+- **Monedas:** ya salen volando del enemigo como botín, así que no llevan partículas propias.
+- **Coste**, con un golpe a 120 esbirros pegados (banco del Brosque, 1280 × 720):
+
+  | | Sin partículas | Con partículas |
+  |---|---|---|
+  | Golpe que mata a los 120 | 7,0 ms; peor fotograma 13,5 ms | 7,4 ms; peor fotograma 14,8 ms |
+  | Golpe a 120 sin matar (en caliente) | Peor fotograma ~20 ms | Peor fotograma ~20 ms |
+
+  El pico de ~20 ms sale igual sin partículas: viene de la física de los 120 apilados tras el empuje.
+- **Por qué:** era lo que faltaba del juice del GDD. Cada golpe, muerte o premio se lee de un vistazo en mitad de la horda.

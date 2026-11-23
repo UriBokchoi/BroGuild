@@ -21,3 +21,6 @@ max_results = 128
 
 [node name="Ring" parent="." index="0"]
 material_override = SubResource("ShaderMaterial_dash")
+
+[node name="Dust" parent="." index="1"]
+visible = false
