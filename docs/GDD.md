@@ -53,7 +53,7 @@ Toda apuesta tiene **anticipación** (giro, luces, sonido que sube), **revelado*
 
 **Rarezas** (mismo color en todo el juego): Común (gris) · Rara (verde) · Improbable (azul) · De leyenda (amarillo) · Mítica (rojo). Pesos de partida 60/25/10/4/1; la **Suerte** sube el peso de las altas (cada punto, +1 / +2 / +3 / +5 % del suyo a rara, improbable, de leyenda y mítica).
 
-1. **Ruleta de nivel** — al subir de nivel, 3 cartas giran como rodillos y caen en una rareza, una tras otra (con un tic-tic y una campanilla más aguda cuanto más rara); un clic las para todas; eliges una.
+1. **Ruleta de nivel** — al subir de nivel, 3 cartas giran como rodillos y caen en una rareza, una tras otra (con un tic-tic y una campanilla más aguda cuanto más rara); un clic las para todas; eliges una. Cada mejora dice cuánto ganas: la stat con su valor de ahora y el que queda («Daño 18 → 22»), igual en las cartas de objetos y en el revelado de los cofres.
    - *Volver a tirar:* otras 3 cartas por oro; cuesta 10 y ×1,5 con cada uso en la partida (10, 15, 23…).
    - *Doble o nada:* tras elegir una mejora que aún puede subir, «Quedármela» o «Doble o nada»: un 50 % sube una rareza (la mejora se vuelve a tirar con su fuerza) y si no, la pierdes y esa subida no da nada. La Suerte mejora las probabilidades sin llegar nunca al 100 % (con 200 de Suerte, un 75 %). Las míticas no se apuestan.
 2. **Cofres** — repartidos por el nivel y soltados por élites. Abrirlos cuesta oro (sube con la dificultad y con cada cofre abierto en la partida). Revelado tipo "case opening": la luz recorre las rarezas antes de pararse. Dan **objetos pasivos** (§6).

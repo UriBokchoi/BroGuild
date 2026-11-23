@@ -7,6 +7,9 @@ var item: ItemData
 var level: int = 1
 ## Mejora que se aplica al elegirla (vacía si es nuevo).
 var upgrade: ItemUpgrade
+## Stats a las que iría (las de su arma o, las runas, las del jugador), para enseñar cuánto cambia
+## cada una. [code]null[/code] si no se sabe: la carta solo dice lo que hace.
+var stats: StatsComponent
 
 
 ## Un objeto nuevo (nivel 1).

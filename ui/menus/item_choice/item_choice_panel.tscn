@@ -14,6 +14,7 @@ layer = 30
 script = ExtResource("1_panel")
 appear_root = NodePath("Center/Content")
 stats_hint = NodePath("Center/Content/StatsHint")
+fit_to_screen = true
 
 [node name="Blur" type="ColorRect" parent="."]
 material = SubResource("ShaderMaterial_blur")

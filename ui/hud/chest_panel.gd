@@ -20,8 +20,14 @@ extends PanelContainer
 @export_range(0.0, 1.0, 0.05) var dim: float = 0.25
 ## Clave del aviso de que falta oro (con un [code]%d[/code]: el coste).
 @export var denied_key: StringName = &""
+## Stats del jugador, para decir cuánto cambia cada una («+10 % Daño (18 → 22)»). Sin ellas, solo lo
+## que hace el objeto.
+@export var stats: StatsComponent
 
 var _item: PassiveItemData
+## Lo que hace el objeto, ya escrito al empezar el revelado: al acabar, puede que ya lo lleve y el
+## «antes» saldría con él.
+var _item_effects: String = ""
 var _reveal_time: float = 0.0
 var _elapsed: float = 0.0
 var _steps: int = 0
@@ -52,6 +58,7 @@ func _ready() -> void:
 ## Empieza a revelar [param item]: la luz tarda [param reveal_time] segundos en pararse en su rareza.
 func show_opening(item: PassiveItemData, reveal_time: float) -> void:
 	_item = item
+	_item_effects = _describe(item)
 	_reveal_time = maxf(reveal_time, 0.01)
 	_elapsed = 0.0
 	_build_tiles()
@@ -111,10 +118,20 @@ func _show_item() -> void:
 	_name.text = tr(_item.name_key)
 	if _item.rarity:
 		_name.add_theme_color_override(&"font_color", _item.rarity.color)
-	_effects.text = "\n".join(ModifierFormat.describe_all(_item.stat_modifiers))
+	_effects.text = _item_effects
 	_description.text = tr(_item.description_key)
 	_result.visible = true
 	_hide_left = linger
+
+
+## Una línea por modificador de [param item], con cuánto cambia su stat si se sabe.
+func _describe(item: PassiveItemData) -> String:
+	var lines := ModifierFormat.describe_all(item.stat_modifiers)
+	var changes := ModifierFormat.changes(item.stat_modifiers, stats if is_instance_valid(stats) else null)
+	for index: int in lines.size():
+		if not changes[index].is_empty():
+			lines[index] += " (%s)" % changes[index]
+	return "\n".join(lines)
 
 
 func _light(index: int) -> void:

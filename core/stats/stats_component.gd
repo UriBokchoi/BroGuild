@@ -90,6 +90,24 @@ func has_stat(stat: StringName) -> bool:
 	return _block.has_stat(stat)
 
 
+## Ver [method StatBlock.preview].
+func preview(stat: StringName, extra: Array[StatModifier]) -> float:
+	return _block.preview(stat, extra)
+
+
+## La propiedad de datos de [param stat] (tipo, rango y unidad, como las da
+## [method Object.get_property_list]), para darle formato con [method StatFormat.format]. Vacía si no
+## tiene esa stat.
+func get_property(stat: StringName) -> Dictionary:
+	var copy: Resource = _resolved_by_stat.get(stat)
+	if copy == null:
+		return {}
+	for property: Dictionary in copy.get_property_list():
+		if StringName(property["name"] as String) == stat:
+			return property
+	return {}
+
+
 ## Ver [method StatBlock.add_modifier].
 func add_modifier(modifier: StatModifier, source: Object) -> void:
 	_block.add_modifier(modifier, source)

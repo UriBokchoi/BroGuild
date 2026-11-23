@@ -24,6 +24,19 @@ func before_each() -> void:
 	add_child_autofree(_panel)
 
 
+func test_each_card_says_how_the_stats_change() -> void:
+	EventBus.item_choice_offered.emit([EXCALIBRO] as Array[PassiveItemData])
+	var card := _panel.get_cards()[0]
+	var expected := ModifierFormat.describe_changes(EXCALIBRO.stat_modifiers, _inventory.stats)
+	var shown := PackedStringArray()
+	for label: Node in card.find_children("*", "Label", true, false):
+		if (label as Label).theme_type_variation == &"StatModifiedLabel":
+			shown.append((label as Label).text)
+	assert_eq(shown.size(), EXCALIBRO.stat_modifiers.size())
+	assert_eq(shown, expected, "cada stat con el valor de ahora y el que queda")
+	assert_string_contains(shown[0], " → ")
+
+
 func after_each() -> void:
 	get_tree().paused = false
 

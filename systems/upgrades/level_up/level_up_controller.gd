@@ -112,6 +112,8 @@ func _offer() -> void:
 		_queue.clear()
 		panel.close()
 		return
+	for option: LevelUpOption in options:
+		option.stats = _stats_for(option)
 	var free: bool = _queue.front()
 	var title := free_choice_title_key if free else &""
 	var cost := reroll_cost()
@@ -132,6 +134,7 @@ func _on_double_requested(option: LevelUpOption) -> void:
 	var result: LevelUpOption = null
 	if won:
 		result = LevelUpOption.create_upgrade(option.item, option.level, option.item.roll_upgrade(next, rng))
+		result.stats = option.stats
 	panel.resolve_double(result)
 
 
@@ -148,6 +151,15 @@ func _warm_up_panel() -> void:
 		LevelUpOption.create(_catalog[-1], 1),
 	]
 	panel.warm_up(sample)
+
+
+## Stats a las que iría [param option]: las de su arma si ya la lleva (un arma nueva no mejora nada aún)
+## y, si es una runa, las del jugador.
+func _stats_for(option: LevelUpOption) -> StatsComponent:
+	if option.item is WeaponData:
+		var weapon := player.weapons.get_weapon(option.item as WeaponData)
+		return weapon.stats if weapon else null
+	return player.stats
 
 
 func _owned_levels() -> Dictionary[StringName, int]:

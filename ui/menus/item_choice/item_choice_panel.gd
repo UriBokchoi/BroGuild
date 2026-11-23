@@ -22,7 +22,7 @@ func open(items: Array[PassiveItemData]) -> void:
 	for card: Node in _cards.get_children():
 		card.free()
 	for item: PassiveItemData in items:
-		var card := ItemChoiceCard.new(item)
+		var card := ItemChoiceCard.new(item, inventory.stats if is_instance_valid(inventory) else null)
 		card.pressed.connect(choose.bind(item))
 		_cards.add_child(card)
 	_set_open(true)

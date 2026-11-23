@@ -15,6 +15,7 @@ layer = 30
 script = ExtResource("1_panel")
 appear_root = NodePath("Center/Content")
 stats_hint = NodePath("Center/Content/StatsHint")
+fit_to_screen = true
 data = ExtResource("3_data")
 
 [node name="Blur" type="ColorRect" parent="."]

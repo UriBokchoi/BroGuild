@@ -65,6 +65,9 @@ player = NodePath("../Player")
 
 [node name="HUD" parent="." instance=ExtResource("6_hud")]
 
+[node name="ChestPanel" parent="HUD/Margin/Bottom/Column" index="0" node_paths=PackedStringArray("stats")]
+stats = NodePath("../../../../../Player/Stats")
+
 [node name="StatsOverlay" parent="." node_paths=PackedStringArray("player") instance=ExtResource("43_stats_overlay")]
 player = NodePath("../Player")
 

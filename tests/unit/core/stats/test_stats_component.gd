@@ -79,6 +79,15 @@ func test_missing_data_type_is_an_error() -> void:
 	assert_push_error("no hay datos")
 
 
+func test_preview_and_the_property_of_a_stat() -> void:
+	var extra: Array[StatModifier] = [StatModifier.create(&"speed", StatModifier.Kind.FLAT, 1.0)]
+	assert_eq(_stats.preview(&"speed", extra), 10.0)
+	assert_eq(_stats.get_value(&"speed"), 9.0)
+	var property := _stats.get_property(&"speed")
+	assert_string_contains(property["hint_string"] as String, "suffix:m/s", "su rango y su unidad")
+	assert_true(_stats.get_property(&"enabled").is_empty(), "no es stat")
+
+
 func test_optional_data_type_is_null_without_error() -> void:
 	assert_null(_stats.find_resolved(StatModifier))
 	assert_not_null(_stats.find_resolved(FixtureData))

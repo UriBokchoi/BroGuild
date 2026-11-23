@@ -1504,3 +1504,11 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - **Morir y ganar a la vez:** la muerte llega por `player_died` y, en la prórroga, `BossEncounter` responde con `run_won` en el mismo aviso. Los resultados y el `RunRecorder` atienden la muerte al final del fotograma (`call_deferred`), así que la victoria llega antes y manda.
   - El premio por rapidez es el del momento en que cae el jefe, no el de cruzar el portal: no se pierde por recoger lo que quede.
 - **Por qué:** lo pidió el diseñador. Pasar el nivel es una decisión del jugador (cruzar) y deja un rato para recoger el botín. Morir en la prórroga con el jefe vencido ya no castiga a quien hizo lo difícil.
+
+## 2026-11-23 · Las mejoras dicen cuánto ganas
+- **Decisión:** las cartas de subir de nivel y de elegir objeto ponen cada stat con su valor de ahora y el que quedará: «Daño 18 → 27», «Tiempo entre ataques 1,1 s → 0,94 s», «Daño 100 % → 125 %». Sustituye a «+9 Daño»: una línea por stat, así la carta no crece. El revelado del cofre, que tiene sitio, deja las dos cosas: «+25 % Daño (100 % → 125 %)».
+  - **Qué stats:** las del arma para sus mejoras, y las del jugador para runas y objetos. Un arma nueva no muestra números: aún no tiene mejoras.
+  - **Cálculo:** `StatBlock.preview` calcula el valor con los modificadores de más, con la misma fórmula, sus límites y su redondeo, sin aplicarlos. El formato y la unidad salen de la propiedad de datos de la stat (`StatsComponent.get_property`), como en la vista de stats. Si varios modificadores tocan la misma stat, sale una sola línea con todos.
+  - **Cofre:** el texto se escribe al empezar el revelado, porque al acabar el objeto puede haber llegado ya y el «antes» lo contaría.
+  - **Paneles que no caben:** con el aviso de Tab (Hito 5b) y cartas de tres mejoras, el panel de subir de nivel medía 698 px de alto en una pantalla de 648 y cortaba el título. `ModalPanel.fit_to_screen` encoge su contenedor lo justo cuando no cabe; lo llevan subir de nivel y elegir objeto.
+- **Por qué:** lo pidió el diseñador. «+10 %» no dice cuánto es; con los dos números se ve la ganancia real y se comparan cartas de un vistazo.

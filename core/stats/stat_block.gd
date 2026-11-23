@@ -112,6 +112,27 @@ func add_base_modifier(modifier: StatModifier, source: Object) -> void:
 	_apply(modifier, source, true)
 
 
+## Valor final que tendría [param stat] con [param extra] aplicados encima de los suyos (los de otras
+## stats no cuentan). No cambia nada: sirve para enseñar el antes y el después de una mejora.
+func preview(stat: StringName, extra: Array[StatModifier]) -> float:
+	var state := _get_state(stat)
+	if state == null:
+		return 0.0
+	var trial := StatState.new()
+	trial.base = state.base
+	trial.min_value = state.min_value
+	trial.max_value = state.max_value
+	trial.is_integer = state.is_integer
+	trial.applied = state.applied.duplicate()
+	for modifier: StatModifier in extra:
+		if modifier.stat == stat:
+			var applied := AppliedModifier.new()
+			applied.modifier = modifier
+			trial.applied.append(applied)
+	_recalculate(trial)
+	return trial.value
+
+
 ## Quita todos los modificadores que aplicó [param source].
 func remove_modifiers_from(source: Object) -> void:
 	var changed: Array[StringName] = []

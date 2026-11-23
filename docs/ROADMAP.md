@@ -112,7 +112,7 @@ Lo que salió al probar la partida; va antes que el resto de hitos.
 - [x] Elegir nivel: su objetivo (en el Brosque, vencer al Ent-renador) y una descripción con su lore
 - [x] `docs/LORE.md`: el lore del juego en un archivo para leerlo y cambiarlo a mano (los textos del juego, con su clave en `data/i18n/strings.csv`, se apuntan ahí)
 - [x] Hacha arrojadiza: gira tumbada (en horizontal) y es más grande (×1,7 y su filo, 1,2 m); crece con el área
-- [ ] Mejoras con el valor actual y el que queda (p. ej. «Daño 18 → 22»), para ver cuánto se gana
+- [x] Mejoras con el valor actual y el que queda (p. ej. «Daño 18 → 22»), para ver cuánto se gana: cartas de subir de nivel, de elegir objeto y revelado de cofres
 
 ## Hito 6 — Niveles
 - [ ] El Brosque más grande

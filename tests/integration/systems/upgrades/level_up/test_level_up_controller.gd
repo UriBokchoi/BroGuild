@@ -53,6 +53,18 @@ func test_the_chosen_option_is_applied() -> void:
 		assert_eq(_player.runes.get_level(option.item as RuneData), 1)
 
 
+func test_each_option_knows_the_stats_it_would_change() -> void:
+	for item: Resource in ResourceDir.load_all(LEVEL_UP.weapons_dir, WeaponData):
+		_player.weapons.add(item as WeaponData)
+	EventBus.player_leveled_up.emit(2)
+	for card: LevelUpCard in _panel.get_cards():
+		var option := card.option
+		if option.item is RuneData:
+			assert_same(option.stats, _player.stats, "una runa, las del jugador")
+		elif not option.is_new():
+			assert_same(option.stats, _player.weapons.get_weapon(option.item as WeaponData).stats, "un arma, las suyas")
+
+
 func test_several_levels_give_several_choices() -> void:
 	EventBus.player_leveled_up.emit(2)
 	EventBus.player_leveled_up.emit(3)
