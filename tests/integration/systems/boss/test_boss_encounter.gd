@@ -162,7 +162,7 @@ func _make_encounter(data: BossData) -> BossEncounter:
 ## Todas las fuentes del jugador: cualquier objeto del premio tiene sus stats.
 func _player_stats() -> StatsComponent:
 	var stats := StatsComponent.new()
-	for source: Resource in [OffenseData.new(), HealthData.new(), MovementData.new(), StaminaData.new(), ProgressionData.new()]:
+	for source: Resource in [OffenseData.new(), HealthData.new(), MovementData.new(), StaminaData.new(), ProgressionData.new(), MovementSynergyData.new()]:
 		stats.sources.append(source)
 	add_child_autofree(stats)
 	return stats

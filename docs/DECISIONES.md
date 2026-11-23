@@ -1375,3 +1375,18 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - **Sonido:** viento para la onda y golpe grave para la explosión. El fuego no suena, para no llenar la mezcla.
 - **Por qué objetos y no runas:** primero fueron runas (Brasas, Vendaval, Terremoto), pero el diseñador las prefirió como objetos. Así no ocupan una de las 4 ranuras de runa, salen de cofres, del jefe y del círculo de setas, y se apilan como el resto de pasivos.
 - **Por qué así:** el GDD pide mejoras que premien moverse bien. Que el daño dependa del objeto deja el movimiento base igual y hace de la sinergia una elección de build. La onda del dash es más débil que la explosión porque sale más a menudo: el dash recarga stamina y la caída exige estar en el aire. No se pueden medir con `tools/sim_balance.gd`, porque allí el jugador no se mueve; habrá que probarlas jugando.
+
+## 2026-11-23 · Miniboss: el Trolleador Cara
+- **Decisión:** un miniboss sale a los 4:30 del Brosque, entre las dos hordas. Es el Trolleador Cara, un troll con porra y sonrisa de trollface.
+  - **Base:** es un `Boss` como el Ent-renador (rabia, gritos, inmune a la bomba). Lo saca un `MiniBossEncounter` según `WaveData.mini_bosses`.
+  - **Aviso y salida:** se anuncia 4 s antes y aparece a 16–22 m del jugador, escalado con la dificultad igual que el jefe.
+  - **Ataques:**
+    - *Porrazo*, nuevo `SlamAttack`, en área: un aro fijo marca 7,5 m y otro se abre desde sus pies en 1,2 s; cuando llega al borde cae el golpe, con 1,6 × su daño al tocar.
+    - *Salto*, el `LeapAttack` del Ent-renador más corto.
+  - **Premio:** 60 de oro y un objeto de rara a de leyenda, revelado como el del jefe.
+  - **Base de stats:** 2200 de vida, 18 de contacto y 3,4 m/s. A los 4:30 sale con unas 1,5 veces esa vida.
+- **Las dos barras:** la barra de jefe es ahora una escena (`boss_bar.tscn`) con dos instancias en una columna arriba en el centro. Arriba, la del jefe; debajo, la del miniboss, más pequeña y verde; después, los textos breves. Si coinciden, se apilan y nunca se tapan. Un test lo comprueba con sus rectángulos.
+- **Jefes que trepan:** el Ent-renador no tenía stats de trepar y su sonda de muros salía a 0,55 m del centro, dentro de su propio cuerpo de 1,2 m. Ahora trepa como los esbirros (`climb_speed` 5,5, `wall_climb_time` 1,2) y su sonda sale a 1,5 m, por delante del cuerpo. Lo mismo el troll. Un test lo pone contra las pesas: antes se quedaba pegado en x = 5,8 y ahora pasa al otro lado.
+- **Trolls de piedra:** el mismo modelo del troll en dos posturas, pintado de piedra con `StoneStatue`, con musgo y una olla. Están fuera de la pared este, en un claro reservado del bosque (`LayoutData.reserved`) para que se vean desde dentro, y algo más grandes que el vivo para que destaquen de lejos.
+- **Escalado sin ciclos:** el cálculo del escalado con la dificultad pasa de `WaveData.scaling_for` a `StatScaling.modifiers_for`. `WaveData` ahora lleva `MiniBossData` dentro y, si `MiniBossData` llamara a `WaveData`, los dos scripts se referenciarían en círculo. Ese ciclo dejaba memoria sin liberar al salir, y la validación lo detectó.
+- **Por qué:** lo pidió el diseñador. El miniboss rompe la espera entre hordas con un enemigo que hay que esquivar, no solo golpear, y da un objeto a mitad de ronda. Los trolls de piedra anticipan al vivo.

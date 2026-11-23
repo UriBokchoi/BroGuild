@@ -95,6 +95,7 @@
 
 ## Hito 6 — Niveles
 - [ ] El Brosque: más detalle (decoración, variedad del suelo, props de gimnasio, sonido ambiente); la v1 llegó en el Hito 3
+- [x] Brosque: el miniboss Trolleador Cara a los 4:30 (barra propia bajo la del jefe, porrazo en área y salto) y dos trolls de piedra fuera de la pared este (guiño a El Hobbit); los jefes ya trepan por las pesas
 - [ ] La Torre del Mago
 - [ ] La Mazmorra
 

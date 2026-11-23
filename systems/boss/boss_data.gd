@@ -32,7 +32,7 @@ extends Resource
 
 ## Mejoras con las que sale con dificultad [param difficulty] (o [code]null[/code] sin escalado).
 func scaling_at(difficulty: float) -> StatModifierSet:
-	return WaveData.scaling_for(stat_scaling, difficulty)
+	return StatScaling.modifiers_for(stat_scaling, difficulty)
 
 
 ## Multiplicador del premio si cae a los [param minutes] minutos de partida.

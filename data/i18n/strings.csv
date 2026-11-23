@@ -220,6 +220,14 @@ ENT_TRAINER_SHOUT_SETS,¡Tres series!,Three sets!
 ENT_TRAINER_SHOUT_NO_EXCUSES,¡Sin excusas!,No excuses!
 ENT_TRAINER_SHOUT_SPROUTS,"¡Bro-tes, a calentar!","Sprouts, warm up!"
 ENT_TRAINER_SHOUT_ENRAGE,"¡Si no duele, no crece!","If it doesn't hurt, it doesn't grow!"
+ENEMY_TROLLEADOR_NAME,Trolleador Cara,Trollface
+ENEMY_TROLLEADOR_DESCRIPTION,"Miniboss del Brosque: un troll con porra y una sonrisa que da mala espina. Sus primos se quedaron de piedra al amanecer.","Miniboss of the Brorest: a troll with a club and a grin you can't trust. His cousins were turned to stone at dawn."
+TROLLEADOR_SHOUT_SMASH,¡PORRAZO!,SMASH!
+TROLLEADOR_SHOUT_PROBLEM,¿Algún problema?,Problem?
+TROLLEADOR_SHOUT_SURPRISE,¡Sorpresa!,Surprise!
+TROLLEADOR_SHOUT_MAD,"¿Te enfadas, bro?","U mad, bro?"
+TROLLEADOR_SHOUT_ENRAGE,¡Ahora va en serio!,Now it's personal!
+TROLLEADOR_INCOMING,¡Se acerca el Trolleador Cara!,Trollface is coming!
 ENEMY_ELITE_NAME,%s élite,Elite %s
 INTERACT_SUMMON,Invocar enemigos,Summon enemies
 INTERACT_WAVES_START,Empezar oleadas,Start waves

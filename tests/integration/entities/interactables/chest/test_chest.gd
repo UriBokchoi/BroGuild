@@ -22,7 +22,7 @@ func before_each() -> void:
 	var progression := ProgressionData.new()
 	progression.currency_gain = 100.0
 	stats.sources.append(progression)
-	for source: Resource in [OffenseData.new(), HealthData.new(), MovementData.new(), StaminaData.new()]:
+	for source: Resource in [OffenseData.new(), HealthData.new(), MovementData.new(), StaminaData.new(), MovementSynergyData.new()]:
 		stats.sources.append(source)
 	add_child_autofree(stats)
 	_wallet = WalletComponent.new()

@@ -14,6 +14,7 @@
 [ext_resource type="Resource" path="res://data/bosses/brosque.tres" id="19_boss"]
 [ext_resource type="PackedScene" path="res://entities/interactables/heal_shop/tavern.tscn" id="20_tavern"]
 [ext_resource type="PackedScene" path="res://levels/brosque/props/puddle.tscn" id="21_puddle"]
+[ext_resource type="PackedScene" path="res://levels/brosque/props/stone_trolls.tscn" id="22_stone_trolls"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_sky"]
 sky_top_color = Color(0.3, 0.52, 0.82, 1)
@@ -113,6 +114,9 @@ data = ExtResource("17_layout_data")
 
 [node name="Tavern" parent="." instance=ExtResource("20_tavern")]
 transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, -79.5)
+
+[node name="StoneTrolls" parent="." instance=ExtResource("22_stone_trolls")]
+transform = Transform3D(0, 0, 1.35, 0, 1.35, 0, -1.35, 0, 0, 90, 0, -18)
 
 [node name="Breakables" type="Node3D" parent="."]
 script = ExtResource("11_scatter")

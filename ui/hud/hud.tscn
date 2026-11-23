@@ -18,7 +18,7 @@
 [ext_resource type="Resource" path="res://data/rarities/rarities.tres" id="16_rarities"]
 [ext_resource type="Script" path="res://ui/hud/boss_key_counter.gd" id="17_keys"]
 [ext_resource type="Texture2D" path="res://assets/textures/icons/ui/membership_card.svg" id="18_card"]
-[ext_resource type="Script" path="res://ui/hud/boss_bar.gd" id="19_boss_bar"]
+[ext_resource type="PackedScene" path="res://ui/hud/boss_bar.tscn" id="19_boss_bar"]
 [ext_resource type="Script" path="res://ui/hud/announcement_feed.gd" id="20_feed"]
 
 [node name="HUD" type="CanvasLayer"]
@@ -174,55 +174,49 @@ mouse_filter = 2
 theme_type_variation = &"PassiveBar"
 script = ExtResource("14_passives")
 
-[node name="BossBar" type="PanelContainer" parent="Margin"]
-unique_name_in_owner = true
+[node name="TopCenter" type="PanelContainer" parent="Margin"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 0
 mouse_filter = 2
 theme_type_variation = &"BossBarFrame"
-script = ExtResource("19_boss_bar")
 
-[node name="Content" type="VBoxContainer" parent="Margin/BossBar"]
+[node name="Column" type="VBoxContainer" parent="Margin/TopCenter"]
 layout_mode = 2
 mouse_filter = 2
-theme_type_variation = &"BossColumn"
+theme_type_variation = &"BossBars"
 
-[node name="BossName" type="Label" parent="Margin/BossBar/Content"]
+[node name="BossBar" parent="Margin/TopCenter/Column" instance=ExtResource("19_boss_bar")]
 unique_name_in_owner = true
 layout_mode = 2
-theme_type_variation = &"BossNameLabel"
-horizontal_alignment = 1
 
-[node name="BossHealth" type="ProgressBar" parent="Margin/BossBar/Content"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(560, 18)
-layout_mode = 2
-mouse_filter = 2
-theme_type_variation = &"BossHealthBar"
-step = 0.0
-show_percentage = false
-
-[node name="BossShout" type="Label" parent="Margin/BossBar/Content"]
+[node name="MiniBossBar" parent="Margin/TopCenter/Column" instance=ExtResource("19_boss_bar")]
 unique_name_in_owner = true
 layout_mode = 2
-theme_type_variation = &"BossShoutLabel"
-horizontal_alignment = 1
+mini_boss = true
 
-[node name="AnnouncementFrame" type="PanelContainer" parent="Margin"]
+[node name="BossName" parent="Margin/TopCenter/Column/MiniBossBar/Content" index="0"]
+theme_type_variation = &"MiniBossNameLabel"
+
+[node name="BossHealth" parent="Margin/TopCenter/Column/MiniBossBar/Content" index="1"]
+custom_minimum_size = Vector2(420, 12)
+theme_type_variation = &"MiniBossHealthBar"
+
+[node name="BossShout" parent="Margin/TopCenter/Column/MiniBossBar/Content" index="2"]
+theme_type_variation = &"MiniBossShoutLabel"
+
+[node name="AnnouncementFrame" type="PanelContainer" parent="Margin/TopCenter/Column"]
 layout_mode = 2
 size_flags_horizontal = 4
-size_flags_vertical = 0
 mouse_filter = 2
 theme_type_variation = &"AnnouncementFrame"
 
-[node name="AnnouncementFeed" type="VBoxContainer" parent="Margin/AnnouncementFrame"]
+[node name="AnnouncementFeed" type="VBoxContainer" parent="Margin/TopCenter/Column/AnnouncementFrame"]
 unique_name_in_owner = true
 layout_mode = 2
 mouse_filter = 2
 theme_type_variation = &"BossColumn"
 script = ExtResource("20_feed")
-
 [node name="LevelIntro" type="VBoxContainer" parent="Margin"]
 unique_name_in_owner = true
 layout_mode = 2

@@ -42,6 +42,12 @@ script = ExtResource("2_cue")
 stream = ExtResource("11_boss_spawned")
 max_voices = 1
 
+[sub_resource type="Resource" id="Cue_mini_boss_spawned"]
+script = ExtResource("2_cue")
+stream = ExtResource("11_boss_spawned")
+volume_db = -3.0
+max_voices = 1
+
 [sub_resource type="Resource" id="Cue_breakable_broken"]
 script = ExtResource("2_cue")
 stream = ExtResource("12_breakable_broken")
@@ -221,6 +227,7 @@ level_up = SubResource("Cue_level_up")
 enemy_hit = SubResource("Cue_enemy_hit")
 enemy_died = SubResource("Cue_enemy_died")
 boss_spawned = SubResource("Cue_boss_spawned")
+mini_boss_spawned = SubResource("Cue_mini_boss_spawned")
 boss_defeated = SubResource("Cue_boss_defeated")
 pickups = Dictionary[StringName, ExtResource("2_cue")]({
 &"bomb": SubResource("Cue_pickup_bomb"),

@@ -148,11 +148,23 @@ func spawn_around(enemy: EnemyData, center: Vector3, count: int, min_distance: f
 	var modifiers := data.scaling_at(get_difficulty()) if data else null
 	var spawned := 0
 	for _index: int in count:
-		var feet := _find_ground(center, min_distance, max_distance)
-		if not feet.is_finite():
-			continue
-		swarm.spawn(enemy, feet).boost(modifiers)
-		spawned += 1
+		if spawn_one_around(enemy, center, min_distance, max_distance, modifiers):
+			spawned += 1
+	return spawned
+
+
+## Saca un [param enemy] en el suelo alrededor de [param center], entre [param min_distance] y
+## [param max_distance], con las mejoras [param modifiers] (o sin ellas), aunque no esté en marcha ni
+## haya sitio en el máximo a la vez (un miniboss). Devuelve el enemigo, o [code]null[/code] si no
+## encontró suelo.
+func spawn_one_around(
+	enemy: EnemyData, center: Vector3, min_distance: float, max_distance: float, modifiers: StatModifierSet = null
+) -> Enemy:
+	var feet := _find_ground(center, min_distance, max_distance)
+	if not feet.is_finite():
+		return null
+	var spawned := swarm.spawn(enemy, feet)
+	spawned.boost(modifiers)
 	return spawned
 
 

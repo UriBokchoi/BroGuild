@@ -1,0 +1,35 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3]
+
+[ext_resource type="Script" path="res://entities/enemies/enemy_data.gd" id="1_data"]
+[ext_resource type="Script" path="res://core/components/health/health_data.gd" id="2_health"]
+[ext_resource type="Script" path="res://entities/enemies/enemy_stats.gd" id="3_stats"]
+[ext_resource type="PackedScene" path="res://entities/enemies/trolleador/trolleador.tscn" id="4_scene"]
+[ext_resource type="Texture2D" path="res://assets/textures/icons/enemies/trolleador.svg" id="98_icon"]
+
+[sub_resource type="Resource" id="Resource_health"]
+script = ExtResource("2_health")
+max_health = 2200.0
+
+[sub_resource type="Resource" id="Resource_stats"]
+script = ExtResource("3_stats")
+move_speed = 3.4
+acceleration = 22.0
+contact_damage = 18.0
+contact_interval = 0.9
+knockback = 10.0
+separation_radius = 2.0
+climb_speed = 5.5
+climb_height = 0.5
+wall_climb_delay = 0.35
+wall_climb_time = 1.2
+xp_reward = 60.0
+gold_reward = 40.0
+
+[resource]
+script = ExtResource("1_data")
+id = &"trolleador"
+name_key = &"ENEMY_TROLLEADOR_NAME"
+description_key = &"ENEMY_TROLLEADOR_DESCRIPTION"
+icon = ExtResource("98_icon")
+scene = ExtResource("4_scene")
+stat_sources = Array[Resource]([SubResource("Resource_health"), SubResource("Resource_stats")])

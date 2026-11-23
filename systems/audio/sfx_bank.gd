@@ -20,6 +20,8 @@ extends Resource
 @export var enemy_hit: SoundCue
 @export var enemy_died: SoundCue
 @export var boss_spawned: SoundCue
+## Llega un miniboss (el Trolleador Cara).
+@export var mini_boss_spawned: SoundCue
 @export var boss_defeated: SoundCue
 
 @export_group("pickups")

@@ -19,6 +19,10 @@ contact_damage = 16.0
 contact_interval = 0.9
 knockback = 10.0
 separation_radius = 2.0
+climb_speed = 5.5
+climb_height = 0.5
+wall_climb_delay = 0.35
+wall_climb_time = 1.2
 
 [resource]
 script = ExtResource("1_data")

@@ -43,6 +43,7 @@
 [ext_resource type="Resource" uid="uid://ctcnxdbqncola" path="res://data/enemies/shooter.tres" id="45_shooter"]
 [ext_resource type="Resource" uid="uid://dwbaq02li0bkq" path="res://data/enemies/sapling.tres" id="46_sapling"]
 [ext_resource type="Resource" uid="uid://blk8526gq2u3k" path="res://data/enemies/ent_trainer.tres" id="47_ent_trainer"]
+[ext_resource type="Resource" path="res://data/enemies/trolleador.tres" id="48_trolleador"]
 
 [sub_resource type="Resource" id="Category_characters"]
 script = ExtResource("2_category")
@@ -79,7 +80,7 @@ id = &"enemies"
 name_key = &"ARCHIVE_CATEGORY_ENEMIES"
 hint_key = &"ARCHIVE_HINT_ENEMIES"
 shown_stats = Array[StringName]([&"max_health", &"contact_damage", &"move_speed"])
-entries = Array[Resource]([ExtResource("44_swarmer"), ExtResource("45_shooter"), ExtResource("46_sapling"), ExtResource("47_ent_trainer")])
+entries = Array[Resource]([ExtResource("44_swarmer"), ExtResource("45_shooter"), ExtResource("46_sapling"), ExtResource("48_trolleador"), ExtResource("47_ent_trainer")])
 
 [resource]
 script = ExtResource("1_catalog")

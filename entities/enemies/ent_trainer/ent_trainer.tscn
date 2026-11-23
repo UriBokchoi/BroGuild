@@ -216,6 +216,9 @@ visual = NodePath("Visual")
 death_time = 1.2
 turn_speed = 6.0
 steer_every_tick = true
+wall_probe_radius = 0.5
+wall_probe_height = 0.9
+wall_probe_reach = 1.5
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.1, 0)

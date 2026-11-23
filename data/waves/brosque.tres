@@ -7,6 +7,14 @@
 [ext_resource type="Resource" path="res://data/enemies/elite.tres" id="5_elite"]
 [ext_resource type="Script" path="res://systems/spawning/stat_scaling.gd" id="6_scaling"]
 [ext_resource type="Script" path="res://systems/spawning/horde_data.gd" id="9_horde"]
+[ext_resource type="Script" path="res://systems/boss/mini_boss_data.gd" id="10_mini_boss"]
+[ext_resource type="Resource" path="res://data/enemies/trolleador.tres" id="11_trolleador"]
+[ext_resource type="Script" path="res://systems/items/item_pool.gd" id="12_pool"]
+[ext_resource type="Script" path="res://core/weighted_table.gd" id="13_table"]
+[ext_resource type="Script" path="res://core/weighted_entry.gd" id="14_entry"]
+[ext_resource type="Resource" path="res://data/rarities/rare.tres" id="15_rare"]
+[ext_resource type="Resource" path="res://data/rarities/improbable.tres" id="16_improbable"]
+[ext_resource type="Resource" path="res://data/rarities/legendary.tres" id="17_legendary"]
 
 [sub_resource type="Curve" id="Curve_rate"]
 _limits = [0.0, 20.0, 0.0, 20.0]
@@ -73,6 +81,49 @@ warning_seconds = 3.0
 announce_key = &"HORDE_INCOMING"
 announce_color = Color(0.88, 0.38, 0.28, 1)
 
+[sub_resource type="Curve" id="Curve_troll_health"]
+_limits = [0.0, 20.0, 0.0, 20.0]
+_data = [Vector2(0, 1), 0.0, 0.12, 1, 1, Vector2(5, 1.6), 0.12, 0.2, 1, 1, Vector2(10, 2.6), 0.2, 0.48, 1, 1, Vector2(15, 5), 0.48, 0.8, 1, 1, Vector2(20, 9), 0.8, 0.0, 1, 1]
+point_count = 5
+
+[sub_resource type="Curve" id="Curve_troll_damage"]
+_limits = [0.0, 10.0, 0.0, 20.0]
+_data = [Vector2(0, 1), 0.0, 0.07, 1, 1, Vector2(10, 1.7), 0.07, 0.13, 1, 1, Vector2(20, 3), 0.13, 0.0, 1, 1]
+point_count = 3
+
+[sub_resource type="Resource" id="Scaling_troll_health"]
+script = ExtResource("6_scaling")
+stat = &"max_health"
+multiplier = SubResource("Curve_troll_health")
+
+[sub_resource type="Resource" id="Scaling_troll_contact"]
+script = ExtResource("6_scaling")
+stat = &"contact_damage"
+multiplier = SubResource("Curve_troll_damage")
+
+[sub_resource type="Resource" id="Rarities_troll_reward"]
+script = ExtResource("13_table")
+entries = Array[ExtResource("14_entry")]([ExtResource("15_rare"), ExtResource("16_improbable"), ExtResource("17_legendary")])
+
+[sub_resource type="Resource" id="Items_troll_reward"]
+script = ExtResource("12_pool")
+rarities = SubResource("Rarities_troll_reward")
+items_dir = "res://data/items"
+
+[sub_resource type="Resource" id="MiniBoss_trolleador"]
+script = ExtResource("10_mini_boss")
+enemy = ExtResource("11_trolleador")
+at_minute = 4.5
+warning_seconds = 4.0
+announce_key = &"TROLLEADOR_INCOMING"
+announce_color = Color(0.55, 0.72, 0.29, 1)
+min_distance = 16.0
+max_distance = 22.0
+stat_scaling = Array[ExtResource("6_scaling")]([SubResource("Scaling_troll_health"), SubResource("Scaling_troll_contact")])
+reward_gold = 60.0
+reward_items = SubResource("Items_troll_reward")
+reveal_time = 1.6
+
 [resource]
 script = ExtResource("1_data")
 round_minutes = 10.0
@@ -88,3 +139,4 @@ elite_chance = SubResource("Curve_elite")
 elite = ExtResource("5_elite")
 stat_scaling = Array[ExtResource("6_scaling")]([SubResource("Resource_scale_health"), SubResource("Resource_scale_contact"), SubResource("Resource_scale_weapon")])
 hordes = Array[ExtResource("9_horde")]([SubResource("Horde_minute_3"), SubResource("Horde_minute_6")])
+mini_bosses = Array[ExtResource("10_mini_boss")]([SubResource("MiniBoss_trolleador")])

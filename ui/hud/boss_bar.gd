@@ -1,12 +1,17 @@
 class_name BossBar
 extends PanelContainer
-## El jefe en el HUD, arriba en el centro: su nombre, su vida y lo que grita (se ve un rato). Aparece
-## al salir ([signal EventBus.boss_spawned]) y se va al vencerlo ([signal EventBus.boss_defeated]).
-## Estilo: variaciones [code]BossBarFrame[/code], [code]BossNameLabel[/code],
-## [code]BossHealthBar[/code] y [code]BossShoutLabel[/code] del Theme global.
+## Un jefe en el HUD, arriba en el centro: su nombre, su vida y lo que grita (se ve un rato). La del
+## jefe del nivel aparece al salir ([signal EventBus.boss_spawned]) y se va al vencerlo
+## ([signal EventBus.boss_defeated]); la del miniboss ([member mini_boss]), con sus señales
+## ([signal EventBus.mini_boss_spawned]…), y también se va si se pasa el nivel. Las dos van en una
+## columna, una bajo la otra. Estilo: variaciones [code]BossBarPanel[/code],
+## [code]BossNameLabel[/code], [code]BossHealthBar[/code] y [code]BossShoutLabel[/code] del Theme
+## global (la del miniboss, las suyas, más pequeñas).
 
 ## Segundos que se ve cada grito.
 @export_range(0.1, 10.0, 0.1, "suffix:s") var shout_time: float = 2.5
+## Muestra al miniboss en vez de al jefe del nivel.
+@export var mini_boss: bool = false
 
 var _shout_left: float = 0.0
 
@@ -16,11 +21,18 @@ var _shout_left: float = 0.0
 
 
 func _enter_tree() -> void:
-	if not EventBus.boss_spawned.is_connected(show_boss):
+	if EventBus.boss_defeated.is_connected(_on_boss_defeated):
+		return
+	EventBus.boss_defeated.connect(_on_boss_defeated)
+	if mini_boss:
+		EventBus.mini_boss_spawned.connect(show_boss)
+		EventBus.mini_boss_health_changed.connect(show_health)
+		EventBus.mini_boss_shouted.connect(show_shout)
+		EventBus.mini_boss_defeated.connect(_on_mini_boss_defeated)
+	else:
 		EventBus.boss_spawned.connect(show_boss)
 		EventBus.boss_health_changed.connect(show_health)
 		EventBus.boss_shouted.connect(show_shout)
-		EventBus.boss_defeated.connect(_on_boss_defeated)
 
 
 func _ready() -> void:
@@ -64,4 +76,8 @@ func get_shout() -> String:
 
 
 func _on_boss_defeated(_victory_key: StringName, _seconds: float, _bonus: float) -> void:
+	visible = false
+
+
+func _on_mini_boss_defeated(_name_key: StringName) -> void:
 	visible = false

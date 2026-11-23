@@ -16,6 +16,8 @@ const HEALTH := Color("c94a4a")
 const EXPERIENCE := Color("4fb6ff")
 const DIFFICULTY := Color("e0806e")
 const BOSS := Color("e0602f")
+## La barra del miniboss (el Trolleador Cara): verde troll, para no confundirla con la del jefe.
+const MINI_BOSS := Color("8db84a")
 const BOSS_KEY := Color("3fd6b8")
 const TOGGLE_ON := preload("res://assets/textures/icons/ui/toggle_on.svg")
 const TOGGLE_OFF := preload("res://assets/textures/icons/ui/toggle_off.svg")
@@ -307,22 +309,32 @@ func _add_chests(theme: Theme) -> void:
 ## Jefe: arriba en el centro (bajo el reloj), su nombre, su barra de vida y lo que grita; debajo
 ## del oro, las llaves que lleva el jugador. La victoria, en la pantalla de resultados.
 func _add_boss(theme: Theme) -> void:
+	# Columna arriba en el centro: la barra del jefe, la del miniboss debajo y los textos breves.
 	theme.set_type_variation(&"BossBarFrame", &"PanelContainer")
 	var frame := StyleBoxEmpty.new()
 	frame.content_margin_top = 84
 	theme.set_stylebox(&"panel", &"BossBarFrame", frame)
+	_separation(theme, &"BossBars", &"VBoxContainer", 14)
+	theme.set_type_variation(&"BossBarPanel", &"PanelContainer")
+	theme.set_stylebox(&"panel", &"BossBarPanel", StyleBoxEmpty.new())
 	_separation(theme, &"BossColumn", &"VBoxContainer", 4)
 	_label_variation(theme, &"BossNameLabel", 26, INK)
 	theme.set_type_variation(&"BossHealthBar", &"ProgressBar")
 	theme.set_stylebox(&"background", &"BossHealthBar", _box(Color(SLATE, 0.85), 6, Vector2.ZERO, Color(BOSS, 0.5), 2, 2))
 	theme.set_stylebox(&"fill", &"BossHealthBar", _box(BOSS, 6, Vector2.ZERO, Color.TRANSPARENT, 0, 0))
 	_label_variation(theme, &"BossShoutLabel", 24, GOLD)
+	# El miniboss: lo mismo, más pequeño y en naranja.
+	_label_variation(theme, &"MiniBossNameLabel", 20, INK)
+	theme.set_type_variation(&"MiniBossHealthBar", &"ProgressBar")
+	theme.set_stylebox(&"background", &"MiniBossHealthBar", _box(Color(SLATE, 0.85), 5, Vector2.ZERO, Color(MINI_BOSS, 0.5), 2, 2))
+	theme.set_stylebox(&"fill", &"MiniBossHealthBar", _box(MINI_BOSS, 5, Vector2.ZERO, Color.TRANSPARENT, 0, 0))
+	_label_variation(theme, &"MiniBossShoutLabel", 20, GOLD)
 	_label_variation(theme, &"BossKeyLabel", 22, INK)
 	_label_variation(theme, &"BossKeyReadyLabel", 22, BOSS_KEY)
 	_label_variation(theme, &"VictoryLabel", 64, BOSS_KEY)
-	# Textos breves (power-ups, mejoras): en el centro, por debajo de la barra del jefe.
+	# Textos breves (power-ups, mejoras): en la misma columna, por debajo de las barras de los jefes.
 	theme.set_type_variation(&"AnnouncementFrame", &"PanelContainer")
 	var announcements := StyleBoxEmpty.new()
-	announcements.content_margin_top = 210
+	announcements.content_margin_top = 24
 	theme.set_stylebox(&"panel", &"AnnouncementFrame", announcements)
 	_label_variation(theme, &"AnnouncementLabel", 32, INK)

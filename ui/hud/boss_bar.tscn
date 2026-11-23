@@ -1,0 +1,36 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ui/hud/boss_bar.gd" id="1_bar"]
+
+[node name="BossBar" type="PanelContainer"]
+size_flags_horizontal = 4
+size_flags_vertical = 0
+mouse_filter = 2
+theme_type_variation = &"BossBarPanel"
+script = ExtResource("1_bar")
+
+[node name="Content" type="VBoxContainer" parent="."]
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"BossColumn"
+
+[node name="BossName" type="Label" parent="Content"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"BossNameLabel"
+horizontal_alignment = 1
+
+[node name="BossHealth" type="ProgressBar" parent="Content"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(560, 18)
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"BossHealthBar"
+step = 0.0
+show_percentage = false
+
+[node name="BossShout" type="Label" parent="Content"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"BossShoutLabel"
+horizontal_alignment = 1

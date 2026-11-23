@@ -13,7 +13,7 @@ var _inventory: PassiveInventory
 
 func before_each() -> void:
 	var stats := StatsComponent.new()
-	for source: Resource in [OffenseData.new(), HealthData.new(), MovementData.new(), StaminaData.new(), ProgressionData.new()]:
+	for source: Resource in [OffenseData.new(), HealthData.new(), MovementData.new(), StaminaData.new(), ProgressionData.new(), MovementSynergyData.new()]:
 		stats.sources.append(source)
 	add_child_autofree(stats)
 	_inventory = PassiveInventory.new()

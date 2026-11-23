@@ -83,6 +83,14 @@ signal boss_shouted(text_key: StringName)
 ## Vencieron al jefe: se pasa el nivel. [param victory_key] es el título de la victoria,
 ## [param seconds] lo que duró la partida y [param bonus] el multiplicador del premio por rapidez.
 signal boss_defeated(victory_key: StringName, seconds: float, bonus: float)
+## Salió un miniboss ([param name_key]: su nombre; ver [MiniBossEncounter]).
+signal mini_boss_spawned(name_key: StringName)
+## Cambió la vida del miniboss (actual y máxima).
+signal mini_boss_health_changed(current: float, maximum: float)
+## El miniboss gritó [param text_key] (clave de traducción).
+signal mini_boss_shouted(text_key: StringName)
+## Vencieron al miniboss [param name_key] (no termina el nivel).
+signal mini_boss_defeated(name_key: StringName)
 ## Un texto breve en el HUD (un power-up recogido, una mejora): [param text_key] con sus valores
 ## [param args] (los que son claves también se traducen), del color [param color].
 signal announced(text_key: StringName, args: Array, color: Color)
