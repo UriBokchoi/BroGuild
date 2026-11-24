@@ -122,7 +122,7 @@ Lo que salió en la segunda tanda de pruebas; va antes que el resto.
 - [x] Optimizar: el ordenador va a tope jugando. Límite de FPS (de serie, 60), enemigos y objetos redondos con menos polígonos, bosque por trozos (un 83 % menos de triángulos)
 
 ## Hito 6 — Niveles
-- [ ] El Brosque más grande
+- [x] El Brosque más grande: paredes a 110 m (antes 80), casi el doble de área, con más piezas, rompibles y árboles en proporción
 - [ ] El Brosque: más detalle (decoración, variedad del suelo, props de gimnasio, sonido ambiente); la v1 llegó en el Hito 3
 - [x] Brosque: el miniboss Trolleador Cara a los 4:30 (barra propia bajo la del jefe, porrazo en área y salto) y dos trolls de piedra fuera de la pared este (guiño a El Hobbit); los jefes ya trepan por las pesas
 - [ ] La Torre del Mago

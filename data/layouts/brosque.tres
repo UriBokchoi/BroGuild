@@ -29,7 +29,7 @@ face_center = true
 [sub_resource type="Resource" id="Piece_high"]
 script = ExtResource("2_piece")
 scene = ExtResource("4_high")
-count = 2
+count = 3
 footprint = 20.0
 top_height = 5.0
 avoid_clearing = true
@@ -37,7 +37,7 @@ avoid_clearing = true
 [sub_resource type="Resource" id="Piece_low"]
 script = ExtResource("2_piece")
 scene = ExtResource("5_low")
-count = 3
+count = 5
 footprint = 15.0
 top_height = 3.0
 avoid_clearing = true
@@ -45,78 +45,78 @@ avoid_clearing = true
 [sub_resource type="Resource" id="Piece_ruin_temple"]
 script = ExtResource("2_piece")
 scene = ExtResource("13_temple")
-count = 1
+count = 2
 footprint = 5.5
 avoid_clearing = true
 
 [sub_resource type="Resource" id="Piece_ruin_wall"]
 script = ExtResource("2_piece")
 scene = ExtResource("14_wall")
-count = 3
+count = 5
 footprint = 3.5
 avoid_clearing = true
 
 [sub_resource type="Resource" id="Piece_ruin_arch"]
 script = ExtResource("2_piece")
 scene = ExtResource("15_arch")
-count = 2
+count = 3
 footprint = 3.0
 avoid_clearing = true
 
 [sub_resource type="Resource" id="Piece_mushroom_ring"]
 script = ExtResource("2_piece")
 scene = ExtResource("16_mushrooms")
-count = 2
+count = 3
 footprint = 3.5
 avoid_clearing = true
 
 [sub_resource type="Resource" id="Piece_slots_ground"]
 script = ExtResource("2_piece")
 scene = ExtResource("8_slots")
-count = 1
+count = 2
 footprint = 2.5
 
 [sub_resource type="Resource" id="Piece_dumbbell"]
 script = ExtResource("2_piece")
 scene = ExtResource("6_dumbbell")
-count = 8
+count = 14
 footprint = 2.5
 
 [sub_resource type="Resource" id="Piece_bench"]
 script = ExtResource("2_piece")
 scene = ExtResource("7_bench")
-count = 6
+count = 10
 footprint = 2.0
 
 [sub_resource type="Resource" id="Piece_chest_ground"]
 script = ExtResource("2_piece")
 scene = ExtResource("11_chest")
-count = 5
+count = 8
 footprint = 2.0
 
 [sub_resource type="Resource" id="Piece_slots_top"]
 script = ExtResource("2_piece")
 scene = ExtResource("8_slots")
-count = 3
+count = 4
 footprint = 2.5
 
 [sub_resource type="Resource" id="Piece_chest_top"]
 script = ExtResource("2_piece")
 scene = ExtResource("11_chest")
-count = 2
+count = 3
 footprint = 2.0
 
 [sub_resource type="Resource" id="Forest_brosque"]
 script = ExtResource("3_forest")
-max_trees = 150
+max_trees = 280
 spacing = 7.0
 piece_margin = 2.0
-attempts = 3000
-border = 74.0
+attempts = 5000
+border = 104.0
 border_depth = 5.0
 border_step = 4.0
-outer_start = 83.0
-outer_end = 135.0
+outer_start = 113.0
+outer_end = 165.0
 outer_step = 4.5
 scale_range = Vector2(0.8, 1.4)
 outer_scale_range = Vector2(1.2, 1.9)
@@ -133,12 +133,12 @@ chunk_size = 40.0
 
 [resource]
 script = ExtResource("1_layout")
-half_size = 70.0
+half_size = 96.0
 clearing_radius = 18.0
 spawn_radius = 6.0
 gap = 3.0
 attempts = 60
 pieces = Array[ExtResource("2_piece")]([SubResource("Piece_altar"), SubResource("Piece_high"), SubResource("Piece_low"), SubResource("Piece_ruin_temple"), SubResource("Piece_slots_ground"), SubResource("Piece_chest_ground"), SubResource("Piece_mushroom_ring"), SubResource("Piece_ruin_wall"), SubResource("Piece_ruin_arch"), SubResource("Piece_dumbbell"), SubResource("Piece_bench")])
 top_pieces = Array[ExtResource("2_piece")]([SubResource("Piece_slots_top"), SubResource("Piece_chest_top")])
-reserved = Array[Vector3]([Vector3(0, -79.5, 9), Vector3(90, -18, 18)])
+reserved = Array[Vector3]([Vector3(0, -109.5, 9), Vector3(120, -18, 18)])
 forest = SubResource("Forest_brosque")

@@ -1573,3 +1573,25 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - Cada 0,1 s mira solo las celdas de 8 m alrededor del jugador. Los árboles de fuera de las paredes no se miran: no se puede llegar a ellos.
   - La hoja es un SVG blanco con forma de hoja (`assets/textures/vfx/leaf.svg`); la partícula le pone el color del árbol.
 - **Por qué:** lo pidió el diseñador. Las copas no chocan, y meterse dentro no daba ninguna respuesta.
+
+## 2026-11-24 · El Brosque, más grande
+- **Decisión:** el Brosque pasa de paredes a 80 m del centro a 110 m: casi el doble de área (×1,9). Lo que hay dentro crece en proporción:
+
+  | Qué | Antes | Ahora |
+  |---|---|---|
+  | Zona de juego (piezas, rompibles) | ±70 m | ±96 m |
+  | Mesetas (altas / bajas) | 2 / 3 | 3 / 5 |
+  | Tragaperras (suelo / mesetas) | 1 / 3 | 2 / 4 |
+  | Cofres (suelo / mesetas) | 5 / 2 | 8 / 3 |
+  | Círculos de setas | 2 | 3 |
+  | Ruinas (templo, muros, arcos) | 1, 3, 2 | 2, 5, 3 |
+  | Pesas / bancos | 8 / 6 | 14 / 10 |
+  | Calaveras / bolsitas / charcos | 30 / 20 / 14 | 56 / 38 / 26 |
+  | Árboles sueltos | 150 | 280 |
+  | Tarjetas de socio | 3, a más de 25 m del centro y entre sí | 3, a más de 34 m |
+
+  - Se mueven con la pared la taberna (centro de la pared norte), los trolls de piedra (fuera de la pared este), el anillo de árboles junto a las paredes, la banda de bosque de fuera, el suelo, la zona donde salen los enemigos (`play_area`), el borde que se ve (`MapBoundary`) y las hojas de las copas.
+  - El claro del centro y el portal del jefe (a 24–28 m) no cambian: el comienzo se siente igual.
+  - Los tests del nivel ya no llevan números a mano: leen las cantidades de los datos del mapa y la pared del borde.
+  - El rendimiento apenas cambia gracias al bosque por trozos: sin enemigos, de 0,43 M a 0,49 M triángulos y de 760 a 940 llamadas de dibujo.
+- **Por qué:** lo pidió el diseñador: el mapa se quedaba pequeño para explorar.

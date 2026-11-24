@@ -24,6 +24,30 @@ func after_all() -> void:
 	RunState.character = null
 
 
+## Distancia del centro a la cara de dentro de las paredes (la del borde que se ve).
+func _wall() -> float:
+	return (_level.get_node(^"MapBoundary") as MapBoundary).half_extent.x
+
+
+## Cuántas piezas del mapa tienen [param marker] en su escena (o son de esa clase), según los datos.
+func _count_in_data(marker: String) -> int:
+	var data := (_level.get_node(^"Layout") as LevelLayout).data
+	var total := 0
+	var all_pieces: Array[LayoutPiece] = []
+	all_pieces.append_array(data.pieces)
+	all_pieces.append_array(data.top_pieces)
+	for piece: LayoutPiece in all_pieces:
+		var path := piece.scene.resource_path
+		var matches := path.contains(marker)
+		if not matches:
+			var root := piece.scene.instantiate()
+			matches = root.is_class(marker) or (root.get_script() and (root.get_script() as Script).get_global_name() == marker)
+			root.free()
+		if matches:
+			total += piece.count
+	return total
+
+
 func test_the_waves_start_alone() -> void:
 	var systems := _level.get_node(^"RunSystems") as RunSystems
 	assert_true(systems.director.is_running())
@@ -38,16 +62,16 @@ func test_the_player_appears_in_the_clearing() -> void:
 func test_the_map_is_generated_with_its_slot_machines() -> void:
 	var layout := _level.get_node(^"Layout") as LevelLayout
 	var slots := layout.get_pieces().filter(func(piece: Node3D) -> bool: return piece is SlotMachine)
-	assert_eq(slots.size(), 4, "una en el suelo y tres encima de mesetas")
+	assert_eq(slots.size(), _count_in_data("SlotMachine"), "en el suelo y encima de mesetas, las de los datos")
 	assert_gt(layout.get_pieces().size(), slots.size())
 
 
 func test_the_map_has_chests_on_the_ground_and_on_plateaus() -> void:
 	var layout := _level.get_node(^"Layout") as LevelLayout
 	var chests := layout.get_pieces().filter(func(piece: Node3D) -> bool: return piece is Chest)
-	assert_eq(chests.size(), 7, "cinco en el suelo y dos en las mesetas que quedan")
+	assert_eq(chests.size(), _count_in_data("Chest"), "en el suelo y en las mesetas, los de los datos")
 	var high := chests.filter(func(chest: Node3D) -> bool: return chest.position.y > 0.0)
-	assert_eq(high.size(), 2)
+	assert_gt(high.size(), 0, "alguno encima de una meseta")
 
 
 func test_the_trees_inside_the_walls_collide_and_the_outer_forest_hides_the_edge() -> void:
@@ -57,7 +81,7 @@ func test_the_trees_inside_the_walls_collide_and_the_outer_forest_hides_the_edge
 	assert_gt(trunks, colliders.size() * 3, "la banda de fuera es mucho más grande")
 	for collider: Node in colliders:
 		var at := (collider as Node3D).position
-		assert_lt(maxf(absf(at.x), absf(at.z)), 81.0, "solo chocan los de dentro de las paredes")
+		assert_lt(maxf(absf(at.x), absf(at.z)), _wall() + 1.0, "solo chocan los de dentro de las paredes")
 
 
 func test_the_visible_edge_lies_on_the_inner_face_of_the_walls() -> void:
@@ -95,7 +119,8 @@ func test_the_canopies_drop_leaves_around_the_player() -> void:
 func test_enemies_only_spawn_inside_the_walls() -> void:
 	var systems := _level.get_node(^"RunSystems") as RunSystems
 	assert_true(systems.director.play_area.has_area())
-	assert_lt(systems.director.play_area.end.x, 81.0)
+	assert_lt(systems.director.play_area.end.x, _wall())
+	assert_gt(systems.director.play_area.end.x, _wall() - 15.0, "casi hasta la pared")
 
 
 func test_it_says_welcome() -> void:
@@ -122,7 +147,7 @@ func test_it_has_its_boss_portal_and_membership_cards() -> void:
 func test_it_has_small_ruins() -> void:
 	var layout := _level.get_node(^"Layout") as LevelLayout
 	var ruins := layout.get_pieces().filter(func(piece: Node3D) -> bool: return piece.scene_file_path.contains("/ruin_"))
-	assert_eq(ruins.size(), 6, "un templo, tres muros y dos arcos")
+	assert_eq(ruins.size(), _count_in_data("/ruin_"), "templos, muros y arcos, los de los datos")
 	for ruin: Node3D in ruins:
 		assert_gt(Vector2(ruin.position.x, ruin.position.z).length(), 18.0, "fuera del claro")
 
@@ -131,8 +156,16 @@ func test_the_tavern_stands_in_the_middle_of_a_wall_facing_inside() -> void:
 	var tavern := _level.get_node(^"Tavern") as HealShop
 	assert_not_null(tavern)
 	assert_almost_eq(tavern.position.x, 0.0, 0.01, "en el centro de la pared")
-	assert_gt(absf(tavern.position.z), 75.0, "en la pared del borde")
+	assert_gt(absf(tavern.position.z), _wall() - 5.0, "en la pared del borde")
 	assert_gt((-tavern.basis.z).dot(-tavern.position.normalized()), 0.99, "mirando hacia dentro")
+
+
+func test_the_map_is_bigger_than_the_first_one() -> void:
+	assert_almost_eq(_wall(), 110.0, 0.01, "paredes a 110 m del centro (antes, 80)")
+	var layout := _level.get_node(^"Layout") as LevelLayout
+	var far := layout.get_pieces().filter(func(piece: Node3D) -> bool:
+		return maxf(absf(piece.position.x), absf(piece.position.z)) > 75.0)
+	assert_gt(far.size(), 0, "hay piezas donde antes estaba la pared")
 
 
 func test_puddles_with_a_flower_are_only_decoration() -> void:
@@ -146,4 +179,4 @@ func test_puddles_with_a_flower_are_only_decoration() -> void:
 func test_it_has_mushroom_rings() -> void:
 	var layout := _level.get_node(^"Layout") as LevelLayout
 	var rings := layout.get_pieces().filter(func(piece: Node3D) -> bool: return piece is ChoiceShrine)
-	assert_eq(rings.size(), 2)
+	assert_eq(rings.size(), _count_in_data("ChoiceShrine"), "los de los datos")
