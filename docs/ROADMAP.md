@@ -140,6 +140,7 @@ Lo que salió en la segunda tanda de pruebas; va antes que el resto.
 - [x] Apuntar: mantener el clic derecho apunta con el ratón (las armas van a por lo que miras); el clic central fija al jefe como objetivo
 - [x] Racha como power-up de 30 s, sin botín: matar seguido sube el multiplicador de oro, experiencia y Suerte; un golpe lo baja
 - [x] Pactos del Gremio: un heraldo aparece cada 1000 enemigos derrotados y ofrece pactos (una maldición a cambio de un premio), que se pueden rechazar
+- [x] Pactos: valores fijos y «volver a tirar» por oro (10, ×1,5 por uso en la partida), que trae otros pactos
 - [x] Objetos con efectos además de stats: veneno con probabilidad al golpear, y más del estilo (Pre-entreno caducado: veneno; Cable pelado: rayo; Spray de frío: frena)
 
 ## Hito 8 — Cierre de partida y meta

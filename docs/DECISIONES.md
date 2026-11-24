@@ -1692,3 +1692,11 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - El heraldo no sale sobre lo que sobresale (árboles, rocas grandes): busca el suelo a como mucho 3 m por encima o por debajo del jugador y comprueba que haya hueco.
   - Suena como la subida de nivel hasta que tenga su sonido.
 - **Por qué:** lo pidió el diseñador: «usamos el heraldo del gremio que aparece cada 1000 enemigos». Los pactos son una apuesta más (Pilar 2), pero sin oro: arriesgas tu personaje. Un premio que se nota a cambio de algo que duele. Rechazar no cuesta nada, para que sea una decisión y no una trampa.
+
+## 2026-11-24 · Volver a tirar los pactos
+- **Decisión:** los valores de cada pacto son fijos (no hay rareza ni Suerte que los cambie). A cambio, el panel de pactos tiene «Volver a tirar», como el de subir de nivel:
+  - Cuesta 10 de oro la primera vez en la partida y ×1,5 cada vez (10, 15, 23…). Lleva su propia cuenta, aparte de la de subir de nivel.
+  - Trae 3 pactos distintos de los que se enseñaban, si quedan. Con los 6 de ahora, son los otros 3.
+  - Sin oro suficiente, el botón se desactiva.
+  - El coste vive en `data/pacts/herald.tres` (`reroll_cost`, `reroll_growth`).
+- **Por qué:** lo pidió el diseñador. Con valores fijos, el jugador sabe lo que firma; volver a tirar le deja buscar el pacto que encaja con su personaje, pagando.

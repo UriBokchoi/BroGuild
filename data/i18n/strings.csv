@@ -384,6 +384,7 @@ PACT_SUBTITLE,"Elige uno: su premio y su maldición duran toda la partida","Pick
 PACT_REWARD,Premio,Reward
 PACT_CURSE,Maldición,Curse
 PACT_REJECT,Rechazar,Decline
+PACT_REROLL,Volver a tirar (%d oro),Reroll (%d gold)
 PACT_SEALED,Pacto sellado: %s,Pact sealed: %s
 PACT_EGO_LIFTING_NAME,Ego lifting,Ego lifting
 PACT_EGO_LIFTING_FLAVOR,Más peso del que puedes. ¿Qué puede salir mal?,More weight than you can lift. What could go wrong?

@@ -269,8 +269,10 @@ herald_scene = ExtResource("59_herald")
 player = NodePath("../Player")
 parent = NodePath("..")
 
-[node name="PactPanel" parent="." node_paths=PackedStringArray("stats") instance=ExtResource("60_pact_panel")]
+[node name="PactPanel" parent="." node_paths=PackedStringArray("stats", "wallet") instance=ExtResource("60_pact_panel")]
 stats = NodePath("../Player/Stats")
+wallet = NodePath("../Player/Wallet")
+data = ExtResource("58_herald_data")
 
 [node name="OnHitEffects" type="Node3D" parent="." node_paths=PackedStringArray("items")]
 script = ExtResource("52_on_hit")

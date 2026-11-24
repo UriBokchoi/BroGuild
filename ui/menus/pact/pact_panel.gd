@@ -1,11 +1,16 @@
 class_name PactPanel
 extends ModalPanel
-## Los pactos que ofrece el heraldo del Gremio: pausa y enseña una carta por pacto y un botón para
-## rechazarlos. El pacto elegido (su premio y su maldición) se suma a las stats del jugador para el
-## resto de la partida, y el HUD lo avisa.
+## Los pactos que ofrece el heraldo del Gremio: pausa y enseña una carta por pacto, un botón para
+## pedir otros por oro (cada vez más caro en la partida) y otro para rechazarlos. El pacto elegido (su
+## premio y su maldición) se suma a las stats del jugador para el resto de la partida, y el HUD lo
+## avisa.
 
 ## Las stats del jugador.
 @export var stats: StatsComponent
+## El oro del jugador (para volver a tirar).
+@export var wallet: WalletComponent
+## De dónde salen los pactos al volver a tirar, y cuánto cuesta.
+@export var data: HeraldData
 ## Aviso en el HUD al sellar un pacto (con su nombre).
 @export var sealed_key: StringName = &"PACT_SEALED"
 @export var sealed_color: Color = Color.WHITE
@@ -14,8 +19,17 @@ extends ModalPanel
 var _sealed: Array[PactData] = []
 ## Origen de los modificadores de cada uno (el StatBlock guarda cada modificador con el suyo).
 var _sources: Array[RefCounted] = []
+## Azar de los pactos nuevos. Si no se asigna antes de entrar en el árbol, el flujo de apuestas de
+## Rng.
+var rng: RandomNumberGenerator
+
+## Veces que se volvió a tirar en la partida (sube el coste).
+var _rerolls: int = 0
+## Pactos que se enseñan ahora.
+var _shown: Array[PactData] = []
 
 @onready var _cards: HBoxContainer = %Cards
+@onready var _reroll: Button = %Reroll
 @onready var _reject: Button = %Reject
 
 
@@ -26,6 +40,9 @@ func _enter_tree() -> void:
 
 func _ready() -> void:
 	super()
+	if rng == null:
+		rng = Rng.stream(Rng.Stream.GAMBLE)
+	_reroll.pressed.connect(reroll)
 	_reject.pressed.connect(reject)
 
 
@@ -33,13 +50,23 @@ func _ready() -> void:
 func open(pacts: Array[PactData]) -> void:
 	if pacts.is_empty():
 		return
-	for card: Node in _cards.get_children():
-		card.free()
-	for pact: PactData in pacts:
-		var card := PactCard.new(pact, stats)
-		card.pressed.connect(choose.bind(pact))
-		_cards.add_child(card)
+	_show(pacts)
 	_set_open(true)
+
+
+## Cambia los pactos por otros (distintos de los de ahora si quedan) a cambio de oro. Devuelve si
+## pudo (sin oro suficiente, no).
+func reroll() -> bool:
+	if not is_open() or data == null or wallet == null or not wallet.spend(reroll_cost()):
+		return false
+	_rerolls += 1
+	_show(data.roll(rng, _shown))
+	return true
+
+
+## Oro que cuesta volver a tirar ahora.
+func reroll_cost() -> int:
+	return data.reroll_cost_at(_rerolls) if data else 0
 
 
 ## Sella [param pact]: su premio y su maldición van a las stats del jugador. Y cierra.
@@ -63,6 +90,24 @@ func reject() -> void:
 ## Pactos sellados en esta partida, por orden.
 func get_sealed() -> Array[PactData]:
 	return _sealed.duplicate()
+
+
+## ¿Se puede volver a tirar ahora (hay con qué y oro suficiente)?
+func can_reroll() -> bool:
+	return not _reroll.disabled
+
+
+func _show(pacts: Array[PactData]) -> void:
+	_shown = pacts.duplicate()
+	for card: Node in _cards.get_children():
+		card.free()
+	for pact: PactData in pacts:
+		var card := PactCard.new(pact, stats)
+		card.pressed.connect(choose.bind(pact))
+		_cards.add_child(card)
+	var cost := reroll_cost()
+	_reroll.text = tr(&"PACT_REROLL") % cost
+	_reroll.disabled = data == null or wallet == null or wallet.get_gold() < cost
 
 
 ## Cartas que enseña ahora (para tests).
