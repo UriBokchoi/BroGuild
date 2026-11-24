@@ -95,7 +95,7 @@
 - [x] Alcance de la nube de colonia: un dibujo en el suelo que gira despacio (como en Megabonk), en vez de la burbuja
 - [x] Límite del mapa: un muro que solo se ve al acercarte
 - [x] Power-ups con su efecto al cogerlos: la bomba, una explosión nuclear (destello, hongo y onda); el imán, la comida, la bebida energética y el reloj de arena, el suyo
-- [ ] Enemigos que aparecen con una animación
+- [x] Enemigos que aparecen con una animación: salen del suelo creciendo, con polvo (los jefes, más despacio y desde más hondo)
 - [ ] Hojitas que caen de las copas de los árboles al meterte dentro
 - [ ] Polvo pequeño a cada paso (con el aviso de pasos del balanceo). Lo último del hito, a petición del diseñador
 - [x] UI animada: botones que crecen y se hunden, paneles que aparecen, contadores y casillas que saltan, experiencia que se llena suave y vida con rastro de lo perdido (los sonidos llegaron tras el Hito 3)
@@ -113,6 +113,13 @@ Lo que salió al probar la partida; va antes que el resto de hitos.
 - [x] `docs/LORE.md`: el lore del juego en un archivo para leerlo y cambiarlo a mano (los textos del juego, con su clave en `data/i18n/strings.csv`, se apuntan ahí)
 - [x] Hacha arrojadiza: gira tumbada (en horizontal) y es más grande (×1,7 y su filo, 1,2 m); crece con el área
 - [x] Mejoras con el valor actual y el que queda (p. ej. «Daño 18 → 22»), para ver cuánto se gana: cartas de subir de nivel, de elegir objeto y revelado de cofres
+
+## Hito 5c — Pulido tras las pruebas (2) (2026-11-24)
+Lo que salió en la segunda tanda de pruebas; va antes que el resto.
+- [ ] Elegir nivel: primero se elige el nivel (clic), debajo su objetivo y su lore, y abajo «Jugar» encima de «Volver»
+- [ ] Estadísticas: solo las que se pueden mejorar (fuera las fijas), para que se vean las importantes
+- [ ] El rastro de fuego del slide escala con las stats del jugador
+- [ ] Optimizar: el ordenador va a tope jugando
 
 ## Hito 6 — Niveles
 - [ ] El Brosque más grande
@@ -142,10 +149,12 @@ Lo que salió al probar la partida; va antes que el resto de hitos.
 ## Orden de trabajo acordado (2026-11-23)
 1. Hito 5b (pulido tras las pruebas).
 2. Del Hito 8: el portal del jefe y la victoria al morir tras el minuto 10.
-3. Del Hito 5: colonia, límite del mapa, power-ups, aparición de enemigos y hojas.
-4. Del Hito 6: el Brosque más grande.
-5. Del Hito 7: objetos con efectos.
-6. Polvo de los pasos (Hito 5) y repaso del código.
+3. Del Hito 5: colonia, límite del mapa, power-ups y aparición de enemigos.
+4. Hito 5c (segunda tanda de pruebas): elegir nivel, stats importantes, fuego del slide y optimizar.
+5. Del Hito 5: las hojas de los árboles.
+6. Del Hito 6: el Brosque más grande.
+7. Del Hito 7: objetos con efectos.
+8. Polvo de los pasos (Hito 5) y repaso del código.
 
 ## Backlog (sin orden)
 - Raíles/ziplines y plataformas de salto

@@ -1,14 +1,15 @@
 class_name BurstEmitter
 extends Node3D
 ## Estallidos de partículas que escuchan el EventBus: el humo al morir un enemigo (del color de su
-## [member EnemyData.color]), las chispas al golpear y los restos al romper algo. Cada estallido sale
+## [member EnemyData.color]), las chispas al golpear, los restos al romper algo y el polvo al salir un
+## enemigo del suelo. Cada estallido sale
 ## de una reserva de [member pool_size] emisores de un solo disparo ([member effect]); si están todos
 ## en uso, reutiliza el más viejo. Como mucho [member max_per_frame] por fotograma, para que una
 ## bomba o un golpe a cien enemigos no dispare cien a la vez. Solo visual. Vive en el mundo
 ## ([code]top_level[/code]).
 
 ## Qué lo dispara.
-enum Trigger { ENEMY_DIED, ENEMY_HIT, BREAKABLE_BROKEN }
+enum Trigger { ENEMY_DIED, ENEMY_HIT, BREAKABLE_BROKEN, ENEMY_SPAWNED }
 
 @export var trigger: Trigger = Trigger.ENEMY_DIED
 ## Escena del estallido: un [GPUParticles3D] de un solo disparo, sin emitir.
@@ -46,6 +47,8 @@ func _ready() -> void:
 			EventBus.enemy_damaged.connect(_on_enemy_damaged)
 		Trigger.BREAKABLE_BROKEN:
 			EventBus.breakable_broken.connect(_on_breakable_broken)
+		Trigger.ENEMY_SPAWNED:
+			EventBus.enemy_spawned.connect(_on_enemy_spawned)
 
 
 ## Lanza un estallido en [param at] (más [member offset]) con el color [param color]. Devuelve el
@@ -70,6 +73,10 @@ func burst(at: Vector3, color: Color = Color.WHITE) -> GPUParticles3D:
 func _on_enemy_died(enemy: Enemy) -> void:
 	var color := enemy.data.color if enemy.data else Color.WHITE
 	burst(enemy.global_position, color)
+
+
+func _on_enemy_spawned(enemy: Enemy) -> void:
+	burst(enemy.global_position)
 
 
 func _on_enemy_damaged(at: Vector3, _amount: float, _info: DamageInfo) -> void:

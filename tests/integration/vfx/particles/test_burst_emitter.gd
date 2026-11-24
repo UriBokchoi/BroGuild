@@ -26,6 +26,17 @@ func test_a_dying_enemy_puffs_in_its_color() -> void:
 	assert_eq((puff.process_material as ParticleProcessMaterial).color, SWARMER.color, "de su color")
 
 
+func test_a_new_enemy_raises_dust_at_its_feet() -> void:
+	var dust := _emitter(BurstEmitter.Trigger.ENEMY_SPAWNED, preload("res://vfx/particles/spawn_dust.tscn"), 4, 4)
+	add_child_autofree(dust)
+	var swarm := EnemySwarm.new()
+	add_child_autofree(swarm)
+	swarm.spawn(SWARMER, Vector3(2.0, 0.0, -4.0))
+	var emitting := _emitting(dust)
+	assert_eq(emitting.size(), 1)
+	assert_eq(emitting[0].global_position, Vector3(2.0, 0.0, -4.0))
+
+
 func test_hits_spark_where_they_land() -> void:
 	var sparks := _emitter(BurstEmitter.Trigger.ENEMY_HIT, HIT_SPARKS, 4, 4)
 	add_child_autofree(sparks)

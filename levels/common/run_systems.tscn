@@ -46,6 +46,7 @@
 [ext_resource type="PackedScene" path="res://vfx/particles/debris.tscn" id="48_debris"]
 [ext_resource type="PackedScene" path="res://vfx/juice/portal_arrow/portal_arrow.tscn" id="49_portal_arrow"]
 [ext_resource type="PackedScene" path="res://vfx/juice/power_up_fx/power_up_fx.tscn" id="50_power_up_fx"]
+[ext_resource type="PackedScene" path="res://vfx/particles/spawn_dust.tscn" id="51_spawn_dust"]
 
 [node name="RunSystems" type="Node3D" node_paths=PackedStringArray("player", "director", "encounter")]
 script = ExtResource("1_run")
@@ -212,6 +213,13 @@ tint_by_enemy = true
 script = ExtResource("45_bursts")
 trigger = 1
 effect = ExtResource("47_hit_sparks")
+pool_size = 32
+max_per_frame = 8
+
+[node name="SpawnDust" type="Node3D" parent="Particles"]
+script = ExtResource("45_bursts")
+trigger = 3
+effect = ExtResource("51_spawn_dust")
 pool_size = 32
 max_per_frame = 8
 

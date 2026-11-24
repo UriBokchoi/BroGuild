@@ -45,6 +45,8 @@ signal item_revealed(item: PassiveItemData, reveal_time: float)
 signal chest_denied(cost: int)
 ## Murió [param enemy] (aún en su sitio, con su tipo y sus stats): botín, experiencia, Archivo…
 signal enemy_died(enemy: Enemy)
+## Salió un enemigo (del pool, ya en su sitio): empieza a salir del suelo.
+signal enemy_spawned(enemy: Enemy)
 ## El jugador rompió un rompible (calavera, bolsita…) de [param data] en [param at].
 signal breakable_broken(data: BreakableData, at: Vector3)
 ## Se recogió un recogible que da [param reward] (p. ej. [code]experience[/code]) por [param amount].

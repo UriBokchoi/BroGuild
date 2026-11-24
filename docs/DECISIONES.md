@@ -1538,3 +1538,10 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - **Altura del hongo:** con la cámara detrás del jugador, lo que pasa de unos 4 m queda fuera de plano. Por eso el sombrero no sube de ahí: se ve como una cúpula de humo encima. La columna es semitransparente para no tapar al jugador más de un segundo.
   - **En el suelo:** si se coge en el aire, un rayo pone el efecto en el suelo, igual que el aro de la colonia.
 - **Por qué:** lo pidió el diseñador. Coger un power-up ya decía algo en texto, pero no se sentía. La bomba tenía que parecer una bomba.
+
+## 2026-11-24 · Los enemigos salen del suelo
+- **Decisión:** al salir del pool, el modelo de un enemigo crece con un pequeño rebote mientras sube desde 0,6 m bajo sus pies, en 0,35 s, y levanta un poco de polvo. El Ent-renador y el Trolleador tardan 0,8 s y salen desde 2,5 m. El cuerpo y su choque están desde el primer momento: solo se anima el modelo.
+  - Se anima en `_process` del propio enemigo y solo mientras aparece. Por fotograma, no por tick: el rumbo se calcula cada tres ticks (`steering_slices`) y a ese ritmo la animación iría a saltos.
+  - El polvo va por una señal nueva, `enemy_spawned`, con otro `BurstEmitter` (`spawn_dust`, 10 partículas, como mucho 8 por fotograma: una horda no dispara cien a la vez).
+  - Si muere mientras sale, deja de aparecer y encoge como siempre.
+- **Por qué:** lo pidió el diseñador. Antes los enemigos aparecían de golpe; así se ve de dónde salen y da tiempo a reaccionar.
