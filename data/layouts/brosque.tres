@@ -140,5 +140,5 @@ gap = 3.0
 attempts = 60
 pieces = Array[ExtResource("2_piece")]([SubResource("Piece_altar"), SubResource("Piece_high"), SubResource("Piece_low"), SubResource("Piece_ruin_temple"), SubResource("Piece_slots_ground"), SubResource("Piece_chest_ground"), SubResource("Piece_mushroom_ring"), SubResource("Piece_ruin_wall"), SubResource("Piece_ruin_arch"), SubResource("Piece_dumbbell"), SubResource("Piece_bench")])
 top_pieces = Array[ExtResource("2_piece")]([SubResource("Piece_slots_top"), SubResource("Piece_chest_top")])
-reserved = Array[Vector3]([Vector3(0, -109.5, 9), Vector3(120, -18, 18)])
+reserved = Array[Vector3]([Vector3(0, -109.5, 9), Vector3(120, -18, 7)])
 forest = SubResource("Forest_brosque")

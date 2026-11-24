@@ -1623,3 +1623,9 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - Los comentarios de una línea de cada `@export` se quedan: son la ayuda del inspector. También los bloques largos dentro de las funciones que explican el porqué (por qué trepan los de atrás y no los de delante, por qué el veneno se cuenta en ticks…).
   - La norma queda en `CLAUDE.md` para el código nuevo.
 - **Por qué:** lo pidió el diseñador. Las cabeceras largas, llenas de referencias, se leían como texto generado y escondían lo importante.
+
+## 2026-11-24 · Pedidos tras las pruebas (3) (Hito 5d)
+- **Decisión:** lo que pidió el diseñador tras probar otra vez.
+  - **Deshacer la elección:** con «Quedármela» y «Doble o nada» a la vista, el clic derecho vuelve a la elección entre todas las cartas (`LevelUpPanel.cancel_bet`). El subtítulo lo recuerda. Antes, elegir una carta obligaba a quedársela o apostarla.
+  - **Árboles en los trolls:** el hueco que el bosque guarda a los trolls de piedra baja de 18 a 7 m de radio (más los 2 m de margen del bosque). Siguen viéndose desde la pared, pero ahora en un claro pequeño rodeado de árboles, no en una explanada pelada.
+- **Por qué:** lo pidió el diseñador tras probar.

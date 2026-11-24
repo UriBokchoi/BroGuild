@@ -253,7 +253,7 @@ UPGRADE_ANNOUNCE,%s sube a nivel %d,%s up to level %d
 LEVEL_UP_CHOOSE,Elige una mejora,Choose an upgrade
 LEVEL_UP_SPINNING,Clic o Espacio para parar la ruleta,Click or Space to stop the wheel
 LEVEL_UP_REROLL,Volver a tirar (%d oro),Reroll (%d gold)
-LEVEL_UP_BET,¿Te la quedas o te la juegas?,Keep it or bet it?
+LEVEL_UP_BET,¿Te la quedas o te la juegas? (clic derecho: elegir otra),Keep it or bet it? (right click: pick another)
 LEVEL_UP_KEEP,Quedármela,Keep it
 LEVEL_UP_DOUBLE,Doble o nada (%d %%),Double or nothing (%d%%)
 LEVEL_UP_DOUBLE_LOST,¡Nada!,Nothing!
