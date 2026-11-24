@@ -1549,4 +1549,6 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
 ## 2026-11-24 · Pulido tras las pruebas (2) (Hito 5c)
 - **Decisión:** arreglos de la segunda tanda de pruebas del diseñador.
   - **Elegir nivel:** un clic marca el nivel (se queda hundido) y saca debajo su objetivo y su lore; abajo, «Jugar» encima de «Volver». Antes, el clic empezaba la partida y la ficha salía al pasar el ratón: no daba tiempo a leerla. Los botones de nivel son más bajos (`SmallButton`) y el lore más ancho, para que la lista, la ficha y los dos botones quepan en 720p.
+  - **Stats importantes:** la vista de stats (pausa, Tab y armería) enseña solo las que algo del juego puede cambiar: algún modificador o mejora de los datos, o la dificultad, que sube sola. Quedan 23 de las 72 del jugador; las otras 49 son tiempos y márgenes internos del movimiento (coyote time, mantle, slide…) que no cambian nunca. Una mejora nueva sobre una stat la hace aparecer sola.
+    - Se buscan solo en las carpetas de datos que cambian al jugador. Buscar en todo `data` cargaba los niveles con sus escenas y tardaba 1,7 s; así son 0,4 s en frío, al cargar el nivel, y menos con los datos ya cargados. Un test (lento a propósito) mira todo `data` y avisa si una stat del jugador cambia desde una carpeta que no está en la lista.
 - **Por qué:** lo pidió el diseñador tras probar.

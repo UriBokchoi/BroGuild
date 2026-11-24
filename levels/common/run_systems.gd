@@ -41,6 +41,7 @@ func _enter_tree() -> void:
 func _ready() -> void:
 	# Al cargar, no en plena partida: la primera carta o ficha con unidades daría un tirón.
 	StatFormat.warm_up()
+	UpgradableStats.warm_up()
 	if spawn_point:
 		player.teleport_to(spawn_point.global_position)
 	if not intro_keys.is_empty():

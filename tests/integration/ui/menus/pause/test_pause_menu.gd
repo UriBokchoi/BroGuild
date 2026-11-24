@@ -63,9 +63,13 @@ func test_options_replaces_the_menu_and_escape_goes_back() -> void:
 	assert_true(get_tree().paused)
 
 
-func test_shows_every_player_stat() -> void:
+func test_shows_only_the_stats_that_can_change() -> void:
 	var view := _menu.get_node(^"%StatsView") as StatsView
-	assert_eq(view.shown_stats(), _player.stats.get_stats())
+	var upgradable := _player.stats.get_stats().filter(func(stat: StringName) -> bool: return UpgradableStats.has(stat))
+	assert_eq(view.shown_stats(), upgradable)
+	for stat: StringName in [&"damage", &"max_health", &"run_speed", &"luck"]:
+		assert_has(view.shown_stats(), stat, "%s se puede mejorar" % stat)
+	assert_does_not_have(view.shown_stats(), &"coyote_time", "fija: no se enseña")
 
 
 func test_modified_stats_are_highlighted_when_opening() -> void:

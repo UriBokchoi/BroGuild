@@ -117,7 +117,7 @@ Lo que salió al probar la partida; va antes que el resto de hitos.
 ## Hito 5c — Pulido tras las pruebas (2) (2026-11-24)
 Lo que salió en la segunda tanda de pruebas; va antes que el resto.
 - [x] Elegir nivel: primero se elige el nivel (clic), debajo su objetivo y su lore, y abajo «Jugar» encima de «Volver»
-- [ ] Estadísticas: solo las que se pueden mejorar (fuera las fijas), para que se vean las importantes
+- [x] Estadísticas: solo las que se pueden mejorar (fuera las fijas), para que se vean las importantes
 - [ ] El rastro de fuego del slide escala con las stats del jugador
 - [ ] Optimizar: el ordenador va a tope jugando
 
