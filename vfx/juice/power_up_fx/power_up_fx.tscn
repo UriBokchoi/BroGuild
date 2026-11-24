@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" path="res://vfx/juice/power_up_fx/heal_sparkles.tscn" id="4_heal"]
 [ext_resource type="PackedScene" path="res://vfx/juice/power_up_fx/energy_burst.tscn" id="5_energy"]
 [ext_resource type="PackedScene" path="res://vfx/juice/power_up_fx/time_wave.tscn" id="6_time"]
+[ext_resource type="PackedScene" path="res://vfx/juice/power_up_fx/streak_burst.tscn" id="7_streak"]
 
 [node name="PowerUpFx" type="Node3D" node_paths=PackedStringArray("flash")]
 script = ExtResource("1_fx")
@@ -14,6 +15,7 @@ effects = Dictionary[StringName, PackedScene]({
 &"energy": ExtResource("5_energy"),
 &"heal": ExtResource("4_heal"),
 &"magnet": ExtResource("3_magnet"),
+&"streak": ExtResource("7_streak"),
 &"time_stop": ExtResource("6_time")
 })
 flash = NodePath("FlashLayer/Flash")

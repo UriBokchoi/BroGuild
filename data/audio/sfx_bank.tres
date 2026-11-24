@@ -236,6 +236,7 @@ pickups = Dictionary[StringName, ExtResource("2_cue")]({
 &"gold": SubResource("Cue_pickup_gold"),
 &"heal": SubResource("Cue_pickup_heal"),
 &"magnet": SubResource("Cue_pickup_magnet"),
+&"streak": SubResource("Cue_pickup_energy"),
 &"time_stop": SubResource("Cue_pickup_time_stop")
 })
 streak_reward = &"experience"

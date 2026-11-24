@@ -343,6 +343,8 @@ PICKUP_FOOD_ANNOUNCE,¡Pollito ñam ñam!,"Chicken, nom nom!"
 PICKUP_MAGNET_ANNOUNCE,¡Succión activada!,Suction on!
 PICKUP_BOMB_ANNOUNCE,¡Nuclear activada!,Going nuclear!
 PICKUP_ENERGY_ANNOUNCE,¡Modo diablo activado!,Devil mode on!
+PICKUP_STREAK_ANNOUNCE,¡En racha!,On a streak!
+HUD_STREAK,Racha ×%s · %d s,Streak ×%s · %d s
 PICKUP_TIME_STOP_ANNOUNCE,¡Tiempo detenido!,Time stop!
 INTERACT_TAVERN,"Tomar una jarra: cura la mitad (%d de oro)","Have a pint: heals half (%d gold)"
 TAVERN_HEALED,¡Salud!,Cheers!

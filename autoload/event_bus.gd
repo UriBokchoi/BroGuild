@@ -122,6 +122,9 @@ signal time_stop_changed(active: bool)
 signal synergy_released(damage_stat: StringName, at: Vector3)
 ## Se ofrece elegir uno de [param items] (el círculo de setas): lo atiende el [ItemChoicePanel].
 signal item_choice_offered(items: Array[PassiveItemData])
+## La racha (el power-up) cambió: su multiplicador de ahora y los segundos que le quedan. Con
+## [param multiplier] 0, se acabó.
+signal streak_changed(multiplier: float, seconds_left: float)
 ## El jugador empezó o dejó de apuntar con el clic derecho (la mira del HUD).
 signal aim_changed(aiming: bool)
 ## El jugador fijó a [param target] como objetivo con el clic central (null: lo soltó).

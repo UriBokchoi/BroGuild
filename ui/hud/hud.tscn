@@ -21,6 +21,7 @@
 [ext_resource type="PackedScene" path="res://ui/hud/boss_bar.tscn" id="19_boss_bar"]
 [ext_resource type="Script" path="res://ui/hud/announcement_feed.gd" id="20_feed"]
 [ext_resource type="Script" path="res://ui/hud/crosshair.gd" id="21_crosshair"]
+[ext_resource type="Script" path="res://ui/hud/streak_meter.gd" id="22_streak"]
 
 [node name="HUD" type="CanvasLayer"]
 layer = 10
@@ -182,6 +183,15 @@ theme_type_variation = &"MiniBossValueLabel"
 [node name="BossHealth" parent="Margin/TopCenter/Column/MiniBossBar/Content" index="1"]
 custom_minimum_size = Vector2(320, 7)
 theme_type_variation = &"MiniBossHealthBar"
+
+[node name="StreakMeter" type="Label" parent="Margin/TopCenter/Column"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+theme_type_variation = &"BossNameLabel"
+theme_override_colors/font_color = Color(1, 0.6, 0.2, 1)
+horizontal_alignment = 1
+script = ExtResource("22_streak")
 
 [node name="AnnouncementFrame" type="PanelContainer" parent="Margin/TopCenter/Column"]
 layout_mode = 2

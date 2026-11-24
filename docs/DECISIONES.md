@@ -1654,3 +1654,18 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - **Dónde vive:** un nodo `Targeting` en el jugador. Cada arma lo consulta en `_candidates` (primero lo fijado, luego la mira y luego lo de siempre). Las armas de los enemigos no tienen `Targeting` y no cambian. El martillo elige el grupo más denso entre esos candidatos.
   - Son acciones del InputMap (`aim` y `lock_target`): se podrán cambiar cuando llegue el remapeo.
 - **Por qué:** lo pidió el diseñador: con el jefe en pantalla, las armas se perdían en los esbirros de alrededor.
+
+## 2026-11-24 · La racha, un power-up de 30 s
+- **Decisión:** la racha deja de ser una mecánica de siempre con botín y pasa a ser un power-up más: una llama naranja que sale de la tabla de power-ups (peso 2, como la bomba). Al cogerla (30 s) empieza en ×1, y derrotar enemigos la sube:
+
+  | Enemigos derrotados | Oro y experiencia | Suerte |
+  |---|---|---|
+  | 10 | ×2 | +10 |
+  | 30 | ×3 | +20 |
+  | 60 | ×5 | +40 |
+
+  - Un golpe que hace daño baja un nivel (y la cuenta vuelve al mínimo de ese nivel). Coger otra mientras dura alarga el tiempo sin perder el nivel. Al acabarse, todo vuelve a la normalidad.
+  - Va como un modificador `MULTIPLIER` sobre `currency_gain` y `xp_gain` y uno `FLAT` sobre la Suerte, con su propio origen: se quitan juntos.
+  - Solo cuentan los enemigos derrotados; la velocidad del jugador no, de momento.
+  - El HUD la enseña arriba en el centro, en naranja («Racha ×3 · 18 s»), con un salto al subir de nivel. Suena como la bebida energética hasta que tenga su sonido.
+- **Por qué:** lo pidió el diseñador: la racha como un momento de la partida (un power-up que te obliga a ir a por los enemigos), sin la gestión del botín.

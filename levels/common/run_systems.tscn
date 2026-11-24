@@ -50,6 +50,8 @@
 [ext_resource type="Script" path="res://systems/items/effects/on_hit_effects.gd" id="52_on_hit"]
 [ext_resource type="PackedScene" path="res://ui/menus/stat_choice/stat_choice_panel.tscn" id="53_stat_choice"]
 [ext_resource type="PackedScene" path="res://vfx/juice/lock_marker/lock_marker.tscn" id="54_lock_marker"]
+[ext_resource type="Script" path="res://systems/progression/effects/streak_effect.gd" id="55_streak"]
+[ext_resource type="Resource" path="res://data/progression/streak.tres" id="56_streak_data"]
 
 [node name="RunSystems" type="Node3D" node_paths=PackedStringArray("player", "director", "encounter")]
 script = ExtResource("1_run")
@@ -168,6 +170,13 @@ reward = &"upgrade"
 script = ExtResource("33_time_stop")
 reward = &"time_stop"
 swarm = NodePath("../../EnemySwarm")
+
+[node name="Streak" type="Node" parent="PickupEffects" node_paths=PackedStringArray("stats", "health")]
+script = ExtResource("55_streak")
+reward = &"streak"
+data = ExtResource("56_streak_data")
+stats = NodePath("../../Player/Stats")
+health = NodePath("../../Player/Health")
 
 [node name="Frailty" type="Node" parent="PickupEffects" node_paths=PackedStringArray("stats")]
 script = ExtResource("24_buff")

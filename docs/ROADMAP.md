@@ -138,7 +138,7 @@ Lo que salió en la segunda tanda de pruebas; va antes que el resto.
 ## Hito 7 — El torneo
 - [x] Élites: todos tienen una probabilidad de soltar un cofre
 - [x] Apuntar: mantener el clic derecho apunta con el ratón (las armas van a por lo que miras); el clic central fija al jefe como objetivo
-- [ ] Racha como power-up de 30 s, sin botín: matar seguido sube el multiplicador de oro, experiencia y Suerte; un golpe lo baja
+- [x] Racha como power-up de 30 s, sin botín: matar seguido sube el multiplicador de oro, experiencia y Suerte; un golpe lo baja
 - [ ] Pactos del Gremio: un heraldo aparece cada 1000 enemigos derrotados y ofrece pactos (una maldición a cambio de un premio), que se pueden rechazar
 - [x] Objetos con efectos además de stats: veneno con probabilidad al golpear, y más del estilo (Pre-entreno caducado: veneno; Cable pelado: rayo; Spray de frío: frena)
 
