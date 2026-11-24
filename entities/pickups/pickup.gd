@@ -1,10 +1,8 @@
 class_name Pickup
 extends Node3D
-## Un recogible en el mundo (gema de experiencia…): su tipo, lo que vale y si ya vuela hacia quien
-## lo recoge. Se ve con el color y el tamaño del nivel de su valor ([member PickupData.tiers]). No
-## se mueve solo: un [PickupField] lo saca de su pool, lo mueve, lo junta con otros y lo recoge. El
-## giro y el balanceo van en su shader, para que cientos de ellos no cuesten un
-## [code]_process[/code] cada uno.
+## Un recogible en el mundo (una gema, una moneda…): su tipo, cuánto vale y si ya vuela hacia el
+## jugador. No se mueve solo: lo lleva un PickupField. El giro y el balanceo van en su shader, para
+## que cientos de ellos no cuesten un _process cada uno.
 
 ## Altura sobre el suelo a la que flota.
 @export_range(0.0, 2.0, 0.05, "suffix:m") var float_height: float = 0.35

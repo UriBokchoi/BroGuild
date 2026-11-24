@@ -1,13 +1,11 @@
 class_name FireTrail
 extends Node3D
-## Rastro ardiente: mientras el jugador está en [member trail_state] (el slide), deja manchas de fuego
-## en el suelo cada [member spacing] metros. Cada [member burn_interval] segundos, lo que pisa alguna
-## mancha (hurtbox de [member hit_mask]) se quema: recibe [code]fire_trail_damage[/code] de su
-## [MovementSynergyData] (0 sin su objeto: entonces no deja nada), con el daño % y el crítico del
-## jugador. Una sola quemadura por tick aunque pise varias manchas. Escala con las stats del jugador
-## como un arma: el daño % y el crítico, el área % (manchas más grandes), la duración % (duran más) y
-## la velocidad de ataque % (quema más a menudo). Son [member max_patches] como mucho: si hacen falta más, se
-## reutiliza la más vieja. Va con [code]top_level[/code]: las manchas se quedan donde caen.
+## Rastro de fuego del slide: deja manchas en el suelo cada pocos metros y lo que las pisa se quema
+## cada medio segundo (una vez por quemadura aunque pise varias). Sin el objeto que lo da
+## (fire_trail_damage a 0), no deja nada.
+##
+## Escala como un arma: daño % y crítico, área % (manchas más grandes), duración % (duran más) y
+## velocidad de ataque % (quema más a menudo). Las manchas se reutilizan de una lista fija.
 
 ## Hurtbox que mira como mucho cada mancha en cada quemadura.
 @export_range(1, 512, 1) var max_results: int = 64

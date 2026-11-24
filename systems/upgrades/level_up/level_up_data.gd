@@ -1,12 +1,8 @@
 class_name LevelUpData
 extends Resource
-## Cómo es la elección al subir de nivel (GDD §5 y §6): cuántas opciones salen, cuántas ranuras de
-## armas y runas hay, de qué carpetas salen, cómo gira la ruleta, cuánto cuesta volver a tirar y cómo
-## es el doble o nada. Los valores viven en [code]data/progression/level_up.tres[/code]; aquí todo
-## vale 0 o vacío a propósito.
-##
-## Cuántas ranuras están abiertas lo dicen las stats del jugador [code]weapon_slots[/code] y
-## [code]rune_slots[/code] ([ProgressionData]): empieza con unas pocas y el resto se desbloquean.
+## Las reglas de la elección al subir de nivel: cuántas cartas, de qué carpetas salen, cuántas
+## ranuras hay, cómo gira la ruleta, cuánto cuesta volver a tirar y cómo es el doble o nada. Los
+## valores viven en data/progression/level_up.tres. Las ranuras abiertas son stats del jugador.
 
 ## Rarezas de las mejoras ([WeightedTable] de [Rarity]).
 @export var rarities: WeightedTable

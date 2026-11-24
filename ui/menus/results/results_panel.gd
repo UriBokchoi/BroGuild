@@ -1,15 +1,11 @@
 class_name ResultsPanel
 extends CanvasLayer
-## Pantalla de resultados al acabar la partida: al morir el jugador ([code]EventBus.player_died[/code])
-## o al ganar ([code]EventBus.run_won[/code]: cruzar el portal del jefe, o morir en la prórroga con
-## el jefe vencido), tras su espera, pausa el juego, pide el cursor y muestra lo que pasó en la
-## partida (según su [RunRecorder]): tiempo, nivel, enemigos y élites derrotados, oro ganado y daño
-## infligido (y, en la victoria, el premio por rapidez; si entró en los récords, su puesto). Arriba,
-## una frase de muerte al azar o el título de la victoria. Lo primero que pasa manda. La muerte se
-## decide al final del fotograma: si esa muerte cuenta como victoria, llega antes. «Reintentar» (o su
-## tecla, [code]retry[/code]) empieza otra partida al momento; «Salir» vuelve al menú principal
-## ([RunFlow]). Esc no la cierra. Funciona con el juego en pausa ([code]process_mode = ALWAYS[/code]
-## en la escena).
+## La pantalla del final de la partida: al morir o al ganar enseña lo que pasó (tiempo, nivel,
+## enemigos, oro, daño y, si toca, el puesto en los récords) con una frase de muerte o el título de
+## la victoria. «Reintentar» empieza otra partida y «Salir» vuelve al menú.
+##
+## La muerte se atiende al final del fotograma: si esa muerte cuenta como victoria (en la prórroga,
+## con el jefe vencido), la victoria llega antes y manda.
 
 ## Quién apuntó la partida.
 @export var recorder: RunRecorder

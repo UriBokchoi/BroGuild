@@ -1,12 +1,8 @@
 class_name ChestPanel
 extends PanelContainer
-## El revelado de un objeto pasivo en el HUD, sin pausar el juego (GDD §5.2, «case opening»): al
-## salir uno ([signal EventBus.item_revealed]: un cofre, el premio del jefe) una luz recorre las
-## rarezas, cada vez más despacio, y se para en la del objeto; entonces lo muestra (icono, nombre del
-## color de su rareza, lo que hace según sus modificadores y su frase) un rato y se oculta. Si falta
-## oro para un cofre ([signal EventBus.chest_denied]), solo el aviso. Estilo: variaciones
-## [code]ChestPanel[/code], [code]ChestTile[/code], [code]ChestItemLabel[/code],
-## [code]ChestEffectLabel[/code] y [code]ChestDescriptionLabel[/code].
+## El revelado de un objeto en el HUD, sin pausar (como abrir una caja en un juego de cartas): una luz
+## recorre las rarezas, frena y se para en la del objeto, que se enseña un rato. Si falta oro para
+## un cofre, solo sale el aviso.
 
 ## Rarezas, en el orden de las casillas (la de cada una, de su color).
 @export var rarities: WeightedTable

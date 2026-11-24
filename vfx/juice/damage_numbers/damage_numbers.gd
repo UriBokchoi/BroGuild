@@ -1,11 +1,8 @@
 class_name DamageNumbers
 extends Node3D
-## Muestra un número de daño encima de cada enemigo golpeado (escucha
-## [code]EventBus.enemy_damaged[/code]): el gameplay no sabe que existen (CLAUDE.md, regla 9). Los
-## números salen de un pool; con demasiados a la vez, los nuevos no se muestran. En un mismo
-## fotograma salen como mucho [member max_per_frame]: un golpe a cien enemigos mostraría cien
-## números (ruido) y daba un tirón. Los del pool se preparan al empezar (fuente y dígitos), para que
-## el primer golpe grande no tenga que hacerlo.
+## Los números de daño encima de cada enemigo golpeado. Salen de un pool y, con un tope por
+## fotograma: un golpe a cien enemigos solo enseñaría ruido y daba un tirón. El pool se prepara al
+## empezar para que el primer golpe grande no tenga que hacerlo.
 
 @export var style: DamageNumberStyle
 ## Números creados al empezar, para no crearlos en mitad del combate.

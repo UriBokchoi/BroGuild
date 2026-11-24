@@ -1,12 +1,10 @@
 class_name UpgradableStats
 extends RefCounted
-## Las stats que algo del juego puede cambiar: las de algún modificador ([StatModifier]) o mejora de
-## arma o runa ([UpgradeStat]) en los datos (objetos, runas, armas, personajes, power-ups…). La vista
-## de stats solo enseña esas: las demás (los márgenes del salto, tiempos internos del movimiento…) no
-## cambian nunca y tapan las importantes. Una mejora nueva sobre una stat la hace aparecer sola.
+## Las stats que algo del juego puede cambiar: las que toca algún modificador o mejora de los datos.
+## La vista de stats solo enseña esas; las demás (márgenes del salto, tiempos del movimiento…) no
+## cambian nunca y tapan las importantes.
 ##
-## Se buscan en los recursos de [constant DIRS] (con sus subcarpetas) la primera vez que se pregunta;
-## [method warm_up] lo hace al cargar el nivel, para que abrir la vista no dé un tirón.
+## Se buscan una vez, al cargar el nivel (warm_up), para que abrir la vista no dé un tirón.
 
 ## Carpetas de datos donde hay cosas que cambian al jugador. No se mira todo [code]res://data[/code]:
 ## cargar un nivel o un mapa carga también sus escenas (más de un segundo). Si algo nuevo cambia al

@@ -1,11 +1,10 @@
 class_name OptionsPanel
 extends PanelContainer
-## Opciones básicas: volumen de cada bus, pantalla completa, tamaño de la ventana, VSync, límite de
-## FPS y temblor de pantalla. El volumen y el temblor se aplican al momento (para oírlo o notarlo); las de pantalla
-## quedan pendientes hasta «Aplicar», que las aplica y las guarda. «Volver» o Esc guardan el volumen
-## y el temblor, descartan lo de pantalla sin aplicar y cierran. Trabaja sobre
-## [code]Save.settings[/code]. Lo abren la pausa y el menú principal. Ejecutado dentro del editor, la
-## ventana no se puede cambiar: lo avisa y desactiva esas opciones.
+## Las opciones: volumen, pantalla completa, tamaño de ventana, VSync, límite de FPS y temblor. El
+## volumen y el temblor se aplican al momento; lo de pantalla espera a «Aplicar». «Volver» o Esc
+## guardan y cierran, descartando lo de pantalla sin aplicar.
+##
+## Dentro del editor la ventana no se puede cambiar: lo dice y desactiva esas opciones.
 
 ## Se cerró (ya guardado).
 signal closed

@@ -1,11 +1,8 @@
 class_name Chest
 extends Node3D
-## Cofre del nivel (GDD §5.2): con «interactuar» cobra su coste en oro y se abre. Sale un objeto
-## pasivo con rareza (la Suerte del jugador sube las altas). El HUD lo revela
-## ([signal EventBus.item_revealed]) y, al acabar el revelado, el objeto pasa al jugador y el cofre
-## desaparece. El coste sube con la dificultad y con cada cofre abierto en la partida: todos los
-## cofres cuentan los que se abren por el [code]EventBus[/code]. No pausa el juego. Al abrirse avisa
-## ([signal opened]): en la escena, sus destellos dorados.
+## Cofre (GDD §5.2): al usarlo cobra oro y se abre. Sale un objeto (la Suerte ayuda a que sea raro),
+## el HUD lo revela y luego pasa al jugador. Cada cofre abierto en la partida encarece los demás.
+## No pausa el juego.
 
 ## Se abrió (con su objeto ya tirado).
 signal opened

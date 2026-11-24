@@ -1,11 +1,8 @@
 class_name SlideState
 extends MovementState
-## Slide (Ctrl corriendo, mantener; gratis): te deslizas con la velocidad que llevas. En llano
-## frena con [code]slide_friction[/code]; la pendiente tira de ti con [code]slide_gravity[/code]
-## (acelera cuesta abajo y frena cuesta arriba). Con WASD se curva hacia la dirección pedida, a
-## [code]slide_turn_speed[/code] como mucho y sin perder velocidad (como en Deadlock). Termina al
-## soltar Ctrl, al bajar de [code]slide_min_speed[/code] o al dejar el suelo (pasa al aire con
-## coyote time). En la escena es comprometido: solo lo interrumpen el dash y el slide-jump.
+## Slide (mantener Ctrl corriendo; gratis): te deslizas con la velocidad que llevas. En llano frena
+## poco a poco, cuesta abajo acelera y cuesta arriba frena más. Se puede curvar sin perder velocidad,
+## como en Deadlock. Termina al soltar Ctrl, al ir muy despacio o al dejar el suelo.
 
 
 func can_enter() -> bool:

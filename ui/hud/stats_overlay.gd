@@ -1,10 +1,8 @@
 class_name StatsOverlay
 extends CanvasLayer
-## Las estadísticas del jugador mientras se mantiene «ver stats» (Tab), sin pausar: la misma lista
-## que la pausa ([StatsView]), a la derecha y encima de la partida. Mientras se ve, se actualiza cada
-## [member refresh_interval], y la rueda del ratón la desplaza. Con el juego en pausa solo sale si hay
-## abierto un panel de elegir (subir de nivel, un objeto: los del grupo [constant ALLOW_GROUP]), para
-## decidir viendo tus stats; en el menú de pausa no (ya las enseña).
+## Las stats del jugador mientras se mantiene Tab, sin pausar, a la derecha de la partida. Se
+## actualizan cada poco y la rueda las desplaza. En pausa solo salen con un panel de elegir abierto,
+## para decidir viéndolas; en el menú de pausa no, que ya las enseña.
 
 ## Grupo de los paneles que, abiertos, dejan verlas aunque el juego esté en pausa.
 const ALLOW_GROUP := &"stats_overlay_allowed"

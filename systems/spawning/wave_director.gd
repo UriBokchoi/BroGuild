@@ -1,19 +1,11 @@
 class_name WaveDirector
 extends Node
-## Director de oleadas: mientras está en marcha, saca enemigos en un [EnemySwarm] alrededor de
-## [member target] al ritmo de su [WaveData] (con picos), sin pasar del máximo a la vez. Cada enemigo
-## aparece en el suelo, a una distancia al azar entre la mínima y la máxima de los datos; si ahí no
-## hay suelo (fuera del mapa), prueba otro punto.
+## Saca enemigos alrededor del jugador al ritmo de su WaveData, sin pasar del máximo a la vez, y
+## siempre sobre suelo de verdad. Mientras está en marcha es también el reloj de la ronda: avisa
+## cada segundo y suma 1 de dificultad por minuto.
 ##
-## Todo depende de la [b]dificultad[/b] ([method get_difficulty]): cuántos salen, cuáles, cuántos
-## élites ([method WaveData.elite_chance_at]) y con qué stats ([method WaveData.scaling_at]). Es la
-## stat [code]difficulty[/code] de [member difficulty_stats] (el jugador): el director le suma 1 por
-## minuto en marcha y los objetos o runas pueden subirla más. Mientras está en marcha, es también el
-## reloj de la ronda: avisa del tiempo cada segundo por [code]EventBus.run_clock_changed[/code].
-##
-## Las [b]hordas[/b] ([member WaveData.hordes]): a su minuto avisa ([code]EventBus.horde_incoming[/code]
-## y su texto en el HUD) y saca muchos enemigos repartidos en unos segundos, sin contar para el
-## máximo a la vez.
+## La dificultad lo decide casi todo: cuántos salen, cuáles, cuántos son élites y lo fuertes que son.
+## Las hordas salen a su minuto, avisadas unos segundos antes, y no cuentan para el máximo.
 
 signal started
 signal stopped

@@ -1,10 +1,8 @@
 class_name CombatRange
 extends Node3D
-## Zona de práctica de combate del gimnasio: muñecos, armería, invocadores de enemigos, campana de
-## oleadas, plataforma escalonada, plataforma de vuelta y un recogedor de caídas que devuelve a la
-## llegada ([member arrival]). Quien coloca la zona dice adónde lleva la vuelta
-## ([member exit_destination]), dónde viven los enemigos ([member swarm]) y qué director de oleadas
-## usa la campana ([member director]). Al volver a la zona de movimiento, las oleadas paran.
+## La zona de combate del gimnasio de pruebas: muñecos, armería, invocadores de enemigos, la campana
+## de las oleadas y un recogedor de caídas. Quien la coloca dice adónde lleva la vuelta, dónde viven
+## los enemigos y qué director usa la campana. Al volver a la zona de movimiento, las oleadas paran.
 
 ## Plataforma de vuelta a la zona de movimiento.
 @export var exit_teleporter: Teleporter

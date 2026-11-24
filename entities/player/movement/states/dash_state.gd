@@ -1,13 +1,10 @@
 class_name DashState
 extends MovementState
-## Dash: ráfaga corta en la dirección pedida (sin dirección, hacia donde mira la cámara), en el
-## suelo (yendo al menos a [code]dash_min_speed[/code]) o en el aire, donde va recto, sin gravedad.
-## Gasta stamina y, en el aire, uno de los [code]air_dashes[/code] (se recuperan al tocar suelo). En la escena es comprometido y cancela
-## cualquier acción (también otro dash). Al terminar, la velocidad horizontal se queda en
-## [code]dash_exit_speed[/code] como mucho; pero si se mantiene Ctrl en el suelo, pasa a
-## [member slide] con toda la velocidad del dash (el slide alarga el dash, sin gastar más). El
-## slide también puede cortarlo a mitad en el suelo (en la escena, lo lista en sus
-## [code]interrupts[/code]); en los dos casos se abre la ventana del dash-jump.
+## Dash: un impulso corto hacia donde se pide (o hacia la cámara). En el aire va recto y sin gravedad
+## y gasta uno de los dashes aéreos. Gasta stamina y puede cortar cualquier acción, incluso otro dash.
+##
+## Al acabar frena a dash_exit_speed, salvo si se mantiene el slide en el suelo: entonces pasa al
+## slide con toda su velocidad. En los dos casos se abre la ventana del dash-jump.
 
 ## Estado de slide al que pasa al terminar si se mantiene Ctrl. Vacío: no hay dash → slide.
 @export var slide: State

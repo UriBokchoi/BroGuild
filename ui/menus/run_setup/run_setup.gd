@@ -1,13 +1,11 @@
 class_name RunSetup
 extends Node3D
-## Selección de personaje y de nivel antes de jugar (GDD §9, «Menús»): a la izquierda, la lista de
-## personajes; en el centro, el modelo del que se mira, girando; a la derecha, al pasar el ratón, su
-## nombre, sus diferencias de stats, su arma principal y su habilidad pasiva. Al elegir uno, ese
-## panel se cambia por la lista de niveles (los que aún no existen salen desactivados) y la lista de
-## personajes se oculta. Un clic en un nivel lo marca y saca su ficha debajo (su nombre, cómo se gana
-## y su lore); «Jugar», abajo, encima de «Volver», empieza la partida en el marcado.
-## Esc o «Volver» retroceden: de los niveles a los personajes y de ahí al menú.
-## Lo muestra [Game].
+## Elegir personaje y nivel antes de jugar. A la izquierda, los personajes; en el centro, el modelo
+## del que se mira; a la derecha, su ficha.
+##
+## Al elegir personaje salen los niveles: un clic marca uno y enseña su objetivo y su lore, y
+## «Jugar» empieza la partida. Esc o «Volver» retroceden de los niveles a los personajes y de ahí
+## al menú.
 
 ## Se eligió personaje y nivel.
 signal play_requested(character: CharacterData, level: LevelData)

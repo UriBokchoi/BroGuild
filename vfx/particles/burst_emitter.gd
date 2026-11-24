@@ -1,12 +1,10 @@
 class_name BurstEmitter
 extends Node3D
-## Estallidos de partículas que escuchan el EventBus: el humo al morir un enemigo (del color de su
-## [member EnemyData.color]), las chispas al golpear, los restos al romper algo y el polvo al salir un
-## enemigo del suelo. Cada estallido sale
-## de una reserva de [member pool_size] emisores de un solo disparo ([member effect]); si están todos
-## en uso, reutiliza el más viejo. Como mucho [member max_per_frame] por fotograma, para que una
-## bomba o un golpe a cien enemigos no dispare cien a la vez. Solo visual. Vive en el mundo
-## ([code]top_level[/code]).
+## Estallidos de partículas que salen con señales del EventBus: el humo al morir un enemigo (de su
+## color), las chispas al golpear, los restos al romper algo y el polvo al salir un enemigo.
+##
+## Cada uno sale de una reserva fija de emisores, reutilizando el más viejo. Hay un tope por
+## fotograma para que una bomba que mata a cien no dispare cien a la vez.
 
 ## Qué lo dispara.
 enum Trigger { ENEMY_DIED, ENEMY_HIT, BREAKABLE_BROKEN, ENEMY_SPAWNED }

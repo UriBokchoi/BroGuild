@@ -1,18 +1,11 @@
 class_name LootDropper
 extends Node
-## Lo que sueltan los enemigos y los rompibles.
-## - Al morir un enemigo ([code]EventBus.enemy_died[/code]): una gema con su experiencia
-##   ([member EnemyStats.xp_reward]) y una moneda con su oro ([member EnemyStats.gold_reward]), que
-##   vuela sola hacia el jugador.
-## - Al romperse un rompible ([code]EventBus.breakable_broken[/code]): su botín ([BreakableData],
-##   más cuanto mayor es la dificultad) en trozos repartidos alrededor.
-## - Además, a veces, un extra (un power-up; más adelante, cofres) de una [WeightedTable]: con la
-##   probabilidad de botín del jugador ([code]drop_chance[/code]) por el multiplicador de quien lo
-##   suelta (×1 un enemigo normal; élites y rompibles, el de sus datos).
-## Suelta como mucho [member max_drops_per_tick] recogibles en un tick de física y el resto en los
-## siguientes: un golpe que mata a cien enemigos soltaba doscientos de golpe (un tirón). Al empezar
-## prepara los de experiencia y oro ([member PickupData.prewarm]), para no crearlos en pleno
-## combate.
+## Lo que sueltan los enemigos al morir (una gema de experiencia y una moneda) y los rompibles al
+## romperse (su botín, en trozos). A veces también un extra, como un power-up, según la probabilidad
+## de botín del jugador.
+##
+## Suelta como mucho max_drops_per_tick por tick y deja el resto para los siguientes: un golpe que
+## mataba a cien enemigos soltaba doscientos recogibles de golpe y daba un tirón.
 
 ## Dónde caen los recogibles.
 @export var field: PickupField

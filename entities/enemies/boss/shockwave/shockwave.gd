@@ -1,12 +1,8 @@
 class_name Shockwave
 extends Node3D
-## Onda que se abre por el suelo (la del salto del jefe, la del dash y la explosión al caer del
-## jugador): desde donde sale ([method start]) hasta [member radius] en [member duration] segundos.
-## Daña una vez a cada [HurtboxComponent] de [member hit_mask] que alcanza su borde
-## ([member band] de ancho), salvo si su centro está más alto que [member reach_height] sobre el
-## suelo de la onda: se esquiva saltándola o alejándose antes de que llegue (lo que ya pasó no
-## daña). Empuja hacia fuera ([member knockback]). Se ve como un aro que se abre y se apaga
-## ([member ring]). Al salir avisa ([signal started]): ahí levanta su polvo.
+## Una onda que se abre por el suelo (el salto del jefe, el dash, la caída del jugador). Daña una vez
+## a lo que alcanza su borde y lo empuja hacia fuera. Se esquiva saltándola: lo que está más alto que
+## reach_height no se lleva el golpe. Se ve como un aro que se abre y se apaga.
 
 ## Salió desde [param center].
 signal started(center: Vector3)

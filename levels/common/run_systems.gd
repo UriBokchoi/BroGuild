@@ -1,10 +1,8 @@
 class_name RunSystems
 extends Node3D
-## Todo lo que necesita un nivel para jugar una partida, ya conectado: jugador, horda y oleadas,
-## botín, subir de nivel, jefe, HUD, pausa, resultados, números de daño y panel de depuración. Un
-## nivel pone su mapa, una instancia de esto y el punto donde aparece el jugador; aquí se eligen sus
-## oleadas, si empiezan solas, la zona donde pueden salir enemigos, los mensajes del principio y su
-## jefe.
+## Todo lo que un nivel necesita para jugar una partida, ya conectado: jugador, horda, oleadas, botín,
+## subir de nivel, jefe, HUD, pausa y resultados. Un nivel pone su mapa, una instancia de esto y el
+## punto de aparición, y elige aquí sus oleadas, su jefe y sus mensajes.
 
 ## Oleadas de este nivel.
 @export var waves: WaveData

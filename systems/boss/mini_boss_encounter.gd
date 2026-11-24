@@ -1,13 +1,8 @@
 class_name MiniBossEncounter
 extends Node
-## Los minibosses de la ronda ([member WaveData.mini_bosses] de las oleadas de [member director]).
-## A su minuto avisa con un texto unos segundos antes ([signal EventBus.announced]) y saca a cada uno
-## cerca del jugador, con el escalado de la dificultad de ese momento
-## ([method WaveDirector.spawn_one_around]). Pasa al HUD su vida
-## ([signal EventBus.mini_boss_spawned] y compañía) y, al vencerlo, da su premio: oro (como un
-## recogible) y un objeto pasivo que el HUD revela y llega al acabar de revelarse. El tiempo solo corre
-## con las oleadas en marcha. Si el jefe del nivel sale mientras tanto, los dos conviven (el HUD
-## pone una barra bajo la otra).
+## Los minibosses de la ronda: a su minuto avisan con un texto y salen cerca del jugador, más fuertes
+## con la dificultad. Al vencer a uno da su premio (oro y un objeto que el HUD revela). Su reloj
+## solo corre con las oleadas en marcha, y pueden coincidir con el jefe.
 
 @export var director: WaveDirector
 ## Stats del jugador: su Suerte para el objeto del premio.

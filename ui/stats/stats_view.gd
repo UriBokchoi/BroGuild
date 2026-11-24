@@ -1,10 +1,8 @@
 class_name StatsView
 extends VBoxContainer
-## Lista de las stats de un [StatsComponent]: agrupadas como en sus datos
-## ([code]@export_group[/code]), con nombre traducido, unidad y filas alternas. Las que cambian
-## por mejoras o maldiciones se resaltan con su valor base al lado. Con [member only_upgradable],
-## solo las que algo del juego puede cambiar ([UpgradableStats]): las fijas no se enseñan. Una stat
-## nueva aparece sola; solo necesita su traducción ([code]STAT_<NOMBRE>[/code] en data/i18n).
+## La lista de stats de un StatsComponent, agrupadas como en sus datos, con su nombre y su unidad.
+## Las que cambian las mejoras se resaltan con su base al lado. De serie solo enseña las que algo
+## del juego puede cambiar. Una stat nueva solo necesita su traducción (STAT_<NOMBRE>).
 
 ## Solo las stats que algo del juego puede cambiar (las importantes); sin esto, todas.
 @export var only_upgradable: bool = true

@@ -1,11 +1,8 @@
 class_name CanopyLeaves
 extends Node3D
-## Hojitas que caen al meterse en la copa de un árbol (saltando o desde una meseta): cada
-## [member check_interval] segundos mira si el cuerpo de [member target] está dentro de alguna copa
-## y, al entrar en una, suelta unas hojas del color de ese árbol (algo más claras, para que se vean
-## contra la copa) desde el borde de abajo de la copa, donde no las tapa. Los árboles los da el mapa
-## generado ([member layout], [method LevelLayout.get_trees]); los de fuera de las paredes no se
-## miran. Solo visual. Vive en el mundo ([code]top_level[/code]).
+## Hojitas que caen al meterse en la copa de un árbol (saltando o desde una meseta). Cada poco mira
+## si el cuerpo del jugador ha entrado en alguna copa y, si es así, caen hojas del color de ese árbol
+## desde el borde de abajo de la copa, donde se ven. Los árboles los da el mapa generado.
 
 ## A quién mira (el jugador).
 @export var target: Node3D

@@ -1,15 +1,10 @@
 class_name WaveData
 extends Resource
-## Cómo salen los enemigos de una ronda (GDD §6, «Director de oleadas»): una curva de enemigos por
-## segundo, un pico al final de cada intervalo, un máximo de enemigos a la vez, qué enemigos pueden
-## salir, cuántos salen élites, cómo se hacen más fuertes y cuánto dura la ronda (pasada, llegan los
-## muy fuertes). Los valores viven en [code]data/waves/[/code]; aquí todo vale 0 o vacío a
-## propósito.
+## Cómo salen los enemigos en una ronda: enemigos por segundo, picos, máximo a la vez, qué enemigos,
+## cuántos élites, cuánto se refuerzan y cuánto dura la ronda. Los valores viven en data/waves/.
 ##
-## Las curvas van según la [b]dificultad[/b] (x), no según el tiempo: la stat
-## [code]difficulty[/code] del jugador, que sube sola 1 por minuto (así, sin bonus, dificultad 5 es
-## el minuto 5) y con objetos o runas (más riesgo, más recompensa). Los picos y la duración de la
-## ronda sí van por el reloj.
+## Las curvas van por dificultad, no por tiempo. Como la dificultad sube 1 por minuto, sin objetos
+## que la suban dificultad 5 es el minuto 5. Los picos y la duración de la ronda sí van por el reloj.
 
 @export_group("round")
 ## Minutos que dura la ronda. Pasados, el reloj del HUD se pone en rojo (y llegará el jefe).

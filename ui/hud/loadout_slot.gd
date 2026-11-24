@@ -1,10 +1,7 @@
 class_name LoadoutSlot
 extends PanelContainer
-## Una ranura del HUD de armas y runas ([LoadoutBar]): vacía, cerrada (con un candado: aún no se ha
-## desbloqueado) o con el icono de lo que lleva y su nivel. Estilo: variaciones
-## [code]LoadoutSlot[/code], [code]LoadoutSlotEmpty[/code], [code]LoadoutSlotLocked[/code],
-## [code]LoadoutLevelLabel[/code] y [code]LoadoutLevelMaxLabel[/code] del Theme global. Salta al
-## entrar algo o subir de nivel ([UiMotion]).
+## Una ranura del HUD de armas y runas: vacía, cerrada con candado o con el icono y el nivel de lo que
+## lleva. Da un salto al entrar algo o al subir de nivel.
 
 ## Qué muestra.
 enum Content { EMPTY, LOCKED, ITEM }

@@ -121,6 +121,11 @@ Lo que salió en la segunda tanda de pruebas; va antes que el resto.
 - [x] El rastro de fuego del slide escala con las stats del jugador
 - [x] Optimizar: el ordenador va a tope jugando. Límite de FPS (de serie, 60), enemigos y objetos redondos con menos polígonos, bosque por trozos (un 83 % menos de triángulos)
 
+## Hito 5d — Pedidos tras las pruebas (3) (2026-11-24)
+- [ ] Pesas de piedra que se activan como los santuarios de Megabonk: quedarse cerca 5 s (de base) da a elegir una de 3 mejoras de stats, con rarezas
+- [ ] Subir de nivel: con «Quedármela» y «Doble o nada» a la vista, el clic derecho deshace la elección y deja escoger otra carta
+- [ ] Árboles alrededor de los trolls de piedra (ahora están en un claro pelado)
+
 ## Hito 6 — Niveles
 - [x] El Brosque más grande: paredes a 110 m (antes 80), casi el doble de área, con más piezas, rompibles y árboles en proporción
 - [ ] El Brosque: más detalle (decoración, variedad del suelo, props de gimnasio, sonido ambiente); la v1 llegó en el Hito 3
@@ -144,7 +149,7 @@ Lo que salió en la segunda tanda de pruebas; va antes que el resto.
 - [ ] Más opciones (sensibilidad, remapeo)
 
 ## Mantenimiento (siempre)
-- [ ] Repaso del código para que se lea como escrito a mano: comentarios que expliquen el porqué en lo que no se entiende solo, comentarios de documentación más cortos y sin jerga
+- [x] Repaso del código para que se lea como escrito a mano: comentarios que expliquen el porqué en lo que no se entiende solo, comentarios de documentación más cortos y sin jerga (primera pasada: las cabeceras de clase de 97 scripts; la norma, en CLAUDE.md)
 
 ## Orden de trabajo acordado (2026-11-23)
 1. Hito 5b (pulido tras las pruebas).
@@ -155,6 +160,7 @@ Lo que salió en la segunda tanda de pruebas; va antes que el resto.
 6. Del Hito 6: el Brosque más grande.
 7. Del Hito 7: objetos con efectos.
 8. Polvo de los pasos (Hito 5) y repaso del código.
+9. Hito 5d: pesas que activan mejoras, deshacer la elección con clic derecho y árboles en los trolls.
 
 ## Backlog (sin orden)
 - Física de la horda: con 180 esbirros apretados, la física se lleva unos 4–6 ms por tick (el rumbo del enjambre, 1 ms; el resto, el motor). Mirar con el profiler del editor si hiciera falta (formas más simples, menos contactos)

@@ -1,10 +1,8 @@
 class_name UiMotion
 extends RefCounted
-## Movimientos de la interfaz con tweens, con los tiempos y tamaños de [code]data/ui/motion.tres[/code]
-## ([UiMotionData]): un salto (un contador que sube), una aparición (un panel que se abre), el
-## crecimiento de un botón con el ratón encima y una barra que llega a su valor sin saltos. Cada
-## control lleva como mucho un tween de tamaño a la vez: uno nuevo corta el anterior. Siguen con el
-## juego en pausa (los menús de pausa también se animan). Solo visual.
+## Movimientos de la interfaz con tweens: un salto (un contador que sube), una aparición (un panel
+## que se abre), un botón que crece con el ratón y una barra que llega a su valor sin saltos. Los
+## tiempos viven en data/ui/motion.tres. Siguen con el juego en pausa.
 
 const DATA: UiMotionData = preload("res://data/ui/motion.tres")
 ## Metadato donde cada control guarda su tween de tamaño en marcha.

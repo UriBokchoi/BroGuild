@@ -1,12 +1,9 @@
 extends Node
-## Efectos de sonido: escucha el [code]EventBus[/code] (y los botones de la interfaz) y hace sonar lo
-## que dice su [SfxBank] con un grupo de [AudioStreamPlayer] en el bus de efectos. Respeta las voces
-## y la separación de cada [SoundCue], y sube de tono la experiencia recogida seguida. Suena también
-## en pausa (los menús). Sin lógica de gameplay.
+## Los efectos de sonido: escucha el EventBus y los botones y hace sonar lo que dice su SfxBank,
+## respetando cuántas voces y cuánta separación tiene cada sonido. Suena también en pausa.
 ##
-## Sin pantalla (tests y validación, [code]--headless[/code]) lleva la cuenta igual pero no reproduce
-## nada: no hay audio que oír, y salir con un sonido a medias deja su reproducción viva (Godot avisa
-## de fugas al cerrar). Las voces se cuentan por lo que dura cada sonido, no por el reproductor.
+## Sin pantalla (tests) lleva la cuenta pero no reproduce nada: cerrar con un sonido a medias deja
+## fugas al salir.
 
 const BANK := preload("res://data/audio/sfx_bank.tres")
 ## Multiplicador de tono de un semitono.

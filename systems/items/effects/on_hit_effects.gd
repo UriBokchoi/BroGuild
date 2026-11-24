@@ -1,10 +1,8 @@
 class_name OnHitEffects
 extends Node3D
-## Los efectos al golpear de los objetos del jugador ([OnHitEffect]: veneno, rayo, frío). Escucha
-## cada golpe a un enemigo ([signal EventBus.enemy_hit]) y, si puede disparar efectos (no lo ha hecho
-## otro efecto: [member DamageInfo.triggers_effects]), tira la probabilidad de cada uno según las
-## copias que lleve de su objeto. Lleva la cuenta de los venenos y los fríos que siguen activos y
-## dibuja los rayos. Vive en el mundo ([code]top_level[/code]).
+## Los efectos al golpear de los objetos del jugador (veneno, rayo, frío). En cada golpe a un enemigo
+## tira la probabilidad de cada uno según las copias que lleve. Lleva la cuenta de los venenos y los
+## fríos activos y dibuja los rayos. El daño de un efecto no dispara más efectos.
 
 ## Los objetos del jugador.
 @export var items: PassiveInventory

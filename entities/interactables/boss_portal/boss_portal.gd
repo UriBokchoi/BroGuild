@@ -1,15 +1,10 @@
 class_name BossPortal
 extends Node3D
-## Portal del jefe (GDD §9): un aro de piedra con un remolino dentro y, delante, una peana con las
-## ranuras de las llaves. Con «interactuar» pide sacar al jefe
-## ([signal EventBus.boss_summon_requested]); el [BossEncounter] lo saca si el jugador lleva las
-## llaves. Al acabar la ronda lo pide solo, aunque falten. Muestra las llaves que lleva el jugador
-## (una en cada ranura) y, con todas, una columna de luz que se ve desde lejos.
+## El portal del jefe (GDD §9): un aro de piedra con un remolino y, delante, una peana con las
+## ranuras de las llaves. Al usarlo pide sacar al jefe, y al acabar la ronda lo pide solo.
 ##
-## El remolino cuenta en qué punto está: apagado, vivo con todas las llaves o con el jefe fuera, y
-## dorado y abierto cuando se vence al jefe ([signal EventBus.boss_defeated]). Abierto, avisa de
-## dónde está ([signal EventBus.boss_portal_opened], para la flecha) y cruzarlo pasa el nivel
-## ([signal EventBus.level_exit_reached]).
+## El remolino dice en qué punto está: apagado, vivo con todas las llaves, y dorado y abierto con el
+## jefe vencido. Abierto, avisa de dónde está (para la flecha) y cruzarlo pasa el nivel.
 
 @export var interactable: Interactable
 ## Dónde aparece el jefe.

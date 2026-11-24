@@ -1,11 +1,8 @@
 class_name HealthBar
 extends ProgressBar
-## Vida del jugador en el HUD, con los números dentro de la barra («85 / 120»: la actual redondeada
-## hacia arriba, para no ver un 0 estando vivo). Se entera por
-## [signal EventBus.player_health_changed]. Al perder vida, la barra baja de golpe y deja detrás un
-## rastro claro ([code]HealthTrail[/code]) que se vacía con retraso: se lee cuánto quitó el golpe. Al
-## curarse, sube suave ([UiMotion]). Estilo: variaciones [code]HealthBar[/code] (solo el relleno),
-## [code]HealthTrailBar[/code] (fondo y rastro) y [code]HealthValueLabel[/code] del Theme global.
+## La vida del jugador, con los números dentro de la barra («85 / 120»; la actual se redondea hacia
+## arriba para no ver un 0 estando vivo). Al perder vida baja de golpe y deja un rastro claro que se
+## vacía después, así se lee cuánto quitó el golpe. Al curarse sube suave.
 
 ## Clave del texto de los números (con dos [code]%d[/code]: la vida y la máxima).
 @export var value_key: StringName = &"HUD_HEALTH_VALUE"

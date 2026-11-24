@@ -1,15 +1,11 @@
 class_name Enemy
 extends RigidBody3D
-## Enemigo: un cuerpo físico sin rotación que choca con el mundo, con el jugador y con otros
-## enemigos. Se empujan y, con la presión de la horda, se apilan unos encima de otros, como en
-## Megabonk. Persigue al objetivo separándose un poco de los que tiene al lado ([EnemySteering]), o
-## se queda a su distancia si es de los que disparan ([member EnemyStats.keep_distance]). Hace daño
-## al tocar (su hitbox de contacto) y con sus armas, si tiene ([member EnemyData.weapons]); al
-## morir, sus armas paran (sus disparos en vuelo siguen), su cuerpo deja de chocar con el jugador y
-## con los demás enemigos, y él encoge y desaparece. No se mueve solo: un [EnemySwarm] lo saca de su
-## pool con [method spawn], fija su velocidad horizontal con [method physics_step] cada tick (la
-## física pone la gravedad y los choques) y lo guarda cuando avisa con [signal despawned]. Sus stats
-## salen de su [EnemyData] ([method setup]).
+## Un enemigo: un cuerpo físico sin rotación que choca con el mundo, con el jugador y con los demás.
+## Con la presión de la horda se empujan y se apilan, como en Megabonk. Daña al tocar y, si tiene,
+## con sus armas.
+##
+## No se mueve solo: el EnemySwarm lo saca del pool (spawn), le fija la velocidad cada tick
+## (physics_step) y lo recoge cuando avisa de que ha terminado de morir (despawned).
 
 ## Acaba de morir (aún encogiéndose).
 signal died(enemy: Enemy)

@@ -1,12 +1,8 @@
 class_name BossBar
 extends PanelContainer
-## La barra de un jefe en el HUD, arriba en el centro: su nombre a la izquierda, su vida en números
-## a la derecha («4530 / 5000») y una barra fina debajo. La del jefe del nivel aparece al salir
-## ([signal EventBus.boss_spawned]) y se va al vencerlo ([signal EventBus.boss_defeated]); la del
-## miniboss ([member mini_boss]) va con sus propias señales; las dos se van al ganar la partida. Las
-## dos van en una columna, una bajo la otra. Estilo: variaciones [code]BossBarPanel[/code],
-## [code]BossNameLabel[/code], [code]BossValueLabel[/code] y [code]BossHealthBar[/code] del Theme
-## global (las del miniboss, más pequeñas y en verde, se ponen en el HUD).
+## La barra de un jefe, arriba en el centro: nombre a la izquierda, vida en números a la derecha
+## («4530 / 5000») y una barra fina. La del jefe y la del miniboss (mini_boss) van una bajo la otra
+## y se van al vencerlos o al ganar la partida.
 
 ## Clave del texto de su vida (con dos [code]%d[/code]: la que le queda y la máxima).
 @export var value_key: StringName = &"HUD_HEALTH_VALUE"

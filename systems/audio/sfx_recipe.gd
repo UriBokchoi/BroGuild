@@ -1,10 +1,8 @@
 class_name SfxRecipe
 extends Resource
-## Receta de un efecto de sonido sintetizado (al estilo de sfxr): una onda con su tono, que se
-## desliza de [member start_frequency] a [member end_frequency], con saltos de arpegio, vibrato,
-## algo de ruido, un filtro de graves y su envolvente (ataque, sostén y caída). [SfxSynth] la
-## convierte en muestras y [code]tools/gen_sfx.gd[/code] la guarda como [code].wav[/code] en
-## [code]assets/audio/sfx/[/code]. Para retocar un sonido: cambia su receta y vuelve a generar.
+## La receta de un sonido sintetizado, al estilo de sfxr: una onda que se desliza de un tono a otro,
+## con arpegio, vibrato, ruido, filtro y envolvente. Para retocar un sonido, cambia su receta y
+## vuelve a generarlo con tools/gen_sfx.gd.
 
 enum Wave { SQUARE, SAW, SINE, TRIANGLE, NOISE }
 

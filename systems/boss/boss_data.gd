@@ -1,10 +1,8 @@
 class_name BossData
 extends Resource
-## El jefe de un nivel y su encuentro (GDD §9): qué enemigo es (su escena tiene raíz [Boss]), cuántas
-## llaves hacen falta para invocarlo antes de tiempo, qué dice el HUD al salir, cómo se hace más
-## fuerte con la dificultad (sus propias curvas: las de las oleadas se disparan en la prórroga) y qué
-## da al vencerlo: oro por un multiplicador que es mayor cuanto antes caiga y un objeto pasivo de
-## rareza alta. Los valores viven en [code]data/bosses/[/code]; aquí todo vale 0 o vacío a propósito.
+## El jefe de un nivel (GDD §9): qué enemigo es, cuántas llaves hacen falta, qué se dice al salir y al
+## vencerlo, cómo crece con la dificultad (con curvas propias) y su premio: oro, más cuanto antes
+## caiga, y un objeto de rareza alta. Viven en data/bosses/.
 
 ## El jefe.
 @export var enemy: EnemyData

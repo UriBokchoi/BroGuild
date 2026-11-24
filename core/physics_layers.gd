@@ -1,9 +1,7 @@
 class_name PhysicsLayers
-## Capas de física 3D: mismos números y nombres que Project Settings >
-## Layer Names > 3D Physics (un test lo comprueba).
-## hitbox = la zona que HACE daño; hurtbox = la zona que lo RECIBE.
-## Con un número de capa: set_collision_layer_value() / set_collision_mask_value().
-## Para asignar collision_layer o collision_mask enteros: mask().
+## Las capas de física 3D, con los mismos números y nombres que en Project Settings (un test lo
+## comprueba). Hitbox es la zona que hace daño; hurtbox, la que lo recibe. Para una máscara entera,
+## mask().
 
 ## Geometría estática: suelo, paredes, rampas, plataformas.
 const WORLD: int = 1

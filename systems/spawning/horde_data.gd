@@ -1,10 +1,8 @@
 class_name HordeData
 extends Resource
-## Una horda: en un minuto de la ronda salen de golpe muchos enemigos alrededor del jugador, con
-## aviso unos segundos antes (texto en el HUD y un cuerno). Salen repartidos en
-## [member spawn_seconds] (llegan como una ola y sin un tirón por sacarlos todos en el mismo
-## fotograma), con el escalado de la dificultad y sin contar para el máximo a la vez. Va en
-## [member WaveData.hordes].
+## Una horda: a su minuto salen de golpe muchos enemigos alrededor del jugador, avisados unos
+## segundos antes. Salen repartidos en unos segundos, como una ola (y sin el tirón de sacarlos todos
+## a la vez), y no cuentan para el máximo.
 
 ## Minuto de la ronda en que sale.
 @export_range(0.0, 120.0, 0.25, "or_greater", "suffix:min") var at_minute: float = 0.0

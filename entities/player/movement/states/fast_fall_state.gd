@@ -1,10 +1,7 @@
 class_name FastFallState
 extends MovementState
-## Caída rápida (el «dash hacia abajo»): Ctrl dos veces seguidas en el aire, como mucho a
-## [code]fast_fall_double_tap_window[/code] segundos. Picado recto al suelo a
-## [code]fast_fall_speed[/code] hasta aterrizar; gasta stamina. Al tocar suelo emite
-## [signal slammed] (para la mejora de impacto en área y el juice). En la escena comparte acción
-## con el slide, que solo entra en el suelo; es comprometida y la cancela el dash.
+## Caída rápida: Ctrl dos veces seguidas en el aire. Bajas en picado hasta el suelo y gastas stamina;
+## al aterrizar avisa (slammed), para la explosión de su mejora y el temblor.
 
 ## Aterrizó de una caída rápida a [param impact_speed] m/s.
 signal slammed(impact_speed: float)

@@ -1,7 +1,6 @@
 extends SceneTree
-## Genera los efectos de sonido: sintetiza ([SfxSynth]) cada receta ([SfxRecipe]) de
-## [code]data/audio/sfx/[/code] y la guarda como [code]assets/audio/sfx/<nombre>.wav[/code].
-## Después hay que importar. Con el editor cerrado:
+## Genera los efectos de sonido: sintetiza cada receta de data/audio/sfx/ y la guarda como
+## assets/audio/sfx/<nombre>.wav. Después hay que importar. Con el editor cerrado:
 ##   "$G" --headless --path . -s res://tools/gen_sfx.gd
 ##   "$G" --headless --path . --import
 

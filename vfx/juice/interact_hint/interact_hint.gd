@@ -1,10 +1,7 @@
 class_name InteractHint
 extends Node
-## Aviso sutil de que algo se puede usar con «interactuar»: encima de las mallas de [member visual]
-## ([code]material_overlay[/code]) pone un destello que lo recorre de vez en cuando
-## ([member idle_material]) y, si es el que se usaría ahora (el más cercano al jugador), un borde de
-## luz más marcado ([member focus_material]). Desactivado su [member interactable], no se ve. Solo
-## visual: escucha las señales del [Interactable].
+## Aviso de que algo se puede usar: un destello que lo recorre de vez en cuando y, si es lo que se
+## usaría ahora (lo más cercano), un borde de luz más marcado. Si está desactivado, no se ve.
 
 @export var interactable: Interactable
 ## Modelo que destella (sus mallas, también las de dentro; los textos no).

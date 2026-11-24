@@ -1,11 +1,8 @@
 class_name BodyBob
 extends Node
-## Balanceo al andar: mientras el personaje va por el suelo en uno de [member walk_states], su cuerpo
-## sube y baja un poco a cada paso y se mece de lado a lado. Cuanto más rápido va, más alto rebota y
-## más pasos da, para que correr se sienta como correr. Con rapidez por encima de la carrera normal
-## (mejoras), rebota más, hasta [member max_ratio]. Al pararse vuelve a su sitio suavemente. Solo
-## visual: mueve [member parts] (las partes del modelo, no el modelo entero, que ya lo agachan,
-## giran y voltean otros nodos). Avisa de cada paso que toca el suelo ([signal stepped]).
+## Balanceo al andar: el cuerpo sube y baja a cada paso y se mece de lado a lado. Cuanto más rápido,
+## más rebota y más pasos da, para que correr se sienta como correr. Solo mueve las partes del
+## modelo, no el modelo entero, que ya giran y agachan otros nodos. Avisa de cada paso (stepped).
 
 ## Un pie tocó el suelo (abajo del rebote), con [param ratio] la rapidez respecto a la carrera.
 signal stepped(ratio: float)

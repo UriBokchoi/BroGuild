@@ -1,12 +1,9 @@
 @abstract
 class_name State
 extends Node
-## Estado de una [StateMachine]: un nodo hijo de su máquina con su propio script. Añadir un
-## estado no obliga a tocar los demás.
-##
-## Se entra en un estado por su acción ([member trigger_action]) o porque otro estado pide
-## pasar a él con [method StateMachine.transition_to]. Las reglas de las acciones están en
-## [StateMachine]; cada estado solo declara aquí cómo participa en ellas.
+## Un estado de una StateMachine: un nodo hijo de la máquina con su propio script, así que añadir
+## uno no obliga a tocar los demás. Se entra por su acción (trigger_action) o porque otro estado
+## pasa a él. Las reglas de las acciones viven en la máquina; aquí cada estado dice cómo participa.
 
 ## Acción que lo activa (p. ej. [code]&"jump"[/code]). Vacía: solo se entra por transición.
 @export var trigger_action: StringName = &""

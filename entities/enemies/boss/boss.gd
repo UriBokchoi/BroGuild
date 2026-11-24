@@ -1,12 +1,11 @@
 class_name Boss
 extends Enemy
-## Jefe de un nivel (GDD §9): un [Enemy] grande que persigue al objetivo y, cada
-## [member attack_interval] segundos, hace uno de sus ataques ([BossAttack], sus nodos hijos),
-## elegido al azar según su peso. Mientras ataca no persigue: el ataque mueve el cuerpo. Por debajo
-## de [member enrage_below] de su vida entra en rabia: aplica [member enrage] (más rápido), ataca más
-## a menudo y puede hacer los ataques de rabia. Pide refuerzos con [signal summon_requested]: quien
-## lo saca ([BossEncounter]) los pone en juego. No lo saca el director de oleadas ni lo mata una bomba
-## de golpe. No habla: sin gritos.
+## Un jefe (GDD §9): un Enemy grande que persigue al jugador y, cada poco, hace uno de sus ataques
+## (sus hijos BossAttack), elegido al azar por peso. Mientras ataca no persigue: el ataque mueve el
+## cuerpo.
+##
+## Con poca vida entra en rabia: va más rápido y ataca más a menudo. Pide refuerzos con
+## summon_requested y el BossEncounter los saca. Una bomba no lo mata de golpe.
 
 ## Pide [param count] enemigos de [param enemy] alrededor de [param center], entre
 ## [param min_distance] y [param max_distance].

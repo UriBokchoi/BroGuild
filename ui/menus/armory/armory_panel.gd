@@ -1,10 +1,7 @@
 class_name ArmoryPanel
 extends CanvasLayer
-## Panel de la armería de práctica: lista todas las armas y runas del juego para equiparlas,
-## quitarlas y subirlas o bajarlas de nivel. A la derecha muestra las stats del objeto por el que
-## pasa el ratón: las propias de un arma (sin las del personaje) o, para una runa, todas las del
-## jugador con lo que cambian sus runas resaltado. Pausa el juego y pide el cursor mientras está
-## abierto; se cierra con Esc, con «interactuar» o con su botón.
+## La armería de práctica: todas las armas y runas para ponerlas, quitarlas y cambiarlas de nivel. A
+## la derecha, las stats de lo que hay bajo el ratón. Pausa el juego mientras está abierta.
 
 var _player: Player
 var _rows: Array[ArmoryRow] = []

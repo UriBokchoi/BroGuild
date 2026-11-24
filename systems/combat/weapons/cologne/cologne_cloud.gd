@@ -1,12 +1,10 @@
 class_name CologneCloud
 extends Weapon
-## Nube de colonia (un spray corporal, GDD §6): un aura alrededor de quien la lleva. Cuando hay algún
-## enemigo dentro, suelta un pulso que daña a todos los de dentro y los empuja un poco hacia fuera.
-## Los proyectiles extra son más pulsos seguidos (separados por [member WeaponStats.burst_interval]).
-## Su radio es su alcance por el área. No necesita ver a los enemigos: la colonia llega a todas partes.
+## Nube de colonia (GDD §6): un aura alrededor de quien la lleva. Si hay algún enemigo dentro, suelta
+## un pulso que daña a todos y los aparta un poco. Sus proyectiles extra son más pulsos. No necesita
+## ver a los enemigos: la colonia llega a todas partes.
 ##
-## El alcance se ve en el suelo ([member ring], como en Megabonk): un aro que gira despacio bajo quien
-## la lleva, del tamaño del aura, y que se aviva en cada pulso.
+## Su alcance se dibuja en el suelo, como en Megabonk: un aro que gira despacio bajo el jugador.
 
 ## Dibujo del alcance: un plano de 2 × 2 (radio 1) con [code]cologne_ring.gdshader[/code] (su
 ## parámetro de instancia [code]pulse[/code] lo aviva). Va suelto en el mundo

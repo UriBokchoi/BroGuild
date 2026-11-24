@@ -1,11 +1,10 @@
 class_name ForestBuilder
 extends RefCounted
-## Construye el bosque de un mapa generado ([LevelLayout], [ForestData]): árboles sueltos que
-## esquivan el claro y las piezas, un anillo denso junto a las paredes (con colisión) y una banda
-## grande fuera de ellas (sin colisión). Los dibuja por trozos de [member ForestData.chunk_size]
-## metros, cada uno con cinco MultiMesh (tronco y copas: pocas llamadas de dibujo para cientos de
-## árboles, y los trozos que no se ven no se dibujan), y les da un solo cuerpo con un cilindro por
-## tronco.
+## Construye el bosque de un mapa generado: árboles sueltos que esquivan el claro y las piezas, un
+## anillo denso junto a las paredes (que choca) y una banda grande fuera (que no).
+##
+## Se dibuja con MultiMesh, por trozos: muchos árboles con pocas llamadas de dibujo, y los trozos que
+## no se ven no se dibujan. Los troncos que chocan comparten un solo cuerpo.
 
 ## Modelo del árbol (como el de una escena): tronco, tres conos de pino y la copa redonda; cada
 ## parte, su radio arriba, su radio abajo, su alto y la altura de su centro.

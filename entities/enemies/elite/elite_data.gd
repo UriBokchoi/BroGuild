@@ -1,10 +1,7 @@
 class_name EliteData
 extends Resource
-## Cómo es un élite: lo que mejora sobre el enemigo normal (vida, daño al tocar y de sus armas,
-## experiencia y oro que suelta…), cuánto más grande es y su brillo. Cualquier enemigo puede salir
-## élite ([method Enemy.promote]); la probabilidad la decide quien lo saca
-## ([member WaveData.elite_chance]). Los valores viven en [code]data/enemies/elite.tres[/code]; aquí
-## todo es neutro a propósito.
+## Cómo es un élite: lo que mejora sobre el enemigo normal, cuánto más grande es y su brillo.
+## Cualquier enemigo puede salir élite; la probabilidad la decide quien lo saca.
 
 ## Modificadores sobre sus stats y las de sus armas: cada uno va adonde exista su stat
 ## ([code]max_health[/code] a su vida, [code]damage[/code] a sus armas…).

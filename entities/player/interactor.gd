@@ -1,10 +1,7 @@
 class_name Interactor
 extends Area3D
-## Zona alrededor del jugador que detecta [Interactable]: elige el más cercano, avisa de qué se
-## puede hacer ([code]EventBus.interaction_prompt_changed[/code], para el HUD; también si su texto
-## cambia mientras está cerca), le dice que es el elegido ([method Interactable.set_focused]) y lo
-## activa al pulsar «interactuar». Su máscara de física es
-## [code]interactable[/code].
+## La zona alrededor del jugador que detecta lo que se puede usar: elige lo más cercano, avisa al HUD
+## de qué se puede hacer y lo usa al pulsar «interactuar».
 
 ## Quien interactúa (el jugador): es lo que recibe el [Interactable].
 @export var body: Node3D

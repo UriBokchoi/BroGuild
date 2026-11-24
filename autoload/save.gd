@@ -1,11 +1,9 @@
 extends Node
-## Lo que dura entre partidas, guardado en [code]user://[/code]: las opciones ([GameSettings]), que
-## al arrancar carga y aplica, la clasificación de partidas ([Leaderboard]) y lo descubierto para el
-## Archivo ([Discoveries]). Los desbloqueos llegarán más adelante.
-## Arrancado con [code]-- --no-save[/code] (lo hace [code]tools/validate.sh[/code] al jugar un nivel),
-## récords y Archivo van a archivos de prueba ([method use_scratch_files]): probar el juego no
-## ensucia lo de verdad.
-## Sin lógica de gameplay.
+## Lo que se guarda entre partidas (en user://): las opciones, los récords y lo descubierto para el
+## Archivo. Al arrancar carga las opciones y las aplica.
+##
+## Con «-- --no-save» (lo usa tools/validate.sh) los récords y el Archivo van a archivos de prueba:
+## probar el juego no ensucia lo de verdad.
 
 const SETTINGS_DATA := preload("res://data/settings/settings.tres")
 ## Argumento de línea de órdenes (tras [code]--[/code]) para no tocar récords ni Archivo.

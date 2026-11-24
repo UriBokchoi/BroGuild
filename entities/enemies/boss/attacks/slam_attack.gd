@@ -1,10 +1,8 @@
 class_name SlamAttack
 extends BossAttack
-## Porrazo en área (el del Trolleador Cara): se planta y levanta el arma mientras dos aros en el suelo
-## avisan. Uno marca hasta dónde llega el golpe; el otro se abre desde sus pies y, cuando llega al
-## borde, cae el porrazo. Entonces suelta una [Shockwave] rápida, que daña su contacto ×
-## [member damage_factor] a todo lo que pille dentro. Se esquiva saliendo del aro a tiempo (o
-## saltando justo cuando cae). Después se queda un momento quieto, con el arma abajo.
+## Porrazo en área (el del Trolleador Cara): se planta y levanta el arma mientras dos aros avisan; uno
+## marca hasta dónde llega y el otro se abre desde sus pies. Cuando llega al borde, cae el golpe y
+## daña todo lo de dentro. Se esquiva saliendo a tiempo o saltando justo al caer.
 
 enum Phase { WINDUP, SWING, RECOVERY }
 

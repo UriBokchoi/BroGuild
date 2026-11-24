@@ -1,10 +1,8 @@
 class_name KnockbackReceiver
 extends Node
-## Empuje de los golpes que recibe el jugador (el contacto de un enemigo, la embestida o la onda del
-## jefe): suma el [member DamageInfo.knockback] de cada golpe que le hace daño (o que le llega en sus
-## segundos de invulnerabilidad; esquivado, no) y lo va soltando sobre [member body], frenándose a
-## [member decay] m/s². Va aparte de la velocidad del movimiento: los estados no tienen que saber de
-## él.
+## El empuje de los golpes que recibe el jugador: suma el de cada golpe y lo va soltando sobre el
+## cuerpo mientras frena. Va aparte de la velocidad del movimiento, así los estados no tienen que
+## saber de él.
 
 ## Cuerpo que se desplaza.
 @export var body: CharacterBody3D

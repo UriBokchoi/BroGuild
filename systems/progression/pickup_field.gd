@@ -1,14 +1,11 @@
 class_name PickupField
 extends Node3D
-## Recogibles en el suelo (gemas de experiencia, oro…). Los saca de un pool por tipo ([method drop])
-## y los deja en el suelo. Cuando [member collector] (el jugador) está a menos de su radio de
-## recogida (su stat [code]pickup_range[/code]), o nada más salir si son de recogida automática
-## ([member PickupData.auto_collect]), vuelan hacia él acelerando y, al llegar, se recogen: avisa por
-## [code]EventBus.pickup_collected[/code] (y, si tienen texto, [code]EventBus.announced[/code]) y
-## vuelven al pool. Todos se mueven en un único bucle; no usan física. Cada [member merge_interval]
-## segundos junta los del mismo tipo que esperan juntos en el suelo
-## ([member PickupData.merge_radius]): el de más valor se queda con la suma y los demás vuelven al
-## pool.
+## Los recogibles del suelo (gemas, oro, power-ups). Los saca de un pool por tipo (drop); cuando el
+## jugador se acerca a su radio de recogida, o nada más salir si son automáticos, vuelan hacia él y
+## se recogen. Todos van en un solo bucle, sin física.
+##
+## De vez en cuando junta los del mismo tipo que están juntos en el suelo en uno solo con la suma:
+## así no se acumulan cientos de gemas.
 
 ## Quien recoge (el jugador).
 @export var collector: Node3D

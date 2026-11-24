@@ -1616,3 +1616,10 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
 ## 2026-11-24 · Polvo de los pasos
 - **Decisión:** a cada paso (`BodyBob.stepped`) sale un soplo pequeño de polvo a los pies (`StepDust`, 6 partículas en 0,45 s), un pie a cada lado de la marcha. Cuanto más rápido, más polvo: un 40 % de las partículas a la rapidez mínima y todas a la de carrera. Andando muy despacio, por debajo del 40 % de la carrera, nada. Solo sale con los pies en el suelo, porque `BodyBob` solo avisa de los pasos ahí.
 - **Por qué:** lo pidió el diseñador para el final del Hito 5. Remata la sensación de correr del balanceo sin tapar nada.
+
+## 2026-11-24 · Repaso de los comentarios
+- **Decisión:** se reescriben las cabeceras de clase de 97 scripts (las de 5 o más líneas) para que se lean como escritas a mano: qué es y cómo se usa, en frases llanas y en 2–5 líneas, con muy pocas referencias de documentación (`[member …]`, `[code]…[/code]`). El detalle que ya está en `docs/MAPA.md` (qué señales escucha, qué variaciones del tema usa) sale de la cabecera. Quedan unas 260 líneas de comentario menos.
+  - Solo cambian comentarios: un script compara cada archivo antes y después sin sus líneas de comentario y sin las vacías, y tienen que ser iguales.
+  - Los comentarios de una línea de cada `@export` se quedan: son la ayuda del inspector. También los bloques largos dentro de las funciones que explican el porqué (por qué trepan los de atrás y no los de delante, por qué el veneno se cuenta en ticks…).
+  - La norma queda en `CLAUDE.md` para el código nuevo.
+- **Por qué:** lo pidió el diseñador. Las cabeceras largas, llenas de referencias, se leían como texto generado y escondían lo importante.

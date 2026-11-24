@@ -1,18 +1,11 @@
 class_name BossEncounter
 extends Node
-## El jefe del nivel (GDD §9). Cuenta las llaves que coge el jugador
-## ([signal EventBus.boss_key_collected]) y avisa de cuántas lleva
-## ([signal EventBus.boss_keys_changed]). Cuando su portal lo pide
-## ([signal EventBus.boss_summon_requested]) con las llaves suficientes, o sin ellas al acabar la
-## ronda, saca al jefe ahí con el escalado de la dificultad de ese momento, lo anuncia y pasa al HUD
-## su vida; sus refuerzos salen por el director ([method WaveDirector.spawn_around]).
+## El jefe del nivel (GDD §9). Cuenta las llaves del jugador y saca al jefe cuando su portal lo pide
+## (con las llaves, o sin ellas al acabar la ronda), más fuerte cuanto más alta sea la dificultad.
 ##
-## Al vencerlo llega el premio (oro × lo pronto que cayó, como un recogible, y un objeto pasivo de
-## rareza alta que el HUD revela), se avisa ([signal EventBus.boss_defeated]: su portal se abre) y
-## unos textos explican que hay que cruzarlo. Las oleadas siguen. La partida se gana
-## ([signal EventBus.run_won]) al cruzar el portal ([signal EventBus.level_exit_reached]) o, si el
-## jugador muere pasado el final de la ronda con el jefe ya vencido, también: entonces paran las
-## oleadas y se retiran los enemigos. Sin [member data], el nivel no tiene jefe.
+## Al vencerlo da el premio y su portal se abre, pero las oleadas siguen. Se gana la partida al
+## cruzar el portal, o muriendo pasado el final de la ronda con el jefe ya vencido. Sin data, el
+## nivel no tiene jefe.
 
 ## El jefe de este nivel (lo pone [RunSystems]).
 @export var data: BossData

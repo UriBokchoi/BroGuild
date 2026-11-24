@@ -1,10 +1,8 @@
 class_name Player
 extends CharacterBody3D
-## Jugador: monta el contexto de movimiento, avanza la máquina de estados y mueve el cuerpo.
-## Lleva un personaje ([CharacterData]: su base de stats, su arma inicial, su pasiva y su aspecto).
-## Avisa a la interfaz de su vida, su experiencia, su oro, su dificultad, sus armas y runas y su
-## muerte (al morir se queda quieto y sus armas paran); al subir de nivel aleja la cámara. Las
-## mecánicas van en sus estados y componentes, nunca aquí (CLAUDE.md, «Nunca»).
+## El jugador: arma el contexto del movimiento, avanza su máquina de estados y mueve el cuerpo. Lleva
+## un personaje (stats, arma inicial, pasiva y aspecto) y avisa a la interfaz de lo que le pasa. Las
+## mecánicas van en sus estados y componentes, no aquí.
 
 ## Modelo que viste con el color y las piezas de su personaje.
 @export var model: CharacterModel

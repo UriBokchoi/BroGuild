@@ -1,10 +1,8 @@
 class_name ScreenShake
 extends Node
-## Temblor de cámara al recibir daño. Cada golpe a [member health] suma «trauma» según la parte de
-## la vida que quita (con un mínimo, para que hasta un roce se note) y el trauma baja solo. La cámara
-## se desplaza ([member Camera3D.h_offset], [member Camera3D.v_offset]) y se inclina tanto como el
-## trauma al cuadrado, con ruido suave: un roce apenas la mueve y un golpe fuerte la sacude. También
-## tiembla con los golpes fuertes del propio jugador ([member blasts]). Solo visual.
+## Temblor de cámara por «trauma»: cada golpe suma más cuanto más vida quita (con un mínimo, para que
+## hasta un roce se note) y baja solo. El temblor crece con el trauma al cuadrado: un roce apenas
+## mueve la cámara y un golpe fuerte la sacude. También tiembla con los golpes fuertes del jugador.
 
 ## Cámara que tiembla.
 @export var camera: Camera3D

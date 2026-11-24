@@ -1,11 +1,7 @@
 class_name LoadoutBar
 extends VBoxContainer
-## Armas y runas del jugador en el HUD, debajo del oro: una fila de ranuras por tipo con el icono y
-## el nivel de lo que lleva, en el orden en que lo consiguió. Las ranuras abiertas sin nada se ven
-## vacías y las que aún no se han desbloqueado, cerradas con un candado. Cuántas hay sale de
-## [LevelUpData]; cuántas están abiertas y qué lleva, de [signal EventBus.player_slots_changed] y
-## [signal EventBus.player_item_changed]. Estilo: variaciones [code]LoadoutBar[/code] y
-## [code]LoadoutRow[/code] (y las de [LoadoutSlot]) del Theme global.
+## Las armas y runas del jugador en el HUD: una fila de ranuras por tipo, con icono y nivel, en el
+## orden en que se consiguieron. Las ranuras aún cerradas llevan un candado.
 
 ## Cuántas ranuras hay de cada tipo.
 @export var level_up: LevelUpData

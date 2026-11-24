@@ -1,10 +1,8 @@
 class_name GameSettings
 extends RefCounted
-## Opciones que ha elegido el jugador: idioma, volumen de cada bus, pantalla completa, tamaño de la
-## ventana, VSync, límite de FPS y cuánto tiembla la pantalla. Se guardan en un [ConfigFile] ([method write_to] y
-## [method read_from]) y se aplican al motor ([method apply_locale], [method apply_audio] y
-## [method apply_display]); el temblor lo lee [ScreenShake]. El autoload [code]Save[/code] las carga
-## y las aplica al arrancar.
+## Las opciones del jugador: idioma, volumen, pantalla completa, tamaño de ventana, VSync, límite de
+## FPS y temblor de pantalla. Se guardan en un ConfigFile y se aplican al motor; Save las carga y las
+## aplica al arrancar.
 
 const SECTION_AUDIO := "audio"
 const SECTION_DISPLAY := "display"

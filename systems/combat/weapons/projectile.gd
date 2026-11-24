@@ -1,11 +1,8 @@
 @abstract
 class_name Projectile
 extends Node3D
-## Proyectil de un [ProjectileWeapon]. Vuela recto y en cada tick traza un rayo del tramo que
-## recorre, así no atraviesa nada aunque vaya muy rápido (y no necesita un Area3D). Al dar a una
-## [HurtboxComponent] llama a [method _impact]; al dar al mundo, a [method _impact_world]; al acabar
-## su vida (la duración del arma), termina. Se reutiliza (pool): al terminar se oculta y avisa con
-## [signal finished].
+## Un proyectil. Vuela recto y cada tick traza un rayo por el tramo que recorre, así no atraviesa
+## nada aunque vaya muy rápido. Se reutiliza: al terminar se oculta y avisa con finished.
 
 signal finished
 

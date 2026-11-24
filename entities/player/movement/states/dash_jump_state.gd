@@ -1,10 +1,8 @@
 class_name DashJumpState
 extends MovementState
-## Dash-jump: Espacio justo después de un dash hecho en el suelo (ventana
-## [code]dash_jump_window[/code], con aviso visual). Salto largo que recupera la velocidad del
-## dash en su dirección; el control aéreo la conserva. Gasta stamina además del dash. En la
-## escena va por encima del doble salto y del slide-jump, y puede interrumpir al slide (dash →
-## slide → dash-jump). Pasa al aire en el mismo tick.
+## Dash-jump: Espacio justo después de un dash en el suelo (hay un aviso visual de la ventana). Un
+## salto largo que recupera la velocidad del dash; gasta stamina además del dash. Puede cortar el
+## slide (dash → slide → dash-jump).
 
 
 func can_enter() -> bool:

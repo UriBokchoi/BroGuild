@@ -75,6 +75,7 @@ Objetivo: 60 fps estables con 300+ enemigos. Enemigos con steering simple (sin `
 - Nombra la mecánica, no la temática: `currency`, `streak`, `pot`; nunca nombres de la temática como `chips` o `la_banca` (ver `docs/DECISIONES.md`).
 - Funciones cortas (≈ menos de 40 líneas) y scripts con una sola responsabilidad (≈ menos de 300 líneas). Si crece, divide.
 - Comentarios para el *por qué*, no el *qué*. Docstrings `##` en clases y métodos públicos.
+- Cabeceras de clase cortas y en lenguaje llano: qué es y cómo se usa, en 2–5 líneas. El detalle (señales, quién escucha, estilos del tema) va en `docs/MAPA.md`. Pocas referencias `[member …]`/`[code]…[/code]`: un nombre basta si se entiende.
 - Sin código muerto ni `print()` de depuración en los commits. A la segunda vez que copias algo, extráelo.
 
 ## Archivos de Godot

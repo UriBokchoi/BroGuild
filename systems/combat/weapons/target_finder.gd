@@ -1,11 +1,8 @@
 class_name TargetFinder
 extends RefCounted
-## Busca objetivos para un arma: las hurtbox de la capa indicada más cercanas a un punto, dentro de
-## un radio, y (con [member sight_mask]) solo las que se ven desde ese punto: un rayo hasta su centro
-## no puede chocar antes con el mundo (un árbol, una meseta, una ruina). Hace una sola consulta de
-## física por búsqueda; con muchos enemigos dentro del radio, solo mira los primeros
-## [member max_candidates] que devuelve la física. Los rayos de vista se tiran del más cercano al
-## más lejano y solo hasta tener los que hacen falta.
+## Busca objetivos para un arma: los más cercanos a un punto dentro de un radio y, si se le pide,
+## solo los que se ven desde ahí (sin un árbol o una meseta en medio). Hace una sola consulta de
+## física por búsqueda y los rayos de vista solo hasta tener los que hacen falta.
 
 ## Capas de física de los objetivos (p. ej. [code]enemy_hurtbox[/code]).
 var mask: int = 0

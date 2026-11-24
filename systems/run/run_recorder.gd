@@ -1,12 +1,10 @@
 class_name RunRecorder
 extends Node
-## Apunta lo que pasa en la partida en un [RunStats], escuchando el [code]EventBus[/code]: enemigos
-## y élites derrotados, daño infligido, oro ganado, nivel y tiempo. El tiempo es el del reloj de la
-## ronda mientras hay una en marcha; si no, el que lleva el nivel. Deja de apuntar al morir el
-## jugador o al ganar la partida ([signal EventBus.run_won], con el premio por rapidez del jefe), así
-## los resultados se quedan como estaban en ese momento. La muerte se apunta al final del fotograma:
-## si esa muerte cuenta como victoria (prórroga con el jefe vencido), se apunta la victoria.
-## Al acabar la partida (si [member record_runs]), la apunta en la clasificación ([code]Save[/code]).
+## Apunta lo que pasa en la partida (enemigos, élites, daño, oro, nivel y tiempo) escuchando el
+## EventBus. Deja de apuntar al morir o al ganar, para que los resultados se queden como estaban, y
+## al final guarda la partida en los récords (si record_runs).
+##
+## La muerte se atiende al final del fotograma: si cuenta como victoria, se apunta la victoria.
 
 ## Jugador de la partida (su personaje, para la clasificación).
 @export var player: Player

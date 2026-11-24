@@ -1,11 +1,8 @@
 class_name SynergyWave
 extends Node
-## Mejora de movimiento que suelta una [Shockwave] desde los pies del jugador: al entrar en
-## [member enter_state] (la onda del dash) o al aterrizar de [member slam_state] (la explosión de la
-## caída rápida). Daña [member damage_stat] (0 sin su objeto: entonces no sale nada) con el daño % y
-## el crítico del jugador, y su radio crece con el área %. Tiene [member pool_size] ondas, por si se
-## encadenan; si todas están en marcha, reinicia la primera. Al soltarla lo avisa por
-## [signal EventBus.synergy_released] (el sonido) y por [signal released] (el temblor de pantalla).
+## Una mejora de movimiento que suelta una onda desde los pies: al hacer el dash, o al aterrizar de
+## la caída rápida. Sin el objeto que la da (su daño a 0), no sale nada. Usa el daño % y el crítico
+## del jugador, y crece con el área.
 
 ## Se soltó una onda desde [param at], que hace temblar la pantalla [param trauma].
 signal released(at: Vector3, trauma: float)

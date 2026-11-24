@@ -1,10 +1,8 @@
 class_name Interactable
 extends Area3D
-## Algo con lo que se interactúa pulsando «interactuar» cerca (una armería, un cofre, una
-## tragaperras…). Un [Interactor] lo detecta, muestra [member prompt_key] y lo activa; qué pasa
-## al activarlo lo decide quien escucha [signal interacted]. Su capa de física es
-## [code]interactable[/code]. Avisa de si es el que se usaría ahora ([signal focus_changed]) y de si
-## se puede usar ([signal enabled_changed]), para el aviso visual ([InteractHint]).
+## Algo que se usa con «interactuar» de cerca (un cofre, una tragaperras…). El Interactor del jugador
+## lo detecta y lo activa; qué pasa lo decide quien escucha interacted. Avisa de si es el elegido y
+## de si se puede usar, para el destello.
 
 ## Lo activó [param by] (quien interactúa, p. ej. el jugador).
 signal interacted(by: Node3D)

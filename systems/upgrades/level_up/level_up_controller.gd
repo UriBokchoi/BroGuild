@@ -1,14 +1,11 @@
 class_name LevelUpController
 extends Node
-## Al subir de nivel el jugador ([code]EventBus.player_leveled_up[/code]), le ofrece la elección
-## ([LevelUpPanel]) y aplica la opción elegida a sus armas o runas. También cuando se pide una mejora
-## gratis ([code]EventBus.upgrade_choice_requested[/code], la tragaperras), con su propio título. Si
-## llegan varias de golpe, una elección tras otra, por orden. Si no queda nada que ofrecer, o el
-## jugador ha muerto, no pregunta. «Volver a tirar» cobra oro al jugador (cada vez más en la
-## partida, [method LevelUpData.reroll_cost_at]) y ofrece otras cartas para la misma elección.
-## El doble o nada: con la probabilidad de los datos y la Suerte del jugador
-## ([method LevelUpData.double_chance_with]), la mejora apostada sube a la rareza siguiente (se vuelve
-## a tirar con su fuerza); si no, esa subida no da nada.
+## Al subir de nivel, ofrece las cartas (LevelUpPanel) y aplica la elegida a las armas o runas del
+## jugador. Lo mismo con las mejoras gratis de la tragaperras. Si llegan varias a la vez, van en
+## cola; si no queda nada que ofrecer o el jugador ha muerto, no pregunta.
+##
+## Volver a tirar cuesta oro, cada vez más. En el doble o nada, la mejora apostada sube a la rareza
+## siguiente con una probabilidad que mejora la Suerte; si sale mal, esa subida se pierde.
 
 @export var data: LevelUpData
 @export var player: Player

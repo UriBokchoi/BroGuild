@@ -1,10 +1,7 @@
 class_name HitFlash
 extends Node
-## Destello blanco y breve al recibir un golpe: pone [member material] como capa encima de los
-## modelos de [member visual] ([member GeometryInstance3D.material_overlay]) durante [member duration]
-## y luego deja la capa que hubiera (el brillo de un élite). Cada golpe lo vuelve a encender. Escucha
-## la vida (juice desacoplado) y solo trabaja mientras destella: con cientos de enemigos quietos no
-## cuesta nada.
+## Destello blanco breve al recibir un golpe, como capa encima del modelo; luego deja la que hubiera
+## (el brillo de un élite). Solo trabaja mientras destella: con cientos de enemigos no cuesta nada.
 
 ## Vida cuyos golpes lo encienden.
 @export var health: HealthComponent

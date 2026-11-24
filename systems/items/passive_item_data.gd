@@ -1,10 +1,8 @@
 class_name PassiveItemData
 extends StatModifierSet
-## Objeto pasivo de la partida (GDD §6): sale de los cofres, de los círculos de setas y de los jefes,
-## tiene una rareza fija, no ocupa ranura y se apila: cada copia vuelve a sumar sus
-## [member StatModifierSet.stat_modifiers] y la probabilidad de sus efectos al golpear
-## ([member on_hit]). Viven en [code]data/items/[/code]: un objeto nuevo es un [code].tres[/code] más,
-## sin código.
+## Un objeto pasivo (GDD §6): sale de cofres, círculos de setas y jefes, tiene una rareza fija, no
+## ocupa ranura y se apila: cada copia suma otra vez sus stats y la probabilidad de sus efectos al
+## golpear. Un objeto nuevo es un .tres más en data/items/, sin código.
 
 ## Identificador estable.
 @export var id: StringName = &""

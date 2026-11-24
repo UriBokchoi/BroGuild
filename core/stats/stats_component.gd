@@ -1,14 +1,13 @@
 class_name StatsComponent
 extends Node
-## Stats de una entidad. Convierte en stats los números exportados de sus Resources de datos
-## (ver [method StatBlock.define_from_resource]) y mantiene una copia «resuelta» de cada uno
-## con los modificadores ya aplicados, para leerla con tipo:
+## Las stats de una entidad. Convierte en stats los números exportados de sus recursos de datos y
+## guarda una copia de cada recurso con los modificadores ya aplicados, para leerla con tipo:
 ## [codeblock]
 ## var move := stats.get_resolved(MovementData) as MovementData
 ## velocity = direction * move.run_speed
 ## [/codeblock]
-## Las stats existen desde que el nodo entra en el árbol, antes de cualquier
-## [code]_ready[/code]: cualquier nodo de la escena puede leerlas en el suyo, esté donde esté.
+## Las stats existen desde que entra en el árbol, antes de cualquier _ready: así cualquier nodo de
+## la escena puede leerlas en el suyo.
 
 ## Cambió una stat. Cuando llega, la copia resuelta ya tiene el valor nuevo.
 signal stat_changed(stat: StringName, value: float, previous: float)

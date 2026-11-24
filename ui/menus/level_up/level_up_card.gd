@@ -1,15 +1,10 @@
 class_name LevelUpCard
 extends Button
-## Carta de una opción al subir de nivel: su icono, qué es (arma o runa), su nombre, «Nuevo» o el
-## nivel al que sube, su descripción y lo que mejora (con las stats a las que va, cómo queda cada una:
-## «Daño 18 → 22»).
-## Las mejoras llevan su rareza: el borde de la carta y su nombre van del color de la rareza
-## ([member Rarity.color]). Se pulsa entera.
+## Una carta al subir de nivel: icono, tipo (arma o runa), nombre, «Nuevo» o el nivel al que sube,
+## descripción y lo que mejora («Daño 18 → 22»). Las mejoras se pintan del color de su rareza.
 ##
-## La ruleta ([method spin]): una carta de mejora gira por las rarezas, cada vez más despacio, y se
-## para en la suya; mientras gira no se puede elegir ni se ve lo que mejora. Avisa de cada paso
-## ([signal EventBus.upgrade_spin_ticked]) y de la rareza en la que cae
-## ([signal EventBus.upgrade_revealed]), para el sonido.
+## Con spin, una carta de mejora gira por las rarezas y frena hasta caer en la suya; mientras gira
+## no se puede elegir ni se ve lo que mejora. Avisa de cada paso y de dónde cae para el sonido.
 
 ## Alto del icono.
 const ICON_HEIGHT := 72.0

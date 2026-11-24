@@ -1,9 +1,7 @@
 extends Node3D
-## Escena de estrés (ROADMAP: se repite al cerrar cada hito). Mantiene [member counts] enemigos a la
-## vez, una cantidad tras otra, persiguiendo a un jugador quieto e inmortal que lleva un arma, y
-## mide los frames: media, el 1 % más lento y el tiempo de física. Muestra y escribe los resultados
-## y, si [member quit_when_done], sale. Se ejecuta con ventana (F6 o por terminal): sin V-Sync ni
-## límite de fps, para medir lo que da la máquina. La semilla es fija: las pruebas se repiten igual.
+## La prueba de estrés (se repite al cerrar cada hito): mantiene muchos enemigos a la vez contra un
+## jugador quieto e inmortal y mide los fotogramas (media, el 1 % más lento y la física). Va sin
+## VSync ni límite de FPS para medir lo que da la máquina, y con semilla fija para que se repita.
 
 @export var player: Player
 @export var swarm: EnemySwarm

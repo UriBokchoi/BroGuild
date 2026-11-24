@@ -1,10 +1,8 @@
 class_name LevelLayout
 extends Node3D
-## Mapa generado al cargar el nivel, distinto en cada partida (con la semilla de la partida, flujo
-## [code]LAYOUT[/code] de [code]Rng[/code]): reparte las piezas de [member data] por el suelo (las
-## grandes primero) sin que se pisen ni invadan el claro del centro, pone encima de algunas las que
-## van arriba (tragaperras en las mesetas) y construye el bosque alrededor ([ForestBuilder]). El
-## centro de este nodo es el centro del mapa y el punto de aparición.
+## El mapa que se genera al cargar, distinto en cada partida: reparte las piezas por el suelo (las
+## grandes primero) sin pisarse ni invadir el claro, pone las que van encima de las mesetas y
+## construye el bosque alrededor. Su centro es el centro del mapa y el punto de aparición.
 
 ## Se terminó de generar.
 signal generated

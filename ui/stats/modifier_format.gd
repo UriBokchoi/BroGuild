@@ -1,10 +1,8 @@
 class_name ModifierFormat
 extends RefCounted
-## Describe un [StatModifier] para mostrarlo con el nombre traducido de su stat: «+10 % Daño»,
-## «+20 Vida máxima», «×0.8 Tiempo entre ataques». Lo que suma lleva la unidad de la stat si la
-## tiene clara ([method StatFormat.range_hint]): «+10 % Probabilidad de crítico», «+0.5 m/s …».
-## Con las stats a las que se aplicaría, también cuánto cambia: «Daño 18 → 22» ([method describe_changes])
-## o solo «18 → 22» ([method changes]).
+## Describe un modificador con el nombre traducido de su stat y su unidad: «+10 % Daño», «+20 Vida
+## máxima», «×0,8 Tiempo entre ataques». Con las stats a las que iría, también cuánto cambia:
+## «Daño 18 → 22».
 
 
 static func describe(modifier: StatModifier) -> String:

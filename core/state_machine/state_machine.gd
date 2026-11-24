@@ -1,17 +1,14 @@
 class_name StateMachine
 extends Node
-## Máquina de estados genérica: sus hijos [State] son los estados, con uno activo cada vez.
-## Su dueño la arranca con [method start] y la avanza con [method physics_update].
+## Máquina de estados: sus hijos State son los estados y hay uno activo cada vez. Su dueño la arranca
+## con start y la avanza con physics_update.
 ##
-## Además de las transiciones que piden los estados, gestiona acciones ([method request]),
-## pulsadas por el jugador o pedidas por una IA:
-## [br]- Gana la primera pulsación que puede ejecutarse. Entra como mucho una por tick; las
-##   demás esperan su turno mientras no caduquen ([member buffer_time]).
-## [br]- Entre estados de la misma acción entra el de mayor prioridad que pueda.
-## [br]- Un estado comprometido no se interrumpe, salvo por estados que cancelan
-##   ([member State.cancels_committed]) o que lo listan en [member State.interrupts].
-## [br]- Lo que se pide durante un estado comprometido se guarda si le quedan
-##   [member committed_end_buffer] segundos o menos; si no, se descarta.
+## Además de las transiciones que piden los estados, atiende acciones (request), las pulse el jugador
+## o una IA:
+## [br]- Gana la primera que se puede hacer; entra una por tick y las demás esperan hasta caducar.
+## [br]- Si varios estados responden a la misma acción, entra el de más prioridad.
+## [br]- Un estado comprometido no se corta, salvo por los que cancelan o lo interrumpen.
+## [br]- Lo pedido al final de un estado comprometido se guarda; lo pedido antes, se pierde.
 
 ## Cambió el estado activo. [param previous] es null al arrancar.
 signal state_changed(previous: State, current: State)

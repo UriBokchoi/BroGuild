@@ -1,11 +1,8 @@
 class_name ThrowingAxe
 extends Projectile
-## Hacha arrojadiza: sale girando hacia su objetivo y atraviesa a todos los enemigos que pilla (a cada
-## uno, una vez por tramo): los que cruza y los que pasan a menos de [member edge_radius] (por el área
-## del arma) de ella, que el hacha gira tumbada y corta a lo ancho. Al pasar
-## [member outward_share] de su vida, o si choca con el mundo, da la vuelta: persigue a quien la lanzó,
-## vuelve a golpear a lo que pille y atraviesa el mundo. Termina al llegar a sus manos (o, por si no
-## puede volver, al acabar su vida de vuelta). Se ve más grande con el área.
+## Hacha arrojadiza: sale girando tumbada hacia su objetivo y corta a todo lo que cruza o le pasa
+## cerca del filo. A medio camino, o si choca con el mundo, da la vuelta y vuelve a la mano cortando
+## otra vez. Crece con el área.
 
 ## Lo que gira (el hacha, tumbada: gira en horizontal, como un aspa).
 @export var spin: Node3D
