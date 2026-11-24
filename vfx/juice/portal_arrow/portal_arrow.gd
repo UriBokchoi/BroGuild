@@ -1,12 +1,16 @@
 class_name PortalArrow
 extends Node3D
-## Flecha amarilla que señala el portal del jefe cuando se abre ([signal EventBus.boss_portal_opened]):
-## durante [member show_time] segundos flota a un lado de [member target] (el jugador), en la
-## dirección del portal y apuntando a él, con un pequeño vaivén; al final se desvanece. Solo visual.
-## Vive en el mundo ([code]top_level[/code]): no gira con el jugador.
+## Flecha que señala algo que acaba de aparecer (el portal del jefe, el heraldo del Gremio): durante
+## [member show_time] segundos flota a un lado de [member target] (el jugador), en su dirección y
+## apuntando a él, con un pequeño vaivén; al final se desvanece. Solo visual. Vive en el mundo
+## ([code]top_level[/code]): no gira con el jugador.
 
 ## A quién acompaña (el jugador).
 @export var target: Node3D
+## Aviso del EventBus que la enciende: uno que lleva dónde señalar ([code]at: Vector3[/code]).
+@export var event: StringName = &"boss_portal_opened"
+## Color de la flecha.
+@export var color: Color = Color(1.0, 0.85, 0.2, 1.0)
 ## Las mallas de la flecha (apunta hacia −Z), para desvanecerlas.
 @export var meshes: Array[GeometryInstance3D] = []
 ## Segundos que se ve.
@@ -25,11 +29,16 @@ var _left: float = 0.0
 
 
 func _enter_tree() -> void:
-	if not EventBus.boss_portal_opened.is_connected(point_at):
-		EventBus.boss_portal_opened.connect(point_at)
+	var opened := Signal(EventBus, event)
+	if not opened.is_connected(point_at):
+		opened.connect(point_at)
 
 
 func _ready() -> void:
+	for mesh: GeometryInstance3D in meshes:
+		var material := (mesh as MeshInstance3D).mesh.surface_get_material(0).duplicate() as StandardMaterial3D
+		material.albedo_color = color
+		mesh.material_override = material
 	top_level = true
 	visible = false
 	set_process(false)

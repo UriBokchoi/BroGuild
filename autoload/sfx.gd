@@ -44,6 +44,7 @@ func _ready() -> void:
 	EventBus.enemy_died.connect(func(_enemy: Enemy) -> void: play(bank.enemy_died))
 	EventBus.boss_spawned.connect(func(_name: StringName) -> void: play(bank.boss_spawned))
 	EventBus.mini_boss_spawned.connect(func(_name: StringName) -> void: play(bank.mini_boss_spawned))
+	EventBus.herald_arrived.connect(func(_at: Vector3) -> void: play(bank.herald_arrived))
 	EventBus.boss_defeated.connect(func(_key: StringName, _seconds: float, _bonus: float) -> void: play(bank.boss_defeated))
 	EventBus.pickup_collected.connect(_on_pickup_collected)
 	EventBus.breakable_broken.connect(func(_data: BreakableData, _at: Vector3) -> void: play(bank.breakable_broken))

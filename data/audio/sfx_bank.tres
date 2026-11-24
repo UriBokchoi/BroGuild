@@ -228,6 +228,7 @@ enemy_hit = SubResource("Cue_enemy_hit")
 enemy_died = SubResource("Cue_enemy_died")
 boss_spawned = SubResource("Cue_boss_spawned")
 mini_boss_spawned = SubResource("Cue_mini_boss_spawned")
+herald_arrived = SubResource("Cue_level_up")
 boss_defeated = SubResource("Cue_boss_defeated")
 pickups = Dictionary[StringName, ExtResource("2_cue")]({
 &"bomb": SubResource("Cue_pickup_bomb"),

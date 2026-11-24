@@ -22,6 +22,8 @@ extends Resource
 @export var boss_spawned: SoundCue
 ## Llega un miniboss (el Trolleador Cara).
 @export var mini_boss_spawned: SoundCue
+## Llega un heraldo del Gremio.
+@export var herald_arrived: SoundCue
 @export var boss_defeated: SoundCue
 
 @export_group("pickups")

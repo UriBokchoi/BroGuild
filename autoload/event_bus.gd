@@ -132,3 +132,7 @@ signal target_locked(target: Node3D)
 ## Una pesa-santuario se cargó: ofrece elegir una de estas mejoras de stats (las enseña el
 ## StatChoicePanel).
 signal stat_choice_offered(offers: Array[StatOffer])
+## Llegó un heraldo del Gremio a [param at] (la flecha lo señala).
+signal herald_arrived(at: Vector3)
+## El heraldo ofrece elegir uno de [param pacts] o rechazarlos: lo atiende el [PactPanel].
+signal pact_offered(pacts: Array[PactData])

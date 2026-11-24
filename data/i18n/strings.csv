@@ -377,6 +377,26 @@ ITEM_CHOICE_SUBTITLE,Elige uno,Pick one
 STAT_CHOICE_TITLE,Las pesas te ofrecen…,The weights offer you…
 STAT_CHOICE_SUBTITLE,Elige una mejora,Pick an upgrade
 INTERACT_MUSHROOM_RING,Entrar en el círculo de setas,Step into the mushroom ring
+INTERACT_HERALD,Hablar con el heraldo,Talk to the herald
+HERALD_ARRIVED,¡Ha llegado un heraldo del Gremio!,A Guild herald has arrived!
+PACT_TITLE,Pactos del Gremio,Guild Pacts
+PACT_SUBTITLE,"Elige uno: su premio y su maldición duran toda la partida","Pick one: its reward and its curse last the whole run"
+PACT_REWARD,Premio,Reward
+PACT_CURSE,Maldición,Curse
+PACT_REJECT,Rechazar,Decline
+PACT_SEALED,Pacto sellado: %s,Pact sealed: %s
+PACT_EGO_LIFTING_NAME,Ego lifting,Ego lifting
+PACT_EGO_LIFTING_FLAVOR,Más peso del que puedes. ¿Qué puede salir mal?,More weight than you can lift. What could go wrong?
+PACT_ALL_IN_NAME,All in,All in
+PACT_ALL_IN_FLAVOR,"Todo al rojo, bro","Everything on red, bro"
+PACT_CHEAT_MEAL_NAME,Cheat meal,Cheat meal
+PACT_CHEAT_MEAL_FLAVOR,"Hoy no cuenta. Mañana, tampoco.","Today doesn't count. Neither does tomorrow."
+PACT_SHOWBOATING_NAME,Postureo,Showboating
+PACT_SHOWBOATING_FLAVOR,Lo importante es que se vea.,What matters is being seen.
+PACT_NO_DAYS_OFF_NAME,Sin días libres,No days off
+PACT_NO_DAYS_OFF_FLAVOR,El descanso es para los débiles.,Rest is for the weak.
+PACT_SKIP_LEG_DAY_NAME,Saltarse pierna,Skip leg day
+PACT_SKIP_LEG_DAY_FLAVOR,"Total, nadie mira las piernas.","Nobody looks at legs anyway."
 RECORDS_TITLE,Récords,Records
 RECORDS_SUBTITLE,"Tus mejores partidas en este equipo, por enemigos derrotados. En azul, la última.","Your best runs on this computer, by enemies defeated. In blue, the latest one."
 RECORDS_EMPTY,Aún no hay partidas. ¡A repartir!,No runs yet. Go get 'em!

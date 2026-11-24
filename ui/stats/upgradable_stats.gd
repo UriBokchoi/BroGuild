@@ -8,7 +8,7 @@ extends RefCounted
 
 ## Carpetas de datos donde hay cosas que cambian al jugador. No se mira todo [code]res://data[/code]:
 ## cargar un nivel o un mapa carga también sus escenas (más de un segundo). Si algo nuevo cambia al
-## jugador desde otra carpeta (los pactos), se añade aquí; un test avisa si falta alguna.
+## jugador desde otra carpeta, se añade aquí; un test avisa si falta alguna.
 const DIRS: Array[String] = [
 	"res://data/items",
 	"res://data/runes",
@@ -18,6 +18,7 @@ const DIRS: Array[String] = [
 	"res://data/slots",
 	"res://data/progression",
 	"res://data/player",
+	"res://data/pacts",
 ]
 ## Stats que cambian aunque no lo diga ningún dato (las cambia el código: la dificultad sube sola
 ## con el reloj de la ronda).

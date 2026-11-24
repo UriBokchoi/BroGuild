@@ -1,6 +1,6 @@
 extends GutTest
 ## Flecha del portal: al abrirse el portal del jefe aparece junto al jugador, hacia el portal y
-## apuntándole, y se va al acabar su tiempo.
+## apuntándole, y se va al acabar su tiempo. Otra, con su color, señala al heraldo del Gremio.
 
 const ArrowScene := preload("res://vfx/juice/portal_arrow/portal_arrow.tscn")
 
@@ -27,3 +27,17 @@ func test_points_at_the_portal_for_a_while() -> void:
 	assert_gt((-_arrow.global_basis.z).dot(Vector3.RIGHT), 0.99, "apunta al portal")
 	await wait_seconds(0.5)
 	assert_false(_arrow.is_showing(), "y se va")
+
+
+func test_another_arrow_points_at_the_herald_in_its_color() -> void:
+	var arrow := ArrowScene.instantiate() as PortalArrow
+	arrow.target = _target
+	arrow.event = &"herald_arrived"
+	arrow.color = Color.MAGENTA
+	add_child_autofree(arrow)
+	EventBus.boss_portal_opened.emit(Vector3(20.0, 0.0, 0.0))
+	assert_false(arrow.is_showing(), "el portal no le toca")
+	EventBus.herald_arrived.emit(Vector3(0.0, 0.0, 20.0))
+	assert_true(arrow.is_showing())
+	var material := (arrow.meshes[0] as GeometryInstance3D).material_override as StandardMaterial3D
+	assert_eq(material.albedo_color, Color.MAGENTA)

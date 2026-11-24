@@ -1669,3 +1669,26 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - Solo cuentan los enemigos derrotados; la velocidad del jugador no, de momento.
   - El HUD la enseña arriba en el centro, en naranja («Racha ×3 · 18 s»), con un salto al subir de nivel. Suena como la bebida energética hasta que tenga su sonido.
 - **Por qué:** lo pidió el diseñador: la racha como un momento de la partida (un power-up que te obliga a ir a por los enemigos), sin la gestión del botín.
+
+## 2026-11-24 · Pactos del Gremio con un heraldo
+- **Decisión:** cada 1000 enemigos derrotados llega un heraldo del Gremio (`HeraldSpawner`, datos en `data/pacts/herald.tres`). Aparece a 12–18 m del jugador, en el suelo y en un hueco libre, y mira al jugador.
+  - Avisa de tres formas: un texto en el HUD, una columna de luz morada y una flecha morada de 5 s (la misma `PortalArrow`, que ahora escucha el aviso que se le diga).
+  - Al hablarle ofrece 3 pactos distintos de 6. Cada pacto es un premio y una maldición, los dos modificadores de stats para el resto de la partida. Se elige uno o se rechazan todos, y el heraldo se va.
+  - Si no vas a hablarle, espera hasta el siguiente, que lo sustituye: solo hay uno a la vez.
+  - Los pactos van con nombres de cultura bro:
+
+    | Pacto | Premio | Maldición |
+    |---|---|---|
+    | Ego lifting | +30 % daño | −25 % vida máxima |
+    | All in | +30 Suerte | +4 dificultad |
+    | Cheat meal | +40 % experiencia | −10 % velocidad de carrera |
+    | Postureo | +60 % oro | −15 % daño |
+    | Sin días libres | +25 % velocidad de ataque | −50 % invulnerabilidad tras un golpe |
+    | Saltarse pierna | +10 % probabilidad de crítico | −20 % altura de salto |
+- **Detalles:**
+  - Las cartas enseñan el premio en verde y la maldición en rojo, cada uno con cómo queda la stat («Daño 100 % → 130 %»). Para eso el tema tiene dos estilos nuevos, `BoonLabel` y `CurseLabel`.
+  - Cada pacto sellado lleva su propio origen en las stats, así que se podría quitar uno suelto.
+  - Los pactos no dependen de la Suerte.
+  - El heraldo no sale sobre lo que sobresale (árboles, rocas grandes): busca el suelo a como mucho 3 m por encima o por debajo del jugador y comprueba que haya hueco.
+  - Suena como la subida de nivel hasta que tenga su sonido.
+- **Por qué:** lo pidió el diseñador: «usamos el heraldo del gremio que aparece cada 1000 enemigos». Los pactos son una apuesta más (Pilar 2), pero sin oro: arriesgas tu personaje. Un premio que se nota a cambio de algo que duele. Rechazar no cuesta nada, para que sea una decisión y no una trampa.

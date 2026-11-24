@@ -12,6 +12,8 @@ const SLATE := Color("1b1f29")
 const SLATE_LIGHT := Color("2b313e")
 const SLATE_HOVER := Color("394152")
 const MODIFIED := Color("7cc7ff")
+const BOON := Color("8fd16a")
+const CURSE := Color("ee6a6a")
 const HEALTH := Color("c94a4a")
 ## El rastro de la vida perdida: un rosa claro que se vacía detrás de la barra.
 const HEALTH_TRAIL := Color("f2c6b8")
@@ -88,6 +90,9 @@ func _add_labels(theme: Theme) -> void:
 	_label_variation(theme, &"StatValueLabel", 20, INK)
 	_label_variation(theme, &"StatModifiedLabel", 20, MODIFIED)
 	_label_variation(theme, &"StatBaseLabel", 15, MUTED)
+	# Lo bueno y lo malo de un pacto.
+	_label_variation(theme, &"BoonLabel", 20, BOON)
+	_label_variation(theme, &"CurseLabel", 20, CURSE)
 
 
 func _add_buttons(theme: Theme) -> void:

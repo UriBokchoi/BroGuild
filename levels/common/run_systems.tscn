@@ -52,6 +52,10 @@
 [ext_resource type="PackedScene" path="res://vfx/juice/lock_marker/lock_marker.tscn" id="54_lock_marker"]
 [ext_resource type="Script" path="res://systems/progression/effects/streak_effect.gd" id="55_streak"]
 [ext_resource type="Resource" path="res://data/progression/streak.tres" id="56_streak_data"]
+[ext_resource type="Script" path="res://systems/pacts/herald_spawner.gd" id="57_herald_spawner"]
+[ext_resource type="Resource" path="res://data/pacts/herald.tres" id="58_herald_data"]
+[ext_resource type="PackedScene" path="res://entities/interactables/herald/herald.tscn" id="59_herald"]
+[ext_resource type="PackedScene" path="res://ui/menus/pact/pact_panel.tscn" id="60_pact_panel"]
 
 [node name="RunSystems" type="Node3D" node_paths=PackedStringArray("player", "director", "encounter")]
 script = ExtResource("1_run")
@@ -247,9 +251,25 @@ offset = Vector3(0, 0.4, 0)
 [node name="PortalArrow" parent="." node_paths=PackedStringArray("target") instance=ExtResource("49_portal_arrow")]
 target = NodePath("../Player")
 
+[node name="HeraldArrow" parent="." node_paths=PackedStringArray("target") instance=ExtResource("49_portal_arrow")]
+target = NodePath("../Player")
+event = &"herald_arrived"
+color = Color(0.85, 0.45, 1, 1)
+show_time = 5.0
+
 [node name="LockMarker" parent="." instance=ExtResource("54_lock_marker")]
 
 [node name="StatChoicePanel" parent="." node_paths=PackedStringArray("stats") instance=ExtResource("53_stat_choice")]
+stats = NodePath("../Player/Stats")
+
+[node name="HeraldSpawner" type="Node" parent="." node_paths=PackedStringArray("player", "parent")]
+script = ExtResource("57_herald_spawner")
+data = ExtResource("58_herald_data")
+herald_scene = ExtResource("59_herald")
+player = NodePath("../Player")
+parent = NodePath("..")
+
+[node name="PactPanel" parent="." node_paths=PackedStringArray("stats") instance=ExtResource("60_pact_panel")]
 stats = NodePath("../Player/Stats")
 
 [node name="OnHitEffects" type="Node3D" parent="." node_paths=PackedStringArray("items")]
