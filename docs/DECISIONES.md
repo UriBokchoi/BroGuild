@@ -1612,3 +1612,7 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - **Se ve:** los números de daño del veneno salen verdes y los del rayo celestes (`DamageInfo.kind`); el rayo dibuja una línea entre los enemigos. El frío, de momento, solo se nota en lo que tardan.
   - **Fichas:** cada efecto tiene su línea con sus números («15 % al golpear: veneno (60 % del golpe en 3 s)») en las cartas de elegir objeto, el revelado del cofre y el Archivo. La frase del objeto sigue sin cifras.
 - **Por qué:** lo pidió el diseñador. Objetos que solo suben stats se parecen mucho; un efecto cambia cómo se juega con ellos.
+
+## 2026-11-24 · Polvo de los pasos
+- **Decisión:** a cada paso (`BodyBob.stepped`) sale un soplo pequeño de polvo a los pies (`StepDust`, 6 partículas en 0,45 s), un pie a cada lado de la marcha. Cuanto más rápido, más polvo: un 40 % de las partículas a la rapidez mínima y todas a la de carrera. Andando muy despacio, por debajo del 40 % de la carrera, nada. Solo sale con los pies en el suelo, porque `BodyBob` solo avisa de los pasos ahí.
+- **Por qué:** lo pidió el diseñador para el final del Hito 5. Remata la sensación de correr del balanceo sin tapar nada.

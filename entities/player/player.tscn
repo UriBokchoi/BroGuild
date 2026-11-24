@@ -51,6 +51,8 @@
 [ext_resource type="PackedScene" path="res://entities/player/synergy/dash_wave.tscn" id="52_dash_wave"]
 [ext_resource type="PackedScene" path="res://entities/player/synergy/slam_blast.tscn" id="53_slam_blast"]
 [ext_resource type="Script" path="res://entities/player/feedback/body_bob.gd" id="54_bob"]
+[ext_resource type="Script" path="res://vfx/juice/step_dust/step_dust.gd" id="55_step_dust"]
+[ext_resource type="PackedScene" path="res://vfx/particles/step_dust.tscn" id="56_step_puff"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_interactor"]
 radius = 0.6
@@ -374,3 +376,9 @@ stats = NodePath("../Stats")
 machine = NodePath("../Movement")
 walk_states = [NodePath("../Movement/Ground")]
 parts = [NodePath("../Body/Skin"), NodePath("../Body/Sockets")]
+
+[node name="StepDust" type="Node3D" parent="." node_paths=PackedStringArray("bob", "walker")]
+script = ExtResource("55_step_dust")
+bob = NodePath("../BodyBob")
+walker = NodePath("..")
+dust = ExtResource("56_step_puff")
