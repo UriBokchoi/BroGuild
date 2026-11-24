@@ -1,0 +1,8 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://vfx/juice/canopy_leaves/canopy_leaves.gd" id="1_canopy"]
+[ext_resource type="PackedScene" path="res://vfx/juice/canopy_leaves/leaves.tscn" id="2_leaves"]
+
+[node name="CanopyLeaves" type="Node3D"]
+script = ExtResource("1_canopy")
+leaves = ExtResource("2_leaves")

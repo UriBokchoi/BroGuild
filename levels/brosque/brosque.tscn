@@ -17,6 +17,7 @@
 [ext_resource type="PackedScene" path="res://levels/brosque/props/stone_trolls.tscn" id="22_stone_trolls"]
 [ext_resource type="Environment" path="res://levels/brosque/environment.tres" id="23_environment"]
 [ext_resource type="PackedScene" path="res://levels/common/boundary/map_boundary.tscn" id="24_boundary"]
+[ext_resource type="PackedScene" path="res://vfx/juice/canopy_leaves/canopy_leaves.tscn" id="25_leaves"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_ground"]
 material = ExtResource("1_grass")
@@ -98,6 +99,10 @@ target = NodePath("../RunSystems/Player")
 [node name="Layout" type="Node3D" parent="."]
 script = ExtResource("16_layout")
 data = ExtResource("17_layout_data")
+
+[node name="CanopyLeaves" parent="." node_paths=PackedStringArray("target", "layout") instance=ExtResource("25_leaves")]
+target = NodePath("../RunSystems/Player")
+layout = NodePath("../Layout")
 
 [node name="Tavern" parent="." instance=ExtResource("20_tavern")]
 transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, -79.5)

@@ -96,7 +96,7 @@
 - [x] Límite del mapa: un muro que solo se ve al acercarte
 - [x] Power-ups con su efecto al cogerlos: la bomba, una explosión nuclear (destello, hongo y onda); el imán, la comida, la bebida energética y el reloj de arena, el suyo
 - [x] Enemigos que aparecen con una animación: salen del suelo creciendo, con polvo (los jefes, más despacio y desde más hondo)
-- [ ] Hojitas que caen de las copas de los árboles al meterte dentro
+- [x] Hojitas que caen de las copas de los árboles al meterte dentro
 - [ ] Polvo pequeño a cada paso (con el aviso de pasos del balanceo). Lo último del hito, a petición del diseñador
 - [x] UI animada: botones que crecen y se hunden, paneles que aparecen, contadores y casillas que saltan, experiencia que se llena suave y vida con rastro de lo perdido (los sonidos llegaron tras el Hito 3)
 - [x] Rendimiento: 300+ enemigos a 60 fps (medido: 300 a 120 fps de media en el equipo de desarrollo)

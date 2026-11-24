@@ -86,6 +86,12 @@ func test_the_forest_is_drawn_in_chunks() -> void:
 		assert_lt(box.size.z, data.chunk_size + 2.0)
 
 
+func test_the_canopies_drop_leaves_around_the_player() -> void:
+	var leaves := _level.get_node(^"CanopyLeaves") as CanopyLeaves
+	assert_same(leaves.target, _level.get_node(^"RunSystems/Player"))
+	assert_gt(leaves.tree_count(), 50, "conoce las copas de los árboles de dentro")
+
+
 func test_enemies_only_spawn_inside_the_walls() -> void:
 	var systems := _level.get_node(^"RunSystems") as RunSystems
 	assert_true(systems.director.play_area.has_area())

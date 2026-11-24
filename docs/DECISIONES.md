@@ -1566,3 +1566,10 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
     - **Bosque por trozos:** era un MultiMesh por parte para todo el mapa (unos 2.000 árboles con la banda de fuera). Un MultiMesh es un solo objeto para el motor: se dibujaban todos los árboles siempre, en la vista y en las cuatro pasadas de sombra. Ahora va en trozos de 40 m (`ForestData.chunk_size`) y el motor descarta los que no se ven. Suben algo las llamadas de dibujo, pero cada una mueve muchos menos triángulos.
     - **Física:** con 180 esbirros apretados, el rumbo del enjambre cuesta 1 ms por tick y la física, unos 4–6 ms. Bajar los pasos del solver de Jolt (10 → 6) no cambió nada medible. Se deja en el backlog: a 60 Hz es una parte de un núcleo y no crece con los FPS.
 - **Por qué:** lo pidió el diseñador tras probar.
+
+## 2026-11-24 · Hojas al meterse en las copas
+- **Decisión:** al meter el cuerpo en la copa de un árbol (saltando o desde una meseta), caen unas 18 hojitas del color de ese árbol, algo más claras para que se vean contra la copa. Salen del borde de abajo de la copa, donde no las tapa la propia copa, giran y se balancean al caer (turbulencia). El mismo árbol espera 1,5 s antes de soltar más.
+  - Los árboles son MultiMesh, sin nodos propios: `CanopyLeaves` toma la lista que genera el mapa (`LevelLayout.get_trees`) y trata cada copa como un cilindro (`ForestBuilder.canopy`: radio y franja de alturas según su forma y su tamaño).
+  - Cada 0,1 s mira solo las celdas de 8 m alrededor del jugador. Los árboles de fuera de las paredes no se miran: no se puede llegar a ellos.
+  - La hoja es un SVG blanco con forma de hoja (`assets/textures/vfx/leaf.svg`); la partícula le pone el color del árbol.
+- **Por qué:** lo pidió el diseñador. Las copas no chocan, y meterse dentro no daba ninguna respuesta.

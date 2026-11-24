@@ -15,7 +15,9 @@ const CROWN_SHAPE := Vector4(1.8, 3.2, 0.0, 4.2)
 const RADIAL_SEGMENTS := 8
 
 
-## Construye el bosque bajo [param parent]. [param occupied] son las piezas (x, z, radio).
+## Construye el bosque bajo [param parent]. [param occupied] son las piezas (x, z, radio). Devuelve
+## los árboles: posición ([code]at[/code], en x y z), tamaño ([code]scale[/code]), giro, si es de
+## copa redonda ([code]round[/code]), color y si choca.
 static func build(
 	parent: Node3D,
 	forest: ForestData,
@@ -23,7 +25,7 @@ static func build(
 	clearing: float,
 	occupied: Array[Vector3],
 	rng: RandomNumberGenerator,
-) -> void:
+) -> Array[Dictionary]:
 	var trees := _scatter(forest, half_size, clearing, occupied, rng)
 	trees.append_array(_border(forest, occupied, rng))
 	trees.append_array(_outer_band(forest, occupied, rng))
@@ -32,6 +34,20 @@ static func build(
 	parent.add_child(root)
 	_add_parts(root, forest, trees)
 	_add_colliders(root, forest, trees)
+	return trees
+
+
+## La copa de [param tree] como un cilindro: su radio, la altura de abajo y la de arriba (desde el
+## suelo, con su tamaño). En los pinos, el radio es algo menor que el del cono de abajo, que se
+## estrecha hacia arriba.
+static func canopy(tree: Dictionary) -> Vector3:
+	var size: float = tree["scale"]
+	if tree["round"]:
+		var half_height := CROWN_SHAPE.y / 2.0
+		return Vector3(CROWN_SHAPE.x, CROWN_SHAPE.w - half_height, CROWN_SHAPE.w + half_height) * size
+	var low := PINE_PARTS[0]
+	var high := PINE_PARTS[-1]
+	return Vector3(low.y * 0.8, low.w - low.z / 2.0, high.w + high.z / 2.0) * size
 
 
 ## Árboles sueltos: al azar, sin pisar el claro ni las piezas y separados entre sí.
