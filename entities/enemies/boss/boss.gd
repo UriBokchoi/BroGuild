@@ -11,6 +11,9 @@ extends Enemy
 ## [param min_distance] y [param max_distance].
 signal summon_requested(enemy: EnemyData, count: int, center: Vector3, min_distance: float, max_distance: float)
 
+## Grupo de los jefes en juego (también los minibosses), para fijarlos como objetivo.
+const GROUP := &"bosses"
+
 ## Segundos persiguiendo entre un ataque y el siguiente.
 @export_range(0.1, 30.0, 0.1, "suffix:s") var attack_interval: float = 4.0
 ## Lo mismo con rabia.
@@ -31,6 +34,7 @@ var _enraged: bool = false
 
 
 func _ready() -> void:
+	add_to_group(GROUP)
 	for child: Node in get_children():
 		var attack := child as BossAttack
 		if attack:

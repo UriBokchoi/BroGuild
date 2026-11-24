@@ -49,9 +49,7 @@ static func densest(targets: Array[Node3D], radius: float, count: int) -> Array[
 
 
 func _find_targets() -> Array[Node3D]:
-	var space := get_world_3d().direct_space_state
-	var near := _finder.nearest(space, aim_origin(), reach(), candidates)
-	return densest(near, impact_radius(), ceili(projectile_count()))
+	return densest(_candidates(candidates), impact_radius(), ceili(projectile_count()))
 
 
 func _fire(target: Node3D, _index: int) -> void:

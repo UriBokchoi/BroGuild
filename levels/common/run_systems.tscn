@@ -49,6 +49,7 @@
 [ext_resource type="PackedScene" path="res://vfx/particles/spawn_dust.tscn" id="51_spawn_dust"]
 [ext_resource type="Script" path="res://systems/items/effects/on_hit_effects.gd" id="52_on_hit"]
 [ext_resource type="PackedScene" path="res://ui/menus/stat_choice/stat_choice_panel.tscn" id="53_stat_choice"]
+[ext_resource type="PackedScene" path="res://vfx/juice/lock_marker/lock_marker.tscn" id="54_lock_marker"]
 
 [node name="RunSystems" type="Node3D" node_paths=PackedStringArray("player", "director", "encounter")]
 script = ExtResource("1_run")
@@ -236,6 +237,8 @@ offset = Vector3(0, 0.4, 0)
 
 [node name="PortalArrow" parent="." node_paths=PackedStringArray("target") instance=ExtResource("49_portal_arrow")]
 target = NodePath("../Player")
+
+[node name="LockMarker" parent="." instance=ExtResource("54_lock_marker")]
 
 [node name="StatChoicePanel" parent="." node_paths=PackedStringArray("stats") instance=ExtResource("53_stat_choice")]
 stats = NodePath("../Player/Stats")

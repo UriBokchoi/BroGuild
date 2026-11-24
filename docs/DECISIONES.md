@@ -1646,3 +1646,11 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - **Afijos de los élites:** solo en el tier 2 o más de cada nivel. Los tiers (Brosque tier 1, 2 y 3) se detallarán más adelante; van al Hito 6.
 - **Cofres de élite:** todos los élites tienen un 10 % de soltar un cofre al morir (`EliteData.chest_chance`). Es un cofre normal: cuesta oro y sube el precio de los demás, como los del mapa. Los élites con afijos tendrán más probabilidad.
 - **Por qué:** lo pidió el diseñador. Un cofre que cuesta oro sigue siendo una decisión; si se quisieran gratis, es otro `ChestData` en `EliteData.chest`.
+
+## 2026-11-24 · Apuntar con el clic derecho y fijar al jefe con el central
+- **Decisión:** las armas siguen siendo automáticas, pero el jugador puede decir adónde.
+  - **Apuntar (mantener clic derecho):** sale una mira en el centro de la pantalla. Las armas eligen lo más cercano al punto del mundo que hay bajo la mira, no lo más cercano al jugador, pero siempre dentro de su alcance y viéndolo. Se apunta moviendo la cámara con el ratón, como siempre.
+  - **Fijar (clic central):** fija el jefe vivo más cercano (también los minibosses) y le sale una marca roja encima. Todas las armas le disparan mientras esté a su alcance; si se aleja, vuelven a lo de siempre. Otro clic central lo suelta, y al morir se suelta solo.
+  - **Dónde vive:** un nodo `Targeting` en el jugador. Cada arma lo consulta en `_candidates` (primero lo fijado, luego la mira y luego lo de siempre). Las armas de los enemigos no tienen `Targeting` y no cambian. El martillo elige el grupo más denso entre esos candidatos.
+  - Son acciones del InputMap (`aim` y `lock_target`): se podrán cambiar cuando llegue el remapeo.
+- **Por qué:** lo pidió el diseñador: con el jefe en pantalla, las armas se perdían en los esbirros de alrededor.

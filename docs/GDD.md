@@ -134,7 +134,7 @@ Dirección: **medieval con humor moderno**, nada realista; los anacronismos son 
 - **Assets**: primitivas + shaders propios; si hace falta, packs CC0 (Kenney, Quaternius).
 
 ## 8. Controles
-WASD mover · Ratón cámara · Espacio saltar · Shift dash · Ctrl slide (doble Ctrl en el aire: caída rápida) · E interactuar / cobrar · Tab estadísticas (mientras se mantiene, sin pausar; la rueda las desplaza) · Esc pausa · R reintentar (en los resultados). Todo remapeable.
+WASD mover · Ratón cámara · Espacio saltar · Shift dash · Ctrl slide (doble Ctrl en el aire: caída rápida) · E interactuar / cobrar · Tab estadísticas (mientras se mantiene, sin pausar; la rueda las desplaza) · Clic derecho (mantener) apuntar: las armas van a por lo que hay en la mira, en el centro de la pantalla · Clic central fijar al jefe (o al miniboss) como objetivo: todas las armas le disparan mientras esté a su alcance; otra vez, lo suelta · Esc pausa · R reintentar (en los resultados). Todo remapeable.
 
 **Menú de pausa (Esc):** a la izquierda, Continuar, Opciones, Reintentar y Salir; a la derecha, un panel fijo con todas las stats del personaje, resaltando las que han cambiado mejoras o maldiciones. Mando: más adelante.
 

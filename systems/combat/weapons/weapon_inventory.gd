@@ -11,6 +11,8 @@ signal weapon_changed(data: WeaponData, level: int)
 
 ## Stats de quien lleva las armas (su daño %, crítico, velocidad de ataque…).
 @export var wielder_stats: StatsComponent
+## Adónde apuntan las armas (el jugador: apuntar, fijar al jefe). Vacío: a lo más cercano.
+@export var targeting: Targeting
 ## Armas con las que empieza.
 @export var starting_weapons: Array[WeaponData] = []
 
@@ -36,6 +38,7 @@ func add(weapon_data: WeaponData) -> Weapon:
 		push_error("WeaponInventory: la escena de '%s' no es un Weapon." % weapon_data.id)
 		return null
 	weapon.setup(weapon_data, wielder_stats)
+	weapon.targeting = targeting
 	var shooter := weapon as ProjectileWeapon
 	if shooter:
 		shooter.shared_pool = projectile_pool

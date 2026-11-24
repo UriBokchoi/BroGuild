@@ -73,6 +73,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 - **Armas** (`systems/combat/weapons/`):
   - `WeaponData` lleva el `.tres` del arma con sus `WeaponStats` de nivel 1; sus mejoras por nivel son tiradas (ver «Objetos y runas»). `Weapon` guarda las que lleva (`add_upgrade`, `get_upgrades`); `set_level` sube con la mejora estándar o quita las últimas (la armería).
   - `Weapon` es la base: ataca sola por cadencia al más cercano desde `aim_height` y combina sus stats con las del personaje (si las tiene: un enemigo no). `disarm()` la para y retira lo que tenga en juego; `rearm(espera)` la vuelve a poner en marcha. Sin objetivo, busca cada `search_interval`.
+  - **Apuntar y fijar** (`entities/player/targeting/`, `Targeting`, en el jugador; `WeaponInventory.targeting` se lo pasa a cada arma): manteniendo `aim` (clic derecho), las armas eligen lo más cercano a la mira (el punto del mundo en el centro de la cámara; `TargetFinder.nearest_to`). Con `lock_target` (clic central) se fija el jefe vivo más cercano (grupo `Boss.GROUP`, también los minibosses): todas las armas le disparan si está a su alcance (`Weapon._candidates`) y, al morir, se suelta. Avisa por `aim_changed` (la mira del HUD, `Crosshair`) y `target_locked` (la marca roja que flota encima, `vfx/juice/lock_marker/`).
   - `TargetFinder` hace una consulta de física y apunta al centro de la hurtbox. Solo elige lo que se ve: un rayo desde quien dispara hasta el objetivo no puede chocar antes con el mundo (`Weapon.sight_mask`; las armas de serie y la del tirador miran la capa `world`).
   - `WeaponInventory` es el nodo que crea y quita armas: lo lleva el jugador y lo crea el enemigo que tiene armas.
   - **Las mismas armas sirven a los dos bandos:** la escena dice a quién busca (`target_mask`) y a quién da su proyectil (`hit_mask`). Las de los enemigos viven en `data/enemies/weapons/`, fuera de la armería y de la subida de nivel.
@@ -295,6 +296,8 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 | `cursor_requested` | pausa, armería, panel de depuración | `MouseCapture` |
 | `player_stamina_changed` | `StaminaComponent` | `StaminaBar` |
 | `player_health_changed` | `Player` | `HealthBar` |
+| `aim_changed` (si apunta) | `Targeting` | `Crosshair` (HUD) |
+| `target_locked` (el objetivo fijado; null, ninguno) | `Targeting` | `LockMarker` |
 | `player_died` | `Player` | `ResultsPanel`, `RunRecorder` (los dos lo atienden al final del fotograma, para que gane `run_won` si llega a la vez), `BossEncounter` (en la prórroga con el jefe vencido, gana) |
 | `enemy_damaged` | `DamageReporter` | `DamageNumbers` |
 | `enemy_hit` (a quién, su vida, el golpe y lo que quitó) | `DamageReporter` | `OnHitEffects` |

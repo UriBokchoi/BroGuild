@@ -27,6 +27,18 @@ func _init(target_mask: int, blocking_mask: int = 0) -> void:
 ## Hasta [param count] objetivos dentro de [param radius] alrededor de [param origin] que se ven
 ## desde ahí, del más cercano al más lejano (en 3D: un enemigo en lo alto de una pila está más lejos).
 func nearest(space: PhysicsDirectSpaceState3D, origin: Vector3, radius: float, count: int) -> Array[Node3D]:
+	return nearest_to(space, origin, radius, count, origin)
+
+
+## Como [method nearest], pero ordenados por lo cerca que están de [param focus] (la mira al
+## apuntar): siguen teniendo que estar a [param radius] de [param origin] y verse desde ahí.
+func nearest_to(
+	space: PhysicsDirectSpaceState3D,
+	origin: Vector3,
+	radius: float,
+	count: int,
+	focus: Vector3,
+) -> Array[Node3D]:
 	_sphere.radius = radius
 	_query.transform = Transform3D(Basis.IDENTITY, origin)
 	_query.collision_mask = mask
@@ -36,7 +48,7 @@ func nearest(space: PhysicsDirectSpaceState3D, origin: Vector3, radius: float, c
 		if target and not found.has(target):
 			found.append(target)
 	found.sort_custom(func(a: Node3D, b: Node3D) -> bool:
-		return origin.distance_squared_to(aim_point(a)) < origin.distance_squared_to(aim_point(b)))
+		return focus.distance_squared_to(aim_point(a)) < focus.distance_squared_to(aim_point(b)))
 	if sight_mask == 0:
 		return found.slice(0, count)
 	var seen: Array[Node3D] = []
