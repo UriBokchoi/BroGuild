@@ -275,6 +275,15 @@ ITEM_GOLDEN_DUMBBELL_NAME,Mancuerna de oro,Golden Dumbbell
 ITEM_GOLDEN_DUMBBELL_DESCRIPTION,"Pesa lo mismo, pero brilla más.","Weighs the same, but shines brighter."
 ITEM_SHADY_SHAKE_NAME,Batido sospechoso,Shady Shake
 ITEM_SHADY_SHAKE_DESCRIPTION,"Funciona, pero no preguntes qué lleva.","It works, but don't ask what's in it."
+ITEM_EXPIRED_PREWORKOUT_NAME,Pre-entreno caducado,Expired Pre-Workout
+ITEM_EXPIRED_PREWORKOUT_DESCRIPTION,"Caducó hace dos años. Sigue pegando fuerte, y ahora también envenena.","Expired two years ago. Still hits hard, and now it poisons too."
+ITEM_FRAYED_CABLE_NAME,Cable pelado,Frayed Cable
+ITEM_FRAYED_CABLE_DESCRIPTION,"Del altavoz del gimnasio. No lo toques… o sí.","From the gym speaker. Do not touch it… or do."
+ITEM_COLD_SPRAY_NAME,Spray de frío,Cold Spray
+ITEM_COLD_SPRAY_DESCRIPTION,"Lo que te echan en el campo cuando te duele algo.","What they spray on you when something hurts."
+ON_HIT_POISON,%s %% al golpear: veneno (%s %% del golpe en %s s),%s%% on hit: poison (%s%% of the hit over %s s)
+ON_HIT_CHAIN,%s %% al golpear: rayo a %s enemigos (%s %% del golpe),%s%% on hit: lightning to %s enemies (%s%% of the hit)
+ON_HIT_SLOW,%s %% al golpear: frena un %s %% (%s s),%s%% on hit: slows by %s%% (%s s)
 ITEM_BRO_CROWN_NAME,Corona del Bro,Bro Crown
 ITEM_BRO_CROWN_DESCRIPTION,Para el rey de los bros.,For the king of bros.
 ITEM_COLD_PIZZA_NAME,Pizza fría de ayer,Last Night's Cold Pizza

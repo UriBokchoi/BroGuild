@@ -19,6 +19,7 @@ func _init(offered: PassiveItemData, stats: StatsComponent = null) -> void:
 	item = offered
 	theme_type_variation = &"CardButton"
 	var effects := ModifierFormat.describe_changes(item.stat_modifiers, stats)
+	effects.append_array(item.effect_lines())
 	var extra_lines := maxi(effects.size() - 1, 0)
 	var height := BASE_HEIGHT + (ICON_HEIGHT if item.icon else 0.0) + LINE_HEIGHT * extra_lines
 	custom_minimum_size = Vector2(WIDTH, height)

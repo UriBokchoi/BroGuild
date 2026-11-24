@@ -175,9 +175,10 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
   - `LevelUpController` (en el nivel) escucha `player_leveled_up`, y también `upgrade_choice_requested` (mejoras gratis de la tragaperras, en la misma cola y con su título), abre `LevelUpPanel` (pausa y cartas, en `ui/menus/level_up/`) y aplica la elegida a las armas o runas del jugador. Usa el flujo `GAMBLE` de `Rng`: la ruleta del Hito 4 irá encima.
 
 ### Objetos pasivos — `systems/items/`
-- **`PassiveItemData`** (un `StatModifierSet` con id, nombre, descripción, icono y `rarity`): objeto de cofre y del premio del jefe. Viven en `data/items/` (23: 15 de cultura bro, donde el gimnasio es solo un tema más, y 8 medievales). `ItemPool.roll_several` saca varios distintos (el círculo de setas). No ocupan ranura y se apilan.
+- **`PassiveItemData`** (un `StatModifierSet` con id, nombre, descripción, icono, `rarity` y `on_hit`, sus efectos al golpear): objeto de cofre y del premio del jefe. Viven en `data/items/` (29: los de cultura bro, donde el gimnasio es solo un tema más, y los medievales).
+- **Efectos al golpear** (`systems/items/effects/`): `OnHitEffect` (probabilidad %, tipo de daño y su línea en las fichas, `describe`) y sus clases: `PoisonOnHit` (veneno: una parte del golpe a cada tick durante unos segundos), `ChainOnHit` (rayo: salta a los enemigos más cercanos con una parte del golpe) y `SlowOnHit` (frío: frena un rato). `OnHitEffects` (en `RunSystems`) escucha `enemy_hit` y tira la probabilidad de cada efecto de los objetos del jugador (`PassiveInventory.on_hit_effects`: las copias la multiplican). Lleva los venenos y los fríos activos (el frío es un modificador de `move_speed` del enemigo con su propio origen) y dibuja los rayos. El daño de un efecto lleva `DamageInfo.triggers_effects` a falso, para no encadenar efectos, y su `kind` (`poison`, `shock`), que da el color a sus números de daño (`DamageNumberStyle.kind_colors`). Las fichas (elegir objeto, cofre, Archivo) añaden la línea de cada efecto (`PassiveItemData.effect_lines`). `ItemPool.roll_several` saca varios distintos (el círculo de setas). No ocupan ranura y se apilan.
 - **`ItemPool`**: de dónde sale un objeto (una `WeightedTable` de rarezas, con la Suerte, y la carpeta de objetos). `roll` tira una rareza y elige un objeto de ella (si no hay, de las de debajo). Lo usan los cofres (`ChestData.items`) y el jefe (`BossData.reward_items`, solo rarezas altas).
-- **`PassiveInventory`** (nodo `Items` del jugador): `add` aplica otra vez los modificadores de una copia (cada copia es su propio origen), `remove` quita la última, `count`, `get_items` (por orden de llegada) y `total`. Avisa con `item_changed`, que el `Player` pasa a `EventBus.player_passive_changed`.
+- **`PassiveInventory`** (nodo `Items` del jugador): `add` aplica otra vez los modificadores de una copia (cada copia es su propio origen), `remove` quita la última, `count`, `get_items` (por orden de llegada), `total` y `on_hit_effects` (cada efecto al golpear con sus copias). Avisa con `item_changed`, que el `Player` pasa a `EventBus.player_passive_changed`.
 
 ### Rompibles — `entities/breakables/`
 - **`Breakable`:** rompible del nivel (como los jarrones de Megabonk). Se rompe con «interactuar» (su `Interactable`: «Romper la calavera», «Abrir la bolsita»), una sola vez; avisa por `EventBus.breakable_broken` con su `BreakableData` (qué recogible, cuánto, en cuántos trozos y a qué distancia) y desaparece con un estallido (`PopOut`, en `vfx/juice/`).
@@ -294,6 +295,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 | `player_health_changed` | `Player` | `HealthBar` |
 | `player_died` | `Player` | `ResultsPanel`, `RunRecorder` (los dos lo atienden al final del fotograma, para que gane `run_won` si llega a la vez), `BossEncounter` (en la prórroga con el jefe vencido, gana) |
 | `enemy_damaged` | `DamageReporter` | `DamageNumbers` |
+| `enemy_hit` (a quién, su vida, el golpe y lo que quitó) | `DamageReporter` | `OnHitEffects` |
 | `enemy_died` (el propio enemigo) | `Enemy` | `LootDropper`, `RunRecorder`, `ArchiveRecorder` |
 | `enemy_spawned` (el propio enemigo) | `Enemy` (al salir del pool) | `BurstEmitter` (el polvo) |
 | `breakable_broken` (sus datos y dónde) | `Breakable` | `LootDropper` |
@@ -354,7 +356,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 
   Aparece sola en la armería.
 - **Una runa:** crea un `.tres` `RuneData` en `data/runes/` con su icono (`assets/textures/icons/runes/`), un `StatModifierSet` por nivel (sobre stats que el jugador tenga) y traduce su nombre y descripción. Aparece sola en la armería.
-- **Un objeto pasivo:** crea un `.tres` `PassiveItemData` en `data/items/` con su rareza, su icono (`assets/textures/icons/items/`, SVG redondo) y sus modificadores (sobre stats que el jugador tenga), y traduce su nombre y descripción. Sale solo en los cofres.
+- **Un objeto pasivo:** crea un `.tres` `PassiveItemData` en `data/items/` con su rareza, su icono (`assets/textures/icons/items/`, SVG redondo) y sus modificadores (sobre stats que el jugador tenga) o sus efectos al golpear (`on_hit`, con su `describe_key` en el CSV), y traduce su nombre y descripción. Sale solo en los cofres, los círculos de setas y los premios de los jefes. Para un efecto nuevo, hereda de `OnHitEffect` (`apply` y `_values`) y, si necesita llevar la cuenta de algo, añádelo a `OnHitEffects`.
 - **Un rompible:** crea su `BreakableData` en `data/breakables/` (recogible, valor, trozos, dispersión) y su escena con raíz `Breakable` (modelo e `Interactable` con su aviso); añádelo como `ScatterEntry` al `BreakableScatter` del nivel.
 - **Un enemigo:**
   1. Crea un `.tres` `EnemyData` en `data/enemies/`.

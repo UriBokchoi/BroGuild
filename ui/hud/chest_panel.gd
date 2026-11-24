@@ -131,6 +131,7 @@ func _describe(item: PassiveItemData) -> String:
 	for index: int in lines.size():
 		if not changes[index].is_empty():
 			lines[index] += " (%s)" % changes[index]
+	lines.append_array(item.effect_lines())
 	return "\n".join(lines)
 
 

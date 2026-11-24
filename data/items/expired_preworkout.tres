@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="PassiveItemData" format=3]
+
+[ext_resource type="Script" path="res://systems/items/passive_item_data.gd" id="1_item"]
+[ext_resource type="Script" path="res://systems/items/effects/on_hit_effect.gd" id="2_effect"]
+[ext_resource type="Script" path="res://systems/items/effects/poison_on_hit.gd" id="3_poison"]
+[ext_resource type="Resource" path="res://data/rarities/rare.tres" id="4_rarity"]
+[ext_resource type="Texture2D" path="res://assets/textures/icons/items/expired_preworkout.svg" id="5_icon"]
+
+[sub_resource type="Resource" id="Effect_poison"]
+script = ExtResource("3_poison")
+tick_share = 0.1
+tick_interval = 0.5
+duration = 3.0
+chance = 15.0
+kind = &"poison"
+describe_key = &"ON_HIT_POISON"
+
+[resource]
+script = ExtResource("1_item")
+id = &"expired_preworkout"
+name_key = &"ITEM_EXPIRED_PREWORKOUT_NAME"
+description_key = &"ITEM_EXPIRED_PREWORKOUT_DESCRIPTION"
+icon = ExtResource("5_icon")
+rarity = ExtResource("4_rarity")
+on_hit = Array[ExtResource("2_effect")]([SubResource("Effect_poison")])

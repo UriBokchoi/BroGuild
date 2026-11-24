@@ -71,6 +71,11 @@ Toda apuesta tiene **anticipación** (giro, luces, sonido que sube), **revelado*
 
 Más ideas para después: más daño mientras estás en el aire · cada carga de stamina sin gastar da crítico extra.
 
+**Objetos con efectos al golpear:** además de stats, algunos objetos tienen una probabilidad de hacer algo con cada golpe. Cada copia suma su probabilidad. El daño del efecto sale de lo que quitó el golpe, así que escala con todo lo que lo sube (daño %, crítico, arma), y no vuelve a disparar efectos. Sus números de daño van de su color.
+- **Pre-entreno caducado** (rara): 15 % de envenenar. El veneno quita un 10 % del golpe cada medio segundo durante 3 s (un 60 % en total); envenenar otra vez lo alarga.
+- **Cable pelado** (improbable): 12 % de soltar un rayo que salta a los 3 enemigos más cercanos (a menos de 6 m de uno a otro) con la mitad del golpe.
+- **Spray de frío** (rara): 20 % de frenar al enemigo un 40 % durante 2 s.
+
 **Mejoras que tocan el azar** (ejemplos): Dado trucado (1 reroll gratis por nivel) · Amigo del tahúr (las maldiciones de la tragaperras a veces son premio) · Mano caliente (cofres más baratos con racha alta).
 
 ## 6. Combate

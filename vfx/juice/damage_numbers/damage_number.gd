@@ -57,11 +57,14 @@ func launch(
 	critical: bool,
 	style: DamageNumberStyle,
 	rng: RandomNumberGenerator,
+	kind: StringName = &"",
 ) -> void:
 	_style = style
 	text = str(maxi(roundi(amount), 1))
 	_apply_font(style)
 	_color = style.critical_color if critical else style.normal_color
+	if style.kind_colors.has(kind):
+		_color = style.kind_colors[kind]
 	_size = style.critical_scale if critical else 1.0
 	var side := Vector3.RIGHT.rotated(Vector3.UP, rng.randf() * TAU)
 	var jitter := Vector3(rng.randf_range(-1.0, 1.0), rng.randf_range(0.0, 1.0), rng.randf_range(-1.0, 1.0))

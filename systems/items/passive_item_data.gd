@@ -1,9 +1,10 @@
 class_name PassiveItemData
 extends StatModifierSet
-## Objeto pasivo de la partida (GDD §6): sale de los cofres (más adelante, también del jefe), tiene
-## una rareza fija, no ocupa ranura y se apila: cada copia vuelve a sumar sus
-## [member StatModifierSet.stat_modifiers]. Viven en [code]data/items/[/code]: un objeto nuevo es un
-## [code].tres[/code] más, sin código.
+## Objeto pasivo de la partida (GDD §6): sale de los cofres, de los círculos de setas y de los jefes,
+## tiene una rareza fija, no ocupa ranura y se apila: cada copia vuelve a sumar sus
+## [member StatModifierSet.stat_modifiers] y la probabilidad de sus efectos al golpear
+## ([member on_hit]). Viven en [code]data/items/[/code]: un objeto nuevo es un [code].tres[/code] más,
+## sin código.
 
 ## Identificador estable.
 @export var id: StringName = &""
@@ -15,3 +16,13 @@ extends StatModifierSet
 @export var icon: Texture2D
 ## Rareza: decide cuánto sale de los cofres y el color con que se ve.
 @export var rarity: Rarity
+## Lo que puede pasar al golpear (veneno, rayo, frío…), además de sus stats.
+@export var on_hit: Array[OnHitEffect] = []
+
+
+## Una línea por efecto al golpear, para las fichas, con [param copies] copias.
+func effect_lines(copies: int = 1) -> PackedStringArray:
+	var lines := PackedStringArray()
+	for effect: OnHitEffect in on_hit:
+		lines.append(effect.describe(copies))
+	return lines

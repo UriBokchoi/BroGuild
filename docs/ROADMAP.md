@@ -132,7 +132,7 @@ Lo que salió en la segunda tanda de pruebas; va antes que el resto.
 - [ ] Racha y botín (niveles, multiplicador, guardar, perder al ser golpeado)
 - [ ] Pactos del Gremio
 - [ ] Élites con afijos que sueltan cofres
-- [ ] Objetos con efectos además de stats: veneno con probabilidad al golpear, y más del estilo
+- [x] Objetos con efectos además de stats: veneno con probabilidad al golpear, y más del estilo (Pre-entreno caducado: veneno; Cable pelado: rayo; Spray de frío: frena)
 
 ## Hito 8 — Cierre de partida y meta
 - [x] Portal del jefe en lugar del altar: el jefe se invoca en él y, tras vencerlo, hay que cruzarlo para pasar el nivel. Al vencerlo, un texto lo explica y una flecha amarilla señala el portal unos 3 s

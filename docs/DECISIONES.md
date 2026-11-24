@@ -1595,3 +1595,20 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - Los tests del nivel ya no llevan números a mano: leen las cantidades de los datos del mapa y la pared del borde.
   - El rendimiento apenas cambia gracias al bosque por trozos: sin enemigos, de 0,43 M a 0,49 M triángulos y de 760 a 940 llamadas de dibujo.
 - **Por qué:** lo pidió el diseñador: el mapa se quedaba pequeño para explorar.
+
+## 2026-11-24 · Objetos con efectos al golpear
+- **Decisión:** los objetos pasivos pueden llevar efectos que salen con una probabilidad en cada golpe del jugador (`PassiveItemData.on_hit`), además de sus stats. Tres efectos y un objeto nuevo para cada uno:
+
+  | Objeto | Rareza | Efecto |
+  |---|---|---|
+  | Pre-entreno caducado | Rara | 15 %: veneno, un 10 % del golpe cada 0,5 s durante 3 s (60 % en total) |
+  | Cable pelado | Improbable | 12 %: rayo a los 3 enemigos más cercanos (6 m de salto), con la mitad del golpe |
+  | Spray de frío | Rara | 20 %: frena un 40 % durante 2 s |
+
+  - **Escala con el golpe:** el daño de un efecto es una parte de lo que quitó el golpe. Así crece con todo lo que sube el golpe (daño %, crítico, arma) sin stats nuevas. A media, el veneno suma un 9 % de daño y el rayo un 18 %, repartido entre varios.
+  - **Copias:** cada copia suma la probabilidad del efecto, como las stats suman sus modificadores. Sin topes: si con muchas copias sale siempre, es la recompensa de apostar por ese objeto.
+  - **Sin cadenas:** el daño de un efecto no vuelve a tirar efectos (`DamageInfo.triggers_effects`). Si no, un rayo podría envenenar y ese veneno soltar otro rayo.
+  - **Por dónde pasa:** `DamageReporter`, que ya avisaba de cada golpe a un enemigo, avisa también de a quién (`enemy_hit`). Así sirve para cualquier arma, proyectil, onda o rastro, sin tocar cada uno.
+  - **Se ve:** los números de daño del veneno salen verdes y los del rayo celestes (`DamageInfo.kind`); el rayo dibuja una línea entre los enemigos. El frío, de momento, solo se nota en lo que tardan.
+  - **Fichas:** cada efecto tiene su línea con sus números («15 % al golpear: veneno (60 % del golpe en 3 s)») en las cartas de elegir objeto, el revelado del cofre y el Archivo. La frase del objeto sigue sin cifras.
+- **Por qué:** lo pidió el diseñador. Objetos que solo suben stats se parecen mucho; un efecto cambia cómo se juega con ellos.

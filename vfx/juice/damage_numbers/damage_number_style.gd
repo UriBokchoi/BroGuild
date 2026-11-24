@@ -7,6 +7,8 @@ extends Resource
 @export_group("look")
 @export var normal_color: Color = Color(0, 0, 0, 0)
 @export var critical_color: Color = Color(0, 0, 0, 0)
+## Color de los números de cada tipo de daño de los efectos ([member DamageInfo.kind]: veneno, rayo…).
+@export var kind_colors: Dictionary[StringName, Color] = {}
 @export var outline_color: Color = Color(0, 0, 0, 0)
 @export var font: Font
 @export_range(1, 256, 1) var font_size: int = 0

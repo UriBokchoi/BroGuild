@@ -44,7 +44,7 @@ func _on_enemy_damaged(at: Vector3, amount: float, info: DamageInfo) -> void:
 		return
 	_shown_this_frame += 1
 	var number := _pool.acquire() as DamageNumber
-	number.launch(at, amount, info.critical, style, _rng)
+	number.launch(at, amount, info.critical, style, _rng, info.kind)
 
 
 func _create_number() -> Node:

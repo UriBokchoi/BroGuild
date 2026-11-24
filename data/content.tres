@@ -42,6 +42,9 @@
 [ext_resource type="Resource" path="res://data/items/flaming_sneakers.tres" id="43a_flaming_sneakers"]
 [ext_resource type="Resource" path="res://data/items/air_horn.tres" id="43b_air_horn"]
 [ext_resource type="Resource" path="res://data/items/championship_belt.tres" id="43c_championship_belt"]
+[ext_resource type="Resource" path="res://data/items/cold_spray.tres" id="43d_cold_spray"]
+[ext_resource type="Resource" path="res://data/items/expired_preworkout.tres" id="43e_expired_preworkout"]
+[ext_resource type="Resource" path="res://data/items/frayed_cable.tres" id="43f_frayed_cable"]
 [ext_resource type="Resource" uid="uid://cw41qak0yntfj" path="res://data/enemies/swarmer.tres" id="44_swarmer"]
 [ext_resource type="Resource" uid="uid://ctcnxdbqncola" path="res://data/enemies/shooter.tres" id="45_shooter"]
 [ext_resource type="Resource" uid="uid://dwbaq02li0bkq" path="res://data/enemies/sapling.tres" id="46_sapling"]
@@ -75,7 +78,7 @@ script = ExtResource("2_category")
 id = &"items"
 name_key = &"ARCHIVE_CATEGORY_ITEMS"
 hint_key = &"ARCHIVE_HINT_ITEMS"
-entries = Array[Resource]([ExtResource("21_cold_pizza"), ExtResource("22_fanny_pack"), ExtResource("23_game_controller"), ExtResource("24_horseshoe"), ExtResource("25_mead"), ExtResource("26_protein_shake"), ExtResource("27_rye_bread"), ExtResource("28_backwards_cap"), ExtResource("29_bluetooth_speaker"), ExtResource("30_scratch_card"), ExtResource("31_socks_and_sandals"), ExtResource("32_torch"), ExtResource("33_travel_cloak"), ExtResource("43a_flaming_sneakers"), ExtResource("43b_air_horn"), ExtResource("34_body_oil"), ExtResource("35_lifting_belt"), ExtResource("36_pocket_crossbow"), ExtResource("37_sunglasses"), ExtResource("43c_championship_belt"), ExtResource("38_brass_grail"), ExtResource("39_gold_chain"), ExtResource("40_golden_dumbbell"), ExtResource("41_shady_shake"), ExtResource("42_bro_crown"), ExtResource("43_excalibro")])
+entries = Array[Resource]([ExtResource("21_cold_pizza"), ExtResource("22_fanny_pack"), ExtResource("23_game_controller"), ExtResource("24_horseshoe"), ExtResource("25_mead"), ExtResource("26_protein_shake"), ExtResource("27_rye_bread"), ExtResource("28_backwards_cap"), ExtResource("29_bluetooth_speaker"), ExtResource("30_scratch_card"), ExtResource("31_socks_and_sandals"), ExtResource("32_torch"), ExtResource("33_travel_cloak"), ExtResource("43a_flaming_sneakers"), ExtResource("43b_air_horn"), ExtResource("34_body_oil"), ExtResource("35_lifting_belt"), ExtResource("36_pocket_crossbow"), ExtResource("37_sunglasses"), ExtResource("43c_championship_belt"), ExtResource("43d_cold_spray"), ExtResource("43e_expired_preworkout"), ExtResource("43f_frayed_cable"), ExtResource("38_brass_grail"), ExtResource("39_gold_chain"), ExtResource("40_golden_dumbbell"), ExtResource("41_shady_shake"), ExtResource("42_bro_crown"), ExtResource("43_excalibro")])
 
 [sub_resource type="Resource" id="Category_enemies"]
 script = ExtResource("2_category")

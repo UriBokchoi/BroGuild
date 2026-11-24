@@ -36,9 +36,12 @@ func test_every_item_is_complete() -> void:
 		assert_not_null(item.icon, "%s: sin icono" % file)
 		assert_not_null(item.rarity, "%s: sin rareza" % file)
 		assert_has(RARITIES.entries, item.rarity, "%s: rareza fuera de la tabla" % file)
-		assert_false(item.stat_modifiers.is_empty(), "%s: no hace nada" % file)
+		assert_false(item.stat_modifiers.is_empty() and item.on_hit.is_empty(), "%s: no hace nada" % file)
 		for modifier: StatModifier in item.stat_modifiers:
 			assert_has(_stats, modifier.stat, "%s: «%s» no es una stat del jugador" % [file, modifier.stat])
+		for effect: OnHitEffect in item.on_hit:
+			assert_gt(effect.chance, 0.0, "%s: efecto que nunca sale" % file)
+			assert_ne(tr(effect.describe_key), String(effect.describe_key), "%s: efecto sin traducir" % file)
 
 
 func test_descriptions_leave_the_numbers_to_the_modifiers() -> void:

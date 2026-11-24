@@ -28,6 +28,9 @@ signal player_died
 ## Un enemigo recibió un golpe de [param amount] (tras su defensa) en [param position], el punto
 ## donde mostrar los efectos (encima de su cabeza).
 signal enemy_damaged(position: Vector3, amount: float, info: DamageInfo)
+## A [param target] (su vida, [param health]) le dieron el golpe [param info], que le quitó
+## [param amount]. Lo escuchan los efectos al golpear de los objetos ([OnHitEffects]).
+signal enemy_hit(target: Node3D, health: HealthComponent, info: DamageInfo, amount: float)
 ## Cambió lo que el jugador puede hacer con «interactuar» (clave de traducción; vacía = nada).
 signal interaction_prompt_changed(prompt_key: StringName)
 ## Una tragaperras empezó a girar: sus datos (símbolos y ritmo) y lo que va a salir en cada rodillo.

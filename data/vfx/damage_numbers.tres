@@ -9,6 +9,10 @@ variation_embolden = 1.0
 script = ExtResource("1_style")
 normal_color = Color(1, 1, 1, 1)
 critical_color = Color(1, 0.82, 0.2, 1)
+kind_colors = Dictionary[StringName, Color]({
+&"poison": Color(0.6, 1, 0.35, 1),
+&"shock": Color(0.55, 0.85, 1, 1)
+})
 outline_color = Color(0.08, 0.06, 0.1, 0.95)
 font = SubResource("FontVariation_numbers")
 font_size = 64

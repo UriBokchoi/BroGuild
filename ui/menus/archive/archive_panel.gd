@@ -185,6 +185,8 @@ func _show_item(item: PassiveItemData) -> void:
 		rarity.add_theme_color_override(&"font_color", item.rarity.color)
 	for line: String in ModifierFormat.describe_all(item.stat_modifiers):
 		_add_line(line, &"StatModifiedLabel")
+	for line: String in item.effect_lines():
+		_add_line(line, &"StatModifiedLabel")
 
 
 func _show_rune(rune: RuneData) -> void:

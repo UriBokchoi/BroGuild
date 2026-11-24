@@ -47,6 +47,7 @@
 [ext_resource type="PackedScene" path="res://vfx/juice/portal_arrow/portal_arrow.tscn" id="49_portal_arrow"]
 [ext_resource type="PackedScene" path="res://vfx/juice/power_up_fx/power_up_fx.tscn" id="50_power_up_fx"]
 [ext_resource type="PackedScene" path="res://vfx/particles/spawn_dust.tscn" id="51_spawn_dust"]
+[ext_resource type="Script" path="res://systems/items/effects/on_hit_effects.gd" id="52_on_hit"]
 
 [node name="RunSystems" type="Node3D" node_paths=PackedStringArray("player", "director", "encounter")]
 script = ExtResource("1_run")
@@ -233,6 +234,11 @@ offset = Vector3(0, 0.4, 0)
 
 [node name="PortalArrow" parent="." node_paths=PackedStringArray("target") instance=ExtResource("49_portal_arrow")]
 target = NodePath("../Player")
+
+[node name="OnHitEffects" type="Node3D" parent="." node_paths=PackedStringArray("items")]
+script = ExtResource("52_on_hit")
+items = NodePath("../Player/Items")
+chain_mask = 16
 
 [node name="PowerUpFx" parent="." node_paths=PackedStringArray("anchor", "shake") instance=ExtResource("50_power_up_fx")]
 anchor = NodePath("../Player")
