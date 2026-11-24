@@ -48,6 +48,43 @@ func test_choosing_shows_the_levels_and_a_level_starts_the_run() -> void:
 	assert_eq(_played, [[ROGUE, BROSQUE]])
 
 
+func test_a_click_marks_the_level_and_play_starts_it() -> void:
+	_setup.choose(ROGUE)
+	var info := _setup.get_node(^"%LevelInfo") as Control
+	var play := _setup.get_node(^"%LevelPlay") as Button
+	assert_false(info.visible, "sin nivel marcado, sin ficha")
+	assert_true(play.disabled)
+	var button := _setup.get_node(^"%LevelList").get_child(_setup.levels.find(BROSQUE)) as Button
+	button.pressed.emit()
+	assert_same(_setup.get_selected(), BROSQUE)
+	assert_true(button.button_pressed, "se queda marcado")
+	assert_true(info.visible, "su ficha, debajo")
+	assert_eq((_setup.get_node(^"%LevelName") as Label).text, String(BROSQUE.name_key))
+	assert_eq(_played.size(), 0, "el clic no empieza la partida")
+	assert_false(play.disabled)
+	play.pressed.emit()
+	assert_eq(_played, [[ROGUE, BROSQUE]])
+
+
+func test_play_sits_above_back() -> void:
+	var panel := _setup.get_node(^"%LevelPanel") as Node
+	var play := _setup.get_node(^"%LevelPlay") as Node
+	var back := _setup.get_node(^"%LevelBack") as Node
+	var info := _setup.get_node(^"%LevelInfo") as Node
+	assert_eq(play.get_parent(), panel)
+	assert_lt(info.get_index(), play.get_index(), "la ficha, encima de «Jugar»")
+	assert_eq(play.get_index() + 1, back.get_index(), "«Jugar» justo encima de «Volver»")
+
+
+func test_going_back_and_in_again_forgets_the_level() -> void:
+	_setup.choose(ROGUE)
+	_setup.select(BROSQUE)
+	_setup.back()
+	_setup.choose(MAGE)
+	assert_null(_setup.get_selected())
+	assert_true((_setup.get_node(^"%LevelPlay") as Button).disabled)
+
+
 func test_levels_that_do_not_exist_yet_are_disabled() -> void:
 	var buttons := (_setup.get_node(^"%LevelList") as Node).get_children()
 	for index: int in buttons.size():

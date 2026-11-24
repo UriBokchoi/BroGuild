@@ -1545,3 +1545,8 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - El polvo va por una señal nueva, `enemy_spawned`, con otro `BurstEmitter` (`spawn_dust`, 10 partículas, como mucho 8 por fotograma: una horda no dispara cien a la vez).
   - Si muere mientras sale, deja de aparecer y encoge como siempre.
 - **Por qué:** lo pidió el diseñador. Antes los enemigos aparecían de golpe; así se ve de dónde salen y da tiempo a reaccionar.
+
+## 2026-11-24 · Pulido tras las pruebas (2) (Hito 5c)
+- **Decisión:** arreglos de la segunda tanda de pruebas del diseñador.
+  - **Elegir nivel:** un clic marca el nivel (se queda hundido) y saca debajo su objetivo y su lore; abajo, «Jugar» encima de «Volver». Antes, el clic empezaba la partida y la ficha salía al pasar el ratón: no daba tiempo a leerla. Los botones de nivel son más bajos (`SmallButton`) y el lore más ancho, para que la lista, la ficha y los dos botones quepan en 720p.
+- **Por qué:** lo pidió el diseñador tras probar.

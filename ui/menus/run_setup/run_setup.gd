@@ -3,8 +3,9 @@ extends Node3D
 ## Selección de personaje y de nivel antes de jugar (GDD §9, «Menús»): a la izquierda, la lista de
 ## personajes; en el centro, el modelo del que se mira, girando; a la derecha, al pasar el ratón, su
 ## nombre, sus diferencias de stats, su arma principal y su habilidad pasiva. Al elegir uno, ese
-## panel se cambia por la lista de niveles (los que aún no existen salen desactivados), con la ficha
-## del nivel señalado debajo (su nombre, cómo se gana y su lore), y la lista de personajes se oculta.
+## panel se cambia por la lista de niveles (los que aún no existen salen desactivados) y la lista de
+## personajes se oculta. Un clic en un nivel lo marca y saca su ficha debajo (su nombre, cómo se gana
+## y su lore); «Jugar», abajo, encima de «Volver», empieza la partida en el marcado.
 ## Esc o «Volver» retroceden: de los niveles a los personajes y de ahí al menú.
 ## Lo muestra [Game].
 
@@ -22,12 +23,17 @@ signal back_requested
 
 var _shown: CharacterData
 var _chosen: CharacterData
+## Nivel marcado (o [code]null[/code]).
+var _selected: LevelData
+var _level_group := ButtonGroup.new()
 
 @onready var _side: Control = %Side
 @onready var _character_list: VBoxContainer = %CharacterList
 @onready var _info: Control = %Info
 @onready var _level_panel: Control = %LevelPanel
 @onready var _level_list: VBoxContainer = %LevelList
+@onready var _level_info: Control = %LevelInfo
+@onready var _level_play: Button = %LevelPlay
 @onready var _level_name: Label = %LevelName
 @onready var _level_goal: Label = %LevelGoal
 @onready var _level_lore: Label = %LevelLore
@@ -49,6 +55,7 @@ func _ready() -> void:
 	(%Choose as Button).pressed.connect(func() -> void: choose(_shown))
 	(%Back as Button).pressed.connect(back)
 	(%LevelBack as Button).pressed.connect(back)
+	_level_play.pressed.connect(func() -> void: play(_selected))
 	var first := RunState.character if RunState.character else characters[0]
 	show_character(first)
 	_show_levels(false)
@@ -82,19 +89,36 @@ func show_character(character: CharacterData) -> void:
 	_passive_description.text = character.passive_description_key
 
 
-## Elige a [param character]: la ficha se cambia por la lista de niveles.
+## Elige a [param character]: la ficha se cambia por la lista de niveles, sin ninguno marcado.
 func choose(character: CharacterData) -> void:
 	show_character(character)
 	_chosen = character
 	_show_levels(true)
-	# De entrada, la ficha del primer nivel (luego, la del que se señale).
-	if not levels.is_empty():
-		show_level(levels[0])
+	select(null)
+	if _level_list.get_child_count() > 0:
+		(_level_list.get_child(0) as Button).grab_focus()
+
+
+## Marca [param level] (o ninguno, con [code]null[/code]) y saca su ficha debajo. «Jugar» solo se
+## puede pulsar con un nivel que ya exista.
+func select(level: LevelData) -> void:
+	_selected = level
+	_level_info.visible = level != null
+	_level_play.disabled = level == null or not level.is_available()
+	for index: int in _level_list.get_child_count():
+		(_level_list.get_child(index) as Button).set_pressed_no_signal(level != null and levels[index] == level)
+	if level:
+		show_level(level)
+
+
+## Nivel marcado (o [code]null[/code]).
+func get_selected() -> LevelData:
+	return _selected
 
 
 ## Juega [param level] con el personaje elegido (si el nivel ya existe).
 func play(level: LevelData) -> void:
-	if _chosen and level.is_available():
+	if _chosen and level and level.is_available():
 		play_requested.emit(_chosen, level)
 
 
@@ -145,10 +169,12 @@ func _level_button(level: LevelData) -> Button:
 	var button := Button.new()
 	button.text = String(level.name_key) if level.is_available() else tr(&"LEVEL_COMING_SOON") % tr(level.name_key)
 	button.disabled = not level.is_available()
-	button.pressed.connect(play.bind(level))
-	# Su ficha, al pasar por encima o con el foco (también los que aún no se pueden jugar).
-	button.mouse_entered.connect(show_level.bind(level))
-	button.focus_entered.connect(show_level.bind(level))
+	# Botones bajos: así la lista, la ficha y «Jugar» caben juntos. Se queda hundido el marcado (uno
+	# solo a la vez).
+	button.theme_type_variation = &"SmallButton"
+	button.toggle_mode = true
+	button.button_group = _level_group
+	button.pressed.connect(select.bind(level))
 	return button
 
 
