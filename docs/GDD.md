@@ -65,7 +65,7 @@ Toda apuesta tiene **anticipación** (giro, luces, sonido que sube), **revelado*
 **Stats mejorables:** como en Megabonk, cualquier stat del personaje se puede subir o bajar con mejoras, rasgos de personaje y maldiciones: velocidad de carrera, altura de salto, control aéreo, stamina, daño… Una stat nueva es mejorable desde que existe.
 
 **Mejoras con sinergia de movimiento:** objetos pasivos que convierten el movimiento en ataque. Sin ellos, el movimiento no daña; cada copia suma su daño. Pasan por el daño % y el crítico del jugador y crecen con su área %.
-- **Zapatillas en llamas** (rara): el slide deja un rastro de fuego. Lo que lo pisa se quema cada medio segundo (8 por quemadura), una sola vez aunque pise varias manchas. Cada mancha dura 3 s, más con la duración %.
+- **Zapatillas en llamas** (rara): el slide deja un rastro de fuego. Lo que lo pisa se quema cada medio segundo (8 por quemadura), una sola vez aunque pise varias manchas. Cada mancha dura 3 s. Escala con tus stats como un arma: el daño % y el crítico, el área % (manchas más grandes), la duración % (duran más) y la velocidad de ataque % (quema más a menudo).
 - **Bocina de estadio** (rara): cada dash suelta una onda de 4,5 m que daña (24) y empuja.
 - **Cinturón de campeón** (improbable): la caída rápida explota al aterrizar: una onda de 5,5 m que daña (40), empuja fuerte y hace temblar la pantalla.
 

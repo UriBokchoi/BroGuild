@@ -12,6 +12,7 @@ static func stats(test: GutTest, synergy: MovementSynergyData, area: float = 100
 	offense.damage = 100.0
 	offense.crit_chance = 0.0
 	offense.crit_damage = 150.0
+	offense.attack_speed = 100.0
 	offense.area = area
 	offense.duration = 100.0
 	offense.knockback = 100.0

@@ -4,8 +4,9 @@ extends Node3D
 ## en el suelo cada [member spacing] metros. Cada [member burn_interval] segundos, lo que pisa alguna
 ## mancha (hurtbox de [member hit_mask]) se quema: recibe [code]fire_trail_damage[/code] de su
 ## [MovementSynergyData] (0 sin su objeto: entonces no deja nada), con el daño % y el crítico del
-## jugador. Una sola quemadura por tick aunque pise varias manchas. Las manchas crecen con el área %
-## y duran más con la duración %. Son [member max_patches] como mucho: si hacen falta más, se
+## jugador. Una sola quemadura por tick aunque pise varias manchas. Escala con las stats del jugador
+## como un arma: el daño % y el crítico, el área % (manchas más grandes), la duración % (duran más) y
+## la velocidad de ataque % (quema más a menudo). Son [member max_patches] como mucho: si hacen falta más, se
 ## reutiliza la más vieja. Va con [code]top_level[/code]: las manchas se quedan donde caen.
 
 ## Hurtbox que mira como mucho cada mancha en cada quemadura.
@@ -24,7 +25,7 @@ extends Node3D
 @export_range(0.1, 10.0, 0.05, "suffix:m") var radius: float = 1.2
 ## Segundos que dura cada mancha (sin alargar por la duración %).
 @export_range(0.1, 30.0, 0.1, "suffix:s") var lifetime: float = 3.0
-## Segundos entre quemaduras.
+## Segundos entre quemaduras con un 100 % de velocidad de ataque.
 @export_range(0.05, 5.0, 0.05, "suffix:s") var burn_interval: float = 0.5
 ## Manchas a la vez como mucho.
 @export_range(1, 256, 1) var max_patches: int = 32
@@ -79,7 +80,7 @@ func _physics_process(delta: float) -> void:
 	var any_left := _age(delta)
 	_burn_left -= delta
 	if _burn_left <= 0.0:
-		_burn_left += burn_interval
+		_burn_left += burn_interval / _attack_rate()
 		_burn()
 	if not _trailing and not any_left:
 		set_physics_process(false)
@@ -114,6 +115,12 @@ func _on_state_changed(_previous: State, current: State) -> void:
 
 func _damage() -> float:
 	return stats.get_value(&"fire_trail_damage")
+
+
+## La velocidad de ataque del jugador, en veces (1 = 100 %). Sin ella en sus datos, 1.
+func _attack_rate() -> float:
+	var offense := stats.find_resolved(OffenseData) as OffenseData
+	return offense.attack_speed / 100.0 if offense and offense.attack_speed > 0.0 else 1.0
 
 
 ## Deja una mancha a los pies de [member body] (con el área % y la duración % de ahora).

@@ -73,6 +73,29 @@ func test_without_damage_it_leaves_nothing() -> void:
 	assert_eq(trail.active_patches(), 0)
 
 
+func test_attack_speed_burns_more_often() -> void:
+	var trail := _trail(10.0)
+	trail.stats.add_modifier(StatModifier.create(&"attack_speed", StatModifier.Kind.PERCENT, 1.0), self)
+	var standing := Target.enemy(self, Vector3(0.3, 0.0, 0.0))
+	await wait_physics_frames(2)
+	_machine.transition_to(_slide)
+	await wait_seconds(trail.burn_interval + 0.1)
+	assert_almost_eq(standing.get_current(), 70.0, 0.01, "al doble de velocidad: al empezar y cada media espera")
+
+
+func test_damage_and_duration_scale_too() -> void:
+	var trail := _trail(10.0)
+	trail.stats.add_modifier(StatModifier.create(&"damage", StatModifier.Kind.PERCENT, 1.0), self)
+	trail.stats.add_modifier(StatModifier.create(&"duration", StatModifier.Kind.PERCENT, 1.0), self)
+	var standing := Target.enemy(self, Vector3(0.3, 0.0, 0.0))
+	await wait_physics_frames(2)
+	_machine.transition_to(_slide)
+	await wait_physics_frames(2)
+	assert_almost_eq(standing.get_current(), 80.0, 0.01, "el doble de daño")
+	await wait_seconds(trail.lifetime + 0.2)
+	assert_gt(trail.active_patches(), 0, "dura el doble")
+
+
 func test_area_grows_the_patches() -> void:
 	var trail := _trail(10.0, 200.0)
 	_machine.transition_to(_slide)
