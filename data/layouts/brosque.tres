@@ -5,7 +5,7 @@
 [ext_resource type="Script" path="res://levels/common/layout/forest_data.gd" id="3_forest"]
 [ext_resource type="PackedScene" path="res://levels/brosque/props/plateau_high.tscn" id="4_high"]
 [ext_resource type="PackedScene" path="res://levels/brosque/props/plateau_low.tscn" id="5_low"]
-[ext_resource type="PackedScene" path="res://levels/brosque/props/dumbbell_rock.tscn" id="6_dumbbell"]
+[ext_resource type="PackedScene" path="res://levels/brosque/props/dumbbell_shrine.tscn" id="6_dumbbell"]
 [ext_resource type="PackedScene" path="res://levels/brosque/props/bench_log.tscn" id="7_bench"]
 [ext_resource type="PackedScene" path="res://entities/interactables/slot_machine/slot_machine.tscn" id="8_slots"]
 [ext_resource type="Material" path="res://levels/brosque/materials/bark.tres" id="9_bark"]
@@ -79,7 +79,7 @@ footprint = 2.5
 [sub_resource type="Resource" id="Piece_dumbbell"]
 script = ExtResource("2_piece")
 scene = ExtResource("6_dumbbell")
-count = 14
+count = 8
 footprint = 2.5
 
 [sub_resource type="Resource" id="Piece_bench"]

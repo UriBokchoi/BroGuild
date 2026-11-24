@@ -1,0 +1,91 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://entities/interactables/charge_shrine/charge_shrine.gd" id="1_shrine"]
+[ext_resource type="Resource" path="res://data/shrines/dumbbell.tres" id="2_data"]
+[ext_resource type="PackedScene" path="res://levels/brosque/props/dumbbell_rock.tscn" id="3_dumbbell"]
+[ext_resource type="Shader" path="res://vfx/shaders/ground_ring.gdshader" id="4_ring"]
+[ext_resource type="Shader" path="res://vfx/shaders/light_beam.gdshader" id="5_beam"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_edge"]
+render_priority = 0
+shader = ExtResource("4_ring")
+shader_parameter/color = Color(1, 0.8, 0.35, 1)
+shader_parameter/intensity = 1.0
+shader_parameter/pulse_rate = 0.6
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_edge"]
+material = SubResource("ShaderMaterial_edge")
+size = Vector2(2, 2)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_charge"]
+render_priority = 0
+shader = ExtResource("4_ring")
+shader_parameter/color = Color(1, 0.88, 0.45, 1)
+shader_parameter/intensity = 2.0
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_charge"]
+material = SubResource("ShaderMaterial_charge")
+size = Vector2(2, 2)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_beam"]
+render_priority = 0
+shader = ExtResource("5_beam")
+shader_parameter/color = Color(1, 0.8, 0.35, 1)
+shader_parameter/intensity = 0.7
+shader_parameter/height = 5.0
+shader_parameter/stripe_count = 4.0
+shader_parameter/stripe_speed = 0.4
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_beam"]
+material = SubResource("ShaderMaterial_beam")
+top_radius = 1.4
+bottom_radius = 1.4
+height = 5.0
+radial_segments = 24
+rings = 1
+cap_top = false
+cap_bottom = false
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_zone"]
+radius = 3.5
+height = 4.0
+
+[node name="DumbbellShrine" type="Node3D" node_paths=PackedStringArray("zone", "edge_ring", "charge_ring", "glow")]
+script = ExtResource("1_shrine")
+data = ExtResource("2_data")
+zone = NodePath("Zone")
+edge_ring = NodePath("Glow/EdgeRing")
+charge_ring = NodePath("Glow/ChargeRing")
+glow = NodePath("Glow")
+
+[node name="Dumbbell" parent="." instance=ExtResource("3_dumbbell")]
+
+[node name="Zone" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="Shape" type="CollisionShape3D" parent="Zone"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+shape = SubResource("CylinderShape3D_zone")
+
+[node name="Glow" type="Node3D" parent="."]
+
+[node name="EdgeRing" type="MeshInstance3D" parent="Glow"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, 0)
+cast_shadow = 0
+instance_shader_parameters/progress = 0.96
+instance_shader_parameters/band = 0.06
+mesh = SubResource("PlaneMesh_edge")
+
+[node name="ChargeRing" type="MeshInstance3D" parent="Glow"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.06, 0)
+cast_shadow = 0
+instance_shader_parameters/progress = 0.0
+instance_shader_parameters/band = 0.14
+mesh = SubResource("PlaneMesh_charge")
+
+[node name="Beam" type="MeshInstance3D" parent="Glow"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
+cast_shadow = 0
+mesh = SubResource("CylinderMesh_beam")

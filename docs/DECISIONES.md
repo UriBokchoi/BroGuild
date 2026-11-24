@@ -1629,3 +1629,11 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - **Deshacer la elección:** con «Quedármela» y «Doble o nada» a la vista, el clic derecho vuelve a la elección entre todas las cartas (`LevelUpPanel.cancel_bet`). El subtítulo lo recuerda. Antes, elegir una carta obligaba a quedársela o apostarla.
   - **Árboles en los trolls:** el hueco que el bosque guarda a los trolls de piedra baja de 18 a 7 m de radio (más los 2 m de margen del bosque). Siguen viéndose desde la pared, pero ahora en un claro pequeño rodeado de árboles, no en una explanada pelada.
 - **Por qué:** lo pidió el diseñador tras probar.
+
+## 2026-11-24 · Las pesas son santuarios de carga
+- **Decisión:** las pesas de piedra del Brosque funcionan como los santuarios de carga de Megabonk (`ChargeShrine`). Quedarse dentro de su aro dorado las carga en 5 s de base. Al salir, la carga se queda donde estaba: no se pierde lo hecho, pero hay que volver. Cargadas, pausan y ofrecen 3 mejoras de stats distintas, cada una con su rareza; la elegida se suma a las stats del jugador para toda la partida. Se usan una vez.
+  - **Mejoras:** diez stats posibles (`data/shrines/dumbbell.tres`), con su fuerza para una rareza rara: +8 % de daño, velocidad de ataque, área o experiencia; +5 % de velocidad; +15 de vida; +4 % de crítico; +5 de Suerte; +2 de defensa; +0,3/s de regeneración. La rareza sale de la misma tabla que las cartas, con la Suerte, y multiplica esa fuerza: una común da el 60 % y una mítica el 240 %. Las mismas `UpgradeStat` que usan armas y runas, así que el redondeo y las unidades son los de siempre.
+  - **Cuántas:** las pesas bajan de 14 a 8, y todas son santuarios. Así cada pesa que se ve funciona y no salen demasiadas mejoras por partida.
+  - **Riesgo:** cargar pide quedarse en un sitio con la horda alrededor. Por eso la carga no se pierde al salir: se puede ir y volver.
+  - **Panel propio** (`StatChoicePanel`): no es un objeto, así que no va a la barra de objetos. Cada carta dice la stat, lo que suma y cómo queda («100 % → 108 %»).
+- **Por qué:** lo pidió el diseñador. Las pesas eran solo decorado; ahora son una decisión más del mapa: ¿me paro aquí con la horda encima?

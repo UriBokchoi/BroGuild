@@ -122,7 +122,7 @@ Lo que salió en la segunda tanda de pruebas; va antes que el resto.
 - [x] Optimizar: el ordenador va a tope jugando. Límite de FPS (de serie, 60), enemigos y objetos redondos con menos polígonos, bosque por trozos (un 83 % menos de triángulos)
 
 ## Hito 5d — Pedidos tras las pruebas (3) (2026-11-24)
-- [ ] Pesas de piedra que se activan como los santuarios de Megabonk: quedarse cerca 5 s (de base) da a elegir una de 3 mejoras de stats, con rarezas
+- [x] Pesas de piedra que se activan como los santuarios de Megabonk: quedarse cerca 5 s (de base) da a elegir una de 3 mejoras de stats, con rarezas
 - [x] Subir de nivel: con «Quedármela» y «Doble o nada» a la vista, el clic derecho deshace la elección y deja escoger otra carta
 - [x] Árboles alrededor de los trolls de piedra (ahora están en un claro pelado)
 

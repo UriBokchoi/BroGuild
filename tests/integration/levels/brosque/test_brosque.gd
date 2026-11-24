@@ -168,6 +168,14 @@ func test_the_map_is_bigger_than_the_first_one() -> void:
 	assert_gt(far.size(), 0, "hay piezas donde antes estaba la pared")
 
 
+func test_the_dumbbells_are_charge_shrines() -> void:
+	var layout := _level.get_node(^"Layout") as LevelLayout
+	var shrines := layout.get_pieces().filter(func(piece: Node3D) -> bool: return piece is ChargeShrine)
+	assert_eq(shrines.size(), _count_in_data("ChargeShrine"))
+	assert_gt(shrines.size(), 0)
+	assert_not_null(_level.get_node(^"RunSystems/StatChoicePanel"), "y quien enseña lo que ofrecen")
+
+
 func test_puddles_with_a_flower_are_only_decoration() -> void:
 	await wait_physics_frames(2)
 	var puddles := _level.get_node(^"Puddles").get_children()

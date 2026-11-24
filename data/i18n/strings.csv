@@ -372,6 +372,8 @@ ITEM_EXCALIBRO_NAME,Excalibro,Excalibro
 ITEM_EXCALIBRO_DESCRIPTION,Solo un bro de verdad podía sacarla de la roca.,Only a true bro could pull it from the stone.
 ITEM_CHOICE_TITLE,El círculo de setas te ofrece…,The mushroom ring offers you…
 ITEM_CHOICE_SUBTITLE,Elige uno,Pick one
+STAT_CHOICE_TITLE,Las pesas te ofrecen…,The weights offer you…
+STAT_CHOICE_SUBTITLE,Elige una mejora,Pick an upgrade
 INTERACT_MUSHROOM_RING,Entrar en el círculo de setas,Step into the mushroom ring
 RECORDS_TITLE,Récords,Records
 RECORDS_SUBTITLE,"Tus mejores partidas en este equipo, por enemigos derrotados. En azul, la última.","Your best runs on this computer, by enemies defeated. In blue, the latest one."
