@@ -202,6 +202,36 @@ func test_elites_and_breakables_multiply_the_drop_chance() -> void:
 	assert_eq(_bombs(), 2, "10 % × 10 del élite")
 
 
+func test_elites_sometimes_drop_a_chest() -> void:
+	_make_dropper(_player_stats(0.0))
+	var chests := Node3D.new()
+	add_child_autofree(chests)
+	_dropper.chest_parent = chests
+	var swarm := EnemySwarm.new()
+	add_child_autofree(swarm)
+	var elite := ELITE.duplicate() as EliteData
+	elite.chest_chance = 0.0
+	var unlucky := swarm.spawn(SWARMER, Vector3(-6.0, 0.0, 0.0))
+	unlucky.promote(elite)
+	unlucky.health.take_damage(DamageInfo.create(100000.0))
+	assert_eq(chests.get_child_count(), 0, "con un 0 %, nada")
+	elite.chest_chance = 100.0
+	var lucky := swarm.spawn(SWARMER, Vector3(6.0, 0.0, 3.0))
+	lucky.promote(elite)
+	lucky.health.take_damage(DamageInfo.create(100000.0))
+	assert_eq(chests.get_child_count(), 1, "con un 100 %, su cofre")
+	var chest := chests.get_child(0) as Chest
+	assert_not_null(chest, "un cofre normal")
+	assert_almost_eq(chest.global_position.x, 6.0, 0.01, "donde cayó")
+	swarm.spawn(SWARMER, Vector3(0.0, 0.0, 6.0)).health.take_damage(DamageInfo.create(1000.0))
+	assert_eq(chests.get_child_count(), 1, "los normales no sueltan cofres")
+
+
+func test_every_elite_can_drop_a_chest() -> void:
+	assert_gt(ELITE.chest_chance, 0.0)
+	assert_not_null(ELITE.chest)
+
+
 func test_prewarmed_pickups_wait_out_of_the_world() -> void:
 	_field.prewarm(XP_GEM, 5)
 	assert_eq(_field.active_count(), 0)

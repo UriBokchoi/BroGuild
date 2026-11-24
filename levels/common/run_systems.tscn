@@ -88,9 +88,10 @@ script = ExtResource("11_pickups")
 collector = NodePath("../Player")
 collector_stats = NodePath("../Player/Stats")
 
-[node name="LootDropper" type="Node" parent="." node_paths=PackedStringArray("field", "player_stats")]
+[node name="LootDropper" type="Node" parent="." node_paths=PackedStringArray("field", "player_stats", "chest_parent")]
 script = ExtResource("12_loot")
 field = NodePath("../PickupField")
+chest_parent = NodePath("..")
 xp_gem = ExtResource("13_xp_gem")
 gold_coin = ExtResource("14_gold_coin")
 player_stats = NodePath("../Player/Stats")

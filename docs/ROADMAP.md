@@ -132,11 +132,14 @@ Lo que salió en la segunda tanda de pruebas; va antes que el resto.
 - [x] Brosque: el miniboss Trolleador Cara a los 4:30 (barra propia bajo la del jefe, porrazo en área y salto) y dos trolls de piedra fuera de la pared este (guiño a El Hobbit); los jefes ya trepan por las pesas
 - [ ] La Torre del Mago
 - [ ] La Mazmorra
+- [ ] Tiers de nivel: cada nivel tiene 3 (Brosque tier 1, tier 2 y tier 3). El tier 2 se abre al pasar el tier 1 y es el mismo nivel, pero distinto. Lo detallará el diseñador más adelante
+- [ ] Élites con afijos (rápido, vampiro, explosivo…), solo en tier 2 o más; con más probabilidad de soltar cofre que un élite normal
 
 ## Hito 7 — El torneo
-- [ ] Racha y botín (niveles, multiplicador, guardar, perder al ser golpeado)
-- [ ] Pactos del Gremio
-- [ ] Élites con afijos que sueltan cofres
+- [x] Élites: todos tienen una probabilidad de soltar un cofre
+- [ ] Apuntar: mantener el clic derecho apunta con el ratón (las armas van a por lo que miras); el clic central fija al jefe como objetivo
+- [ ] Racha como power-up de 30 s, sin botín: matar seguido sube el multiplicador de oro, experiencia y Suerte; un golpe lo baja
+- [ ] Pactos del Gremio: un heraldo aparece cada 1000 enemigos derrotados y ofrece pactos (una maldición a cambio de un premio), que se pueden rechazar
 - [x] Objetos con efectos además de stats: veneno con probabilidad al golpear, y más del estilo (Pre-entreno caducado: veneno; Cable pelado: rayo; Spray de frío: frena)
 
 ## Hito 8 — Cierre de partida y meta
@@ -161,6 +164,7 @@ Lo que salió en la segunda tanda de pruebas; va antes que el resto.
 7. Del Hito 7: objetos con efectos.
 8. Polvo de los pasos (Hito 5) y repaso del código.
 9. Hito 5d: pesas que activan mejoras, deshacer la elección con clic derecho y árboles en los trolls.
+10. Hito 7 (2026-11-24): cofres de élite, apuntar y fijar al jefe, racha como power-up y pactos con el heraldo. Los afijos y los tiers, más adelante (Hito 6).
 
 ## Backlog (sin orden)
 - Física de la horda: con 180 esbirros apretados, la física se lleva unos 4–6 ms por tick (el rumbo del enjambre, 1 ms; el resto, el motor). Mirar con el profiler del editor si hiciera falta (formas más simples, menos contactos)

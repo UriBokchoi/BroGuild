@@ -1637,3 +1637,12 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - **Riesgo:** cargar pide quedarse en un sitio con la horda alrededor. Por eso la carga no se pierde al salir: se puede ir y volver.
   - **Panel propio** (`StatChoicePanel`): no es un objeto, así que no va a la barra de objetos. Cada carta dice la stat, lo que suma y cómo queda («100 % → 108 %»).
 - **Por qué:** lo pidió el diseñador. Las pesas eran solo decorado; ahora son una decisión más del mapa: ¿me paro aquí con la horda encima?
+
+## 2026-11-24 · Hito 7: el plan acordado y los cofres de élite
+- **Plan:** el diseñador cambió el Hito 7.
+  - **Racha:** pasa a ser un power-up de 30 s, sin botín: mientras dura, matar seguido sube el multiplicador de oro, experiencia y Suerte, y un golpe lo baja.
+  - **Pactos:** los ofrece un heraldo del Gremio que aparece cada 1000 enemigos derrotados.
+  - **Apuntar:** mantener el clic derecho apunta con el ratón y el clic central fija al jefe como objetivo.
+  - **Afijos de los élites:** solo en el tier 2 o más de cada nivel. Los tiers (Brosque tier 1, 2 y 3) se detallarán más adelante; van al Hito 6.
+- **Cofres de élite:** todos los élites tienen un 10 % de soltar un cofre al morir (`EliteData.chest_chance`). Es un cofre normal: cuesta oro y sube el precio de los demás, como los del mapa. Los élites con afijos tendrán más probabilidad.
+- **Por qué:** lo pidió el diseñador. Un cofre que cuesta oro sigue siendo una decisión; si se quisieran gratis, es otro `ChestData` en `EliteData.chest`.
