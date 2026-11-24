@@ -2,8 +2,10 @@ class_name ForestBuilder
 extends RefCounted
 ## Construye el bosque de un mapa generado ([LevelLayout], [ForestData]): árboles sueltos que
 ## esquivan el claro y las piezas, un anillo denso junto a las paredes (con colisión) y una banda
-## grande fuera de ellas (sin colisión). Los dibuja con cinco MultiMesh (tronco y copas: pocas
-## llamadas de dibujo para cientos de árboles) y les da un solo cuerpo con un cilindro por tronco.
+## grande fuera de ellas (sin colisión). Los dibuja por trozos de [member ForestData.chunk_size]
+## metros, cada uno con cinco MultiMesh (tronco y copas: pocas llamadas de dibujo para cientos de
+## árboles, y los trozos que no se ven no se dibujan), y les da un solo cuerpo con un cilindro por
+## tronco.
 
 ## Modelo del árbol (como el de una escena): tronco, tres conos de pino y la copa redonda; cada
 ## parte, su radio arriba, su radio abajo, su alto y la altura de su centro.
@@ -109,24 +111,63 @@ static func _crowded(at: Vector2, trees: Array[Dictionary], spacing: float) -> b
 
 
 static func _add_parts(root: Node3D, forest: ForestData, trees: Array[Dictionary]) -> void:
-	var everyone := func(_tree_data: Dictionary) -> bool: return true
 	var pines := func(tree_data: Dictionary) -> bool: return not tree_data["round"]
 	var rounds := func(tree_data: Dictionary) -> bool: return tree_data["round"]
-	_add_part(root, "Trunks", _cylinder(forest.bark, TRUNK_SHAPE), trees.filter(everyone), TRUNK_SHAPE.w, false)
-	var names: Array[String] = ["PineLow", "PineMid", "PineTop"]
-	for index: int in PINE_PARTS.size():
-		var shape := PINE_PARTS[index]
-		_add_part(root, names[index], _cylinder(forest.foliage, shape), trees.filter(pines), shape.w, true)
+	# Las mallas se comparten entre trozos.
+	var trunk := _cylinder(forest.bark, TRUNK_SHAPE)
+	var pine_meshes: Array[Mesh] = []
+	for shape: Vector4 in PINE_PARTS:
+		pine_meshes.append(_cylinder(forest.foliage, shape))
 	var crown := SphereMesh.new()
 	crown.material = forest.foliage
 	crown.radius = CROWN_SHAPE.x
 	crown.height = CROWN_SHAPE.y
 	crown.radial_segments = RADIAL_SEGMENTS + 4
 	crown.rings = RADIAL_SEGMENTS - 2
-	_add_part(root, "RoundCrowns", crown, trees.filter(rounds), CROWN_SHAPE.w, true)
+	var names: Array[String] = ["PineLow", "PineMid", "PineTop"]
+	var chunks := _chunks(trees, forest.chunk_size)
+	for chunk_index: int in chunks.size():
+		var chunk_trees: Array = chunks[chunk_index]
+		var chunk := Node3D.new()
+		chunk.name = "Chunk%d" % chunk_index
+		root.add_child(chunk)
+		_add_part(chunk, "Trunks", trunk, chunk_trees, TRUNK_SHAPE.w, false)
+		for index: int in PINE_PARTS.size():
+			_add_part(chunk, names[index], pine_meshes[index], chunk_trees.filter(pines), PINE_PARTS[index].w, true)
+		_add_part(chunk, "RoundCrowns", crown, chunk_trees.filter(rounds), CROWN_SHAPE.w, true)
+
+
+## Cuántos árboles dibuja la parte [param part_name] ([code]Trunks[/code], [code]PineLow[/code]…)
+## en todos los trozos del bosque [param forest_root].
+static func count_instances(forest_root: Node, part_name: String) -> int:
+	var total := 0
+	for chunk: Node in forest_root.get_children():
+		var part := chunk.get_node_or_null(NodePath(part_name)) as MultiMeshInstance3D
+		if part:
+			total += part.multimesh.instance_count
+	return total
+
+
+## [param trees] repartidos en trozos de [param size] × [param size] metros (sin tamaño, uno solo).
+static func _chunks(trees: Array[Dictionary], size: float) -> Array[Array]:
+	var chunks: Array[Array] = []
+	if size <= 0.0:
+		chunks.append(trees)
+		return chunks
+	var by_cell: Dictionary[Vector2i, Array] = {}
+	for tree: Dictionary in trees:
+		var at: Vector2 = tree["at"]
+		var cell := Vector2i(floori(at.x / size), floori(at.y / size))
+		if not by_cell.has(cell):
+			by_cell[cell] = []
+		by_cell[cell].append(tree)
+	chunks.assign(by_cell.values())
+	return chunks
 
 
 static func _add_part(root: Node3D, part_name: String, mesh: Mesh, chosen: Array, height: float, colored: bool) -> void:
+	if chosen.is_empty():
+		return
 	var multimesh := MultiMesh.new()
 	multimesh.transform_format = MultiMesh.TRANSFORM_3D
 	multimesh.use_colors = colored

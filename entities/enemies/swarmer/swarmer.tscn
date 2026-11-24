@@ -42,17 +42,22 @@ albedo_color = Color(0.92, 0.86, 0.72, 1)
 material = SubResource("StandardMaterial3D_skin")
 radius = 0.38
 height = 1.2
+radial_segments = 16
+rings = 4
 
 [sub_resource type="SphereMesh" id="SphereMesh_eye"]
 material = SubResource("StandardMaterial3D_eye")
 radius = 0.08
 height = 0.16
+radial_segments = 16
+rings = 8
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_horn"]
 material = SubResource("StandardMaterial3D_horn")
 top_radius = 0.0
 bottom_radius = 0.07
 height = 0.28
+radial_segments = 12
 
 [node name="Swarmer" type="RigidBody3D" node_paths=PackedStringArray("stats", "health", "hurtbox", "contact_hitbox", "visual")]
 collision_layer = 4

@@ -36,6 +36,7 @@ material = SubResource("StandardMaterial3D_stone")
 top_radius = 3.4
 bottom_radius = 3.6
 height = 0.3
+radial_segments = 12
 
 [sub_resource type="TorusMesh" id="TorusMesh_ring"]
 material = SubResource("StandardMaterial3D_stone")

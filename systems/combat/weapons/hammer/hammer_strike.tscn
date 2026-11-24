@@ -30,6 +30,7 @@ material = SubResource("Mat_wood")
 top_radius = 0.07
 bottom_radius = 0.08
 height = 1.8
+radial_segments = 12
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ring"]
 render_priority = 0

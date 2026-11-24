@@ -15,22 +15,29 @@ roughness = 1.0
 material = SubResource("Mat_moss")
 radius = 0.5
 height = 0.35
+radial_segments = 16
+rings = 8
 
 [sub_resource type="CylinderMesh" id="Mesh_pot"]
 material = SubResource("Mat_stone")
 top_radius = 0.95
 bottom_radius = 0.7
 height = 1.0
+radial_segments = 12
 
 [sub_resource type="TorusMesh" id="Mesh_pot_rim"]
 material = SubResource("Mat_stone")
 inner_radius = 0.82
 outer_radius = 1.05
+rings = 24
+ring_segments = 8
 
 [sub_resource type="SphereMesh" id="Mesh_rock"]
 material = SubResource("Mat_stone")
 radius = 0.9
 height = 1.0
+radial_segments = 16
+rings = 8
 
 [node name="StoneTrolls" type="Node3D" node_paths=PackedStringArray("statues")]
 script = ExtResource("1_statue")

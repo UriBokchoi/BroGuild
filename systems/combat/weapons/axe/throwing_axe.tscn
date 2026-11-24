@@ -19,6 +19,7 @@ material = SubResource("Mat_wood")
 top_radius = 0.045
 bottom_radius = 0.05
 height = 0.7
+radial_segments = 12
 
 [sub_resource type="BoxMesh" id="Mesh_blade"]
 material = SubResource("Mat_steel")

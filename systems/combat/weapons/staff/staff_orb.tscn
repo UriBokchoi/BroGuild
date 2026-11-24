@@ -13,12 +13,16 @@ emission_energy_multiplier = 3.0
 material = SubResource("StandardMaterial3D_orb")
 radius = 0.2
 height = 0.4
+radial_segments = 16
+rings = 8
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_blast"]
 shader = ExtResource("2_blast")
 
 [sub_resource type="SphereMesh" id="SphereMesh_blast"]
 material = SubResource("ShaderMaterial_blast")
+radial_segments = 16
+rings = 8
 
 [node name="StaffOrb" type="Node3D" node_paths=PackedStringArray("orb", "blast")]
 script = ExtResource("1_orb")

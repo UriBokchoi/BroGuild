@@ -34,6 +34,7 @@ material = SubResource("Mat_skin_dark")
 top_radius = 0.42
 bottom_radius = 0.36
 height = 1.3
+radial_segments = 12
 
 [sub_resource type="BoxMesh" id="Mesh_foot"]
 material = SubResource("Mat_skin_dark")
@@ -44,46 +45,63 @@ material = SubResource("Mat_cloth")
 top_radius = 1.12
 bottom_radius = 1.25
 height = 0.65
+radial_segments = 12
 
 [sub_resource type="SphereMesh" id="Mesh_belly"]
 material = SubResource("Mat_skin")
 radius = 1.35
 height = 2.4
+radial_segments = 16
+rings = 8
 
 [sub_resource type="SphereMesh" id="Mesh_chest"]
 material = SubResource("Mat_skin")
 radius = 1.25
 height = 1.9
+radial_segments = 16
+rings = 8
 
 [sub_resource type="SphereMesh" id="Mesh_skull"]
 material = SubResource("Mat_skin")
 radius = 0.72
 height = 1.25
+radial_segments = 16
+rings = 8
 
 [sub_resource type="SphereMesh" id="Mesh_chin"]
 material = SubResource("Mat_skin")
 radius = 0.5
 height = 0.8
+radial_segments = 16
+rings = 8
 
 [sub_resource type="SphereMesh" id="Mesh_nose"]
 material = SubResource("Mat_skin_dark")
 radius = 0.3
 height = 0.62
+radial_segments = 16
+rings = 8
 
 [sub_resource type="SphereMesh" id="Mesh_ear"]
 material = SubResource("Mat_skin")
 radius = 0.26
 height = 0.52
+radial_segments = 16
+rings = 8
 
 [sub_resource type="SphereMesh" id="Mesh_eye"]
 material = SubResource("Mat_eye")
 radius = 0.14
 height = 0.18
+radial_segments = 16
+rings = 8
 
 [sub_resource type="SphereMesh" id="Mesh_pupil"]
 material = SubResource("Mat_dark")
 radius = 0.07
 height = 0.1
+radial_segments = 16
+rings = 8
 
 [sub_resource type="BoxMesh" id="Mesh_brow"]
 material = SubResource("Mat_dark")
@@ -118,34 +136,42 @@ material = SubResource("Mat_skin")
 top_radius = 0.38
 bottom_radius = 0.3
 height = 1.3
+radial_segments = 12
 
 [sub_resource type="CylinderMesh" id="Mesh_forearm"]
 material = SubResource("Mat_skin")
 top_radius = 0.32
 bottom_radius = 0.42
 height = 1.2
+radial_segments = 12
 
 [sub_resource type="SphereMesh" id="Mesh_hand"]
 material = SubResource("Mat_skin_dark")
 radius = 0.42
 height = 0.8
+radial_segments = 16
+rings = 8
 
 [sub_resource type="CylinderMesh" id="Mesh_club_handle"]
 material = SubResource("Mat_wood")
 top_radius = 0.12
 bottom_radius = 0.11
 height = 0.6
+radial_segments = 12
 
 [sub_resource type="CylinderMesh" id="Mesh_club_head"]
 material = SubResource("Mat_wood")
 top_radius = 0.38
 bottom_radius = 0.2
 height = 1.0
+radial_segments = 12
 
 [sub_resource type="SphereMesh" id="Mesh_knot"]
 material = SubResource("Mat_wood")
 radius = 0.17
 height = 0.34
+radial_segments = 16
+rings = 8
 
 [node name="TrollModel" type="Node3D"]
 

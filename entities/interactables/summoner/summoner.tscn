@@ -19,11 +19,14 @@ material = SubResource("StandardMaterial3D_stone")
 top_radius = 0.5
 bottom_radius = 0.65
 height = 1.0
+radial_segments = 12
 
 [sub_resource type="TorusMesh" id="TorusMesh_rune"]
 material = SubResource("StandardMaterial3D_rune")
 inner_radius = 0.32
 outer_radius = 0.4
+rings = 24
+ring_segments = 8
 
 [sub_resource type="PrismMesh" id="PrismMesh_crystal"]
 material = SubResource("StandardMaterial3D_rune")

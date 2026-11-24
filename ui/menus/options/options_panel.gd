@@ -1,7 +1,7 @@
 class_name OptionsPanel
 extends PanelContainer
-## Opciones básicas: volumen de cada bus, pantalla completa, tamaño de la ventana, VSync y temblor de
-## pantalla. El volumen y el temblor se aplican al momento (para oírlo o notarlo); las de pantalla
+## Opciones básicas: volumen de cada bus, pantalla completa, tamaño de la ventana, VSync, límite de
+## FPS y temblor de pantalla. El volumen y el temblor se aplican al momento (para oírlo o notarlo); las de pantalla
 ## quedan pendientes hasta «Aplicar», que las aplica y las guarda. «Volver» o Esc guardan el volumen
 ## y el temblor, descartan lo de pantalla sin aplicar y cierran. Trabaja sobre
 ## [code]Save.settings[/code]. Lo abren la pausa y el menú principal. Ejecutado dentro del editor, la
@@ -23,6 +23,7 @@ var _pending: GameSettings
 @onready var _fullscreen: CheckButton = %Fullscreen
 @onready var _resolution: OptionButton = %Resolution
 @onready var _vsync: CheckButton = %VSync
+@onready var _fps_limit: OptionButton = %FpsLimit
 @onready var _shake: HSlider = %ScreenShake
 @onready var _shake_value: Label = %ScreenShakeValue
 @onready var _window_note: Label = %WindowNote
@@ -36,6 +37,9 @@ func _ready() -> void:
 	_fullscreen.toggled.connect(_on_fullscreen_toggled)
 	_resolution.item_selected.connect(_on_resolution_selected)
 	_vsync.toggled.connect(_on_vsync_toggled)
+	for limit: int in data.fps_limits:
+		_fps_limit.add_item(str(limit) if limit > 0 else tr(&"OPTIONS_FPS_UNLIMITED"))
+	_fps_limit.item_selected.connect(_on_fps_limit_selected)
 	_shake.value_changed.connect(_on_shake_changed)
 	_apply.pressed.connect(apply)
 	_back.pressed.connect(close)
@@ -119,6 +123,7 @@ func _show_settings() -> void:
 	_show_shake()
 	_fullscreen.set_pressed_no_signal(_pending.fullscreen)
 	_vsync.set_pressed_no_signal(_pending.vsync)
+	_fps_limit.select(data.fps_limits.find(_pending.fps_limit))
 	_fill_resolutions()
 	_refresh_apply()
 
@@ -194,4 +199,9 @@ func _on_shake_changed(value: float) -> void:
 
 func _on_vsync_toggled(on: bool) -> void:
 	_pending.vsync = on
+	_refresh_apply()
+
+
+func _on_fps_limit_selected(index: int) -> void:
+	_pending.fps_limit = data.fps_limits[index]
 	_refresh_apply()

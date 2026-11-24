@@ -81,6 +81,8 @@ OPTIONS_FULLSCREEN,Pantalla completa,Fullscreen
 OPTIONS_RESOLUTION,Resolución,Resolution
 OPTIONS_RESOLUTION_VALUE,%d × %d,%d × %d
 OPTIONS_VSYNC,VSync,VSync
+OPTIONS_FPS_LIMIT,Límite de FPS,FPS limit
+OPTIONS_FPS_UNLIMITED,Sin límite,Unlimited
 OPTIONS_SCREEN_SHAKE,Temblor de pantalla,Screen shake
 OPTIONS_APPLY,Aplicar,Apply
 OPTIONS_BACK,Volver,Back

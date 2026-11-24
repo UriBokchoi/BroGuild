@@ -63,6 +63,19 @@ func test_display_options_wait_for_apply() -> void:
 	assert_true(FileAccess.file_exists(PATH), "y guardado")
 
 
+func test_offers_the_fps_limits_and_applies_the_chosen_one() -> void:
+	var limits := _panel.get_node(^"%FpsLimit") as OptionButton
+	assert_eq(limits.item_count, DATA.fps_limits.size())
+	assert_eq(limits.selected, DATA.fps_limits.find(DATA.default_fps_limit), "el de serie, marcado")
+	var unlimited := DATA.fps_limits.find(0)
+	assert_eq(limits.get_item_text(unlimited), tr(&"OPTIONS_FPS_UNLIMITED"))
+	limits.select(unlimited)
+	limits.item_selected.emit(unlimited)
+	assert_eq(Save.settings.fps_limit, DATA.default_fps_limit, "aún sin aplicar")
+	(_panel.get_node(^"%Apply") as Button).pressed.emit()
+	assert_eq(Save.settings.fps_limit, 0)
+
+
 func test_back_drops_what_was_not_applied() -> void:
 	(_panel.get_node(^"%Fullscreen") as CheckButton).button_pressed = true
 	(_panel.get_node(^"%Back") as Button).pressed.emit()

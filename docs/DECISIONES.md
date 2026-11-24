@@ -1552,4 +1552,17 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - **Stats importantes:** la vista de stats (pausa, Tab y armería) enseña solo las que algo del juego puede cambiar: algún modificador o mejora de los datos, o la dificultad, que sube sola. Quedan 23 de las 72 del jugador; las otras 49 son tiempos y márgenes internos del movimiento (coyote time, mantle, slide…) que no cambian nunca. Una mejora nueva sobre una stat la hace aparecer sola.
     - Se buscan solo en las carpetas de datos que cambian al jugador. Buscar en todo `data` cargaba los niveles con sus escenas y tardaba 1,7 s; así son 0,4 s en frío, al cargar el nivel, y menos con los datos ya cargados. Un test (lento a propósito) mira todo `data` y avisa si una stat del jugador cambia desde una carpeta que no está en la lista.
   - **Rastro de fuego:** ya escalaba con el daño %, el crítico, el área % y la duración %, pero no con la velocidad de ataque %, que en las armas acorta la espera. Ahora quema cada 0,5 s ÷ velocidad de ataque: con un 200 %, cada 0,25 s.
+  - **Optimizar:** medido en el Brosque a 1080p con una sonda (sin VSync, el peor caso):
+
+    | Qué | Antes | Ahora |
+    |---|---|---|
+    | Fotogramas por segundo, sin enemigos | ~880 (sin límite) | 60 (límite de serie) |
+    | Triángulos por fotograma, sin enemigos | 2,6 M | 0,43 M |
+    | Triángulos por fotograma, con 300 esbirros | 9,3 M | 1,6 M |
+    | Llamadas de dibujo, con 300 esbirros | 640 | 890 |
+
+    - **Límite de FPS:** el juego no tenía. Con el VSync quitado dibujaba cientos de fotogramas por segundo, también en los menús, y el ordenador iba a tope sin que se notara nada. Ahora es una opción de pantalla (30, 60, 90, 120, 144, 165, 240 o sin límite), de serie 60, que se aplica al arrancar (`Engine.max_fps`). Las opciones ya guardadas sin ella toman el 60.
+    - **Mallas redondas:** las esferas, cápsulas, cilindros y toros que usaban la resolución de serie de Godot (64 segmentos: miles de triángulos por enemigo, y cada uno se dibuja también en cada pasada de sombra) pasan a 16 × 8, 16 × 4, 12 y 24 × 8. En el estilo low-poly no se nota. El cuerpo del jugador se queda como estaba: siempre está grande en pantalla.
+    - **Bosque por trozos:** era un MultiMesh por parte para todo el mapa (unos 2.000 árboles con la banda de fuera). Un MultiMesh es un solo objeto para el motor: se dibujaban todos los árboles siempre, en la vista y en las cuatro pasadas de sombra. Ahora va en trozos de 40 m (`ForestData.chunk_size`) y el motor descarta los que no se ven. Suben algo las llamadas de dibujo, pero cada una mueve muchos menos triángulos.
+    - **Física:** con 180 esbirros apretados, el rumbo del enjambre cuesta 1 ms por tick y la física, unos 4–6 ms. Bajar los pasos del solver de Jolt (10 → 6) no cambió nada medible. Se deja en el backlog: a 60 Hz es una parte de un núcleo y no crece con los FPS.
 - **Por qué:** lo pidió el diseñador tras probar.

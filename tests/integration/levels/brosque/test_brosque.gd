@@ -51,7 +51,7 @@ func test_the_map_has_chests_on_the_ground_and_on_plateaus() -> void:
 
 
 func test_the_trees_inside_the_walls_collide_and_the_outer_forest_hides_the_edge() -> void:
-	var trunks := (_level.get_node(^"Layout/Forest/Trunks") as MultiMeshInstance3D).multimesh.instance_count
+	var trunks := ForestBuilder.count_instances(_level.get_node(^"Layout/Forest"), "Trunks")
 	var colliders := _level.get_node(^"Layout/Forest/TreeColliders").get_children()
 	assert_gt(colliders.size(), 0)
 	assert_gt(trunks, colliders.size() * 3, "la banda de fuera es mucho más grande")
@@ -71,6 +71,19 @@ func test_the_visible_edge_lies_on_the_inner_face_of_the_walls() -> void:
 			assert_almost_eq(absf(at.x) - size.x / 2.0, boundary.half_extent.x, 0.01, "%s" % wall.name)
 		else:
 			assert_almost_eq(absf(at.z) - size.z / 2.0, boundary.half_extent.y, 0.01, "%s" % wall.name)
+
+
+func test_the_forest_is_drawn_in_chunks() -> void:
+	var forest := _level.get_node(^"Layout/Forest")
+	var data := (_level.get_node(^"Layout") as LevelLayout).data.forest
+	var chunks := forest.get_children().filter(func(node: Node) -> bool: return node.name.begins_with("Chunk"))
+	assert_gt(chunks.size(), 10, "muchos trozos: los que no se ven no se dibujan")
+	for chunk: Node in chunks:
+		var trunks := chunk.get_node_or_null(^"Trunks") as MultiMeshInstance3D
+		assert_not_null(trunks, "%s tiene árboles" % chunk.name)
+		var box := trunks.multimesh.get_aabb()
+		assert_lt(box.size.x, data.chunk_size + 2.0, "%s cabe en su trozo" % chunk.name)
+		assert_lt(box.size.z, data.chunk_size + 2.0)
 
 
 func test_enemies_only_spawn_inside_the_walls() -> void:

@@ -1,7 +1,7 @@
 class_name GameSettings
 extends RefCounted
 ## Opciones que ha elegido el jugador: idioma, volumen de cada bus, pantalla completa, tamaño de la
-## ventana, VSync y cuánto tiembla la pantalla. Se guardan en un [ConfigFile] ([method write_to] y
+## ventana, VSync, límite de FPS y cuánto tiembla la pantalla. Se guardan en un [ConfigFile] ([method write_to] y
 ## [method read_from]) y se aplican al motor ([method apply_locale], [method apply_audio] y
 ## [method apply_display]); el temblor lo lee [ScreenShake]. El autoload [code]Save[/code] las carga
 ## y las aplica al arrancar.
@@ -19,6 +19,8 @@ var fullscreen: bool = false
 ## el que tenga).
 var resolution: Vector2i = Vector2i.ZERO
 var vsync: bool = false
+## Fotogramas por segundo como mucho ([member Engine.max_fps]; 0 = sin límite).
+var fps_limit: int = 0
 ## Cuánto tiembla la pantalla al recibir golpes, de 0 (nada) a 1 (lo normal).
 var screen_shake: float = 1.0
 
@@ -29,6 +31,7 @@ static func create(data: SettingsData) -> GameSettings:
 	for bus: StringName in data.volume_buses:
 		settings.volumes[bus] = data.default_volume
 	settings.vsync = data.default_vsync
+	settings.fps_limit = data.default_fps_limit
 	settings.locale = data.default_locale
 	settings.screen_shake = data.default_screen_shake
 	return settings
@@ -50,6 +53,9 @@ func read_from(config: ConfigFile) -> void:
 	var saved_vsync: Variant = config.get_value(SECTION_DISPLAY, "vsync", vsync)
 	if saved_vsync is bool:
 		vsync = saved_vsync
+	var saved_fps: Variant = config.get_value(SECTION_DISPLAY, "fps_limit", fps_limit)
+	if saved_fps is int:
+		fps_limit = maxi(saved_fps as int, 0)
 	var saved_shake: Variant = config.get_value(SECTION_DISPLAY, "screen_shake", screen_shake)
 	if saved_shake is float or saved_shake is int:
 		var shake: float = saved_shake
@@ -66,6 +72,7 @@ func write_to(config: ConfigFile) -> void:
 	config.set_value(SECTION_DISPLAY, "fullscreen", fullscreen)
 	config.set_value(SECTION_DISPLAY, "resolution", resolution)
 	config.set_value(SECTION_DISPLAY, "vsync", vsync)
+	config.set_value(SECTION_DISPLAY, "fps_limit", fps_limit)
 	config.set_value(SECTION_DISPLAY, "screen_shake", screen_shake)
 	config.set_value(SECTION_GENERAL, "locale", locale)
 
@@ -86,13 +93,14 @@ func apply_audio() -> void:
 		AudioServer.set_bus_volume_linear(index, volumes[bus])
 
 
-## Pone el VSync y [param window] en pantalla completa o en ventana (con su tamaño, centrada). Sin
-## pantalla (headless: tests y validación), no hace nada; incrustado en el editor, solo el VSync
-## (ver [method can_change_window]).
+## Pone el VSync, el límite de FPS y [param window] en pantalla completa o en ventana (con su tamaño,
+## centrada). Sin pantalla (headless: tests y validación), no hace nada; incrustado en el editor,
+## solo el VSync y el límite (ver [method can_change_window]).
 func apply_display(window: Window) -> void:
 	if DisplayServer.get_name() == "headless":
 		return
 	DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_ENABLED if vsync else DisplayServer.VSYNC_DISABLED)
+	Engine.max_fps = fps_limit
 	if not can_change_window():
 		return
 	window.mode = Window.MODE_FULLSCREEN if fullscreen else Window.MODE_WINDOWED
@@ -108,14 +116,21 @@ func copy() -> GameSettings:
 	other.fullscreen = fullscreen
 	other.resolution = resolution
 	other.vsync = vsync
+	other.fps_limit = fps_limit
 	other.locale = locale
 	other.screen_shake = screen_shake
 	return other
 
 
-## Si las opciones de pantalla (pantalla completa, tamaño y VSync) de [param other] son otras.
+## Si las opciones de pantalla (pantalla completa, tamaño, VSync y límite de FPS) de [param other] son
+## otras.
 func display_differs(other: GameSettings) -> bool:
-	return fullscreen != other.fullscreen or resolution != other.resolution or vsync != other.vsync
+	return (
+		fullscreen != other.fullscreen
+		or resolution != other.resolution
+		or vsync != other.vsync
+		or fps_limit != other.fps_limit
+	)
 
 
 ## Toma de [param other] las opciones de pantalla.
@@ -123,6 +138,7 @@ func take_display(other: GameSettings) -> void:
 	fullscreen = other.fullscreen
 	resolution = other.resolution
 	vsync = other.vsync
+	fps_limit = other.fps_limit
 
 
 ## Si el juego puede cambiar su ventana. Ejecutado dentro del editor (pestaña «Juego»), la ventana

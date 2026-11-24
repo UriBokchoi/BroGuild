@@ -41,3 +41,7 @@ extends Resource
 ## Tronco: alto y radio de su colisión.
 @export_range(0.5, 20.0, 0.1, "suffix:m") var trunk_height: float = 1.0
 @export_range(0.05, 5.0, 0.05, "suffix:m") var trunk_radius: float = 0.1
+## Lado de los trozos en que se reparte el bosque para dibujarlo: cada trozo lleva sus propios
+## MultiMesh, así el motor descarta los que no se ven (también al dibujar las sombras). Con un solo
+## MultiMesh para todo el mapa, se dibujaban todos los árboles siempre. 0: un solo trozo.
+@export_range(0.0, 200.0, 1.0, "suffix:m") var chunk_size: float = 0.0

@@ -44,16 +44,22 @@ roughness = 0.4
 material = SubResource("StandardMaterial3D_skin")
 radius = 0.36
 height = 1.5
+radial_segments = 16
+rings = 4
 
 [sub_resource type="SphereMesh" id="SphereMesh_eye"]
 material = SubResource("StandardMaterial3D_eye")
 radius = 0.14
 height = 0.28
+radial_segments = 16
+rings = 8
 
 [sub_resource type="TorusMesh" id="TorusMesh_visor"]
 material = SubResource("StandardMaterial3D_visor")
 inner_radius = 0.33
 outer_radius = 0.43
+rings = 24
+ring_segments = 8
 
 [sub_resource type="PrismMesh" id="PrismMesh_crest"]
 material = SubResource("StandardMaterial3D_visor")

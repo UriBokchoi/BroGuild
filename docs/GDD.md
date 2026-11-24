@@ -154,7 +154,7 @@ WASD mover · Ratón cámara · Espacio saltar · Shift dash · Ctrl slide (dobl
   | Regeneración | 0,8 de vida/s | 0,4 de vida/s | 0,5 de vida/s |
   | Pasiva (crece con cada nivel) | **Veterano**: +1 % de daño por cada nivel | **Expansión arcana**: +1 % de área por cada nivel | **Letal**: +1 % de probabilidad de crítico por cada nivel |
 
-- **Menús**: al iniciar, menú principal con Jugar, Opciones, Récords, Archivo y Abandonar (cierra el juego).
+- **Menús**: al iniciar, menú principal con Jugar, Opciones, Récords, Archivo y Abandonar (cierra el juego). En Opciones, además del sonido y la pantalla, un límite de FPS (de serie, 60): el juego no dibuja más fotogramas de los que hacen falta.
   - *Récords:* las 20 mejores partidas jugadas en este equipo, ordenadas por enemigos derrotados: con qué personaje, enemigos, tiempo, nivel alcanzado, mapa y si fue victoria o derrota. La última partida sale en azul y, al acabar una, los resultados dicen su puesto si entró.
   - *Idioma:* abajo a la izquierda del menú principal, pequeño, un globo con el idioma actual (cada uno con su nombre en su idioma: Español, English). El juego empieza en español.
   - *Jugar* → selección de personaje: lista a la izquierda, su modelo 3D en el centro y, al pasar el ratón, un panel a la derecha con nombre, stats, arma principal y habilidad pasiva. Al elegir, ese panel se cambia por la selección de nivel.

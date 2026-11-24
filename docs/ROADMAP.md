@@ -119,7 +119,7 @@ Lo que salió en la segunda tanda de pruebas; va antes que el resto.
 - [x] Elegir nivel: primero se elige el nivel (clic), debajo su objetivo y su lore, y abajo «Jugar» encima de «Volver»
 - [x] Estadísticas: solo las que se pueden mejorar (fuera las fijas), para que se vean las importantes
 - [x] El rastro de fuego del slide escala con las stats del jugador
-- [ ] Optimizar: el ordenador va a tope jugando
+- [x] Optimizar: el ordenador va a tope jugando. Límite de FPS (de serie, 60), enemigos y objetos redondos con menos polígonos, bosque por trozos (un 83 % menos de triángulos)
 
 ## Hito 6 — Niveles
 - [ ] El Brosque más grande
@@ -157,6 +157,7 @@ Lo que salió en la segunda tanda de pruebas; va antes que el resto.
 8. Polvo de los pasos (Hito 5) y repaso del código.
 
 ## Backlog (sin orden)
+- Física de la horda: con 180 esbirros apretados, la física se lleva unos 4–6 ms por tick (el rumbo del enjambre, 1 ms; el resto, el motor). Mirar con el profiler del editor si hiciera falta (formas más simples, menos contactos)
 - Raíles/ziplines y plataformas de salto
 - Más armas, enemigos y personajes con movimiento propio
 - Nuevas arenas; generación procedural
