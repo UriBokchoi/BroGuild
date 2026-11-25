@@ -36,6 +36,9 @@ extends Resource
 ## Distancia a la que se queda del objetivo (un tirador): más lejos se acerca, más cerca se aleja y
 ## siempre lo mira. 0 = va hasta él.
 @export_range(0.0, 50.0, 0.5, "or_greater", "suffix:m") var keep_distance: float = 0.0
+## Si vuela, a qué altura sobre los pies de su objetivo (0: camina). Volando no le afecta la gravedad
+## ni trepa: sube o baja hasta su altura a la velocidad de trepar (climb_speed).
+@export_range(0.0, 20.0, 0.1, "or_greater", "suffix:m") var fly_height: float = 0.0
 
 @export_group("loot")
 ## Experiencia que suelta al morir.

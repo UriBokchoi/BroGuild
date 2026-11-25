@@ -12,6 +12,9 @@ signal died(enemy: Enemy)
 ## Terminó de desaparecer: puede volver al pool.
 signal despawned(enemy: Enemy)
 
+## Uno que vuela corrige su altura así de rápido (por segundo, por metro que le falta).
+const FLY_RESPONSE := 3.0
+
 @export var stats: StatsComponent
 @export var health: HealthComponent
 @export var hurtbox: HurtboxComponent
@@ -293,14 +296,22 @@ func physics_step(
 	var desired := (chase + push * _stats.separation_weight * _stats.move_speed).limit_length(_stats.move_speed)
 	var current := Vector3(linear_velocity.x, 0.0, linear_velocity.z)
 	var vertical := linear_velocity.y
+	if _stats.fly_height > 0.0:
+		vertical = _fly_vertical(target if has_target else global_position)
 	# Primero el mundo: así su espera cuenta aunque luego trepe por encima de otro enemigo.
-	var over_obstacle := _climbs_obstacle(delta, current, chase)
-	if over_obstacle or _is_stuck_behind(current, chase, target, footholds):
+	elif _climbs_obstacle(delta, current, chase) or _is_stuck_behind(current, chase, target, footholds):
 		vertical = maxf(vertical, _stats.climb_speed)
 	var horizontal := current.move_toward(desired, _stats.acceleration * delta)
 	linear_velocity = Vector3(horizontal.x, vertical, horizontal.z)
 	# Uno que guarda la distancia mira siempre a su objetivo (también al retroceder).
 	_face(target - global_position if has_target and keeps_range else horizontal, delta)
+
+
+## Velocidad vertical de uno que vuela: hacia su altura sobre los pies de [param target], más rápido
+## cuanto más lejos está y como mucho a su velocidad de trepar.
+func _fly_vertical(target: Vector3) -> float:
+	var goal := target.y + _stats.fly_height
+	return clampf((goal - global_position.y) * FLY_RESPONSE, -_stats.climb_speed, _stats.climb_speed)
 
 
 ## ¿Quiere avanzar pero va frenado porque un enemigo apoyado le tapa el paso, y aún no está más alto

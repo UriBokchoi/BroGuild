@@ -227,8 +227,13 @@ STAT_WALL_CLIMB_DELAY,Espera para trepar muros,Wait before climbing walls
 STAT_WALL_CLIMB_TIME,Tiempo trepando muros,Wall climbing time
 STAT_APPROACH_SPREAD,Desvío al acercarse,Approach spread
 STAT_KEEP_DISTANCE,Distancia que guarda,Distance kept
+STAT_FLY_HEIGHT,Altura a la que vuela,Flying height
 ENEMY_SWARMER_NAME,Esbirro,Minion
 ENEMY_SWARMER_DESCRIPTION,"Rápido y frágil; llega en enjambre.","Fast and frail; comes in swarms."
+ENEMY_CARDIO_NAME,Cardioadicto,Cardio Junkie
+ENEMY_CARDIO_DESCRIPTION,"Solo hace cardio: pega flojo y aguanta poco, pero no hay quien lo pille. Sale poco.","Only does cardio: weak hits and frail, but nobody can catch him. Rare."
+ENEMY_BAT_NAME,Murciébro,Bro Bat
+ENEMY_BAT_DESCRIPTION,"Vuela a la altura de tu cabeza con su cadena de oro: saltar por encima de la horda ya no es tan fácil. Sale poco.","Flies at head height wearing a gold chain: jumping over the horde is no longer that easy. Rare."
 ENEMY_SHOOTER_NAME,Tirador,Shooter
 ENEMY_SHOOTER_DESCRIPTION,"Se queda a distancia y dispara bolas de fuego lentas; no te quedes quieto.","Keeps its distance and shoots slow fireballs; don't stand still."
 ENEMY_SAPLING_NAME,Bro-te,Sprout Bro

@@ -1768,6 +1768,14 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - El robo de vida (`lifesteal`, que existía como stat pero no hacía nada) cura al jugador un % del daño que hace a los enemigos (`Lifesteal`, en el jugador). Sale en las mejoras de las pesas (+1 % de base) y tiene su runa, Sed de sangre (+0,8 % por nivel de base).
 - **Por qué:** lo pidió el diseñador tras probar el juego.
 
+## 2026-11-26 · Dos enemigos raros: el Cardioadicto y el Murciébro
+- **Decisión:**
+  - **Cardioadicto:** variante del esbirro (escena heredada, verde neón con muñequera), frágil (35 de vida) y casi el doble de rápido (7 m/s).
+  - **Murciébro:** un murciélago bro con cadena de oro que vuela a 1,6 m sobre los pies del jugador, a la altura de su cabeza. Choca y daña al tocar como los demás, así que saltar por encima de la horda deja de ser gratis.
+  - Volar es una stat de los enemigos (`fly_height`): sin gravedad ni trepar, sube o baja hasta su altura. Cualquier enemigo nuevo puede volar con datos.
+  - Los dos salen poco: peso 0,06 y 0,05 en las oleadas (el esbirro, 1), desde dificultad 2 y 3. Dan algo más de experiencia y oro.
+- **Por qué:** lo pidió el diseñador: «una variante algo más rara que vaya más rápido y una que vuele que también sea rara, para dificultar el pasar por encima de los enemigos».
+
 ## 2026-11-25 · Cruzar el portal, con animación
 - **Decisión:** al cruzar el portal de un tier, el jugador se queda quieto y encoge hacia el portal (0,45 s) mientras los enemigos se hunden en el suelo con su humo, y luego la pantalla funde a negro. Los enemigos que se hunden no mueren: ni sueltan botín ni cuentan, y no se les puede dar. El portal tiene su sonido (un barrido que sube), también al cruzar el de la arena final.
 - **Por qué:** lo pidió el diseñador; antes todo desaparecía de golpe.

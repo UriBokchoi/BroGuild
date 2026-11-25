@@ -213,3 +213,13 @@ func test_vanishing_enemies_sink_and_leave_without_dying() -> void:
 	var again := _swarm.spawn(SWARMER, Vector3(1.0, 0.0, 1.0))
 	assert_false(again.is_vanishing(), "al volver del pool, como nuevo")
 	assert_false(again.freeze)
+
+
+func test_a_flying_enemy_keeps_its_height_over_the_target() -> void:
+	var bat_data: EnemyData = load("res://data/enemies/bat.tres")
+	var height := (bat_data.stat_sources[1] as EnemyStats).fly_height
+	_swarm.target = _target
+	var bat := _swarm.spawn(bat_data, Vector3(6.0, 0.0, 0.0))
+	await wait_seconds(1.5)
+	assert_almost_eq(bat.global_position.y, _target.global_position.y + height, 0.3, "vuela a su altura")
+	assert_lt(bat.global_position.distance_to(_target.global_position), 6.0, "y va a por él")

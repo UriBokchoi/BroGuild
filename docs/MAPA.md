@@ -91,10 +91,13 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 - **Martillo de guerra** (`hammer/`, `WarHammer` con `HammerStats`): elige el grupo más denso a su alcance (`densest`: el enemigo con más vecinos dentro del radio del golpe; cada martillo extra, el siguiente grupo) y suelta ahí un `HammerStrike`, que cae del cielo con un aro de aviso y daña a todos en `impact_radius` × área al tocar el suelo.
 
 ### Enemigos — `entities/enemies/` y `systems/spawning/`
+- **Los de la horda:** el esbirro (el de siempre), el tirador (a distancia), el **Cardioadicto** (`cardio/`, raro: variante del esbirro, frágil y casi el doble de rápido) y el **Murciébro** (`bat/`, raro: vuela a la altura de la cabeza, para que saltar por encima de la horda no sea gratis; aletea con `WingFlap`). Los raros salen poco (peso 0,06 y 0,05 en las oleadas, desde dificultad 2 y 3).
 - **Tipos:** `EnemyData` (en `data/enemies/`) lleva id, nombre, frase, icono (el del Archivo), color (el de su cuerpo, para sus efectos), escena, fuentes de stats (`HealthData` y `EnemyStats`: velocidad, contacto, separación, trepar y distancia que guarda) y armas (`weapons`, opcional).
 - **`Enemy`** (base de las escenas):
   - Es un `RigidBody3D` sin rotación que choca con el mundo, con el jugador y con otros enemigos.
   - Fija su velocidad horizontal con `EnemySteering`: perseguir con desvío, separarse y decidir si trepa. Con `keep_distance` se queda a esa distancia (`keep_range`) mirando al objetivo.
+  - Con `fly_height` vuela: sin gravedad (su escena lleva `gravity_scale = 0`) y sin trepar, a esa altura sobre los pies de su objetivo (sube o baja a la velocidad de trepar).
+  - Al cambiar de mapa se hunde en el suelo sin morir (`vanish`: ni botín ni cuenta, y ya no se le puede dar).
   - Trepa encima de otros enemigos apoyados que le tapan el paso (hasta `climb_height` sobre el objetivo). Y si lleva `wall_climb_delay` atascado contra el mundo (una esfera delante, `wall_probe_*`, solo cuando va atascado), trepa por él `wall_climb_time` y, si sigue atascado, lo vuelve a intentar: así pasa por encima de pesas, troncos y muros bajos. En los grandes (los jefes), la esfera va más lejos y más grande, por delante de su cuerpo.
   - Daña al tocar y con sus armas, si tiene: las crea al prepararse, esperan un poco al aparecer (`first_attack_delay`) y paran al morir (sus disparos en vuelo siguen). Avisa de su muerte y encoge.
   - Al salir del pool sale del suelo: su modelo crece con un pequeño rebote y sube desde `appear_depth` bajo sus pies en `appear_time` (0,35 s; los jefes, 0,8 s desde 2,5 m). Va en `_process`, solo mientras aparece; si muere antes, para. Avisa con `enemy_spawned` (el polvo).

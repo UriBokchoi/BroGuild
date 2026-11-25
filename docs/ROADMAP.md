@@ -202,8 +202,8 @@ De fácil a difícil, como pidió el diseñador.
 - [x] «Volver a tirar» en el círculo de setas (10 de oro, ×1,5 por uso en la partida)
 - [x] Robo de vida que funciona (cura un % del daño hecho), en las mejoras de las pesas y con su runa, Sed de sangre
 - [x] Al cruzar el portal: el jugador entra en él (encoge, sin control), los enemigos se hunden en el suelo con su humo (sin botín ni contar) y suena el portal
-- [ ] Enemigo raro y rápido
-- [ ] Enemigo raro que vuela (para que no se pueda saltar por encima de la horda)
+- [x] Enemigo raro y rápido: el Cardioadicto (frágil, casi el doble de rápido)
+- [x] Enemigo raro que vuela: el Murciébro, a la altura de la cabeza (para que no se pueda saltar por encima de la horda)
 - [ ] Bro-monedas: 1 por élite y 5 por jefe, guardadas entre partidas
 - [ ] Pestaña «Mejoras» en el menú, con bro-monedas y reembolso: daño, área, crítico, vida, armadura, velocidad, Suerte y dificultad; más oro y bro-monedas; ranuras de armas y runas; nivel máximo de armas (12 a 20) y de runas (25 a 40)
 - [ ] Misiones y desbloqueos: espada, bastón y daga abiertos; el resto, con sus condiciones (martillo, hacha, Paladín, Bárbaro y Brujo)
