@@ -16,6 +16,9 @@ var run_seed: int = 0
 ## Lo que suman a la base del jugador las mejoras permanentes compradas (las pone Game al empezar
 ## cada partida). Vacío: nada (un nivel ejecutado solo).
 var bonuses: StatModifierSet
+## Lo que aún no se ha desbloqueado con misiones (armas y personajes): no sale en la partida. Lo pone
+## Game al empezar cada partida.
+var locked: Array[Resource] = []
 
 
 ## Empieza una partida nueva. Si ya había una, la termina antes (reinicio).
@@ -33,4 +36,7 @@ func end_run() -> void:
 	if not is_running:
 		return
 	is_running = false
+	# Lo de esta partida (la siguiente lo vuelve a poner).
+	bonuses = null
+	locked = []
 	EventBus.run_ended.emit()

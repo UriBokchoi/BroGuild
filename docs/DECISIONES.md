@@ -1805,3 +1805,13 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - «Reembolsar todo» devuelve todo lo gastado, sin perder nada.
   - La mejora de la recarga de las habilidades (3:00 → 2:30) llegará con las habilidades.
 - **Por qué:** lo pidió el diseñador. Lo que no dijo (precios, si los % son totales, cuánto oro y bro-monedas) está en `data/meta/upgrades.tres` para cambiarlo sin tocar código.
+
+## 2026-11-26 · Misiones y desbloqueos
+- **Decisión:**
+  - Una misión dice qué hay que hacer en una partida y qué desbloquea (un arma o un personaje). Se mira con el récord al acabar la partida (al morir o al ganar), no durante.
+  - «Ganar» es ganar la partida, en cualquier tier.
+  - «Subir el hacha» para el Bárbaro se lee como el martillo para el Paladín: hacha a nivel 10 y ganar.
+  - La colonia no se nombró: se queda abierta, como ahora.
+  - Lo bloqueado no sale como nuevo al subir de nivel; si ya se lleva (la armería de práctica), sí se sube.
+  - Las misiones de Paladín, Bárbaro y Brujo se añaden con sus personajes.
+- **Por qué:** lo pidió el diseñador. Las condiciones están en `data/meta/quests.tres` para cambiarlas sin tocar código.

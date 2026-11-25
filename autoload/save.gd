@@ -193,6 +193,19 @@ func refund_upgrades(catalog: MetaUpgradeCatalog) -> int:
 	return refunded
 
 
+## Apunta en el perfil las misiones de [param catalog] que cumple la partida [param record] y aún no
+## tenía, y lo guarda. Devuelve las nuevas (lo que desbloquean ya está abierto).
+func complete_quests(catalog: QuestCatalog, record: RunRecord) -> Array[QuestData]:
+	if profile == null:
+		load_profile()
+	var met := catalog.newly_met(record, profile)
+	for quest: QuestData in met:
+		profile.complete_quest(quest.id)
+	if not met.is_empty():
+		save_profile()
+	return met
+
+
 ## Guarda el perfil en [member profile_path].
 func save_profile() -> Error:
 	var config := ConfigFile.new()

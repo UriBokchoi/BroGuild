@@ -6,6 +6,13 @@ MENU_PLAY,Jugar,Play
 MENU_OPTIONS,Opciones,Options
 MENU_ARCHIVE,Archivo,Archive
 MENU_UPGRADES,Mejoras,Upgrades
+MENU_QUESTS,Misiones,Quests
+QUESTS_TITLE,Misiones,Quests
+QUESTS_DONE,Hecha,Done
+QUESTS_PENDING,Pendiente,Pending
+QUEST_HAMMER_DESC,Sube la espada a nivel 10 y gana una partida.,Get the sword to level 10 and win a run.
+QUEST_AXE_DESC,Llega a nivel 30 con el Guerrero.,Reach level 30 as the Warrior.
+CHARACTER_LOCKED,Bloqueado: %s,Locked: %s
 UPGRADES_TITLE,Mejoras,Upgrades
 UPGRADES_LEVEL,Nivel %d/%d,Level %d/%d
 UPGRADES_BUY,Comprar (%d),Buy (%d)
@@ -85,6 +92,7 @@ RESULTS_STAGE,Llegaste a,Reached
 RESULTS_TIME,Tiempo,Time
 RESULTS_BRO_COINS,Bro-monedas,Bro coins
 RESULTS_BRO_COINS_VALUE,+%d,+%d
+RESULTS_UNLOCKED,¡Desbloqueado!,Unlocked!
 STAT_BRO_COIN_GAIN,Bro-monedas ganadas,Bro coins gained
 STAT_WEAPON_LEVEL_BONUS,Niveles de más en las armas,Extra weapon levels
 STAT_RUNE_LEVEL_BONUS,Niveles de más en las runas,Extra rune levels

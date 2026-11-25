@@ -37,6 +37,17 @@ func _ready() -> void:
 	_warm_up_panel.call_deferred()
 
 
+## Lo que puede ofrecer ahora: armas y runas, sin lo que aún no se ha desbloqueado con misiones (si
+## ya lo lleva, sí: se puede subir).
+func get_offerable() -> Array[ItemData]:
+	var owned := _owned_levels()
+	var offerable: Array[ItemData] = []
+	for item: ItemData in _catalog:
+		if owned.has(item.id) or not RunState.locked.has(item):
+			offerable.append(item)
+	return offerable
+
+
 ## Elecciones que quedan por hacer.
 func pending() -> int:
 	return _queue.size()
@@ -103,8 +114,8 @@ func _offer() -> void:
 	var rune_slots := data.clamp_rune_slots(player.stats.get_int(&"rune_slots"))
 	var luck := player.stats.get_value(&"luck")
 	var options := LevelUpOffer.build(
-		_catalog, _owned_levels(), data.choices, weapon_slots, rune_slots, data.rarities, rng, luck,
-		player.stats
+		get_offerable(), _owned_levels(), data.choices, weapon_slots, rune_slots, data.rarities, rng,
+		luck, player.stats
 	)
 	if options.is_empty():
 		_queue.clear()

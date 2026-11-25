@@ -54,6 +54,7 @@
 [ext_resource type="Resource" path="res://data/progression/streak.tres" id="56_streak_data"]
 [ext_resource type="Script" path="res://systems/pacts/herald_spawner.gd" id="57_herald_spawner"]
 [ext_resource type="Resource" path="res://data/meta/bro_coins.tres" id="61_bro_coins"]
+[ext_resource type="Resource" path="res://data/meta/quests.tres" id="62_quests"]
 [ext_resource type="Resource" path="res://data/pacts/herald.tres" id="58_herald_data"]
 [ext_resource type="PackedScene" path="res://entities/interactables/herald/herald.tscn" id="59_herald"]
 [ext_resource type="PackedScene" path="res://ui/menus/pact/pact_panel.tscn" id="60_pact_panel"]
@@ -123,6 +124,7 @@ script = ExtResource("18_recorder")
 player = NodePath("../Player")
 pact_panel = NodePath("../PactPanel")
 bro_coin_data = ExtResource("61_bro_coins")
+quests = ExtResource("62_quests")
 record_runs = true
 
 [node name="ArchiveRecorder" type="Node" parent="." node_paths=PackedStringArray("player")]

@@ -1,8 +1,8 @@
 class_name PlayerProfile
 extends RefCounted
-## Lo que el jugador tiene fuera de las partidas: sus bro-monedas y el nivel de cada mejora permanente
-## que compró con ellas (comprar, reembolsar). Se guarda en un ConfigFile (write_to, read_from); lo
-## carga y lo guarda Save.
+## Lo que el jugador tiene fuera de las partidas: sus bro-monedas, el nivel de cada mejora permanente
+## que compró con ellas (comprar, reembolsar) y las misiones cumplidas. Se guarda en un ConfigFile
+## (write_to, read_from); lo carga y lo guarda Save.
 
 const SECTION := "profile"
 
@@ -10,11 +10,26 @@ const SECTION := "profile"
 var bro_coins: int = 0
 ## Nivel comprado de cada mejora permanente (por id; sin entrada, 0).
 var upgrades: Dictionary[StringName, int] = {}
+## Misiones cumplidas (por id).
+var completed_quests: Array[StringName] = []
 
 
 ## Suma [param amount] bro-monedas (nunca resta).
 func add_bro_coins(amount: int) -> void:
 	bro_coins += maxi(amount, 0)
+
+
+## ¿Cumplió la misión [param id]?
+func has_completed(id: StringName) -> bool:
+	return completed_quests.has(id)
+
+
+## Apunta la misión [param id] como cumplida; si ya lo estaba, devuelve [code]false[/code].
+func complete_quest(id: StringName) -> bool:
+	if id.is_empty() or has_completed(id):
+		return false
+	completed_quests.append(id)
+	return true
 
 
 ## Nivel comprado de [param id] (0 sin comprar).
@@ -56,6 +71,10 @@ func write_to(config: ConfigFile) -> void:
 	for id: StringName in upgrades:
 		saved[String(id)] = upgrades[id]
 	config.set_value(SECTION, "upgrades", saved)
+	var quests := PackedStringArray()
+	for id: StringName in completed_quests:
+		quests.append(id)
+	config.set_value(SECTION, "completed_quests", quests)
 
 
 func read_from(config: ConfigFile) -> void:
@@ -63,9 +82,13 @@ func read_from(config: ConfigFile) -> void:
 	bro_coins = maxi(saved as int, 0) if saved is int else 0
 	upgrades.clear()
 	var levels: Variant = config.get_value(SECTION, "upgrades", {})
-	if not levels is Dictionary:
-		return
-	for key: Variant in levels:
-		var level: Variant = (levels as Dictionary)[key]
-		if (key is String or key is StringName) and level is int and level > 0:
-			upgrades[StringName(str(key))] = level
+	if levels is Dictionary:
+		for key: Variant in levels:
+			var level: Variant = (levels as Dictionary)[key]
+			if (key is String or key is StringName) and level is int and level > 0:
+				upgrades[StringName(str(key))] = level
+	completed_quests.clear()
+	var quests: Variant = config.get_value(SECTION, "completed_quests", PackedStringArray())
+	if quests is PackedStringArray:
+		for id: String in quests:
+			complete_quest(StringName(id))

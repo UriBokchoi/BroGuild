@@ -9,6 +9,7 @@
 [ext_resource type="Resource" path="res://data/levels/dungeon.tres" id="7_dungeon"]
 [ext_resource type="PackedScene" path="res://entities/player/characters/model/character_model.tscn" id="8_model"]
 [ext_resource type="Script" path="res://vfx/juice/spin_bob.gd" id="9_spin"]
+[ext_resource type="Resource" path="res://data/meta/quests.tres" id="10_quests"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_sky"]
 sky_top_color = Color(0.32, 0.45, 0.68, 1)
@@ -41,6 +42,7 @@ rings = 1
 [node name="RunSetup" type="Node3D" node_paths=PackedStringArray("model")]
 script = ExtResource("1_setup")
 characters = Array[Resource]([ExtResource("2_warrior"), ExtResource("3_mage"), ExtResource("4_rogue")])
+quests = ExtResource("10_quests")
 levels = Array[Resource]([ExtResource("5_brosque"), ExtResource("6_tower"), ExtResource("7_dungeon")])
 model = NodePath("Model")
 

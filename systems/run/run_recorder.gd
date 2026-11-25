@@ -12,6 +12,8 @@ extends Node
 @export var pact_panel: PactPanel
 ## Cuántas bro-monedas dan élites y jefes (vacío: ninguna). Se suman al perfil al acabar.
 @export var bro_coin_data: BroCoinData
+## Misiones que se miran al apuntar la partida (vacío: ninguna).
+@export var quests: QuestCatalog
 ## Si al acabar apunta la partida en la clasificación (sí el de las partidas de verdad, en
 ## [code]run_systems.tscn[/code]; los tests la llevan a otro archivo: [code]tests/hooks/pre_run.gd[/code]).
 @export var record_runs: bool = false
@@ -20,6 +22,8 @@ extends Node
 var stats := RunStats.new()
 ## Puesto que sacó en la clasificación (desde 0), o −1 si no entró o aún no se apuntó.
 var place: int = -1
+## Misiones que cumplió la partida (al apuntarla), con lo que desbloquean.
+var completed_quests: Array[QuestData] = []
 
 ## Último oro conocido del jugador, para sumar solo lo que gana.
 var _gold: float = 0.0
@@ -154,6 +158,8 @@ func _record() -> void:
 	_add_build(record)
 	place = Save.record_run(record)
 	Save.add_bro_coins(stats.bro_coins)
+	if quests:
+		completed_quests = Save.complete_quests(quests, record)
 
 
 ## Apunta en [param record] la build del jugador: armas y runas con su nivel, objetos con sus copias

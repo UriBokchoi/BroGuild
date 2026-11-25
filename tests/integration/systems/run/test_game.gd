@@ -80,3 +80,19 @@ func test_back_to_the_menu_ends_the_run() -> void:
 	await wait_process_frames(1)
 	assert_true(_game.get_screen() is MainMenu)
 	assert_false(RunState.is_running)
+
+
+func test_each_run_brings_the_bought_upgrades_and_the_locked_content() -> void:
+	Save.profile = PlayerProfile.new()
+	Save.profile.upgrades[&"damage"] = 2
+	_game.play()
+	await wait_process_frames(1)
+	assert_not_null(RunState.bonuses)
+	assert_eq(RunState.bonuses.stat_modifiers.size(), 1, "el daño comprado")
+	assert_true(RunState.locked.has(preload("res://data/weapons/hammer.tres")), "sin la misión")
+	_game.retry()
+	await wait_process_frames(1)
+	assert_not_null(RunState.bonuses, "reintentar no las pierde")
+	Save.profile = PlayerProfile.new()
+	RunState.end_run()
+	assert_null(RunState.bonuses, "al acabar, fuera")

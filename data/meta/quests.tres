@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="QuestCatalog" format=3]
+
+[ext_resource type="Script" path="res://systems/meta/quest_catalog.gd" id="1_catalog"]
+[ext_resource type="Script" path="res://systems/meta/quest_data.gd" id="2_quest"]
+[ext_resource type="Resource" path="res://data/weapons/sword.tres" id="3_sword"]
+[ext_resource type="Resource" path="res://data/weapons/hammer.tres" id="4_hammer"]
+[ext_resource type="Resource" path="res://data/weapons/axe.tres" id="5_axe"]
+[ext_resource type="Resource" path="res://data/characters/warrior.tres" id="6_warrior"]
+
+[sub_resource type="Resource" id="Quest_hammer"]
+script = ExtResource("2_quest")
+id = &"hammer"
+description_key = &"QUEST_HAMMER_DESC"
+reward = ExtResource("4_hammer")
+item = ExtResource("3_sword")
+item_level = 10
+needs_win = true
+
+[sub_resource type="Resource" id="Quest_axe"]
+script = ExtResource("2_quest")
+id = &"axe"
+description_key = &"QUEST_AXE_DESC"
+reward = ExtResource("5_axe")
+character = ExtResource("6_warrior")
+player_level = 30
+
+[resource]
+script = ExtResource("1_catalog")
+quests = Array[ExtResource("2_quest")]([SubResource("Quest_hammer"), SubResource("Quest_axe")])
