@@ -252,3 +252,13 @@ func _flat_curve(value: float) -> Curve:
 	curve.add_point(Vector2(0.0, value))
 	curve.add_point(Vector2(1.0, value))
 	return curve
+
+
+func test_in_a_round_map_enemies_only_spawn_inside_the_circle() -> void:
+	_director.play_radius = 12.0
+	_director.start()
+	await wait_physics_frames(6)
+	assert_gt(_swarm.active_count(), 0)
+	for enemy: Enemy in _swarm.get_active():
+		var at := enemy.global_position
+		assert_lte(Vector2(at.x, at.z).length(), 12.0 + 0.01)

@@ -1749,3 +1749,20 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - «Logros (WIP)» en el menú, desactivado, hasta que se diseñen.
   - Los archivos de prueba que usan los tests, la validación y las capturas se borran al cerrar, para no dejar basura en `%APPDATA%\bro_guild`.
 - **Por qué:** lo pidió el diseñador antes de seguir con niveles nuevos. La interfaz trabaja en 1152 × 648, así que lo que no cabía en esa altura se salía.
+
+## 2026-11-25 · Economía de los tiers y rendimiento del invierno
+- **Economía:** revisada, sin cambios.
+  - El oro de los enemigos sube con la dificultad casi al mismo ritmo que el precio de cofres, tragaperras y taberna. Un cofre cuesta unos 15 enemigos en el tier 1 y unos 35 en los tiers 2 y 3, donde salen más por minuto.
+  - El encarecimiento por cofre abierto y por cura en la taberna vuelve a empezar en cada tier: son los de un mapa nuevo. Si se quiere que cuente toda la partida, habría que guardar la cuenta fuera del mapa.
+- **Rendimiento** (180 esbirros alrededor del jugador, sin límite de FPS, en el equipo de desarrollo): el otoño y el invierno van a unos 300 FPS. La física se lleva unos 7 ms por tick, como antes.
+- **Herramientas de prueba:** en F3, «god mode» (el jugador no pierde vida) y «next stage», para recorrer los tiers y el jefe final.
+- **Sonidos:** el heraldo tiene su fanfarria y sellar un pacto, un golpe grave y metálico (antes, el de subir de nivel).
+
+## 2026-11-25 · La arena final, redonda
+- **Decisión:** la arena del jefe final es un círculo de 45 m de radio.
+  - Las paredes de choque son tramos rectos en círculo (`RingBounds`).
+  - El borde que se ve al acercarse también (`MapBoundary.radius`, tramos de la misma malla).
+  - El bosque del contorno y la banda de fuera se reparten en círculo (`ForestData.circular`).
+  - Los enemigos solo salen dentro del círculo (`play_radius` del mapa, que llega al director de oleadas).
+  - Los mapas cuadrados siguen igual: todo es opcional y de serie está apagado.
+- **Por qué:** desde arriba se notaba que era un cuadrado; un claro redondo encaja con las ruinas en círculo y con la idea de arena.

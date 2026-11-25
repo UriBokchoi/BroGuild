@@ -56,14 +56,19 @@ static func _scatter(forest: ForestData, half: float, clearing: float, occupied:
 		if trees.size() >= forest.max_trees:
 			break
 		var at := Vector2(rng.randf_range(-half, half), rng.randf_range(-half, half))
-		if at.length() < clearing or _blocked(at, occupied, forest.piece_margin) or _crowded(at, trees, forest.spacing):
+		if at.length() < clearing or _reach(at, forest.circular) > half:
+			continue
+		if _blocked(at, occupied, forest.piece_margin) or _crowded(at, trees, forest.spacing):
 			continue
 		trees.append(_tree(forest, at, forest.scale_range, true, rng))
 	return trees
 
 
-## Anillo denso junto a las paredes, en los cuatro lados (sin pisar lo reservado, como una taberna).
+## Anillo denso junto a las paredes, en los cuatro lados o en círculo (sin pisar lo reservado, como
+## una taberna).
 static func _border(forest: ForestData, occupied: Array[Vector3], rng: RandomNumberGenerator) -> Array[Dictionary]:
+	if forest.circular:
+		return _round_border(forest, occupied, rng)
 	var trees: Array[Dictionary] = []
 	var steps := floori(forest.border * 2.0 / forest.border_step)
 	for side: int in 4:
@@ -78,6 +83,17 @@ static func _border(forest: ForestData, occupied: Array[Vector3], rng: RandomNum
 	return trees
 
 
+static func _round_border(forest: ForestData, occupied: Array[Vector3], rng: RandomNumberGenerator) -> Array[Dictionary]:
+	var trees: Array[Dictionary] = []
+	var steps := maxi(floori(TAU * forest.border / forest.border_step), 1)
+	for step: int in steps:
+		var angle := TAU * (step + rng.randf_range(-0.3, 0.3)) / steps
+		var at := Vector2.from_angle(angle) * (forest.border + rng.randf_range(0.0, forest.border_depth))
+		if not _blocked(at, occupied, forest.piece_margin):
+			trees.append(_tree(forest, at, forest.scale_range, true, rng))
+	return trees
+
+
 ## Banda de fuera: rejilla con temblor, solo más allá de [member ForestData.outer_start] (sin pisar lo
 ## reservado).
 static func _outer_band(forest: ForestData, occupied: Array[Vector3], rng: RandomNumberGenerator) -> Array[Dictionary]:
@@ -87,12 +103,18 @@ static func _outer_band(forest: ForestData, occupied: Array[Vector3], rng: Rando
 	for row: int in steps + 1:
 		for column: int in steps + 1:
 			var spot := Vector2(-forest.outer_end + column * forest.outer_step, -forest.outer_end + row * forest.outer_step)
-			if maxf(absf(spot.x), absf(spot.y)) < forest.outer_start:
+			var reach := _reach(spot, forest.circular)
+			if reach < forest.outer_start or reach > forest.outer_end:
 				continue
 			spot += Vector2(rng.randf_range(-jitter, jitter), rng.randf_range(-jitter, jitter))
 			if not _blocked(spot, occupied, forest.piece_margin):
 				trees.append(_tree(forest, spot, forest.outer_scale_range, false, rng))
 	return trees
+
+
+## Lo lejos que está [param at] del centro: en círculo, su distancia; en cuadrado, su lado mayor.
+static func _reach(at: Vector2, circular: bool) -> float:
+	return at.length() if circular else maxf(absf(at.x), absf(at.y))
 
 
 static func _tree(forest: ForestData, at: Vector2, scale_range: Vector2, collides: bool, rng: RandomNumberGenerator) -> Dictionary:

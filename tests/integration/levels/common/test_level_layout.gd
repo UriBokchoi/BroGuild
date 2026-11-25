@@ -78,3 +78,21 @@ func test_nothing_grows_on_reserved_ground() -> void:
 			assert_gt(Vector2(at.x, at.z).distance_to(Vector2(zone.x, zone.y)), zone.z, "ningún árbol en lo reservado")
 		for piece: Node3D in layout.get_pieces():
 			assert_gt(Vector2(piece.position.x, piece.position.z).distance_to(Vector2(zone.x, zone.y)), zone.z)
+
+
+func test_a_round_forest_grows_in_circles() -> void:
+	var data: LayoutData = load("res://data/layouts/final_arena.tres")
+	assert_true(data.forest.circular)
+	var root := Node3D.new()
+	add_child_autofree(root)
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 9
+	var trees := ForestBuilder.build(root, data.forest, data.half_size, data.clearing_radius, [], rng)
+	assert_gt(trees.size(), 0)
+	var jitter := data.forest.outer_step
+	for tree: Dictionary in trees:
+		var at: Vector2 = tree["at"]
+		var reach := at.length()
+		assert_lt(reach, data.forest.outer_end + jitter, "dentro del círculo de fuera")
+		if tree["collides"]:
+			assert_lt(reach, data.forest.border + data.forest.border_depth + 0.01, "los que chocan, dentro del anillo")

@@ -16,6 +16,9 @@ extends Resource
 @export_range(1, 20000, 1) var attempts: int = 1
 
 @export_group("border")
+## Si el borde es un círculo (una arena redonda) en vez de un cuadrado: el anillo junto a la pared,
+## la banda de fuera y los árboles sueltos se reparten en círculo.
+@export var circular: bool = false
 ## Distancia al centro del anillo junto a las paredes (con colisión), su grosor y su paso.
 @export_range(1.0, 500.0, 0.5, "suffix:m") var border: float = 1.0
 @export_range(0.0, 50.0, 0.5, "suffix:m") var border_depth: float = 0.0

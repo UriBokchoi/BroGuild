@@ -183,12 +183,13 @@ Lo que pidió el diseñador antes de seguir con niveles nuevos, de fácil a dif�
 - [x] Icono propio de Mr. Brolympia en el Archivo
 - [x] Fondo del menú principal: un claro del Brosque con ruinas, pesas, bosque y hojas que caen
 - [x] Récords fijos a la derecha del menú: cada partida con su personaje y sus enemigos; al hacer clic, su detalle y su build
-- [ ] Repaso del resto de menús y paneles en ventana pequeña
-- [ ] Arena final redonda
-- [ ] Modo sin morir en F3 y ajuste de los tiers 2 y 3 y del jefe final
-- [ ] Economía de los tiers altos (cofres, tragaperras y taberna)
-- [ ] Rendimiento en el invierno (el mapa más grande, con nieve)
-- [ ] Sonidos propios del heraldo, los pactos y Mr. Brolympia
+- [x] Repaso del resto de menús y paneles en ventana pequeña (Archivo, pausa y resultados caben; los paneles de elegir se ajustan solos)
+- [x] Arena final redonda: paredes, borde y bosque en círculo, y los enemigos salen dentro
+- [x] «God mode» en F3 (con «next stage», para recorrer los tiers y el jefe final)
+- [ ] Ajuste de los tiers 2 y 3 y del jefe final (jugando)
+- [x] Economía de los tiers altos: revisada, proporcional (ver DECISIONES); sin cambios
+- [x] Rendimiento en el invierno: unos 300 FPS con 180 enemigos, como el otoño
+- [x] Sonidos propios del heraldo y del sello de un pacto (Mr. Brolympia usa el de los jefes)
 - [ ] Plantilla de exportación ligera (cuando estén Python y SCons)
 - Pendiente de diseño: los logros y la música
 

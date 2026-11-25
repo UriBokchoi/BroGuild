@@ -26,6 +26,8 @@ signal stopped
 ## Zona del suelo (x, z) donde pueden salir (dentro de las paredes del nivel). Vacía: en cualquier
 ## sitio con suelo.
 @export var play_area: Rect2 = Rect2()
+## Radio del círculo (con centro en el origen) donde pueden salir, en un mapa redondo. 0: sin círculo.
+@export_range(0.0, 1000.0, 0.5, "suffix:m") var play_radius: float = 0.0
 ## Puntos que prueba para cada enemigo antes de dejarlo para el siguiente tick.
 @export_range(1, 32, 1) var placement_attempts: int = 6
 
@@ -242,6 +244,8 @@ func _find_ground(center: Vector3, min_distance: float, max_distance: float) -> 
 		var distance := rng.randf_range(min_distance, max_distance)
 		var spot := center + Vector3(cos(angle), 0.0, sin(angle)) * distance
 		if play_area.has_area() and not play_area.has_point(Vector2(spot.x, spot.z)):
+			continue
+		if play_radius > 0.0 and Vector2(spot.x, spot.z).length() > play_radius:
 			continue
 		var from := spot + Vector3.UP * probe_height
 		var to := spot + Vector3.DOWN * probe_height

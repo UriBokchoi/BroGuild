@@ -24,6 +24,8 @@ extends Resource
 @export var mini_boss_spawned: SoundCue
 ## Llega un heraldo del Gremio.
 @export var herald_arrived: SoundCue
+## Se sella un pacto del Gremio.
+@export var pact_sealed: SoundCue
 @export var boss_defeated: SoundCue
 
 @export_group("pickups")

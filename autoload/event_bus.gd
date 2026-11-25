@@ -139,3 +139,5 @@ signal stat_choice_offered(offers: Array[StatOffer])
 signal herald_arrived(at: Vector3)
 ## El heraldo ofrece elegir uno de [param pacts] o rechazarlos: lo atiende el [PactPanel].
 signal pact_offered(pacts: Array[PactData])
+## Se selló un pacto (el elegido).
+signal pact_sealed(pact: PactData)

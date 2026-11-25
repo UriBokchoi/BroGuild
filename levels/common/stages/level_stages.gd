@@ -160,6 +160,7 @@ func _configure_systems() -> void:
 	systems.waves = _map.waves
 	systems.autostart_waves = _map.autostart_waves and not _map.waves_after_boss
 	systems.play_area = _map.play_area
+	systems.play_radius = _map.play_radius
 	systems.spawn_point = _map.spawn_point
 	systems.boss = _map.boss
 	var keys: Array[StringName] = [stage.name_key]
