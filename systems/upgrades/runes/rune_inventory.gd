@@ -29,14 +29,14 @@ func add(rune: RuneData) -> bool:
 ## Le suma a [param rune] la mejora [param extra] (un nivel más). Si no la lleva o está al
 ## máximo, no hace nada.
 func upgrade(rune: RuneData, extra: ItemUpgrade) -> void:
-	if has(rune) and get_level(rune) < rune.max_level():
+	if has(rune) and get_level(rune) < rune.max_level_with(stats):
 		_apply(rune, extra)
 
 
 ## Pone [param rune] a [param level] (de 0 a su máximo; 0 la quita): para subir, suma mejoras
 ## estándar (la armería de práctica); para bajar, quita las últimas.
 func set_level(rune: RuneData, level: int) -> void:
-	level = clampi(level, 0, rune.max_level())
+	level = clampi(level, 0, rune.max_level_with(stats))
 	if level > 0 and not has(rune):
 		add(rune)
 	while has(rune) and get_level(rune) < level:

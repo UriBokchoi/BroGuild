@@ -1,7 +1,7 @@
 class_name MainMenu
 extends Node3D
-## Menú principal: Jugar, Opciones, Archivo, Logros (aún sin hacer: desactivado) y Abandonar, y a la
-## derecha, fijos, los récords. Cada panel sustituye a la lista y a los récords y, al cerrarse,
+## Menú principal: Jugar, Mejoras, Opciones, Archivo, Logros (aún sin hacer: desactivado) y Abandonar,
+## y a la derecha, fijos, los récords. Cada panel sustituye a la lista y a los récords y, al cerrarse,
 ## vuelven. Detrás, los personajes con su aspecto en un claro del Brosque (el mapa generado, siempre
 ## el mismo) con hojas que caen. Lo muestra Game, que escucha play_requested.
 
@@ -22,6 +22,7 @@ signal play_requested
 @onready var _quit: Button = %Quit
 @onready var _options: OptionsPanel = %OptionsPanel
 @onready var _archive: ArchivePanel = %ArchivePanel
+@onready var _upgrades: UpgradesPanel = %UpgradesPanel
 @onready var _records: LeaderboardPanel = %LeaderboardPanel
 @onready var _run_detail: RunDetailPanel = %RunDetailPanel
 
@@ -43,6 +44,7 @@ func _ready() -> void:
 	_play.pressed.connect(play_requested.emit)
 	_wire(%Options as Button, _options.open, _options.closed)
 	_wire(%Archive as Button, _archive.open, _archive.closed)
+	_wire(%Upgrades as Button, _upgrades.open, _upgrades.closed)
 	_records.run_chosen.connect(_show_run)
 	_run_detail.closed.connect(func() -> void:
 		_menu.visible = true

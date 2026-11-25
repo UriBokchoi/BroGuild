@@ -5,6 +5,35 @@ LANGUAGE_NAME,Español,English
 MENU_PLAY,Jugar,Play
 MENU_OPTIONS,Opciones,Options
 MENU_ARCHIVE,Archivo,Archive
+MENU_UPGRADES,Mejoras,Upgrades
+UPGRADES_TITLE,Mejoras,Upgrades
+UPGRADES_LEVEL,Nivel %d/%d,Level %d/%d
+UPGRADES_BUY,Comprar (%d),Buy (%d)
+UPGRADES_MAXED,Al máximo,Maxed
+UPGRADES_NONE,Nada,None
+UPGRADES_NEXT,%s → %s,%s → %s
+UPGRADES_REFUND,Reembolsar todo,Refund all
+UPGRADES_REFUNDED,Te devuelven %d bro-monedas,%d bro coins refunded
+UPGRADE_VALUE_PERCENT,+%s %%,+%s%%
+UPGRADE_VALUE_FLAT,+%s,+%s
+UPGRADE_VALUE_LEVELS,+%s niveles,+%s levels
+UPGRADE_SPEED_NAME,Velocidad,Speed
+UPGRADE_GREED_NAME,Oro y bro-monedas,Gold and bro coins
+UPGRADE_WEAPON_LEVEL_NAME,Nivel máximo de las armas,Weapon max level
+UPGRADE_RUNE_LEVEL_NAME,Nivel máximo de las runas,Rune max level
+UPGRADE_DAMAGE_DESC,Todo tu daño pega un poco más.,All your damage hits a bit harder.
+UPGRADE_AREA_DESC,"Ataques y efectos, un poco más grandes.","Attacks and effects, a bit bigger."
+UPGRADE_CRIT_CHANCE_DESC,Más probabilidad de crítico.,Higher crit chance.
+UPGRADE_MAX_HEALTH_DESC,Más vida máxima.,More max health.
+UPGRADE_ARMOR_DESC,"Más defensa: los golpes duelen menos.","More armor: hits hurt less."
+UPGRADE_SPEED_DESC,Corres y esprintas más rápido.,You run and sprint faster.
+UPGRADE_LUCK_DESC,"Rarezas más altas en mejoras, cofres y tragaperras.","Higher rarities in upgrades, chests and slots."
+UPGRADE_DIFFICULTY_DESC,"Más enemigos y más fuertes, pero más experiencia y oro.","More and stronger enemies, but more XP and gold."
+UPGRADE_GREED_DESC,Más oro en la partida y más bro-monedas al acabar.,More gold in the run and more bro coins at the end.
+UPGRADE_WEAPON_SLOTS_DESC,Empiezas con más ranuras de armas abiertas.,You start with more weapon slots open.
+UPGRADE_RUNE_SLOTS_DESC,Empiezas con más ranuras de runas abiertas.,You start with more rune slots open.
+UPGRADE_WEAPON_LEVEL_DESC,Tus armas suben más niveles.,Your weapons go up more levels.
+UPGRADE_RUNE_LEVEL_DESC,Tus runas suben más niveles.,Your runes go up more levels.
 MENU_ACHIEVEMENTS,Logros (WIP),Achievements (WIP)
 MENU_QUIT,Abandonar,Quit game
 LEVEL_BROSQUE_NAME,El Brosque,The Brorest
@@ -56,6 +85,9 @@ RESULTS_STAGE,Llegaste a,Reached
 RESULTS_TIME,Tiempo,Time
 RESULTS_BRO_COINS,Bro-monedas,Bro coins
 RESULTS_BRO_COINS_VALUE,+%d,+%d
+STAT_BRO_COIN_GAIN,Bro-monedas ganadas,Bro coins gained
+STAT_WEAPON_LEVEL_BONUS,Niveles de más en las armas,Extra weapon levels
+STAT_RUNE_LEVEL_BONUS,Niveles de más en las runas,Extra rune levels
 RESULTS_LEVEL,Nivel,Level
 RESULTS_KILLS,Enemigos derrotados,Enemies defeated
 RESULTS_ELITE_KILLS,Élites derrotados,Elites defeated

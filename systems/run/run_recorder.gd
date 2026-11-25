@@ -29,6 +29,8 @@ var _round_running: bool = false
 var _banked: float = 0.0
 ## Empezó otra fase: la próxima ronda suma a lo que ya se llevaba.
 var _bank_next_round: bool = false
+## Bro-monedas ganadas, con sus fracciones (las enteras van a stats).
+var _bro_coins: float = 0.0
 var _stopped: bool = false
 
 
@@ -67,12 +69,23 @@ func _on_enemy_died(enemy: Enemy) -> void:
 	if enemy.is_elite():
 		stats.elite_kills += 1
 		if bro_coin_data:
-			stats.bro_coins += bro_coin_data.per_elite
+			_add_bro_coins(bro_coin_data.per_elite)
 
 
 func _on_boss_defeated(_victory_key: StringName, _seconds: float, _bonus: float) -> void:
 	if not _stopped and bro_coin_data:
-		stats.bro_coins += bro_coin_data.per_boss
+		_add_bro_coins(bro_coin_data.per_boss)
+
+
+## Suma [param amount] bro-monedas con lo que las multiplique el jugador (bro_coin_gain); las
+## fracciones se acumulan hasta hacer una entera.
+func _add_bro_coins(amount: int) -> void:
+	var gain := 1.0
+	if is_instance_valid(player) and player.stats.has_stat(&"bro_coin_gain"):
+		gain = player.stats.get_value(&"bro_coin_gain") / 100.0
+	_bro_coins += amount * gain
+	# Un pelín de margen: 1,1 × 10 no siempre da 11 justo.
+	stats.bro_coins = floori(_bro_coins + 0.001)
 
 
 func _on_enemy_damaged(_position: Vector3, amount: float, _info: DamageInfo) -> void:

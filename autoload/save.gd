@@ -168,9 +168,36 @@ func add_bro_coins(amount: int) -> void:
 	if amount <= 0:
 		return
 	profile.add_bro_coins(amount)
+	save_profile()
+
+
+## Compra el siguiente nivel de [param upgrade] con las bro-monedas del perfil y lo guarda. Si no
+## puede (al máximo o sin monedas), no hace nada y devuelve [code]false[/code].
+func buy_upgrade(upgrade: MetaUpgradeData) -> bool:
+	if profile == null:
+		load_profile()
+	if not profile.buy(upgrade):
+		return false
+	save_profile()
+	return true
+
+
+## Deshace las mejoras de [param catalog], devuelve sus bro-monedas al perfil y lo guarda. Devuelve
+## cuántas.
+func refund_upgrades(catalog: MetaUpgradeCatalog) -> int:
+	if profile == null:
+		load_profile()
+	var refunded := profile.refund(catalog)
+	if refunded > 0:
+		save_profile()
+	return refunded
+
+
+## Guarda el perfil en [member profile_path].
+func save_profile() -> Error:
 	var config := ConfigFile.new()
 	profile.write_to(config)
-	_save(config, profile_path, "el perfil")
+	return _save(config, profile_path, "el perfil")
 
 
 func _remove_scratch_files() -> void:

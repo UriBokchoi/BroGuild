@@ -13,6 +13,9 @@ var level: LevelData
 var tier: int = 1
 ## Semilla de la partida en curso (la última que empezó).
 var run_seed: int = 0
+## Lo que suman a la base del jugador las mejoras permanentes compradas (las pone Game al empezar
+## cada partida). Vacío: nada (un nivel ejecutado solo).
+var bonuses: StatModifierSet
 
 
 ## Empieza una partida nueva. Si ya había una, la termina antes (reinicio).

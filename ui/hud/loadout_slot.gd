@@ -31,12 +31,12 @@ func _init(side: float) -> void:
 	show_empty()
 
 
-## Muestra [param item] a [param level].
-func show_item(item: ItemData, level: int) -> void:
+## Muestra [param item] a [param level], con su máximo [param max_level] (0: el de serie).
+func show_item(item: ItemData, level: int, max_level: int = 0) -> void:
 	var changed := item != get_item() or level != _shown_level
 	_show(Content.ITEM, item, &"LoadoutSlot")
 	_icon.texture = item.icon
-	var maxed := level >= item.max_level()
+	var maxed := level >= (max_level if max_level > 0 else item.max_level())
 	_level.text = tr(&"LOADOUT_MAX") if maxed else str(level)
 	_level.theme_type_variation = &"LoadoutLevelMaxLabel" if maxed else &"LoadoutLevelLabel"
 	_shown_level = level

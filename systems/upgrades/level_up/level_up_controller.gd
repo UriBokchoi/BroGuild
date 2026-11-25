@@ -103,7 +103,8 @@ func _offer() -> void:
 	var rune_slots := data.clamp_rune_slots(player.stats.get_int(&"rune_slots"))
 	var luck := player.stats.get_value(&"luck")
 	var options := LevelUpOffer.build(
-		_catalog, _owned_levels(), data.choices, weapon_slots, rune_slots, data.rarities, rng, luck
+		_catalog, _owned_levels(), data.choices, weapon_slots, rune_slots, data.rarities, rng, luck,
+		player.stats
 	)
 	if options.is_empty():
 		_queue.clear()

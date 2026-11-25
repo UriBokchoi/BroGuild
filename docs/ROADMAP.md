@@ -205,7 +205,7 @@ De fácil a difícil, como pidió el diseñador.
 - [x] Enemigo raro y rápido: el Cardioadicto (frágil, casi el doble de rápido)
 - [x] Enemigo raro que vuela: el Murciébro, a la altura de la cabeza (para que no se pueda saltar por encima de la horda)
 - [x] Bro-monedas: 1 por élite y 5 por jefe, guardadas entre partidas (se ven en los resultados)
-- [ ] Pestaña «Mejoras» en el menú, con bro-monedas y reembolso: daño, área, crítico, vida, armadura, velocidad, Suerte y dificultad; más oro y bro-monedas; ranuras de armas y runas; nivel máximo de armas (12 a 20) y de runas (25 a 40)
+- [x] Pestaña «Mejoras» en el menú, con bro-monedas y reembolso: daño, área, crítico, vida, armadura, velocidad, Suerte y dificultad; más oro y bro-monedas; ranuras de armas y runas; nivel máximo de armas (12 a 20) y de runas (25 a 40). Precios provisionales; la recarga de las habilidades, cuando existan
 - [ ] Misiones y desbloqueos: espada, bastón y daga abiertos; el resto, con sus condiciones (martillo, hacha, Paladín, Bárbaro y Brujo)
 - [ ] En vez de las mesetas cuadradas, montañitas o árboles grandes con parkour para subir
 - [ ] El arma del Brujo: proyectil dirigido que rebota, rojo con estela, que explota en área al hacer crítico

@@ -8,7 +8,8 @@ extends RefCounted
 
 ## Hasta [param choices] opciones. [param levels] es el nivel de cada objeto que lleva (por id);
 ## [param weapon_slots] y [param rune_slots], sus ranuras abiertas de cada tipo. Cada mejora sale con
-## una rareza de [param rarities], con [param luck] puntos de Suerte.
+## una rareza de [param rarities], con [param luck] puntos de Suerte. El máximo de cada objeto cuenta
+## los niveles de más que den las stats [param stats] del jugador (sin ellas, el de serie).
 static func build(
 	catalog: Array[ItemData],
 	levels: Dictionary[StringName, int],
@@ -18,13 +19,14 @@ static func build(
 	rarities: WeightedTable,
 	rng: RandomNumberGenerator,
 	luck: float = 0.0,
+	stats: StatsComponent = null,
 ) -> Array[LevelUpOption]:
 	var weapons := _count_owned(catalog, levels, WeaponData)
 	var runes := _count_owned(catalog, levels, RuneData)
 	var candidates: Array[LevelUpOption] = []
 	for item: ItemData in catalog:
 		var level: int = levels.get(item.id, 0)
-		if level >= item.max_level():
+		if level >= item.max_level_with(stats):
 			continue
 		if level == 0:
 			var full := weapons >= weapon_slots if item is WeaponData else runes >= rune_slots

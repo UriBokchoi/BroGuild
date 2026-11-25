@@ -1792,3 +1792,16 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
 ## 2026-11-26 · Bro-monedas
 - **Decisión:** la moneda de fuera de la partida son las bro-monedas: 1 por élite y 5 por jefe (`data/meta/bro_coins.tres`). Los minibosses no dan, porque no se pidió. Se suman al perfil (`user://profile.cfg`) al acabar la partida, se gane o se pierda, y en los resultados sale cuántas se ganaron. Se gastarán en la pestaña «Mejoras» del menú.
 - **Por qué:** lo pidió el diseñador. Guardarlas al acabar (y no al matar) hace que el juego escriba en disco una sola vez por partida, como los récords.
+
+## 2026-11-26 · Mejoras permanentes con bro-monedas
+- **Decisión:**
+  - Cada mejora tiene niveles; el valor de cada nivel es el total, no lo que se suma (daño: +1 %, +2 %… hasta +5 %), igual que el nivel máximo de las armas (12, 14… 20).
+  - Las stats en % (daño, área, vida y velocidad, que sube carrera y sprint) suben un %; las que son puntos (crítico, defensa, Suerte y dificultad), puntos.
+  - Oro y bro-monedas van juntas en una mejora: +10 % a +50 %.
+  - Las ranuras abren 1 y 2 más al empezar (de 2 a 4, las que hay).
+  - Los niveles máximos de más son stats del jugador (`weapon_level_bonus`, `rune_level_bonus`) que suman al `level_cap` de cada arma o runa.
+  - Precios provisionales: 5/10/15/20/25 las stats, 10 a 50 el oro y los niveles máximos, 30 y 60 las ranuras.
+  - Lo comprado va a la base del jugador al empezar la partida, como el personaje.
+  - «Reembolsar todo» devuelve todo lo gastado, sin perder nada.
+  - La mejora de la recarga de las habilidades (3:00 → 2:30) llegará con las habilidades.
+- **Por qué:** lo pidió el diseñador. Lo que no dijo (precios, si los % son totales, cuánto oro y bro-monedas) está en `data/meta/upgrades.tres` para cambiarlo sin tocar código.

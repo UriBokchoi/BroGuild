@@ -21,9 +21,23 @@ extends Resource
 @export var upgrade_stats: Array[UpgradeStat] = []
 
 
-## Nivel máximo.
+## Nivel máximo de serie.
 func max_level() -> int:
 	return level_cap
+
+
+## Nivel máximo para quien tiene las stats [param stats]: el de serie más los niveles de más que le
+## den (la stat de [method level_bonus_stat]; las mejoras del menú). Sin stats, el de serie.
+func max_level_with(stats: StatsComponent) -> int:
+	var bonus_stat := level_bonus_stat()
+	if stats == null or bonus_stat.is_empty() or not stats.has_stat(bonus_stat):
+		return level_cap
+	return level_cap + maxi(stats.get_int(bonus_stat), 0)
+
+
+## Stat del jugador con los niveles de más sobre [member level_cap] (vacía: ninguna).
+func level_bonus_stat() -> StringName:
+	return &""
 
 
 ## Clave de traducción de qué es (arma, runa…), para mostrarlo.

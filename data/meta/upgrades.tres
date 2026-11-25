@@ -1,0 +1,169 @@
+[gd_resource type="Resource" script_class="MetaUpgradeCatalog" format=3]
+
+[ext_resource type="Script" path="res://systems/meta/meta_upgrade_catalog.gd" id="1_catalog"]
+[ext_resource type="Script" path="res://systems/meta/meta_upgrade_data.gd" id="90_upgrade"]
+[ext_resource type="Texture2D" path="res://assets/textures/icons/runes/strength.svg" id="2_strength"]
+[ext_resource type="Texture2D" path="res://assets/textures/icons/runes/amplitude.svg" id="3_amplitude"]
+[ext_resource type="Texture2D" path="res://assets/textures/icons/upgrades/crit.svg" id="4_crit"]
+[ext_resource type="Texture2D" path="res://assets/textures/icons/runes/vigor.svg" id="5_vigor"]
+[ext_resource type="Texture2D" path="res://assets/textures/icons/items/lifting_belt.svg" id="6_lifting_belt"]
+[ext_resource type="Texture2D" path="res://assets/textures/icons/items/flaming_sneakers.svg" id="7_flaming_sneakers"]
+[ext_resource type="Texture2D" path="res://assets/textures/icons/items/horseshoe.svg" id="8_horseshoe"]
+[ext_resource type="Texture2D" path="res://assets/textures/icons/ui/difficulty.svg" id="9_difficulty"]
+[ext_resource type="Texture2D" path="res://assets/textures/icons/slots/coin.svg" id="10_coin"]
+[ext_resource type="Texture2D" path="res://assets/textures/icons/upgrades/weapon_slot.svg" id="11_weapon_slot"]
+[ext_resource type="Texture2D" path="res://assets/textures/icons/upgrades/rune_slot.svg" id="12_rune_slot"]
+[ext_resource type="Texture2D" path="res://assets/textures/icons/upgrades/weapon_level.svg" id="13_weapon_level"]
+[ext_resource type="Texture2D" path="res://assets/textures/icons/upgrades/rune_level.svg" id="14_rune_level"]
+
+[sub_resource type="Resource" id="Upgrade_damage"]
+script = ExtResource("90_upgrade")
+id = &"damage"
+name_key = &"STAT_DAMAGE"
+description_key = &"UPGRADE_DAMAGE_DESC"
+icon = ExtResource("2_strength")
+stats = Array[StringName]([&"damage"])
+kind = 1
+values = PackedFloat32Array(0.01, 0.02, 0.03, 0.04, 0.05)
+value_key = &"UPGRADE_VALUE_PERCENT"
+display_scale = 100.0
+costs = PackedInt32Array(5, 10, 15, 20, 25)
+
+[sub_resource type="Resource" id="Upgrade_area"]
+script = ExtResource("90_upgrade")
+id = &"area"
+name_key = &"STAT_AREA"
+description_key = &"UPGRADE_AREA_DESC"
+icon = ExtResource("3_amplitude")
+stats = Array[StringName]([&"area"])
+kind = 1
+values = PackedFloat32Array(0.01, 0.02, 0.03, 0.04, 0.05)
+value_key = &"UPGRADE_VALUE_PERCENT"
+display_scale = 100.0
+costs = PackedInt32Array(5, 10, 15, 20, 25)
+
+[sub_resource type="Resource" id="Upgrade_crit_chance"]
+script = ExtResource("90_upgrade")
+id = &"crit_chance"
+name_key = &"STAT_CRIT_CHANCE"
+description_key = &"UPGRADE_CRIT_CHANCE_DESC"
+icon = ExtResource("4_crit")
+stats = Array[StringName]([&"crit_chance"])
+values = PackedFloat32Array(1, 2, 3, 4, 5)
+value_key = &"UPGRADE_VALUE_PERCENT"
+costs = PackedInt32Array(5, 10, 15, 20, 25)
+
+[sub_resource type="Resource" id="Upgrade_max_health"]
+script = ExtResource("90_upgrade")
+id = &"max_health"
+name_key = &"STAT_MAX_HEALTH"
+description_key = &"UPGRADE_MAX_HEALTH_DESC"
+icon = ExtResource("5_vigor")
+stats = Array[StringName]([&"max_health"])
+kind = 1
+values = PackedFloat32Array(0.01, 0.02, 0.03, 0.04, 0.05)
+value_key = &"UPGRADE_VALUE_PERCENT"
+display_scale = 100.0
+costs = PackedInt32Array(5, 10, 15, 20, 25)
+
+[sub_resource type="Resource" id="Upgrade_armor"]
+script = ExtResource("90_upgrade")
+id = &"armor"
+name_key = &"STAT_ARMOR"
+description_key = &"UPGRADE_ARMOR_DESC"
+icon = ExtResource("6_lifting_belt")
+stats = Array[StringName]([&"armor"])
+values = PackedFloat32Array(1, 2, 3, 4, 5)
+costs = PackedInt32Array(5, 10, 15, 20, 25)
+
+[sub_resource type="Resource" id="Upgrade_speed"]
+script = ExtResource("90_upgrade")
+id = &"speed"
+name_key = &"UPGRADE_SPEED_NAME"
+description_key = &"UPGRADE_SPEED_DESC"
+icon = ExtResource("7_flaming_sneakers")
+stats = Array[StringName]([&"run_speed", &"sprint_speed"])
+kind = 1
+values = PackedFloat32Array(0.01, 0.02, 0.03, 0.04, 0.05)
+value_key = &"UPGRADE_VALUE_PERCENT"
+display_scale = 100.0
+costs = PackedInt32Array(5, 10, 15, 20, 25)
+
+[sub_resource type="Resource" id="Upgrade_luck"]
+script = ExtResource("90_upgrade")
+id = &"luck"
+name_key = &"STAT_LUCK"
+description_key = &"UPGRADE_LUCK_DESC"
+icon = ExtResource("8_horseshoe")
+stats = Array[StringName]([&"luck"])
+values = PackedFloat32Array(1, 2, 3, 4, 5)
+costs = PackedInt32Array(5, 10, 15, 20, 25)
+
+[sub_resource type="Resource" id="Upgrade_difficulty"]
+script = ExtResource("90_upgrade")
+id = &"difficulty"
+name_key = &"STAT_DIFFICULTY"
+description_key = &"UPGRADE_DIFFICULTY_DESC"
+icon = ExtResource("9_difficulty")
+stats = Array[StringName]([&"difficulty"])
+values = PackedFloat32Array(1, 2, 3, 4, 5)
+costs = PackedInt32Array(5, 10, 15, 20, 25)
+
+[sub_resource type="Resource" id="Upgrade_greed"]
+script = ExtResource("90_upgrade")
+id = &"greed"
+name_key = &"UPGRADE_GREED_NAME"
+description_key = &"UPGRADE_GREED_DESC"
+icon = ExtResource("10_coin")
+stats = Array[StringName]([&"currency_gain", &"bro_coin_gain"])
+kind = 1
+values = PackedFloat32Array(0.1, 0.2, 0.3, 0.4, 0.5)
+value_key = &"UPGRADE_VALUE_PERCENT"
+display_scale = 100.0
+costs = PackedInt32Array(10, 20, 30, 40, 50)
+
+[sub_resource type="Resource" id="Upgrade_weapon_slots"]
+script = ExtResource("90_upgrade")
+id = &"weapon_slots"
+name_key = &"STAT_WEAPON_SLOTS"
+description_key = &"UPGRADE_WEAPON_SLOTS_DESC"
+icon = ExtResource("11_weapon_slot")
+stats = Array[StringName]([&"weapon_slots"])
+values = PackedFloat32Array(1, 2)
+costs = PackedInt32Array(30, 60)
+
+[sub_resource type="Resource" id="Upgrade_rune_slots"]
+script = ExtResource("90_upgrade")
+id = &"rune_slots"
+name_key = &"STAT_RUNE_SLOTS"
+description_key = &"UPGRADE_RUNE_SLOTS_DESC"
+icon = ExtResource("12_rune_slot")
+stats = Array[StringName]([&"rune_slots"])
+values = PackedFloat32Array(1, 2)
+costs = PackedInt32Array(30, 60)
+
+[sub_resource type="Resource" id="Upgrade_weapon_level"]
+script = ExtResource("90_upgrade")
+id = &"weapon_level"
+name_key = &"UPGRADE_WEAPON_LEVEL_NAME"
+description_key = &"UPGRADE_WEAPON_LEVEL_DESC"
+icon = ExtResource("13_weapon_level")
+stats = Array[StringName]([&"weapon_level_bonus"])
+values = PackedFloat32Array(2, 4, 6, 8, 10)
+value_key = &"UPGRADE_VALUE_LEVELS"
+costs = PackedInt32Array(10, 20, 30, 40, 50)
+
+[sub_resource type="Resource" id="Upgrade_rune_level"]
+script = ExtResource("90_upgrade")
+id = &"rune_level"
+name_key = &"UPGRADE_RUNE_LEVEL_NAME"
+description_key = &"UPGRADE_RUNE_LEVEL_DESC"
+icon = ExtResource("14_rune_level")
+stats = Array[StringName]([&"rune_level_bonus"])
+values = PackedFloat32Array(5, 10, 15, 20)
+value_key = &"UPGRADE_VALUE_LEVELS"
+costs = PackedInt32Array(10, 20, 30, 40)
+
+[resource]
+script = ExtResource("1_catalog")
+upgrades = Array[ExtResource("90_upgrade")]([SubResource("Upgrade_damage"), SubResource("Upgrade_area"), SubResource("Upgrade_crit_chance"), SubResource("Upgrade_max_health"), SubResource("Upgrade_armor"), SubResource("Upgrade_speed"), SubResource("Upgrade_luck"), SubResource("Upgrade_difficulty"), SubResource("Upgrade_greed"), SubResource("Upgrade_weapon_slots"), SubResource("Upgrade_rune_slots"), SubResource("Upgrade_weapon_level"), SubResource("Upgrade_rune_level")])

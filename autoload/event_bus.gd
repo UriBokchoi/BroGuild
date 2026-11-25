@@ -65,7 +65,7 @@ signal player_gold_changed(gold: float)
 ## Cambió la dificultad (la stat [code]difficulty[/code] del jugador; sube con el tiempo y con objetos).
 signal difficulty_changed(difficulty: float)
 ## Cambió el nivel de un arma o runa del jugador: al conseguirla (1), al subirla y al perderla (0).
-signal player_item_changed(item: ItemData, level: int)
+signal player_item_changed(item: ItemData, level: int, max_level: int)
 ## Cambió cuántas copias lleva el jugador de un objeto pasivo (0 = ya no lo lleva).
 signal player_passive_changed(item: PassiveItemData, count: int)
 ## Cambiaron las ranuras abiertas del jugador (sin limitar a las que hay: eso lo hace [LevelUpData]).

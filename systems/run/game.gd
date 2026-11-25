@@ -10,6 +10,8 @@ extends Node
 @export var run_setup: PackedScene
 ## Nivel que se juega si no se ha elegido otro.
 @export var default_level: LevelData
+## Mejoras permanentes que se pueden comprar: las del perfil se suman al jugador en cada partida.
+@export var upgrades: MetaUpgradeCatalog
 
 var _screen: Node
 
@@ -42,6 +44,7 @@ func play(level: LevelData = null) -> void:
 		RunState.level = level
 	elif RunState.level == null:
 		RunState.level = default_level
+	RunState.bonuses = upgrades.build_set(Save.profile.upgrades) if upgrades and Save.profile else null
 	RunState.start_run(Rng.make_seed())
 	_show.call_deferred(RunState.level.scene.instantiate())
 
