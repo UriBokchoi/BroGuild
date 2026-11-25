@@ -218,8 +218,9 @@ items = NodePath("../Player/Items")
 
 [node name="DamageVignette" parent="." instance=ExtResource("42_vignette")]
 
-[node name="ItemChoicePanel" parent="." node_paths=PackedStringArray("inventory") instance=ExtResource("35_item_choice")]
+[node name="ItemChoicePanel" parent="." node_paths=PackedStringArray("inventory", "wallet") instance=ExtResource("35_item_choice")]
 inventory = NodePath("../Player/Items")
+wallet = NodePath("../Player/Wallet")
 
 [node name="Particles" type="Node3D" parent="."]
 

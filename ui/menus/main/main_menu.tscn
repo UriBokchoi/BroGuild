@@ -10,6 +10,7 @@
 [ext_resource type="Texture2D" path="res://assets/textures/icons/ui/language.svg" id="8_globe"]
 [ext_resource type="PackedScene" path="res://ui/menus/leaderboard/leaderboard_panel.tscn" id="9_records"]
 [ext_resource type="PackedScene" path="res://ui/menus/archive/archive_panel.tscn" id="10_archive"]
+[ext_resource type="PackedScene" path="res://ui/menus/leaderboard/run_detail_panel.tscn" id="16_run_detail"]
 [ext_resource type="Environment" path="res://levels/brosque/environment.tres" id="11_environment"]
 [ext_resource type="Material" path="res://levels/brosque/materials/grass.tres" id="12_grass"]
 [ext_resource type="Script" path="res://levels/common/layout/level_layout.gd" id="13_layout"]
@@ -116,6 +117,11 @@ visible = false
 layout_mode = 2
 
 [node name="ArchivePanel" parent="UI/Margin" instance=ExtResource("10_archive")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="RunDetailPanel" parent="UI/Margin" instance=ExtResource("16_run_detail")]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2

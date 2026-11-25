@@ -43,3 +43,17 @@ func test_the_archive_replaces_the_menu_and_comes_back() -> void:
 func test_the_records_are_always_on_the_right() -> void:
 	assert_true((_menu.get_node(^"%LeaderboardPanel") as LeaderboardPanel).visible)
 	assert_true((_menu.get_node(^"%Right") as Control).visible)
+
+
+func test_choosing_a_run_opens_its_detail_apart() -> void:
+	var detail := _menu.get_node(^"%RunDetailPanel") as RunDetailPanel
+	var records := _menu.get_node(^"%LeaderboardPanel") as LeaderboardPanel
+	var record := RunRecord.new()
+	record.kills = 12
+	records.run_chosen.emit(record)
+	assert_true(detail.visible)
+	assert_false((_menu.get_node(^"%Menu") as Control).visible)
+	assert_false((_menu.get_node(^"%Right") as Control).visible)
+	detail.close()
+	assert_true((_menu.get_node(^"%Menu") as Control).visible)
+	assert_true((_menu.get_node(^"%Right") as Control).visible)

@@ -13,7 +13,7 @@ max_health = 53.0
 
 [sub_resource type="Resource" id="Resource_stats"]
 script = ExtResource("3_stats")
-move_speed = 4.6
+move_speed = 4.1
 acceleration = 30.0
 contact_damage = 11.5
 contact_interval = 0.8

@@ -70,10 +70,16 @@ stat = &"health_regen"
 value = 0.3
 step = 0.1
 
+[sub_resource type="Resource" id="Stat_lifesteal"]
+script = ExtResource("2_stat")
+stat = &"lifesteal"
+value = 1.0
+step = 0.5
+
 [resource]
 script = ExtResource("1_data")
 charge_time = 5.0
 reach = 3.5
 choices = 3
-stats = Array[ExtResource("2_stat")]([SubResource("Stat_damage"), SubResource("Stat_attack_speed"), SubResource("Stat_area"), SubResource("Stat_xp_gain"), SubResource("Stat_run_speed"), SubResource("Stat_max_health"), SubResource("Stat_crit_chance"), SubResource("Stat_luck"), SubResource("Stat_armor"), SubResource("Stat_health_regen")])
+stats = Array[ExtResource("2_stat")]([SubResource("Stat_damage"), SubResource("Stat_attack_speed"), SubResource("Stat_area"), SubResource("Stat_xp_gain"), SubResource("Stat_run_speed"), SubResource("Stat_max_health"), SubResource("Stat_crit_chance"), SubResource("Stat_luck"), SubResource("Stat_armor"), SubResource("Stat_health_regen"), SubResource("Stat_lifesteal")])
 rarities = ExtResource("3_rarities")

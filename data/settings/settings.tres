@@ -12,6 +12,6 @@ fps_limits = Array[int]([30, 60, 90, 120, 144, 165, 240, 0])
 default_fps_limit = 60
 resolutions = Array[Vector2i]([Vector2i(1280, 720), Vector2i(1600, 900), Vector2i(1920, 1080), Vector2i(2560, 1440), Vector2i(3840, 2160)])
 default_locale = "es"
-leaderboard_size = 20
+leaderboard_size = 10
 default_screen_shake = 1.0
 default_mouse_sensitivity = 1.0

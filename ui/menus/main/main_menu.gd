@@ -22,6 +22,8 @@ signal play_requested
 @onready var _quit: Button = %Quit
 @onready var _options: OptionsPanel = %OptionsPanel
 @onready var _archive: ArchivePanel = %ArchivePanel
+@onready var _records: LeaderboardPanel = %LeaderboardPanel
+@onready var _run_detail: RunDetailPanel = %RunDetailPanel
 
 
 func _enter_tree() -> void:
@@ -41,6 +43,11 @@ func _ready() -> void:
 	_play.pressed.connect(play_requested.emit)
 	_wire(%Options as Button, _options.open, _options.closed)
 	_wire(%Archive as Button, _archive.open, _archive.closed)
+	_records.run_chosen.connect(_show_run)
+	_run_detail.closed.connect(func() -> void:
+		_menu.visible = true
+		_right.visible = true
+		_play.grab_focus())
 	_quit.pressed.connect(_quit_game)
 	_play.grab_focus()
 
@@ -56,6 +63,13 @@ func _wire(button: Button, open_panel: Callable, closed: Signal) -> void:
 		_menu.visible = true
 		_right.visible = true
 		button.grab_focus())
+
+
+## Abre el detalle de [param record] en su ventana, en lugar de la lista y los récords.
+func _show_run(record: RunRecord) -> void:
+	_menu.visible = false
+	_right.visible = false
+	_run_detail.open(record)
 
 
 func _quit_game() -> void:

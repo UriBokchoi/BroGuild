@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" path="res://ui/menus/item_choice/item_choice_panel.gd" id="1_panel"]
 [ext_resource type="Shader" path="res://vfx/shaders/screen_blur.gdshader" id="2_blur"]
+[ext_resource type="PackedScene" path="res://ui/widgets/gold_counter.tscn" id="3_gold"]
+[ext_resource type="Resource" path="res://data/choice_shrines/mushroom_ring.tres" id="4_pool"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_blur"]
 shader = ExtResource("2_blur")
@@ -12,6 +14,9 @@ shader_parameter/tint = Color(0.05, 0.06, 0.09, 0.55)
 process_mode = 3
 layer = 30
 script = ExtResource("1_panel")
+pool = ExtResource("4_pool")
+reroll_cost = 10
+reroll_growth = 1.5
 appear_root = NodePath("Center/Content")
 stats_hint = NodePath("Center/Content/StatsHint")
 fit_to_screen = true
@@ -53,6 +58,17 @@ unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"CardRow"
 alignment = 1
+
+[node name="Gold" parent="Center/Content" instance=ExtResource("3_gold")]
+layout_mode = 2
+
+[node name="Reroll" type="Button" parent="Center/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+focus_mode = 0
+theme_type_variation = &"SmallButton"
+text = "ITEM_CHOICE_REROLL"
 
 [node name="StatsHint" type="Label" parent="Center/Content"]
 layout_mode = 2

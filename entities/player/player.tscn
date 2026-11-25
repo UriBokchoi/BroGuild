@@ -54,6 +54,7 @@
 [ext_resource type="Script" path="res://vfx/juice/step_dust/step_dust.gd" id="55_step_dust"]
 [ext_resource type="PackedScene" path="res://vfx/particles/step_dust.tscn" id="56_step_puff"]
 [ext_resource type="Script" path="res://entities/player/targeting/targeting.gd" id="57_targeting"]
+[ext_resource type="Script" path="res://entities/player/lifesteal.gd" id="58_lifesteal"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_interactor"]
 radius = 0.6
@@ -148,6 +149,11 @@ sources = Array[Resource]([ExtResource("16_health_data"), ExtResource("17_offens
 script = ExtResource("33_health")
 stats = NodePath("../Stats")
 rules = ExtResource("34_rules")
+
+[node name="Lifesteal" type="Node" parent="." node_paths=PackedStringArray("health", "stats")]
+script = ExtResource("58_lifesteal")
+health = NodePath("../Health")
+stats = NodePath("../Stats")
 
 [node name="Hurtbox" type="Area3D" parent="." node_paths=PackedStringArray("health")]
 collision_layer = 8

@@ -1758,6 +1758,16 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
 - **Herramientas de prueba:** en F3, «god mode» (el jugador no pierde vida) y «next stage», para recorrer los tiers y el jefe final.
 - **Sonidos:** el heraldo tiene su fanfarria y sellar un pacto, un golpe grave y metálico (antes, el de subir de nivel).
 
+## 2026-11-25 · Pedidos tras probar (2): primeros arreglos
+- **Decisión:**
+  - Los récords guardan las 10 mejores partidas (antes, 20).
+  - El detalle de una partida se abre en una ventana aparte, en el centro del menú, en vez de debajo de la lista.
+  - Los enemigos van un 10 % más lentos de base (esbirros 4,1 m/s, tiradores 2,8 y Bro-tes 5,0); los jefes, igual.
+  - El oro se ve en los paneles que cobran por volver a tirar: subir de nivel, círculo de setas y pactos.
+  - El círculo de setas deja volver a tirar: 10 de oro, ×1,5 por uso en la partida, como los pactos.
+  - El robo de vida (`lifesteal`, que existía como stat pero no hacía nada) cura al jugador un % del daño que hace a los enemigos (`Lifesteal`, en el jugador). Sale en las mejoras de las pesas (+1 % de base) y tiene su runa, Sed de sangre (+0,8 % por nivel de base).
+- **Por qué:** lo pidió el diseñador tras probar el juego.
+
 ## 2026-11-25 · La arena final, redonda
 - **Decisión:** la arena del jefe final es un círculo de 45 m de radio.
   - Las paredes de choque son tramos rectos en círculo (`RingBounds`).

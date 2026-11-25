@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://ui/menus/level_up/level_up_panel.gd" id="1_panel"]
 [ext_resource type="Shader" path="res://vfx/shaders/screen_blur.gdshader" id="2_blur"]
 [ext_resource type="Resource" path="res://data/progression/level_up.tres" id="3_data"]
+[ext_resource type="PackedScene" path="res://ui/widgets/gold_counter.tscn" id="4_gold"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_blur"]
 shader = ExtResource("2_blur")
@@ -74,6 +75,9 @@ unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 text = "LEVEL_UP_DOUBLE"
+
+[node name="Gold" parent="Center/Content" instance=ExtResource("4_gold")]
+layout_mode = 2
 
 [node name="Reroll" type="Button" parent="Center/Content"]
 unique_name_in_owner = true

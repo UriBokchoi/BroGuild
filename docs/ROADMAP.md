@@ -193,6 +193,25 @@ Lo que pidió el diseñador antes de seguir con niveles nuevos, de fácil a dif�
 - [ ] Plantilla de exportación ligera (cuando estén Python y SCons)
 - Pendiente de diseño: los logros y la música
 
+## Pedidos tras probar (2) (2026-11-25)
+De fácil a difícil, como pidió el diseñador.
+- [x] Récords: solo los 10 mejores
+- [x] Enemigos un 10 % más lentos de base (esbirros, tiradores y Bro-tes)
+- [x] El oro a la vista al subir de nivel, en el círculo de setas y en los pactos
+- [x] El detalle de una partida de los récords, en una ventana aparte
+- [x] «Volver a tirar» en el círculo de setas (10 de oro, ×1,5 por uso en la partida)
+- [x] Robo de vida que funciona (cura un % del daño hecho), en las mejoras de las pesas y con su runa, Sed de sangre
+- [ ] Al cruzar el portal: animación de entrar, los enemigos desaparecen con efecto y sonido propio
+- [ ] Enemigo raro y rápido
+- [ ] Enemigo raro que vuela (para que no se pueda saltar por encima de la horda)
+- [ ] Bro-monedas: 1 por élite y 5 por jefe, guardadas entre partidas
+- [ ] Pestaña «Mejoras» en el menú, con bro-monedas y reembolso: daño, área, crítico, vida, armadura, velocidad, Suerte y dificultad; más oro y bro-monedas; ranuras de armas y runas; nivel máximo de armas (12 a 20) y de runas (25 a 40)
+- [ ] Misiones y desbloqueos: espada, bastón y daga abiertos; el resto, con sus condiciones (martillo, hacha, Paladín, Bárbaro y Brujo)
+- [ ] En vez de las mesetas cuadradas, montañitas o árboles grandes con parkour para subir
+- [ ] El arma del Brujo: proyectil dirigido que rebota, rojo con estela, que explota en área al hacer crítico
+- [ ] Personajes nuevos: Paladín, Bárbaro y Brujo
+- [ ] Habilidades únicas (una por personaje, 3 min de recarga, 2:30 con mejora; icono abajo a la derecha con su indicador sin números)
+
 ## Backlog (sin orden)
 - Física de la horda: con 180 esbirros apretados, la física se lleva unos 4–6 ms por tick (el rumbo del enjambre, 1 ms; el resto, el motor). Mirar con el profiler del editor si hiciera falta (formas más simples, menos contactos)
 - Raíles/ziplines y plataformas de salto
