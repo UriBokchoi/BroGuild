@@ -5,21 +5,25 @@ const PREFIX := "test_save_scratch"
 
 var _real_leaderboard: String
 var _real_archive: String
+var _real_profile: String
 
 
 func before_each() -> void:
 	_real_leaderboard = Save.leaderboard_path
 	_real_archive = Save.archive_path
+	_real_profile = Save.profile_path
 
 
 func after_each() -> void:
-	for path: String in [Save.leaderboard_path, Save.archive_path]:
+	for path: String in [Save.leaderboard_path, Save.archive_path, Save.profile_path]:
 		if FileAccess.file_exists(path):
 			DirAccess.remove_absolute(ProjectSettings.globalize_path(path))
 	Save.leaderboard_path = _real_leaderboard
 	Save.archive_path = _real_archive
+	Save.profile_path = _real_profile
 	Save.load_leaderboard()
 	Save.load_discoveries()
+	Save.load_profile()
 
 
 func test_scratch_files_start_empty_every_time() -> void:
@@ -34,3 +38,16 @@ func test_scratch_files_start_empty_every_time() -> void:
 	Save.use_scratch_files(PREFIX)
 	assert_false(Save.discoveries.has(&"enemies", &"swarmer"), "vacío otra vez")
 	assert_eq(Save.leaderboard.get_entries().size(), 0)
+
+
+func test_bro_coins_add_up_and_are_kept() -> void:
+	Save.use_scratch_files(PREFIX)
+	assert_eq(Save.profile_path, "user://%s_profile.cfg" % PREFIX)
+	assert_eq(Save.profile.bro_coins, 0, "empieza vacío")
+	Save.add_bro_coins(5)
+	Save.add_bro_coins(1)
+	assert_true(FileAccess.file_exists(Save.profile_path), "guardado")
+	Save.load_profile()
+	assert_eq(Save.profile.bro_coins, 6, "se lee de nuevo")
+	Save.use_scratch_files(PREFIX)
+	assert_eq(Save.profile.bro_coins, 0, "vacío otra vez")

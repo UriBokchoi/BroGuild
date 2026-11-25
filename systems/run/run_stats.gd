@@ -22,3 +22,5 @@ var won: bool = false
 var boss_bonus: float = 0.0
 ## Fase a la que se llegó en un nivel con tiers (su nombre; vacío: un nivel sin tiers).
 var stage_key: StringName = &""
+## Bro-monedas ganadas (por élites y jefes).
+var bro_coins: int = 0

@@ -94,6 +94,26 @@ func test_stops_when_the_player_dies() -> void:
 	assert_eq(_recorder.stats.seconds, before)
 
 
+func test_elites_and_bosses_give_bro_coins() -> void:
+	_recorder.bro_coin_data = preload("res://data/meta/bro_coins.tres")
+	_kill(_swarm.spawn(SWARMER, Vector3(-3.0, 0.0, 0.0)))
+	var elite := _swarm.spawn(SWARMER, Vector3(3.0, 0.0, 0.0))
+	elite.promote(ELITE)
+	_kill(elite)
+	assert_eq(_recorder.stats.bro_coins, _recorder.bro_coin_data.per_elite, "solo el élite")
+	EventBus.boss_defeated.emit(&"BROSQUE_VICTORY", 60.0, 1.0)
+	assert_eq(_recorder.stats.bro_coins,
+		_recorder.bro_coin_data.per_elite + _recorder.bro_coin_data.per_boss, "y el jefe")
+
+
+func test_without_data_there_are_no_bro_coins() -> void:
+	var elite := _swarm.spawn(SWARMER, Vector3(3.0, 0.0, 0.0))
+	elite.promote(ELITE)
+	_kill(elite)
+	EventBus.boss_defeated.emit(&"BROSQUE_VICTORY", 60.0, 1.0)
+	assert_eq(_recorder.stats.bro_coins, 0)
+
+
 func _kill(enemy: Enemy) -> void:
 	enemy.health.take_damage(DamageInfo.create(100000.0))
 

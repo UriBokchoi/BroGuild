@@ -1788,3 +1788,7 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - Los enemigos solo salen dentro del círculo (`play_radius` del mapa, que llega al director de oleadas).
   - Los mapas cuadrados siguen igual: todo es opcional y de serie está apagado.
 - **Por qué:** desde arriba se notaba que era un cuadrado; un claro redondo encaja con las ruinas en círculo y con la idea de arena.
+
+## 2026-11-26 · Bro-monedas
+- **Decisión:** la moneda de fuera de la partida son las bro-monedas: 1 por élite y 5 por jefe (`data/meta/bro_coins.tres`). Los minibosses no dan, porque no se pidió. Se suman al perfil (`user://profile.cfg`) al acabar la partida, se gane o se pierda, y en los resultados sale cuántas se ganaron. Se gastarán en la pestaña «Mejoras» del menú.
+- **Por qué:** lo pidió el diseñador. Guardarlas al acabar (y no al matar) hace que el juego escriba en disco una sola vez por partida, como los récords.

@@ -204,7 +204,7 @@ De fácil a difícil, como pidió el diseñador.
 - [x] Al cruzar el portal: el jugador entra en él (encoge, sin control), los enemigos se hunden en el suelo con su humo (sin botín ni contar) y suena el portal
 - [x] Enemigo raro y rápido: el Cardioadicto (frágil, casi el doble de rápido)
 - [x] Enemigo raro que vuela: el Murciébro, a la altura de la cabeza (para que no se pueda saltar por encima de la horda)
-- [ ] Bro-monedas: 1 por élite y 5 por jefe, guardadas entre partidas
+- [x] Bro-monedas: 1 por élite y 5 por jefe, guardadas entre partidas (se ven en los resultados)
 - [ ] Pestaña «Mejoras» en el menú, con bro-monedas y reembolso: daño, área, crítico, vida, armadura, velocidad, Suerte y dificultad; más oro y bro-monedas; ranuras de armas y runas; nivel máximo de armas (12 a 20) y de runas (25 a 40)
 - [ ] Misiones y desbloqueos: espada, bastón y daga abiertos; el resto, con sus condiciones (martillo, hacha, Paladín, Bárbaro y Brujo)
 - [ ] En vez de las mesetas cuadradas, montañitas o árboles grandes con parkour para subir

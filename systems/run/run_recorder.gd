@@ -10,6 +10,8 @@ extends Node
 @export var player: Player
 ## Pactos sellados en la partida (para apuntarlos con la build). Vacío: ninguno.
 @export var pact_panel: PactPanel
+## Cuántas bro-monedas dan élites y jefes (vacío: ninguna). Se suman al perfil al acabar.
+@export var bro_coin_data: BroCoinData
 ## Si al acabar apunta la partida en la clasificación (sí el de las partidas de verdad, en
 ## [code]run_systems.tscn[/code]; los tests la llevan a otro archivo: [code]tests/hooks/pre_run.gd[/code]).
 @export var record_runs: bool = false
@@ -40,6 +42,7 @@ func _enter_tree() -> void:
 	_connect(EventBus.player_died, _on_player_died)
 	_connect(EventBus.run_won, _on_run_won)
 	_connect(EventBus.stage_started, _on_stage_started)
+	_connect(EventBus.boss_defeated, _on_boss_defeated)
 
 
 func _physics_process(delta: float) -> void:
@@ -63,6 +66,13 @@ func _on_enemy_died(enemy: Enemy) -> void:
 	stats.kills += 1
 	if enemy.is_elite():
 		stats.elite_kills += 1
+		if bro_coin_data:
+			stats.bro_coins += bro_coin_data.per_elite
+
+
+func _on_boss_defeated(_victory_key: StringName, _seconds: float, _bonus: float) -> void:
+	if not _stopped and bro_coin_data:
+		stats.bro_coins += bro_coin_data.per_boss
 
 
 func _on_enemy_damaged(_position: Vector3, amount: float, _info: DamageInfo) -> void:
@@ -130,6 +140,7 @@ func _record() -> void:
 	var record := RunRecord.create(stats, character, RunState.level, RunState.tier)
 	_add_build(record)
 	place = Save.record_run(record)
+	Save.add_bro_coins(stats.bro_coins)
 
 
 ## Apunta en [param record] la build del jugador: armas y runas con su nivel, objetos con sus copias

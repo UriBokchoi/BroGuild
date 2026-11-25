@@ -1,6 +1,7 @@
 extends Node
 ## Lo que se guarda entre partidas (en user://): las opciones, los récords, lo descubierto para el
-## Archivo y los tiers superados de cada nivel. Al arrancar carga las opciones y las aplica.
+## Archivo, los tiers superados de cada nivel y el perfil (las bro-monedas). Al arrancar carga las
+## opciones y las aplica.
 ##
 ## Con «-- --no-save» (lo usa tools/validate.sh) los récords y el Archivo van a archivos de prueba:
 ## probar el juego no ensucia lo de verdad. Esos archivos se borran al cerrar.
@@ -25,6 +26,10 @@ var discoveries: Discoveries
 var progress_path: String = "user://progress.cfg"
 ## Tiers superados de cada nivel. Para apuntar uno, [method complete_tier].
 var progress: LevelProgress
+## Archivo del perfil (los tests usan otro).
+var profile_path: String = "user://profile.cfg"
+## Bro-monedas y lo que se compra con ellas. Para sumar monedas, [method add_bro_coins].
+var profile: PlayerProfile
 ## Si se usan archivos de prueba (se borran al cerrar).
 var _scratch: bool = false
 
@@ -40,6 +45,7 @@ func _ready() -> void:
 		load_leaderboard()
 		load_discoveries()
 		load_progress()
+		load_profile()
 
 
 func _exit_tree() -> void:
@@ -54,11 +60,13 @@ func use_scratch_files(prefix: String) -> void:
 	leaderboard_path = "user://%s_leaderboard.cfg" % prefix
 	archive_path = "user://%s_archive.cfg" % prefix
 	progress_path = "user://%s_progress.cfg" % prefix
+	profile_path = "user://%s_profile.cfg" % prefix
 	_scratch = true
 	_remove_scratch_files()
 	load_leaderboard()
 	load_discoveries()
 	load_progress()
+	load_profile()
 
 
 ## Carga las opciones de [member settings_path]; sin archivo, las de un juego recién estrenado.
@@ -145,8 +153,28 @@ func complete_tier(level_id: StringName, tier: int) -> bool:
 	return true
 
 
+## Carga el perfil de [member profile_path] (sin archivo, vacío).
+func load_profile() -> void:
+	profile = PlayerProfile.new()
+	var config := ConfigFile.new()
+	if config.load(profile_path) == OK:
+		profile.read_from(config)
+
+
+## Suma [param amount] bro-monedas al perfil y lo guarda.
+func add_bro_coins(amount: int) -> void:
+	if profile == null:
+		load_profile()
+	if amount <= 0:
+		return
+	profile.add_bro_coins(amount)
+	var config := ConfigFile.new()
+	profile.write_to(config)
+	_save(config, profile_path, "el perfil")
+
+
 func _remove_scratch_files() -> void:
-	for path: String in [leaderboard_path, archive_path, progress_path]:
+	for path: String in [leaderboard_path, archive_path, progress_path, profile_path]:
 		if FileAccess.file_exists(path):
 			DirAccess.remove_absolute(ProjectSettings.globalize_path(path))
 

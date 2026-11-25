@@ -123,6 +123,7 @@ func _fill(stats: RunStats) -> void:
 	_add_row(&"RESULTS_ELITE_KILLS", str(stats.elite_kills))
 	_add_row(&"RESULTS_GOLD", str(floori(stats.gold_earned)))
 	_add_row(&"RESULTS_DAMAGE", str(floori(stats.damage_dealt)))
+	_add_row(&"RESULTS_BRO_COINS", tr(&"RESULTS_BRO_COINS_VALUE") % stats.bro_coins)
 	if recorder and recorder.place >= 0:
 		_add_row(&"RESULTS_RECORD_PLACE", tr(&"RESULTS_RECORD_PLACE_VALUE") % (recorder.place + 1))
 

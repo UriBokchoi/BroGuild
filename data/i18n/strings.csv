@@ -54,6 +54,8 @@ DEATH_LINE_COUSIN,Mi primo pequeño lo haría mejor,My little cousin would do be
 DEATH_LINE_DIED,Has muerto,You died
 RESULTS_STAGE,Llegaste a,Reached
 RESULTS_TIME,Tiempo,Time
+RESULTS_BRO_COINS,Bro-monedas,Bro coins
+RESULTS_BRO_COINS_VALUE,+%d,+%d
 RESULTS_LEVEL,Nivel,Level
 RESULTS_KILLS,Enemigos derrotados,Enemies defeated
 RESULTS_ELITE_KILLS,Élites derrotados,Elites defeated
