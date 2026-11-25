@@ -1,8 +1,9 @@
 class_name OptionsPanel
 extends PanelContainer
-## Las opciones: volumen, pantalla completa, tamaño de ventana, VSync, límite de FPS y temblor. El
-## volumen y el temblor se aplican al momento; lo de pantalla espera a «Aplicar». «Volver» o Esc
-## guardan y cierran, descartando lo de pantalla sin aplicar.
+## Las opciones: volumen, pantalla completa, tamaño de ventana, VSync, límite de FPS, temblor y los
+## controles (sensibilidad del ratón e invertir el eje vertical). El volumen, el temblor y los
+## controles se aplican al momento; lo de pantalla espera a «Aplicar». «Volver» o Esc guardan y
+## cierran, descartando lo de pantalla sin aplicar.
 ##
 ## Dentro del editor la ventana no se puede cambiar: lo dice y desactiva esas opciones.
 
@@ -25,6 +26,9 @@ var _pending: GameSettings
 @onready var _fps_limit: OptionButton = %FpsLimit
 @onready var _shake: HSlider = %ScreenShake
 @onready var _shake_value: Label = %ScreenShakeValue
+@onready var _sensitivity: HSlider = %MouseSensitivity
+@onready var _sensitivity_value: Label = %MouseSensitivityValue
+@onready var _invert_y: CheckButton = %InvertY
 @onready var _window_note: Label = %WindowNote
 @onready var _apply: Button = %Apply
 @onready var _back: Button = %Back
@@ -40,6 +44,10 @@ func _ready() -> void:
 		_fps_limit.add_item(str(limit) if limit > 0 else tr(&"OPTIONS_FPS_UNLIMITED"))
 	_fps_limit.item_selected.connect(_on_fps_limit_selected)
 	_shake.value_changed.connect(_on_shake_changed)
+	_sensitivity.min_value = GameSettings.MIN_SENSITIVITY
+	_sensitivity.max_value = GameSettings.MAX_SENSITIVITY
+	_sensitivity.value_changed.connect(_on_sensitivity_changed)
+	_invert_y.toggled.connect(_on_invert_y_toggled)
 	_apply.pressed.connect(apply)
 	_back.pressed.connect(close)
 	visible = false
@@ -120,6 +128,9 @@ func _show_settings() -> void:
 	_fullscreen.disabled = not can_change
 	_shake.set_value_no_signal(Save.settings.screen_shake)
 	_show_shake()
+	_sensitivity.set_value_no_signal(Save.settings.mouse_sensitivity)
+	_show_sensitivity()
+	_invert_y.set_pressed_no_signal(Save.settings.invert_y)
 	_fullscreen.set_pressed_no_signal(_pending.fullscreen)
 	_vsync.set_pressed_no_signal(_pending.vsync)
 	_fps_limit.select(data.fps_limits.find(_pending.fps_limit))
@@ -194,6 +205,19 @@ func _show_shake() -> void:
 func _on_shake_changed(value: float) -> void:
 	Save.settings.screen_shake = value
 	_show_shake()
+
+
+func _show_sensitivity() -> void:
+	_sensitivity_value.text = tr(&"OPTIONS_VOLUME_VALUE") % roundi(_sensitivity.value * 100.0)
+
+
+func _on_sensitivity_changed(value: float) -> void:
+	Save.settings.mouse_sensitivity = value
+	_show_sensitivity()
+
+
+func _on_invert_y_toggled(on: bool) -> void:
+	Save.settings.invert_y = on
 
 
 func _on_vsync_toggled(on: bool) -> void:

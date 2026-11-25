@@ -113,6 +113,8 @@ func _show(title: String, style: StringName, tint: Color) -> void:
 func _fill(stats: RunStats) -> void:
 	for cell: Node in _rows.get_children():
 		cell.free()
+	if not stats.stage_key.is_empty():
+		_add_row(&"RESULTS_STAGE", tr(stats.stage_key))
 	_add_row(&"RESULTS_TIME", RunClock.format(stats.seconds))
 	if stats.won:
 		_add_row(&"RESULTS_BOSS_BONUS", tr(&"RESULTS_BOSS_BONUS_VALUE") % StatFormat.number(stats.boss_bonus))

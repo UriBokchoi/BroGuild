@@ -54,3 +54,21 @@ func test_missing_fields_get_their_defaults() -> void:
 	assert_eq(record.player_level, 1)
 	assert_false(record.won)
 	assert_eq(record.character_name_key, &"")
+
+
+func test_keeps_the_build_and_old_runs_have_none() -> void:
+	var record := RunRecord.create(RunStats.new(), WARRIOR, BROSQUE)
+	assert_false(record.has_build(), "sin build")
+	record.weapons = {"sword": 6} as Dictionary[String, int]
+	record.runes = {"haste": 3} as Dictionary[String, int]
+	record.items = {"backwards_cap": 2} as Dictionary[String, int]
+	record.pacts.append("PACT_EGO_LIFTING_NAME")
+	record.gold_earned = 1200.0
+	var copy := RunRecord.from_dict(record.to_dict())
+	assert_true(copy.has_build())
+	assert_eq(copy.weapons, record.weapons)
+	assert_eq(copy.runes, record.runes)
+	assert_eq(copy.items, record.items)
+	assert_eq(copy.pacts, record.pacts)
+	assert_almost_eq(copy.gold_earned, 1200.0, 0.01)
+	assert_false(RunRecord.from_dict({"kills": 3}).has_build(), "una partida vieja no tiene build")

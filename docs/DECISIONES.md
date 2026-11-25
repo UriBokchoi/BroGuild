@@ -1730,3 +1730,22 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
 - **Medición:** el ejecutable exportado pesa 103 MB y el `.pck` 3,7 MB (27 MB comprimido en `.7z`). Casi todo es el motor: el ejecutable es la plantilla de exportación oficial de Godot, con todos sus módulos.
 - **Hecho:** la exportación (en `export_presets.cfg`, que no se versiona) ya no mete GUT, los tests, las herramientas ni los docs.
 - **Lo que haría falta para bajar de verdad:** compilar plantillas de exportación propias (`optimize=size`, LTO y sin los módulos que no usamos). Suelen quedar en la mitad. Hace falta Python y SCons (Visual Studio 2022 ya está), así que es una decisión del diseñador.
+
+## 2026-11-25 · Récords fijos en el menú principal, con la build
+- **Decisión:** los récords dejan de ser un botón: están siempre a la derecha del menú principal, con scroll. Cada partida sale con el icono del personaje y sus enemigos derrotados; al hacer clic, debajo sale su detalle (mapa y tier, hasta dónde llegó, resultado, tiempo, nivel, enemigos, élites, oro, daño y fecha) y la build con la que acabó (armas, runas y objetos con su icono y nivel o copias, y los pactos).
+  - Para eso cada partida guarda ahora su build, el oro y el daño (`RunRecord`). Las de antes no la tienen y lo dicen.
+  - Los iconos y nombres salen del catálogo del Archivo (`ContentCatalog.find`), así que la build se guarda solo con ids.
+- **Por qué:** lo pidió el diseñador. Con la build a la vista, los récords sirven para comparar qué funcionó.
+
+## 2026-11-25 · El fondo del menú principal, un claro del Brosque
+- **Decisión:** el fondo del menú deja el disco de hierba y es un claro del Brosque generado con las mismas piezas (ruinas, pesas, bancos y el bosque), siempre con la misma semilla para que quede bien encuadrado, y hojas que caen. Los personajes se quedan en el centro, entre el menú y los récords.
+- **Por qué:** el diseñador lo veía muy plano. Reutilizar el generador del mapa no añade assets.
+
+## 2026-11-25 · Pulido de menús y opciones
+- **Decisión:**
+  - La selección de nivel y las opciones tienen scroll; sus botones de abajo siempre se ven.
+  - Opciones nuevas: sensibilidad del ratón (de 20 a 300 %) e invertir el eje vertical, que se aplican al momento.
+  - El tier se ve en el HUD (pequeño, bajo la dificultad) y en los resultados («Llegaste a»).
+  - «Logros (WIP)» en el menú, desactivado, hasta que se diseñen.
+  - Los archivos de prueba que usan los tests, la validación y las capturas se borran al cerrar, para no dejar basura en `%APPDATA%\bro_guild`.
+- **Por qué:** lo pidió el diseñador antes de seguir con niveles nuevos. La interfaz trabaja en 1152 × 648, así que lo que no cabía en esa altura se salía.

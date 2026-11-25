@@ -1,8 +1,8 @@
 class_name RunStats
 extends RefCounted
 ## Lo que pasó en una partida, para la pantalla de resultados (y más adelante el Archivo y el bote):
-## tiempo, nivel, enemigos y élites derrotados, oro ganado, daño infligido y, si se venció al jefe,
-## su premio por rapidez. Lo rellena un [RunRecorder].
+## tiempo, nivel, enemigos y élites derrotados, oro ganado, daño infligido, si se venció al jefe su
+## premio por rapidez y, en un nivel con tiers, hasta qué fase se llegó. Lo rellena un [RunRecorder].
 
 ## Segundos de partida.
 var seconds: float = 0.0
@@ -20,3 +20,5 @@ var damage_dealt: float = 0.0
 var won: bool = false
 ## Multiplicador del premio del jefe por rapidez (si se venció).
 var boss_bonus: float = 0.0
+## Fase a la que se llegó en un nivel con tiers (su nombre; vacío: un nivel sin tiers).
+var stage_key: StringName = &""

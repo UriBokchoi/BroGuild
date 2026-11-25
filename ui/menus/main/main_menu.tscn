@@ -12,17 +12,18 @@
 [ext_resource type="PackedScene" path="res://ui/menus/archive/archive_panel.tscn" id="10_archive"]
 [ext_resource type="Environment" path="res://levels/brosque/environment.tres" id="11_environment"]
 [ext_resource type="Material" path="res://levels/brosque/materials/grass.tres" id="12_grass"]
+[ext_resource type="Script" path="res://levels/common/layout/level_layout.gd" id="13_layout"]
+[ext_resource type="Resource" path="res://data/layouts/main_menu.tres" id="14_layout_data"]
+[ext_resource type="PackedScene" path="res://vfx/weather/falling_leaves.tscn" id="15_leaves"]
 
-[sub_resource type="CylinderMesh" id="CylinderMesh_ground"]
+[sub_resource type="PlaneMesh" id="PlaneMesh_ground"]
 material = ExtResource("12_grass")
-top_radius = 9.0
-bottom_radius = 9.0
-height = 0.2
-radial_segments = 48
-rings = 1
+size = Vector2(220, 220)
 
-[node name="MainMenu" type="Node3D" node_paths=PackedStringArray("models")]
+[node name="MainMenu" type="Node3D" node_paths=PackedStringArray("models", "layout")]
 script = ExtResource("1_menu")
+layout = NodePath("Layout")
+layout_seed = 7
 characters = Array[Resource]([ExtResource("2_warrior"), ExtResource("3_mage"), ExtResource("4_rogue")])
 models = [NodePath("Characters/Warrior"), NodePath("Characters/Mage"), NodePath("Characters/Rogue")]
 
@@ -36,24 +37,30 @@ light_energy = 1.25
 shadow_enabled = true
 
 [node name="Camera" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.995, 0.1, 0, -0.1, 0.995, 0, 1.7, 6.5)
+transform = Transform3D(1, 0, 0, 0, 0.999, 0.04, 0, -0.04, 0.999, 0.5, 1.4, 7.8)
 fov = 50.0
 current = true
 
 [node name="Ground" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, -0.1, 0)
-mesh = SubResource("CylinderMesh_ground")
+mesh = SubResource("PlaneMesh_ground")
+
+[node name="Layout" type="Node3D" parent="."]
+script = ExtResource("13_layout")
+data = ExtResource("14_layout_data")
+
+[node name="Leaves" parent="." node_paths=PackedStringArray("target") instance=ExtResource("15_leaves")]
+target = NodePath("../Camera")
 
 [node name="Characters" type="Node3D" parent="."]
 
 [node name="Warrior" parent="Characters" instance=ExtResource("5_model")]
-transform = Transform3D(-0.966, 0, -0.259, 0, 1, 0, 0.259, 0, -0.966, 0.6, 0.9, 0.4)
+transform = Transform3D(-0.966, 0, -0.259, 0, 1, 0, 0.259, 0, -0.966, -0.7, 0.9, 0.4)
 
 [node name="Mage" parent="Characters" instance=ExtResource("5_model")]
-transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 2.2, 0.9, -0.4)
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0.2, 0.9, -0.4)
 
 [node name="Rogue" parent="Characters" instance=ExtResource("5_model")]
-transform = Transform3D(-0.966, 0, 0.259, 0, 1, 0, -0.259, 0, -0.966, 3.8, 0.9, 0.4)
+transform = Transform3D(-0.966, 0, 0.259, 0, 1, 0, -0.259, 0, -0.966, 1.1, 0.9, 0.4)
 
 [node name="UI" type="CanvasLayer" parent="."]
 
@@ -88,15 +95,15 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "MENU_OPTIONS"
 
-[node name="Records" type="Button" parent="UI/Margin/Menu"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "MENU_RECORDS"
-
 [node name="Archive" type="Button" parent="UI/Margin/Menu"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "MENU_ARCHIVE"
+
+[node name="Achievements" type="Button" parent="UI/Margin/Menu"]
+layout_mode = 2
+disabled = true
+text = "MENU_ACHIEVEMENTS"
 
 [node name="Quit" type="Button" parent="UI/Margin/Menu"]
 unique_name_in_owner = true
@@ -108,23 +115,27 @@ unique_name_in_owner = true
 visible = false
 layout_mode = 2
 
-[node name="LeaderboardPanel" parent="UI/Margin" instance=ExtResource("9_records")]
-unique_name_in_owner = true
-visible = false
-layout_mode = 2
-
 [node name="ArchivePanel" parent="UI/Margin" instance=ExtResource("10_archive")]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 
-[node name="LanguagePicker" type="OptionButton" parent="UI/Margin"]
+[node name="Right" type="VBoxContainer" parent="UI/Margin"]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 8
+size_flags_horizontal = 8
+theme_type_variation = &"MenuList"
+
+[node name="LanguagePicker" type="OptionButton" parent="UI/Margin/Right"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
 theme_type_variation = &"SmallOptionButton"
 icon = ExtResource("8_globe")
 expand_icon = true
 script = ExtResource("7_language")
 name_key = &"LANGUAGE_NAME"
+
+[node name="LeaderboardPanel" parent="UI/Margin/Right" instance=ExtResource("9_records")]
+unique_name_in_owner = true
+layout_mode = 2

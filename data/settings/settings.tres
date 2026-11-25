@@ -14,3 +14,4 @@ resolutions = Array[Vector2i]([Vector2i(1280, 720), Vector2i(1600, 900), Vector2
 default_locale = "es"
 leaderboard_size = 20
 default_screen_shake = 1.0
+default_mouse_sensitivity = 1.0

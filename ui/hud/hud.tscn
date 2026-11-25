@@ -22,6 +22,7 @@
 [ext_resource type="Script" path="res://ui/hud/announcement_feed.gd" id="20_feed"]
 [ext_resource type="Script" path="res://ui/hud/crosshair.gd" id="21_crosshair"]
 [ext_resource type="Script" path="res://ui/hud/streak_meter.gd" id="22_streak"]
+[ext_resource type="Script" path="res://ui/hud/stage_label.gd" id="23_stage"]
 
 [node name="HUD" type="CanvasLayer"]
 layer = 10
@@ -97,6 +98,13 @@ unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"DifficultyLabel"
 text = "0.0"
+
+[node name="StageLabel" type="Label" parent="Margin/Top"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 8
+theme_type_variation = &"StatBaseLabel"
+script = ExtResource("23_stage")
 
 [node name="BossKeyCounter" type="HBoxContainer" parent="Margin/Top"]
 unique_name_in_owner = true

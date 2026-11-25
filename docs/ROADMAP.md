@@ -172,6 +172,26 @@ Lo que salió en la segunda tanda de pruebas; va antes que el resto.
 
 11. Hito 6 (2026-11-25): tiers con desbloqueo, arena del jefe final, más recompensa con la dificultad y detalles del Guerrero y el Pícaro. Todo en un solo PR junto con el Hito 7. Los afijos de los élites, después.
 
+## Pulido antes de la Torre del Mago (2026-11-25)
+Lo que pidió el diseñador antes de seguir con niveles nuevos, de fácil a difícil.
+- [x] El Pícaro, sin capucha: pañuelo al cuello y cinturón con bolsitas
+- [x] «Logros (WIP)» en el menú principal, desactivado hasta que se diseñen
+- [x] Selección de nivel y opciones con scroll: ya no se salen de la pantalla
+- [x] Los archivos de prueba (tests, validación, capturas) se borran solos al cerrar
+- [x] El tier en partida (pequeño, bajo la dificultad) y en los resultados
+- [x] Opciones: sensibilidad del ratón e invertir el eje vertical
+- [x] Icono propio de Mr. Brolympia en el Archivo
+- [x] Fondo del menú principal: un claro del Brosque con ruinas, pesas, bosque y hojas que caen
+- [x] Récords fijos a la derecha del menú: cada partida con su personaje y sus enemigos; al hacer clic, su detalle y su build
+- [ ] Repaso del resto de menús y paneles en ventana pequeña
+- [ ] Arena final redonda
+- [ ] Modo sin morir en F3 y ajuste de los tiers 2 y 3 y del jefe final
+- [ ] Economía de los tiers altos (cofres, tragaperras y taberna)
+- [ ] Rendimiento en el invierno (el mapa más grande, con nieve)
+- [ ] Sonidos propios del heraldo, los pactos y Mr. Brolympia
+- [ ] Plantilla de exportación ligera (cuando estén Python y SCons)
+- Pendiente de diseño: los logros y la música
+
 ## Backlog (sin orden)
 - Física de la horda: con 180 esbirros apretados, la física se lleva unos 4–6 ms por tick (el rumbo del enjambre, 1 ms; el resto, el motor). Mirar con el profiler del editor si hiciera falta (formas más simples, menos contactos)
 - Raíles/ziplines y plataformas de salto

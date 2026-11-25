@@ -1,15 +1,19 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" path="res://ui/menus/leaderboard/leaderboard_panel.gd" id="1_records"]
+[ext_resource type="Script" path="res://ui/menus/leaderboard/leaderboard_panel.gd" id="1_panel"]
+[ext_resource type="Resource" path="res://data/content.tres" id="2_catalog"]
+[ext_resource type="PackedScene" path="res://ui/menus/leaderboard/build_chip.tscn" id="3_chip"]
 
 [node name="LeaderboardPanel" type="PanelContainer"]
-custom_minimum_size = Vector2(560, 0)
-size_flags_horizontal = 4
-size_flags_vertical = 4
-script = ExtResource("1_records")
+custom_minimum_size = Vector2(360, 0)
+size_flags_vertical = 3
+script = ExtResource("1_panel")
+catalog = ExtResource("2_catalog")
+chip = ExtResource("3_chip")
 
 [node name="Content" type="VBoxContainer" parent="."]
 layout_mode = 2
+size_flags_vertical = 3
 theme_type_variation = &"MenuList"
 
 [node name="Title" type="Label" parent="Content"]
@@ -21,30 +25,52 @@ text = "RECORDS_TITLE"
 layout_mode = 2
 theme_type_variation = &"StatBaseLabel"
 text = "RECORDS_SUBTITLE"
-
-[node name="Scroll" type="ScrollContainer" parent="Content"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 360)
-layout_mode = 2
-horizontal_scroll_mode = 0
-
-[node name="Rows" type="GridContainer" parent="Content/Scroll"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-theme_type_variation = &"OptionsGrid"
+autowrap_mode = 3
 
 [node name="Empty" type="Label" parent="Content"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 120)
 layout_mode = 2
 theme_type_variation = &"StatNameLabel"
 text = "RECORDS_EMPTY"
-horizontal_alignment = 1
-vertical_alignment = 1
+autowrap_mode = 3
 
-[node name="Back" type="Button" parent="Content"]
+[node name="ListScroll" type="ScrollContainer" parent="Content"]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 4
-text = "OPTIONS_BACK"
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="List" type="VBoxContainer" parent="Content/ListScroll"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"StatList"
+
+[node name="Detail" type="ScrollContainer" parent="Content"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 1.3
+horizontal_scroll_mode = 0
+
+[node name="DetailContent" type="VBoxContainer" parent="Content/Detail"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"CardColumn"
+
+[node name="DetailTitle" type="Label" parent="Content/Detail/DetailContent"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"CardTitleLabel"
+
+[node name="DetailRows" type="GridContainer" parent="Content/Detail/DetailContent"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"OptionsGrid"
+columns = 2
+
+[node name="Build" type="VBoxContainer" parent="Content/Detail/DetailContent"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"CardColumn"

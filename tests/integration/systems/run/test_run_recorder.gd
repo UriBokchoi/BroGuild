@@ -70,6 +70,7 @@ func test_with_tiers_the_time_adds_up_stage_after_stage() -> void:
 	EventBus.run_clock_changed.emit(0.0, false)
 	EventBus.run_clock_changed.emit(20.0, false)
 	assert_almost_eq(_recorder.stats.seconds, 320.0, 0.1, "el tier 1 y lo que va del 2")
+	assert_eq(_recorder.stats.stage_key, &"BROSQUE_TIER_2", "y hasta dónde llegó")
 	EventBus.run_won.emit(&"BROSQUE_VICTORY", 25.0, 1.0)
 	assert_almost_eq(_recorder.stats.seconds, 325.0, 0.1, "al ganar, también")
 

@@ -116,6 +116,15 @@ func _add_small_buttons(theme: Theme) -> void:
 	_button_boxes(theme, &"SmallOptionButton", Vector2(12, 6), 8)
 	theme.set_font_size(&"font_size", &"SmallOptionButton", 18)
 	theme.set_constant(&"icon_max_width", &"SmallOptionButton", 26)
+	# Las partidas de los récords: compactas, con el icono del personaje.
+	theme.set_type_variation(&"RecordRow", &"Button")
+	_button_boxes(theme, &"RecordRow", Vector2(12, 6), 8)
+	theme.set_font_size(&"font_size", &"RecordRow", 18)
+	theme.set_constant(&"icon_max_width", &"RecordRow", 30)
+	theme.set_constant(&"h_separation", &"RecordRow", 10)
+	# La última partida jugada, en azul (como lo que cambia en las stats).
+	theme.set_type_variation(&"RecordRowLatest", &"RecordRow")
+	theme.set_color(&"font_color", &"RecordRowLatest", MODIFIED)
 
 
 ## Cartas de la elección al subir de nivel: un botón grande con su contenido en columna.
@@ -318,6 +327,10 @@ func _add_chests(theme: Theme) -> void:
 	theme.set_type_variation(&"PassiveBar", &"HFlowContainer")
 	theme.set_constant(&"h_separation", &"PassiveBar", 6)
 	theme.set_constant(&"v_separation", &"PassiveBar", 6)
+	# La build de una partida en los récords: cada pieza (icono y número), bien separada de la siguiente.
+	theme.set_type_variation(&"BuildFlow", &"HFlowContainer")
+	theme.set_constant(&"h_separation", &"BuildFlow", 22)
+	theme.set_constant(&"v_separation", &"BuildFlow", 8)
 
 
 ## Jefe: arriba en el centro (bajo el reloj), su nombre, su barra de vida y lo que grita; debajo

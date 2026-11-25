@@ -26,3 +26,5 @@ extends Resource
 @export var default_locale: String = ""
 ## Temblor de pantalla al estrenar el juego (0 = nada, 1 = lo normal).
 @export_range(0.0, 1.0, 0.05) var default_screen_shake: float = 0.0
+## Sensibilidad del ratón al estrenar el juego (multiplica la de la cámara).
+@export_range(0.2, 3.0, 0.05) var default_mouse_sensitivity: float = 0.0

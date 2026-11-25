@@ -1,0 +1,100 @@
+[gd_resource type="Resource" script_class="LayoutData" format=3]
+
+[ext_resource type="Script" path="res://levels/common/layout/layout_data.gd" id="1_layout"]
+[ext_resource type="Script" path="res://levels/common/layout/layout_piece.gd" id="2_piece"]
+[ext_resource type="Script" path="res://levels/common/layout/forest_data.gd" id="3_forest"]
+[ext_resource type="PackedScene" path="res://levels/brosque/props/ruin_arch.tscn" id="4_arch"]
+[ext_resource type="PackedScene" path="res://levels/brosque/props/ruin_wall.tscn" id="5_wall"]
+[ext_resource type="PackedScene" path="res://levels/brosque/props/dumbbell_rock.tscn" id="6_dumbbell"]
+[ext_resource type="PackedScene" path="res://levels/brosque/props/bench_log.tscn" id="7_bench"]
+[ext_resource type="PackedScene" path="res://levels/brosque/props/plateau_low.tscn" id="8_plateau"]
+[ext_resource type="PackedScene" path="res://levels/brosque/props/ruin_temple.tscn" id="9_temple"]
+[ext_resource type="Material" path="res://levels/brosque/materials/bark.tres" id="10_bark"]
+[ext_resource type="Material" path="res://levels/brosque/materials/foliage.tres" id="11_foliage"]
+
+[sub_resource type="Resource" id="Piece_temple"]
+script = ExtResource("2_piece")
+scene = ExtResource("9_temple")
+count = 1
+footprint = 5.5
+avoid_clearing = true
+ring = Vector2(16, 20)
+face_center = true
+
+[sub_resource type="Resource" id="Piece_plateau"]
+script = ExtResource("2_piece")
+scene = ExtResource("8_plateau")
+count = 2
+footprint = 15.0
+avoid_clearing = true
+ring = Vector2(24, 28)
+
+[sub_resource type="Resource" id="Piece_arch"]
+script = ExtResource("2_piece")
+scene = ExtResource("4_arch")
+count = 3
+footprint = 3.0
+avoid_clearing = true
+ring = Vector2(14, 20)
+face_center = true
+
+[sub_resource type="Resource" id="Piece_wall"]
+script = ExtResource("2_piece")
+scene = ExtResource("5_wall")
+count = 3
+footprint = 3.5
+avoid_clearing = true
+ring = Vector2(14, 22)
+face_center = true
+
+[sub_resource type="Resource" id="Piece_dumbbell"]
+script = ExtResource("2_piece")
+scene = ExtResource("6_dumbbell")
+count = 4
+footprint = 2.5
+avoid_clearing = true
+ring = Vector2(13, 18)
+
+[sub_resource type="Resource" id="Piece_bench"]
+script = ExtResource("2_piece")
+scene = ExtResource("7_bench")
+count = 3
+footprint = 2.0
+avoid_clearing = true
+ring = Vector2(13, 17)
+face_center = true
+
+[sub_resource type="Resource" id="Forest_menu"]
+script = ExtResource("3_forest")
+max_trees = 45
+spacing = 6.0
+piece_margin = 2.0
+attempts = 1500
+border = 32.0
+border_depth = 5.0
+border_step = 4.0
+outer_start = 38.0
+outer_end = 80.0
+outer_step = 4.5
+scale_range = Vector2(0.9, 1.5)
+outer_scale_range = Vector2(1.2, 1.9)
+round_share = 0.45
+accent_share = 0.1
+pine_colors = Array[Color]([Color(0.16, 0.46, 0.3, 1), Color(0.13, 0.4, 0.33, 1), Color(0.2, 0.52, 0.28, 1)])
+round_colors = Array[Color]([Color(0.4, 0.66, 0.24, 1), Color(0.5, 0.7, 0.22, 1), Color(0.32, 0.6, 0.3, 1)])
+accent_colors = Array[Color]([Color(0.9, 0.48, 0.18, 1), Color(0.95, 0.72, 0.2, 1)])
+bark = ExtResource("10_bark")
+foliage = ExtResource("11_foliage")
+trunk_height = 3.0
+trunk_radius = 0.4
+chunk_size = 40.0
+
+[resource]
+script = ExtResource("1_layout")
+half_size = 28.0
+clearing_radius = 13.0
+spawn_radius = 4.0
+gap = 2.0
+attempts = 60
+pieces = Array[ExtResource("2_piece")]([SubResource("Piece_temple"), SubResource("Piece_plateau"), SubResource("Piece_arch"), SubResource("Piece_wall"), SubResource("Piece_dumbbell"), SubResource("Piece_bench")])
+forest = SubResource("Forest_menu")

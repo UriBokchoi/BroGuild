@@ -1,6 +1,6 @@
 extends GutTest
-## Menú principal: viste a los personajes de fondo, «Jugar» lo pide y «Opciones», «Récords» y
-## «Archivo» cambian el menú por su panel (y al cerrarlo vuelve).
+## Menú principal: viste a los personajes de fondo, «Jugar» lo pide, los récords están a la derecha
+## y «Opciones» y «Archivo» cambian el menú y los récords por su panel (y al cerrarlo vuelven).
 
 const MenuScene := preload("res://ui/menus/main/main_menu.tscn")
 
@@ -29,19 +29,17 @@ func test_options_replace_the_menu() -> void:
 	assert_false((_menu.get_node(^"%Menu") as Control).visible)
 
 
-func test_records_replace_the_menu_and_come_back() -> void:
-	var records := _menu.get_node(^"%LeaderboardPanel") as LeaderboardPanel
-	(_menu.get_node(^"%Records") as Button).pressed.emit()
-	assert_true(records.visible)
-	assert_false((_menu.get_node(^"%Menu") as Control).visible)
-	records.close()
-	assert_true((_menu.get_node(^"%Menu") as Control).visible)
-
-
 func test_the_archive_replaces_the_menu_and_comes_back() -> void:
 	var archive := _menu.get_node(^"%ArchivePanel") as ArchivePanel
 	(_menu.get_node(^"%Archive") as Button).pressed.emit()
 	assert_true(archive.visible)
+	assert_false((_menu.get_node(^"%Right") as Control).visible, "los récords también se van")
 	assert_false((_menu.get_node(^"%Menu") as Control).visible)
 	archive.close()
 	assert_true((_menu.get_node(^"%Menu") as Control).visible)
+	assert_true((_menu.get_node(^"%Right") as Control).visible)
+
+
+func test_the_records_are_always_on_the_right() -> void:
+	assert_true((_menu.get_node(^"%LeaderboardPanel") as LeaderboardPanel).visible)
+	assert_true((_menu.get_node(^"%Right") as Control).visible)

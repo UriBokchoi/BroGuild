@@ -3,7 +3,7 @@ extends Node
 ## Archivo y los tiers superados de cada nivel. Al arrancar carga las opciones y las aplica.
 ##
 ## Con «-- --no-save» (lo usa tools/validate.sh) los récords y el Archivo van a archivos de prueba:
-## probar el juego no ensucia lo de verdad.
+## probar el juego no ensucia lo de verdad. Esos archivos se borran al cerrar.
 
 const SETTINGS_DATA := preload("res://data/settings/settings.tres")
 ## Argumento de línea de órdenes (tras [code]--[/code]) para no tocar récords ni Archivo.
@@ -25,6 +25,8 @@ var discoveries: Discoveries
 var progress_path: String = "user://progress.cfg"
 ## Tiers superados de cada nivel. Para apuntar uno, [method complete_tier].
 var progress: LevelProgress
+## Si se usan archivos de prueba (se borran al cerrar).
+var _scratch: bool = false
 
 
 func _ready() -> void:
@@ -40,6 +42,11 @@ func _ready() -> void:
 		load_progress()
 
 
+func _exit_tree() -> void:
+	if _scratch:
+		_remove_scratch_files()
+
+
 ## Lleva récords, Archivo y tiers a [code]user://<prefix>_leaderboard.cfg[/code],
 ## [code]user://<prefix>_archive.cfg[/code] y [code]user://<prefix>_progress.cfg[/code], que empiezan
 ## vacíos (los tests y la validación).
@@ -47,9 +54,8 @@ func use_scratch_files(prefix: String) -> void:
 	leaderboard_path = "user://%s_leaderboard.cfg" % prefix
 	archive_path = "user://%s_archive.cfg" % prefix
 	progress_path = "user://%s_progress.cfg" % prefix
-	for path: String in [leaderboard_path, archive_path, progress_path]:
-		if FileAccess.file_exists(path):
-			DirAccess.remove_absolute(ProjectSettings.globalize_path(path))
+	_scratch = true
+	_remove_scratch_files()
 	load_leaderboard()
 	load_discoveries()
 	load_progress()
@@ -137,6 +143,12 @@ func complete_tier(level_id: StringName, tier: int) -> bool:
 	progress.write_to(config)
 	_save(config, progress_path, "los tiers superados")
 	return true
+
+
+func _remove_scratch_files() -> void:
+	for path: String in [leaderboard_path, archive_path, progress_path]:
+		if FileAccess.file_exists(path):
+			DirAccess.remove_absolute(ProjectSettings.globalize_path(path))
 
 
 func _save(config: ConfigFile, path: String, what: String) -> Error:

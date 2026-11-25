@@ -8,6 +8,8 @@ extends Node
 
 ## Jugador de la partida (su personaje, para la clasificación).
 @export var player: Player
+## Pactos sellados en la partida (para apuntarlos con la build). Vacío: ninguno.
+@export var pact_panel: PactPanel
 ## Si al acabar apunta la partida en la clasificación (sí el de las partidas de verdad, en
 ## [code]run_systems.tscn[/code]; los tests la llevan a otro archivo: [code]tests/hooks/pre_run.gd[/code]).
 @export var record_runs: bool = false
@@ -112,7 +114,10 @@ func _on_run_won(_victory_key: StringName, seconds: float, bonus: float) -> void
 	_record()
 
 
-func _on_stage_started(_name_key: StringName, index: int, _count: int) -> void:
+func _on_stage_started(name_key: StringName, index: int, _count: int) -> void:
+	if _stopped:
+		return
+	stats.stage_key = name_key
 	if index > 0:
 		_bank_next_round = true
 
@@ -122,4 +127,22 @@ func _record() -> void:
 	if not record_runs:
 		return
 	var character: CharacterData = player.character if is_instance_valid(player) else null
-	place = Save.record_run(RunRecord.create(stats, character, RunState.level, RunState.tier))
+	var record := RunRecord.create(stats, character, RunState.level, RunState.tier)
+	_add_build(record)
+	place = Save.record_run(record)
+
+
+## Apunta en [param record] la build del jugador: armas y runas con su nivel, objetos con sus copias
+## y pactos sellados.
+func _add_build(record: RunRecord) -> void:
+	if not is_instance_valid(player):
+		return
+	for weapon: Weapon in player.weapons.get_weapons():
+		record.weapons[String(weapon.data.id)] = weapon.level
+	for rune: RuneData in player.runes.get_runes():
+		record.runes[String(rune.id)] = player.runes.get_level(rune)
+	for item: PassiveItemData in player.items.get_items():
+		record.items[String(item.id)] = player.items.count(item)
+	if is_instance_valid(pact_panel):
+		for pact: PactData in pact_panel.get_sealed():
+			record.pacts.append(String(pact.name_key))

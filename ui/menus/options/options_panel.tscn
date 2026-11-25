@@ -6,12 +6,13 @@
 [node name="OptionsPanel" type="PanelContainer"]
 custom_minimum_size = Vector2(640, 0)
 size_flags_horizontal = 4
-size_flags_vertical = 4
+size_flags_vertical = 3
 script = ExtResource("1_options")
 data = ExtResource("2_data")
 
 [node name="Content" type="VBoxContainer" parent="."]
 layout_mode = 2
+size_flags_vertical = 3
 theme_type_variation = &"MenuList"
 
 [node name="Title" type="Label" parent="Content"]
@@ -19,84 +20,94 @@ layout_mode = 2
 theme_type_variation = &"HeaderLabel"
 text = "OPTIONS_TITLE"
 
-[node name="AudioHeader" type="Label" parent="Content"]
+[node name="Scroll" type="ScrollContainer" parent="Content"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="Groups" type="VBoxContainer" parent="Content/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"MenuList"
+
+[node name="AudioHeader" type="Label" parent="Content/Scroll/Groups"]
 layout_mode = 2
 theme_type_variation = &"StatGroupLabel"
 text = "OPTIONS_GROUP_AUDIO"
 
-[node name="Volumes" type="VBoxContainer" parent="Content"]
+[node name="Volumes" type="VBoxContainer" parent="Content/Scroll/Groups"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"StatList"
 
-[node name="DisplayHeader" type="Label" parent="Content"]
+[node name="DisplayHeader" type="Label" parent="Content/Scroll/Groups"]
 layout_mode = 2
 theme_type_variation = &"StatGroupLabel"
 text = "OPTIONS_GROUP_DISPLAY"
 
-[node name="Display" type="GridContainer" parent="Content"]
+[node name="Display" type="GridContainer" parent="Content/Scroll/Groups"]
 layout_mode = 2
 theme_type_variation = &"OptionsGrid"
 columns = 2
 
-[node name="FullscreenLabel" type="Label" parent="Content/Display"]
+[node name="FullscreenLabel" type="Label" parent="Content/Scroll/Groups/Display"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"StatNameLabel"
 text = "OPTIONS_FULLSCREEN"
 
-[node name="Fullscreen" type="CheckButton" parent="Content/Display"]
+[node name="Fullscreen" type="CheckButton" parent="Content/Scroll/Groups/Display"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 8
 
-[node name="ResolutionLabel" type="Label" parent="Content/Display"]
+[node name="ResolutionLabel" type="Label" parent="Content/Scroll/Groups/Display"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"StatNameLabel"
 text = "OPTIONS_RESOLUTION"
 
-[node name="Resolution" type="OptionButton" parent="Content/Display"]
+[node name="Resolution" type="OptionButton" parent="Content/Scroll/Groups/Display"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 8
 theme_type_variation = &"SmallButton"
 
-[node name="VSyncLabel" type="Label" parent="Content/Display"]
+[node name="VSyncLabel" type="Label" parent="Content/Scroll/Groups/Display"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"StatNameLabel"
 text = "OPTIONS_VSYNC"
 
-[node name="VSync" type="CheckButton" parent="Content/Display"]
+[node name="VSync" type="CheckButton" parent="Content/Scroll/Groups/Display"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 8
 
-[node name="FpsLimitLabel" type="Label" parent="Content/Display"]
+[node name="FpsLimitLabel" type="Label" parent="Content/Scroll/Groups/Display"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"StatNameLabel"
 text = "OPTIONS_FPS_LIMIT"
 
-[node name="FpsLimit" type="OptionButton" parent="Content/Display"]
+[node name="FpsLimit" type="OptionButton" parent="Content/Scroll/Groups/Display"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 8
 theme_type_variation = &"SmallButton"
 
-[node name="ShakeLabel" type="Label" parent="Content/Display"]
+[node name="ShakeLabel" type="Label" parent="Content/Scroll/Groups/Display"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"StatNameLabel"
 text = "OPTIONS_SCREEN_SHAKE"
 
-[node name="ShakeRow" type="HBoxContainer" parent="Content/Display"]
+[node name="ShakeRow" type="HBoxContainer" parent="Content/Scroll/Groups/Display"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"OptionsRow"
 
-[node name="ScreenShake" type="HSlider" parent="Content/Display/ShakeRow"]
+[node name="ScreenShake" type="HSlider" parent="Content/Scroll/Groups/Display/ShakeRow"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -104,11 +115,56 @@ size_flags_vertical = 4
 max_value = 1.0
 step = 0.05
 
-[node name="ScreenShakeValue" type="Label" parent="Content/Display/ShakeRow"]
+[node name="ScreenShakeValue" type="Label" parent="Content/Scroll/Groups/Display/ShakeRow"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"OptionsValueLabel"
 horizontal_alignment = 2
+
+[node name="ControlsHeader" type="Label" parent="Content/Scroll/Groups"]
+layout_mode = 2
+theme_type_variation = &"StatGroupLabel"
+text = "OPTIONS_GROUP_CONTROLS"
+
+[node name="Controls" type="GridContainer" parent="Content/Scroll/Groups"]
+layout_mode = 2
+theme_type_variation = &"OptionsGrid"
+columns = 2
+
+[node name="SensitivityLabel" type="Label" parent="Content/Scroll/Groups/Controls"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"StatNameLabel"
+text = "OPTIONS_MOUSE_SENSITIVITY"
+
+[node name="SensitivityRow" type="HBoxContainer" parent="Content/Scroll/Groups/Controls"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"OptionsRow"
+
+[node name="MouseSensitivity" type="HSlider" parent="Content/Scroll/Groups/Controls/SensitivityRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+step = 0.05
+
+[node name="MouseSensitivityValue" type="Label" parent="Content/Scroll/Groups/Controls/SensitivityRow"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"OptionsValueLabel"
+horizontal_alignment = 2
+
+[node name="InvertLabel" type="Label" parent="Content/Scroll/Groups/Controls"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"StatNameLabel"
+text = "OPTIONS_INVERT_Y"
+
+[node name="InvertY" type="CheckButton" parent="Content/Scroll/Groups/Controls"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
 
 [node name="WindowNote" type="Label" parent="Content"]
 unique_name_in_owner = true

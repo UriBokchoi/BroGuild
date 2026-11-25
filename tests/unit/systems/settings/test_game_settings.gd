@@ -128,3 +128,19 @@ func test_screen_shake_is_saved_and_clamped() -> void:
 	config.set_value(GameSettings.SECTION_DISPLAY, "screen_shake", 7.0)
 	loaded.read_from(config)
 	assert_eq(loaded.screen_shake, 1.0, "nunca más que lo normal")
+
+
+func test_mouse_controls_are_saved_and_clamped() -> void:
+	assert_eq(_settings.mouse_sensitivity, DATA.default_mouse_sensitivity, "la de serie")
+	assert_false(_settings.invert_y)
+	_settings.mouse_sensitivity = 1.5
+	_settings.invert_y = true
+	var config := ConfigFile.new()
+	_settings.write_to(config)
+	var loaded := GameSettings.create(DATA)
+	loaded.read_from(config)
+	assert_almost_eq(loaded.mouse_sensitivity, 1.5, 0.0001)
+	assert_true(loaded.invert_y)
+	config.set_value(GameSettings.SECTION_CONTROLS, "mouse_sensitivity", 50.0)
+	loaded.read_from(config)
+	assert_eq(loaded.mouse_sensitivity, GameSettings.MAX_SENSITIVITY, "dentro de sus límites")

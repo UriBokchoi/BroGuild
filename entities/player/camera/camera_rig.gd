@@ -50,11 +50,15 @@ func _unhandled_input(event: InputEvent) -> void:
 		rotate_view(motion.screen_relative)
 
 
-## Gira la vista según un movimiento de ratón en píxeles (x: giro, y: inclinación).
+## Gira la vista según un movimiento de ratón en píxeles (x: giro, y: inclinación), con la
+## sensibilidad y el eje vertical de las opciones.
 func rotate_view(pixels: Vector2) -> void:
-	var radians_per_pixel := deg_to_rad(data.mouse_sensitivity)
+	var settings := Save.settings
+	var factor := settings.mouse_sensitivity if settings else 1.0
+	var radians_per_pixel := deg_to_rad(data.mouse_sensitivity * factor)
+	var vertical := -pixels.y if settings and settings.invert_y else pixels.y
 	_yaw = wrapf(_yaw - pixels.x * radians_per_pixel, -PI, PI)
-	_pitch = clampf(_pitch - pixels.y * radians_per_pixel, data.pitch_min, data.pitch_max)
+	_pitch = clampf(_pitch - vertical * radians_per_pixel, data.pitch_min, data.pitch_max)
 	_apply_rotation()
 
 
