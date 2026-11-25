@@ -35,6 +35,25 @@ func test_the_light_stops_on_the_item_rarity() -> void:
 	assert_eq((_hud.get_node(^"%ChestItemDescription") as Label).text, tr(CROWN.description_key), "y su frase")
 
 
+func test_with_the_player_stats_it_says_how_they_change() -> void:
+	var panel := _hud.get_node(^"%ChestPanel") as ChestPanel
+	var stats := StatsComponent.new()
+	for source: Resource in [OffenseData.new(), HealthData.new(), MovementData.new(), StaminaData.new(), ProgressionData.new(), MovementSynergyData.new()]:
+		stats.sources.append(source)
+	add_child_autofree(stats)
+	panel.stats = stats
+	EventBus.item_revealed.emit(CROWN, 0.1)
+	var changes := ModifierFormat.changes(CROWN.stat_modifiers, stats)
+	# Si ya lo lleva al acabar el revelado, el «antes» sigue siendo el de sin él.
+	for modifier: StatModifier in CROWN.stat_modifiers:
+		stats.add_modifier(modifier, self)
+	await wait_seconds(0.2)
+	var lines := (_hud.get_node(^"%ChestItemEffects") as Label).text.split("\n")
+	assert_eq(lines.size(), CROWN.stat_modifiers.size())
+	assert_false(changes[0].is_empty())
+	assert_eq(lines[0], "%s (%s)" % [ModifierFormat.describe(CROWN.stat_modifiers[0]), changes[0]])
+
+
 func test_without_gold_only_the_warning() -> void:
 	var panel := _hud.get_node(^"%ChestPanel") as ChestPanel
 	EventBus.chest_denied.emit(25)

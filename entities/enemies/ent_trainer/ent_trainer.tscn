@@ -93,48 +93,63 @@ material = SubResource("StandardMaterial3D_bark")
 top_radius = 0.35
 bottom_radius = 0.48
 height = 0.7
+radial_segments = 12
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_trunk"]
 material = SubResource("StandardMaterial3D_bark")
 top_radius = 0.85
 bottom_radius = 1.05
 height = 2.4
+radial_segments = 12
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_shirt"]
 material = SubResource("StandardMaterial3D_shirt")
 top_radius = 0.98
 bottom_radius = 1.08
 height = 1.1
+radial_segments = 12
 
 [sub_resource type="SphereMesh" id="SphereMesh_canopy"]
 material = SubResource("StandardMaterial3D_leaves")
 radius = 1.5
 height = 2.6
+radial_segments = 16
+rings = 8
 
 [sub_resource type="SphereMesh" id="SphereMesh_tuft"]
 material = SubResource("StandardMaterial3D_leaves")
 radius = 0.9
 height = 1.6
+radial_segments = 16
+rings = 8
 
 [sub_resource type="SphereMesh" id="SphereMesh_top"]
 material = SubResource("StandardMaterial3D_leaves_dark")
 radius = 1.0
 height = 1.7
+radial_segments = 16
+rings = 8
 
 [sub_resource type="TorusMesh" id="TorusMesh_band"]
 material = SubResource("StandardMaterial3D_band")
 inner_radius = 1.3
 outer_radius = 1.6
+rings = 24
+ring_segments = 8
 
 [sub_resource type="SphereMesh" id="SphereMesh_eye"]
 material = SubResource("StandardMaterial3D_eye")
 radius = 0.2
 height = 0.4
+radial_segments = 16
+rings = 8
 
 [sub_resource type="SphereMesh" id="SphereMesh_pupil"]
 material = SubResource("StandardMaterial3D_dark")
 radius = 0.09
 height = 0.18
+radial_segments = 16
+rings = 8
 
 [sub_resource type="BoxMesh" id="BoxMesh_brow"]
 material = SubResource("StandardMaterial3D_dark")
@@ -149,28 +164,35 @@ material = SubResource("StandardMaterial3D_whistle")
 top_radius = 0.09
 bottom_radius = 0.09
 height = 0.28
+radial_segments = 12
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_upper_arm"]
 material = SubResource("StandardMaterial3D_bark")
 top_radius = 0.16
 bottom_radius = 0.24
 height = 1.4
+radial_segments = 12
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_forearm"]
 material = SubResource("StandardMaterial3D_bark")
 top_radius = 0.15
 bottom_radius = 0.18
 height = 1.0
+radial_segments = 12
 
 [sub_resource type="SphereMesh" id="SphereMesh_bicep"]
 material = SubResource("StandardMaterial3D_bark")
 radius = 0.32
 height = 0.6
+radial_segments = 16
+rings = 8
 
 [sub_resource type="SphereMesh" id="SphereMesh_fist"]
 material = SubResource("StandardMaterial3D_leaves")
 radius = 0.32
 height = 0.6
+radial_segments = 16
+rings = 8
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_marker"]
 render_priority = 0
@@ -206,7 +228,6 @@ script = ExtResource("1_boss")
 attack_interval = 3.5
 enraged_attack_interval = 2.2
 enrage = SubResource("Resource_enrage")
-enrage_shouts = Array[StringName]([&"ENT_TRAINER_SHOUT_ENRAGE"])
 enrage_overlay = SubResource("ShaderMaterial_rage")
 stats = NodePath("Stats")
 health = NodePath("Health")
@@ -214,8 +235,13 @@ hurtbox = NodePath("Hurtbox")
 contact_hitbox = NodePath("ContactHitbox")
 visual = NodePath("Visual")
 death_time = 1.2
+appear_time = 0.8
+appear_depth = 2.5
 turn_speed = 6.0
 steer_every_tick = true
+wall_probe_radius = 0.5
+wall_probe_height = 0.9
+wall_probe_reach = 1.5
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.1, 0)
@@ -366,7 +392,6 @@ crouch = 0.65
 damage_factor = 1.3
 shockwave = NodePath("Shockwave")
 landing_marker = NodePath("LandingMarker")
-shout_keys = Array[StringName]([&"ENT_TRAINER_SHOUT_BURPEE", &"ENT_TRAINER_SHOUT_ONE_MORE"])
 
 [node name="Shockwave" parent="Burpee" instance=ExtResource("14_shockwave")]
 knockback = 9.0
@@ -392,7 +417,6 @@ speed = 18.0
 distance = 16.0
 damage_factor = 1.25
 lane = NodePath("Lane")
-shout_keys = Array[StringName]([&"ENT_TRAINER_SHOUT_SETS", &"ENT_TRAINER_SHOUT_NO_EXCUSES"])
 
 [node name="Lane" type="MeshInstance3D" parent="Series"]
 top_level = true
@@ -403,7 +427,6 @@ mesh = SubResource("PlaneMesh_lane")
 script = ExtResource("13_summon")
 enemy = ExtResource("16_sapling")
 weight = 0.7
-shout_keys = Array[StringName]([&"ENT_TRAINER_SHOUT_SPROUTS"])
 
 [node name="HitFlash" type="Node" parent="." node_paths=PackedStringArray("health", "visual")]
 script = ExtResource("90_hit_flash")

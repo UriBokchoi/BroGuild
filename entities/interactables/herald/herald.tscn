@@ -1,0 +1,189 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://entities/interactables/herald/herald.gd" id="1_herald"]
+[ext_resource type="Script" path="res://entities/interactables/interactable.gd" id="2_interactable"]
+[ext_resource type="Resource" path="res://data/pacts/herald.tres" id="3_data"]
+[ext_resource type="Shader" path="res://vfx/shaders/ground_ring.gdshader" id="5_ring"]
+[ext_resource type="Shader" path="res://vfx/shaders/light_beam.gdshader" id="6_beam"]
+[ext_resource type="Script" path="res://vfx/juice/interact_hint/interact_hint.gd" id="7_hint"]
+[ext_resource type="Material" path="res://vfx/juice/interact_hint/interact_glint_idle.tres" id="8_idle"]
+[ext_resource type="Material" path="res://vfx/juice/interact_hint/interact_glint_focus.tres" id="9_focus"]
+
+[sub_resource type="StandardMaterial3D" id="Mat_robe"]
+albedo_color = Color(0.32, 0.16, 0.48, 1)
+roughness = 0.8
+
+[sub_resource type="StandardMaterial3D" id="Mat_skin"]
+albedo_color = Color(0.9, 0.72, 0.56, 1)
+roughness = 0.7
+
+[sub_resource type="StandardMaterial3D" id="Mat_gold"]
+albedo_color = Color(0.95, 0.72, 0.25, 1)
+metallic = 0.6
+roughness = 0.35
+
+[sub_resource type="StandardMaterial3D" id="Mat_wood"]
+albedo_color = Color(0.42, 0.27, 0.15, 1)
+roughness = 0.85
+
+[sub_resource type="StandardMaterial3D" id="Mat_banner"]
+albedo_color = Color(0.55, 0.12, 0.2, 1)
+roughness = 0.8
+
+[sub_resource type="CylinderMesh" id="Mesh_robe"]
+material = SubResource("Mat_robe")
+top_radius = 0.24
+bottom_radius = 0.46
+height = 1.4
+radial_segments = 8
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Mesh_sash"]
+material = SubResource("Mat_gold")
+top_radius = 0.33
+bottom_radius = 0.35
+height = 0.1
+radial_segments = 8
+rings = 1
+
+[sub_resource type="SphereMesh" id="Mesh_head"]
+material = SubResource("Mat_skin")
+radius = 0.22
+height = 0.44
+radial_segments = 10
+rings = 5
+
+[sub_resource type="CylinderMesh" id="Mesh_hat"]
+material = SubResource("Mat_gold")
+top_radius = 0.0
+bottom_radius = 0.27
+height = 0.42
+radial_segments = 8
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Mesh_staff"]
+material = SubResource("Mat_wood")
+top_radius = 0.04
+bottom_radius = 0.05
+height = 2.6
+radial_segments = 6
+rings = 1
+
+[sub_resource type="BoxMesh" id="Mesh_banner"]
+material = SubResource("Mat_banner")
+size = Vector3(0.62, 0.85, 0.04)
+
+[sub_resource type="BoxMesh" id="Mesh_emblem"]
+material = SubResource("Mat_gold")
+size = Vector3(0.22, 0.22, 0.07)
+
+[sub_resource type="SphereMesh" id="Mesh_knob"]
+material = SubResource("Mat_gold")
+radius = 0.08
+height = 0.16
+radial_segments = 8
+rings = 4
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ring"]
+render_priority = 0
+shader = ExtResource("5_ring")
+shader_parameter/color = Color(0.85, 0.45, 1, 1)
+shader_parameter/intensity = 1.4
+shader_parameter/pulse_rate = 0.8
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ring"]
+material = SubResource("ShaderMaterial_ring")
+size = Vector2(2, 2)
+center_offset = Vector3(0, 0.03, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_beam"]
+render_priority = 0
+shader = ExtResource("6_beam")
+shader_parameter/color = Color(0.85, 0.45, 1, 1)
+shader_parameter/intensity = 1.2
+shader_parameter/height = 14.0
+shader_parameter/stripe_count = 6.0
+shader_parameter/stripe_speed = 0.5
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_beam"]
+material = SubResource("ShaderMaterial_beam")
+top_radius = 1.2
+bottom_radius = 1.2
+height = 14.0
+radial_segments = 16
+rings = 1
+cap_top = false
+cap_bottom = false
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_reach"]
+radius = 2.6
+
+[node name="Herald" type="Node3D" node_paths=PackedStringArray("interactable")]
+script = ExtResource("1_herald")
+data = ExtResource("3_data")
+interactable = NodePath("Interactable")
+
+[node name="Visual" type="Node3D" parent="."]
+
+[node name="Robe" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, 0)
+mesh = SubResource("Mesh_robe")
+
+[node name="Sash" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.95, 0)
+mesh = SubResource("Mesh_sash")
+
+[node name="Head" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
+mesh = SubResource("Mesh_head")
+
+[node name="Hat" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.92, 0)
+mesh = SubResource("Mesh_hat")
+
+[node name="Staff" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.55, 1.3, -0.1)
+mesh = SubResource("Mesh_staff")
+
+[node name="Knob" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.55, 2.62, -0.1)
+mesh = SubResource("Mesh_knob")
+
+[node name="Banner" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.88, 2.1, -0.1)
+mesh = SubResource("Mesh_banner")
+
+[node name="Emblem" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(0.7071, 0.7071, 0, -0.7071, 0.7071, 0, 0, 0, 1, 0.88, 2.12, -0.1)
+mesh = SubResource("Mesh_emblem")
+
+[node name="Glow" type="Node3D" parent="."]
+
+[node name="Ring" type="MeshInstance3D" parent="Glow"]
+transform = Transform3D(2.2, 0, 0, 0, 2.2, 0, 0, 0, 2.2, 0, 0, 0)
+cast_shadow = 0
+instance_shader_parameters/progress = 0.85
+instance_shader_parameters/band = 0.2
+mesh = SubResource("PlaneMesh_ring")
+
+[node name="Beam" type="MeshInstance3D" parent="Glow"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7, 0)
+cast_shadow = 0
+mesh = SubResource("CylinderMesh_beam")
+
+[node name="Interactable" type="Area3D" parent="."]
+collision_layer = 256
+collision_mask = 0
+script = ExtResource("2_interactable")
+prompt_key = &"INTERACT_HERALD"
+
+[node name="Shape" type="CollisionShape3D" parent="Interactable"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("SphereShape3D_reach")
+
+[node name="InteractHint" type="Node" parent="." node_paths=PackedStringArray("interactable", "visual")]
+script = ExtResource("7_hint")
+interactable = NodePath("../Interactable")
+visual = NodePath("../Visual")
+idle_material = ExtResource("8_idle")
+focus_material = ExtResource("9_focus")

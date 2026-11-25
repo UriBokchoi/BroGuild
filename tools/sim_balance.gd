@@ -1,18 +1,14 @@
 extends SceneTree
-## Simulación de equilibrio (herramienta, sin traducir): cada personaje de [code]data/characters/[/code]
-## (también los nuevos), quieto, contra una horda de esbirros inmortales que le persiguen y contra uno
-## solo (un jefe), al empezar (nivel 1) y con una build de mitad de partida: su arma a nivel 10 con
-## mejoras tiradas, [constant RUNES] a nivel [constant RUNE_LEVEL] y el jugador a nivel
-## [constant PLAYER_LEVEL]. Mide el daño por segundo (media de [constant SEEDS]) y lo compara con la
-## media de todos. Escribe líneas [code]SIM …[/code] y sale.
+## Herramienta de equilibrio (sin traducir). Pone a cada personaje de data/characters/ quieto contra
+## una horda de esbirros inmortales y contra un solo enemigo, al empezar y con una build de mitad de
+## partida, y compara su daño por segundo con la media. Escribe líneas «SIM …» y sale.
 ##
 ## [codeblock]
 ## "$G" --headless --path . --fixed-fps 60 -s res://tools/sim_balance.gd
 ## "$G" --headless --path . --fixed-fps 60 -s res://tools/sim_balance.gd -- weapon   # solo el arma
 ## [/codeblock]
-## Partes de la build que se pueden pedir (por defecto, todas): [code]weapon[/code],
-## [code]runes[/code] y [code]level[/code]. No usa tipos del juego: se compila antes que los
-## autoloads.
+## Se puede pedir solo una parte de la build: weapon, runes o level. No nombra tipos del juego
+## porque se compila antes que los autoloads.
 
 const CHARACTERS_DIR := "res://data/characters"
 const SEEDS: Array[int] = [7, 11, 23, 31, 47, 59]

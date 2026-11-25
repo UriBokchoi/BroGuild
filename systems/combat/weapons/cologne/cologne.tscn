@@ -1,0 +1,22 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://systems/combat/weapons/cologne/cologne_cloud.gd" id="1_cologne"]
+[ext_resource type="Shader" path="res://systems/combat/weapons/cologne/cologne_ring.gdshader" id="2_shader"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ring"]
+render_priority = 0
+shader = ExtResource("2_shader")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ring"]
+material = SubResource("ShaderMaterial_ring")
+size = Vector2(2, 2)
+
+[node name="Cologne" type="Node3D" node_paths=PackedStringArray("ring")]
+script = ExtResource("1_cologne")
+ring = NodePath("Ring")
+target_mask = 16
+aim_height = 0.9
+
+[node name="Ring" type="MeshInstance3D" parent="."]
+cast_shadow = 0
+mesh = SubResource("PlaneMesh_ring")

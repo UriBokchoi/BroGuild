@@ -1,15 +1,11 @@
 class_name StatBlock
 extends RefCounted
-## Stats de una entidad: valor base + [StatModifier] → valor final. Es el único sitio donde
-## se calcula una stat (CLAUDE.md, regla 7).
+## Las stats de una entidad: valor base + modificadores = valor final. Es el único sitio donde se
+## calcula una stat.
 ##
-## Valor final: [code](base + Σ FLAT) × (1 + Σ PERCENT) × Π MULTIPLIER[/code], limitado a
-## [mínimo, máximo] y redondeado al entero más cercano si la stat es entera. Se recalcula al
-## cambiar sus modificadores y se guarda, así que leerlo cada frame no cuesta nada.
-##
-## Dos capas: los modificadores de base ([method add_base_modifier], el personaje) cambian la
-## base con esa misma fórmula; los normales ([method add_modifier], mejoras y maldiciones) se
-## aplican después, sobre esa base.
+## Valor final: (base + planos) × (1 + porcentajes) × multiplicadores, dentro de su rango y redondeado
+## si la stat es entera. Se guarda al cambiar algo, así que leerlo cada fotograma no cuesta nada.
+## Los modificadores de base (el personaje) cambian la base; los demás (mejoras) van encima.
 
 ## Cambió el valor final de una stat. No se emite si un cambio la deja igual.
 signal stat_changed(stat: StringName, value: float, previous: float)
@@ -110,6 +106,27 @@ func add_modifier(modifier: StatModifier, source: Object) -> void:
 ## base que se muestra ya lo incluye y las mejoras se calculan sobre ella.
 func add_base_modifier(modifier: StatModifier, source: Object) -> void:
 	_apply(modifier, source, true)
+
+
+## Valor final que tendría [param stat] con [param extra] aplicados encima de los suyos (los de otras
+## stats no cuentan). No cambia nada: sirve para enseñar el antes y el después de una mejora.
+func preview(stat: StringName, extra: Array[StatModifier]) -> float:
+	var state := _get_state(stat)
+	if state == null:
+		return 0.0
+	var trial := StatState.new()
+	trial.base = state.base
+	trial.min_value = state.min_value
+	trial.max_value = state.max_value
+	trial.is_integer = state.is_integer
+	trial.applied = state.applied.duplicate()
+	for modifier: StatModifier in extra:
+		if modifier.stat == stat:
+			var applied := AppliedModifier.new()
+			applied.modifier = modifier
+			trial.applied.append(applied)
+	_recalculate(trial)
+	return trial.value
 
 
 ## Quita todos los modificadores que aplicó [param source].

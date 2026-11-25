@@ -1,5 +1,5 @@
 shader_type spatial;
-// Columna de luz (teletransporte, altar y llaves del jefe): se desvanece hacia arriba, con franjas
+// Columna de luz (teletransporte, portal y llaves del jefe): se desvanece hacia arriba, con franjas
 // que suben y bordes suaves (más opaca donde la superficie se ve de canto). Va en un CylinderMesh
 // abierto y centrado.
 render_mode unshaded, blend_add, depth_draw_never, cull_disabled, shadows_disabled;

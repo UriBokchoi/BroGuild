@@ -1,11 +1,8 @@
 class_name WeaponStats
 extends Resource
-## Stats propias de un arma, antes de las del personaje ([OffenseData]): cada número es una stat, así
-## que sus mejoras de nivel son modificadores ([StatModifierSet] en [WeaponData]). El arma combina
-## las dos en [Weapon]: el daño % y el crítico del personaje van en el golpe, su velocidad de
-## ataque divide [member cooldown], sus proyectiles se suman a [member projectiles] y su área y
-## duración multiplican las del arma. Los valores viven en el [code].tres[/code] de cada arma; aquí
-## todo vale 0 a propósito. Un arma con stats que no tienen las demás extiende este Resource.
+## Las stats propias de un arma. Se combinan con las del personaje: su daño % y su crítico van en el
+## golpe, su velocidad de ataque acorta la espera, sus proyectiles se suman y su área y duración
+## multiplican. Los valores viven en el .tres de cada arma; un arma con stats propias extiende esto.
 
 @export_group("weapon")
 ## Daño de cada golpe.

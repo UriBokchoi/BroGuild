@@ -1,10 +1,8 @@
 class_name HitboxComponent
 extends Area3D
-## Zona que hace daño a las [HurtboxComponent] que toca; su máscara de física dice a quién
-## ([code]enemy_hurtbox[/code] para el jugador y sus armas, [code]player_hurtbox[/code] para enemigos
-## y trampas). Con [member rehit_interval] > 0 repite el golpe a cada objetivo mientras lo toque
-## (daño por contacto); con 0, golpea una sola vez a cada uno (un proyectil, un tajo). Solo golpea
-## con [member Area3D.monitoring] activado: un ataque la activa mientras dura.
+## Una zona que hace daño a las hurtbox que toca; su máscara dice a quién. Con rehit_interval repite
+## el golpe mientras toca (el daño al tocar); sin él, golpea una vez a cada uno (un tajo, un
+## proyectil). Solo golpea con monitoring activado.
 
 ## Golpeó a [param hurtbox]; [param amount] es la vida que quitó de verdad.
 signal hit(hurtbox: HurtboxComponent, amount: float)

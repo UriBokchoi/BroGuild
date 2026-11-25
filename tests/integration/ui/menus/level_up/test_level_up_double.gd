@@ -33,6 +33,26 @@ func test_choosing_an_upgrade_asks_keep_or_bet() -> void:
 	assert_signal_emitted_with_parameters(_panel, "chosen", [card.option])
 
 
+func test_a_right_click_undoes_the_choice() -> void:
+	var cards := _open([_upgrade(RARE), _upgrade(RARE)])
+	cards[0].pressed.emit()
+	assert_eq(_panel.get_phase(), LevelUpPanel.Phase.BETTING)
+	assert_true(cards[1].disabled, "las demás, apagadas")
+	var click := InputEventMouseButton.new()
+	click.button_index = MOUSE_BUTTON_RIGHT
+	click.pressed = true
+	_panel._input(click)
+	assert_eq(_panel.get_phase(), LevelUpPanel.Phase.CHOOSING, "vuelve a elegir")
+	assert_false(cards[1].disabled)
+	assert_eq(cards[1].modulate, Color.WHITE)
+	assert_false((_panel.get_node(^"%Bet") as Control).visible)
+	watch_signals(_panel)
+	cards[1].pressed.emit()
+	assert_eq(_panel.get_phase(), LevelUpPanel.Phase.BETTING, "y puede escoger otra")
+	(_panel.get_node(^"%Keep") as Button).pressed.emit()
+	assert_signal_emitted_with_parameters(_panel, "chosen", [cards[1].option])
+
+
 func test_betting_asks_for_the_result() -> void:
 	var card := _open([_upgrade(RARE)])[0]
 	card.pressed.emit()

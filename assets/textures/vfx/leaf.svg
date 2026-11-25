@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <!-- Hoja blanca (el color lo pone la partícula): punta arriba, nervio central más claro. -->
+  <path d="M32 4 C48 16 54 34 32 60 C10 34 16 16 32 4 Z" fill="#ffffff"/>
+  <path d="M32 10 L32 56" stroke="#d9d9d9" stroke-width="2.5" stroke-linecap="round"/>
+</svg>

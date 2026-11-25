@@ -1,12 +1,10 @@
 class_name CameraRig
 extends Node3D
-## Cámara en tercera persona: orbita alrededor de [member target] con el ratón y se aleja un
-## poco con [member level] (curva en [CameraData]). Su [SpringArm3D] solo choca con el mundo,
-## para no meterse en paredes ni suelo.
+## Cámara en tercera persona: orbita alrededor del jugador con el ratón y se aleja un poco con su
+## nivel. El brazo solo choca con el mundo, para no meterse en paredes ni en el suelo.
 ##
-## Va con [code]top_level[/code] y sin interpolación de física: se mueve cada frame en
-## [code]_process[/code] siguiendo la posición interpolada del objetivo, así que va fluida a
-## cualquier tasa de refresco.
+## Va suelta (top_level) y sin interpolación de física: se mueve en _process siguiendo la posición
+## interpolada del jugador, así va fluida a cualquier tasa de refresco.
 
 ## Parámetros de la cámara ([code]data/player/camera.tres[/code]).
 @export var data: CameraData

@@ -1,6 +1,7 @@
 extends GutTest
 ## Taberna: cobra su coste y cura la mitad de la vida máxima; cada vez cuesta más (y más con la
-## dificultad); sin oro no cura y con la vida llena no cobra, y lo dice en el HUD.
+## dificultad); sin oro no cura y con la vida llena no cobra, y lo dice en el HUD. Su tejado choca:
+## no se puede atravesar subiendo encima.
 
 const TavernScene := preload("res://entities/interactables/heal_shop/tavern.tscn")
 
@@ -68,3 +69,14 @@ func test_difficulty_raises_the_cost() -> void:
 
 func _on_announced(text_key: StringName, _args: Array, _color: Color) -> void:
 	_announced.append(text_key)
+
+
+func test_the_roof_is_solid() -> void:
+	await wait_physics_frames(2)
+	var space := _shop.get_world_3d().direct_space_state
+	var top := _shop.global_position + Vector3(-2.0, 12.0, -1.5)
+	var query := PhysicsRayQueryParameters3D.create(top, top + Vector3.DOWN * 20.0, PhysicsLayers.mask(PhysicsLayers.WORLD))
+	var hit := space.intersect_ray(query)
+	assert_false(hit.is_empty())
+	var point: Vector3 = hit["position"]
+	assert_gt(point.y - _shop.global_position.y, 4.5, "choca con el tejado, no con la caja de las paredes")

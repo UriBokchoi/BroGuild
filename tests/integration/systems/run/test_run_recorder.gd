@@ -1,6 +1,6 @@
 extends GutTest
 ## RunRecorder: apunta enemigos y élites derrotados, daño, oro ganado (no gastado), nivel y tiempo
-## (el del reloj de la ronda si la hay), y deja de apuntar al morir el jugador o al vencer al jefe
+## (el del reloj de la ronda si la hay), y deja de apuntar al morir el jugador o al ganar la partida
 ## (apuntando la victoria y su premio por rapidez). Si se le pide, al acabar apunta la partida en la
 ## clasificación (una sola vez) y se queda con su puesto.
 
@@ -63,6 +63,17 @@ func test_time_follows_the_round_clock() -> void:
 	assert_eq(_recorder.stats.seconds, 125.0, "con ronda, el de su reloj")
 
 
+func test_with_tiers_the_time_adds_up_stage_after_stage() -> void:
+	EventBus.run_clock_changed.emit(300.0, false)
+	EventBus.run_clock_changed.emit(-1.0, false)
+	EventBus.stage_started.emit(&"BROSQUE_TIER_2", 1, 2)
+	EventBus.run_clock_changed.emit(0.0, false)
+	EventBus.run_clock_changed.emit(20.0, false)
+	assert_almost_eq(_recorder.stats.seconds, 320.0, 0.1, "el tier 1 y lo que va del 2")
+	EventBus.run_won.emit(&"BROSQUE_VICTORY", 25.0, 1.0)
+	assert_almost_eq(_recorder.stats.seconds, 325.0, 0.1, "al ganar, también")
+
+
 func test_without_a_round_counts_its_own_time() -> void:
 	await wait_physics_frames(10)
 	assert_gt(_recorder.stats.seconds, 0.0)
@@ -70,6 +81,8 @@ func test_without_a_round_counts_its_own_time() -> void:
 
 func test_stops_when_the_player_dies() -> void:
 	EventBus.player_died.emit()
+	# La muerte se apunta al final del fotograma (por si cuenta como victoria).
+	await wait_process_frames(1)
 	EventBus.enemy_damaged.emit(Vector3.ZERO, 12.0, DamageInfo.create(12.0))
 	EventBus.player_xp_changed.emit(0.0, 10.0, 9)
 	var before := _recorder.stats.seconds
@@ -84,8 +97,8 @@ func _kill(enemy: Enemy) -> void:
 	enemy.health.take_damage(DamageInfo.create(100000.0))
 
 
-func test_beating_the_boss_records_the_win_and_stops() -> void:
-	EventBus.boss_defeated.emit(&"BROSQUE_VICTORY", 75.0, 1.8)
+func test_winning_records_the_win_and_stops() -> void:
+	EventBus.run_won.emit(&"BROSQUE_VICTORY", 75.0, 1.8)
 	assert_true(_recorder.stats.won)
 	assert_almost_eq(_recorder.stats.boss_bonus, 1.8, 0.001)
 	assert_almost_eq(_recorder.stats.seconds, 75.0, 0.001, "lo que duró de verdad")
@@ -96,6 +109,7 @@ func test_records_the_run_when_asked() -> void:
 	_recorder.record_runs = true
 	_recorder.stats.kills = 55
 	EventBus.player_died.emit()
+	await wait_process_frames(1)
 	var entries := Save.leaderboard.get_entries()
 	assert_eq(entries.size(), 1)
 	assert_eq(entries[0].kills, 55)
@@ -105,14 +119,16 @@ func test_records_the_run_when_asked() -> void:
 
 func test_does_not_record_unless_asked() -> void:
 	EventBus.player_died.emit()
+	await wait_process_frames(1)
 	assert_eq(Save.leaderboard.get_entries().size(), 0)
 	assert_eq(_recorder.place, -1)
 
 
 func test_records_a_win_once() -> void:
 	_recorder.record_runs = true
-	EventBus.boss_defeated.emit(&"BROSQUE_VICTORY", 75.0, 1.8)
+	EventBus.run_won.emit(&"BROSQUE_VICTORY", 75.0, 1.8)
 	EventBus.player_died.emit()
+	await wait_process_frames(1)
 	var entries := Save.leaderboard.get_entries()
 	assert_eq(entries.size(), 1, "morir después no apunta otra")
 	assert_true(entries[0].won)

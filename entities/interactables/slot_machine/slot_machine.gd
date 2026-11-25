@@ -1,11 +1,8 @@
 class_name SlotMachine
 extends Node3D
-## Tragaperras del nivel (GDD §5.3): con «interactuar» cobra su coste en oro (sube con la dificultad
-## y cada vez que se usa esta máquina) y gira sus rodillos. Avisa por el [code]EventBus[/code] de lo
-## que va a salir ([signal EventBus.slot_spun], para el panel del HUD) y, cuando paran, da el premio
-## como una recompensa ([code]pickup_collected[/code]) y lo anuncia
-## ([signal EventBus.slot_resolved]). No pausa el juego: apostar con la horda encima es el riesgo.
-## Tras [member SlotMachineData.max_uses] tiradas, revienta y desaparece.
+## Tragaperras (GDD §5.3): al usarla cobra oro, cada vez más, y gira sus rodillos; al parar da el
+## premio. No pausa el juego: apostar con la horda encima es el riesgo. Tras unas cuantas tiradas,
+## revienta.
 
 ## Símbolos, coste y ritmo.
 @export var data: SlotMachineData

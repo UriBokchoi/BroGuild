@@ -8,6 +8,7 @@
 [ext_resource type="Script" path="res://vfx/juice/interact_hint/interact_hint.gd" id="91_hint"]
 [ext_resource type="Material" path="res://vfx/juice/interact_hint/interact_glint_idle.tres" id="92_idle"]
 [ext_resource type="Material" path="res://vfx/juice/interact_hint/interact_glint_focus.tres" id="93_focus"]
+[ext_resource type="PackedScene" path="res://vfx/particles/gold_sparkles.tscn" id="94_sparkles"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_base"]
 material = ExtResource("4_wood")
@@ -99,3 +100,8 @@ interactable = NodePath("../Interactable")
 visual = NodePath("../Visual")
 idle_material = ExtResource("92_idle")
 focus_material = ExtResource("93_focus")
+
+[node name="Sparkles" parent="." instance=ExtResource("94_sparkles")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
+
+[connection signal="opened" from="." to="Sparkles" method="restart"]

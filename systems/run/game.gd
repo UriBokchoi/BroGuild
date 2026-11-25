@@ -1,10 +1,8 @@
 class_name Game
 extends Node
-## Raíz del juego y su flujo de pantallas: empieza en el menú principal; «Jugar» lleva a la selección
-## de personaje y nivel ([RunSetup]), que empieza la partida en el nivel elegido
-## ([code]RunState.level[/code]); reintentar la vuelve a empezar con otra semilla y salir vuelve al
-## menú. Cada pantalla es una escena que sustituye a la anterior. Los demás le piden cosas por el
-## [code]EventBus[/code] (ver [RunFlow]).
+## La raíz del juego y su flujo de pantallas: menú principal, elegir personaje y nivel, la partida.
+## Reintentar la vuelve a empezar con otra semilla y salir vuelve al menú. Cada pantalla sustituye a
+## la anterior; los demás le piden cambios por el EventBus (ver RunFlow).
 
 ## Menú principal: su raíz es un [MainMenu].
 @export var main_menu: PackedScene
@@ -66,6 +64,7 @@ func _show(screen: Node) -> void:
 	add_child(screen)
 
 
-func _on_setup_done(character: CharacterData, level: LevelData) -> void:
+func _on_setup_done(character: CharacterData, level: LevelData, tier: int) -> void:
 	RunState.character = character
+	RunState.tier = tier
 	play(level)

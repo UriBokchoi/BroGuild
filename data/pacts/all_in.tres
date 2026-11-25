@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="PactData" format=3]
+
+[ext_resource type="Script" path="res://systems/pacts/pact_data.gd" id="1_pact"]
+[ext_resource type="Script" path="res://core/stats/stat_modifier.gd" id="2_modifier"]
+
+[sub_resource type="Resource" id="Reward_1"]
+script = ExtResource("2_modifier")
+stat = &"luck"
+value = 30
+
+[sub_resource type="Resource" id="Curse_1"]
+script = ExtResource("2_modifier")
+stat = &"difficulty"
+value = 4
+
+[resource]
+script = ExtResource("1_pact")
+name_key = &"PACT_ALL_IN_NAME"
+flavor_key = &"PACT_ALL_IN_FLAVOR"
+rewards = Array[ExtResource("2_modifier")]([SubResource("Reward_1")])
+curses = Array[ExtResource("2_modifier")]([SubResource("Curse_1")])

@@ -1,14 +1,11 @@
 class_name ResultsPanel
 extends CanvasLayer
-## Pantalla de resultados al acabar la partida: al morir el jugador ([code]EventBus.player_died[/code])
-## o al vencer al jefe y pasar el nivel ([code]EventBus.boss_defeated[/code]), tras su espera, pausa
-## el juego, pide el cursor y muestra lo que pasó en la partida (según su [RunRecorder]): tiempo,
-## nivel, enemigos y élites derrotados, oro ganado y daño infligido (y, en la victoria, el premio
-## por rapidez; si entró en los récords, su puesto). Arriba, una frase de muerte al azar o el título de la victoria. Lo primero que pasa
-## manda: si el jugador muere tras vencer al jefe (o al revés), no cambia. «Reintentar» (o su tecla,
-## [code]retry[/code]) empieza otra partida al momento; «Salir» vuelve al menú principal
-## ([RunFlow]). Esc no la cierra. Funciona con el juego en pausa ([code]process_mode = ALWAYS[/code]
-## en la escena).
+## La pantalla del final de la partida: al morir o al ganar enseña lo que pasó (tiempo, nivel,
+## enemigos, oro, daño y, si toca, el puesto en los récords) con una frase de muerte o el título de
+## la victoria. «Reintentar» empieza otra partida y «Salir» vuelve al menú.
+##
+## La muerte se atiende al final del fotograma: si esa muerte cuenta como victoria (en la prórroga,
+## con el jefe vencido), la victoria llega antes y manda.
 
 ## Quién apuntó la partida.
 @export var recorder: RunRecorder
@@ -30,6 +27,7 @@ var _ended: bool = false
 var _death_tint: Color = Color.BLACK
 
 @onready var _blur: ColorRect = %Blur
+@onready var _content: Control = $Center/Content
 @onready var _title: Label = %Title
 @onready var _rows: GridContainer = %Rows
 @onready var _retry: Button = %Retry
@@ -44,7 +42,7 @@ func _ready() -> void:
 	_retry.pressed.connect(retry)
 	_quit.pressed.connect(_to_main_menu)
 	EventBus.player_died.connect(_on_player_died)
-	EventBus.boss_defeated.connect(_on_boss_defeated)
+	EventBus.run_won.connect(_on_run_won)
 
 
 func _input(event: InputEvent) -> void:
@@ -143,6 +141,8 @@ func _add_row(name_key: StringName, value: String) -> void:
 
 func _set_open(open_panel: bool) -> void:
 	visible = open_panel
+	if open_panel:
+		UiMotion.appear(_content)
 	get_tree().paused = open_panel
 	EventBus.cursor_requested.emit(self, open_panel)
 
@@ -153,6 +153,11 @@ func _tint_material() -> ShaderMaterial:
 
 
 func _on_player_died() -> void:
+	# Al final del fotograma: si morir cuenta como victoria, el aviso llega mientras tanto y manda.
+	_end_with_death.call_deferred()
+
+
+func _end_with_death() -> void:
 	if _ended:
 		return
 	_ended = true
@@ -160,7 +165,7 @@ func _on_player_died() -> void:
 	get_tree().create_timer(delay, false).timeout.connect(open)
 
 
-func _on_boss_defeated(victory_key: StringName, _seconds: float, _bonus: float) -> void:
+func _on_run_won(victory_key: StringName, _seconds: float, _bonus: float) -> void:
 	if _ended:
 		return
 	_ended = true

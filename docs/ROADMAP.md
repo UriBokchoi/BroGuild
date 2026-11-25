@@ -69,7 +69,7 @@
 - [x] Rarezas de las mejoras (común gris, rara verde, improbable azul, de leyenda amarilla y mítica roja) en datos: cada subida de nivel es una mejora tirada que toca de 1 a todas las stats del arma o runa, más fuerte cuanto más rara; borde de la carta del color de la rareza. Nivel máximo: armas 10, runas 20
 - [x] Suerte (stat): cada entrada de una tabla ponderada gana peso con ella según su `luck_scaling`; las rarezas altas suben más (con 100, la mítica pasa del 1 al 3,7 %). La usan las cartas de subir de nivel y las mejoras gratis
 - [x] Cofres y objetos pasivos: cofres por el nivel (5 en el suelo y 2 en mesetas del Brosque) que cuestan oro (sube con la dificultad y con cada cofre abierto) y dan un objeto pasivo con rareza (la Suerte ayuda), revelado en el HUD sin pausar; 15 objetos de cultura bro que se apilan, a la vista bajo las runas
-- [x] Jefe del Brosque, el Ent-renador (un árbol entrenador personal): altar al borde del claro que lo invoca con las 3 tarjetas de socio del mapa (las justas) o se activa solo al minuto 10; ataques Burpee (salto con onda), Series (embestidas) y Bro-tes (refuerzos) y rabia por debajo de la mitad de su vida; su barra y sus gritos en el HUD; vencerlo da oro × rapidez (×3 al empezar, ×1 desde el minuto 10) y un objeto de rareza alta, y pasa el nivel (pantalla de victoria «¡Brosque superado!»)
+- [x] Jefe del Brosque, el Ent-renador (un árbol entrenador personal): altar (hoy portal) al borde del claro que lo invoca con las 3 tarjetas de socio del mapa (las justas) o se activa solo al minuto 10; ataques Burpee (salto con onda), Series (embestidas) y Bro-tes (refuerzos) y rabia por debajo de la mitad de su vida; su barra y sus gritos en el HUD; vencerlo da oro × rapidez (×3 al empezar, ×1 desde el minuto 10) y un objeto de rareza alta, y pasa el nivel (pantalla de victoria «¡Brosque superado!»)
 - [x] Taberna en el centro de la pared norte del Brosque (no se entra): cura la mitad de la vida por oro, cada vez más cara y más con la dificultad. Charquitos de agua con una flor por el suelo, de decorado
 - [x] Círculo de setas (2 por el Brosque): elegir 1 de 3 objetos pasivos (la Suerte ayuda), una vez cada uno. 8 objetos medievales más (23 en total)
 - [x] Récords: las 20 mejores partidas en local, por enemigos derrotados, con personaje, tiempo, nivel, mapa y resultado; en el menú principal y, al acabar, el puesto en los resultados
@@ -82,38 +82,102 @@
 - [x] GDD adaptado a la temática medieval: botín, el Gremio, el tahúr, el torneo, «¿Retirarse o seguir?» y luz de antorchas
 - [x] Ruleta de nivel: las cartas de mejora giran por las rarezas y se paran una tras otra (clic o Espacio para pararlas); «volver a tirar» por oro, 10 y ×1,5 cada vez en la partida
 - [x] Doble o nada sobre la opción elegida: 50 % de subirla una rareza (más con Suerte) o perderla; la carta gira entre las dos rarezas
-- [ ] Más armas y runas en `.tres` (3 con sinergia de movimiento)
+- [x] 3 mejoras con sinergia de movimiento, como objetos pasivos: Zapatillas en llamas (rastro de fuego al deslizarte), Bocina de estadio (onda al hacer dash) y Cinturón de campeón (explosión al caer)
+- [x] Más armas en `.tres`: hacha arrojadiza (va y vuelve atravesando), nube de colonia (aura de pulsos) y martillo de guerra (cae sobre el grupo más denso)
 - [x] Pantalla de estadísticas (Tab, mientras se mantiene y sin pausar), reutilizando la lista de stats de la pausa
 
 ## Hito 5 — Juice y look
-- [ ] Entorno según la dirección visual del GDD (luz, glow y tonemapping)
-- [ ] Materiales con color propio por tipo de enemigo y rareza
-- [ ] Hit-stop (los números de daño llegaron en el Hito 2; el temblor de pantalla, el borde rojo al recibir daño y el destello blanco al golpear, adelantados tras el Hito 3)
-- [ ] Partículas: muertes, monedas, cofres, impactos
-- [ ] UI animada (los sonidos, con la experiencia que sube de tono si se recoge seguida, adelantados tras el Hito 3)
-- [ ] Rendimiento: 300+ enemigos a 60 fps
+- [x] Entorno según la dirección visual del GDD: sol de media tarde, cielo azul con horizonte cálido, niebla dorada, ACES, glow, SSAO y hierba con manchas (compartido por el Brosque y el menú)
+- [x] Color propio por tipo de enemigo y por rareza: cada enemigo con el suyo (también en sus datos, `EnemyData.color`, para sus efectos), élites con brillo y rarezas iguales en cartas, cofres, HUD y Archivo
+- [x] Feedback al golpear y al recibir: números de daño (Hito 2), temblor de pantalla, borde rojo y destello blanco (tras el Hito 3). Hit-stop descartado: el diseñador no quiere parones al golpear
+- [x] Balanceo al andar y correr: el cuerpo rebota a cada paso y se mece, más cuanto más rápido vas
+- [x] Partículas: humo al morir (del color del enemigo), chispas al golpear, restos al romper, destellos al abrir un cofre y polvo de las ondas de suelo (las monedas ya saltaban como botín)
+- [x] Alcance de la nube de colonia: un dibujo en el suelo que gira despacio (como en Megabonk), en vez de la burbuja
+- [x] Límite del mapa: un muro que solo se ve al acercarte
+- [x] Power-ups con su efecto al cogerlos: la bomba, una explosión nuclear (destello, hongo y onda); el imán, la comida, la bebida energética y el reloj de arena, el suyo
+- [x] Enemigos que aparecen con una animación: salen del suelo creciendo, con polvo (los jefes, más despacio y desde más hondo)
+- [x] Hojitas que caen de las copas de los árboles al meterte dentro
+- [x] Polvo pequeño a cada paso (con el aviso de pasos del balanceo). Lo último del hito, a petición del diseñador
+- [x] UI animada: botones que crecen y se hunden, paneles que aparecen, contadores y casillas que saltan, experiencia que se llena suave y vida con rastro de lo perdido (los sonidos llegaron tras el Hito 3)
+- [x] Rendimiento: 300+ enemigos a 60 fps (medido: 300 a 120 fps de media en el equipo de desarrollo)
+
+## Hito 5b — Pulido tras las pruebas (2026-11-23)
+Lo que salió al probar la partida; va antes que el resto de hitos.
+- [x] Opciones: la resolución que se ve es la de verdad (en pantalla completa, la de la pantalla)
+- [x] El tejado de la taberna choca (se podía atravesar subiendo encima)
+- [x] Los jefes no hablan: fuera sus gritos
+- [x] Barras de jefe más pequeñas y claras: nombre a la izquierda, vida en números («4530 / 5000») a la derecha y una barra fina
+- [x] Barra de experiencia abajo, fina y minimalista
+- [x] Ver tus stats al subir de nivel y al elegir un objeto
+- [x] Elegir nivel: su objetivo (en el Brosque, vencer al Ent-renador) y una descripción con su lore
+- [x] `docs/LORE.md`: el lore del juego en un archivo para leerlo y cambiarlo a mano (los textos del juego, con su clave en `data/i18n/strings.csv`, se apuntan ahí)
+- [x] Hacha arrojadiza: gira tumbada (en horizontal) y es más grande (×1,7 y su filo, 1,2 m); crece con el área
+- [x] Mejoras con el valor actual y el que queda (p. ej. «Daño 18 → 22»), para ver cuánto se gana: cartas de subir de nivel, de elegir objeto y revelado de cofres
+
+## Hito 5c — Pulido tras las pruebas (2) (2026-11-24)
+Lo que salió en la segunda tanda de pruebas; va antes que el resto.
+- [x] Elegir nivel: primero se elige el nivel (clic), debajo su objetivo y su lore, y abajo «Jugar» encima de «Volver»
+- [x] Estadísticas: solo las que se pueden mejorar (fuera las fijas), para que se vean las importantes
+- [x] El rastro de fuego del slide escala con las stats del jugador
+- [x] Optimizar: el ordenador va a tope jugando. Límite de FPS (de serie, 60), enemigos y objetos redondos con menos polígonos, bosque por trozos (un 83 % menos de triángulos)
+
+## Hito 5d — Pedidos tras las pruebas (3) (2026-11-24)
+- [x] Pesas de piedra que se activan como los santuarios de Megabonk: quedarse cerca 5 s (de base) da a elegir una de 3 mejoras de stats, con rarezas
+- [x] Subir de nivel: con «Quedármela» y «Doble o nada» a la vista, el clic derecho deshace la elección y deja escoger otra carta
+- [x] Árboles alrededor de los trolls de piedra (ahora están en un claro pelado)
 
 ## Hito 6 — Niveles
+- [x] El Brosque más grande: paredes a 110 m (antes 80), casi el doble de área, con más piezas, rompibles y árboles en proporción
 - [ ] El Brosque: más detalle (decoración, variedad del suelo, props de gimnasio, sonido ambiente); la v1 llegó en el Hito 3
+- [x] Brosque: el miniboss Trolleador Cara a los 4:30 (barra propia bajo la del jefe, porrazo en área y salto) y dos trolls de piedra fuera de la pared este (guiño a El Hobbit); los jefes ya trepan por las pesas
 - [ ] La Torre del Mago
 - [ ] La Mazmorra
+- [x] Tiers de nivel: cada nivel tiene 3. Superar uno abre el siguiente en la selección de nivel; elegir el 2 es jugar el 1 y, al cruzar su portal, pasar al 2 conservando todo (y así con el 3). Más grande y más difícil cada uno. El Brosque: verano, otoño (130 m) e invierno (150 m), con sus colores y su clima y las mismas piezas
+- [x] Tras el tier 3, la arena del jefe final (la misma para todos los niveles): solo el jefe, Mr. Brolympia; al vencerlo aparece el portal y ya es victoria, pero sigue la oleada infinita hasta morir o cruzarlo
+- [x] Más dificultad, más experiencia y oro: los enemigos sueltan más cuanto más alta es
+- [x] Detalles del Guerrero (yelmo, hombreras y cinturón) y del Pícaro (capucha con pañuelo y cinturón con bolsitas)
+- [ ] Élites con afijos (rápido, vampiro, explosivo…), solo en tier 2 o más; con más probabilidad de soltar cofre que un élite normal
 
 ## Hito 7 — El torneo
-- [ ] Racha y botín (niveles, multiplicador, guardar, perder al ser golpeado)
-- [ ] Pactos del Gremio
-- [ ] Élites con afijos que sueltan cofres
+- [x] Élites: todos tienen una probabilidad de soltar un cofre
+- [x] Apuntar: mantener el clic derecho apunta con el ratón (las armas van a por lo que miras); el clic central fija al jefe como objetivo
+- [x] Racha como power-up de 30 s, sin botín: matar seguido sube el multiplicador de oro, experiencia y Suerte; un golpe lo baja
+- [x] Pactos del Gremio: un heraldo aparece cada 1000 enemigos derrotados y ofrece pactos (una maldición a cambio de un premio), que se pueden rechazar
+- [x] Pactos: valores fijos y «volver a tirar» por oro (10, ×1,5 por uso en la partida), que trae otros pactos
+- [x] Objetos con efectos además de stats: veneno con probabilidad al golpear, y más del estilo (Pre-entreno caducado: veneno; Cable pelado: rayo; Spray de frío: frena)
 
 ## Hito 8 — Cierre de partida y meta
+- [x] Portal del jefe en lugar del altar: el jefe se invoca en él y, tras vencerlo, hay que cruzarlo para pasar el nivel. Al vencerlo, un texto lo explica y una flecha amarilla señala el portal unos 3 s
+- [x] Pasado el minuto 10, con el jefe vencido, morir también cuenta como victoria
 - [ ] Jefes de la Torre del Mago y la Mazmorra (el del Brosque llega en el Hito 3)
 - [ ] ¿Retirarse o seguir? y torneos siguientes
 - [ ] Resumen de partida
 - [ ] Desbloqueos (personajes, armas, ventajas) y condiciones para conseguirlos
 - [ ] Más opciones (sensibilidad, remapeo)
 
+## Mantenimiento (siempre)
+- [x] Repaso del código para que se lea como escrito a mano: comentarios que expliquen el porqué en lo que no se entiende solo, comentarios de documentación más cortos y sin jerga (primera pasada: las cabeceras de clase de 97 scripts; la norma, en CLAUDE.md)
+
+## Orden de trabajo acordado (2026-11-23)
+1. Hito 5b (pulido tras las pruebas).
+2. Del Hito 8: el portal del jefe y la victoria al morir tras el minuto 10.
+3. Del Hito 5: colonia, límite del mapa, power-ups y aparición de enemigos.
+4. Hito 5c (segunda tanda de pruebas): elegir nivel, stats importantes, fuego del slide y optimizar.
+5. Del Hito 5: las hojas de los árboles.
+6. Del Hito 6: el Brosque más grande.
+7. Del Hito 7: objetos con efectos.
+8. Polvo de los pasos (Hito 5) y repaso del código.
+9. Hito 5d: pesas que activan mejoras, deshacer la elección con clic derecho y árboles en los trolls.
+10. Hito 7 (2026-11-24): cofres de élite, apuntar y fijar al jefe, racha como power-up y pactos con el heraldo. Los afijos y los tiers, más adelante (Hito 6).
+
+11. Hito 6 (2026-11-25): tiers con desbloqueo, arena del jefe final, más recompensa con la dificultad y detalles del Guerrero y el Pícaro. Todo en un solo PR junto con el Hito 7. Los afijos de los élites, después.
+
 ## Backlog (sin orden)
+- Física de la horda: con 180 esbirros apretados, la física se lleva unos 4–6 ms por tick (el rumbo del enjambre, 1 ms; el resto, el motor). Mirar con el profiler del editor si hiciera falta (formas más simples, menos contactos)
 - Raíles/ziplines y plataformas de salto
 - Más armas, enemigos y personajes con movimiento propio
 - Nuevas arenas; generación procedural
 - Retos diarios con semilla compartida
 - Soporte de mando
 - Actualizar a Godot 4.8 cuando sea estable
+- Que el juego pese menos: plantillas de exportación propias (sin los módulos que no usamos, `optimize=size`); hace falta instalar Python y SCons

@@ -1,11 +1,10 @@
 class_name OptionsPanel
 extends PanelContainer
-## Opciones básicas: volumen de cada bus, pantalla completa, tamaño de la ventana, VSync y temblor de
-## pantalla. El volumen y el temblor se aplican al momento (para oírlo o notarlo); las de pantalla
-## quedan pendientes hasta «Aplicar», que las aplica y las guarda. «Volver» o Esc guardan el volumen
-## y el temblor, descartan lo de pantalla sin aplicar y cierran. Trabaja sobre
-## [code]Save.settings[/code]. Lo abren la pausa y el menú principal. Ejecutado dentro del editor, la
-## ventana no se puede cambiar: lo avisa y desactiva esas opciones.
+## Las opciones: volumen, pantalla completa, tamaño de ventana, VSync, límite de FPS y temblor. El
+## volumen y el temblor se aplican al momento; lo de pantalla espera a «Aplicar». «Volver» o Esc
+## guardan y cierran, descartando lo de pantalla sin aplicar.
+##
+## Dentro del editor la ventana no se puede cambiar: lo dice y desactiva esas opciones.
 
 ## Se cerró (ya guardado).
 signal closed
@@ -23,6 +22,7 @@ var _pending: GameSettings
 @onready var _fullscreen: CheckButton = %Fullscreen
 @onready var _resolution: OptionButton = %Resolution
 @onready var _vsync: CheckButton = %VSync
+@onready var _fps_limit: OptionButton = %FpsLimit
 @onready var _shake: HSlider = %ScreenShake
 @onready var _shake_value: Label = %ScreenShakeValue
 @onready var _window_note: Label = %WindowNote
@@ -36,6 +36,9 @@ func _ready() -> void:
 	_fullscreen.toggled.connect(_on_fullscreen_toggled)
 	_resolution.item_selected.connect(_on_resolution_selected)
 	_vsync.toggled.connect(_on_vsync_toggled)
+	for limit: int in data.fps_limits:
+		_fps_limit.add_item(str(limit) if limit > 0 else tr(&"OPTIONS_FPS_UNLIMITED"))
+	_fps_limit.item_selected.connect(_on_fps_limit_selected)
 	_shake.value_changed.connect(_on_shake_changed)
 	_apply.pressed.connect(apply)
 	_back.pressed.connect(close)
@@ -52,7 +55,7 @@ func _unhandled_input(event: InputEvent) -> void:
 func open() -> void:
 	_pending = Save.settings.copy()
 	_show_settings()
-	visible = true
+	UiMotion.reveal(self)
 	_back.grab_focus()
 
 
@@ -119,17 +122,16 @@ func _show_settings() -> void:
 	_show_shake()
 	_fullscreen.set_pressed_no_signal(_pending.fullscreen)
 	_vsync.set_pressed_no_signal(_pending.vsync)
+	_fps_limit.select(data.fps_limits.find(_pending.fps_limit))
 	_fill_resolutions()
 	_refresh_apply()
 
 
-## Lista los tamaños que caben en la pantalla (sin la barra de tareas) y el de la ventana ahora, si
-## no está entre ellos.
+## Lista los tamaños que caben en la pantalla (sin la barra de tareas) y el que hay ahora, si no está
+## entre ellos.
 func _fill_resolutions() -> void:
 	var usable := DisplayServer.screen_get_usable_rect().size
-	var current := _pending.resolution
-	if current == Vector2i.ZERO:
-		current = get_window().size
+	var current := shown_resolution()
 	_resolutions.clear()
 	for option: Vector2i in data.resolutions:
 		# Sin pantalla (headless), el área es cero: se ofrecen todos.
@@ -142,6 +144,16 @@ func _fill_resolutions() -> void:
 		_resolution.add_item(tr(&"OPTIONS_RESOLUTION_VALUE") % [option.x, option.y])
 	_resolution.select(_resolutions.find(current))
 	_refresh_resolution()
+
+
+## El tamaño que enseña la lista: en pantalla completa, el de la pantalla (el de verdad, aunque haya
+## un tamaño de ventana guardado); en ventana, el elegido o, si no hay, el de la ventana ahora.
+func shown_resolution() -> Vector2i:
+	if _pending.fullscreen:
+		return DisplayServer.screen_get_size(get_window().current_screen)
+	if _pending.resolution != Vector2i.ZERO:
+		return _pending.resolution
+	return get_window().size
 
 
 ## Sin tamaño de ventana en pantalla completa ni dentro del editor.
@@ -165,7 +177,8 @@ func _on_volume_changed(value: float, bus: StringName) -> void:
 
 func _on_fullscreen_toggled(on: bool) -> void:
 	_pending.fullscreen = on
-	_refresh_resolution()
+	# Cambia el tamaño que se enseña (el de la pantalla o el de la ventana).
+	_fill_resolutions()
 	_refresh_apply()
 
 
@@ -185,4 +198,9 @@ func _on_shake_changed(value: float) -> void:
 
 func _on_vsync_toggled(on: bool) -> void:
 	_pending.vsync = on
+	_refresh_apply()
+
+
+func _on_fps_limit_selected(index: int) -> void:
+	_pending.fps_limit = data.fps_limits[index]
 	_refresh_apply()

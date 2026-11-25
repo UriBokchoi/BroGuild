@@ -1,0 +1,102 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://levels/brosque/brosque_map.tscn" id="1_base"]
+[ext_resource type="Resource" path="res://data/waves/brosque_autumn.tres" id="2_waves"]
+[ext_resource type="Resource" path="res://data/layouts/brosque_autumn.tres" id="3_layout"]
+[ext_resource type="Environment" path="res://levels/brosque/environment_autumn.tres" id="4_environment"]
+[ext_resource type="PackedScene" path="res://vfx/weather/falling_leaves.tscn" id="5_weather"]
+[ext_resource type="Script" path="res://systems/spawning/scatter_entry.gd" id="6_entry"]
+[ext_resource type="PackedScene" path="res://entities/breakables/skull/skull.tscn" id="7_skull"]
+[ext_resource type="PackedScene" path="res://entities/breakables/pouch/pouch.tscn" id="8_pouch"]
+[ext_resource type="PackedScene" path="res://levels/brosque/props/puddle.tscn" id="9_puddle"]
+[ext_resource type="Material" path="res://levels/brosque/materials/grass.tres" id="10_grass"]
+[ext_resource type="Material" path="res://levels/brosque/materials/grass_autumn.tres" id="11_grass_season"]
+[ext_resource type="Material" path="res://levels/brosque/materials/moss.tres" id="12_moss"]
+[ext_resource type="Material" path="res://levels/brosque/materials/moss_autumn.tres" id="13_moss_season"]
+
+[sub_resource type="BoxShape3D" id="Shape_ground"]
+size = Vector3(300, 1, 300)
+
+[sub_resource type="BoxShape3D" id="Shape_bound_x"]
+size = Vector3(264, 30, 2)
+
+[sub_resource type="BoxShape3D" id="Shape_bound_z"]
+size = Vector3(2, 30, 264)
+
+[sub_resource type="Resource" id="Entry_skulls"]
+script = ExtResource("6_entry")
+scene = ExtResource("7_skull")
+count = 78
+
+[sub_resource type="Resource" id="Entry_pouches"]
+script = ExtResource("6_entry")
+scene = ExtResource("8_pouch")
+count = 53
+
+[sub_resource type="Resource" id="Entry_puddles"]
+script = ExtResource("6_entry")
+scene = ExtResource("9_puddle")
+count = 36
+
+[node name="BrosqueMap" node_paths=PackedStringArray("followers") instance=ExtResource("1_base")]
+waves = ExtResource("2_waves")
+play_area = Rect2(-123, -123, 246, 246)
+intro_keys = Array[StringName]([&"BROSQUE_AUTUMN_INTRO", &"BROSQUE_INTRO_KEYS"])
+followers = [NodePath("MapBoundary"), NodePath("CanopyLeaves"), NodePath("Weather")]
+material_swaps = Dictionary[Material, Material]({ExtResource("10_grass"): ExtResource("11_grass_season"), ExtResource("12_moss"): ExtResource("13_moss_season")})
+
+[node name="WorldEnvironment" parent="."]
+environment = ExtResource("4_environment")
+
+[node name="Sun" parent="."]
+light_color = Color(1, 0.76, 0.52, 1)
+light_energy = 1.15
+
+[node name="Shape" parent="Ground"]
+shape = SubResource("Shape_ground")
+
+[node name="North" parent="Bounds"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15, -131)
+shape = SubResource("Shape_bound_x")
+
+[node name="South" parent="Bounds"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15, 131)
+shape = SubResource("Shape_bound_x")
+
+[node name="West" parent="Bounds"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -131, 15, 0)
+shape = SubResource("Shape_bound_z")
+
+[node name="East" parent="Bounds"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 131, 15, 0)
+shape = SubResource("Shape_bound_z")
+
+[node name="MapBoundary" parent="."]
+half_extent = Vector2(130, 130)
+
+[node name="Layout" parent="."]
+data = ExtResource("3_layout")
+
+[node name="CanopyLeaves" parent="."]
+reach = 132.0
+
+[node name="Tavern" parent="."]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, -129.5)
+
+[node name="StoneTrolls" parent="."]
+transform = Transform3D(0, 0, 1.35, 0, 1.35, 0, -1.35, 0, 0, 140, 0, -18)
+
+[node name="Breakables" parent="."]
+entries = Array[ExtResource("6_entry")]([SubResource("Entry_skulls"), SubResource("Entry_pouches")])
+half_extent = Vector2(116, 116)
+
+[node name="BossKeys" parent="."]
+half_extent = Vector2(112, 112)
+min_spacing = 40.0
+min_center_distance = 40.0
+
+[node name="Puddles" parent="."]
+entries = Array[ExtResource("6_entry")]([SubResource("Entry_puddles")])
+half_extent = Vector2(116, 116)
+
+[node name="Weather" parent="." instance=ExtResource("5_weather")]

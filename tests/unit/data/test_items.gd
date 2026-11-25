@@ -36,9 +36,12 @@ func test_every_item_is_complete() -> void:
 		assert_not_null(item.icon, "%s: sin icono" % file)
 		assert_not_null(item.rarity, "%s: sin rareza" % file)
 		assert_has(RARITIES.entries, item.rarity, "%s: rareza fuera de la tabla" % file)
-		assert_false(item.stat_modifiers.is_empty(), "%s: no hace nada" % file)
+		assert_false(item.stat_modifiers.is_empty() and item.on_hit.is_empty(), "%s: no hace nada" % file)
 		for modifier: StatModifier in item.stat_modifiers:
 			assert_has(_stats, modifier.stat, "%s: «%s» no es una stat del jugador" % [file, modifier.stat])
+		for effect: OnHitEffect in item.on_hit:
+			assert_gt(effect.chance, 0.0, "%s: efecto que nunca sale" % file)
+			assert_ne(tr(effect.describe_key), String(effect.describe_key), "%s: efecto sin traducir" % file)
 
 
 func test_descriptions_leave_the_numbers_to_the_modifiers() -> void:
@@ -65,3 +68,15 @@ func test_the_chest_finds_every_item() -> void:
 	assert_same(CHEST.items.rarities, RARITIES)
 	assert_gt(CHEST.cost_at(0.0, 0), 0)
 	assert_gt(CHEST.reveal_time, 0.0)
+
+
+func test_three_items_turn_movement_into_damage() -> void:
+	var expected: Dictionary[StringName, StringName] = {
+		&"flaming_sneakers": &"fire_trail_damage", &"air_horn": &"dash_wave_damage", &"championship_belt": &"slam_damage"
+	}
+	for item: PassiveItemData in _items:
+		if expected.has(item.id):
+			assert_eq(item.stat_modifiers[0].stat, expected[item.id], "%s" % item.id)
+			assert_gt(item.stat_modifiers[0].value, 0.0, "%s: ya daña con una copia" % item.id)
+			expected.erase(item.id)
+	assert_true(expected.is_empty(), "faltan: %s" % [expected.keys()])

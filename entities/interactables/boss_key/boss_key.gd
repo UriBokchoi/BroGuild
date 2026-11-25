@@ -3,7 +3,7 @@ extends Node3D
 ## Llave del jefe (GDD §6; en el Brosque, una tarjeta de socio): repartida por el nivel, gira y flota
 ## bajo una columna de luz que se ve de lejos. Se coge con «interactuar»: avisa por
 ## [signal EventBus.boss_key_collected] (las cuenta el [BossEncounter]) y desaparece con un
-## estallido. Con las suficientes, el altar invoca al jefe antes de tiempo.
+## estallido. Con las suficientes, el portal invoca al jefe antes de tiempo.
 
 @export var interactable: Interactable
 ## Modelo (con su columna de luz) que estalla al cogerla.

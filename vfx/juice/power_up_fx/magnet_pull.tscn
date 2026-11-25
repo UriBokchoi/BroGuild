@@ -1,0 +1,63 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://vfx/juice/power_up_fx/fx_burst.gd" id="1_burst"]
+[ext_resource type="Shader" path="res://vfx/shaders/ground_ring.gdshader" id="2_ring"]
+[ext_resource type="QuadMesh" path="res://vfx/particles/soft_dot_quad.tres" id="3_dot"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ring"]
+render_priority = 0
+shader = ExtResource("2_ring")
+shader_parameter/color = Color(0.5, 0.78, 1, 1)
+shader_parameter/intensity = 1.8
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ring"]
+material = SubResource("ShaderMaterial_ring")
+size = Vector2(2, 2)
+
+[sub_resource type="Gradient" id="Gradient_Pull"]
+offsets = PackedFloat32Array(0, 0.2, 0.85, 1)
+colors = PackedColorArray(0.5, 0.78, 1, 0, 0.55, 0.82, 1, 1, 0.9, 0.95, 1, 0.9, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_Pull"]
+gradient = SubResource("Gradient_Pull")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_Pull"]
+emission_shape = 6
+emission_ring_axis = Vector3(0, 1, 0)
+emission_ring_height = 0.6
+emission_ring_radius = 6.0
+emission_ring_inner_radius = 4.0
+direction = Vector3(0, 1, 0)
+spread = 0.0
+radial_velocity_min = -13.0
+radial_velocity_max = -10.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.25
+scale_max = 0.4
+color_ramp = SubResource("GradientTexture1D_Pull")
+
+[node name="MagnetPull" type="Node3D" node_paths=PackedStringArray("rings")]
+script = ExtResource("1_burst")
+rings = [NodePath("Ring")]
+ring_radius = 10
+ring_time = 0.45
+ring_band = 0.08
+
+[node name="Ring" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.06, 0)
+cast_shadow = 0
+mesh = SubResource("PlaneMesh_ring")
+
+[node name="Pull" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+cast_shadow = 0
+emitting = false
+amount = 40
+lifetime = 0.5
+one_shot = true
+explosiveness = 0.85
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-8, -2, -8, 16, 6, 16)
+process_material = SubResource("ParticleProcessMaterial_Pull")
+draw_pass_1 = ExtResource("3_dot")

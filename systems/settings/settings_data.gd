@@ -13,6 +13,11 @@ extends Resource
 @export_range(0.01, 0.25, 0.01) var volume_step: float = 0.0
 ## VSync al estrenar el juego.
 @export var default_vsync: bool = false
+## Límites de fotogramas por segundo que se ofrecen, en orden (0 = sin límite).
+@export var fps_limits: Array[int] = []
+## Límite de FPS al estrenar el juego (0 = sin límite). Sin él, con el VSync quitado, el juego dibuja
+## cientos de fotogramas por segundo y el ordenador va a tope sin que se note nada.
+@export_range(0, 1000, 1) var default_fps_limit: int = 0
 ## Tamaños de ventana que se ofrecen (solo los que caben en la pantalla).
 @export var resolutions: Array[Vector2i] = []
 ## Partidas que guarda la clasificación (las mejores).

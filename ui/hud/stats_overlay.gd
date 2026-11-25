@@ -1,9 +1,11 @@
 class_name StatsOverlay
 extends CanvasLayer
-## Las estadísticas del jugador mientras se mantiene «ver stats» (Tab), sin pausar: la misma lista
-## que la pausa ([StatsView]), a la derecha y encima de la partida. Mientras se ve, se actualiza cada
-## [member refresh_interval], y la rueda del ratón la desplaza. Con el juego en pausa no sale (la pausa
-## ya las enseña).
+## Las stats del jugador mientras se mantiene Tab, sin pausar, a la derecha de la partida. Se
+## actualizan cada poco y la rueda las desplaza. En pausa solo salen con un panel de elegir abierto,
+## para decidir viéndolas; en el menú de pausa no, que ya las enseña.
+
+## Grupo de los paneles que, abiertos, dejan verlas aunque el juego esté en pausa.
+const ALLOW_GROUP := &"stats_overlay_allowed"
 
 @export var player: Player
 ## Segundos entre actualizaciones mientras se ve.
@@ -38,7 +40,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _process(delta: float) -> void:
-	var held := Input.is_action_pressed(InputActions.SHOW_STATS) and not get_tree().paused
+	var held := Input.is_action_pressed(InputActions.SHOW_STATS) and _can_show()
 	if held != _panel.visible:
 		_panel.visible = held
 		if held:
@@ -63,3 +65,14 @@ func shown_stats() -> Array[StringName]:
 func _refresh() -> void:
 	_stats_view.refresh()
 	_refresh_left = refresh_interval
+
+
+## Sin pausa, siempre; en pausa, solo con un panel de elegir abierto.
+func _can_show() -> bool:
+	if not get_tree().paused:
+		return true
+	for panel: Node in get_tree().get_nodes_in_group(ALLOW_GROUP):
+		var choice := panel as CanvasLayer
+		if choice and choice.visible:
+			return true
+	return false

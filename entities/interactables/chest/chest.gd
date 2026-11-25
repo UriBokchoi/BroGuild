@@ -1,10 +1,11 @@
 class_name Chest
 extends Node3D
-## Cofre del nivel (GDD §5.2): con «interactuar» cobra su coste en oro y se abre. Sale un objeto
-## pasivo con rareza (la Suerte del jugador sube las altas). El HUD lo revela
-## ([signal EventBus.item_revealed]) y, al acabar el revelado, el objeto pasa al jugador y el cofre
-## desaparece. El coste sube con la dificultad y con cada cofre abierto en la partida: todos los
-## cofres cuentan los que se abren por el [code]EventBus[/code]. No pausa el juego.
+## Cofre (GDD §5.2): al usarlo cobra oro y se abre. Sale un objeto (la Suerte ayuda a que sea raro),
+## el HUD lo revela y luego pasa al jugador. Cada cofre abierto en la partida encarece los demás.
+## No pausa el juego.
+
+## Se abrió (con su objeto ya tirado).
+signal opened
 
 ## Coste, rarezas, objetos y ritmo.
 @export var data: ChestData
@@ -70,6 +71,7 @@ func open(wallet: WalletComponent, items: PassiveInventory, luck: float = 0.0) -
 	interactable.enabled = false
 	body.process_mode = Node.PROCESS_MODE_DISABLED
 	var item := data.items.roll(_catalog, luck, rng)
+	opened.emit()
 	EventBus.chest_opened.emit()
 	EventBus.item_revealed.emit(item, data.reveal_time)
 	# La bisagra está detrás (+Z) y el cierre delante (−Z): girar en +X levanta el frente.

@@ -1,6 +1,7 @@
 extends GutTest
 ## Stats con Tab: mientras se mantiene «ver stats» salen las del jugador (las mismas que en la
-## pausa), al soltar se van, la rueda las desplaza y con el juego en pausa no salen.
+## pausa), al soltar se van y la rueda las desplaza. Con el juego en pausa solo salen si está abierto
+## un panel de elegir (subir de nivel, un objeto), que además lo recuerda con un texto.
 
 const PlayerScene := preload("res://entities/player/player.tscn")
 const OverlayScene := preload("res://ui/hud/stats_overlay.tscn")
@@ -34,11 +35,22 @@ func test_shows_while_held() -> void:
 
 
 func test_not_while_paused() -> void:
-	_overlay.process_mode = Node.PROCESS_MODE_ALWAYS
 	get_tree().paused = true
 	Input.action_press(InputActions.SHOW_STATS)
 	await get_tree().create_timer(0.1, true).timeout
 	assert_false(_overlay.is_showing(), "la pausa ya las enseña")
+
+
+func test_over_a_choice_panel_even_paused() -> void:
+	var panel := (load("res://ui/menus/item_choice/item_choice_panel.tscn") as PackedScene).instantiate() as ModalPanel
+	add_child_autofree(panel)
+	assert_eq(panel.stats_hint.text, tr(&"HUD_STATS_HINT") % InteractionPrompt.key_text(InputActions.SHOW_STATS))
+	panel.visible = true
+	get_tree().paused = true
+	Input.action_press(InputActions.SHOW_STATS)
+	await get_tree().create_timer(0.1, true).timeout
+	assert_true(_overlay.is_showing(), "eligiendo, se pueden ver")
+	assert_gt(_overlay.layer, panel.layer, "por encima del panel")
 
 
 func test_the_wheel_scrolls_while_showing() -> void:

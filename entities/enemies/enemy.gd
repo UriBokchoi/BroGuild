@@ -1,15 +1,11 @@
 class_name Enemy
 extends RigidBody3D
-## Enemigo: un cuerpo físico sin rotación que choca con el mundo, con el jugador y con otros
-## enemigos. Se empujan y, con la presión de la horda, se apilan unos encima de otros, como en
-## Megabonk. Persigue al objetivo separándose un poco de los que tiene al lado ([EnemySteering]), o
-## se queda a su distancia si es de los que disparan ([member EnemyStats.keep_distance]). Hace daño
-## al tocar (su hitbox de contacto) y con sus armas, si tiene ([member EnemyData.weapons]); al
-## morir, sus armas paran (sus disparos en vuelo siguen), su cuerpo deja de chocar con el jugador y
-## con los demás enemigos, y él encoge y desaparece. No se mueve solo: un [EnemySwarm] lo saca de su
-## pool con [method spawn], fija su velocidad horizontal con [method physics_step] cada tick (la
-## física pone la gravedad y los choques) y lo guarda cuando avisa con [signal despawned]. Sus stats
-## salen de su [EnemyData] ([method setup]).
+## Un enemigo: un cuerpo físico sin rotación que choca con el mundo, con el jugador y con los demás.
+## Con la presión de la horda se empujan y se apilan, como en Megabonk. Daña al tocar y, si tiene,
+## con sus armas.
+##
+## No se mueve solo: el EnemySwarm lo saca del pool (spawn), le fija la velocidad cada tick
+## (physics_step) y lo recoge cuando avisa de que ha terminado de morir (despawned).
 
 ## Acaba de morir (aún encogiéndose).
 signal died(enemy: Enemy)
@@ -25,6 +21,10 @@ signal despawned(enemy: Enemy)
 @export var visual: Node3D
 ## Segundos que tarda en encoger al morir.
 @export_range(0.0, 2.0, 0.01, "suffix:s") var death_time: float = 0.15
+## Al aparecer, el modelo sale del suelo creciendo, con un pequeño rebote: en cuántos segundos y desde
+## cuánto por debajo de sus pies (crece con su tamaño). 0 segundos: aparece de golpe.
+@export_range(0.0, 2.0, 0.01, "suffix:s") var appear_time: float = 0.35
+@export_range(0.0, 3.0, 0.05, "suffix:m") var appear_depth: float = 0.6
 ## Rapidez con la que gira hacia donde va.
 @export_range(0.1, 60.0, 0.1, "suffix:1/s") var turn_speed: float = 12.0
 ## Al aparecer, sus armas esperan antes del primer ataque esta parte de su espera normal, al azar
@@ -51,6 +51,9 @@ var elite: EliteData
 
 var _stats: EnemyStats
 var _rest_scale: Vector3 = Vector3.ONE
+var _rest_visual_position: Vector3 = Vector3.ZERO
+## Segundos que le quedan para terminar de aparecer.
+var _appear_left: float = 0.0
 var _rest_mass: float = 1.0
 ## Capas y máscara de su cuerpo vivo (al morir deja de chocar con el jugador y con los demás).
 var _rest_layer: int = 0
@@ -93,6 +96,7 @@ func setup(enemy_data: EnemyData, projectiles: ProjectilePool = null) -> void:
 func _ready() -> void:
 	_stats = stats.get_resolved(EnemyStats) as EnemyStats
 	_rest_scale = visual.scale
+	_rest_visual_position = visual.position
 	_rest_mass = mass
 	_rest_layer = collision_layer
 	_rest_mask = collision_mask
@@ -134,6 +138,8 @@ func spawn(feet: Vector3) -> void:
 	_approach_angle = deg_to_rad(rng.randf_range(-_stats.approach_spread, _stats.approach_spread))
 	_rearm()
 	reset_physics_interpolation()
+	_start_appearing()
+	EventBus.enemy_spawned.emit(self)
 
 
 ## Lo mejora hasta que vuelva al pool: aplica [param modifiers] a sus stats y a las de sus armas
@@ -187,8 +193,26 @@ func is_frozen() -> bool:
 ## Lo saca del juego: invisible y fuera de la física hasta el siguiente [method spawn].
 func deactivate() -> void:
 	_disarm()
+	_stop_appearing()
 	visible = false
 	process_mode = Node.PROCESS_MODE_DISABLED
+
+
+## ¿Está saliendo del suelo?
+func is_appearing() -> bool:
+	return _appear_left > 0.0
+
+
+# Solo trabaja mientras aparece; va por fotograma (no por tick de física) para que se vea suave.
+func _process(delta: float) -> void:
+	if health.is_dead():
+		_stop_appearing()
+		return
+	_appear_left -= delta
+	if _appear_left <= 0.0:
+		_stop_appearing()
+		return
+	_show_appearing(1.0 - _appear_left / appear_time)
 
 
 func is_alive() -> bool:
@@ -300,6 +324,29 @@ func _face(direction: Vector3, delta: float) -> void:
 	# Con rotation.y = θ, −Z apunta a (−sen θ, −cos θ).
 	var yaw := atan2(-direction.x, -direction.z)
 	visual.rotation.y = lerp_angle(visual.rotation.y, yaw, 1.0 - exp(-turn_speed * delta))
+
+
+func _start_appearing() -> void:
+	_appear_left = appear_time
+	set_process(appear_time > 0.0)
+	if appear_time > 0.0:
+		_show_appearing(0.0)
+
+
+func _stop_appearing() -> void:
+	_appear_left = 0.0
+	set_process(false)
+	visual.position = _rest_visual_position
+	if not health.is_dead():
+		visual.scale = _rest_scale * _size
+
+
+## El modelo en el punto [param progress] (0–1) de su aparición: crece con rebote y sube desde el suelo.
+func _show_appearing(progress: float) -> void:
+	var grow := Tween.interpolate_value(0.0, 1.0, progress, 1.0, Tween.TRANS_BACK, Tween.EASE_OUT) as float
+	var rise := Tween.interpolate_value(0.0, 1.0, progress, 1.0, Tween.TRANS_CUBIC, Tween.EASE_OUT) as float
+	visual.scale = _rest_scale * _size * maxf(grow, 0.01)
+	visual.position = _rest_visual_position + Vector3.DOWN * appear_depth * _size * (1.0 - rise)
 
 
 func _shrink(delta: float) -> void:

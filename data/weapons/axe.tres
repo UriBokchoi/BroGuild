@@ -1,0 +1,53 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3]
+
+[ext_resource type="Script" path="res://systems/combat/weapons/weapon_data.gd" id="1_data"]
+[ext_resource type="Script" path="res://systems/combat/weapons/projectile_stats.gd" id="2_stats"]
+[ext_resource type="PackedScene" path="res://systems/combat/weapons/axe/axe.tscn" id="5_scene"]
+[ext_resource type="Script" path="res://systems/upgrades/upgrade_stat.gd" id="90_upgrade"]
+[ext_resource type="Texture2D" path="res://assets/textures/icons/weapons/axe.svg" id="99_icon"]
+
+[sub_resource type="Resource" id="Resource_stats"]
+script = ExtResource("2_stats")
+projectile_speed = 18.0
+damage = 16.0
+cooldown = 1.5
+projectiles = 1
+burst_interval = 0.2
+area = 100.0
+duration = 1.3
+reach = 12.0
+knockback = 3.0
+
+[sub_resource type="Resource" id="Upgrade_damage"]
+script = ExtResource("90_upgrade")
+stat = &"damage"
+value = 4.0
+
+[sub_resource type="Resource" id="Upgrade_projectiles"]
+script = ExtResource("90_upgrade")
+stat = &"projectiles"
+value = 1.0
+whole_numbers = true
+
+[sub_resource type="Resource" id="Upgrade_projectile_speed"]
+script = ExtResource("90_upgrade")
+stat = &"projectile_speed"
+kind = 1
+value = 0.15
+
+[sub_resource type="Resource" id="Upgrade_cooldown"]
+script = ExtResource("90_upgrade")
+stat = &"cooldown"
+kind = 2
+value = 0.92
+
+[resource]
+script = ExtResource("1_data")
+scene = ExtResource("5_scene")
+stats = SubResource("Resource_stats")
+id = &"axe"
+name_key = &"WEAPON_AXE_NAME"
+description_key = &"WEAPON_AXE_DESCRIPTION"
+icon = ExtResource("99_icon")
+level_cap = 10
+upgrade_stats = Array[ExtResource("90_upgrade")]([SubResource("Upgrade_damage"), SubResource("Upgrade_projectiles"), SubResource("Upgrade_projectile_speed"), SubResource("Upgrade_cooldown")])

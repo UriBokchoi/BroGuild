@@ -47,22 +47,28 @@ material = SubResource("StandardMaterial3D_bark")
 top_radius = 0.2
 bottom_radius = 0.28
 height = 0.8
+radial_segments = 12
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_crown"]
 material = SubResource("StandardMaterial3D_leaves")
 top_radius = 0.0
 bottom_radius = 0.5
 height = 0.9
+radial_segments = 12
 
 [sub_resource type="TorusMesh" id="TorusMesh_band"]
 material = SubResource("StandardMaterial3D_band")
 inner_radius = 0.36
 outer_radius = 0.46
+rings = 24
+ring_segments = 8
 
 [sub_resource type="SphereMesh" id="SphereMesh_eye"]
 material = SubResource("StandardMaterial3D_eye")
 radius = 0.07
 height = 0.14
+radial_segments = 16
+rings = 8
 
 [node name="Sapling" type="RigidBody3D" node_paths=PackedStringArray("stats", "health", "hurtbox", "contact_hitbox", "visual")]
 collision_layer = 4

@@ -1,10 +1,8 @@
 class_name ArchivePanel
 extends PanelContainer
-## El Archivo: lo que hay en el juego ([ContentCatalog]), una pestaña por tipo con cuántas entradas
-## se han descubierto ([code]Save.discoveries[/code]). Cada entrada es una casilla con su icono; lo
-## no descubierto sale como «?». Al pasar el ratón o el foco, su ficha: nombre, frase y lo que hace
-## (stats, modificadores, arma inicial y pasiva, mejoras); lo no descubierto, «???» y cómo
-## descubrirlo. «Volver» o Esc lo cierran. Lo abre el menú principal.
+## El Archivo: una pestaña por tipo de contenido con lo descubierto («1/3»). Cada entrada es una
+## casilla con su icono; al pasar por encima, su ficha. Lo no descubierto sale como «?» y dice cómo
+## descubrirlo.
 
 ## Se cerró.
 signal closed
@@ -46,7 +44,7 @@ func open() -> void:
 	_build_tabs()
 	if not catalog.categories.is_empty():
 		show_category(catalog.categories[0])
-	visible = true
+	UiMotion.reveal(self)
 	_back.grab_focus()
 
 
@@ -184,6 +182,8 @@ func _show_item(item: PassiveItemData) -> void:
 		var rarity := _add_line(item.rarity.name_key, &"StatGroupLabel")
 		rarity.add_theme_color_override(&"font_color", item.rarity.color)
 	for line: String in ModifierFormat.describe_all(item.stat_modifiers):
+		_add_line(line, &"StatModifiedLabel")
+	for line: String in item.effect_lines():
 		_add_line(line, &"StatModifiedLabel")
 
 

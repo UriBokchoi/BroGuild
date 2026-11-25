@@ -159,6 +159,25 @@ func test_min_above_max_is_rejected() -> void:
 	assert_false(_block.has_stat(SPEED))
 
 
+func test_preview_gives_the_value_with_more_modifiers_without_applying_them() -> void:
+	_block.define(SPEED, 10.0, 0.0, 15.0)
+	_add(SPEED, FLAT, 2.0)
+	var extra: Array[StatModifier] = [
+		StatModifier.create(SPEED, PERCENT, 0.1),
+		StatModifier.create(&"other", FLAT, 100.0),
+	]
+	assert_almost_eq(_block.preview(SPEED, extra), 13.2, 0.001, "(10 + 2) × 1,1; lo de otra stat no cuenta")
+	assert_eq(_block.get_value(SPEED), 12.0, "no cambia nada")
+	extra.append(StatModifier.create(SPEED, MULTIPLIER, 2.0))
+	assert_eq(_block.preview(SPEED, extra), 15.0, "con su tope")
+
+
+func test_preview_rounds_whole_stats() -> void:
+	_block.define(&"jumps", 1.0, 0.0, 5.0, true)
+	var extra: Array[StatModifier] = [StatModifier.create(&"jumps", PERCENT, 0.6)]
+	assert_eq(_block.preview(&"jumps", extra), 2.0, "1,6 → 2")
+
+
 func _add(stat: StringName, kind: StatModifier.Kind, amount: float) -> void:
 	_block.add_modifier(StatModifier.create(stat, kind, amount), _source)
 

@@ -1,0 +1,104 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://levels/brosque/brosque_map.tscn" id="1_base"]
+[ext_resource type="Resource" path="res://data/waves/brosque_winter.tres" id="2_waves"]
+[ext_resource type="Resource" path="res://data/layouts/brosque_winter.tres" id="3_layout"]
+[ext_resource type="Environment" path="res://levels/brosque/environment_winter.tres" id="4_environment"]
+[ext_resource type="PackedScene" path="res://vfx/weather/snowfall.tscn" id="5_weather"]
+[ext_resource type="Script" path="res://systems/spawning/scatter_entry.gd" id="6_entry"]
+[ext_resource type="PackedScene" path="res://entities/breakables/skull/skull.tscn" id="7_skull"]
+[ext_resource type="PackedScene" path="res://entities/breakables/pouch/pouch.tscn" id="8_pouch"]
+[ext_resource type="PackedScene" path="res://levels/brosque/props/puddle.tscn" id="9_puddle"]
+[ext_resource type="Material" path="res://levels/brosque/materials/grass.tres" id="10_grass"]
+[ext_resource type="Material" path="res://levels/brosque/materials/grass_winter.tres" id="11_grass_season"]
+[ext_resource type="Material" path="res://levels/brosque/materials/moss.tres" id="12_moss"]
+[ext_resource type="Material" path="res://levels/brosque/materials/snow.tres" id="13_moss_season"]
+[ext_resource type="Material" path="res://levels/brosque/materials/water.tres" id="14_water"]
+[ext_resource type="Material" path="res://levels/brosque/materials/ice.tres" id="15_ice"]
+
+[sub_resource type="BoxShape3D" id="Shape_ground"]
+size = Vector3(340, 1, 340)
+
+[sub_resource type="BoxShape3D" id="Shape_bound_x"]
+size = Vector3(304, 30, 2)
+
+[sub_resource type="BoxShape3D" id="Shape_bound_z"]
+size = Vector3(2, 30, 304)
+
+[sub_resource type="Resource" id="Entry_skulls"]
+script = ExtResource("6_entry")
+scene = ExtResource("7_skull")
+count = 104
+
+[sub_resource type="Resource" id="Entry_pouches"]
+script = ExtResource("6_entry")
+scene = ExtResource("8_pouch")
+count = 71
+
+[sub_resource type="Resource" id="Entry_puddles"]
+script = ExtResource("6_entry")
+scene = ExtResource("9_puddle")
+count = 48
+
+[node name="BrosqueMap" node_paths=PackedStringArray("followers") instance=ExtResource("1_base")]
+waves = ExtResource("2_waves")
+play_area = Rect2(-143, -143, 286, 286)
+intro_keys = Array[StringName]([&"BROSQUE_WINTER_INTRO", &"BROSQUE_INTRO_KEYS"])
+followers = [NodePath("MapBoundary"), NodePath("CanopyLeaves"), NodePath("Weather")]
+material_swaps = Dictionary[Material, Material]({ExtResource("10_grass"): ExtResource("11_grass_season"), ExtResource("12_moss"): ExtResource("13_moss_season"), ExtResource("14_water"): ExtResource("15_ice")})
+
+[node name="WorldEnvironment" parent="."]
+environment = ExtResource("4_environment")
+
+[node name="Sun" parent="."]
+light_color = Color(0.92, 0.95, 1, 1)
+light_energy = 1.0
+
+[node name="Shape" parent="Ground"]
+shape = SubResource("Shape_ground")
+
+[node name="North" parent="Bounds"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15, -151)
+shape = SubResource("Shape_bound_x")
+
+[node name="South" parent="Bounds"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15, 151)
+shape = SubResource("Shape_bound_x")
+
+[node name="West" parent="Bounds"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -151, 15, 0)
+shape = SubResource("Shape_bound_z")
+
+[node name="East" parent="Bounds"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 151, 15, 0)
+shape = SubResource("Shape_bound_z")
+
+[node name="MapBoundary" parent="."]
+half_extent = Vector2(150, 150)
+
+[node name="Layout" parent="."]
+data = ExtResource("3_layout")
+
+[node name="CanopyLeaves" parent="."]
+reach = 152.0
+
+[node name="Tavern" parent="."]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, -149.5)
+
+[node name="StoneTrolls" parent="."]
+transform = Transform3D(0, 0, 1.35, 0, 1.35, 0, -1.35, 0, 0, 160, 0, -18)
+
+[node name="Breakables" parent="."]
+entries = Array[ExtResource("6_entry")]([SubResource("Entry_skulls"), SubResource("Entry_pouches")])
+half_extent = Vector2(136, 136)
+
+[node name="BossKeys" parent="."]
+half_extent = Vector2(132, 132)
+min_spacing = 40.0
+min_center_distance = 40.0
+
+[node name="Puddles" parent="."]
+entries = Array[ExtResource("6_entry")]([SubResource("Entry_puddles")])
+half_extent = Vector2(136, 136)
+
+[node name="Weather" parent="." instance=ExtResource("5_weather")]

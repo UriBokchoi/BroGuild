@@ -29,6 +29,8 @@ func test_starts_with_the_data_defaults() -> void:
 	for bus: StringName in DATA.volume_buses:
 		assert_eq(_settings.volumes[bus], DATA.default_volume)
 	assert_eq(_settings.vsync, DATA.default_vsync)
+	assert_eq(_settings.fps_limit, DATA.default_fps_limit)
+	assert_gt(_settings.fps_limit, 0, "de serie, con límite")
 	assert_false(_settings.fullscreen)
 	assert_eq(_settings.resolution, Vector2i.ZERO, "sin tamaño elegido")
 	assert_eq(_settings.locale, "es", "el juego empieza en español")
@@ -39,6 +41,7 @@ func test_round_trips_through_a_config_file() -> void:
 	_settings.fullscreen = true
 	_settings.resolution = Vector2i(1600, 900)
 	_settings.vsync = false
+	_settings.fps_limit = 144
 	var config := ConfigFile.new()
 	_settings.write_to(config)
 	var loaded := GameSettings.create(DATA)
@@ -47,6 +50,7 @@ func test_round_trips_through_a_config_file() -> void:
 	assert_true(loaded.fullscreen)
 	assert_eq(loaded.resolution, Vector2i(1600, 900))
 	assert_false(loaded.vsync)
+	assert_eq(loaded.fps_limit, 144)
 
 
 func test_ignores_bad_values_and_clamps_the_volume() -> void:
@@ -84,11 +88,14 @@ func test_a_copy_is_independent() -> void:
 func test_compares_and_takes_the_display_options() -> void:
 	var other := _settings.copy()
 	assert_false(other.display_differs(_settings))
+	other.fps_limit = 0
+	assert_true(other.display_differs(_settings), "el límite de FPS es de pantalla")
 	other.resolution = Vector2i(1600, 900)
 	other.volumes[&"Music"] = 0.2
 	assert_true(other.display_differs(_settings))
 	_settings.take_display(other)
 	assert_eq(_settings.resolution, Vector2i(1600, 900))
+	assert_eq(_settings.fps_limit, 0)
 	assert_eq(_settings.volumes[&"Music"], DATA.default_volume, "el volumen no es de pantalla")
 	assert_false(other.display_differs(_settings))
 

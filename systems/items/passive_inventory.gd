@@ -50,6 +50,16 @@ func get_items() -> Array[PassiveItemData]:
 	return _items.duplicate()
 
 
+## Los efectos al golpear de los objetos que lleva, con cuántas copias cuenta cada uno (su
+## probabilidad se multiplica por ellas).
+func on_hit_effects() -> Dictionary[OnHitEffect, int]:
+	var effects: Dictionary[OnHitEffect, int] = {}
+	for item: PassiveItemData in _items:
+		for effect: OnHitEffect in item.on_hit:
+			effects[effect] = effects.get(effect, 0) + count(item)
+	return effects
+
+
 ## Copias que lleva en total.
 func total() -> int:
 	var copies := 0

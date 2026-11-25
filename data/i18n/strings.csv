@@ -8,6 +8,16 @@ MENU_RECORDS,Récords,Records
 MENU_ARCHIVE,Archivo,Archive
 MENU_QUIT,Abandonar,Quit game
 LEVEL_BROSQUE_NAME,El Brosque,The Brorest
+LEVEL_BROSQUE_GOAL,Objetivo: vence al Ent-renador.,Goal: defeat the Ent Trainer.
+TIER_SHORT,Tier %d,Tier %d
+TIER_LOCKED,Supera el tier %d para abrirlo,Clear tier %d to unlock it
+BROSQUE_TIER_1,Tier 1 · Verano,Tier 1 · Summer
+BROSQUE_TIER_2,Tier 2 · Otoño,Tier 2 · Autumn
+BROSQUE_TIER_3,Tier 3 · Invierno,Tier 3 · Winter
+BROSQUE_TIER_1_GOAL,"Objetivo: vence al Ent-renador y cruza su portal. Supéralo para abrir el tier 2.","Goal: defeat the Ent Trainer and go through his portal. Clear it to unlock tier 2."
+BROSQUE_TIER_2_GOAL,"Objetivo: pasa el tier 1 y vence al Ent-renador en el Brosque de otoño, más grande y más duro. Supéralo para abrir el tier 3.","Goal: get through tier 1 and defeat the Ent Trainer in the autumn Brorest, bigger and tougher. Clear it to unlock tier 3."
+BROSQUE_TIER_3_GOAL,"Objetivo: pasa los tiers 1 y 2, vence al Ent-renador en el invierno y, tras su portal, a Mr. Brolympia, el jefe final.","Goal: get through tiers 1 and 2, defeat the Ent Trainer in winter and, past his portal, Mr. Brolympia, the final boss."
+LEVEL_BROSQUE_LORE,"Un bosque viejísimo convertido en gimnasio al aire libre: pesas de piedra entre los robles, bancos de tronco y una taberna para recuperar fuerzas. Lo lleva el Ent-renador, un árbol centenario que nunca se salta el día de pierna y entrena a sus Bro-tes a golpe de silbato. Junta tres tarjetas de socio y llámalo… si te ves con fuerzas.","An ancient forest turned into an open-air gym: stone weights among the oaks, log benches and a tavern to get your strength back. It is run by the Ent Trainer, a centuries-old tree who never skips leg day and drills his Bro-saplings with a whistle. Collect three membership cards and call him out… if you feel strong enough."
 LEVEL_WIZARD_TOWER_NAME,La Torre del Mago,The Wizard's Tower
 LEVEL_DUNGEON_NAME,La Mazmorra,The Dungeon
 LEVEL_COMING_SOON,"%s (próximamente)","%s (coming soon)"
@@ -21,8 +31,15 @@ SELECT_PASSIVE,Habilidad pasiva,Passive ability
 BROSQUE_INTRO_WELCOME,Bienvenido al Brosque,Welcome to the Brorest
 BROSQUE_INTRO_NO_PAIN,"No pain, no gain","No pain, no gain"
 BROSQUE_INTRO_LEG_DAY,Hoy toca pierna,It's leg day
-BROSQUE_INTRO_KEYS,Junta tarjetas de socio para invocar al Ent-renador,Collect membership cards to summon the Ent Trainer
+BROSQUE_INTRO_KEYS,Junta tarjetas de socio para abrir el portal del Ent-renador,Collect membership cards to open the Ent Trainer's portal
 BROSQUE_VICTORY,¡Brosque superado!,Brorest cleared!
+BROSQUE_AUTUMN_INTRO,El Brosque se viste de otoño,Autumn falls on the Brorest
+BROSQUE_WINTER_INTRO,"Invierno en el Brosque: abrígate… o no","Winter in the Brorest: wrap up… or don't"
+FINAL_ARENA_NAME,El Claro del Campeón,The Champion's Clearing
+FINAL_ARENA_INTRO,Aquí solo queda el campeón,Only the champion remains
+FINAL_VICTORY,¡Brosque conquistado!,Brorest conquered!
+FINAL_BOSS_DEFEATED,¡VICTORIA!,VICTORY!
+FINAL_PORTAL_HINT,"Cruza el portal… o aguanta la oleada infinita","Go through the portal… or hold out against the endless wave"
 PAUSE_TITLE,Pausa,Paused
 PAUSE_CONTINUE,Continuar,Resume
 PAUSE_OPTIONS,Opciones,Options
@@ -54,8 +71,8 @@ SLOT_NOT_ENOUGH_GOLD,Te falta oro: cuesta %d,Not enough gold: it costs %d
 SLOT_NOTHING,Nada… a la próxima,Nothing… next time
 INTERACT_CHEST,"Abrir el cofre (%d de oro)","Open the chest (%d gold)"
 INTERACT_BOSS_KEY,Coger la tarjeta de socio,Grab the membership card
-BOSS_ALTAR_LOCKED,Faltan tarjetas de socio (%d de %d),Membership cards missing (%d of %d)
-BOSS_ALTAR_READY,Invocar al Ent-renador,Summon the Ent Trainer
+BOSS_PORTAL_LOCKED,Faltan tarjetas de socio (%d de %d),Membership cards missing (%d of %d)
+BOSS_PORTAL_READY,Abrir el portal del Ent-renador,Open the Ent Trainer's portal
 HUD_BOSS_KEYS,%d/%d,%d/%d
 CHEST_NOT_ENOUGH_GOLD,Te falta oro: cuesta %d,Not enough gold: it costs %d
 SLOT_WIN_GOLD,¡+%d de oro!,+%d gold!
@@ -79,6 +96,8 @@ OPTIONS_FULLSCREEN,Pantalla completa,Fullscreen
 OPTIONS_RESOLUTION,Resolución,Resolution
 OPTIONS_RESOLUTION_VALUE,%d × %d,%d × %d
 OPTIONS_VSYNC,VSync,VSync
+OPTIONS_FPS_LIMIT,Límite de FPS,FPS limit
+OPTIONS_FPS_UNLIMITED,Sin límite,Unlimited
 OPTIONS_SCREEN_SHAKE,Temblor de pantalla,Screen shake
 OPTIONS_APPLY,Aplicar,Apply
 OPTIONS_BACK,Volver,Back
@@ -103,6 +122,10 @@ STAT_ACTION_END_BUFFER_TIME,Margen al acabar una acción,Action end buffer
 STAT_GROUP_STAMINA,Stamina,Stamina
 STAT_MAX_CHARGES,Cargas de stamina,Stamina charges
 STAT_RECHARGE_TIME,Recarga por carga,Recharge per charge
+STAT_GROUP_SYNERGY,Sinergias de movimiento,Movement synergies
+STAT_FIRE_TRAIL_DAMAGE,Daño del rastro de fuego,Fire trail damage
+STAT_DASH_WAVE_DAMAGE,Daño de la onda del dash,Dash wave damage
+STAT_SLAM_DAMAGE,Daño de la caída explosiva,Slam damage
 STAT_AIR_JUMPS,Saltos en el aire,Air jumps
 STAT_AIR_JUMP_HEIGHT,Altura del doble salto,Double jump height
 STAT_AIR_JUMP_COST,Coste del doble salto,Double jump cost
@@ -210,12 +233,15 @@ ENEMY_ENT_TRAINER_NAME,El Ent-renador,The Ent Trainer
 ENEMY_ENT_TRAINER_DESCRIPTION,"Jefe del Brosque: un árbol centenario con silbato y cinta en la frente. Nunca se salta el día de pierna.","Boss of the Brorest: an ancient tree with a whistle and a headband. Never skips leg day."
 ENT_TRAINER_ARRIVES,¡Llega el Ent-renador!,The Ent Trainer is here!
 ENT_TRAINER_ARRIVES_LINE,Hora de entrenar,Workout time
-ENT_TRAINER_SHOUT_BURPEE,"¡Burpees, ya!","Burpees, now!"
-ENT_TRAINER_SHOUT_ONE_MORE,¡Una más!,One more rep!
-ENT_TRAINER_SHOUT_SETS,¡Tres series!,Three sets!
-ENT_TRAINER_SHOUT_NO_EXCUSES,¡Sin excusas!,No excuses!
-ENT_TRAINER_SHOUT_SPROUTS,"¡Bro-tes, a calentar!","Sprouts, warm up!"
-ENT_TRAINER_SHOUT_ENRAGE,"¡Si no duele, no crece!","If it doesn't hurt, it doesn't grow!"
+ENEMY_MR_BROLYMPIA_NAME,Mr. Brolympia,Mr. Brolympia
+ENEMY_MR_BROLYMPIA_DESCRIPTION,"Jefe final del Brosque: el entrenador del Ent-renador. Lleva mil años ganando el torneo del Gremio y no piensa soltar el cinturón.","Final boss of the Brorest: the Ent Trainer's own coach. He has won the Guild tournament for a thousand years and won't give up the belt."
+MR_BROLYMPIA_ARRIVES,¡Mr. Brolympia!,Mr. Brolympia!
+MR_BROLYMPIA_ARRIVES_LINE,El entrenador del Ent-renador,The Ent Trainer's coach
+BROSQUE_BOSS_DEFEATED,¡Ent-renador vencido!,Ent Trainer defeated!
+BROSQUE_PORTAL_HINT,Cruza su portal para seguir,Go through his portal to move on
+ENEMY_TROLLEADOR_NAME,Trolleador Cara,Trollface
+ENEMY_TROLLEADOR_DESCRIPTION,"Miniboss del Brosque: un troll con porra y una sonrisa que da mala espina. Sus primos se quedaron de piedra al amanecer.","Miniboss of the Brorest: a troll with a club and a grin you can't trust. His cousins were turned to stone at dawn."
+TROLLEADOR_INCOMING,¡Se acerca el Trolleador Cara!,Trollface is coming!
 ENEMY_ELITE_NAME,%s élite,Elite %s
 INTERACT_SUMMON,Invocar enemigos,Summon enemies
 INTERACT_WAVES_START,Empezar oleadas,Start waves
@@ -226,6 +252,7 @@ STAT_XP_REWARD,Experiencia que suelta,Experience dropped
 STAT_GOLD_REWARD,Oro que suelta,Gold dropped
 HUD_LEVEL,Nv. %d,Lv. %d
 HUD_HEALTH_VALUE,%d / %d,%d / %d
+HUD_STATS_HINT,Mantén %s: tus estadísticas,Hold %s: your stats
 HORDE_INCOMING,¡Viene una horda!,A horde is coming!
 RUNE_STRENGTH_NAME,Runa de Fuerza,Rune of Strength
 RUNE_STRENGTH_DESCRIPTION,"Más daño con todas las armas.","More damage with every weapon."
@@ -245,7 +272,7 @@ UPGRADE_ANNOUNCE,%s sube a nivel %d,%s up to level %d
 LEVEL_UP_CHOOSE,Elige una mejora,Choose an upgrade
 LEVEL_UP_SPINNING,Clic o Espacio para parar la ruleta,Click or Space to stop the wheel
 LEVEL_UP_REROLL,Volver a tirar (%d oro),Reroll (%d gold)
-LEVEL_UP_BET,¿Te la quedas o te la juegas?,Keep it or bet it?
+LEVEL_UP_BET,¿Te la quedas o te la juegas? (clic derecho: elegir otra),Keep it or bet it? (right click: pick another)
 LEVEL_UP_KEEP,Quedármela,Keep it
 LEVEL_UP_DOUBLE,Doble o nada (%d %%),Double or nothing (%d%%)
 LEVEL_UP_DOUBLE_LOST,¡Nada!,Nothing!
@@ -267,6 +294,15 @@ ITEM_GOLDEN_DUMBBELL_NAME,Mancuerna de oro,Golden Dumbbell
 ITEM_GOLDEN_DUMBBELL_DESCRIPTION,"Pesa lo mismo, pero brilla más.","Weighs the same, but shines brighter."
 ITEM_SHADY_SHAKE_NAME,Batido sospechoso,Shady Shake
 ITEM_SHADY_SHAKE_DESCRIPTION,"Funciona, pero no preguntes qué lleva.","It works, but don't ask what's in it."
+ITEM_EXPIRED_PREWORKOUT_NAME,Pre-entreno caducado,Expired Pre-Workout
+ITEM_EXPIRED_PREWORKOUT_DESCRIPTION,"Caducó hace dos años. Sigue pegando fuerte, y ahora también envenena.","Expired two years ago. Still hits hard, and now it poisons too."
+ITEM_FRAYED_CABLE_NAME,Cable pelado,Frayed Cable
+ITEM_FRAYED_CABLE_DESCRIPTION,"Del altavoz del gimnasio. No lo toques… o sí.","From the gym speaker. Do not touch it… or do."
+ITEM_COLD_SPRAY_NAME,Spray de frío,Cold Spray
+ITEM_COLD_SPRAY_DESCRIPTION,"Lo que te echan en el campo cuando te duele algo.","What they spray on you when something hurts."
+ON_HIT_POISON,%s %% al golpear: veneno (%s %% del golpe en %s s),%s%% on hit: poison (%s%% of the hit over %s s)
+ON_HIT_CHAIN,%s %% al golpear: rayo a %s enemigos (%s %% del golpe),%s%% on hit: lightning to %s enemies (%s%% of the hit)
+ON_HIT_SLOW,%s %% al golpear: frena un %s %% (%s s),%s%% on hit: slows by %s%% (%s s)
 ITEM_BRO_CROWN_NAME,Corona del Bro,Bro Crown
 ITEM_BRO_CROWN_DESCRIPTION,Para el rey de los bros.,For the king of bros.
 ITEM_COLD_PIZZA_NAME,Pizza fría de ayer,Last Night's Cold Pizza
@@ -293,6 +329,12 @@ WEAPON_STAFF_NAME,Bastón de mago,Mage staff
 WEAPON_STAFF_DESCRIPTION,"Orbes que explotan al tocar algo y dañan a todos los enemigos cercanos.","Orbs that explode on contact and hit every nearby enemy."
 WEAPON_DAGGER_NAME,Daga,Dagger
 WEAPON_DAGGER_DESCRIPTION,"Dagas rápidas a un solo enemigo; al mejorarla rebotan al más cercano con todo su daño.","Fast daggers at a single enemy; upgraded, they bounce to the nearest one with full damage."
+WEAPON_AXE_NAME,Hacha arrojadiza,Throwing axe
+WEAPON_AXE_DESCRIPTION,"Sale girando, atraviesa a todos los que pilla y vuelve a tu mano (y vuelve a cortar).","Spins out, cuts through everyone in its path and comes back to your hand (cutting again)."
+WEAPON_COLOGNE_NAME,Nube de colonia,Cologne cloud
+WEAPON_COLOGNE_DESCRIPTION,"Un aura de spray corporal: cada poco daña a todos los que se te acercan. Crece con el área.","A body-spray aura: every so often it hurts everyone who gets close. Grows with area."
+WEAPON_HAMMER_NAME,Martillo de guerra,War hammer
+WEAPON_HAMMER_DESCRIPTION,"Cae del cielo sobre el grupo de enemigos más apretado y aplasta a todos los de debajo.","Falls from the sky on the tightest group of enemies and crushes everyone under it."
 WEAPON_SHOOTER_GUN_NAME,Bola de fuego,Fireball
 WEAPON_SHOOTER_GUN_DESCRIPTION,"Disparo lento del tirador: da al primero que toca.","The shooter's slow shot: hits the first thing it touches."
 STAT_GROUP_PROJECTILE,Proyectil,Projectile
@@ -301,6 +343,8 @@ STAT_EXPLOSION_RADIUS,Radio de explosión,Explosion radius
 STAT_GROUP_DAGGER,Daga,Dagger
 STAT_BOUNCES,Rebotes,Bounces
 STAT_BOUNCE_RANGE,Distancia de rebote,Bounce range
+STAT_GROUP_HAMMER,Martillo,Hammer
+STAT_IMPACT_RADIUS,Radio del golpe,Impact radius
 CHARACTER_WARRIOR_NAME,Guerrero,Warrior
 CHARACTER_WARRIOR_DESCRIPTION,"Aguanta en primera línea: más vida y defensa, algo más lento y con un dash más largo.","Holds the front line: more health and armor, a bit slower, with a longer dash."
 CHARACTER_MAGE_NAME,Mago,Mage
@@ -318,6 +362,8 @@ PICKUP_FOOD_ANNOUNCE,¡Pollito ñam ñam!,"Chicken, nom nom!"
 PICKUP_MAGNET_ANNOUNCE,¡Succión activada!,Suction on!
 PICKUP_BOMB_ANNOUNCE,¡Nuclear activada!,Going nuclear!
 PICKUP_ENERGY_ANNOUNCE,¡Modo diablo activado!,Devil mode on!
+PICKUP_STREAK_ANNOUNCE,¡En racha!,On a streak!
+HUD_STREAK,Racha ×%s · %d s,Streak ×%s · %d s
 PICKUP_TIME_STOP_ANNOUNCE,¡Tiempo detenido!,Time stop!
 INTERACT_TAVERN,"Tomar una jarra: cura la mitad (%d de oro)","Have a pint: heals half (%d gold)"
 TAVERN_HEALED,¡Salud!,Cheers!
@@ -335,13 +381,42 @@ ITEM_TORCH_NAME,Antorcha,Torch
 ITEM_TORCH_DESCRIPTION,Ilumina un buen trozo de bosque.,Lights up a good chunk of forest.
 ITEM_POCKET_CROSSBOW_NAME,Ballesta de bolsillo,Pocket crossbow
 ITEM_POCKET_CROSSBOW_DESCRIPTION,Cabe en la riñonera.,Fits in your fanny pack.
+ITEM_FLAMING_SNEAKERS_NAME,Zapatillas en llamas,Flaming sneakers
+ITEM_FLAMING_SNEAKERS_DESCRIPTION,Derrapan tan fuerte que el suelo arde.,They skid so hard the ground catches fire.
+ITEM_AIR_HORN_NAME,Bocina de estadio,Stadium air horn
+ITEM_AIR_HORN_DESCRIPTION,Cada arrancada suena a gol.,Every burst sounds like a goal.
+ITEM_CHAMPIONSHIP_BELT_NAME,Cinturón de campeón,Championship belt
+ITEM_CHAMPIONSHIP_BELT_DESCRIPTION,Para saltar desde la tercera cuerda.,For jumping off the top rope.
 ITEM_BRASS_GRAIL_NAME,Grial de latón,Brass grail
 ITEM_BRASS_GRAIL_DESCRIPTION,"No es el de verdad, pero cura igual.","Not the real one, but it heals just the same."
 ITEM_EXCALIBRO_NAME,Excalibro,Excalibro
 ITEM_EXCALIBRO_DESCRIPTION,Solo un bro de verdad podía sacarla de la roca.,Only a true bro could pull it from the stone.
 ITEM_CHOICE_TITLE,El círculo de setas te ofrece…,The mushroom ring offers you…
 ITEM_CHOICE_SUBTITLE,Elige uno,Pick one
+STAT_CHOICE_TITLE,Las pesas te ofrecen…,The weights offer you…
+STAT_CHOICE_SUBTITLE,Elige una mejora,Pick an upgrade
 INTERACT_MUSHROOM_RING,Entrar en el círculo de setas,Step into the mushroom ring
+INTERACT_HERALD,Hablar con el heraldo,Talk to the herald
+HERALD_ARRIVED,¡Ha llegado un heraldo del Gremio!,A Guild herald has arrived!
+PACT_TITLE,Pactos del Gremio,Guild Pacts
+PACT_SUBTITLE,"Elige uno: su premio y su maldición duran toda la partida","Pick one: its reward and its curse last the whole run"
+PACT_REWARD,Premio,Reward
+PACT_CURSE,Maldición,Curse
+PACT_REJECT,Rechazar,Decline
+PACT_REROLL,Volver a tirar (%d oro),Reroll (%d gold)
+PACT_SEALED,Pacto sellado: %s,Pact sealed: %s
+PACT_EGO_LIFTING_NAME,Ego lifting,Ego lifting
+PACT_EGO_LIFTING_FLAVOR,Más peso del que puedes. ¿Qué puede salir mal?,More weight than you can lift. What could go wrong?
+PACT_ALL_IN_NAME,All in,All in
+PACT_ALL_IN_FLAVOR,"Todo al rojo, bro","Everything on red, bro"
+PACT_CHEAT_MEAL_NAME,Cheat meal,Cheat meal
+PACT_CHEAT_MEAL_FLAVOR,"Hoy no cuenta. Mañana, tampoco.","Today doesn't count. Neither does tomorrow."
+PACT_SHOWBOATING_NAME,Postureo,Showboating
+PACT_SHOWBOATING_FLAVOR,Lo importante es que se vea.,What matters is being seen.
+PACT_NO_DAYS_OFF_NAME,Sin días libres,No days off
+PACT_NO_DAYS_OFF_FLAVOR,El descanso es para los débiles.,Rest is for the weak.
+PACT_SKIP_LEG_DAY_NAME,Saltarse pierna,Skip leg day
+PACT_SKIP_LEG_DAY_FLAVOR,"Total, nadie mira las piernas.","Nobody looks at legs anyway."
 RECORDS_TITLE,Récords,Records
 RECORDS_SUBTITLE,"Tus mejores partidas en este equipo, por enemigos derrotados. En azul, la última.","Your best runs on this computer, by enemies defeated. In blue, the latest one."
 RECORDS_EMPTY,Aún no hay partidas. ¡A repartir!,No runs yet. Go get 'em!
@@ -351,6 +426,7 @@ RECORDS_KILLS,Enemigos,Enemies
 RECORDS_TIME,Tiempo,Time
 RECORDS_LEVEL,Nivel,Level
 RECORDS_MAP,Mapa,Map
+RECORDS_LEVEL_TIER,%s · T%d,%s · T%d
 RECORDS_RESULT,Resultado,Result
 RECORDS_WON,Victoria,Victory
 RECORDS_LOST,Derrota,Defeat

@@ -18,8 +18,10 @@
 [ext_resource type="Resource" path="res://data/rarities/rarities.tres" id="16_rarities"]
 [ext_resource type="Script" path="res://ui/hud/boss_key_counter.gd" id="17_keys"]
 [ext_resource type="Texture2D" path="res://assets/textures/icons/ui/membership_card.svg" id="18_card"]
-[ext_resource type="Script" path="res://ui/hud/boss_bar.gd" id="19_boss_bar"]
+[ext_resource type="PackedScene" path="res://ui/hud/boss_bar.tscn" id="19_boss_bar"]
 [ext_resource type="Script" path="res://ui/hud/announcement_feed.gd" id="20_feed"]
+[ext_resource type="Script" path="res://ui/hud/crosshair.gd" id="21_crosshair"]
+[ext_resource type="Script" path="res://ui/hud/streak_meter.gd" id="22_streak"]
 
 [node name="HUD" type="CanvasLayer"]
 layer = 10
@@ -38,29 +40,6 @@ layout_mode = 2
 size_flags_vertical = 0
 mouse_filter = 2
 theme_type_variation = &"HudTop"
-
-[node name="XpBar" type="HBoxContainer" parent="Margin/Top"]
-unique_name_in_owner = true
-layout_mode = 2
-mouse_filter = 2
-theme_type_variation = &"XpRow"
-script = ExtResource("4_xp")
-
-[node name="LevelLabel" type="Label" parent="Margin/Top/XpBar"]
-unique_name_in_owner = true
-layout_mode = 2
-theme_type_variation = &"LevelLabel"
-
-[node name="XpProgress" type="ProgressBar" parent="Margin/Top/XpBar"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 12)
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 4
-mouse_filter = 2
-theme_type_variation = &"XpBar"
-step = 0.0
-show_percentage = false
 
 [node name="InfoRow" type="HBoxContainer" parent="Margin/Top"]
 layout_mode = 2
@@ -174,55 +153,58 @@ mouse_filter = 2
 theme_type_variation = &"PassiveBar"
 script = ExtResource("14_passives")
 
-[node name="BossBar" type="PanelContainer" parent="Margin"]
-unique_name_in_owner = true
+[node name="TopCenter" type="PanelContainer" parent="Margin"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 0
 mouse_filter = 2
 theme_type_variation = &"BossBarFrame"
-script = ExtResource("19_boss_bar")
 
-[node name="Content" type="VBoxContainer" parent="Margin/BossBar"]
+[node name="Column" type="VBoxContainer" parent="Margin/TopCenter"]
 layout_mode = 2
 mouse_filter = 2
-theme_type_variation = &"BossColumn"
+theme_type_variation = &"BossBars"
 
-[node name="BossName" type="Label" parent="Margin/BossBar/Content"]
+[node name="BossBar" parent="Margin/TopCenter/Column" instance=ExtResource("19_boss_bar")]
 unique_name_in_owner = true
 layout_mode = 2
-theme_type_variation = &"BossNameLabel"
-horizontal_alignment = 1
 
-[node name="BossHealth" type="ProgressBar" parent="Margin/BossBar/Content"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(560, 18)
-layout_mode = 2
-mouse_filter = 2
-theme_type_variation = &"BossHealthBar"
-step = 0.0
-show_percentage = false
-
-[node name="BossShout" type="Label" parent="Margin/BossBar/Content"]
+[node name="MiniBossBar" parent="Margin/TopCenter/Column" instance=ExtResource("19_boss_bar")]
 unique_name_in_owner = true
 layout_mode = 2
-theme_type_variation = &"BossShoutLabel"
-horizontal_alignment = 1
+mini_boss = true
 
-[node name="AnnouncementFrame" type="PanelContainer" parent="Margin"]
+[node name="BossName" parent="Margin/TopCenter/Column/MiniBossBar/Content/Header" index="0"]
+theme_type_variation = &"MiniBossNameLabel"
+
+[node name="BossValue" parent="Margin/TopCenter/Column/MiniBossBar/Content/Header" index="1"]
+theme_type_variation = &"MiniBossValueLabel"
+
+[node name="BossHealth" parent="Margin/TopCenter/Column/MiniBossBar/Content" index="1"]
+custom_minimum_size = Vector2(320, 7)
+theme_type_variation = &"MiniBossHealthBar"
+
+[node name="StreakMeter" type="Label" parent="Margin/TopCenter/Column"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
-size_flags_vertical = 0
+theme_type_variation = &"BossNameLabel"
+theme_override_colors/font_color = Color(1, 0.6, 0.2, 1)
+horizontal_alignment = 1
+script = ExtResource("22_streak")
+
+[node name="AnnouncementFrame" type="PanelContainer" parent="Margin/TopCenter/Column"]
+layout_mode = 2
+size_flags_horizontal = 4
 mouse_filter = 2
 theme_type_variation = &"AnnouncementFrame"
 
-[node name="AnnouncementFeed" type="VBoxContainer" parent="Margin/AnnouncementFrame"]
+[node name="AnnouncementFeed" type="VBoxContainer" parent="Margin/TopCenter/Column/AnnouncementFrame"]
 unique_name_in_owner = true
 layout_mode = 2
 mouse_filter = 2
 theme_type_variation = &"BossColumn"
 script = ExtResource("20_feed")
-
 [node name="LevelIntro" type="VBoxContainer" parent="Margin"]
 unique_name_in_owner = true
 layout_mode = 2
@@ -232,14 +214,20 @@ mouse_filter = 2
 theme_type_variation = &"CardColumn"
 script = ExtResource("13_intro")
 
-[node name="Column" type="VBoxContainer" parent="Margin"]
+[node name="Bottom" type="VBoxContainer" parent="Margin"]
+layout_mode = 2
+size_flags_vertical = 8
+mouse_filter = 2
+theme_type_variation = &"HudBottom"
+
+[node name="Column" type="VBoxContainer" parent="Margin/Bottom"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 8
 mouse_filter = 2
 theme_type_variation = &"HudColumn"
 
-[node name="ChestPanel" type="PanelContainer" parent="Margin/Column"]
+[node name="ChestPanel" type="PanelContainer" parent="Margin/Bottom/Column"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
@@ -249,26 +237,26 @@ script = ExtResource("15_chest")
 rarities = ExtResource("16_rarities")
 denied_key = &"CHEST_NOT_ENOUGH_GOLD"
 
-[node name="Content" type="VBoxContainer" parent="Margin/Column/ChestPanel"]
+[node name="Content" type="VBoxContainer" parent="Margin/Bottom/Column/ChestPanel"]
 layout_mode = 2
 mouse_filter = 2
 theme_type_variation = &"CardColumn"
 
-[node name="ChestTiles" type="HBoxContainer" parent="Margin/Column/ChestPanel/Content"]
+[node name="ChestTiles" type="HBoxContainer" parent="Margin/Bottom/Column/ChestPanel/Content"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 mouse_filter = 2
 theme_type_variation = &"LoadoutRow"
 
-[node name="ChestResult" type="HBoxContainer" parent="Margin/Column/ChestPanel/Content"]
+[node name="ChestResult" type="HBoxContainer" parent="Margin/Bottom/Column/ChestPanel/Content"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 mouse_filter = 2
 theme_type_variation = &"PromptRow"
 
-[node name="ChestIcon" type="TextureRect" parent="Margin/Column/ChestPanel/Content/ChestResult"]
+[node name="ChestIcon" type="TextureRect" parent="Margin/Bottom/Column/ChestPanel/Content/ChestResult"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(56, 56)
 layout_mode = 2
@@ -276,33 +264,33 @@ mouse_filter = 2
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Text" type="VBoxContainer" parent="Margin/Column/ChestPanel/Content/ChestResult"]
+[node name="Text" type="VBoxContainer" parent="Margin/Bottom/Column/ChestPanel/Content/ChestResult"]
 layout_mode = 2
 size_flags_vertical = 4
 mouse_filter = 2
 
-[node name="ChestItemName" type="Label" parent="Margin/Column/ChestPanel/Content/ChestResult/Text"]
+[node name="ChestItemName" type="Label" parent="Margin/Bottom/Column/ChestPanel/Content/ChestResult/Text"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"ChestItemLabel"
 
-[node name="ChestItemEffects" type="Label" parent="Margin/Column/ChestPanel/Content/ChestResult/Text"]
+[node name="ChestItemEffects" type="Label" parent="Margin/Bottom/Column/ChestPanel/Content/ChestResult/Text"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"ChestEffectLabel"
 
-[node name="ChestItemDescription" type="Label" parent="Margin/Column/ChestPanel/Content/ChestResult/Text"]
+[node name="ChestItemDescription" type="Label" parent="Margin/Bottom/Column/ChestPanel/Content/ChestResult/Text"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"ChestDescriptionLabel"
 
-[node name="ChestMessage" type="Label" parent="Margin/Column/ChestPanel/Content"]
+[node name="ChestMessage" type="Label" parent="Margin/Bottom/Column/ChestPanel/Content"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"SlotResultLabel"
 horizontal_alignment = 1
 
-[node name="SlotPanel" type="PanelContainer" parent="Margin/Column"]
+[node name="SlotPanel" type="PanelContainer" parent="Margin/Bottom/Column"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
@@ -310,25 +298,25 @@ mouse_filter = 2
 theme_type_variation = &"SlotPanel"
 script = ExtResource("12_slots")
 
-[node name="Content" type="VBoxContainer" parent="Margin/Column/SlotPanel"]
+[node name="Content" type="VBoxContainer" parent="Margin/Bottom/Column/SlotPanel"]
 layout_mode = 2
 mouse_filter = 2
 theme_type_variation = &"CardColumn"
 
-[node name="Reels" type="HBoxContainer" parent="Margin/Column/SlotPanel/Content"]
+[node name="Reels" type="HBoxContainer" parent="Margin/Bottom/Column/SlotPanel/Content"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 mouse_filter = 2
 theme_type_variation = &"LoadoutRow"
 
-[node name="SlotResult" type="Label" parent="Margin/Column/SlotPanel/Content"]
+[node name="SlotResult" type="Label" parent="Margin/Bottom/Column/SlotPanel/Content"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"SlotResultLabel"
 horizontal_alignment = 1
 
-[node name="InteractionPrompt" type="PanelContainer" parent="Margin/Column"]
+[node name="InteractionPrompt" type="PanelContainer" parent="Margin/Bottom/Column"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
@@ -336,29 +324,29 @@ mouse_filter = 2
 theme_type_variation = &"PromptPanel"
 script = ExtResource("3_prompt")
 
-[node name="Row" type="HBoxContainer" parent="Margin/Column/InteractionPrompt"]
+[node name="Row" type="HBoxContainer" parent="Margin/Bottom/Column/InteractionPrompt"]
 layout_mode = 2
 mouse_filter = 2
 theme_type_variation = &"PromptRow"
 
-[node name="KeyCap" type="PanelContainer" parent="Margin/Column/InteractionPrompt/Row"]
+[node name="KeyCap" type="PanelContainer" parent="Margin/Bottom/Column/InteractionPrompt/Row"]
 layout_mode = 2
 size_flags_vertical = 4
 mouse_filter = 2
 theme_type_variation = &"KeyCap"
 
-[node name="PromptKey" type="Label" parent="Margin/Column/InteractionPrompt/Row/KeyCap"]
+[node name="PromptKey" type="Label" parent="Margin/Bottom/Column/InteractionPrompt/Row/KeyCap"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"KeyCapLabel"
 horizontal_alignment = 1
 
-[node name="PromptText" type="Label" parent="Margin/Column/InteractionPrompt/Row"]
+[node name="PromptText" type="Label" parent="Margin/Bottom/Column/InteractionPrompt/Row"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"PromptLabel"
 
-[node name="HealthBar" type="ProgressBar" parent="Margin/Column"]
+[node name="HealthBar" type="ProgressBar" parent="Margin/Bottom/Column"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(320, 24)
 layout_mode = 2
@@ -367,7 +355,21 @@ mouse_filter = 2
 theme_type_variation = &"HealthBar"
 script = ExtResource("2_health")
 
-[node name="HealthValue" type="Label" parent="Margin/Column/HealthBar"]
+[node name="HealthTrail" type="ProgressBar" parent="Margin/Bottom/Column/HealthBar"]
+unique_name_in_owner = true
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_type_variation = &"HealthTrailBar"
+step = 0.0
+show_percentage = false
+
+[node name="HealthValue" type="Label" parent="Margin/Bottom/Column/HealthBar"]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
@@ -380,10 +382,45 @@ horizontal_alignment = 1
 vertical_alignment = 1
 mouse_filter = 2
 
-[node name="StaminaBar" type="HBoxContainer" parent="Margin/Column"]
+[node name="StaminaBar" type="HBoxContainer" parent="Margin/Bottom/Column"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 mouse_filter = 2
 theme_type_variation = &"ChargeRow"
 script = ExtResource("1_stamina")
+
+[node name="XpBar" type="HBoxContainer" parent="Margin/Bottom"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"XpRow"
+script = ExtResource("4_xp")
+
+[node name="LevelLabel" type="Label" parent="Margin/Bottom/XpBar"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"LevelLabel"
+
+[node name="XpProgress" type="ProgressBar" parent="Margin/Bottom/XpBar"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 6)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+mouse_filter = 2
+theme_type_variation = &"XpBar"
+step = 0.0
+show_percentage = false
+
+[node name="Crosshair" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("21_crosshair")

@@ -7,6 +7,7 @@ extends GutTest
 const SWARMER := preload("res://data/enemies/swarmer.tres")
 const ELITE := preload("res://data/enemies/elite.tres")
 const DUMBBELL := preload("res://levels/brosque/props/dumbbell_rock.tscn")
+const ENT_TRAINER := preload("res://data/enemies/ent_trainer.tres")
 
 var _swarm: EnemySwarm
 var _target: Node3D
@@ -74,6 +75,20 @@ func test_an_enemy_climbs_over_the_dumbbells_in_its_way() -> void:
 	var enemy := _swarm.spawn(SWARMER, Vector3(8.0, 0.0, 0.0))
 	await wait_seconds(6.0)
 	assert_lt(enemy.global_position.x, 2.5, "ha pasado al otro lado")
+
+
+func test_a_boss_climbs_over_the_dumbbells_too() -> void:
+	# El Ent-renador es grande: su sonda de muros llega más allá de su cuerpo.
+	var dumbbell := DUMBBELL.instantiate() as Node3D
+	dumbbell.position = Vector3(4.0, 0.0, 0.0)
+	dumbbell.rotation.y = PI / 2.0
+	add_child_autofree(dumbbell)
+	_swarm.target = _target
+	var boss := _swarm.spawn(ENT_TRAINER, Vector3(10.0, 0.0, 0.0)) as Boss
+	# Sin ataques: solo cuenta cómo anda (un salto lo pasaría por encima igualmente).
+	boss.set(&"_until_attack", 1000.0)
+	await wait_seconds(8.0)
+	assert_lt(boss.global_position.x, 1.5, "ha pasado al otro lado")
 
 
 func test_an_enemy_on_open_ground_does_not_climb() -> void:

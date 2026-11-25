@@ -32,6 +32,7 @@ func test_an_elite_is_bigger_and_glows() -> void:
 	var normal := _swarm.spawn(SWARMER, Vector3(-5.0, 0.0, 0.0))
 	var elite := _swarm.spawn(SWARMER, Vector3(5.0, 0.0, 0.0))
 	elite.promote(ELITE)
+	await _appeared(elite)
 	assert_almost_eq(elite.visual.scale.x, normal.visual.scale.x * ELITE.size, 1e-4, "modelo")
 	var normal_hurtbox := _first_shape(normal.hurtbox)
 	var elite_hurtbox := _first_shape(elite.hurtbox)
@@ -53,12 +54,14 @@ func test_elite_weapons_hit_harder() -> void:
 func test_back_from_the_pool_it_is_normal_again() -> void:
 	var elite := _swarm.spawn(SWARMER, Vector3.ZERO)
 	var normal_health := elite.health.get_maximum()
+	await _appeared(elite)
 	var normal_scale := elite.visual.scale
 	elite.promote(ELITE)
 	elite.health.take_damage(DamageInfo.create(100000.0))
 	await wait_physics_frames(20)
 	var again := _swarm.spawn(SWARMER, Vector3.ZERO)
 	assert_same(again, elite, "el mismo, reutilizado")
+	await _appeared(again)
 	assert_false(again.is_elite())
 	assert_eq(again.health.get_maximum(), normal_health)
 	assert_eq(again.visual.scale, normal_scale)
@@ -68,6 +71,7 @@ func test_back_from_the_pool_it_is_normal_again() -> void:
 func test_boost_changes_stats_but_not_the_look() -> void:
 	var enemy := _swarm.spawn(SWARMER, Vector3.ZERO)
 	var normal_health := enemy.health.get_maximum()
+	await _appeared(enemy)
 	var normal_scale := enemy.visual.scale
 	var modifiers := StatModifierSet.new()
 	modifiers.stat_modifiers.append(StatModifier.create(&"max_health", StatModifier.Kind.MULTIPLIER, 2.0))
@@ -76,6 +80,11 @@ func test_boost_changes_stats_but_not_the_look() -> void:
 	assert_eq(enemy.health.get_current(), enemy.health.get_maximum())
 	assert_eq(enemy.visual.scale, normal_scale)
 	assert_false(enemy.is_elite())
+
+
+## Espera a que [param enemy] termine de salir del suelo (mientras sale, su modelo crece).
+func _appeared(enemy: Enemy) -> void:
+	await wait_seconds(enemy.appear_time + 0.05)
 
 
 ## Multiplicador de élite de [param stat] (1 si no lo cambia).

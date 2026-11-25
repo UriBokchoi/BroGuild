@@ -1,10 +1,8 @@
 class_name BossData
 extends Resource
-## El jefe de un nivel y su encuentro (GDD §9): qué enemigo es (su escena tiene raíz [Boss]), cuántas
-## llaves hacen falta para invocarlo antes de tiempo, qué dice el HUD al salir, cómo se hace más
-## fuerte con la dificultad (sus propias curvas: las de las oleadas se disparan en la prórroga) y qué
-## da al vencerlo: oro por un multiplicador que es mayor cuanto antes caiga y un objeto pasivo de
-## rareza alta. Los valores viven en [code]data/bosses/[/code]; aquí todo vale 0 o vacío a propósito.
+## El jefe de un nivel (GDD §9): qué enemigo es, cuántas llaves hacen falta, qué se dice al salir y al
+## vencerlo, cómo crece con la dificultad (con curvas propias) y su premio: oro, más cuanto antes
+## caiga, y un objeto de rareza alta. Viven en data/bosses/.
 
 ## El jefe.
 @export var enemy: EnemyData
@@ -12,6 +10,9 @@ extends Resource
 @export_range(0, 20, 1) var keys_needed: int = 0
 ## Mensajes al salir (claves de traducción; el primero, grande).
 @export var arrival_keys: Array[StringName] = []
+## Mensajes al vencerlo, que explican que ahora hay que cruzar su portal (claves de traducción; el
+## primero, grande).
+@export var defeated_keys: Array[StringName] = []
 ## Título de la pantalla de victoria (clave de traducción).
 @export var victory_key: StringName = &""
 
@@ -32,7 +33,7 @@ extends Resource
 
 ## Mejoras con las que sale con dificultad [param difficulty] (o [code]null[/code] sin escalado).
 func scaling_at(difficulty: float) -> StatModifierSet:
-	return WaveData.scaling_for(stat_scaling, difficulty)
+	return StatScaling.modifiers_for(stat_scaling, difficulty)
 
 
 ## Multiplicador del premio si cae a los [param minutes] minutos de partida.

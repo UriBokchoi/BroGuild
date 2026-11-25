@@ -1,0 +1,77 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://systems/combat/weapons/hammer/hammer_strike.gd" id="1_strike"]
+[ext_resource type="Shader" path="res://vfx/shaders/ground_ring.gdshader" id="2_ring"]
+
+[sub_resource type="StandardMaterial3D" id="Mat_iron"]
+albedo_color = Color(0.55, 0.57, 0.62, 1)
+metallic = 0.7
+roughness = 0.35
+
+[sub_resource type="StandardMaterial3D" id="Mat_band"]
+albedo_color = Color(0.91, 0.69, 0.29, 1)
+metallic = 0.7
+roughness = 0.35
+
+[sub_resource type="StandardMaterial3D" id="Mat_wood"]
+albedo_color = Color(0.45, 0.29, 0.16, 1)
+roughness = 0.85
+
+[sub_resource type="BoxMesh" id="Mesh_head"]
+material = SubResource("Mat_iron")
+size = Vector3(1.1, 0.6, 0.6)
+
+[sub_resource type="BoxMesh" id="Mesh_band"]
+material = SubResource("Mat_band")
+size = Vector3(0.2, 0.64, 0.64)
+
+[sub_resource type="CylinderMesh" id="Mesh_handle"]
+material = SubResource("Mat_wood")
+top_radius = 0.07
+bottom_radius = 0.08
+height = 1.8
+radial_segments = 12
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ring"]
+render_priority = 0
+shader = ExtResource("2_ring")
+shader_parameter/color = Color(1, 0.78, 0.35, 1)
+shader_parameter/intensity = 1.5
+shader_parameter/pulse_rate = 0.0
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ring"]
+material = SubResource("ShaderMaterial_ring")
+size = Vector2(2, 2)
+center_offset = Vector3(0, 0.06, 0)
+
+[node name="HammerStrike" type="Node3D" node_paths=PackedStringArray("hammer", "marker")]
+script = ExtResource("1_strike")
+hammer = NodePath("Hammer")
+marker = NodePath("Marker")
+
+[node name="Hammer" type="Node3D" parent="."]
+
+[node name="Head" type="MeshInstance3D" parent="Hammer"]
+position = Vector3(0, 0.3, 0)
+cast_shadow = 0
+mesh = SubResource("Mesh_head")
+
+[node name="BandLeft" type="MeshInstance3D" parent="Hammer"]
+position = Vector3(-0.32, 0.3, 0)
+cast_shadow = 0
+mesh = SubResource("Mesh_band")
+
+[node name="BandRight" type="MeshInstance3D" parent="Hammer"]
+position = Vector3(0.32, 0.3, 0)
+cast_shadow = 0
+mesh = SubResource("Mesh_band")
+
+[node name="Handle" type="MeshInstance3D" parent="Hammer"]
+position = Vector3(0, 1.5, 0)
+cast_shadow = 0
+mesh = SubResource("Mesh_handle")
+
+[node name="Marker" type="MeshInstance3D" parent="."]
+cast_shadow = 0
+instance_shader_parameters/band = 0.18
+mesh = SubResource("PlaneMesh_ring")

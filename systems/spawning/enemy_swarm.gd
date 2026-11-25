@@ -1,15 +1,11 @@
 class_name EnemySwarm
 extends Node3D
-## Enemigos en juego. Los saca de un pool por tipo ([method spawn]), los mueve a todos en un único
-## bucle hacia [member target] (separándose y trepando unos sobre otros con un [SpatialHash], sin
-## comparar todos con todos) y los guarda en su pool cuando terminan de morir. Quien decide cuándo
-## y dónde salen (el director de oleadas, el invocador de práctica) solo llama a [method spawn].
+## Los enemigos en juego. Los saca de un pool por tipo (spawn), los mueve a todos en un solo bucle y
+## los devuelve al pool al terminar de morir. Quien decide cuándo y dónde salen solo llama a spawn.
 ##
-## Rendimiento: el rumbo de cada enemigo (perseguir, separarse, trepar) se recalcula cada
-## [member steering_slices] ticks, repartidos entre ticks; la física los mueve en todos. Los que lo
-## piden ([member Enemy.steer_every_tick], un jefe) lo recalculan en todos.
-##
-## Se puede parar el tiempo ([method freeze_for]): todos quietos un rato, también sus disparos.
+## Para que aguante cientos, cada enemigo recalcula su rumbo una vez cada steering_slices ticks (los
+## jefes, en todos) y los vecinos se buscan con un SpatialHash en vez de comparar todos con todos.
+## También puede parar el tiempo (freeze_for): todos quietos, disparos incluidos.
 
 signal enemy_spawned(enemy: Enemy)
 signal enemy_despawned(enemy: Enemy)

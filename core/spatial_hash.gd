@@ -1,11 +1,10 @@
 class_name SpatialHash
 extends RefCounted
-## Rejilla en el plano XZ para encontrar rápido lo que hay cerca de un punto (vecinos de un enemigo,
-## botín cercano…) sin comparar todo con todo. Uso por tick: [method clear], un [method insert] por
-## cosa y las consultas que hagan falta. La rejilla se construye en la primera consulta tras
-## insertar, con arrays empaquetados (ordenando por celdas, sin diccionarios): con cientos de cosas,
-## en GDScript es mucho más rápido que una celda por clave. Cada cosa puede llevar una marca entera
-## ([param tag]) para filtrar sin consultar dos veces.
+## Rejilla en el plano XZ para encontrar lo que hay cerca de un punto sin comparar todo con todo.
+## Cada tick: clear, un insert por cosa y las consultas que hagan falta.
+##
+## Guarda todo en arrays empaquetados ordenados por celda, sin diccionarios: con cientos de cosas,
+## en GDScript es mucho más rápido. Cada cosa puede llevar una marca (tag) para filtrar.
 
 ## Celdas como mucho en la rejilla (recorrerlas cuesta: ver [method _build]).
 const MAX_CELLS: int = 16384

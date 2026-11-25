@@ -1,10 +1,7 @@
 class_name SlotPanel
 extends PanelContainer
-## Los rodillos de la tragaperras en el HUD, sin pausar el juego: al girar
-## ([signal EventBus.slot_spun]) cada rodillo cambia de símbolo hasta que se para, uno tras otro,
-## en lo que salió; luego muestra el resultado ([signal EventBus.slot_resolved]) un rato y se oculta.
-## Si no hay oro, solo muestra el aviso. Estilo: variaciones [code]SlotPanel[/code],
-## [code]SlotReel[/code], [code]SlotResultLabel[/code] y [code]SlotJackpotLabel[/code].
+## Los rodillos de la tragaperras en el HUD, sin pausar: giran, se paran uno tras otro en lo que salió
+## y enseñan el premio un rato. Sin oro, solo el aviso.
 
 ## Segundos entre cambios de símbolo mientras gira un rodillo.
 @export_range(0.01, 0.5, 0.01, "suffix:s") var flicker_interval: float = 0.06
@@ -47,7 +44,7 @@ func show_spin(data: SlotMachineData, results: Array[SlotSymbol]) -> void:
 	_build_reels(results.size())
 	_reels.visible = true
 	_result.visible = false
-	visible = true
+	UiMotion.reveal(self)
 	set_process(true)
 
 
@@ -60,7 +57,7 @@ func show_result(text_key: StringName, value: float, jackpot: bool) -> void:
 	if _data == null:
 		# Sin tirada (no había oro): solo el aviso.
 		_reels.visible = false
-	visible = true
+	UiMotion.reveal(self)
 	_hide_left = linger
 	set_process(true)
 

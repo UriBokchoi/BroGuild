@@ -1,13 +1,10 @@
 class_name LevelUpCard
 extends Button
-## Carta de una opción al subir de nivel: su icono, qué es (arma o runa), su nombre, «Nuevo» o el
-## nivel al que sube, su descripción y lo que mejora. Las mejoras llevan su rareza: el borde de la
-## carta y su nombre van del color de la rareza ([member Rarity.color]). Se pulsa entera.
+## Una carta al subir de nivel: icono, tipo (arma o runa), nombre, «Nuevo» o el nivel al que sube,
+## descripción y lo que mejora («Daño 18 → 22»). Las mejoras se pintan del color de su rareza.
 ##
-## La ruleta ([method spin]): una carta de mejora gira por las rarezas, cada vez más despacio, y se
-## para en la suya; mientras gira no se puede elegir ni se ve lo que mejora. Avisa de cada paso
-## ([signal EventBus.upgrade_spin_ticked]) y de la rareza en la que cae
-## ([signal EventBus.upgrade_revealed]), para el sonido.
+## Con spin, una carta de mejora gira por las rarezas y frena hasta caer en la suya; mientras gira
+## no se puede elegir ni se ve lo que mejora. Avisa de cada paso y de dónde cae para el sonido.
 
 ## Alto del icono.
 const ICON_HEIGHT := 72.0
@@ -35,9 +32,12 @@ var _pop: Tween
 
 
 func _init(offered: LevelUpOption) -> void:
+	# Se anima por su cuenta (ruleta y salto): los botones de UiJuice no la tocan.
+	add_to_group(UiJuice.SKIP_GROUP)
 	option = offered
 	theme_type_variation = &"CardButton"
-	var extra_lines := maxi(option.modifiers().size() - 1, 0) + (1 if option.rarity() else 0)
+	var effects := ModifierFormat.describe_changes(option.modifiers(), option.stats)
+	var extra_lines := maxi(effects.size() - 1, 0) + (1 if option.rarity() else 0)
 	var height := 340.0 + (ICON_HEIGHT if option.item.icon else 0.0) + LINE_HEIGHT * extra_lines
 	custom_minimum_size = Vector2(260.0, height)
 	focus_mode = Control.FOCUS_NONE
@@ -53,8 +53,8 @@ func _init(offered: LevelUpOption) -> void:
 	var level_text := tr(&"LEVEL_UP_NEW") if option.is_new() else tr(&"LEVEL_UP_LEVEL") % [option.level - 1, option.level]
 	CardParts.label(column, level_text, &"StatValueLabel")
 	CardParts.label(column, option.item.description_key, &"StatBaseLabel")
-	for modifier: StatModifier in option.modifiers():
-		_effects.append(CardParts.label(column, ModifierFormat.describe(modifier), &"StatModifiedLabel"))
+	for effect: String in effects:
+		_effects.append(CardParts.label(column, effect, &"StatModifiedLabel"))
 	set_process(false)
 
 
@@ -152,6 +152,7 @@ func _show_rarity(rarity: Rarity) -> void:
 	_rarity_label.add_theme_color_override(&"font_color", rarity.color)
 	if is_inside_tree():
 		CardParts.rarity_border(self, rarity)
+
 
 
 static func _index_of(wheel: Array[Rarity], rarity: Rarity) -> int:

@@ -1,14 +1,14 @@
 class_name BossEncounter
 extends Node
-## El jefe del nivel (GDD §9). Cuenta las llaves que coge el jugador
-## ([signal EventBus.boss_key_collected]) y avisa de cuántas lleva
-## ([signal EventBus.boss_keys_changed]). Cuando el altar lo pide
-## ([signal EventBus.boss_summon_requested]) con las llaves suficientes, o sin ellas al acabar la
-## ronda, saca al jefe ahí con el escalado de la dificultad de ese momento, lo anuncia y pasa al HUD
-## su vida y sus gritos; sus refuerzos salen por el director ([method WaveDirector.spawn_around]).
-## Al vencerlo: paran las oleadas, se retiran los demás enemigos, llega el premio (oro × lo pronto
-## que cayó, como un recogible, y un objeto pasivo de rareza alta que el HUD revela) y se avisa de la
-## victoria ([signal EventBus.boss_defeated]). Sin [member data], el nivel no tiene jefe.
+## El jefe del nivel (GDD §9). Cuenta las llaves del jugador y saca al jefe cuando su portal lo pide
+## (con las llaves, o sin ellas al acabar la ronda), más fuerte cuanto más alta sea la dificultad.
+##
+## Al vencerlo da el premio y su portal se abre, pero las oleadas siguen. Se gana la partida al
+## cruzar el portal, o muriendo pasado el final de la ronda con el jefe ya vencido. En un tier que no
+## es el último, cruzar el portal pasa al siguiente (stage_cleared). Sin data, no hay jefe.
+
+## Se cruzó el portal de un jefe que no acaba la partida: toca la fase siguiente.
+signal stage_cleared
 
 ## El jefe de este nivel (lo pone [RunSystems]).
 @export var data: BossData
@@ -22,23 +22,51 @@ extends Node
 ## Azar del objeto del premio. Si no se asigna antes de entrar en el árbol, el flujo de botín de
 ## [code]Rng[/code].
 var rng: RandomNumberGenerator
+## Si cruzar el portal gana la partida (no, en un tier que no es el último: pasa al siguiente).
+var ends_run: bool = true
+## Si morir con el jefe vencido gana aunque la ronda no haya acabado (la arena del jefe final).
+var death_wins: bool = false
 
 var _keys: int = 0
 var _boss: Boss
 var _summoned: bool = false
 var _catalog: Array[PassiveItemData] = []
+## Jefe vencido, con el premio por rapidez de ese momento.
+var _defeated: bool = false
+var _bonus: float = 1.0
+var _won: bool = false
+var _cleared: bool = false
 
 
 func _enter_tree() -> void:
-	# En _enter_tree: el altar (del mapa generado) y las llaves pueden avisar antes de nuestro _ready.
+	# En _enter_tree: el portal (del mapa generado) y las llaves pueden avisar antes de nuestro _ready.
 	if not EventBus.boss_key_collected.is_connected(_on_key_collected):
 		EventBus.boss_key_collected.connect(_on_key_collected)
 		EventBus.boss_summon_requested.connect(_on_summon_requested)
+		EventBus.level_exit_reached.connect(_on_level_exit_reached)
+		EventBus.player_died.connect(_on_player_died)
 
 
 func _ready() -> void:
 	if rng == null:
 		rng = Rng.stream(Rng.Stream.LOOT)
+	_prepare()
+
+
+## Vuelve a empezar con el jefe [param boss] (el de la fase siguiente): sin llaves y sin jefe.
+func reset(boss: BossData) -> void:
+	data = boss
+	_keys = 0
+	_boss = null
+	_summoned = false
+	_defeated = false
+	_bonus = 1.0
+	_cleared = false
+	_catalog.clear()
+	_prepare()
+
+
+func _prepare() -> void:
 	if data == null:
 		return
 	if data.reward_items:
@@ -71,7 +99,6 @@ func summon(at: Vector3) -> bool:
 		return false
 	_summoned = true
 	_boss.health.health_changed.connect(EventBus.boss_health_changed.emit)
-	_boss.shouted.connect(EventBus.boss_shouted.emit)
 	_boss.summon_requested.connect(_on_summon_minions)
 	_boss.died.connect(_on_boss_died, CONNECT_ONE_SHOT)
 	EventBus.boss_spawned.emit(data.enemy.name_key)
@@ -82,7 +109,8 @@ func summon(at: Vector3) -> bool:
 
 
 func _announce_keys() -> void:
-	EventBus.boss_keys_changed.emit(_keys, data.keys_needed)
+	if data.keys_needed > 0:
+		EventBus.boss_keys_changed.emit(_keys, data.keys_needed)
 
 
 ## El premio: oro por el multiplicador de rapidez (como un recogible) y un objeto que el HUD revela y
@@ -121,10 +149,50 @@ func _on_summon_minions(enemy: EnemyData, count: int, center: Vector3, min_dista
 	director.spawn_around(enemy, center, count, min_distance, max_distance)
 
 
+## ¿Ya está vencido el jefe?
+func is_defeated() -> bool:
+	return _defeated
+
+
+## ¿Se ganó ya la partida?
+func is_won() -> bool:
+	return _won
+
+
 func _on_boss_died(_enemy: Enemy) -> void:
 	var seconds := director.get_elapsed()
+	_defeated = true
+	_bonus = _give_reward(seconds / 60.0)
+	EventBus.boss_defeated.emit(data.victory_key, seconds, _bonus)
+	if not data.defeated_keys.is_empty():
+		EventBus.level_intro.emit(data.defeated_keys)
+
+
+## Gana la partida (una vez): paran las oleadas, se retiran los enemigos y se avisa.
+func _win() -> void:
+	if _won:
+		return
+	_won = true
+	var seconds := director.get_elapsed()
 	director.stop(false)
-	# Los demás se retiran; el jefe termina de caer.
 	swarm.clear(true)
-	var bonus := _give_reward(seconds / 60.0)
-	EventBus.boss_defeated.emit(data.victory_key, seconds, bonus)
+	EventBus.run_won.emit(data.victory_key, seconds, _bonus)
+
+
+func _on_level_exit_reached() -> void:
+	if not _defeated:
+		return
+	if ends_run:
+		_win()
+	elif not _cleared:
+		_cleared = true
+		stage_cleared.emit()
+
+
+## Morir con el jefe vencido y la ronda terminada (en la prórroga) también es ganar, si este jefe
+## acaba la partida. En la arena final ([member death_wins]), aunque la ronda no haya acabado.
+func _on_player_died() -> void:
+	if not _defeated or not ends_run:
+		return
+	if death_wins or (director.data and director.data.is_overtime(director.get_elapsed())):
+		_win()

@@ -1,0 +1,30 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://vfx/juice/portal_arrow/portal_arrow.gd" id="1_arrow"]
+
+[sub_resource type="StandardMaterial3D" id="Mat_arrow"]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(1, 0.85, 0.2, 1)
+
+[sub_resource type="BoxMesh" id="Mesh_shaft"]
+material = SubResource("Mat_arrow")
+size = Vector3(0.32, 0.32, 1.1)
+
+[sub_resource type="PrismMesh" id="Mesh_head"]
+material = SubResource("Mat_arrow")
+size = Vector3(1, 0.8, 0.32)
+
+[node name="PortalArrow" type="Node3D" node_paths=PackedStringArray("meshes")]
+script = ExtResource("1_arrow")
+meshes = [NodePath("Shaft"), NodePath("Head")]
+
+[node name="Shaft" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.4)
+cast_shadow = 0
+mesh = SubResource("Mesh_shaft")
+
+[node name="Head" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0, -0.55)
+cast_shadow = 0
+mesh = SubResource("Mesh_head")

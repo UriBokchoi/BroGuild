@@ -1359,3 +1359,374 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   El jefe no cambia.
 - **Efectos de sonido:** toda la mezcla baja 6 dB, la mitad de fuerte (`SfxBank.volume_db`), sin cambiar las proporciones entre sonidos. La barra de «Efectos» de las opciones sigue encima.
 - **Por qué:** lo pidió el diseñador: hordas que sean un momento de aguante, no una ola, que todo pegue un poco más (los enemigos) y efectos algo más suaves de base.
+
+## 2026-11-23 · Tres objetos con sinergia de movimiento
+- **Decisión:** el movimiento daña solo con su objeto pasivo. Cada objeto sube una stat de daño de `MovementSynergyData`, que es 0 sin él, y cada copia suma otra vez. Los tres pasan por el daño % y el crítico del jugador y crecen con su área %:
+
+  | Objeto | Rareza | Qué hace | Daño por copia | Tamaño |
+  |---|---|---|---|---|
+  | Zapatillas en llamas | Rara | El slide deja manchas de fuego cada metro; queman cada 0,5 s | 8 por quemadura | 1,2 m de radio, 3 s |
+  | Bocina de estadio | Rara | Cada dash suelta una onda que empuja | 24 | 4,5 m en 0,3 s |
+  | Cinturón de campeón | Improbable | La caída rápida explota al aterrizar, con temblor de pantalla | 40 | 5,5 m en 0,22 s |
+
+- **Cómo:**
+  - **Ondas:** el dash y la caída reutilizan la `Shockwave` del jefe. Ahora acepta las stats de ataque de quien la lanza y un tamaño, y su número de resultados por tick (`max_results`) es un dato: el jugador mira 128 hurtbox para no dejarse enemigos en una horda.
+  - **Fuego:** el rastro vive en un solo nodo (`FireTrail`), con manchas en un búfer circular; si hacen falta más, reutiliza la más vieja. Cada quemadura es una consulta de física por mancha. Un enemigo se quema una vez por tick aunque pise varias manchas, y encadenar slides no adelanta el ritmo.
+  - **Sonido:** viento para la onda y golpe grave para la explosión. El fuego no suena, para no llenar la mezcla.
+- **Por qué objetos y no runas:** primero fueron runas (Brasas, Vendaval, Terremoto), pero el diseñador las prefirió como objetos. Así no ocupan una de las 4 ranuras de runa, salen de cofres, del jefe y del círculo de setas, y se apilan como el resto de pasivos.
+- **Por qué así:** el GDD pide mejoras que premien moverse bien. Que el daño dependa del objeto deja el movimiento base igual y hace de la sinergia una elección de build. La onda del dash es más débil que la explosión porque sale más a menudo: el dash recarga stamina y la caída exige estar en el aire. No se pueden medir con `tools/sim_balance.gd`, porque allí el jugador no se mueve; habrá que probarlas jugando.
+
+## 2026-11-23 · Miniboss: el Trolleador Cara
+- **Decisión:** un miniboss sale a los 4:30 del Brosque, entre las dos hordas. Es el Trolleador Cara, un troll con porra y sonrisa de trollface.
+  - **Base:** es un `Boss` como el Ent-renador (rabia, gritos, inmune a la bomba). Lo saca un `MiniBossEncounter` según `WaveData.mini_bosses`.
+  - **Aviso y salida:** se anuncia 4 s antes y aparece a 16–22 m del jugador, escalado con la dificultad igual que el jefe.
+  - **Ataques:**
+    - *Porrazo*, nuevo `SlamAttack`, en área: un aro fijo marca 7,5 m y otro se abre desde sus pies en 1,2 s; cuando llega al borde cae el golpe, con 1,6 × su daño al tocar.
+    - *Salto*, el `LeapAttack` del Ent-renador más corto.
+  - **Premio:** 60 de oro y un objeto de rara a de leyenda, revelado como el del jefe.
+  - **Base de stats:** 2200 de vida, 18 de contacto y 3,4 m/s. A los 4:30 sale con unas 1,5 veces esa vida.
+- **Las dos barras:** la barra de jefe es ahora una escena (`boss_bar.tscn`) con dos instancias en una columna arriba en el centro. Arriba, la del jefe; debajo, la del miniboss, más pequeña y verde; después, los textos breves. Si coinciden, se apilan y nunca se tapan. Un test lo comprueba con sus rectángulos.
+- **Jefes que trepan:** el Ent-renador no tenía stats de trepar y su sonda de muros salía a 0,55 m del centro, dentro de su propio cuerpo de 1,2 m. Ahora trepa como los esbirros (`climb_speed` 5,5, `wall_climb_time` 1,2) y su sonda sale a 1,5 m, por delante del cuerpo. Lo mismo el troll. Un test lo pone contra las pesas: antes se quedaba pegado en x = 5,8 y ahora pasa al otro lado.
+- **Trolls de piedra:** el mismo modelo del troll en dos posturas, pintado de piedra con `StoneStatue`, con musgo y una olla. Están fuera de la pared este, en un claro reservado del bosque (`LayoutData.reserved`) para que se vean desde dentro, y algo más grandes que el vivo para que destaquen de lejos.
+- **Escalado sin ciclos:** el cálculo del escalado con la dificultad pasa de `WaveData.scaling_for` a `StatScaling.modifiers_for`. `WaveData` ahora lleva `MiniBossData` dentro y, si `MiniBossData` llamara a `WaveData`, los dos scripts se referenciarían en círculo. Ese ciclo dejaba memoria sin liberar al salir, y la validación lo detectó.
+- **Por qué:** lo pidió el diseñador. El miniboss rompe la espera entre hordas con un enemigo que hay que esquivar, no solo golpear, y da un objeto a mitad de ronda. Los trolls de piedra anticipan al vivo.
+
+## 2026-11-23 · Tres armas nuevas: hacha, colonia y martillo
+- **Decisión:** tres armas que atacan de formas que aún no había. Cada una usa los proyectiles extra a su manera:
+
+  | Arma | Cómo ataca | Proyectiles extra | Base |
+  |---|---|---|---|
+  | Hacha arrojadiza | Va y vuelve atravesando. Corta lo que cruza y lo que pasa a menos de 0,9 m × área de su filo; vuelve antes si choca con una pared | Más hachas | 16 de daño cada 1,5 s |
+  | Nube de colonia | Aura de 3,2 m × área. Con alguien dentro, pulso a todos los de dentro con un empuje leve; no necesita verlos | Más pulsos seguidos | 7 cada 0,7 s |
+  | Martillo de guerra | Cae del cielo sobre el grupo más denso a su alcance (16 m) y aplasta a todos en 2,6 m × área | Más martillos, cada uno sobre otro grupo | 30 cada 2 s |
+
+- **Medida** (nivel 1, sin mejoras del personaje, DPS contra muñecos durante 12 s):
+
+  | Arma | Horda pegada (24 a 1,8–4 m) | Sueltos (10 a 6–12 m) |
+  |---|---|---|
+  | Espada | 231 | 0 |
+  | Bastón | 191 | 17 |
+  | Daga | 75 | 72 |
+  | Hacha | 93 con 14 de daño (ahora 16: unos 107) | 19 |
+  | Colonia | 241 | 0 |
+  | Martillo | 180 | 15 |
+
+  Con un rayo fino, el hacha solo daba a uno por pasada (19 en la horda). Por eso corta también a lo ancho con su filo.
+- **Por qué:** lo pidió el diseñador; el GDD ya hablaba de armas que van al grupo más denso.
+  - **Papeles distintos:** la colonia es la espada de la horda (fuerte encima, nula lejos), el martillo castiga los grupos apretados y el hacha va a media distancia contra filas.
+  - **Equilibrio:** ninguna pasa de lo que ya hacían espada y bastón a nivel 1. Las mejoras son las de siempre, con las comunes flojas.
+
+## 2026-11-23 · Balanceo al andar
+- **Decisión:** en el suelo, el cuerpo del jugador rebota a cada paso y se mece un poco de lado a lado (`BodyBob`). Rebota más alto y da más pasos cuanto más rápido va respecto a su carrera:
+
+  | | Rebote | Pasos por segundo |
+  |---|---|---|
+  | Despacio | casi nada | 1,8 |
+  | A la carrera | 8 cm | 3,2 |
+  | Por encima de la carrera (mejoras) | hasta 12 cm (×1,5) | 3,2 |
+
+  En el slide, en el aire o parado no rebota, y vuelve a su sitio suavemente.
+- **Cómo:** mueve las partes del modelo (`Skin` y `Sockets`), no el modelo entero, porque el modelo ya lo agachan, giran y voltean otros nodos (`BodyCrouch`, `BodyFacing`, `BodyFlip`) y se pisarían. Va en el tick de física, con la interpolación del proyecto, para que sea igual a cualquier tasa de fotogramas. Avisa de cada paso (`stepped`): ahí saldrá el polvo de los pasos.
+- **Hit-stop, descartado:** el diseñador no quiere parones al golpear. El GDD ya no lo lista; el golpe se nota con el destello blanco, los números y el sonido.
+- **Por qué:** lo pidió el diseñador, para que correr se sienta como correr.
+
+## 2026-11-23 · Luz del Brosque: media tarde cálida
+- **Decisión:** el Brosque deja el aspecto plano y lavado por una luz de media tarde, siguiendo el GDD (cálida, con brillo en lo que se recoge). El entorno vive en `levels/brosque/environment.tres` y lo comparte el menú principal.
+
+  | | Antes | Ahora |
+  |---|---|---|
+  | Sol | Blanco, energía 1 | Cálido (1; 0,89; 0,72), energía 1,25 |
+  | Cielo | Azul verdoso | Azul más profundo arriba y horizonte cálido |
+  | Niebla | Verdosa, tiñe el cielo | Dorada, con algo de dispersión del sol, sin tapar el cielo (20 %) |
+  | Tonemap | Filmic | ACES, contraste ×1,06 y saturación ×1,15 |
+  | Glow | Por defecto | Intensidad 0,7, umbral 0,95: brillan las gemas, los ojos y las luces |
+  | Sombras de contacto | No | SSAO |
+  | Hierba | Un verde plano | Manchas grandes claras y oscuras, calvas secas y grano fino (`grass.gdshader`) |
+
+- **Coste:** con 300 esbirros vivos alrededor del jugador en el Brosque (1280 × 720, sin V-Sync, equipo de desarrollo), el SSAO no se nota: 8,0 ms con él y 7,8 ms sin él. Ese fotograma lo limita la física, no la gráfica. En gráficas flojas podría pesar más; si hace falta, irá como opción en «Opciones».
+- **Por qué:** el diseñador pidió perfeccionar el aspecto. Antes todo era un verde pastel uniforme y la niebla verdosa apagaba la distancia: costaba leer el suelo y faltaba calidez.
+
+## 2026-11-23 · Partículas
+- **Decisión:** estallidos cortos de puntos suaves (un mismo `soft_dot_quad.tres`), sin texturas ni artista:
+
+  | Efecto | Cuándo | Cómo se ve |
+  |---|---|---|
+  | Humo | Muere un enemigo | 18 puntos de su color (`EnemyData.color`, nuevo) que se abren y se apagan |
+  | Chispas | Golpe a un enemigo | 6 chispas cálidas, rápidas, que caen |
+  | Restos | Se rompe una calavera o una bolsita | 12 trocitos claros que saltan y caen |
+  | Destellos | Se abre un cofre | 26 puntos dorados que suben |
+  | Polvo | Una onda golpea el suelo (porrazo y salto del troll, Burpee, la caída del jugador) | Un anillo de polvo que se abre a ras de suelo |
+
+- **Cómo:**
+  - **Efectos globales:** los tres primeros los lanza un `BurstEmitter` que escucha el `EventBus`. Lleva una reserva circular y un tope por fotograma (10 humos, 8 chispas, 3 restos): una bomba o un tajo a cien enemigos no lanza cien estallidos a la vez.
+  - **Efectos de escena:** destellos y polvo van dentro de su escena, conectados a una señal nueva (`Chest.opened`, `Shockwave.started`). En la onda del dash el polvo está oculto, porque el dash puede ser en el aire.
+- **Monedas:** ya salen volando del enemigo como botín, así que no llevan partículas propias.
+- **Coste**, con un golpe a 120 esbirros pegados (banco del Brosque, 1280 × 720):
+
+  | | Sin partículas | Con partículas |
+  |---|---|---|
+  | Golpe que mata a los 120 | 7,0 ms; peor fotograma 13,5 ms | 7,4 ms; peor fotograma 14,8 ms |
+  | Golpe a 120 sin matar (en caliente) | Peor fotograma ~20 ms | Peor fotograma ~20 ms |
+
+  El pico de ~20 ms sale igual sin partículas: viene de la física de los 120 apilados tras el empuje.
+- **Por qué:** era lo que faltaba del juice del GDD. Cada golpe, muerte o premio se lee de un vistazo en mitad de la horda.
+
+## 2026-11-23 · UI animada
+- **Decisión:** la interfaz se mueve con tweens cortos, todos con sus tiempos en `data/ui/motion.tres` (`UiMotionData`):
+
+  | Qué | Cómo |
+  |---|---|
+  | Botones | Crecen un 4 % con el ratón o el foco y se hunden al 96 % al pulsarlos, en 0,08 s. Los engancha todos el autoload `UiJuice` al entrar en el árbol, salvo las cartas de mejora, que tienen su propia animación |
+  | Paneles | Aparecen en 0,16 s, de transparentes y al 94 % a su tamaño |
+  | Contadores y casillas | Saltan al 118 % y vuelven en 0,22 s: el oro al ganar, la casilla de un arma, runa u objeto al llegar o subir de nivel, el número de nivel |
+  | Experiencia | La barra se llena suave en 0,18 s; al subir de nivel empieza de nuevo al momento |
+  | Vida | Al perderla, la barra baja de golpe y deja un rastro claro que se vacía tras 0,35 s, en 0,45 s; al curarse, sube suave |
+
+- **Por qué:** el GDD pide una UI animada y legible en mitad del caos. El rastro de la vida dice cuánto quitó el golpe sin leer números. La vida baja al momento para no esconder el peligro.
+
+## 2026-11-23 · Pulido tras las pruebas (Hito 5b)
+- **Decisión:** arreglos y cambios tras una partida de prueba del diseñador.
+  - **Opciones:** en pantalla completa, la resolución que se ve es la de la pantalla. Antes salía el tamaño de ventana guardado, que no era el real.
+  - **Taberna:** el tejado y la chimenea chocan (dos cajas inclinadas y una recta). Antes la caja del edificio llegaba a 4,2 m y el tejado, que llega a unos 6 m, se atravesaba.
+  - **Jefes sin gritos:** se quitan del todo: la señal, los textos, la línea de la barra y las frases de los datos. Solo queda el aviso de llegada del nivel («¡Llega el Ent-renador!»), que es del narrador, no del jefe.
+  - **Barras de jefe:** nombre a la izquierda, vida en números a la derecha y barra fina. Antes eran el nombre grande centrado, una barra gruesa y una línea de gritos; ocupan menos y se leen mejor. Las dos barras juntas ya no tapan la pantalla.
+  - **Experiencia:** baja a una franja fina a lo ancho, abajo del todo, con el nivel pequeño a la izquierda (como en Megabonk). Arriba quedan el oro, el reloj y la dificultad.
+  - **Stats al elegir:** la vista de Tab también funciona con el panel de subir de nivel o el de elegir objeto abiertos (el juego está en pausa), por encima de ellos, y los dos lo recuerdan con un texto. En el menú de pausa sigue sin salir, porque la pausa ya las enseña.
+  - **Elegir nivel:** cada nivel lleva su objetivo y su lore (`LevelData.goal_key` y `lore_key`), y la ficha del nivel señalado sale debajo de la lista. El lore completo vive en `docs/LORE.md`, que escribe el diseñador y que dice qué claves del CSV le tocan.
+  - **Hacha arrojadiza:** gira tumbada (en horizontal, como un aspa), su modelo es 1,7 veces más grande, crece con el área y su filo llega a 1,2 m (antes 0,9 m). Corta a más gente por pasada.
+- **Por qué:** lo pidió el diseñador tras probar la partida.
+
+## 2026-11-23 · Portal del jefe y cómo se gana
+- **Decisión:** el altar del jefe pasa a ser un **portal** (`BossPortal`), y vencer al jefe ya no termina la partida.
+  - **El portal:** un aro de piedra con un remolino (`portal_vortex.gdshader`) y un pedestal delante con las ranuras de las llaves. Se invoca igual que antes: con las llaves o, forzado, al empezar la prórroga. El remolino dice en qué punto está: violeta y tenue sin llaves, más vivo con ellas y dorado al abrirse.
+  - **Al vencer al jefe:** llega el premio como antes, pero las oleadas siguen. El portal se abre, salen dos textos («¡Ent-renador vencido!» y «Cruza su portal para pasar el nivel», de `BossData.defeated_keys`) y una flecha amarilla junto al jugador lo señala 3 s (`PortalArrow`).
+  - **Victoria** (`EventBus.run_won`, la emite `BossEncounter` una sola vez): al cruzar el portal abierto (`level_exit_reached`) o al morir en la prórroga con el jefe vencido. Solo entonces paran las oleadas y se retiran los enemigos. La pantalla de resultados y el `RunRecorder` escuchan `run_won` en vez de `boss_defeated`.
+  - **Morir y ganar a la vez:** la muerte llega por `player_died` y, en la prórroga, `BossEncounter` responde con `run_won` en el mismo aviso. Los resultados y el `RunRecorder` atienden la muerte al final del fotograma (`call_deferred`), así que la victoria llega antes y manda.
+  - El premio por rapidez es el del momento en que cae el jefe, no el de cruzar el portal: no se pierde por recoger lo que quede.
+- **Por qué:** lo pidió el diseñador. Pasar el nivel es una decisión del jugador (cruzar) y deja un rato para recoger el botín. Morir en la prórroga con el jefe vencido ya no castiga a quien hizo lo difícil.
+
+## 2026-11-23 · Las mejoras dicen cuánto ganas
+- **Decisión:** las cartas de subir de nivel y de elegir objeto ponen cada stat con su valor de ahora y el que quedará: «Daño 18 → 27», «Tiempo entre ataques 1,1 s → 0,94 s», «Daño 100 % → 125 %». Sustituye a «+9 Daño»: una línea por stat, así la carta no crece. El revelado del cofre, que tiene sitio, deja las dos cosas: «+25 % Daño (100 % → 125 %)».
+  - **Qué stats:** las del arma para sus mejoras, y las del jugador para runas y objetos. Un arma nueva no muestra números: aún no tiene mejoras.
+  - **Cálculo:** `StatBlock.preview` calcula el valor con los modificadores de más, con la misma fórmula, sus límites y su redondeo, sin aplicarlos. El formato y la unidad salen de la propiedad de datos de la stat (`StatsComponent.get_property`), como en la vista de stats. Si varios modificadores tocan la misma stat, sale una sola línea con todos.
+  - **Cofre:** el texto se escribe al empezar el revelado, porque al acabar el objeto puede haber llegado ya y el «antes» lo contaría.
+  - **Paneles que no caben:** con el aviso de Tab (Hito 5b) y cartas de tres mejoras, el panel de subir de nivel medía 698 px de alto en una pantalla de 648 y cortaba el título. `ModalPanel.fit_to_screen` encoge su contenedor lo justo cuando no cabe; lo llevan subir de nivel y elegir objeto.
+- **Por qué:** lo pidió el diseñador. «+10 %» no dice cuánto es; con los dos números se ve la ganancia real y se comparan cartas de un vistazo.
+
+## 2026-11-23 · El alcance de la colonia, en el suelo
+- **Decisión:** la burbuja de la nube de colonia se cambia por un dibujo en el suelo, como en Megabonk: un aro de trazos en el borde del aura, otro fino por dentro con ocho marcas y un velo muy tenue que se aclara hacia el centro. Gira a 12 °/s y se aviva en cada pulso. Va en un plano suelto (`top_level`) que un rayo pone en el suelo bajo el jugador, así que al saltar se queda abajo, que es donde están los enemigos. Se borra `cologne_cloud.gdshader`.
+- **Por qué:** lo pidió el diseñador: la burbuja tapaba al jugador y no dejaba ver hasta dónde llegaba. En el suelo el borde se lee de un vistazo y no tapa nada.
+
+## 2026-11-23 · El borde del mapa se ve al acercarse
+- **Decisión:** las paredes de choque del borde (invisibles hasta ahora) llevan delante una pared de malla de rombos (`MapBoundary`, `boundary_wall.gdshader`). Solo se ve en un círculo alrededor del jugador: del todo a 3 m y nada a 11 m. Los rombos suben despacio, hay una franja más marcada abajo y por arriba se apaga. A más de 11 m de todos los bordes, las paredes ni se dibujan.
+  - Es solo visual. Lo que choca siguen siendo las cajas `Bounds` del nivel; un test comprueba que su cara de dentro coincide con `MapBoundary.half_extent`.
+  - El brillo es una esfera alrededor del jugador: se ve igual al saltar o en una meseta pegada al borde.
+- **Por qué:** lo pidió el diseñador. Chocar con un muro invisible parecía un fallo, y ver el borde desde lejos rompería el bosque. Así avisa solo cuando hace falta.
+
+## 2026-11-23 · Los power-ups se ven al cogerlos
+- **Decisión:** cada power-up tiene un efecto en el suelo bajo el jugador al cogerlo (`PowerUpFx`). Escucha `pickup_collected`, igual que los `PickupEffect`, pero solo es visual.
+
+  | Power-up | Efecto |
+  |---|---|
+  | Bomba | Explosión nuclear: destello blanco de 0,45 s, temblor fuerte, bola de fuego, columna de humo, sombrero que sube hasta unos 3,8 m, polvo hacia fuera y una onda en el suelo hasta 15 m, el alcance de su daño (un test lo comprueba) |
+  | Imán | Onda azul de 10 m y chispas que van hacia el jugador |
+  | Comida | Chispas verdes que suben y un destello verde muy suave |
+  | Bebida energética | Estallido lima, rayas que suben y un temblor pequeño |
+  | Reloj de arena | Onda azul de 22 m, escarcha y un destello azul, junto con el tinte que ya tenía |
+
+  - **Piezas:** cada efecto es una escena `FxBurst`, con partículas de un solo disparo, aros en el suelo con el shader `ground_ring` y nodos que suben (el sombrero del hongo). Dice qué temblor y qué destello quiere, y `PowerUpFx` los aplica. Las escenas sencillas se generaron con los mismos parámetros; la bomba está hecha a mano.
+  - **Altura del hongo:** con la cámara detrás del jugador, lo que pasa de unos 4 m queda fuera de plano. Por eso el sombrero no sube de ahí: se ve como una cúpula de humo encima. La columna es semitransparente para no tapar al jugador más de un segundo.
+  - **En el suelo:** si se coge en el aire, un rayo pone el efecto en el suelo, igual que el aro de la colonia.
+- **Por qué:** lo pidió el diseñador. Coger un power-up ya decía algo en texto, pero no se sentía. La bomba tenía que parecer una bomba.
+
+## 2026-11-24 · Los enemigos salen del suelo
+- **Decisión:** al salir del pool, el modelo de un enemigo crece con un pequeño rebote mientras sube desde 0,6 m bajo sus pies, en 0,35 s, y levanta un poco de polvo. El Ent-renador y el Trolleador tardan 0,8 s y salen desde 2,5 m. El cuerpo y su choque están desde el primer momento: solo se anima el modelo.
+  - Se anima en `_process` del propio enemigo y solo mientras aparece. Por fotograma, no por tick: el rumbo se calcula cada tres ticks (`steering_slices`) y a ese ritmo la animación iría a saltos.
+  - El polvo va por una señal nueva, `enemy_spawned`, con otro `BurstEmitter` (`spawn_dust`, 10 partículas, como mucho 8 por fotograma: una horda no dispara cien a la vez).
+  - Si muere mientras sale, deja de aparecer y encoge como siempre.
+- **Por qué:** lo pidió el diseñador. Antes los enemigos aparecían de golpe; así se ve de dónde salen y da tiempo a reaccionar.
+
+## 2026-11-24 · Pulido tras las pruebas (2) (Hito 5c)
+- **Decisión:** arreglos de la segunda tanda de pruebas del diseñador.
+  - **Elegir nivel:** un clic marca el nivel (se queda hundido) y saca debajo su objetivo y su lore; abajo, «Jugar» encima de «Volver». Antes, el clic empezaba la partida y la ficha salía al pasar el ratón: no daba tiempo a leerla. Los botones de nivel son más bajos (`SmallButton`) y el lore más ancho, para que la lista, la ficha y los dos botones quepan en 720p.
+  - **Stats importantes:** la vista de stats (pausa, Tab y armería) enseña solo las que algo del juego puede cambiar: algún modificador o mejora de los datos, o la dificultad, que sube sola. Quedan 23 de las 72 del jugador; las otras 49 son tiempos y márgenes internos del movimiento (coyote time, mantle, slide…) que no cambian nunca. Una mejora nueva sobre una stat la hace aparecer sola.
+    - Se buscan solo en las carpetas de datos que cambian al jugador. Buscar en todo `data` cargaba los niveles con sus escenas y tardaba 1,7 s; así son 0,4 s en frío, al cargar el nivel, y menos con los datos ya cargados. Un test (lento a propósito) mira todo `data` y avisa si una stat del jugador cambia desde una carpeta que no está en la lista.
+  - **Rastro de fuego:** ya escalaba con el daño %, el crítico, el área % y la duración %, pero no con la velocidad de ataque %, que en las armas acorta la espera. Ahora quema cada 0,5 s ÷ velocidad de ataque: con un 200 %, cada 0,25 s.
+  - **Optimizar:** medido en el Brosque a 1080p con una sonda (sin VSync, el peor caso):
+
+    | Qué | Antes | Ahora |
+    |---|---|---|
+    | Fotogramas por segundo, sin enemigos | ~880 (sin límite) | 60 (límite de serie) |
+    | Triángulos por fotograma, sin enemigos | 2,6 M | 0,43 M |
+    | Triángulos por fotograma, con 300 esbirros | 9,3 M | 1,6 M |
+    | Llamadas de dibujo, con 300 esbirros | 640 | 890 |
+
+    - **Límite de FPS:** el juego no tenía. Con el VSync quitado dibujaba cientos de fotogramas por segundo, también en los menús, y el ordenador iba a tope sin que se notara nada. Ahora es una opción de pantalla (30, 60, 90, 120, 144, 165, 240 o sin límite), de serie 60, que se aplica al arrancar (`Engine.max_fps`). Las opciones ya guardadas sin ella toman el 60.
+    - **Mallas redondas:** las esferas, cápsulas, cilindros y toros que usaban la resolución de serie de Godot (64 segmentos: miles de triángulos por enemigo, y cada uno se dibuja también en cada pasada de sombra) pasan a 16 × 8, 16 × 4, 12 y 24 × 8. En el estilo low-poly no se nota. El cuerpo del jugador se queda como estaba: siempre está grande en pantalla.
+    - **Bosque por trozos:** era un MultiMesh por parte para todo el mapa (unos 2.000 árboles con la banda de fuera). Un MultiMesh es un solo objeto para el motor: se dibujaban todos los árboles siempre, en la vista y en las cuatro pasadas de sombra. Ahora va en trozos de 40 m (`ForestData.chunk_size`) y el motor descarta los que no se ven. Suben algo las llamadas de dibujo, pero cada una mueve muchos menos triángulos.
+    - **Física:** con 180 esbirros apretados, el rumbo del enjambre cuesta 1 ms por tick y la física, unos 4–6 ms. Bajar los pasos del solver de Jolt (10 → 6) no cambió nada medible. Se deja en el backlog: a 60 Hz es una parte de un núcleo y no crece con los FPS.
+- **Por qué:** lo pidió el diseñador tras probar.
+
+## 2026-11-24 · Hojas al meterse en las copas
+- **Decisión:** al meter el cuerpo en la copa de un árbol (saltando o desde una meseta), caen unas 18 hojitas del color de ese árbol, algo más claras para que se vean contra la copa. Salen del borde de abajo de la copa, donde no las tapa la propia copa, giran y se balancean al caer (turbulencia). El mismo árbol espera 1,5 s antes de soltar más.
+  - Los árboles son MultiMesh, sin nodos propios: `CanopyLeaves` toma la lista que genera el mapa (`LevelLayout.get_trees`) y trata cada copa como un cilindro (`ForestBuilder.canopy`: radio y franja de alturas según su forma y su tamaño).
+  - Cada 0,1 s mira solo las celdas de 8 m alrededor del jugador. Los árboles de fuera de las paredes no se miran: no se puede llegar a ellos.
+  - La hoja es un SVG blanco con forma de hoja (`assets/textures/vfx/leaf.svg`); la partícula le pone el color del árbol.
+- **Por qué:** lo pidió el diseñador. Las copas no chocan, y meterse dentro no daba ninguna respuesta.
+
+## 2026-11-24 · El Brosque, más grande
+- **Decisión:** el Brosque pasa de paredes a 80 m del centro a 110 m: casi el doble de área (×1,9). Lo que hay dentro crece en proporción:
+
+  | Qué | Antes | Ahora |
+  |---|---|---|
+  | Zona de juego (piezas, rompibles) | ±70 m | ±96 m |
+  | Mesetas (altas / bajas) | 2 / 3 | 3 / 5 |
+  | Tragaperras (suelo / mesetas) | 1 / 3 | 2 / 4 |
+  | Cofres (suelo / mesetas) | 5 / 2 | 8 / 3 |
+  | Círculos de setas | 2 | 3 |
+  | Ruinas (templo, muros, arcos) | 1, 3, 2 | 2, 5, 3 |
+  | Pesas / bancos | 8 / 6 | 14 / 10 |
+  | Calaveras / bolsitas / charcos | 30 / 20 / 14 | 56 / 38 / 26 |
+  | Árboles sueltos | 150 | 280 |
+  | Tarjetas de socio | 3, a más de 25 m del centro y entre sí | 3, a más de 34 m |
+
+  - Se mueven con la pared la taberna (centro de la pared norte), los trolls de piedra (fuera de la pared este), el anillo de árboles junto a las paredes, la banda de bosque de fuera, el suelo, la zona donde salen los enemigos (`play_area`), el borde que se ve (`MapBoundary`) y las hojas de las copas.
+  - El claro del centro y el portal del jefe (a 24–28 m) no cambian: el comienzo se siente igual.
+  - Los tests del nivel ya no llevan números a mano: leen las cantidades de los datos del mapa y la pared del borde.
+  - El rendimiento apenas cambia gracias al bosque por trozos: sin enemigos, de 0,43 M a 0,49 M triángulos y de 760 a 940 llamadas de dibujo.
+- **Por qué:** lo pidió el diseñador: el mapa se quedaba pequeño para explorar.
+
+## 2026-11-24 · Objetos con efectos al golpear
+- **Decisión:** los objetos pasivos pueden llevar efectos que salen con una probabilidad en cada golpe del jugador (`PassiveItemData.on_hit`), además de sus stats. Tres efectos y un objeto nuevo para cada uno:
+
+  | Objeto | Rareza | Efecto |
+  |---|---|---|
+  | Pre-entreno caducado | Rara | 15 %: veneno, un 10 % del golpe cada 0,5 s durante 3 s (60 % en total) |
+  | Cable pelado | Improbable | 12 %: rayo a los 3 enemigos más cercanos (6 m de salto), con la mitad del golpe |
+  | Spray de frío | Rara | 20 %: frena un 40 % durante 2 s |
+
+  - **Escala con el golpe:** el daño de un efecto es una parte de lo que quitó el golpe. Así crece con todo lo que sube el golpe (daño %, crítico, arma) sin stats nuevas. A media, el veneno suma un 9 % de daño y el rayo un 18 %, repartido entre varios.
+  - **Copias:** cada copia suma la probabilidad del efecto, como las stats suman sus modificadores. Sin topes: si con muchas copias sale siempre, es la recompensa de apostar por ese objeto.
+  - **Sin cadenas:** el daño de un efecto no vuelve a tirar efectos (`DamageInfo.triggers_effects`). Si no, un rayo podría envenenar y ese veneno soltar otro rayo.
+  - **Por dónde pasa:** `DamageReporter`, que ya avisaba de cada golpe a un enemigo, avisa también de a quién (`enemy_hit`). Así sirve para cualquier arma, proyectil, onda o rastro, sin tocar cada uno.
+  - **Se ve:** los números de daño del veneno salen verdes y los del rayo celestes (`DamageInfo.kind`); el rayo dibuja una línea entre los enemigos. El frío, de momento, solo se nota en lo que tardan.
+  - **Fichas:** cada efecto tiene su línea con sus números («15 % al golpear: veneno (60 % del golpe en 3 s)») en las cartas de elegir objeto, el revelado del cofre y el Archivo. La frase del objeto sigue sin cifras.
+- **Por qué:** lo pidió el diseñador. Objetos que solo suben stats se parecen mucho; un efecto cambia cómo se juega con ellos.
+
+## 2026-11-24 · Polvo de los pasos
+- **Decisión:** a cada paso (`BodyBob.stepped`) sale un soplo pequeño de polvo a los pies (`StepDust`, 6 partículas en 0,45 s), un pie a cada lado de la marcha. Cuanto más rápido, más polvo: un 40 % de las partículas a la rapidez mínima y todas a la de carrera. Andando muy despacio, por debajo del 40 % de la carrera, nada. Solo sale con los pies en el suelo, porque `BodyBob` solo avisa de los pasos ahí.
+- **Por qué:** lo pidió el diseñador para el final del Hito 5. Remata la sensación de correr del balanceo sin tapar nada.
+
+## 2026-11-24 · Repaso de los comentarios
+- **Decisión:** se reescriben las cabeceras de clase de 97 scripts (las de 5 o más líneas) para que se lean como escritas a mano: qué es y cómo se usa, en frases llanas y en 2–5 líneas, con muy pocas referencias de documentación (`[member …]`, `[code]…[/code]`). El detalle que ya está en `docs/MAPA.md` (qué señales escucha, qué variaciones del tema usa) sale de la cabecera. Quedan unas 260 líneas de comentario menos.
+  - Solo cambian comentarios: un script compara cada archivo antes y después sin sus líneas de comentario y sin las vacías, y tienen que ser iguales.
+  - Los comentarios de una línea de cada `@export` se quedan: son la ayuda del inspector. También los bloques largos dentro de las funciones que explican el porqué (por qué trepan los de atrás y no los de delante, por qué el veneno se cuenta en ticks…).
+  - La norma queda en `CLAUDE.md` para el código nuevo.
+- **Por qué:** lo pidió el diseñador. Las cabeceras largas, llenas de referencias, se leían como texto generado y escondían lo importante.
+
+## 2026-11-24 · Pedidos tras las pruebas (3) (Hito 5d)
+- **Decisión:** lo que pidió el diseñador tras probar otra vez.
+  - **Deshacer la elección:** con «Quedármela» y «Doble o nada» a la vista, el clic derecho vuelve a la elección entre todas las cartas (`LevelUpPanel.cancel_bet`). El subtítulo lo recuerda. Antes, elegir una carta obligaba a quedársela o apostarla.
+  - **Árboles en los trolls:** el hueco que el bosque guarda a los trolls de piedra baja de 18 a 7 m de radio (más los 2 m de margen del bosque). Siguen viéndose desde la pared, pero ahora en un claro pequeño rodeado de árboles, no en una explanada pelada.
+- **Por qué:** lo pidió el diseñador tras probar.
+
+## 2026-11-24 · Las pesas son santuarios de carga
+- **Decisión:** las pesas de piedra del Brosque funcionan como los santuarios de carga de Megabonk (`ChargeShrine`). Quedarse dentro de su aro dorado las carga en 5 s de base. Al salir, la carga se queda donde estaba: no se pierde lo hecho, pero hay que volver. Cargadas, pausan y ofrecen 3 mejoras de stats distintas, cada una con su rareza; la elegida se suma a las stats del jugador para toda la partida. Se usan una vez.
+  - **Mejoras:** diez stats posibles (`data/shrines/dumbbell.tres`), con su fuerza para una rareza rara: +8 % de daño, velocidad de ataque, área o experiencia; +5 % de velocidad; +15 de vida; +4 % de crítico; +5 de Suerte; +2 de defensa; +0,3/s de regeneración. La rareza sale de la misma tabla que las cartas, con la Suerte, y multiplica esa fuerza: una común da el 60 % y una mítica el 240 %. Las mismas `UpgradeStat` que usan armas y runas, así que el redondeo y las unidades son los de siempre.
+  - **Cuántas:** las pesas bajan de 14 a 8, y todas son santuarios. Así cada pesa que se ve funciona y no salen demasiadas mejoras por partida.
+  - **Riesgo:** cargar pide quedarse en un sitio con la horda alrededor. Por eso la carga no se pierde al salir: se puede ir y volver.
+  - **Panel propio** (`StatChoicePanel`): no es un objeto, así que no va a la barra de objetos. Cada carta dice la stat, lo que suma y cómo queda («100 % → 108 %»).
+- **Por qué:** lo pidió el diseñador. Las pesas eran solo decorado; ahora son una decisión más del mapa: ¿me paro aquí con la horda encima?
+
+## 2026-11-24 · Hito 7: el plan acordado y los cofres de élite
+- **Plan:** el diseñador cambió el Hito 7.
+  - **Racha:** pasa a ser un power-up de 30 s, sin botín: mientras dura, matar seguido sube el multiplicador de oro, experiencia y Suerte, y un golpe lo baja.
+  - **Pactos:** los ofrece un heraldo del Gremio que aparece cada 1000 enemigos derrotados.
+  - **Apuntar:** mantener el clic derecho apunta con el ratón y el clic central fija al jefe como objetivo.
+  - **Afijos de los élites:** solo en el tier 2 o más de cada nivel. Los tiers (Brosque tier 1, 2 y 3) se detallarán más adelante; van al Hito 6.
+- **Cofres de élite:** todos los élites tienen un 10 % de soltar un cofre al morir (`EliteData.chest_chance`). Es un cofre normal: cuesta oro y sube el precio de los demás, como los del mapa. Los élites con afijos tendrán más probabilidad.
+- **Por qué:** lo pidió el diseñador. Un cofre que cuesta oro sigue siendo una decisión; si se quisieran gratis, es otro `ChestData` en `EliteData.chest`.
+
+## 2026-11-24 · Apuntar con el clic derecho y fijar al jefe con el central
+- **Decisión:** las armas siguen siendo automáticas, pero el jugador puede decir adónde.
+  - **Apuntar (mantener clic derecho):** sale una mira en el centro de la pantalla. Las armas eligen lo más cercano al punto del mundo que hay bajo la mira, no lo más cercano al jugador, pero siempre dentro de su alcance y viéndolo. Se apunta moviendo la cámara con el ratón, como siempre.
+  - **Fijar (clic central):** fija el jefe vivo más cercano (también los minibosses) y le sale una marca roja encima. Todas las armas le disparan mientras esté a su alcance; si se aleja, vuelven a lo de siempre. Otro clic central lo suelta, y al morir se suelta solo.
+  - **Dónde vive:** un nodo `Targeting` en el jugador. Cada arma lo consulta en `_candidates` (primero lo fijado, luego la mira y luego lo de siempre). Las armas de los enemigos no tienen `Targeting` y no cambian. El martillo elige el grupo más denso entre esos candidatos.
+  - Son acciones del InputMap (`aim` y `lock_target`): se podrán cambiar cuando llegue el remapeo.
+- **Por qué:** lo pidió el diseñador: con el jefe en pantalla, las armas se perdían en los esbirros de alrededor.
+
+## 2026-11-24 · La racha, un power-up de 30 s
+- **Decisión:** la racha deja de ser una mecánica de siempre con botín y pasa a ser un power-up más: una llama naranja que sale de la tabla de power-ups (peso 2, como la bomba). Al cogerla (30 s) empieza en ×1, y derrotar enemigos la sube:
+
+  | Enemigos derrotados | Oro y experiencia | Suerte |
+  |---|---|---|
+  | 10 | ×2 | +10 |
+  | 30 | ×3 | +20 |
+  | 60 | ×5 | +40 |
+
+  - Un golpe que hace daño baja un nivel (y la cuenta vuelve al mínimo de ese nivel). Coger otra mientras dura alarga el tiempo sin perder el nivel. Al acabarse, todo vuelve a la normalidad.
+  - Va como un modificador `MULTIPLIER` sobre `currency_gain` y `xp_gain` y uno `FLAT` sobre la Suerte, con su propio origen: se quitan juntos.
+  - Solo cuentan los enemigos derrotados; la velocidad del jugador no, de momento.
+  - El HUD la enseña arriba en el centro, en naranja («Racha ×3 · 18 s»), con un salto al subir de nivel. Suena como la bebida energética hasta que tenga su sonido.
+- **Por qué:** lo pidió el diseñador: la racha como un momento de la partida (un power-up que te obliga a ir a por los enemigos), sin la gestión del botín.
+
+## 2026-11-24 · Pactos del Gremio con un heraldo
+- **Decisión:** cada 1000 enemigos derrotados llega un heraldo del Gremio (`HeraldSpawner`, datos en `data/pacts/herald.tres`). Aparece a 12–18 m del jugador, en el suelo y en un hueco libre, y mira al jugador.
+  - Avisa de tres formas: un texto en el HUD, una columna de luz morada y una flecha morada de 5 s (la misma `PortalArrow`, que ahora escucha el aviso que se le diga).
+  - Al hablarle ofrece 3 pactos distintos de 6. Cada pacto es un premio y una maldición, los dos modificadores de stats para el resto de la partida. Se elige uno o se rechazan todos, y el heraldo se va.
+  - Si no vas a hablarle, espera hasta el siguiente, que lo sustituye: solo hay uno a la vez.
+  - Los pactos van con nombres de cultura bro:
+
+    | Pacto | Premio | Maldición |
+    |---|---|---|
+    | Ego lifting | +30 % daño | −25 % vida máxima |
+    | All in | +30 Suerte | +4 dificultad |
+    | Cheat meal | +40 % experiencia | −10 % velocidad de carrera |
+    | Postureo | +60 % oro | −15 % daño |
+    | Sin días libres | +25 % velocidad de ataque | −50 % invulnerabilidad tras un golpe |
+    | Saltarse pierna | +10 % probabilidad de crítico | −20 % altura de salto |
+- **Detalles:**
+  - Las cartas enseñan el premio en verde y la maldición en rojo, cada uno con cómo queda la stat («Daño 100 % → 130 %»). Para eso el tema tiene dos estilos nuevos, `BoonLabel` y `CurseLabel`.
+  - Cada pacto sellado lleva su propio origen en las stats, así que se podría quitar uno suelto.
+  - Los pactos no dependen de la Suerte.
+  - El heraldo no sale sobre lo que sobresale (árboles, rocas grandes): busca el suelo a como mucho 3 m por encima o por debajo del jugador y comprueba que haya hueco.
+  - Suena como la subida de nivel hasta que tenga su sonido.
+- **Por qué:** lo pidió el diseñador: «usamos el heraldo del gremio que aparece cada 1000 enemigos». Los pactos son una apuesta más (Pilar 2), pero sin oro: arriesgas tu personaje. Un premio que se nota a cambio de algo que duele. Rechazar no cuesta nada, para que sea una decisión y no una trampa.
+
+## 2026-11-24 · Volver a tirar los pactos
+- **Decisión:** los valores de cada pacto son fijos (no hay rareza ni Suerte que los cambie). A cambio, el panel de pactos tiene «Volver a tirar», como el de subir de nivel:
+  - Cuesta 10 de oro la primera vez en la partida y ×1,5 cada vez (10, 15, 23…). Lleva su propia cuenta, aparte de la de subir de nivel.
+  - Trae 3 pactos distintos de los que se enseñaban, si quedan. Con los 6 de ahora, son los otros 3.
+  - Sin oro suficiente, el botón se desactiva.
+  - El coste vive en `data/pacts/herald.tres` (`reroll_cost`, `reroll_growth`).
+- **Por qué:** lo pidió el diseñador. Con valores fijos, el jugador sabe lo que firma; volver a tirar le deja buscar el pacto que encaja con su personaje, pagando.
+
+## 2026-11-25 · Tiers de nivel: el mismo nivel, otra estación
+- **Decisión:** cada nivel tiene 3 tiers. El 1 está siempre abierto y superar uno (ganar la partida con él elegido) abre el siguiente (`LevelProgress`, guardado en `user://progress.cfg`). En la selección de nivel se elige el tier; la partida juega los tiers del 1 al elegido, uno tras otro.
+  - Al cruzar el portal de un tier que no es el último, funde a negro y cambia el mapa: el jugador conserva todo (nivel, armas, runas, objetos, oro, pactos), el reloj vuelve a 0, el mapa es más grande y la dificultad sube (+10 por tier sobre la que sube con el tiempo).
+  - El Brosque: verano (110 m), otoño (130 m) e invierno (150 m). Las piezas, los rompibles y los árboles crecen en proporción al área.
+  - Cada tier tiene sus oleadas (`data/waves/brosque_autumn.tres`, `brosque_winter.tres`), con las curvas de la dificultad desplazadas: el tier 2 empieza donde acababa el 1 antes de la prórroga y su prórroga llega en su minuto 10. Los jefes y el Trolleador son los mismos; sus curvas llegan ahora hasta la dificultad 40.
+  - El tiempo de la partida es la suma de las rondas de cada tier.
+- **Cómo:** el jugador y los sistemas de la partida (`RunSystems`) no se tocan; lo que cambia es el mapa. Cada mapa es una escena con raíz `LevelMap` (sus oleadas, jefe, zona de juego, punto de aparición y mensajes) y `LevelStages` las pone una tras otra, quitando la anterior. Los cofres de élite y el heraldo salen dentro del mapa, así que se van con él.
+  - Otoño e invierno son escenas heredadas del mapa del verano: cambian el tamaño, los datos del mapa, la luz, el clima y los materiales (`material_swaps`: `MaterialSwap` cambia un material por otro en todas las mallas, también en lo que se genera). Así se reutilizan las mismas piezas sin copiarlas.
+- **Por qué:** lo pidió el diseñador: el tier 2 «con otro color predominante, como si fuera otoño, y el tier 3 invierno», más grande y más difícil, abierto al superar el anterior y jugado desde el tier 1. Cambiar solo el mapa evita guardar y reconstruir la build (armas con sus mejoras tiradas, objetos, pactos…), que se rompería con cada sistema nuevo. Reutilizar piezas con otros materiales mantiene el juego ligero, como pidió.
+- **Pendiente:** los valores de las oleadas de los tiers 2 y 3 y del jefe final son una primera estimación; se ajustan jugando.
+
+## 2026-11-25 · La arena del jefe final y Mr. Brolympia
+- **Decisión:** tras el portal del tier 3 viene la arena del jefe final (`levels/final_arena/`, la misma para todos los niveles). Es un claro del Brosque al atardecer, con arcos y muros de ruinas en círculo, pesas y bancos, y árboles de las tres estaciones.
+  - Solo está el jefe: sale al entrar. Al vencerlo da su premio, aparece el portal (estaba escondido) y la partida ya es una victoria. No se acaba hasta que el jugador cruza el portal o muere en la oleada infinita que empieza entonces.
+  - El jefe es **Mr. Brolympia**, el entrenador del Ent-renador: la escena del Ent-renador heredada, más grande, con otros colores, cinturón de campeón y una pesa de piedra. Hace sus ataques, más fuertes, y el porrazo del Trolleador con la pesa (*Peso muerto*).
+- **Por qué:** lo pidió el diseñador: «después del tier 3 un jefe final que solo es el jefe; al vencerlo aparece el portal y se da como victoria, pero no se acaba hasta que el jugador muere con una oleada infinita o pasa el portal», en una arena del Brosque que reutilice lo que ya hay. El jefe no estaba decidido: es una propuesta con piezas existentes (el modelo del Ent-renador y el porrazo del Trolleador), fácil de cambiar en datos.
+
+## 2026-11-25 · Más dificultad, más experiencia y oro
+- **Decisión:** los enemigos dan más experiencia y más oro cuanto más alta es la dificultad: las oleadas escalan `xp_reward` y `gold_reward` como ya escalaban la vida y el daño (×1,3 de experiencia y ×1,4 de oro a dificultad 10, ×2 y ×2,2 a 20, ×2,8 y ×3 a 30).
+- **Por qué:** lo pidió el diseñador («contra más dificultad más experiencia»). Hasta ahora solo lo hacían las calaveras y las bolsitas. Es el «más riesgo, más recompensa» del GDD, y con los tiers hace que la dificultad alta compense.
+
+## 2026-11-25 · Detalles del Guerrero y del Pícaro
+- **Decisión:** el Guerrero lleva yelmo con cresta, hombreras y cinturón con hebilla; el Pícaro, capucha con pañuelo y un cinturón con bolsitas. Son piezas como las que ya había (`assets/models/props/`), puestas en los puntos del modelo con `attachments`.
+- **Por qué:** lo pidió el diseñador. El Mago ya tenía sombrero; ahora los tres se distinguen de un vistazo.
+
+## 2026-11-25 · Lo que pesa el juego
+- **Medición:** el ejecutable exportado pesa 103 MB y el `.pck` 3,7 MB (27 MB comprimido en `.7z`). Casi todo es el motor: el ejecutable es la plantilla de exportación oficial de Godot, con todos sus módulos.
+- **Hecho:** la exportación (en `export_presets.cfg`, que no se versiona) ya no mete GUT, los tests, las herramientas ni los docs.
+- **Lo que haría falta para bajar de verdad:** compilar plantillas de exportación propias (`optimize=size`, LTO y sin los módulos que no usamos). Suelen quedar en la mitad. Hace falta Python y SCons (Visual Studio 2022 ya está), así que es una decisión del diseñador.

@@ -21,6 +21,10 @@ const PAUSE: StringName = &"pause"
 const TOGGLE_DEBUG: StringName = &"toggle_debug"
 ## Reintentar en la pantalla de resultados (reinicio rápido).
 const RETRY: StringName = &"retry"
+## Mantener para apuntar con la cámara (clic derecho): las armas van a por lo que hay en la mira.
+const AIM: StringName = &"aim"
+## Fijar al jefe como objetivo o soltarlo (clic central).
+const LOCK_TARGET: StringName = &"lock_target"
 
 ## Todas las acciones propias del juego (sin las ui_* de Godot).
 const ALL: Array[StringName] = [
@@ -36,4 +40,6 @@ const ALL: Array[StringName] = [
 	PAUSE,
 	TOGGLE_DEBUG,
 	RETRY,
+	AIM,
+	LOCK_TARGET,
 ]

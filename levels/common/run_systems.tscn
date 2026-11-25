@@ -39,12 +39,33 @@
 [ext_resource type="Resource" path="res://data/content.tres" id="41_content"]
 [ext_resource type="PackedScene" path="res://vfx/juice/damage_vignette/damage_vignette.tscn" id="42_vignette"]
 [ext_resource type="PackedScene" path="res://ui/hud/stats_overlay.tscn" id="43_stats_overlay"]
+[ext_resource type="Script" path="res://systems/boss/mini_boss_encounter.gd" id="44_mini_boss"]
+[ext_resource type="Script" path="res://vfx/particles/burst_emitter.gd" id="45_bursts"]
+[ext_resource type="PackedScene" path="res://vfx/particles/death_puff.tscn" id="46_death_puff"]
+[ext_resource type="PackedScene" path="res://vfx/particles/hit_sparks.tscn" id="47_hit_sparks"]
+[ext_resource type="PackedScene" path="res://vfx/particles/debris.tscn" id="48_debris"]
+[ext_resource type="PackedScene" path="res://vfx/juice/portal_arrow/portal_arrow.tscn" id="49_portal_arrow"]
+[ext_resource type="PackedScene" path="res://vfx/juice/power_up_fx/power_up_fx.tscn" id="50_power_up_fx"]
+[ext_resource type="PackedScene" path="res://vfx/particles/spawn_dust.tscn" id="51_spawn_dust"]
+[ext_resource type="Script" path="res://systems/items/effects/on_hit_effects.gd" id="52_on_hit"]
+[ext_resource type="PackedScene" path="res://ui/menus/stat_choice/stat_choice_panel.tscn" id="53_stat_choice"]
+[ext_resource type="PackedScene" path="res://vfx/juice/lock_marker/lock_marker.tscn" id="54_lock_marker"]
+[ext_resource type="Script" path="res://systems/progression/effects/streak_effect.gd" id="55_streak"]
+[ext_resource type="Resource" path="res://data/progression/streak.tres" id="56_streak_data"]
+[ext_resource type="Script" path="res://systems/pacts/herald_spawner.gd" id="57_herald_spawner"]
+[ext_resource type="Resource" path="res://data/pacts/herald.tres" id="58_herald_data"]
+[ext_resource type="PackedScene" path="res://entities/interactables/herald/herald.tscn" id="59_herald"]
+[ext_resource type="PackedScene" path="res://ui/menus/pact/pact_panel.tscn" id="60_pact_panel"]
 
-[node name="RunSystems" type="Node3D" node_paths=PackedStringArray("player", "director", "encounter")]
+[node name="RunSystems" type="Node3D" node_paths=PackedStringArray("player", "director", "encounter", "mini_bosses", "herald", "pickups", "loot")]
 script = ExtResource("1_run")
 player = NodePath("Player")
 director = NodePath("WaveDirector")
 encounter = NodePath("BossEncounter")
+mini_bosses = NodePath("MiniBossEncounter")
+herald = NodePath("HeraldSpawner")
+pickups = NodePath("PickupField")
+loot = NodePath("LootDropper")
 
 [node name="MouseCapture" type="Node" parent="."]
 script = ExtResource("2_mouse")
@@ -58,6 +79,9 @@ player = NodePath("../Player")
 player = NodePath("../Player")
 
 [node name="HUD" parent="." instance=ExtResource("6_hud")]
+
+[node name="ChestPanel" parent="HUD/Margin/Bottom/Column" index="0" node_paths=PackedStringArray("stats")]
+stats = NodePath("../../../../../Player/Stats")
 
 [node name="StatsOverlay" parent="." node_paths=PackedStringArray("player") instance=ExtResource("43_stats_overlay")]
 player = NodePath("../Player")
@@ -75,9 +99,10 @@ script = ExtResource("11_pickups")
 collector = NodePath("../Player")
 collector_stats = NodePath("../Player/Stats")
 
-[node name="LootDropper" type="Node" parent="." node_paths=PackedStringArray("field", "player_stats")]
+[node name="LootDropper" type="Node" parent="." node_paths=PackedStringArray("field", "player_stats", "chest_parent")]
 script = ExtResource("12_loot")
 field = NodePath("../PickupField")
+chest_parent = NodePath("..")
 xp_gem = ExtResource("13_xp_gem")
 gold_coin = ExtResource("14_gold_coin")
 player_stats = NodePath("../Player/Stats")
@@ -154,6 +179,13 @@ script = ExtResource("33_time_stop")
 reward = &"time_stop"
 swarm = NodePath("../../EnemySwarm")
 
+[node name="Streak" type="Node" parent="PickupEffects" node_paths=PackedStringArray("stats", "health")]
+script = ExtResource("55_streak")
+reward = &"streak"
+data = ExtResource("56_streak_data")
+stats = NodePath("../../Player/Stats")
+health = NodePath("../../Player/Health")
+
 [node name="Frailty" type="Node" parent="PickupEffects" node_paths=PackedStringArray("stats")]
 script = ExtResource("24_buff")
 reward = &"frailty"
@@ -175,9 +207,82 @@ swarm = NodePath("../EnemySwarm")
 player_stats = NodePath("../Player/Stats")
 items = NodePath("../Player/Items")
 
+[node name="MiniBossEncounter" type="Node" parent="." node_paths=PackedStringArray("director", "player_stats", "items")]
+script = ExtResource("44_mini_boss")
+director = NodePath("../WaveDirector")
+player_stats = NodePath("../Player/Stats")
+items = NodePath("../Player/Items")
+
 [node name="TimeStopFilter" parent="." instance=ExtResource("34_filter")]
 
 [node name="DamageVignette" parent="." instance=ExtResource("42_vignette")]
 
 [node name="ItemChoicePanel" parent="." node_paths=PackedStringArray("inventory") instance=ExtResource("35_item_choice")]
 inventory = NodePath("../Player/Items")
+
+[node name="Particles" type="Node3D" parent="."]
+
+[node name="DeathPuffs" type="Node3D" parent="Particles"]
+script = ExtResource("45_bursts")
+effect = ExtResource("46_death_puff")
+pool_size = 32
+max_per_frame = 10
+offset = Vector3(0, 0.7, 0)
+tint_by_enemy = true
+
+[node name="HitSparks" type="Node3D" parent="Particles"]
+script = ExtResource("45_bursts")
+trigger = 1
+effect = ExtResource("47_hit_sparks")
+pool_size = 32
+max_per_frame = 8
+
+[node name="SpawnDust" type="Node3D" parent="Particles"]
+script = ExtResource("45_bursts")
+trigger = 3
+effect = ExtResource("51_spawn_dust")
+pool_size = 32
+max_per_frame = 8
+
+[node name="Debris" type="Node3D" parent="Particles"]
+script = ExtResource("45_bursts")
+trigger = 2
+effect = ExtResource("48_debris")
+pool_size = 6
+max_per_frame = 3
+offset = Vector3(0, 0.4, 0)
+
+[node name="PortalArrow" parent="." node_paths=PackedStringArray("target") instance=ExtResource("49_portal_arrow")]
+target = NodePath("../Player")
+
+[node name="HeraldArrow" parent="." node_paths=PackedStringArray("target") instance=ExtResource("49_portal_arrow")]
+target = NodePath("../Player")
+event = &"herald_arrived"
+color = Color(0.85, 0.45, 1, 1)
+show_time = 5.0
+
+[node name="LockMarker" parent="." instance=ExtResource("54_lock_marker")]
+
+[node name="StatChoicePanel" parent="." node_paths=PackedStringArray("stats") instance=ExtResource("53_stat_choice")]
+stats = NodePath("../Player/Stats")
+
+[node name="HeraldSpawner" type="Node" parent="." node_paths=PackedStringArray("player", "parent")]
+script = ExtResource("57_herald_spawner")
+data = ExtResource("58_herald_data")
+herald_scene = ExtResource("59_herald")
+player = NodePath("../Player")
+parent = NodePath("..")
+
+[node name="PactPanel" parent="." node_paths=PackedStringArray("stats", "wallet") instance=ExtResource("60_pact_panel")]
+stats = NodePath("../Player/Stats")
+wallet = NodePath("../Player/Wallet")
+data = ExtResource("58_herald_data")
+
+[node name="OnHitEffects" type="Node3D" parent="." node_paths=PackedStringArray("items")]
+script = ExtResource("52_on_hit")
+items = NodePath("../Player/Items")
+chain_mask = 16
+
+[node name="PowerUpFx" parent="." node_paths=PackedStringArray("anchor", "shake") instance=ExtResource("50_power_up_fx")]
+anchor = NodePath("../Player")
+shake = NodePath("../Player/ScreenShake")

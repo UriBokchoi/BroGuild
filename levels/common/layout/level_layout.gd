@@ -1,10 +1,8 @@
 class_name LevelLayout
 extends Node3D
-## Mapa generado al cargar el nivel, distinto en cada partida (con la semilla de la partida, flujo
-## [code]LAYOUT[/code] de [code]Rng[/code]): reparte las piezas de [member data] por el suelo (las
-## grandes primero) sin que se pisen ni invadan el claro del centro, pone encima de algunas las que
-## van arriba (tragaperras en las mesetas) y construye el bosque alrededor ([ForestBuilder]). El
-## centro de este nodo es el centro del mapa y el punto de aparición.
+## El mapa que se genera al cargar, distinto en cada partida: reparte las piezas por el suelo (las
+## grandes primero) sin pisarse ni invadir el claro, pone las que van encima de las mesetas y
+## construye el bosque alrededor. Su centro es el centro del mapa y el punto de aparición.
 
 ## Se terminó de generar.
 signal generated
@@ -17,6 +15,7 @@ var rng: RandomNumberGenerator
 ## Lo ocupado por piezas (x, z, radio) y sitios libres encima de piezas (x, alto, z).
 var _occupied: Array[Vector3] = []
 var _tops: Array[Vector3] = []
+var _trees: Array[Dictionary] = []
 
 
 func _ready() -> void:
@@ -39,8 +38,13 @@ func generate() -> void:
 	for piece: LayoutPiece in data.top_pieces:
 		for _index: int in piece.count:
 			_place_on_top(piece)
-	ForestBuilder.build(self, data.forest, data.half_size, data.clearing_radius, _occupied, rng)
+	_trees = ForestBuilder.build(self, data.forest, data.half_size, data.clearing_radius, _occupied, rng)
 	generated.emit()
+
+
+## Los árboles del bosque generado (ver [method ForestBuilder.build]).
+func get_trees() -> Array[Dictionary]:
+	return _trees.duplicate()
 
 
 ## Círculos del suelo ocupados por piezas (x, z, radio), incluido el punto de aparición.

@@ -1,0 +1,73 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://vfx/weather/weather.gd" id="1_weather"]
+[ext_resource type="Texture2D" path="res://assets/textures/vfx/leaf.svg" id="2_leaf"]
+
+[sub_resource type="Gradient" id="Gradient_fade"]
+offsets = PackedFloat32Array(0, 0.1, 0.8, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_fade"]
+gradient = SubResource("Gradient_fade")
+
+[sub_resource type="Gradient" id="Gradient_colors"]
+offsets = PackedFloat32Array(0, 0.35, 0.7, 1)
+colors = PackedColorArray(0.92, 0.48, 0.12, 1, 0.85, 0.28, 0.12, 1, 0.95, 0.72, 0.18, 1, 0.7, 0.14, 0.1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_colors"]
+gradient = SubResource("Gradient_colors")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_leaves"]
+emission_shape = 3
+emission_box_extents = Vector3(24, 1, 24)
+angle_min = -180.0
+angle_max = 180.0
+direction = Vector3(1, -0.4, 0.3)
+spread = 40.0
+initial_velocity_min = 0.6
+initial_velocity_max = 1.6
+angular_velocity_min = -160.0
+angular_velocity_max = 160.0
+gravity = Vector3(0, -0.9, 0)
+damping_min = 0.2
+damping_max = 0.5
+scale_min = 0.22
+scale_max = 0.36
+color_ramp = SubResource("GradientTexture1D_fade")
+color_initial_ramp = SubResource("GradientTexture1D_colors")
+turbulence_enabled = true
+turbulence_noise_strength = 1.4
+turbulence_noise_scale = 4.0
+turbulence_influence_min = 0.05
+turbulence_influence_max = 0.12
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_leaf"]
+transparency = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("2_leaf")
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_leaf"]
+material = SubResource("StandardMaterial3D_leaf")
+size = Vector2(1, 1)
+
+[node name="FallingLeaves" type="Node3D"]
+script = ExtResource("1_weather")
+
+[node name="Particles" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12, 0)
+cast_shadow = 0
+amount = 70
+lifetime = 9.0
+preprocess = 9.0
+fixed_fps = 0
+interpolate = false
+local_coords = false
+visibility_aabb = AABB(-30, -16, -30, 60, 20, 60)
+process_material = SubResource("ParticleProcessMaterial_leaves")
+draw_pass_1 = SubResource("QuadMesh_leaf")

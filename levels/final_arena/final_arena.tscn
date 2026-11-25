@@ -1,0 +1,96 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://levels/common/level_map.gd" id="1_map"]
+[ext_resource type="Resource" path="res://data/waves/brosque_final.tres" id="2_waves"]
+[ext_resource type="Resource" path="res://data/bosses/brosque_final.tres" id="3_boss"]
+[ext_resource type="Environment" path="res://levels/final_arena/environment.tres" id="4_environment"]
+[ext_resource type="Material" path="res://levels/brosque/materials/grass.tres" id="5_grass"]
+[ext_resource type="PackedScene" path="res://levels/common/boundary/map_boundary.tscn" id="6_boundary"]
+[ext_resource type="Script" path="res://levels/common/layout/level_layout.gd" id="7_layout"]
+[ext_resource type="Resource" path="res://data/layouts/final_arena.tres" id="8_layout_data"]
+[ext_resource type="PackedScene" path="res://vfx/juice/canopy_leaves/canopy_leaves.tscn" id="9_leaves"]
+[ext_resource type="PackedScene" path="res://entities/interactables/boss_portal/boss_portal.tscn" id="10_portal"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ground"]
+material = ExtResource("5_grass")
+size = Vector2(240, 240)
+
+[sub_resource type="BoxShape3D" id="Shape_ground"]
+size = Vector3(130, 1, 130)
+
+[sub_resource type="BoxShape3D" id="Shape_bound_x"]
+size = Vector3(96, 30, 2)
+
+[sub_resource type="BoxShape3D" id="Shape_bound_z"]
+size = Vector3(2, 30, 96)
+
+[node name="FinalArena" type="Node3D" node_paths=PackedStringArray("spawn_point", "boss_spawn", "followers")]
+script = ExtResource("1_map")
+waves = ExtResource("2_waves")
+waves_after_boss = true
+play_area = Rect2(-40, -40, 80, 80)
+spawn_point = NodePath("PlayerSpawn")
+intro_keys = Array[StringName]([&"FINAL_ARENA_INTRO"])
+boss = ExtResource("3_boss")
+boss_spawn = NodePath("BossSpawn")
+death_wins_after_boss = true
+followers = [NodePath("MapBoundary"), NodePath("CanopyLeaves")]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = ExtResource("4_environment")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.819, 0.47, -0.329, 0, 0.574, 0.819, 0.574, -0.671, 0.47, 0, 0, 0)
+light_color = Color(1, 0.62, 0.42, 1)
+shadow_enabled = true
+directional_shadow_max_distance = 80.0
+
+[node name="Ground" type="StaticBody3D" parent="."]
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="Ground"]
+mesh = SubResource("PlaneMesh_ground")
+
+[node name="Shape" type="CollisionShape3D" parent="Ground"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+shape = SubResource("Shape_ground")
+
+[node name="Bounds" type="StaticBody3D" parent="."]
+collision_mask = 0
+
+[node name="North" type="CollisionShape3D" parent="Bounds"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15, -46)
+shape = SubResource("Shape_bound_x")
+
+[node name="South" type="CollisionShape3D" parent="Bounds"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15, 46)
+shape = SubResource("Shape_bound_x")
+
+[node name="West" type="CollisionShape3D" parent="Bounds"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -46, 15, 0)
+shape = SubResource("Shape_bound_z")
+
+[node name="East" type="CollisionShape3D" parent="Bounds"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 46, 15, 0)
+shape = SubResource("Shape_bound_z")
+
+[node name="MapBoundary" parent="." instance=ExtResource("6_boundary")]
+half_extent = Vector2(45, 45)
+
+[node name="Layout" type="Node3D" parent="."]
+script = ExtResource("7_layout")
+data = ExtResource("8_layout_data")
+
+[node name="CanopyLeaves" parent="." node_paths=PackedStringArray("layout") instance=ExtResource("9_leaves")]
+layout = NodePath("../Layout")
+reach = 47.0
+
+[node name="BossPortal" parent="." instance=ExtResource("10_portal")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, -30)
+hidden_until_open = true
+
+[node name="PlayerSpawn" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 16)
+
+[node name="BossSpawn" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)

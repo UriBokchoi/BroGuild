@@ -1,15 +1,16 @@
 class_name ScreenShake
 extends Node
-## Temblor de cámara al recibir daño. Cada golpe a [member health] suma «trauma» según la parte de
-## la vida que quita (con un mínimo, para que hasta un roce se note) y el trauma baja solo. La cámara
-## se desplaza ([member Camera3D.h_offset], [member Camera3D.v_offset]) y se inclina tanto como el
-## trauma al cuadrado, con ruido suave: un roce apenas la mueve y un golpe fuerte la sacude. Solo
-## visual.
+## Temblor de cámara por «trauma»: cada golpe suma más cuanto más vida quita (con un mínimo, para que
+## hasta un roce se note) y baja solo. El temblor crece con el trauma al cuadrado: un roce apenas
+## mueve la cámara y un golpe fuerte la sacude. También tiembla con los golpes fuertes del jugador.
 
 ## Cámara que tiembla.
 @export var camera: Camera3D
 ## Vida cuyos golpes la hacen temblar.
 @export var health: HealthComponent
+## Golpes del propio jugador que también la hacen temblar, con el trauma que trae cada uno (la
+## explosión de la caída rápida).
+@export var blasts: Array[SynergyWave] = []
 ## Trauma de un golpe que quitara toda la vida (los demás, en proporción).
 @export_range(0.0, 5.0, 0.05) var trauma_per_health: float = 0.0
 ## Trauma mínimo de un golpe.
@@ -32,6 +33,8 @@ func _ready() -> void:
 	_noise.frequency = 1.0
 	if health:
 		health.damaged.connect(_on_damaged)
+	for blast: SynergyWave in blasts:
+		blast.released.connect(func(_at: Vector3, trauma: float) -> void: add_trauma(trauma))
 	set_process(false)
 
 

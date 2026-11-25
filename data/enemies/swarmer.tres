@@ -34,5 +34,6 @@ id = &"swarmer"
 name_key = &"ENEMY_SWARMER_NAME"
 description_key = &"ENEMY_SWARMER_DESCRIPTION"
 icon = ExtResource("98_icon")
+color = Color(0.62, 0.2, 0.32, 1)
 scene = ExtResource("4_scene")
 stat_sources = Array[Resource]([SubResource("Resource_health"), SubResource("Resource_stats")])

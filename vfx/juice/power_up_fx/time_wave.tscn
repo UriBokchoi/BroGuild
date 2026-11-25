@@ -1,0 +1,64 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://vfx/juice/power_up_fx/fx_burst.gd" id="1_burst"]
+[ext_resource type="Shader" path="res://vfx/shaders/ground_ring.gdshader" id="2_ring"]
+[ext_resource type="QuadMesh" path="res://vfx/particles/soft_dot_quad.tres" id="3_dot"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ring"]
+render_priority = 0
+shader = ExtResource("2_ring")
+shader_parameter/color = Color(0.5, 0.8, 1, 1)
+shader_parameter/intensity = 1.8
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ring"]
+material = SubResource("ShaderMaterial_ring")
+size = Vector2(2, 2)
+
+[sub_resource type="Gradient" id="Gradient_Frost"]
+offsets = PackedFloat32Array(0, 1)
+colors = PackedColorArray(0.8, 0.95, 1, 1, 0.5, 0.8, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_Frost"]
+gradient = SubResource("Gradient_Frost")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_Frost"]
+emission_shape = 1
+emission_sphere_radius = 1.0
+direction = Vector3(0, 1, 0)
+spread = 180.0
+initial_velocity_min = 2.0
+initial_velocity_max = 4.0
+gravity = Vector3(0, 0, 0)
+damping_min = 2.0
+damping_max = 2.0
+scale_min = 0.2
+scale_max = 0.35
+color_ramp = SubResource("GradientTexture1D_Frost")
+
+[node name="TimeWave" type="Node3D" node_paths=PackedStringArray("rings")]
+script = ExtResource("1_burst")
+rings = [NodePath("Ring")]
+ring_radius = 22
+ring_time = 0.9
+ring_band = 0.05
+flash = Color(0.6, 0.85, 1, 0.3)
+flash_time = 0.4
+
+[node name="Ring" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.06, 0)
+cast_shadow = 0
+mesh = SubResource("PlaneMesh_ring")
+
+[node name="Frost" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+cast_shadow = 0
+emitting = false
+amount = 24
+lifetime = 0.8
+one_shot = true
+explosiveness = 1
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-4, -2, -4, 8, 6, 8)
+process_material = SubResource("ParticleProcessMaterial_Frost")
+draw_pass_1 = ExtResource("3_dot")

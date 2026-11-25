@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="StreakData" format=3]
+
+[ext_resource type="Script" path="res://systems/progression/streak_data.gd" id="1_data"]
+
+[resource]
+script = ExtResource("1_data")
+kills = PackedInt32Array(0, 10, 30, 60)
+multipliers = PackedFloat32Array(1, 2, 3, 5)
+luck_per_multiplier = 10.0

@@ -1,13 +1,6 @@
 [gd_scene format=3]
 
-[sub_resource type="StandardMaterial3D" id="Mat_water"]
-transparency = 1
-albedo_color = Color(0.32, 0.58, 0.82, 0.78)
-metallic = 0.4
-roughness = 0.05
-emission_enabled = true
-emission = Color(0.25, 0.5, 0.75, 1)
-emission_energy_multiplier = 0.15
+[ext_resource type="Material" path="res://levels/brosque/materials/water.tres" id="1_water"]
 
 [sub_resource type="StandardMaterial3D" id="Mat_stem"]
 albedo_color = Color(0.25, 0.55, 0.22, 1)
@@ -22,7 +15,7 @@ emission = Color(1, 0.8, 0.2, 1)
 emission_energy_multiplier = 0.2
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_water"]
-material = SubResource("Mat_water")
+material = ExtResource("1_water")
 top_radius = 1.0
 bottom_radius = 1.0
 height = 0.02

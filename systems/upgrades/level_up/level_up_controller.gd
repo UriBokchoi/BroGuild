@@ -1,14 +1,11 @@
 class_name LevelUpController
 extends Node
-## Al subir de nivel el jugador ([code]EventBus.player_leveled_up[/code]), le ofrece la elección
-## ([LevelUpPanel]) y aplica la opción elegida a sus armas o runas. También cuando se pide una mejora
-## gratis ([code]EventBus.upgrade_choice_requested[/code], la tragaperras), con su propio título. Si
-## llegan varias de golpe, una elección tras otra, por orden. Si no queda nada que ofrecer, o el
-## jugador ha muerto, no pregunta. «Volver a tirar» cobra oro al jugador (cada vez más en la
-## partida, [method LevelUpData.reroll_cost_at]) y ofrece otras cartas para la misma elección.
-## El doble o nada: con la probabilidad de los datos y la Suerte del jugador
-## ([method LevelUpData.double_chance_with]), la mejora apostada sube a la rareza siguiente (se vuelve
-## a tirar con su fuerza); si no, esa subida no da nada.
+## Al subir de nivel, ofrece las cartas (LevelUpPanel) y aplica la elegida a las armas o runas del
+## jugador. Lo mismo con las mejoras gratis de la tragaperras. Si llegan varias a la vez, van en
+## cola; si no queda nada que ofrecer o el jugador ha muerto, no pregunta.
+##
+## Volver a tirar cuesta oro, cada vez más. En el doble o nada, la mejora apostada sube a la rareza
+## siguiente con una probabilidad que mejora la Suerte; si sale mal, esa subida se pierde.
 
 @export var data: LevelUpData
 @export var player: Player
@@ -112,6 +109,8 @@ func _offer() -> void:
 		_queue.clear()
 		panel.close()
 		return
+	for option: LevelUpOption in options:
+		option.stats = _stats_for(option)
 	var free: bool = _queue.front()
 	var title := free_choice_title_key if free else &""
 	var cost := reroll_cost()
@@ -132,6 +131,7 @@ func _on_double_requested(option: LevelUpOption) -> void:
 	var result: LevelUpOption = null
 	if won:
 		result = LevelUpOption.create_upgrade(option.item, option.level, option.item.roll_upgrade(next, rng))
+		result.stats = option.stats
 	panel.resolve_double(result)
 
 
@@ -148,6 +148,15 @@ func _warm_up_panel() -> void:
 		LevelUpOption.create(_catalog[-1], 1),
 	]
 	panel.warm_up(sample)
+
+
+## Stats a las que iría [param option]: las de su arma si ya la lleva (un arma nueva no mejora nada aún)
+## y, si es una runa, las del jugador.
+func _stats_for(option: LevelUpOption) -> StatsComponent:
+	if option.item is WeaponData:
+		var weapon := player.weapons.get_weapon(option.item as WeaponData)
+		return weapon.stats if weapon else null
+	return player.stats
 
 
 func _owned_levels() -> Dictionary[StringName, int]:

@@ -1,8 +1,8 @@
 extends GutTest
 ## Pantalla de resultados: al morir el jugador y tras su espera, pausa y muestra lo apuntado por el
 ## RunRecorder bajo una frase de muerte al azar, con el foco en «Reintentar» (que lleva su tecla);
-## Esc no la cierra. Al vencer al jefe, tras su espera, la victoria con su premio por rapidez. Si
-## la partida entró en los récords, su puesto.
+## Esc no la cierra. Al ganar (cruzar el portal del jefe), tras su espera, la victoria con su premio
+## por rapidez; morir después no la cambia. Si la partida entró en los récords, su puesto.
 ## Reintentar y Salir van por el flujo del juego (RunFlow).
 
 const PanelScene := preload("res://ui/menus/results/results_panel.tscn")
@@ -107,9 +107,9 @@ func test_retry_and_quit_go_through_the_game_flow() -> void:
 	assert_eq(asked, [&"retry", &"menu"] as Array[StringName])
 
 
-func test_beating_the_boss_shows_the_victory() -> void:
+func test_winning_shows_the_victory() -> void:
 	_panel.victory_delay = 0.1
-	EventBus.boss_defeated.emit(&"BROSQUE_VICTORY", 90.0, 2.5)
+	EventBus.run_won.emit(&"BROSQUE_VICTORY", 90.0, 2.5)
 	assert_false(_panel.is_open(), "espera a ver caer al jefe")
 	# Temporizador que corre en pausa: el panel pausa el árbol al abrirse.
 	await get_tree().create_timer(0.3, true).timeout

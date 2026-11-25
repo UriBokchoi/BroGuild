@@ -203,6 +203,40 @@ unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"MenuList"
 
+[node name="LevelInfo" type="VBoxContainer" parent="UI/Margin/Layout/Panel/Content/LevelPanel"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"CardColumn"
+
+[node name="LevelName" type="Label" parent="UI/Margin/Layout/Panel/Content/LevelPanel/LevelInfo"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"CardTitleLabel"
+
+[node name="TierRow" type="HBoxContainer" parent="UI/Margin/Layout/Panel/Content/LevelPanel/LevelInfo"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"CardRow"
+
+[node name="LevelGoal" type="Label" parent="UI/Margin/Layout/Panel/Content/LevelPanel/LevelInfo"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"ChestEffectLabel"
+autowrap_mode = 3
+
+[node name="LevelLore" type="Label" parent="UI/Margin/Layout/Panel/Content/LevelPanel/LevelInfo"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 2
+theme_type_variation = &"ChestDescriptionLabel"
+autowrap_mode = 3
+
+[node name="LevelPlay" type="Button" parent="UI/Margin/Layout/Panel/Content/LevelPanel"]
+unique_name_in_owner = true
+layout_mode = 2
+disabled = true
+text = "MENU_PLAY"
+
 [node name="LevelBack" type="Button" parent="UI/Margin/Layout/Panel/Content/LevelPanel"]
 unique_name_in_owner = true
 layout_mode = 2

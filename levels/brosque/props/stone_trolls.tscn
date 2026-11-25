@@ -1,0 +1,106 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://levels/brosque/props/stone_statue.gd" id="1_statue"]
+[ext_resource type="PackedScene" path="res://entities/enemies/trolleador/troll_model.tscn" id="2_troll"]
+[ext_resource type="Material" path="res://levels/brosque/materials/moss.tres" id="3_moss"]
+
+[sub_resource type="StandardMaterial3D" id="Mat_stone"]
+albedo_color = Color(0.56, 0.56, 0.53, 1)
+roughness = 1.0
+
+[sub_resource type="SphereMesh" id="Mesh_moss"]
+material = ExtResource("3_moss")
+radius = 0.5
+height = 0.35
+radial_segments = 16
+rings = 8
+
+[sub_resource type="CylinderMesh" id="Mesh_pot"]
+material = SubResource("Mat_stone")
+top_radius = 0.95
+bottom_radius = 0.7
+height = 1.0
+radial_segments = 12
+
+[sub_resource type="TorusMesh" id="Mesh_pot_rim"]
+material = SubResource("Mat_stone")
+inner_radius = 0.82
+outer_radius = 1.05
+rings = 24
+ring_segments = 8
+
+[sub_resource type="SphereMesh" id="Mesh_rock"]
+material = SubResource("Mat_stone")
+radius = 0.9
+height = 1.0
+radial_segments = 16
+rings = 8
+
+[node name="StoneTrolls" type="Node3D" node_paths=PackedStringArray("statues")]
+script = ExtResource("1_statue")
+material = SubResource("Mat_stone")
+statues = [NodePath("Bert"), NodePath("Tom")]
+
+[node name="Bert" parent="." instance=ExtResource("2_troll")]
+position = Vector3(-2.4, 0, 0.2)
+rotation = Vector3(0, 0.45, 0)
+
+[node name="Head" parent="Bert" index="7"]
+rotation = Vector3(-0.35, 0.2, 0)
+
+[node name="ArmRight" parent="Bert" index="9"]
+rotation = Vector3(-2.2, 0, 0.15)
+
+[node name="ArmLeft" parent="Bert" index="8"]
+rotation = Vector3(0.5, 0, -0.25)
+
+[node name="Tom" parent="." instance=ExtResource("2_troll")]
+position = Vector3(2.6, 0, -0.4)
+rotation = Vector3(0, -0.6, 0)
+scale = Vector3(1, 0.88, 1)
+
+[node name="Head" parent="Tom" index="7"]
+rotation = Vector3(0.25, -0.45, 0)
+
+[node name="ArmLeft" parent="Tom" index="8"]
+rotation = Vector3(1.25, 0, 0)
+
+[node name="ArmRight" parent="Tom" index="9"]
+rotation = Vector3(0.3, 0, 0.1)
+
+[node name="Pot" type="MeshInstance3D" parent="."]
+position = Vector3(0.1, 0.5, -2.2)
+mesh = SubResource("Mesh_pot")
+
+[node name="PotRim" type="MeshInstance3D" parent="."]
+position = Vector3(0.1, 1, -2.2)
+mesh = SubResource("Mesh_pot_rim")
+
+[node name="RockA" type="MeshInstance3D" parent="."]
+position = Vector3(-4.6, 0.2, -1.6)
+scale = Vector3(1.2, 0.8, 1)
+mesh = SubResource("Mesh_rock")
+
+[node name="RockB" type="MeshInstance3D" parent="."]
+position = Vector3(4.8, 0.15, 1.2)
+scale = Vector3(0.9, 0.6, 1.1)
+mesh = SubResource("Mesh_rock")
+
+[node name="MossBertHead" type="MeshInstance3D" parent="."]
+position = Vector3(-2.75, 4.05, -0.55)
+scale = Vector3(0.9, 0.6, 0.9)
+mesh = SubResource("Mesh_moss")
+
+[node name="MossBertShoulder" type="MeshInstance3D" parent="."]
+position = Vector3(-3.6, 3.45, 0.35)
+mesh = SubResource("Mesh_moss")
+
+[node name="MossTomBack" type="MeshInstance3D" parent="."]
+position = Vector3(2.9, 3.35, 0.45)
+scale = Vector3(1.3, 0.8, 1.2)
+mesh = SubResource("Mesh_moss")
+
+[node name="MossPot" type="MeshInstance3D" parent="."]
+position = Vector3(0.6, 1.05, -2.7)
+scale = Vector3(0.6, 0.5, 0.6)
+mesh = SubResource("Mesh_moss")

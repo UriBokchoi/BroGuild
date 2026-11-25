@@ -1,11 +1,9 @@
 extends Node
-## Lo que dura entre partidas, guardado en [code]user://[/code]: las opciones ([GameSettings]), que
-## al arrancar carga y aplica, la clasificación de partidas ([Leaderboard]) y lo descubierto para el
-## Archivo ([Discoveries]). Los desbloqueos llegarán más adelante.
-## Arrancado con [code]-- --no-save[/code] (lo hace [code]tools/validate.sh[/code] al jugar un nivel),
-## récords y Archivo van a archivos de prueba ([method use_scratch_files]): probar el juego no
-## ensucia lo de verdad.
-## Sin lógica de gameplay.
+## Lo que se guarda entre partidas (en user://): las opciones, los récords, lo descubierto para el
+## Archivo y los tiers superados de cada nivel. Al arrancar carga las opciones y las aplica.
+##
+## Con «-- --no-save» (lo usa tools/validate.sh) los récords y el Archivo van a archivos de prueba:
+## probar el juego no ensucia lo de verdad.
 
 const SETTINGS_DATA := preload("res://data/settings/settings.tres")
 ## Argumento de línea de órdenes (tras [code]--[/code]) para no tocar récords ni Archivo.
@@ -23,6 +21,10 @@ var leaderboard: Leaderboard
 var archive_path: String = "user://archive.cfg"
 ## Lo descubierto. Para apuntar algo, [method discover].
 var discoveries: Discoveries
+## Archivo de los tiers superados (los tests usan otro).
+var progress_path: String = "user://progress.cfg"
+## Tiers superados de cada nivel. Para apuntar uno, [method complete_tier].
+var progress: LevelProgress
 
 
 func _ready() -> void:
@@ -35,18 +37,22 @@ func _ready() -> void:
 	else:
 		load_leaderboard()
 		load_discoveries()
+		load_progress()
 
 
-## Lleva récords y Archivo a [code]user://<prefix>_leaderboard.cfg[/code] y
-## [code]user://<prefix>_archive.cfg[/code], que empiezan vacíos (los tests y la validación).
+## Lleva récords, Archivo y tiers a [code]user://<prefix>_leaderboard.cfg[/code],
+## [code]user://<prefix>_archive.cfg[/code] y [code]user://<prefix>_progress.cfg[/code], que empiezan
+## vacíos (los tests y la validación).
 func use_scratch_files(prefix: String) -> void:
 	leaderboard_path = "user://%s_leaderboard.cfg" % prefix
 	archive_path = "user://%s_archive.cfg" % prefix
-	for path: String in [leaderboard_path, archive_path]:
+	progress_path = "user://%s_progress.cfg" % prefix
+	for path: String in [leaderboard_path, archive_path, progress_path]:
 		if FileAccess.file_exists(path):
 			DirAccess.remove_absolute(ProjectSettings.globalize_path(path))
 	load_leaderboard()
 	load_discoveries()
+	load_progress()
 
 
 ## Carga las opciones de [member settings_path]; sin archivo, las de un juego recién estrenado.
@@ -102,6 +108,34 @@ func discover(category: StringName, id: StringName) -> bool:
 	var config := ConfigFile.new()
 	discoveries.write_to(config)
 	_save(config, archive_path, "el Archivo")
+	return true
+
+
+## Carga los tiers superados de [member progress_path] (sin archivo, ninguno).
+func load_progress() -> void:
+	progress = LevelProgress.new()
+	var config := ConfigFile.new()
+	if config.load(progress_path) == OK:
+		progress.read_from(config)
+
+
+## ¿Se puede jugar el tier [param tier] del nivel [param level_id]?
+func is_tier_unlocked(level_id: StringName, tier: int) -> bool:
+	if progress == null:
+		load_progress()
+	return progress.is_unlocked(level_id, tier)
+
+
+## Apunta que se superó el tier [param tier] de [param level_id] y, si es nuevo, lo guarda. Devuelve
+## si era nuevo (abre el siguiente).
+func complete_tier(level_id: StringName, tier: int) -> bool:
+	if progress == null:
+		load_progress()
+	if not progress.complete(level_id, tier):
+		return false
+	var config := ConfigFile.new()
+	progress.write_to(config)
+	_save(config, progress_path, "los tiers superados")
 	return true
 
 

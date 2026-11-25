@@ -1,18 +1,11 @@
 class_name LootDropper
 extends Node
-## Lo que sueltan los enemigos y los rompibles.
-## - Al morir un enemigo ([code]EventBus.enemy_died[/code]): una gema con su experiencia
-##   ([member EnemyStats.xp_reward]) y una moneda con su oro ([member EnemyStats.gold_reward]), que
-##   vuela sola hacia el jugador.
-## - Al romperse un rompible ([code]EventBus.breakable_broken[/code]): su botín ([BreakableData],
-##   más cuanto mayor es la dificultad) en trozos repartidos alrededor.
-## - Además, a veces, un extra (un power-up; más adelante, cofres) de una [WeightedTable]: con la
-##   probabilidad de botín del jugador ([code]drop_chance[/code]) por el multiplicador de quien lo
-##   suelta (×1 un enemigo normal; élites y rompibles, el de sus datos).
-## Suelta como mucho [member max_drops_per_tick] recogibles en un tick de física y el resto en los
-## siguientes: un golpe que mata a cien enemigos soltaba doscientos de golpe (un tirón). Al empezar
-## prepara los de experiencia y oro ([member PickupData.prewarm]), para no crearlos en pleno
-## combate.
+## Lo que sueltan los enemigos al morir (una gema de experiencia y una moneda) y los rompibles al
+## romperse (su botín, en trozos). A veces también un extra, como un power-up, según la probabilidad
+## de botín del jugador.
+##
+## Suelta como mucho max_drops_per_tick por tick y deja el resto para los siguientes: un golpe que
+## mataba a cien enemigos soltaba doscientos recogibles de golpe y daba un tirón.
 
 ## Dónde caen los recogibles.
 @export var field: PickupField
@@ -26,6 +19,11 @@ extends Node
 @export var enemy_drop_table: WeightedTable
 ## Recogibles que suelta como mucho en un mismo tick de física.
 @export_range(1, 1000, 1, "or_greater") var max_drops_per_tick: int = 40
+## Dónde van los cofres que sueltan los élites (en el mundo). Vacío: no sueltan cofres.
+@export var chest_parent: Node3D
+## Qué cuenta como suelo para dejar un cofre, y cuánto mira hacia abajo.
+@export_flags_3d_physics var ground_mask: int = 1
+@export_range(0.5, 50.0, 0.5, "suffix:m") var ground_probe: float = 10.0
 
 ## Azar del reparto. Si no se asigna antes de entrar en el árbol, el flujo de botín de
 ## [code]Rng[/code].
@@ -64,6 +62,7 @@ func _on_enemy_died(enemy: Enemy) -> void:
 	_drop(gold_coin, at, enemy.gold_reward())
 	if enemy.is_elite():
 		_roll_extra(enemy.elite.drop_table, enemy.elite.drop_chance_multiplier, at)
+		_roll_chest(enemy.elite, at)
 	else:
 		_roll_extra(enemy_drop_table, 1.0, at)
 
@@ -84,6 +83,26 @@ func _roll_extra(table: WeightedTable, multiplier: float, at: Vector3) -> void:
 	var extra := table.pick(rng) as BonusDrop
 	if extra:
 		_drop(extra.pickup, at, extra.amount)
+
+
+## Con la probabilidad del élite, deja su cofre en el suelo donde cayó.
+func _roll_chest(elite: EliteData, at: Vector3) -> void:
+	if elite.chest == null or not is_instance_valid(chest_parent) or rng.randf() * 100.0 >= elite.chest_chance:
+		return
+	var chest := elite.chest.instantiate() as Node3D
+	chest_parent.add_child(chest)
+	chest.global_position = _ground_below(at)
+	chest.rotation.y = rng.randf_range(0.0, TAU)
+
+
+func _ground_below(at: Vector3) -> Vector3:
+	var from := at + Vector3.UP * 1.0
+	var query := PhysicsRayQueryParameters3D.create(from, from + Vector3.DOWN * ground_probe, ground_mask)
+	var hit := chest_parent.get_world_3d().direct_space_state.intersect_ray(query)
+	if hit.is_empty():
+		return at
+	var ground: Vector3 = hit["position"]
+	return ground
 
 
 func _drop(pickup_data: PickupData, at: Vector3, amount: float) -> void:

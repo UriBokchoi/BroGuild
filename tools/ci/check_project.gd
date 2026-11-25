@@ -1,11 +1,10 @@
 extends SceneTree
-## Carga sin caché todos los scripts, escenas, recursos y shaders del proyecto
-## (salvo addons/, carpetas ocultas y carpetas con .gdignore). Así se analiza
-## cada .gd aunque nadie lo use, y aparecen escenas o .tres rotos que la escena
-## principal no carga. Sustituye a --check-only, que da falsos errores con los
+## Carga sin caché todos los scripts, escenas, recursos y shaders del proyecto (menos addons/ y lo
+## que esté oculto o con .gdignore). Así se compila cada .gd aunque nadie lo use y salen los .tres
+## rotos que no carga la escena principal. Sustituye a --check-only, que se equivoca con los
 ## autoloads.
-## Lanzar con -d --ignore-error-breaks: solo así los warnings salen por stderr.
-## Sale con código 1 si algo no carga; los errores impresos los recoge validate.sh.
+##
+## Se lanza con -d --ignore-error-breaks (si no, los warnings no salen) y sale con 1 si algo falla.
 
 const SKIP_DIRS: PackedStringArray = ["res://addons"]
 const SCRIPT_EXTENSION: String = "gd"

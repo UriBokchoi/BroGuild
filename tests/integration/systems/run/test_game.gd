@@ -28,6 +28,7 @@ func after_each() -> void:
 	RunState.end_run()
 	RunState.level = null
 	RunState.character = null
+	RunState.tier = 1
 
 
 func test_starts_in_the_main_menu() -> void:
@@ -44,11 +45,12 @@ func test_play_goes_to_the_run_setup() -> void:
 func test_the_run_setup_starts_the_run_with_its_choice() -> void:
 	_game.show_run_setup()
 	await wait_process_frames(1)
-	(_game.get_screen() as RunSetup).play_requested.emit(ROGUE, _level)
+	(_game.get_screen() as RunSetup).play_requested.emit(ROGUE, _level, 2)
 	await wait_process_frames(1)
 	assert_eq(_game.get_screen().scene_file_path, TestLevelScene.resource_path)
 	assert_same(RunState.level, _level)
 	assert_same(RunState.character, ROGUE)
+	assert_eq(RunState.tier, 2, "el tier elegido")
 	assert_true(RunState.is_running)
 
 

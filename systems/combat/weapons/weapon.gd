@@ -1,13 +1,12 @@
 @abstract
 class_name Weapon
 extends Node3D
-## Arma automática (GDD §6): ataca sola en cuanto acaba su espera y tiene un objetivo a su alcance.
-## Cada ataque son [method roll_shots] golpes (los de [method projectile_count]; si tiene decimales,
-## a veces uno más) separados por [member WeaponStats.burst_interval]; el primero va al enemigo más
-## cercano, el segundo al segundo más cercano, y así (si hay menos enemigos que golpes, se repiten). Qué es un golpe (un tajo, un
-## proyectil…) lo decide cada arma en [method _fire]. Combina sus stats ([WeaponStats], con las
-## mejoras de su nivel) con las del personaje ([OffenseData]). La monta un [WeaponInventory] con
-## [method setup].
+## Un arma automática (GDD §6): ataca sola cuando acaba su espera y hay a quién darle. Cada ataque
+## son varios golpes seguidos (sus proyectiles), uno al enemigo más cercano, otro al siguiente, y así.
+## Qué es un golpe (un tajo, un proyectil…) lo decide cada arma en _fire.
+##
+## Sus stats son las suyas con las mejoras de su nivel más las del personaje. La monta un
+## WeaponInventory con setup.
 
 ## Lanzó el golpe número [param index] (desde 0) de un ataque contra [param target].
 signal fired(target: Node3D, index: int)
@@ -30,6 +29,8 @@ var data: WeaponData
 var stats: StatsComponent
 ## Stats de quien la lleva. Vacío: el arma usa solo las suyas.
 var wielder_stats: StatsComponent
+## Adónde apunta quien la lleva (el jugador: la mira y el jefe fijado). Vacío: a lo más cercano.
+var targeting: Targeting
 var level: int = 1
 ## Azar del golpe de más (la parte decimal de los proyectiles). Sin asignar, el de combate de
 ## [code]Rng[/code].
@@ -214,8 +215,21 @@ func _fire_at(targets: Array[Node3D]) -> void:
 
 
 func _find_targets() -> Array[Node3D]:
+	return _candidates(ceili(projectile_count()))
+
+
+## Hasta [param count] objetivos para el siguiente ataque: el objetivo fijado si está a su alcance;
+## si no, al apuntar, los más cercanos a la mira; y si no, los más cercanos al arma.
+func _candidates(count: int) -> Array[Node3D]:
 	var space := get_world_3d().direct_space_state
-	return _finder.nearest(space, aim_origin(), reach(), ceili(projectile_count()))
+	if targeting:
+		var locked := targeting.get_locked()
+		if locked and aim_origin().distance_to(TargetFinder.aim_point(locked)) <= reach():
+			var only: Array[Node3D] = [locked]
+			return only
+		if targeting.is_aiming():
+			return _finder.nearest_to(space, aim_origin(), reach(), count, targeting.get_aim_point())
+	return _finder.nearest(space, aim_origin(), reach(), count)
 
 
 static func _percent(value: float) -> float:

@@ -18,7 +18,7 @@ func before_each() -> void:
 	_played.clear()
 	_setup = SetupScene.instantiate() as RunSetup
 	add_child_autofree(_setup)
-	_setup.play_requested.connect(func(character: CharacterData, level: LevelData) -> void: _played.append([character, level]))
+	_setup.play_requested.connect(func(character: CharacterData, level: LevelData, tier: int) -> void: _played.append([character, level, tier]))
 
 
 func after_each() -> void:
@@ -45,7 +45,44 @@ func test_choosing_shows_the_levels_and_a_level_starts_the_run() -> void:
 	_setup.play(DUNGEON)
 	assert_eq(_played.size(), 0, "la Mazmorra aún no existe")
 	_setup.play(BROSQUE)
-	assert_eq(_played, [[ROGUE, BROSQUE]])
+	assert_eq(_played, [[ROGUE, BROSQUE, 1]])
+
+
+func test_a_click_marks_the_level_and_play_starts_it() -> void:
+	_setup.choose(ROGUE)
+	var info := _setup.get_node(^"%LevelInfo") as Control
+	var play := _setup.get_node(^"%LevelPlay") as Button
+	assert_false(info.visible, "sin nivel marcado, sin ficha")
+	assert_true(play.disabled)
+	var button := _setup.get_node(^"%LevelList").get_child(_setup.levels.find(BROSQUE)) as Button
+	button.pressed.emit()
+	assert_same(_setup.get_selected(), BROSQUE)
+	assert_true(button.button_pressed, "se queda marcado")
+	assert_true(info.visible, "su ficha, debajo")
+	assert_eq((_setup.get_node(^"%LevelName") as Label).text, String(BROSQUE.name_key))
+	assert_eq(_played.size(), 0, "el clic no empieza la partida")
+	assert_false(play.disabled)
+	play.pressed.emit()
+	assert_eq(_played, [[ROGUE, BROSQUE, 1]])
+
+
+func test_play_sits_above_back() -> void:
+	var panel := _setup.get_node(^"%LevelPanel") as Node
+	var play := _setup.get_node(^"%LevelPlay") as Node
+	var back := _setup.get_node(^"%LevelBack") as Node
+	var info := _setup.get_node(^"%LevelInfo") as Node
+	assert_eq(play.get_parent(), panel)
+	assert_lt(info.get_index(), play.get_index(), "la ficha, encima de «Jugar»")
+	assert_eq(play.get_index() + 1, back.get_index(), "«Jugar» justo encima de «Volver»")
+
+
+func test_going_back_and_in_again_forgets_the_level() -> void:
+	_setup.choose(ROGUE)
+	_setup.select(BROSQUE)
+	_setup.back()
+	_setup.choose(MAGE)
+	assert_null(_setup.get_selected())
+	assert_true((_setup.get_node(^"%LevelPlay") as Button).disabled)
 
 
 func test_levels_that_do_not_exist_yet_are_disabled() -> void:
@@ -71,3 +108,24 @@ func test_while_choosing_a_level_the_character_list_hides() -> void:
 	assert_false(side.visible, "un solo «Volver», el de los niveles")
 	_setup.back()
 	assert_true(side.visible)
+
+
+func test_a_level_with_tiers_only_lets_you_choose_the_open_ones() -> void:
+	var saved := Save.progress
+	Save.progress = LevelProgress.new()
+	_setup.choose(ROGUE)
+	_setup.select(BROSQUE)
+	var row := _setup.get_node(^"%TierRow") as HBoxContainer
+	assert_eq(row.get_child_count(), BROSQUE.tiers.size())
+	assert_false((row.get_child(0) as Button).disabled)
+	assert_true((row.get_child(1) as Button).disabled, "el 2, cerrado hasta superar el 1")
+	_setup.select_tier(2)
+	assert_eq(_setup.get_tier(), 1, "uno cerrado no se elige")
+	Save.progress.complete(&"brosque", 1)
+	_setup.select(BROSQUE)
+	_setup.select_tier(2)
+	assert_eq(_setup.get_tier(), 2)
+	assert_eq((_setup.get_node(^"%LevelGoal") as Label).text, String(BROSQUE.tiers[1].goal_key), "su objetivo")
+	_setup.play(BROSQUE)
+	assert_eq(_played, [[ROGUE, BROSQUE, 2]])
+	Save.progress = saved

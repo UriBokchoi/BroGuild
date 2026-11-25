@@ -39,7 +39,7 @@ func open() -> void:
 	if Save.leaderboard:
 		entries = Save.leaderboard.get_entries()
 	_fill(entries)
-	visible = true
+	UiMotion.reveal(self)
 	_back.grab_focus()
 
 
@@ -80,7 +80,7 @@ func _fill(entries: Array[RunRecord]) -> void:
 		_add_cell(str(record.kills), style)
 		_add_cell(RunClock.format(record.seconds), style)
 		_add_cell(str(record.player_level), style)
-		_add_cell(_key_or_unknown(record.level_name_key), style)
+		_add_cell(_level_text(record), style)
 		_add_cell("RECORDS_WON" if record.won else "RECORDS_LOST", style)
 
 
@@ -96,6 +96,14 @@ static func _latest(entries: Array[RunRecord]) -> int:
 ## Las claves se traducen solas en la etiqueta.
 static func _key_or_unknown(key: StringName) -> String:
 	return UNKNOWN if key.is_empty() else String(key)
+
+
+## El mapa de [param record] y, si tiene, su tier («Brosque · T2»).
+func _level_text(record: RunRecord) -> String:
+	var level := _key_or_unknown(record.level_name_key)
+	if record.tier <= 0 or record.level_name_key.is_empty():
+		return level
+	return tr(&"RECORDS_LEVEL_TIER") % [tr(level), record.tier]
 
 
 func _add_cell(text: String, style: StringName) -> void:

@@ -1,14 +1,13 @@
 class_name StatsComponent
 extends Node
-## Stats de una entidad. Convierte en stats los números exportados de sus Resources de datos
-## (ver [method StatBlock.define_from_resource]) y mantiene una copia «resuelta» de cada uno
-## con los modificadores ya aplicados, para leerla con tipo:
+## Las stats de una entidad. Convierte en stats los números exportados de sus recursos de datos y
+## guarda una copia de cada recurso con los modificadores ya aplicados, para leerla con tipo:
 ## [codeblock]
 ## var move := stats.get_resolved(MovementData) as MovementData
 ## velocity = direction * move.run_speed
 ## [/codeblock]
-## Las stats existen desde que el nodo entra en el árbol, antes de cualquier
-## [code]_ready[/code]: cualquier nodo de la escena puede leerlas en el suyo, esté donde esté.
+## Las stats existen desde que entra en el árbol, antes de cualquier _ready: así cualquier nodo de
+## la escena puede leerlas en el suyo.
 
 ## Cambió una stat. Cuando llega, la copia resuelta ya tiene el valor nuevo.
 signal stat_changed(stat: StringName, value: float, previous: float)
@@ -88,6 +87,24 @@ func get_stats() -> Array[StringName]:
 
 func has_stat(stat: StringName) -> bool:
 	return _block.has_stat(stat)
+
+
+## Ver [method StatBlock.preview].
+func preview(stat: StringName, extra: Array[StatModifier]) -> float:
+	return _block.preview(stat, extra)
+
+
+## La propiedad de datos de [param stat] (tipo, rango y unidad, como las da
+## [method Object.get_property_list]), para darle formato con [method StatFormat.format]. Vacía si no
+## tiene esa stat.
+func get_property(stat: StringName) -> Dictionary:
+	var copy: Resource = _resolved_by_stat.get(stat)
+	if copy == null:
+		return {}
+	for property: Dictionary in copy.get_property_list():
+		if StringName(property["name"] as String) == stat:
+			return property
+	return {}
 
 
 ## Ver [method StatBlock.add_modifier].

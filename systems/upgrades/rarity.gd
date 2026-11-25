@@ -1,10 +1,8 @@
 class_name Rarity
 extends WeightedEntry
-## Una rareza de las mejoras (común, rara, improbable, de leyenda, mítica): cuánto sale (su peso),
-## su color (el borde de la carta), cuántas stats del arma o runa toca y cuánto más fuertes son.
-## Con Suerte, las altas salen más ([member WeightedEntry.luck_scaling]). Las rarezas viven en
-## [code]data/rarities/[/code]; la tabla que se usa, en
-## [code]data/rarities/rarities.tres[/code].
+## Una rareza de las mejoras (común, rara, improbable, de leyenda, mítica): cuánto sale, su color,
+## cuántas stats toca y cuánto más fuerte es. Con Suerte salen más las altas. Viven en
+## data/rarities/.
 
 ## Identificador estable.
 @export var id: StringName = &""

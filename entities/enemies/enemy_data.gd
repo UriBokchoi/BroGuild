@@ -12,6 +12,8 @@ extends Resource
 @export var description_key: StringName = &""
 ## Icono (Archivo).
 @export var icon: Texture2D
+## Su color (el de su cuerpo): lo usan sus efectos, como el humo al morir.
+@export var color: Color = Color.WHITE
 ## Escena del enemigo: su raíz es un [Enemy].
 @export var scene: PackedScene
 ## Resources de stats del enemigo ([HealthData], [EnemyStats]…): las fuentes de su [StatsComponent].

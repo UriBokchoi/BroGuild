@@ -19,6 +19,28 @@ func test_an_upgrade_card_wears_its_rarity_color() -> void:
 	assert_true(_has_label(card, LEGENDARY.name_key), "dice su rareza")
 
 
+func test_an_upgrade_says_how_much_each_stat_grows() -> void:
+	var stats := StatsComponent.new()
+	stats.sources.append(SWORD.stats)
+	add_child_autofree(stats)
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 2
+	var option := LevelUpOption.create_upgrade(SWORD, 2, SWORD.roll_upgrade(LEGENDARY, rng))
+	option.stats = stats
+	var card := LevelUpCard.new(option)
+	add_child_autofree(card)
+	var first := option.modifiers()[0]
+	var expected := "%s %s" % [tr(StatFormat.name_key(first.stat)), ModifierFormat.change(first.stat, stats, option.modifiers())]
+	assert_string_contains(expected, " → ")
+	assert_true(_has_label(card, expected), "la stat, el valor de ahora y el que queda")
+
+
+func test_without_stats_a_card_only_says_what_it_does() -> void:
+	var card := _upgrade_card()
+	for line: String in ModifierFormat.describe_all(card.option.modifiers()):
+		assert_true(_has_label(card, line), "lo que hace: %s" % line)
+
+
 func test_a_new_item_card_keeps_the_normal_style() -> void:
 	var card := LevelUpCard.new(LevelUpOption.create(SWORD, 1))
 	add_child_autofree(card)

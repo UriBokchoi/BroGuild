@@ -1,12 +1,11 @@
 class_name CharacterData
 extends StatModifierSet
-## Un personaje: todos parten de las stats básicas ([code]data/player/[/code]) y sus
-## [member StatModifierSet.stat_modifiers] dicen en qué se diferencia según su gimmick (+1 salto
-## en el aire, +20 % de velocidad…). Esas diferencias cambian la base de las stats: el menú las
-## muestra como base, no como mejora. Además lleva su arma inicial, su habilidad pasiva y su aspecto
-## (color y piezas del modelo). Añadir un personaje es crear un [code].tres[/code] en
-## [code]data/characters/[/code] con sus textos traducidos (y, si su pasiva es nueva, su escena en
-## [code]entities/player/characters/passives/[/code]).
+## Un personaje. Todos parten de las mismas stats (data/player/) y sus modificadores dicen en qué se
+## diferencia; cuentan como su base, no como una mejora. También lleva su arma inicial, su pasiva y
+## su aspecto.
+##
+## Para añadir uno: un .tres en data/characters/ con sus textos traducidos (y, si su pasiva es nueva,
+## su escena en entities/player/characters/passives/).
 
 ## Identificador estable (récords, Archivo).
 @export var id: StringName = &""

@@ -1,9 +1,7 @@
 class_name PassiveBar
 extends HFlowContainer
-## Objetos pasivos del jugador en el HUD, debajo de las runas: el icono de cada uno con el borde del
-## color de su rareza y, si lleva más de una copia, cuántas. En el orden en que los consiguió
-## ([signal EventBus.player_passive_changed]); al llenar la fila, sigue en la de abajo. Estilo:
-## variación [code]PassiveBar[/code] (separaciones) y las de [LoadoutSlot] del Theme global.
+## Los objetos del jugador en el HUD, bajo las runas: el icono de cada uno con el borde de su rareza
+## y «×N» si lleva varias copias, en el orden en que los consiguió.
 
 ## Lado de cada casilla.
 @export_range(16.0, 128.0, 1.0, "suffix:px") var slot_size: float = 36.0
@@ -33,6 +31,9 @@ func show_item(item: PassiveItemData, count: int) -> void:
 		slot = _make_slot(item)
 		_slots[item.id] = slot
 	(slot.get_child(1) as Label).text = "×%d" % count if count > 1 else ""
+	# Salta al llegar el objeto o una copia más.
+	if slot.is_inside_tree():
+		UiMotion.pop(slot)
 
 
 ## Ids de los objetos que se ven, en orden.

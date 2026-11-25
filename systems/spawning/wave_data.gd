@@ -1,15 +1,10 @@
 class_name WaveData
 extends Resource
-## Cómo salen los enemigos de una ronda (GDD §6, «Director de oleadas»): una curva de enemigos por
-## segundo, un pico al final de cada intervalo, un máximo de enemigos a la vez, qué enemigos pueden
-## salir, cuántos salen élites, cómo se hacen más fuertes y cuánto dura la ronda (pasada, llegan los
-## muy fuertes). Los valores viven en [code]data/waves/[/code]; aquí todo vale 0 o vacío a
-## propósito.
+## Cómo salen los enemigos en una ronda: enemigos por segundo, picos, máximo a la vez, qué enemigos,
+## cuántos élites, cuánto se refuerzan y cuánto dura la ronda. Los valores viven en data/waves/.
 ##
-## Las curvas van según la [b]dificultad[/b] (x), no según el tiempo: la stat
-## [code]difficulty[/code] del jugador, que sube sola 1 por minuto (así, sin bonus, dificultad 5 es
-## el minuto 5) y con objetos o runas (más riesgo, más recompensa). Los picos y la duración de la
-## ronda sí van por el reloj.
+## Las curvas van por dificultad, no por tiempo. Como la dificultad sube 1 por minuto, sin objetos
+## que la suban dificultad 5 es el minuto 5. Los picos y la duración de la ronda sí van por el reloj.
 
 @export_group("round")
 ## Minutos que dura la ronda. Pasados, el reloj del HUD se pone en rojo (y llegará el jefe).
@@ -45,6 +40,10 @@ extends Resource
 ## Hordas de la ronda (en el orden en que salen).
 @export var hordes: Array[HordeData] = []
 
+@export_group("mini_bosses")
+## Minibosses de la ronda (en el orden en que salen; ver [MiniBossEncounter]).
+@export var mini_bosses: Array[MiniBossData] = []
+
 @export_group("scaling")
 ## Stats de los enemigos que se multiplican con la dificultad (vida, daño…): cada enemigo sale con
 ## los multiplicadores de la dificultad de ese momento.
@@ -59,7 +58,7 @@ func is_overtime(seconds: float) -> bool:
 ## Mejoras con las que sale un enemigo con dificultad [param difficulty] (un multiplicador por cada
 ## [member stat_scaling]), o [code]null[/code] si no hay escalado.
 func scaling_at(difficulty: float) -> StatModifierSet:
-	return scaling_for(stat_scaling, difficulty)
+	return StatScaling.modifiers_for(stat_scaling, difficulty)
 
 
 ## Probabilidad (%) de que un enemigo que sale con dificultad [param difficulty] sea élite.
@@ -102,15 +101,3 @@ func pick_enemy(difficulty: float, rng: RandomNumberGenerator) -> EnemyData:
 		if roll < 0.0:
 			return entry.enemy
 	return null
-
-
-## Mejoras de [param scalings] con dificultad [param difficulty]: un multiplicador por cada uno, o
-## [code]null[/code] si no hay ninguno. Lo usan las oleadas y los jefes ([BossData]).
-static func scaling_for(scalings: Array[StatScaling], difficulty: float) -> StatModifierSet:
-	if scalings.is_empty():
-		return null
-	var modifiers := StatModifierSet.new()
-	for scaling: StatScaling in scalings:
-		var factor := scaling.multiplier_at(difficulty)
-		modifiers.stat_modifiers.append(StatModifier.create(scaling.stat, StatModifier.Kind.MULTIPLIER, factor))
-	return modifiers

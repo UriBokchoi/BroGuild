@@ -1,10 +1,8 @@
 class_name OffenseData
 extends Resource
-## Stats de ataque del personaje, que modifican a todas sus armas: daño, crítico, cadencia,
-## proyectiles, área, duración y retroceso. Los porcentajes se guardan como porcentaje
-## (100 = normal), así una mejora de «+10 % de daño» es un modificador PERCENT de 0.1 y
-## «+5 % de crítico», uno FLAT de 5. Los valores viven en [code]data/player/offense.tres[/code];
-## aquí todo vale 0 a propósito. Su efecto exacto está en el GDD (§6, «Stats del personaje»).
+## Las stats de ataque del personaje, que valen para todas sus armas: daño, crítico, cadencia,
+## proyectiles, área, duración y empuje. Los porcentajes se guardan como tal (100 = normal): «+10 %
+## de daño» es un modificador PERCENT de 0,1 y «+5 % de crítico», uno FLAT de 5.
 
 @export_group("offense")
 ## Multiplica el daño de todas las armas.

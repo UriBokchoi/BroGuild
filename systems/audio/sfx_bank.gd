@@ -20,6 +20,10 @@ extends Resource
 @export var enemy_hit: SoundCue
 @export var enemy_died: SoundCue
 @export var boss_spawned: SoundCue
+## Llega un miniboss (el Trolleador Cara).
+@export var mini_boss_spawned: SoundCue
+## Llega un heraldo del Gremio.
+@export var herald_arrived: SoundCue
 @export var boss_defeated: SoundCue
 
 @export_group("pickups")
@@ -48,6 +52,11 @@ extends Resource
 @export_group("hordes")
 ## Aviso de que viene una horda (un cuerno de guerra).
 @export var horde_incoming: SoundCue
+
+@export_group("movement")
+## El golpe de una mejora de movimiento, por la stat de su daño ([signal EventBus.synergy_released]:
+## dash_wave_damage, slam_damage).
+@export var synergies: Dictionary[StringName, SoundCue] = {}
 
 @export_group("roulette")
 ## Doble o nada ganado y perdido.

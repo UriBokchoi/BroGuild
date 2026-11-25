@@ -1,12 +1,9 @@
 extends Node
-## Efectos de sonido: escucha el [code]EventBus[/code] (y los botones de la interfaz) y hace sonar lo
-## que dice su [SfxBank] con un grupo de [AudioStreamPlayer] en el bus de efectos. Respeta las voces
-## y la separación de cada [SoundCue], y sube de tono la experiencia recogida seguida. Suena también
-## en pausa (los menús). Sin lógica de gameplay.
+## Los efectos de sonido: escucha el EventBus y los botones y hace sonar lo que dice su SfxBank,
+## respetando cuántas voces y cuánta separación tiene cada sonido. Suena también en pausa.
 ##
-## Sin pantalla (tests y validación, [code]--headless[/code]) lleva la cuenta igual pero no reproduce
-## nada: no hay audio que oír, y salir con un sonido a medias deja su reproducción viva (Godot avisa
-## de fugas al cerrar). Las voces se cuentan por lo que dura cada sonido, no por el reproductor.
+## Sin pantalla (tests) lleva la cuenta pero no reproduce nada: cerrar con un sonido a medias deja
+## fugas al salir.
 
 const BANK := preload("res://data/audio/sfx_bank.tres")
 ## Multiplicador de tono de un semitono.
@@ -46,6 +43,8 @@ func _ready() -> void:
 	EventBus.enemy_damaged.connect(func(_at: Vector3, _amount: float, _info: DamageInfo) -> void: play(bank.enemy_hit))
 	EventBus.enemy_died.connect(func(_enemy: Enemy) -> void: play(bank.enemy_died))
 	EventBus.boss_spawned.connect(func(_name: StringName) -> void: play(bank.boss_spawned))
+	EventBus.mini_boss_spawned.connect(func(_name: StringName) -> void: play(bank.mini_boss_spawned))
+	EventBus.herald_arrived.connect(func(_at: Vector3) -> void: play(bank.herald_arrived))
 	EventBus.boss_defeated.connect(func(_key: StringName, _seconds: float, _bonus: float) -> void: play(bank.boss_defeated))
 	EventBus.pickup_collected.connect(_on_pickup_collected)
 	EventBus.breakable_broken.connect(func(_data: BreakableData, _at: Vector3) -> void: play(bank.breakable_broken))
@@ -58,6 +57,7 @@ func _ready() -> void:
 	EventBus.upgrade_revealed.connect(_on_upgrade_revealed)
 	EventBus.double_or_nothing_resolved.connect(_on_double_resolved)
 	EventBus.horde_incoming.connect(func(_horde: HordeData, _seconds: float) -> void: play(bank.horde_incoming))
+	EventBus.synergy_released.connect(_on_synergy_released)
 	get_tree().node_added.connect(_on_node_added)
 
 
@@ -182,3 +182,8 @@ func _on_node_added(node: Node) -> void:
 
 func _on_button_pressed() -> void:
 	play(bank.button_pressed)
+
+
+func _on_synergy_released(damage_stat: StringName, _at: Vector3) -> void:
+	if bank.synergies.has(damage_stat):
+		play(bank.synergies[damage_stat])

@@ -57,6 +57,27 @@ func test_reroll_waits_for_the_wheel_and_the_gold() -> void:
 	assert_false(_panel.can_reroll(), "sin oro, no")
 
 
+func test_big_cards_shrink_to_fit_the_screen() -> void:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 4
+	var legendary := preload("res://data/rarities/legendary.tres")
+	var options: Array[LevelUpOption] = [
+		LevelUpOption.create_upgrade(SWORD, 3, SWORD.roll_upgrade(legendary, rng)),
+		LevelUpOption.create_upgrade(STAFF, 3, STAFF.roll_upgrade(legendary, rng)),
+		LevelUpOption.create_upgrade(SWORD, 4, SWORD.roll_upgrade(legendary, rng)),
+	]
+	_panel.open(options, 3, &"", 10, true)
+	_panel.stop_spins()
+	await get_tree().create_timer(UiMotion.DATA.appear_time + 0.1, true).timeout
+	var content := _panel.appear_root
+	var screen := content.get_viewport_rect()
+	var xform := content.get_global_transform_with_canvas()
+	var drawn := Rect2(xform * Vector2.ZERO, xform.basis_xform(content.size))
+	assert_true(screen.grow(1.0).encloses(drawn), "se ve entero: %s en %s" % [drawn, screen])
+	if content.size.y > screen.size.y:
+		assert_lt(_panel.get_fit(), 1.0, "más alto que la pantalla: encogido")
+
+
 func _options() -> Array[LevelUpOption]:
 	var rng := RandomNumberGenerator.new()
 	rng.seed = 3

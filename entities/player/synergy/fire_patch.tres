@@ -1,0 +1,11 @@
+[gd_resource type="PlaneMesh" format=3]
+
+[ext_resource type="Shader" path="res://vfx/shaders/ground_fire.gdshader" id="1_fire"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fire"]
+render_priority = 0
+shader = ExtResource("1_fire")
+
+[resource]
+material = SubResource("ShaderMaterial_fire")
+size = Vector2(2, 2)

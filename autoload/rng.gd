@@ -1,9 +1,7 @@
 extends Node
-## Fuente única de azar del juego. Cada sistema tiene su propio generador,
-## sembrado a partir de la semilla de la partida: los bugs se reproducen con la
-## misma semilla y el azar de un sistema no altera la secuencia de otro.
-## La lógica pura no llama a este autoload: recibe el RandomNumberGenerator por
-## parámetro, así se testea sin estado global.
+## La única fuente de azar del juego. Cada sistema tiene su generador, sembrado con la semilla de la
+## partida: así un fallo se reproduce con la misma semilla y el azar de un sistema no cambia el de
+## otro. La lógica pura no llama aquí: recibe el generador, y se puede probar sin estado global.
 
 ## Un generador por sistema. Cada semilla se deriva del NOMBRE del valor, así que
 ## añadir o reordenar valores no cambia las secuencias existentes.

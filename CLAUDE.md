@@ -4,6 +4,7 @@ Roguelike de hordas en 3D, frenético y con apuestas en cada decisión: el bucle
 Proyecto a largo plazo: se va a ampliar durante meses, así que la arquitectura manda sobre la prisa.
 
 - Diseño: `docs/GDD.md` — léelo antes de tocar gameplay.
+- Lore: `docs/LORE.md` — la historia y el tono del juego (lo escribe el diseñador). Al tocar textos de lore del juego, que casen con él.
 - Plan: `docs/ROADMAP.md` — la tarea actual es la primera casilla sin marcar.
 - Decisiones de arquitectura: `docs/DECISIONES.md` (créalo si no existe; fecha, decisión y por qué).
 - Mapa del código: `docs/MAPA.md` — para qué sirve cada carpeta y sistema, cómo se conectan (señales, capas) y cómo añadir contenido. Léelo para orientarte y actualízalo en el mismo commit cuando crees, muevas o quites un sistema o una carpeta.
@@ -74,6 +75,7 @@ Objetivo: 60 fps estables con 300+ enemigos. Enemigos con steering simple (sin `
 - Nombra la mecánica, no la temática: `currency`, `streak`, `pot`; nunca nombres de la temática como `chips` o `la_banca` (ver `docs/DECISIONES.md`).
 - Funciones cortas (≈ menos de 40 líneas) y scripts con una sola responsabilidad (≈ menos de 300 líneas). Si crece, divide.
 - Comentarios para el *por qué*, no el *qué*. Docstrings `##` en clases y métodos públicos.
+- Cabeceras de clase cortas y en lenguaje llano: qué es y cómo se usa, en 2–5 líneas. El detalle (señales, quién escucha, estilos del tema) va en `docs/MAPA.md`. Pocas referencias `[member …]`/`[code]…[/code]`: un nombre basta si se entiende.
 - Sin código muerto ni `print()` de depuración en los commits. A la segunda vez que copias algo, extráelo.
 
 ## Archivos de Godot
@@ -92,7 +94,7 @@ Objetivo: 60 fps estables con 300+ enemigos. Enemigos con steering simple (sin `
 CLAUDE.md
 docs/        GDD.md, ROADMAP.md, DECISIONES.md
 addons/      solo GUT (tests)
-autoload/    EventBus, RunState, Rng, Audio, Save
+autoload/    EventBus, RunState, Rng, Save, Sfx, UiJuice
 core/        piezas genéricas: state_machine/, stats/, components/, pooling/, weighted_table.gd
 entities/    player/ (movement/ con states/, feedback/, camera/, stamina/, characters/), enemies/, pickups/, interactables/
 systems/     combat/, gamble/, upgrades/, spawning/, progression/

@@ -25,11 +25,14 @@ material = SubResource("StandardMaterial3D_bell")
 top_radius = 0.22
 bottom_radius = 0.42
 height = 0.6
+radial_segments = 12
 
 [sub_resource type="SphereMesh" id="SphereMesh_top"]
 material = SubResource("StandardMaterial3D_bell")
 radius = 0.22
 height = 0.44
+radial_segments = 16
+rings = 8
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_frame"]
 size = Vector3(1.8, 2.7, 0.3)

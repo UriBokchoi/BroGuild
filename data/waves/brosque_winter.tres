@@ -1,0 +1,163 @@
+[gd_resource type="Resource" script_class="WaveData" format=3]
+
+[ext_resource type="Script" path="res://systems/spawning/wave_data.gd" id="1_data"]
+[ext_resource type="Script" path="res://systems/spawning/wave_enemy.gd" id="2_entry"]
+[ext_resource type="Resource" path="res://data/enemies/swarmer.tres" id="3_swarmer"]
+[ext_resource type="Resource" path="res://data/enemies/shooter.tres" id="4_shooter"]
+[ext_resource type="Resource" path="res://data/enemies/elite.tres" id="5_elite"]
+[ext_resource type="Script" path="res://systems/spawning/stat_scaling.gd" id="6_scaling"]
+[ext_resource type="Script" path="res://systems/spawning/horde_data.gd" id="9_horde"]
+[ext_resource type="Script" path="res://systems/boss/mini_boss_data.gd" id="10_mini_boss"]
+[ext_resource type="Resource" path="res://data/enemies/trolleador.tres" id="11_trolleador"]
+[ext_resource type="Script" path="res://systems/items/item_pool.gd" id="12_pool"]
+[ext_resource type="Script" path="res://core/weighted_table.gd" id="13_table"]
+[ext_resource type="Script" path="res://core/weighted_entry.gd" id="14_entry"]
+[ext_resource type="Resource" path="res://data/rarities/rare.tres" id="15_rare"]
+[ext_resource type="Resource" path="res://data/rarities/improbable.tres" id="16_improbable"]
+[ext_resource type="Resource" path="res://data/rarities/legendary.tres" id="17_legendary"]
+
+[sub_resource type="Curve" id="Curve_rate"]
+_limits = [0.0, 20.0, 0.0, 50.0]
+_data = [Vector2(20, 3.6), 0.0, 0.15, 1, 1, Vector2(24, 4.2), 0.15, 0.175, 1, 1, Vector2(28, 4.9), 0.175, 0.2, 1, 1, Vector2(30, 5.3), 0.2, 4.4, 1, 1, Vector2(30.5, 7.5), 4.4, 0.6667, 1, 1, Vector2(35, 10.5), 0.6667, 0.3, 1, 1, Vector2(40, 12), 0.3, 0.0, 1, 1]
+point_count = 7
+
+[sub_resource type="Curve" id="Curve_elite"]
+_limits = [0.0, 100.0, 0.0, 50.0]
+_data = [Vector2(20, 9), 0.0, 0.4, 1, 1, Vector2(25, 11), 0.4, 0.4, 1, 1, Vector2(30, 13), 0.4, 12.0, 1, 1, Vector2(31, 25), 12.0, 7.5, 1, 1, Vector2(33, 40), 7.5, 1.4286, 1, 1, Vector2(40, 50), 1.4286, 0.0, 1, 1]
+point_count = 6
+
+[sub_resource type="Curve" id="Curve_health"]
+_limits = [0.0, 600.0, 0.0, 50.0]
+_data = [Vector2(20, 10.2), 0.0, 0.9333, 1, 1, Vector2(23, 13), 0.9333, 1.3333, 1, 1, Vector2(26, 17), 1.3333, 1.6667, 1, 1, Vector2(29, 22), 1.6667, 2.0, 1, 1, Vector2(30, 24), 2.0, 24.0, 1, 1, Vector2(31, 48), 24.0, 31.0, 1, 1, Vector2(33, 110), 31.0, 55.0, 1, 1, Vector2(35, 220), 55.0, 60.0, 1, 1, Vector2(40, 520), 60.0, 0.0, 1, 1]
+point_count = 9
+
+[sub_resource type="Curve" id="Curve_damage"]
+_limits = [0.0, 50.0, 0.0, 50.0]
+_data = [Vector2(20, 2.6), 0.0, 0.1, 1, 1, Vector2(25, 3.1), 0.1, 0.1, 1, 1, Vector2(30, 3.6), 0.1, 2.4, 1, 1, Vector2(31, 6), 2.4, 2.75, 1, 1, Vector2(33, 11.5), 2.75, 3.75, 1, 1, Vector2(35, 19), 3.75, 3.8, 1, 1, Vector2(40, 38), 3.8, 0.0, 1, 1]
+point_count = 7
+
+[sub_resource type="Resource" id="Resource_scale_health"]
+script = ExtResource("6_scaling")
+stat = &"max_health"
+multiplier = SubResource("Curve_health")
+
+[sub_resource type="Resource" id="Resource_scale_contact"]
+script = ExtResource("6_scaling")
+stat = &"contact_damage"
+multiplier = SubResource("Curve_damage")
+
+[sub_resource type="Resource" id="Resource_scale_weapon"]
+script = ExtResource("6_scaling")
+stat = &"damage"
+multiplier = SubResource("Curve_damage")
+
+[sub_resource type="Curve" id="Curve_xp"]
+_limits = [0.0, 10.0, 0.0, 50.0]
+_data = [Vector2(0, 1), 0.0, 0.03, 1, 1, Vector2(10, 1.3), 0.03, 0.07, 1, 1, Vector2(20, 2), 0.07, 0.08, 1, 1, Vector2(30, 2.8), 0.08, 0.08, 1, 1, Vector2(40, 3.6), 0.08, 0.08, 1, 1, Vector2(50, 4.4), 0.08, 0.0, 1, 1]
+point_count = 6
+
+[sub_resource type="Curve" id="Curve_gold"]
+_limits = [0.0, 10.0, 0.0, 50.0]
+_data = [Vector2(0, 1), 0.0, 0.04, 1, 1, Vector2(10, 1.4), 0.04, 0.08, 1, 1, Vector2(20, 2.2), 0.08, 0.08, 1, 1, Vector2(30, 3), 0.08, 0.1, 1, 1, Vector2(40, 4), 0.1, 0.1, 1, 1, Vector2(50, 5), 0.1, 0.0, 1, 1]
+point_count = 6
+
+[sub_resource type="Resource" id="Resource_scale_xp"]
+script = ExtResource("6_scaling")
+stat = &"xp_reward"
+multiplier = SubResource("Curve_xp")
+
+[sub_resource type="Resource" id="Resource_scale_gold"]
+script = ExtResource("6_scaling")
+stat = &"gold_reward"
+multiplier = SubResource("Curve_gold")
+
+[sub_resource type="Resource" id="Resource_swarmer"]
+script = ExtResource("2_entry")
+enemy = ExtResource("3_swarmer")
+weight = 1.0
+
+[sub_resource type="Resource" id="Resource_shooter"]
+script = ExtResource("2_entry")
+enemy = ExtResource("4_shooter")
+weight = 0.12
+from_difficulty = 0.5
+
+[sub_resource type="Resource" id="Horde_minute_3"]
+script = ExtResource("9_horde")
+at_minute = 3.0
+count = 230
+elites = 6
+spawn_seconds = 30.0
+warning_seconds = 3.0
+announce_key = &"HORDE_INCOMING"
+announce_color = Color(0.88, 0.38, 0.28, 1)
+
+[sub_resource type="Resource" id="Horde_minute_6"]
+script = ExtResource("9_horde")
+at_minute = 6.0
+count = 360
+elites = 14
+spawn_seconds = 30.0
+warning_seconds = 3.0
+announce_key = &"HORDE_INCOMING"
+announce_color = Color(0.88, 0.38, 0.28, 1)
+
+[sub_resource type="Curve" id="Curve_troll_health"]
+_limits = [0.0, 50.0, 0.0, 40.0]
+_data = [Vector2(0, 1), 0.0, 0.12, 1, 1, Vector2(5, 1.6), 0.12, 0.2, 1, 1, Vector2(10, 2.6), 0.2, 0.48, 1, 1, Vector2(15, 5), 0.48, 0.8, 1, 1, Vector2(20, 9), 0.8, 1.0, 1, 1, Vector2(25, 14), 1.0, 1.2, 1, 1, Vector2(30, 20), 1.2, 1.6, 1, 1, Vector2(40, 36), 1.6, 0.0, 1, 1]
+point_count = 8
+
+[sub_resource type="Curve" id="Curve_troll_damage"]
+_limits = [0.0, 10.0, 0.0, 40.0]
+_data = [Vector2(0, 1), 0.0, 0.07, 1, 1, Vector2(10, 1.7), 0.07, 0.13, 1, 1, Vector2(20, 3), 0.13, 0.14, 1, 1, Vector2(30, 4.4), 0.14, 0.16, 1, 1, Vector2(40, 6), 0.16, 0.0, 1, 1]
+point_count = 5
+
+[sub_resource type="Resource" id="Scaling_troll_health"]
+script = ExtResource("6_scaling")
+stat = &"max_health"
+multiplier = SubResource("Curve_troll_health")
+
+[sub_resource type="Resource" id="Scaling_troll_contact"]
+script = ExtResource("6_scaling")
+stat = &"contact_damage"
+multiplier = SubResource("Curve_troll_damage")
+
+[sub_resource type="Resource" id="Rarities_troll_reward"]
+script = ExtResource("13_table")
+entries = Array[ExtResource("14_entry")]([ExtResource("15_rare"), ExtResource("16_improbable"), ExtResource("17_legendary")])
+
+[sub_resource type="Resource" id="Items_troll_reward"]
+script = ExtResource("12_pool")
+rarities = SubResource("Rarities_troll_reward")
+items_dir = "res://data/items"
+
+[sub_resource type="Resource" id="MiniBoss_trolleador"]
+script = ExtResource("10_mini_boss")
+enemy = ExtResource("11_trolleador")
+at_minute = 4.5
+warning_seconds = 4.0
+announce_key = &"TROLLEADOR_INCOMING"
+announce_color = Color(0.55, 0.72, 0.29, 1)
+min_distance = 16.0
+max_distance = 22.0
+stat_scaling = Array[ExtResource("6_scaling")]([SubResource("Scaling_troll_health"), SubResource("Scaling_troll_contact")])
+reward_gold = 120.0
+reward_items = SubResource("Items_troll_reward")
+reveal_time = 1.6
+
+[resource]
+script = ExtResource("1_data")
+round_minutes = 10.0
+spawn_rate = SubResource("Curve_rate")
+peak_interval = 60.0
+peak_duration = 10.0
+peak_multiplier = 2.0
+max_alive = 180
+min_spawn_distance = 16.0
+max_spawn_distance = 24.0
+enemies = Array[ExtResource("2_entry")]([SubResource("Resource_swarmer"), SubResource("Resource_shooter")])
+elite_chance = SubResource("Curve_elite")
+elite = ExtResource("5_elite")
+stat_scaling = Array[ExtResource("6_scaling")]([SubResource("Resource_scale_health"), SubResource("Resource_scale_contact"), SubResource("Resource_scale_weapon"), SubResource("Resource_scale_xp"), SubResource("Resource_scale_gold")])
+hordes = Array[ExtResource("9_horde")]([SubResource("Horde_minute_3"), SubResource("Horde_minute_6")])
+mini_bosses = Array[ExtResource("10_mini_boss")]([SubResource("MiniBoss_trolleador")])

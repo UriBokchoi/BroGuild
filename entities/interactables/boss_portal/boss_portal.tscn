@@ -1,0 +1,238 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://entities/interactables/boss_portal/boss_portal.gd" id="1_portal"]
+[ext_resource type="Script" path="res://entities/interactables/interactable.gd" id="2_interactable"]
+[ext_resource type="Shader" path="res://vfx/shaders/light_beam.gdshader" id="3_beam"]
+[ext_resource type="Shader" path="res://vfx/shaders/portal_vortex.gdshader" id="4_vortex"]
+[ext_resource type="Script" path="res://vfx/juice/interact_hint/interact_hint.gd" id="91_hint"]
+[ext_resource type="Material" path="res://vfx/juice/interact_hint/interact_glint_idle.tres" id="92_idle"]
+[ext_resource type="Material" path="res://vfx/juice/interact_hint/interact_glint_focus.tres" id="93_focus"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_stone"]
+albedo_color = Color(0.56, 0.56, 0.6, 1)
+roughness = 0.95
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_stone_dark"]
+albedo_color = Color(0.44, 0.44, 0.49, 1)
+roughness = 0.95
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_slot"]
+albedo_color = Color(0.1, 0.1, 0.12, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_card"]
+albedo_color = Color(0.1, 0.72, 0.62, 1)
+emission_enabled = true
+emission = Color(0.15, 0.9, 0.75, 1)
+emission_energy_multiplier = 1.2
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rune"]
+albedo_color = Color(0.95, 0.75, 0.3, 1)
+emission_enabled = true
+emission = Color(1, 0.78, 0.32, 1)
+emission_energy_multiplier = 0.8
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_platform"]
+material = SubResource("StandardMaterial3D_stone")
+top_radius = 3.4
+bottom_radius = 3.6
+height = 0.3
+radial_segments = 12
+
+[sub_resource type="TorusMesh" id="TorusMesh_ring"]
+material = SubResource("StandardMaterial3D_stone")
+inner_radius = 1.75
+outer_radius = 2.3
+rings = 48
+ring_segments = 12
+
+[sub_resource type="BoxMesh" id="BoxMesh_pillar"]
+material = SubResource("StandardMaterial3D_stone_dark")
+size = Vector3(0.7, 2, 0.9)
+
+[sub_resource type="BoxMesh" id="BoxMesh_rune"]
+material = SubResource("StandardMaterial3D_rune")
+size = Vector3(0.22, 0.22, 0.95)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vortex"]
+render_priority = 0
+shader = ExtResource("4_vortex")
+
+[sub_resource type="QuadMesh" id="QuadMesh_vortex"]
+material = SubResource("ShaderMaterial_vortex")
+size = Vector2(3.6, 3.6)
+
+[sub_resource type="BoxMesh" id="BoxMesh_pedestal"]
+material = SubResource("StandardMaterial3D_stone_dark")
+size = Vector3(1.8, 1.1, 0.8)
+
+[sub_resource type="BoxMesh" id="BoxMesh_slab"]
+material = SubResource("StandardMaterial3D_stone")
+size = Vector3(2.1, 0.2, 1.1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_slot"]
+material = SubResource("StandardMaterial3D_slot")
+size = Vector3(0.42, 0.55, 0.06)
+
+[sub_resource type="BoxMesh" id="BoxMesh_card"]
+material = SubResource("StandardMaterial3D_card")
+size = Vector3(0.34, 0.48, 0.04)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_beam"]
+render_priority = 0
+shader = ExtResource("3_beam")
+shader_parameter/color = Color(1, 0.8, 0.3, 1)
+shader_parameter/intensity = 0.9
+shader_parameter/height = 40.0
+shader_parameter/stripe_count = 14.0
+shader_parameter/stripe_speed = 0.5
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_beam"]
+material = SubResource("ShaderMaterial_beam")
+top_radius = 1.0
+bottom_radius = 1.0
+height = 40.0
+radial_segments = 32
+rings = 1
+cap_top = false
+cap_bottom = false
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_pedestal"]
+size = Vector3(2.1, 1.6, 1.1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_pillar"]
+size = Vector3(0.7, 4.6, 0.9)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_exit"]
+size = Vector3(3, 3.4, 0.9)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_reach"]
+radius = 2.8
+
+[node name="BossPortal" type="Node3D" node_paths=PackedStringArray("interactable", "boss_spawn", "key_slots", "beam", "vortex", "exit_area")]
+script = ExtResource("1_portal")
+interactable = NodePath("Interactable")
+boss_spawn = NodePath("BossSpawn")
+key_slots = [NodePath("Visual/CardLeft"), NodePath("Visual/CardMiddle"), NodePath("Visual/CardRight")]
+beam = NodePath("Beam")
+vortex = NodePath("Vortex")
+exit_area = NodePath("Exit")
+locked_key = &"BOSS_PORTAL_LOCKED"
+ready_key = &"BOSS_PORTAL_READY"
+
+[node name="Visual" type="Node3D" parent="."]
+
+[node name="Platform" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, 0.6)
+mesh = SubResource("CylinderMesh_platform")
+
+[node name="Ring" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 2.7, 1.4)
+mesh = SubResource("TorusMesh_ring")
+
+[node name="PillarLeft" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.2, 1.3, 1.4)
+mesh = SubResource("BoxMesh_pillar")
+
+[node name="PillarRight" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, 1.3, 1.4)
+mesh = SubResource("BoxMesh_pillar")
+
+[node name="RuneTop" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(0.7071, -0.7071, 0, 0.7071, 0.7071, 0, 0, 0, 1, 0, 4.75, 1.4)
+mesh = SubResource("BoxMesh_rune")
+
+[node name="RuneLeft" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(0.7071, -0.7071, 0, 0.7071, 0.7071, 0, 0, 0, 1, -1.45, 4.2, 1.4)
+mesh = SubResource("BoxMesh_rune")
+
+[node name="RuneRight" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(0.7071, -0.7071, 0, 0.7071, 0.7071, 0, 0, 0, 1, 1.45, 4.2, 1.4)
+mesh = SubResource("BoxMesh_rune")
+
+[node name="Pedestal" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.85, -1.6)
+mesh = SubResource("BoxMesh_pedestal")
+
+[node name="Slab" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -1.6)
+mesh = SubResource("BoxMesh_slab")
+
+[node name="SlotLeft" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.55, 0.9, -2)
+mesh = SubResource("BoxMesh_slot")
+
+[node name="SlotMiddle" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, -2)
+mesh = SubResource("BoxMesh_slot")
+
+[node name="SlotRight" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.55, 0.9, -2)
+mesh = SubResource("BoxMesh_slot")
+
+[node name="CardLeft" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.55, 0.9, -2.05)
+mesh = SubResource("BoxMesh_card")
+
+[node name="CardMiddle" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, -2.05)
+mesh = SubResource("BoxMesh_card")
+
+[node name="CardRight" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.55, 0.9, -2.05)
+mesh = SubResource("BoxMesh_card")
+
+[node name="Vortex" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.7, 1.4)
+cast_shadow = 0
+instance_shader_parameters/charge = 0.15
+mesh = SubResource("QuadMesh_vortex")
+
+[node name="Beam" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 20, 1.4)
+cast_shadow = 0
+mesh = SubResource("CylinderMesh_beam")
+
+[node name="Body" type="StaticBody3D" parent="."]
+collision_mask = 0
+
+[node name="Pedestal" type="CollisionShape3D" parent="Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, -1.6)
+shape = SubResource("BoxShape3D_pedestal")
+
+[node name="PillarLeft" type="CollisionShape3D" parent="Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.2, 2.3, 1.4)
+shape = SubResource("BoxShape3D_pillar")
+
+[node name="PillarRight" type="CollisionShape3D" parent="Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, 2.3, 1.4)
+shape = SubResource("BoxShape3D_pillar")
+
+[node name="Exit" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2, 1.4)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="Shape" type="CollisionShape3D" parent="Exit"]
+shape = SubResource("BoxShape3D_exit")
+
+[node name="Interactable" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.6)
+collision_layer = 256
+collision_mask = 0
+script = ExtResource("2_interactable")
+prompt_key = &"BOSS_PORTAL_READY"
+
+[node name="Shape" type="CollisionShape3D" parent="Interactable"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("SphereShape3D_reach")
+
+[node name="BossSpawn" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6.5)
+
+[node name="InteractHint" type="Node" parent="." node_paths=PackedStringArray("interactable", "visual")]
+script = ExtResource("91_hint")
+interactable = NodePath("../Interactable")
+visual = NodePath("../Visual")
+idle_material = ExtResource("92_idle")
+focus_material = ExtResource("93_focus")

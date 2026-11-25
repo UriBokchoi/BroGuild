@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="HeraldData" format=3]
+
+[ext_resource type="Script" path="res://systems/pacts/herald_data.gd" id="1_data"]
+[ext_resource type="Script" path="res://systems/pacts/pact_data.gd" id="2_pact"]
+[ext_resource type="Resource" path="res://data/pacts/ego_lifting.tres" id="3_ego_lifting"]
+[ext_resource type="Resource" path="res://data/pacts/all_in.tres" id="4_all_in"]
+[ext_resource type="Resource" path="res://data/pacts/cheat_meal.tres" id="5_cheat_meal"]
+[ext_resource type="Resource" path="res://data/pacts/showboating.tres" id="6_showboating"]
+[ext_resource type="Resource" path="res://data/pacts/no_days_off.tres" id="7_no_days_off"]
+[ext_resource type="Resource" path="res://data/pacts/skip_leg_day.tres" id="8_skip_leg_day"]
+
+[resource]
+script = ExtResource("1_data")
+every_kills = 1000
+min_distance = 12.0
+max_distance = 18.0
+choices = 3
+pacts = Array[ExtResource("2_pact")]([ExtResource("3_ego_lifting"), ExtResource("4_all_in"), ExtResource("5_cheat_meal"), ExtResource("6_showboating"), ExtResource("7_no_days_off"), ExtResource("8_skip_leg_day")])
+announce_key = &"HERALD_ARRIVED"
+announce_color = Color(0.85, 0.45, 1, 1)
+reroll_cost = 10
+reroll_growth = 1.5

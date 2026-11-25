@@ -1,18 +1,12 @@
 class_name LevelUpPanel
 extends ModalPanel
-## Elección al subir de nivel: pausa el juego, pide el cursor y muestra una carta por opción. Hay
-## que elegir: Esc no la salta ([ModalPanel]). Quien la abre ([LevelUpController]) aplica la elegida
-## y la cierra.
+## Las cartas al subir de nivel. Pausa el juego y obliga a elegir (Esc no lo salta); quien lo abre,
+## el LevelUpController, aplica la elegida.
 ##
-## La ruleta (GDD §5): las cartas de mejora giran por las rarezas y se paran una tras otra
-## ([method LevelUpCard.spin], con los tiempos de [member data]); hasta entonces no se puede elegir.
-## Un clic o «aceptar» las para todas ya. «Volver a tirar» pide otras cartas
-## ([signal reroll_requested]); quien abre el panel cobra y lo vuelve a abrir.
-##
-## Doble o nada: al elegir una mejora que aún puede subir de rareza, se puede quedar o apostar
-## ([signal double_requested]). Quien abre el panel decide el resultado ([method resolve_double]): la
-## carta gira entre su rareza y la siguiente y cae en la nueva (otra mejora, más fuerte) o se pierde
-## (en gris; esa subida no da nada: [signal chosen] con [code]null[/code]).
+## Las cartas de mejora giran como una ruleta y se paran una tras otra; un clic las para todas.
+## «Volver a tirar» pide cartas nuevas. Al elegir una mejora que aún puede subir de rareza se puede
+## apostar a doble o nada: el controlador decide y el panel lo enseña con resolve_double. Antes de
+## decidir, el clic derecho deshace la elección y deja escoger otra carta.
 
 signal chosen(option: LevelUpOption)
 ## Se pulsó «volver a tirar».
@@ -59,6 +53,10 @@ func _ready() -> void:
 
 func _input(event: InputEvent) -> void:
 	super(event)
+	if visible and _phase == Phase.BETTING and _is_right_click(event):
+		cancel_bet()
+		get_viewport().set_input_as_handled()
+		return
 	if not visible or not _skips_spin(event):
 		return
 	if is_spinning():
@@ -282,6 +280,23 @@ func _on_card_pressed(card: LevelUpCard) -> void:
 			other.disabled = true
 			other.modulate = DIMMED
 	_refresh()
+
+
+## Deshace la carta elegida (antes de quedársela o apostarla): vuelve a elegir entre todas.
+func cancel_bet() -> void:
+	if _phase != Phase.BETTING:
+		return
+	_bet = null
+	_phase = Phase.CHOOSING
+	for card: LevelUpCard in get_cards():
+		card.disabled = false
+		card.modulate = Color.WHITE
+	_refresh()
+
+
+static func _is_right_click(event: InputEvent) -> bool:
+	var click := event as InputEventMouseButton
+	return click != null and click.pressed and click.button_index == MOUSE_BUTTON_RIGHT
 
 
 func _on_keep_pressed() -> void:

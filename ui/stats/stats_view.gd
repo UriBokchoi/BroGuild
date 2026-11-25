@@ -1,9 +1,11 @@
 class_name StatsView
 extends VBoxContainer
-## Lista de las stats de un [StatsComponent]: agrupadas como en sus datos
-## ([code]@export_group[/code]), con nombre traducido, unidad y filas alternas. Las que cambian
-## por mejoras o maldiciones se resaltan con su valor base al lado. Una stat nueva aparece sola;
-## solo necesita su traducción ([code]STAT_<NOMBRE>[/code] en data/i18n).
+## La lista de stats de un StatsComponent, agrupadas como en sus datos, con su nombre y su unidad.
+## Las que cambian las mejoras se resaltan con su base al lado. De serie solo enseña las que algo
+## del juego puede cambiar. Una stat nueva solo necesita su traducción (STAT_<NOMBRE>).
+
+## Solo las stats que algo del juego puede cambiar (las importantes); sin esto, todas.
+@export var only_upgradable: bool = true
 
 var _stats: StatsComponent
 var _rows: Dictionary[StringName, StatRow] = {}
@@ -23,7 +25,7 @@ func show_stats(stats: StatsComponent) -> void:
 			var property_name: String = property["name"]
 			if usage & PROPERTY_USAGE_GROUP:
 				pending_group = property_name
-			elif stats.has_stat(property_name):
+			elif stats.has_stat(property_name) and _shows(property_name):
 				if not pending_group.is_empty():
 					_add_group(pending_group)
 					pending_group = ""
@@ -49,6 +51,10 @@ func shown_stats() -> Array[StringName]:
 ## ¿Se muestra [param stat] resaltada (distinta de su base)?
 func is_highlighted(stat: StringName) -> bool:
 	return _rows.has(stat) and _rows[stat].modified
+
+
+func _shows(stat: StringName) -> bool:
+	return not only_upgradable or UpgradableStats.has(stat)
 
 
 func _clear() -> void:

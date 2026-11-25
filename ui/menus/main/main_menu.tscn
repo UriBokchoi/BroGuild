@@ -10,29 +10,11 @@
 [ext_resource type="Texture2D" path="res://assets/textures/icons/ui/language.svg" id="8_globe"]
 [ext_resource type="PackedScene" path="res://ui/menus/leaderboard/leaderboard_panel.tscn" id="9_records"]
 [ext_resource type="PackedScene" path="res://ui/menus/archive/archive_panel.tscn" id="10_archive"]
-
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_sky"]
-sky_top_color = Color(0.32, 0.45, 0.68, 1)
-sky_horizon_color = Color(0.78, 0.66, 0.5, 1)
-ground_bottom_color = Color(0.12, 0.14, 0.12, 1)
-ground_horizon_color = Color(0.78, 0.66, 0.5, 1)
-
-[sub_resource type="Sky" id="Sky_menu"]
-sky_material = SubResource("ProceduralSkyMaterial_sky")
-
-[sub_resource type="Environment" id="Environment_menu"]
-background_mode = 2
-sky = SubResource("Sky_menu")
-ambient_light_source = 3
-tonemap_mode = 2
-glow_enabled = true
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ground"]
-albedo_color = Color(0.3, 0.46, 0.27, 1)
-roughness = 0.95
+[ext_resource type="Environment" path="res://levels/brosque/environment.tres" id="11_environment"]
+[ext_resource type="Material" path="res://levels/brosque/materials/grass.tres" id="12_grass"]
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_ground"]
-material = SubResource("StandardMaterial3D_ground")
+material = ExtResource("12_grass")
 top_radius = 9.0
 bottom_radius = 9.0
 height = 0.2
@@ -45,11 +27,12 @@ characters = Array[Resource]([ExtResource("2_warrior"), ExtResource("3_mage"), E
 models = [NodePath("Characters/Warrior"), NodePath("Characters/Mage"), NodePath("Characters/Rogue")]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_menu")
+environment = ExtResource("11_environment")
 
 [node name="Sun" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.866, -0.25, 0.433, 0, 0.866, 0.5, -0.5, -0.433, 0.75, 0, 6, 0)
-light_color = Color(1, 0.93, 0.82, 1)
+light_color = Color(1, 0.89, 0.72, 1)
+light_energy = 1.25
 shadow_enabled = true
 
 [node name="Camera" type="Camera3D" parent="."]

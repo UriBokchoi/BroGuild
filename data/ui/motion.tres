@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="UiMotionData" format=3]
+
+[ext_resource type="Script" path="res://ui/widgets/ui_motion_data.gd" id="1_data"]
+
+[resource]
+script = ExtResource("1_data")
+pop_scale = 1.18
+pop_time = 0.22
+appear_scale = 0.94
+appear_time = 0.16
+hover_scale = 1.04
+press_scale = 0.96
+hover_time = 0.08
+bar_time = 0.18
+trail_delay = 0.35
+trail_time = 0.45

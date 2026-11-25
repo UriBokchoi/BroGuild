@@ -1,10 +1,8 @@
 class_name WallJumpState
 extends MovementState
 ## Salto en pared, al estilo de Deadlock: en el aire junto a una pared, Espacio te impulsa hacia
-## arriba y hacia donde pides, separándote de la pared (si pides hacia la pared, rebotas). Sales
-## al menos a [code]wall_jump_speed[/code]; si ibas más rápido, conservas tu velocidad. El primero
-## es gratis; los encadenados sin tocar suelo gastan [code]wall_jump_chain_cost[/code]. En la
-## escena va por encima del dash-jump y del doble salto. Pasa al aire en el mismo tick.
+## arriba y hacia donde pides, separándote de ella (si pides hacia la pared, rebotas). Si ibas más
+## rápido, conservas la velocidad. El primero es gratis; los encadenados sin tocar suelo gastan.
 
 
 func can_enter() -> bool:
