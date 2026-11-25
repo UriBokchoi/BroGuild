@@ -1723,7 +1723,7 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
 - **Por qué:** lo pidió el diseñador («contra más dificultad más experiencia»). Hasta ahora solo lo hacían las calaveras y las bolsitas. Es el «más riesgo, más recompensa» del GDD, y con los tiers hace que la dificultad alta compense.
 
 ## 2026-11-25 · Detalles del Guerrero y del Pícaro
-- **Decisión:** el Guerrero lleva yelmo con cresta, hombreras y cinturón con hebilla; el Pícaro, capucha con pañuelo y un cinturón con bolsitas. Son piezas como las que ya había (`assets/models/props/`), puestas en los puntos del modelo con `attachments`.
+- **Decisión:** el Guerrero lleva yelmo con cresta, hombreras y cinturón con hebilla; el Pícaro, un pañuelo rojo al cuello y un cinturón con bolsitas. (Llevó también una capucha, pero al diseñador no le gustó y se quitó.) Son piezas como las que ya había (`assets/models/props/`), puestas en los puntos del modelo con `attachments`.
 - **Por qué:** lo pidió el diseñador. El Mago ya tenía sombrero; ahora los tres se distinguen de un vistazo.
 
 ## 2026-11-25 · Lo que pesa el juego

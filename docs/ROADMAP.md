@@ -135,7 +135,7 @@ Lo que salió en la segunda tanda de pruebas; va antes que el resto.
 - [x] Tiers de nivel: cada nivel tiene 3. Superar uno abre el siguiente en la selección de nivel; elegir el 2 es jugar el 1 y, al cruzar su portal, pasar al 2 conservando todo (y así con el 3). Más grande y más difícil cada uno. El Brosque: verano, otoño (130 m) e invierno (150 m), con sus colores y su clima y las mismas piezas
 - [x] Tras el tier 3, la arena del jefe final (la misma para todos los niveles): solo el jefe, Mr. Brolympia; al vencerlo aparece el portal y ya es victoria, pero sigue la oleada infinita hasta morir o cruzarlo
 - [x] Más dificultad, más experiencia y oro: los enemigos sueltan más cuanto más alta es
-- [x] Detalles del Guerrero (yelmo, hombreras y cinturón) y del Pícaro (capucha con pañuelo y cinturón con bolsitas)
+- [x] Detalles del Guerrero (yelmo, hombreras y cinturón) y del Pícaro (pañuelo y cinturón con bolsitas)
 - [ ] Élites con afijos (rápido, vampiro, explosivo…), solo en tier 2 o más; con más probabilidad de soltar cofre que un élite normal
 
 ## Hito 7 — El torneo
