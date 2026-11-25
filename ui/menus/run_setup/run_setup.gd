@@ -3,12 +3,12 @@ extends Node3D
 ## Elegir personaje y nivel antes de jugar. A la izquierda, los personajes; en el centro, el modelo
 ## del que se mira; a la derecha, su ficha.
 ##
-## Al elegir personaje salen los niveles: un clic marca uno y enseña su objetivo y su lore, y
-## «Jugar» empieza la partida. Esc o «Volver» retroceden de los niveles a los personajes y de ahí
-## al menú.
+## Al elegir personaje salen los niveles: un clic marca uno y enseña sus tiers (los que no se han
+## abierto, sin poder elegirlos), el objetivo del tier marcado y su lore, y «Jugar» empieza la
+## partida. Esc o «Volver» retroceden de los niveles a los personajes y de ahí al menú.
 
-## Se eligió personaje y nivel.
-signal play_requested(character: CharacterData, level: LevelData)
+## Se eligió personaje, nivel y tier (1 en un nivel sin tiers).
+signal play_requested(character: CharacterData, level: LevelData, tier: int)
 ## Se pidió volver al menú principal.
 signal back_requested
 
@@ -21,9 +21,11 @@ signal back_requested
 
 var _shown: CharacterData
 var _chosen: CharacterData
-## Nivel marcado (o [code]null[/code]).
+## Nivel marcado (o [code]null[/code]) y su tier marcado.
 var _selected: LevelData
+var _tier: int = 1
 var _level_group := ButtonGroup.new()
+var _tier_group := ButtonGroup.new()
 
 @onready var _side: Control = %Side
 @onready var _character_list: VBoxContainer = %CharacterList
@@ -33,6 +35,7 @@ var _level_group := ButtonGroup.new()
 @onready var _level_info: Control = %LevelInfo
 @onready var _level_play: Button = %LevelPlay
 @onready var _level_name: Label = %LevelName
+@onready var _tier_row: HBoxContainer = %TierRow
 @onready var _level_goal: Label = %LevelGoal
 @onready var _level_lore: Label = %LevelLore
 @onready var _name: Label = %CharacterName
@@ -114,10 +117,29 @@ func get_selected() -> LevelData:
 	return _selected
 
 
-## Juega [param level] con el personaje elegido (si el nivel ya existe).
+## Juega [param level] con el personaje elegido, hasta el tier marcado (si el nivel ya existe).
 func play(level: LevelData) -> void:
 	if _chosen and level and level.is_available():
-		play_requested.emit(_chosen, level)
+		play_requested.emit(_chosen, level, _tier if level == _selected else 1)
+
+
+## Marca el tier [param tier] del nivel marcado (si está abierto) y enseña su objetivo.
+func select_tier(tier: int) -> void:
+	if _selected == null or _selected.tiers.is_empty():
+		return
+	if tier < 1 or tier > _selected.tiers.size() or not Save.is_tier_unlocked(_selected.id, tier):
+		return
+	_tier = tier
+	for index: int in _tier_row.get_child_count():
+		(_tier_row.get_child(index) as Button).set_pressed_no_signal(index + 1 == tier)
+	var stage := _selected.tiers[tier - 1]
+	_level_goal.text = stage.goal_key
+	_level_goal.visible = not stage.goal_key.is_empty()
+
+
+## Tier marcado.
+func get_tier() -> int:
+	return _tier
 
 
 ## Retrocede: de los niveles a los personajes; de ahí, al menú.
@@ -154,13 +176,38 @@ func _character_button(character: CharacterData) -> Button:
 	return button
 
 
-## Muestra la ficha de [param level]: su nombre, cómo se gana y su lore (lo que no tenga, no sale).
+## Muestra la ficha de [param level]: su nombre, sus tiers, cómo se gana y su lore (lo que no tenga,
+## no sale). Marca el último tier jugado si está abierto; si no, el 1.
 func show_level(level: LevelData) -> void:
 	_level_name.text = level.name_key
 	_level_goal.text = level.goal_key
 	_level_goal.visible = not level.goal_key.is_empty()
 	_level_lore.text = level.lore_key
 	_level_lore.visible = not level.lore_key.is_empty()
+	for child: Node in _tier_row.get_children():
+		_tier_row.remove_child(child)
+		child.queue_free()
+	_tier = 1
+	_tier_row.visible = not level.tiers.is_empty()
+	for index: int in level.tiers.size():
+		_tier_row.add_child(_tier_button(level, index + 1))
+	if not level.tiers.is_empty():
+		var last := RunState.tier if RunState.level == level else 1
+		select_tier(last if Save.is_tier_unlocked(level.id, last) else 1)
+
+
+## Botón de un tier: con su número, sin poder pulsarlo si aún no se ha abierto (dice cuál abrirlo).
+func _tier_button(level: LevelData, tier: int) -> Button:
+	var button := Button.new()
+	var unlocked := Save.is_tier_unlocked(level.id, tier)
+	button.text = tr(&"TIER_SHORT") % tier
+	button.disabled = not unlocked
+	button.tooltip_text = String(level.tiers[tier - 1].name_key) if unlocked else tr(&"TIER_LOCKED") % (tier - 1)
+	button.theme_type_variation = &"SmallButton"
+	button.toggle_mode = true
+	button.button_group = _tier_group
+	button.pressed.connect(select_tier.bind(tier))
+	return button
 
 
 func _level_button(level: LevelData) -> Button:

@@ -1,0 +1,142 @@
+[gd_scene format=3]
+
+[ext_resource type="Material" path="res://levels/brosque/materials/grass.tres" id="1_grass"]
+[ext_resource type="Resource" path="res://data/waves/brosque.tres" id="9_waves"]
+[ext_resource type="Script" path="res://levels/common/level_map.gd" id="10_map"]
+[ext_resource type="Script" path="res://systems/spawning/breakable_scatter.gd" id="11_scatter"]
+[ext_resource type="Script" path="res://systems/spawning/scatter_entry.gd" id="12_entry"]
+[ext_resource type="PackedScene" path="res://entities/breakables/skull/skull.tscn" id="13_skull"]
+[ext_resource type="PackedScene" path="res://entities/breakables/pouch/pouch.tscn" id="14_pouch"]
+[ext_resource type="Script" path="res://levels/common/layout/level_layout.gd" id="16_layout"]
+[ext_resource type="Resource" path="res://data/layouts/brosque.tres" id="17_layout_data"]
+[ext_resource type="PackedScene" path="res://entities/interactables/boss_key/boss_key.tscn" id="18_key"]
+[ext_resource type="Resource" path="res://data/bosses/brosque.tres" id="19_boss"]
+[ext_resource type="PackedScene" path="res://entities/interactables/heal_shop/tavern.tscn" id="20_tavern"]
+[ext_resource type="PackedScene" path="res://levels/brosque/props/puddle.tscn" id="21_puddle"]
+[ext_resource type="PackedScene" path="res://levels/brosque/props/stone_trolls.tscn" id="22_stone_trolls"]
+[ext_resource type="Environment" path="res://levels/brosque/environment.tres" id="23_environment"]
+[ext_resource type="PackedScene" path="res://levels/common/boundary/map_boundary.tscn" id="24_boundary"]
+[ext_resource type="PackedScene" path="res://vfx/juice/canopy_leaves/canopy_leaves.tscn" id="25_leaves"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ground"]
+material = ExtResource("1_grass")
+size = Vector2(440, 440)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ground"]
+size = Vector3(260, 1, 260)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_bound_x"]
+size = Vector3(224, 30, 2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_bound_z"]
+size = Vector3(2, 30, 224)
+
+[sub_resource type="Resource" id="Resource_skulls"]
+script = ExtResource("12_entry")
+scene = ExtResource("13_skull")
+count = 56
+
+[sub_resource type="Resource" id="Resource_pouches"]
+script = ExtResource("12_entry")
+scene = ExtResource("14_pouch")
+count = 38
+
+[sub_resource type="Resource" id="Resource_puddles"]
+script = ExtResource("12_entry")
+scene = ExtResource("21_puddle")
+count = 26
+
+[sub_resource type="Resource" id="Resource_keys"]
+script = ExtResource("12_entry")
+scene = ExtResource("18_key")
+count = 3
+
+[node name="BrosqueMap" type="Node3D" node_paths=PackedStringArray("spawn_point", "followers")]
+script = ExtResource("10_map")
+waves = ExtResource("9_waves")
+autostart_waves = true
+play_area = Rect2(-103, -103, 206, 206)
+spawn_point = NodePath("PlayerSpawn")
+intro_keys = Array[StringName]([&"BROSQUE_INTRO_WELCOME", &"BROSQUE_INTRO_NO_PAIN", &"BROSQUE_INTRO_LEG_DAY", &"BROSQUE_INTRO_KEYS"])
+boss = ExtResource("19_boss")
+followers = [NodePath("MapBoundary"), NodePath("CanopyLeaves")]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = ExtResource("23_environment")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.819, 0.47, -0.329, 0, 0.574, 0.819, 0.574, -0.671, 0.47, 0, 0, 0)
+light_color = Color(1, 0.89, 0.72, 1)
+light_energy = 1.25
+shadow_enabled = true
+directional_shadow_max_distance = 80.0
+
+[node name="Ground" type="StaticBody3D" parent="."]
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="Ground"]
+mesh = SubResource("PlaneMesh_ground")
+
+[node name="Shape" type="CollisionShape3D" parent="Ground"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+shape = SubResource("BoxShape3D_ground")
+
+[node name="Bounds" type="StaticBody3D" parent="."]
+collision_mask = 0
+
+[node name="North" type="CollisionShape3D" parent="Bounds"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15, -111)
+shape = SubResource("BoxShape3D_bound_x")
+
+[node name="South" type="CollisionShape3D" parent="Bounds"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15, 111)
+shape = SubResource("BoxShape3D_bound_x")
+
+[node name="West" type="CollisionShape3D" parent="Bounds"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -111, 15, 0)
+shape = SubResource("BoxShape3D_bound_z")
+
+[node name="East" type="CollisionShape3D" parent="Bounds"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 111, 15, 0)
+shape = SubResource("BoxShape3D_bound_z")
+
+[node name="MapBoundary" parent="." instance=ExtResource("24_boundary")]
+half_extent = Vector2(110, 110)
+
+[node name="Layout" type="Node3D" parent="."]
+script = ExtResource("16_layout")
+data = ExtResource("17_layout_data")
+
+[node name="CanopyLeaves" parent="." node_paths=PackedStringArray("layout") instance=ExtResource("25_leaves")]
+layout = NodePath("../Layout")
+reach = 112.0
+
+[node name="Tavern" parent="." instance=ExtResource("20_tavern")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, -109.5)
+
+[node name="StoneTrolls" parent="." instance=ExtResource("22_stone_trolls")]
+transform = Transform3D(0, 0, 1.35, 0, 1.35, 0, -1.35, 0, 0, 120, 0, -18)
+
+[node name="Breakables" type="Node3D" parent="."]
+script = ExtResource("11_scatter")
+entries = Array[ExtResource("12_entry")]([SubResource("Resource_skulls"), SubResource("Resource_pouches")])
+half_extent = Vector2(96, 96)
+
+[node name="BossKeys" type="Node3D" parent="."]
+script = ExtResource("11_scatter")
+entries = Array[ExtResource("12_entry")]([SubResource("Resource_keys")])
+half_extent = Vector2(92, 92)
+clearance = 0.6
+min_spacing = 34.0
+min_center_distance = 34.0
+
+[node name="Puddles" type="Node3D" parent="."]
+script = ExtResource("11_scatter")
+entries = Array[ExtResource("12_entry")]([SubResource("Resource_puddles")])
+half_extent = Vector2(96, 96)
+clearance = 1.2
+min_spacing = 8.0
+
+[node name="PlayerSpawn" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3)
+

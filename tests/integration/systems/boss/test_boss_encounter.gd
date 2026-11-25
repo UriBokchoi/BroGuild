@@ -4,7 +4,9 @@ extends GutTest
 ## la dificultad; pasa al HUD su vida y sus refuerzos salen por el director. Al vencerlo llega el
 ## premio (oro × rapidez y un objeto que el HUD revela y llega al acabar), se explica que hay que
 ## cruzar su portal y las oleadas siguen. Cruzarlo gana la partida (paran las oleadas y se retiran
-## los demás); morir también, pero solo en la prórroga y con el jefe vencido.
+## los demás); morir también, pero solo en la prórroga y con el jefe vencido. En un tier que no es el
+## último, cruzarlo pasa al siguiente (stage_cleared) y el encuentro vuelve a empezar con el jefe
+## nuevo; en la arena final, morir con el jefe vencido gana aunque no sea la prórroga.
 
 const BOSS := preload("res://data/bosses/brosque.tres")
 const WAVES := preload("res://data/waves/brosque.tres")
@@ -171,6 +173,49 @@ func test_dying_after_the_round_with_the_boss_beaten_still_wins() -> void:
 	_director.set(&"_elapsed", WAVES.round_minutes * 60.0 + 1.0)
 	EventBus.player_died.emit()
 	assert_eq(_wins.size(), 1, "en la prórroga, con el jefe vencido, es victoria")
+
+
+func test_in_a_tier_that_is_not_the_last_the_portal_leads_on() -> void:
+	var cleared: Array[bool] = []
+	_encounter.stage_cleared.connect(func() -> void: cleared.append(true))
+	_encounter.ends_run = false
+	_director.start()
+	_encounter.summon(Vector3.ZERO)
+	var boss := _encounter.get_boss()
+	boss.health.take_damage(DamageInfo.create(boss.health.get_maximum() * 2.0))
+	EventBus.level_exit_reached.emit()
+	EventBus.level_exit_reached.emit()
+	assert_eq(cleared.size(), 1, "pasa de tier una sola vez")
+	assert_true(_wins.is_empty(), "no gana la partida")
+	_director.set(&"_elapsed", WAVES.round_minutes * 60.0 + 1.0)
+	EventBus.player_died.emit()
+	assert_true(_wins.is_empty(), "morir en la prórroga de un tier intermedio no es ganar")
+
+
+func test_reset_starts_over_with_the_next_boss() -> void:
+	_encounter.summon(Vector3.ZERO)
+	var boss := _encounter.get_boss()
+	boss.health.take_damage(DamageInfo.create(boss.health.get_maximum() * 2.0))
+	EventBus.boss_key_collected.emit()
+	_keys.clear()
+	_encounter.reset(BOSS)
+	assert_false(_encounter.is_summoned())
+	assert_false(_encounter.is_defeated())
+	assert_eq(_encounter.get_keys(), 0)
+	assert_eq(_keys, [Vector2i(0, 3)] as Array[Vector2i], "el HUD vuelve a contar desde 0")
+	assert_true(_encounter.summon(Vector3(4.0, 0.0, 0.0)), "y puede salir otra vez")
+
+
+func test_in_the_final_arena_dying_after_the_boss_wins() -> void:
+	_encounter.death_wins = true
+	_director.start()
+	_encounter.summon(Vector3.ZERO)
+	EventBus.player_died.emit()
+	assert_true(_wins.is_empty(), "con el jefe vivo, morir es perder")
+	var boss := _encounter.get_boss()
+	boss.health.take_damage(DamageInfo.create(boss.health.get_maximum() * 2.0))
+	EventBus.player_died.emit()
+	assert_eq(_wins.size(), 1, "vencido el jefe final, morir en la oleada infinita es victoria")
 
 
 func test_without_a_boss_nothing_happens() -> void:

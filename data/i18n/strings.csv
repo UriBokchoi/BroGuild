@@ -9,6 +9,14 @@ MENU_ARCHIVE,Archivo,Archive
 MENU_QUIT,Abandonar,Quit game
 LEVEL_BROSQUE_NAME,El Brosque,The Brorest
 LEVEL_BROSQUE_GOAL,Objetivo: vence al Ent-renador.,Goal: defeat the Ent Trainer.
+TIER_SHORT,Tier %d,Tier %d
+TIER_LOCKED,Supera el tier %d para abrirlo,Clear tier %d to unlock it
+BROSQUE_TIER_1,Tier 1 · Verano,Tier 1 · Summer
+BROSQUE_TIER_2,Tier 2 · Otoño,Tier 2 · Autumn
+BROSQUE_TIER_3,Tier 3 · Invierno,Tier 3 · Winter
+BROSQUE_TIER_1_GOAL,"Objetivo: vence al Ent-renador y cruza su portal. Supéralo para abrir el tier 2.","Goal: defeat the Ent Trainer and go through his portal. Clear it to unlock tier 2."
+BROSQUE_TIER_2_GOAL,"Objetivo: pasa el tier 1 y vence al Ent-renador en el Brosque de otoño, más grande y más duro. Supéralo para abrir el tier 3.","Goal: get through tier 1 and defeat the Ent Trainer in the autumn Brorest, bigger and tougher. Clear it to unlock tier 3."
+BROSQUE_TIER_3_GOAL,"Objetivo: pasa los tiers 1 y 2, vence al Ent-renador en el invierno y, tras su portal, a Mr. Brolympia, el jefe final.","Goal: get through tiers 1 and 2, defeat the Ent Trainer in winter and, past his portal, Mr. Brolympia, the final boss."
 LEVEL_BROSQUE_LORE,"Un bosque viejísimo convertido en gimnasio al aire libre: pesas de piedra entre los robles, bancos de tronco y una taberna para recuperar fuerzas. Lo lleva el Ent-renador, un árbol centenario que nunca se salta el día de pierna y entrena a sus Bro-tes a golpe de silbato. Junta tres tarjetas de socio y llámalo… si te ves con fuerzas.","An ancient forest turned into an open-air gym: stone weights among the oaks, log benches and a tavern to get your strength back. It is run by the Ent Trainer, a centuries-old tree who never skips leg day and drills his Bro-saplings with a whistle. Collect three membership cards and call him out… if you feel strong enough."
 LEVEL_WIZARD_TOWER_NAME,La Torre del Mago,The Wizard's Tower
 LEVEL_DUNGEON_NAME,La Mazmorra,The Dungeon
@@ -25,6 +33,13 @@ BROSQUE_INTRO_NO_PAIN,"No pain, no gain","No pain, no gain"
 BROSQUE_INTRO_LEG_DAY,Hoy toca pierna,It's leg day
 BROSQUE_INTRO_KEYS,Junta tarjetas de socio para abrir el portal del Ent-renador,Collect membership cards to open the Ent Trainer's portal
 BROSQUE_VICTORY,¡Brosque superado!,Brorest cleared!
+BROSQUE_AUTUMN_INTRO,El Brosque se viste de otoño,Autumn falls on the Brorest
+BROSQUE_WINTER_INTRO,"Invierno en el Brosque: abrígate… o no","Winter in the Brorest: wrap up… or don't"
+FINAL_ARENA_NAME,El Claro del Campeón,The Champion's Clearing
+FINAL_ARENA_INTRO,Aquí solo queda el campeón,Only the champion remains
+FINAL_VICTORY,¡Brosque conquistado!,Brorest conquered!
+FINAL_BOSS_DEFEATED,¡VICTORIA!,VICTORY!
+FINAL_PORTAL_HINT,"Cruza el portal… o aguanta la oleada infinita","Go through the portal… or hold out against the endless wave"
 PAUSE_TITLE,Pausa,Paused
 PAUSE_CONTINUE,Continuar,Resume
 PAUSE_OPTIONS,Opciones,Options
@@ -218,8 +233,12 @@ ENEMY_ENT_TRAINER_NAME,El Ent-renador,The Ent Trainer
 ENEMY_ENT_TRAINER_DESCRIPTION,"Jefe del Brosque: un árbol centenario con silbato y cinta en la frente. Nunca se salta el día de pierna.","Boss of the Brorest: an ancient tree with a whistle and a headband. Never skips leg day."
 ENT_TRAINER_ARRIVES,¡Llega el Ent-renador!,The Ent Trainer is here!
 ENT_TRAINER_ARRIVES_LINE,Hora de entrenar,Workout time
+ENEMY_MR_BROLYMPIA_NAME,Mr. Brolympia,Mr. Brolympia
+ENEMY_MR_BROLYMPIA_DESCRIPTION,"Jefe final del Brosque: el entrenador del Ent-renador. Lleva mil años ganando el torneo del Gremio y no piensa soltar el cinturón.","Final boss of the Brorest: the Ent Trainer's own coach. He has won the Guild tournament for a thousand years and won't give up the belt."
+MR_BROLYMPIA_ARRIVES,¡Mr. Brolympia!,Mr. Brolympia!
+MR_BROLYMPIA_ARRIVES_LINE,El entrenador del Ent-renador,The Ent Trainer's coach
 BROSQUE_BOSS_DEFEATED,¡Ent-renador vencido!,Ent Trainer defeated!
-BROSQUE_PORTAL_HINT,Cruza su portal para pasar el nivel,Go through his portal to clear the level
+BROSQUE_PORTAL_HINT,Cruza su portal para seguir,Go through his portal to move on
 ENEMY_TROLLEADOR_NAME,Trolleador Cara,Trollface
 ENEMY_TROLLEADOR_DESCRIPTION,"Miniboss del Brosque: un troll con porra y una sonrisa que da mala espina. Sus primos se quedaron de piedra al amanecer.","Miniboss of the Brorest: a troll with a club and a grin you can't trust. His cousins were turned to stone at dawn."
 TROLLEADOR_INCOMING,¡Se acerca el Trolleador Cara!,Trollface is coming!
@@ -407,6 +426,7 @@ RECORDS_KILLS,Enemigos,Enemies
 RECORDS_TIME,Tiempo,Time
 RECORDS_LEVEL,Nivel,Level
 RECORDS_MAP,Mapa,Map
+RECORDS_LEVEL_TIER,%s · T%d,%s · T%d
 RECORDS_RESULT,Resultado,Result
 RECORDS_WON,Victoria,Victory
 RECORDS_LOST,Derrota,Defeat

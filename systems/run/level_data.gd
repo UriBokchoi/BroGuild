@@ -9,12 +9,16 @@ extends Resource
 @export var id: StringName = &""
 ## Clave de traducción del nombre (p. ej. [code]LEVEL_BROSQUE_NAME[/code]).
 @export var name_key: StringName = &""
-## Clave de traducción de cómo se gana (p. ej. vencer a su jefe). Vacía: no se dice.
+## Clave de traducción de cómo se gana (p. ej. vencer a su jefe). Vacía: no se dice. Con tiers, cada
+## uno dice el suyo.
 @export var goal_key: StringName = &""
 ## Clave de traducción de su descripción con lore. Vacía: no se dice.
 @export var lore_key: StringName = &""
 ## Escena del nivel. Vacía: aún no existe (sale como «Próximamente»).
 @export var scene: PackedScene
+## Sus tiers, en orden (los mismos que su LevelStages): al elegir nivel se elige también hasta cuál
+## se juega. Vacío: un solo mapa.
+@export var tiers: Array[StageData] = []
 
 
 ## ¿Se puede jugar ya?

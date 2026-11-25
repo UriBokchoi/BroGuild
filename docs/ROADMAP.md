@@ -132,7 +132,10 @@ Lo que salió en la segunda tanda de pruebas; va antes que el resto.
 - [x] Brosque: el miniboss Trolleador Cara a los 4:30 (barra propia bajo la del jefe, porrazo en área y salto) y dos trolls de piedra fuera de la pared este (guiño a El Hobbit); los jefes ya trepan por las pesas
 - [ ] La Torre del Mago
 - [ ] La Mazmorra
-- [ ] Tiers de nivel: cada nivel tiene 3 (Brosque tier 1, tier 2 y tier 3). El tier 2 se abre al pasar el tier 1 y es el mismo nivel, pero distinto. Lo detallará el diseñador más adelante
+- [x] Tiers de nivel: cada nivel tiene 3. Superar uno abre el siguiente en la selección de nivel; elegir el 2 es jugar el 1 y, al cruzar su portal, pasar al 2 conservando todo (y así con el 3). Más grande y más difícil cada uno. El Brosque: verano, otoño (130 m) e invierno (150 m), con sus colores y su clima y las mismas piezas
+- [x] Tras el tier 3, la arena del jefe final (la misma para todos los niveles): solo el jefe, Mr. Brolympia; al vencerlo aparece el portal y ya es victoria, pero sigue la oleada infinita hasta morir o cruzarlo
+- [x] Más dificultad, más experiencia y oro: los enemigos sueltan más cuanto más alta es
+- [x] Detalles del Guerrero (yelmo, hombreras y cinturón) y del Pícaro (capucha con pañuelo y cinturón con bolsitas)
 - [ ] Élites con afijos (rápido, vampiro, explosivo…), solo en tier 2 o más; con más probabilidad de soltar cofre que un élite normal
 
 ## Hito 7 — El torneo
@@ -167,6 +170,8 @@ Lo que salió en la segunda tanda de pruebas; va antes que el resto.
 9. Hito 5d: pesas que activan mejoras, deshacer la elección con clic derecho y árboles en los trolls.
 10. Hito 7 (2026-11-24): cofres de élite, apuntar y fijar al jefe, racha como power-up y pactos con el heraldo. Los afijos y los tiers, más adelante (Hito 6).
 
+11. Hito 6 (2026-11-25): tiers con desbloqueo, arena del jefe final, más recompensa con la dificultad y detalles del Guerrero y el Pícaro. Todo en un solo PR junto con el Hito 7. Los afijos de los élites, después.
+
 ## Backlog (sin orden)
 - Física de la horda: con 180 esbirros apretados, la física se lleva unos 4–6 ms por tick (el rumbo del enjambre, 1 ms; el resto, el motor). Mirar con el profiler del editor si hiciera falta (formas más simples, menos contactos)
 - Raíles/ziplines y plataformas de salto
@@ -175,3 +180,4 @@ Lo que salió en la segunda tanda de pruebas; va antes que el resto.
 - Retos diarios con semilla compartida
 - Soporte de mando
 - Actualizar a Godot 4.8 cuando sea estable
+- Que el juego pese menos: plantillas de exportación propias (sin los módulos que no usamos, `optimize=size`); hace falta instalar Python y SCons

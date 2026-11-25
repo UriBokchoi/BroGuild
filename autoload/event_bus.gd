@@ -96,6 +96,9 @@ signal level_exit_reached
 ## ya vencido. [param victory_key] es el título de la victoria, [param seconds] lo que duró y
 ## [param bonus] el multiplicador del premio por rapidez (el del momento en que cayó el jefe).
 signal run_won(victory_key: StringName, seconds: float, bonus: float)
+## Empezó una fase de un nivel con tiers (también la primera): su nombre, su número (desde 0) y
+## cuántas tiene la partida.
+signal stage_started(name_key: StringName, index: int, count: int)
 ## Salió un miniboss ([param name_key]: su nombre; ver [MiniBossEncounter]).
 signal mini_boss_spawned(name_key: StringName)
 ## Cambió la vida del miniboss (actual y máxima).

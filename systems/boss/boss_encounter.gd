@@ -4,8 +4,11 @@ extends Node
 ## (con las llaves, o sin ellas al acabar la ronda), más fuerte cuanto más alta sea la dificultad.
 ##
 ## Al vencerlo da el premio y su portal se abre, pero las oleadas siguen. Se gana la partida al
-## cruzar el portal, o muriendo pasado el final de la ronda con el jefe ya vencido. Sin data, el
-## nivel no tiene jefe.
+## cruzar el portal, o muriendo pasado el final de la ronda con el jefe ya vencido. En un tier que no
+## es el último, cruzar el portal pasa al siguiente (stage_cleared). Sin data, no hay jefe.
+
+## Se cruzó el portal de un jefe que no acaba la partida: toca la fase siguiente.
+signal stage_cleared
 
 ## El jefe de este nivel (lo pone [RunSystems]).
 @export var data: BossData
@@ -19,6 +22,10 @@ extends Node
 ## Azar del objeto del premio. Si no se asigna antes de entrar en el árbol, el flujo de botín de
 ## [code]Rng[/code].
 var rng: RandomNumberGenerator
+## Si cruzar el portal gana la partida (no, en un tier que no es el último: pasa al siguiente).
+var ends_run: bool = true
+## Si morir con el jefe vencido gana aunque la ronda no haya acabado (la arena del jefe final).
+var death_wins: bool = false
 
 var _keys: int = 0
 var _boss: Boss
@@ -28,6 +35,7 @@ var _catalog: Array[PassiveItemData] = []
 var _defeated: bool = false
 var _bonus: float = 1.0
 var _won: bool = false
+var _cleared: bool = false
 
 
 func _enter_tree() -> void:
@@ -42,6 +50,23 @@ func _enter_tree() -> void:
 func _ready() -> void:
 	if rng == null:
 		rng = Rng.stream(Rng.Stream.LOOT)
+	_prepare()
+
+
+## Vuelve a empezar con el jefe [param boss] (el de la fase siguiente): sin llaves y sin jefe.
+func reset(boss: BossData) -> void:
+	data = boss
+	_keys = 0
+	_boss = null
+	_summoned = false
+	_defeated = false
+	_bonus = 1.0
+	_cleared = false
+	_catalog.clear()
+	_prepare()
+
+
+func _prepare() -> void:
 	if data == null:
 		return
 	if data.reward_items:
@@ -84,7 +109,8 @@ func summon(at: Vector3) -> bool:
 
 
 func _announce_keys() -> void:
-	EventBus.boss_keys_changed.emit(_keys, data.keys_needed)
+	if data.keys_needed > 0:
+		EventBus.boss_keys_changed.emit(_keys, data.keys_needed)
 
 
 ## El premio: oro por el multiplicador de rapidez (como un recogible) y un objeto que el HUD revela y
@@ -154,11 +180,19 @@ func _win() -> void:
 
 
 func _on_level_exit_reached() -> void:
-	if _defeated:
+	if not _defeated:
+		return
+	if ends_run:
 		_win()
+	elif not _cleared:
+		_cleared = true
+		stage_cleared.emit()
 
 
-## Morir con el jefe vencido y la ronda terminada (en la prórroga) también es ganar.
+## Morir con el jefe vencido y la ronda terminada (en la prórroga) también es ganar, si este jefe
+## acaba la partida. En la arena final ([member death_wins]), aunque la ronda no haya acabado.
 func _on_player_died() -> void:
-	if _defeated and director.data and director.data.is_overtime(director.get_elapsed()):
+	if not _defeated or not ends_run:
+		return
+	if death_wins or (director.data and director.data.is_overtime(director.get_elapsed())):
 		_win()

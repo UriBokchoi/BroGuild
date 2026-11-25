@@ -5,6 +5,7 @@
 [ext_resource type="Script" path="res://ui/debug/sections/camera_debug_section.gd" id="3_camera"]
 [ext_resource type="Script" path="res://ui/debug/sections/stats_debug_section.gd" id="4_stats"]
 [ext_resource type="Theme" path="res://ui/debug/debug_theme.tres" id="5_theme"]
+[ext_resource type="Script" path="res://ui/debug/sections/stage_debug_section.gd" id="6_stage"]
 
 [node name="DebugPanel" type="CanvasLayer"]
 process_mode = 3
@@ -42,3 +43,7 @@ script = ExtResource("3_camera")
 [node name="Stats" type="VBoxContainer" parent="Panel/Scroll/Sections"]
 layout_mode = 2
 script = ExtResource("4_stats")
+
+[node name="Stages" type="VBoxContainer" parent="Panel/Scroll/Sections"]
+layout_mode = 2
+script = ExtResource("6_stage")

@@ -25,6 +25,13 @@ func test_takes_the_run_the_character_and_the_level() -> void:
 	assert_gt(record.finished_at, 0.0, "con la fecha de ahora")
 
 
+func test_keeps_the_tier_of_a_level_with_tiers() -> void:
+	var record := RunRecord.create(RunStats.new(), WARRIOR, BROSQUE, 2)
+	assert_eq(record.tier, 2)
+	assert_eq(RunRecord.from_dict(record.to_dict()).tier, 2)
+	assert_eq(RunRecord.create(RunStats.new(), WARRIOR, null, 2).tier, 0, "sin nivel, sin tier")
+
+
 func test_without_character_or_level_they_stay_empty() -> void:
 	var record := RunRecord.create(RunStats.new(), null, null)
 	assert_eq(record.character_name_key, &"")

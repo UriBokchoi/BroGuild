@@ -2,6 +2,10 @@
 
 [ext_resource type="Script" path="res://systems/run/level_data.gd" id="1_data"]
 [ext_resource type="PackedScene" path="res://levels/brosque/brosque.tscn" id="2_scene"]
+[ext_resource type="Script" path="res://systems/run/stage_data.gd" id="3_stage"]
+[ext_resource type="Resource" path="res://data/levels/brosque/tier_1.tres" id="4_tier_1"]
+[ext_resource type="Resource" path="res://data/levels/brosque/tier_2.tres" id="5_tier_2"]
+[ext_resource type="Resource" path="res://data/levels/brosque/tier_3.tres" id="6_tier_3"]
 
 [resource]
 script = ExtResource("1_data")
@@ -10,3 +14,4 @@ name_key = &"LEVEL_BROSQUE_NAME"
 goal_key = &"LEVEL_BROSQUE_GOAL"
 lore_key = &"LEVEL_BROSQUE_LORE"
 scene = ExtResource("2_scene")
+tiers = Array[ExtResource("3_stage")]([ExtResource("4_tier_1"), ExtResource("5_tier_2"), ExtResource("6_tier_3")])

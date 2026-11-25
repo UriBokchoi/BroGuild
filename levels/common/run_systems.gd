@@ -2,7 +2,8 @@ class_name RunSystems
 extends Node3D
 ## Todo lo que un nivel necesita para jugar una partida, ya conectado: jugador, horda, oleadas, botín,
 ## subir de nivel, jefe, HUD, pausa y resultados. Un nivel pone su mapa, una instancia de esto y el
-## punto de aparición, y elige aquí sus oleadas, su jefe y sus mensajes.
+## punto de aparición, y elige aquí sus oleadas, su jefe y sus mensajes (en un nivel con tiers se los
+## pone LevelStages, mapa a mapa).
 
 ## Oleadas de este nivel.
 @export var waves: WaveData
@@ -23,17 +24,17 @@ extends Node3D
 @export var player: Player
 @export var director: WaveDirector
 @export var encounter: BossEncounter
+@export var mini_bosses: MiniBossEncounter
+@export var herald: HeraldSpawner
+@export var pickups: PickupField
+@export var loot: LootDropper
 
 
 func _enter_tree() -> void:
 	# Antes de que entren sus hijos: el jugador y el director arrancan ya con lo de este nivel.
 	if default_character:
 		player.character = default_character
-	if waves:
-		director.data = waves
-	director.autostart = autostart_waves
-	director.play_area = play_area
-	encounter.data = boss
+	apply_map_settings()
 
 
 func _ready() -> void:
@@ -44,3 +45,12 @@ func _ready() -> void:
 		player.teleport_to(spawn_point.global_position)
 	if not intro_keys.is_empty():
 		EventBus.level_intro.emit(intro_keys)
+
+
+## Pasa al director y al jefe lo del mapa: oleadas, si empiezan solas, zona de juego y jefe.
+func apply_map_settings() -> void:
+	if waves:
+		director.data = waves
+	director.autostart = autostart_waves
+	director.play_area = play_area
+	encounter.data = boss

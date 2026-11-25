@@ -64,6 +64,7 @@ func _show(screen: Node) -> void:
 	add_child(screen)
 
 
-func _on_setup_done(character: CharacterData, level: LevelData) -> void:
+func _on_setup_done(character: CharacterData, level: LevelData, tier: int) -> void:
 	RunState.character = character
+	RunState.tier = tier
 	play(level)

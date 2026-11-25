@@ -2,7 +2,7 @@ class_name BossBar
 extends PanelContainer
 ## La barra de un jefe, arriba en el centro: nombre a la izquierda, vida en números a la derecha
 ## («4530 / 5000») y una barra fina. La del jefe y la del miniboss (mini_boss) van una bajo la otra
-## y se van al vencerlos o al ganar la partida.
+## y se van al vencerlos, al ganar la partida o al pasar de tier.
 
 ## Clave del texto de su vida (con dos [code]%d[/code]: la que le queda y la máxima).
 @export var value_key: StringName = &"HUD_HEALTH_VALUE"
@@ -19,6 +19,7 @@ func _enter_tree() -> void:
 		return
 	# Al ganar la partida se van las dos (el miniboss puede seguir vivo tras vencer al jefe).
 	EventBus.run_won.connect(_on_run_won)
+	EventBus.stage_started.connect(_on_stage_started)
 	if mini_boss:
 		EventBus.mini_boss_spawned.connect(show_boss)
 		EventBus.mini_boss_health_changed.connect(show_health)
@@ -63,4 +64,8 @@ func _on_mini_boss_defeated(_name_key: StringName) -> void:
 
 
 func _on_run_won(_victory_key: StringName, _seconds: float, _bonus: float) -> void:
+	visible = false
+
+
+func _on_stage_started(_name_key: StringName, _index: int, _count: int) -> void:
 	visible = false

@@ -1,0 +1,232 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://entities/enemies/ent_trainer/ent_trainer.tscn" id="1_base"]
+[ext_resource type="Script" path="res://entities/enemies/boss/attacks/slam_attack.gd" id="2_slam"]
+[ext_resource type="PackedScene" path="res://entities/enemies/boss/shockwave/shockwave.tscn" id="3_shockwave"]
+[ext_resource type="Shader" path="res://vfx/shaders/ground_ring.gdshader" id="4_ring"]
+[ext_resource type="Material" path="res://levels/brosque/materials/rock.tres" id="5_rock"]
+[ext_resource type="Material" path="res://levels/brosque/materials/iron.tres" id="6_iron"]
+
+[sub_resource type="CapsuleShape3D" id="Shape_body"]
+radius = 1.8
+height = 6.3
+
+[sub_resource type="CapsuleShape3D" id="Shape_hurtbox"]
+radius = 2.25
+height = 7.2
+
+[sub_resource type="CapsuleShape3D" id="Shape_contact"]
+radius = 2.2
+height = 6.3
+
+[sub_resource type="StandardMaterial3D" id="Mat_bark"]
+albedo_color = Color(0.3, 0.2, 0.13, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="Mat_canopy"]
+albedo_color = Color(0.88, 0.36, 0.14, 1)
+roughness = 0.85
+
+[sub_resource type="StandardMaterial3D" id="Mat_canopy_dark"]
+albedo_color = Color(0.96, 0.66, 0.2, 1)
+roughness = 0.85
+
+[sub_resource type="StandardMaterial3D" id="Mat_tank"]
+albedo_color = Color(0.08, 0.08, 0.1, 1)
+roughness = 0.7
+
+[sub_resource type="StandardMaterial3D" id="Mat_gold"]
+albedo_color = Color(1, 0.78, 0.2, 1)
+metallic = 0.7
+roughness = 0.3
+emission_enabled = true
+emission = Color(1, 0.7, 0.15, 1)
+emission_energy_multiplier = 0.25
+
+[sub_resource type="TorusMesh" id="Mesh_belt"]
+material = SubResource("Mat_gold")
+inner_radius = 0.98
+outer_radius = 1.22
+rings = 24
+ring_segments = 8
+
+[sub_resource type="BoxMesh" id="Mesh_plate"]
+material = SubResource("Mat_gold")
+size = Vector3(0.75, 0.55, 0.14)
+
+[sub_resource type="CylinderMesh" id="Mesh_bar"]
+material = ExtResource("6_iron")
+top_radius = 0.11
+bottom_radius = 0.11
+height = 2.4
+radial_segments = 8
+rings = 1
+
+[sub_resource type="SphereMesh" id="Mesh_weight"]
+material = ExtResource("5_rock")
+radius = 0.6
+height = 1.1
+radial_segments = 10
+rings = 6
+
+[sub_resource type="ShaderMaterial" id="Mat_edge"]
+render_priority = 0
+shader = ExtResource("4_ring")
+shader_parameter/color = Color(1, 0.22, 0.18, 1)
+shader_parameter/intensity = 1.4
+shader_parameter/pulse_rate = 3.0
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_edge"]
+material = SubResource("Mat_edge")
+size = Vector2(2, 2)
+center_offset = Vector3(0, 0.05, 0)
+
+[sub_resource type="ShaderMaterial" id="Mat_charge"]
+render_priority = 0
+shader = ExtResource("4_ring")
+shader_parameter/color = Color(1, 0.5, 0.15, 1)
+shader_parameter/intensity = 1.2
+shader_parameter/pulse_rate = 0.0
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_charge"]
+material = SubResource("Mat_charge")
+size = Vector2(2, 2)
+center_offset = Vector3(0, 0.06, 0)
+
+[node name="MrBrolympia" instance=ExtResource("1_base")]
+mass = 70.0
+attack_interval = 2.8
+enraged_attack_interval = 1.7
+appear_time = 1.4
+appear_depth = 4.0
+
+[node name="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.15, 0)
+shape = SubResource("Shape_body")
+
+[node name="Visual" parent="."]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 0, 0)
+
+[node name="RootLeft" parent="Visual"]
+surface_material_override/0 = SubResource("Mat_bark")
+
+[node name="RootRight" parent="Visual"]
+surface_material_override/0 = SubResource("Mat_bark")
+
+[node name="Trunk" parent="Visual"]
+surface_material_override/0 = SubResource("Mat_bark")
+
+[node name="Shirt" parent="Visual"]
+surface_material_override/0 = SubResource("Mat_tank")
+
+[node name="Canopy" parent="Visual"]
+surface_material_override/0 = SubResource("Mat_canopy")
+
+[node name="TuftLeft" parent="Visual"]
+surface_material_override/0 = SubResource("Mat_canopy_dark")
+
+[node name="TuftRight" parent="Visual"]
+surface_material_override/0 = SubResource("Mat_canopy_dark")
+
+[node name="Top" parent="Visual"]
+surface_material_override/0 = SubResource("Mat_canopy")
+
+[node name="Headband" parent="Visual"]
+surface_material_override/0 = SubResource("Mat_gold")
+
+[node name="UpperArmLeft" parent="Visual"]
+surface_material_override/0 = SubResource("Mat_bark")
+
+[node name="ForearmLeft" parent="Visual"]
+surface_material_override/0 = SubResource("Mat_bark")
+
+[node name="UpperArmRight" parent="Visual"]
+surface_material_override/0 = SubResource("Mat_bark")
+
+[node name="ForearmRight" parent="Visual"]
+surface_material_override/0 = SubResource("Mat_bark")
+
+[node name="Belt" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.95, 0)
+mesh = SubResource("Mesh_belt")
+
+[node name="BeltPlate" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.95, -1.14)
+mesh = SubResource("Mesh_plate")
+
+[node name="Arm" type="Node3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, 3.35, 0)
+
+[node name="Bar" type="MeshInstance3D" parent="Visual/Arm"]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0, 0, -0.7)
+mesh = SubResource("Mesh_bar")
+
+[node name="WeightLeft" type="MeshInstance3D" parent="Visual/Arm"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.1, 0, -0.7)
+mesh = SubResource("Mesh_weight")
+
+[node name="WeightRight" type="MeshInstance3D" parent="Visual/Arm"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1, 0, -0.7)
+mesh = SubResource("Mesh_weight")
+
+[node name="CollisionShape3D" parent="Hurtbox"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.6, 0)
+shape = SubResource("Shape_hurtbox")
+
+[node name="CollisionShape3D" parent="ContactHitbox"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.15, 0)
+shape = SubResource("Shape_contact")
+
+[node name="DamageReporter" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.4, 0)
+
+[node name="Burpee" parent="."]
+max_distance = 26.0
+damage_factor = 1.4
+
+[node name="Shockwave" parent="Burpee"]
+radius = 18.0
+
+[node name="LandingMarker" parent="Burpee"]
+transform = Transform3D(3.6, 0, 0, 0, 3.6, 0, 0, 0, 3.6, 0, 0, 0)
+
+[node name="Series" parent="."]
+reps = 4
+speed = 21.0
+distance = 20.0
+
+[node name="BroTes" parent="."]
+weight = 0.5
+
+[node name="PesoMuerto" type="Node" parent="." node_paths=PackedStringArray("shockwave", "edge_marker", "charge_marker", "arm")]
+script = ExtResource("2_slam")
+weight = 1.5
+windup = 1.3
+swing_time = 0.14
+recovery = 0.9
+damage_factor = 1.7
+shockwave = NodePath("Shockwave")
+edge_marker = NodePath("EdgeMarker")
+charge_marker = NodePath("ChargeMarker")
+arm = NodePath("../Visual/Arm")
+
+[node name="Shockwave" parent="PesoMuerto" instance=ExtResource("3_shockwave")]
+radius = 11.0
+duration = 0.18
+band = 3.0
+reach_height = 1.4
+knockback = 14.0
+
+[node name="EdgeMarker" type="MeshInstance3D" parent="PesoMuerto"]
+top_level = true
+cast_shadow = 0
+instance_shader_parameters/progress = 0.97
+instance_shader_parameters/band = 0.06
+mesh = SubResource("PlaneMesh_edge")
+
+[node name="ChargeMarker" type="MeshInstance3D" parent="PesoMuerto"]
+top_level = true
+cast_shadow = 0
+instance_shader_parameters/progress = 0.0
+instance_shader_parameters/band = 0.12
+mesh = SubResource("PlaneMesh_charge")

@@ -42,6 +42,16 @@ func test_drops_on_the_ground() -> void:
 	assert_almost_eq(gem.global_position.y, gem.float_height, 0.05, "flota sobre el suelo")
 
 
+func test_collecting_everything_of_a_reward_gives_it_at_once() -> void:
+	_field.drop(XP_GEM, Vector3(40.0, 0.0, 0.0), 2.0)
+	_field.drop(XP_GEM, Vector3(-40.0, 0.0, 0.0), 3.0)
+	_field.drop(BOMB, Vector3(0.0, 0.0, 40.0), 1.0)
+	watch_signals(EventBus)
+	_field.collect_all(&"experience")
+	assert_signal_emit_count(EventBus, "pickup_collected", 2, "solo la experiencia, aunque esté lejos")
+	assert_eq(_field.active_count(), 1, "la bomba sigue en el suelo")
+
+
 func test_stays_while_the_collector_is_far() -> void:
 	var gem := _field.drop(XP_GEM, Vector3.ZERO, 1.0)
 	var start := gem.global_position

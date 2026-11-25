@@ -1,0 +1,34 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3]
+
+[ext_resource type="Script" path="res://entities/enemies/enemy_data.gd" id="1_data"]
+[ext_resource type="Script" path="res://core/components/health/health_data.gd" id="2_health"]
+[ext_resource type="Script" path="res://entities/enemies/enemy_stats.gd" id="3_stats"]
+[ext_resource type="PackedScene" path="res://entities/enemies/mr_brolympia/mr_brolympia.tscn" id="4_scene"]
+[ext_resource type="Texture2D" path="res://assets/textures/icons/enemies/ent_trainer.svg" id="98_icon"]
+
+[sub_resource type="Resource" id="Resource_health"]
+script = ExtResource("2_health")
+max_health = 12000.0
+
+[sub_resource type="Resource" id="Resource_stats"]
+script = ExtResource("3_stats")
+move_speed = 4.2
+acceleration = 25.0
+contact_damage = 20.0
+contact_interval = 0.9
+knockback = 12.0
+separation_radius = 3.0
+climb_speed = 5.5
+climb_height = 0.5
+wall_climb_delay = 0.35
+wall_climb_time = 1.2
+
+[resource]
+script = ExtResource("1_data")
+id = &"mr_brolympia"
+name_key = &"ENEMY_MR_BROLYMPIA_NAME"
+description_key = &"ENEMY_MR_BROLYMPIA_DESCRIPTION"
+icon = ExtResource("98_icon")
+color = Color(1, 0.78, 0.2, 1)
+scene = ExtResource("4_scene")
+stat_sources = Array[Resource]([SubResource("Resource_health"), SubResource("Resource_stats")])

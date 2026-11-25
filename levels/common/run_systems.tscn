@@ -57,11 +57,15 @@
 [ext_resource type="PackedScene" path="res://entities/interactables/herald/herald.tscn" id="59_herald"]
 [ext_resource type="PackedScene" path="res://ui/menus/pact/pact_panel.tscn" id="60_pact_panel"]
 
-[node name="RunSystems" type="Node3D" node_paths=PackedStringArray("player", "director", "encounter")]
+[node name="RunSystems" type="Node3D" node_paths=PackedStringArray("player", "director", "encounter", "mini_bosses", "herald", "pickups", "loot")]
 script = ExtResource("1_run")
 player = NodePath("Player")
 director = NodePath("WaveDirector")
 encounter = NodePath("BossEncounter")
+mini_bosses = NodePath("MiniBossEncounter")
+herald = NodePath("HeraldSpawner")
+pickups = NodePath("PickupField")
+loot = NodePath("LootDropper")
 
 [node name="MouseCapture" type="Node" parent="."]
 script = ExtResource("2_mouse")

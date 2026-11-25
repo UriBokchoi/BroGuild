@@ -1,0 +1,13 @@
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Shader" path="res://levels/brosque/materials/grass.gdshader" id="1_shader"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_shader")
+shader_parameter/base_color = Color(0.9, 0.93, 0.97, 1)
+shader_parameter/dark_color = Color(0.78, 0.84, 0.92, 1)
+shader_parameter/light_color = Color(0.98, 0.99, 1, 1)
+shader_parameter/dry_color = Color(0.46, 0.53, 0.44, 1)
+shader_parameter/dry_amount = 0.16
+shader_parameter/grain_strength = 0.03

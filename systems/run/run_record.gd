@@ -9,6 +9,8 @@ var character_id: StringName = &""
 var character_name_key: StringName = &""
 ## Clave del nombre del nivel (el mapa; vacía si no se sabe).
 var level_name_key: StringName = &""
+## Tier elegido (0: un nivel sin tiers).
+var tier: int = 0
 var kills: int = 0
 var elite_kills: int = 0
 var seconds: float = 0.0
@@ -19,14 +21,17 @@ var won: bool = false
 var finished_at: float = 0.0
 
 
-## La partida apuntada en [param stats], con [param character] en [param level].
-static func create(stats: RunStats, character: CharacterData, level: LevelData) -> RunRecord:
+## La partida apuntada en [param stats], con [param character] en [param level] (en su tier
+## [param chosen_tier], si tiene).
+static func create(stats: RunStats, character: CharacterData, level: LevelData, chosen_tier: int = 0) -> RunRecord:
 	var record := RunRecord.new()
 	if character:
 		record.character_id = character.id
 		record.character_name_key = character.name_key
 	if level:
 		record.level_name_key = level.name_key
+		if not level.tiers.is_empty():
+			record.tier = chosen_tier
 	record.kills = stats.kills
 	record.elite_kills = stats.elite_kills
 	record.seconds = stats.seconds
@@ -41,6 +46,7 @@ func to_dict() -> Dictionary:
 		"character_id": String(character_id),
 		"character_name_key": String(character_name_key),
 		"level_name_key": String(level_name_key),
+		"tier": tier,
 		"kills": kills,
 		"elite_kills": elite_kills,
 		"seconds": seconds,
@@ -57,6 +63,7 @@ static func from_dict(data: Dictionary) -> RunRecord:
 	record.character_id = StringName(str(data.get("character_id", "")))
 	record.character_name_key = StringName(str(data.get("character_name_key", "")))
 	record.level_name_key = StringName(str(data.get("level_name_key", "")))
+	record.tier = roundi(_number(data, "tier", record.tier))
 	record.kills = roundi(_number(data, "kills", record.kills))
 	record.elite_kills = roundi(_number(data, "elite_kills", record.elite_kills))
 	record.seconds = _number(data, "seconds", record.seconds)

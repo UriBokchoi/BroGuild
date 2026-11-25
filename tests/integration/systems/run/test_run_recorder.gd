@@ -63,6 +63,17 @@ func test_time_follows_the_round_clock() -> void:
 	assert_eq(_recorder.stats.seconds, 125.0, "con ronda, el de su reloj")
 
 
+func test_with_tiers_the_time_adds_up_stage_after_stage() -> void:
+	EventBus.run_clock_changed.emit(300.0, false)
+	EventBus.run_clock_changed.emit(-1.0, false)
+	EventBus.stage_started.emit(&"BROSQUE_TIER_2", 1, 2)
+	EventBus.run_clock_changed.emit(0.0, false)
+	EventBus.run_clock_changed.emit(20.0, false)
+	assert_almost_eq(_recorder.stats.seconds, 320.0, 0.1, "el tier 1 y lo que va del 2")
+	EventBus.run_won.emit(&"BROSQUE_VICTORY", 25.0, 1.0)
+	assert_almost_eq(_recorder.stats.seconds, 325.0, 0.1, "al ganar, también")
+
+
 func test_without_a_round_counts_its_own_time() -> void:
 	await wait_physics_frames(10)
 	assert_gt(_recorder.stats.seconds, 0.0)

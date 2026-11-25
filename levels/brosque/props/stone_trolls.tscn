@@ -2,17 +2,14 @@
 
 [ext_resource type="Script" path="res://levels/brosque/props/stone_statue.gd" id="1_statue"]
 [ext_resource type="PackedScene" path="res://entities/enemies/trolleador/troll_model.tscn" id="2_troll"]
+[ext_resource type="Material" path="res://levels/brosque/materials/moss.tres" id="3_moss"]
 
 [sub_resource type="StandardMaterial3D" id="Mat_stone"]
 albedo_color = Color(0.56, 0.56, 0.53, 1)
 roughness = 1.0
 
-[sub_resource type="StandardMaterial3D" id="Mat_moss"]
-albedo_color = Color(0.33, 0.5, 0.22, 1)
-roughness = 1.0
-
 [sub_resource type="SphereMesh" id="Mesh_moss"]
-material = SubResource("Mat_moss")
+material = ExtResource("3_moss")
 radius = 0.5
 height = 0.35
 radial_segments = 16

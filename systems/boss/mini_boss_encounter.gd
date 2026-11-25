@@ -63,6 +63,18 @@ func summon(data: MiniBossData) -> Boss:
 	return boss
 
 
+## Vuelve a empezar la cuenta (la fase siguiente): se olvida de los que había, que ya se retiraron.
+func reset() -> void:
+	for boss: Boss in _alive:
+		if boss.died.is_connected(_on_died):
+			boss.died.disconnect(_on_died)
+		if boss.health.health_changed.is_connected(_on_health_changed):
+			boss.health.health_changed.disconnect(_on_health_changed)
+	_alive.clear()
+	_index = 0
+	_warned = false
+
+
 ## Minibosses en juego ahora.
 func alive() -> Array[Boss]:
 	var bosses: Array[Boss] = []

@@ -1700,3 +1700,33 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - Sin oro suficiente, el botón se desactiva.
   - El coste vive en `data/pacts/herald.tres` (`reroll_cost`, `reroll_growth`).
 - **Por qué:** lo pidió el diseñador. Con valores fijos, el jugador sabe lo que firma; volver a tirar le deja buscar el pacto que encaja con su personaje, pagando.
+
+## 2026-11-25 · Tiers de nivel: el mismo nivel, otra estación
+- **Decisión:** cada nivel tiene 3 tiers. El 1 está siempre abierto y superar uno (ganar la partida con él elegido) abre el siguiente (`LevelProgress`, guardado en `user://progress.cfg`). En la selección de nivel se elige el tier; la partida juega los tiers del 1 al elegido, uno tras otro.
+  - Al cruzar el portal de un tier que no es el último, funde a negro y cambia el mapa: el jugador conserva todo (nivel, armas, runas, objetos, oro, pactos), el reloj vuelve a 0, el mapa es más grande y la dificultad sube (+10 por tier sobre la que sube con el tiempo).
+  - El Brosque: verano (110 m), otoño (130 m) e invierno (150 m). Las piezas, los rompibles y los árboles crecen en proporción al área.
+  - Cada tier tiene sus oleadas (`data/waves/brosque_autumn.tres`, `brosque_winter.tres`), con las curvas de la dificultad desplazadas: el tier 2 empieza donde acababa el 1 antes de la prórroga y su prórroga llega en su minuto 10. Los jefes y el Trolleador son los mismos; sus curvas llegan ahora hasta la dificultad 40.
+  - El tiempo de la partida es la suma de las rondas de cada tier.
+- **Cómo:** el jugador y los sistemas de la partida (`RunSystems`) no se tocan; lo que cambia es el mapa. Cada mapa es una escena con raíz `LevelMap` (sus oleadas, jefe, zona de juego, punto de aparición y mensajes) y `LevelStages` las pone una tras otra, quitando la anterior. Los cofres de élite y el heraldo salen dentro del mapa, así que se van con él.
+  - Otoño e invierno son escenas heredadas del mapa del verano: cambian el tamaño, los datos del mapa, la luz, el clima y los materiales (`material_swaps`: `MaterialSwap` cambia un material por otro en todas las mallas, también en lo que se genera). Así se reutilizan las mismas piezas sin copiarlas.
+- **Por qué:** lo pidió el diseñador: el tier 2 «con otro color predominante, como si fuera otoño, y el tier 3 invierno», más grande y más difícil, abierto al superar el anterior y jugado desde el tier 1. Cambiar solo el mapa evita guardar y reconstruir la build (armas con sus mejoras tiradas, objetos, pactos…), que se rompería con cada sistema nuevo. Reutilizar piezas con otros materiales mantiene el juego ligero, como pidió.
+- **Pendiente:** los valores de las oleadas de los tiers 2 y 3 y del jefe final son una primera estimación; se ajustan jugando.
+
+## 2026-11-25 · La arena del jefe final y Mr. Brolympia
+- **Decisión:** tras el portal del tier 3 viene la arena del jefe final (`levels/final_arena/`, la misma para todos los niveles). Es un claro del Brosque al atardecer, con arcos y muros de ruinas en círculo, pesas y bancos, y árboles de las tres estaciones.
+  - Solo está el jefe: sale al entrar. Al vencerlo da su premio, aparece el portal (estaba escondido) y la partida ya es una victoria. No se acaba hasta que el jugador cruza el portal o muere en la oleada infinita que empieza entonces.
+  - El jefe es **Mr. Brolympia**, el entrenador del Ent-renador: la escena del Ent-renador heredada, más grande, con otros colores, cinturón de campeón y una pesa de piedra. Hace sus ataques, más fuertes, y el porrazo del Trolleador con la pesa (*Peso muerto*).
+- **Por qué:** lo pidió el diseñador: «después del tier 3 un jefe final que solo es el jefe; al vencerlo aparece el portal y se da como victoria, pero no se acaba hasta que el jugador muere con una oleada infinita o pasa el portal», en una arena del Brosque que reutilice lo que ya hay. El jefe no estaba decidido: es una propuesta con piezas existentes (el modelo del Ent-renador y el porrazo del Trolleador), fácil de cambiar en datos.
+
+## 2026-11-25 · Más dificultad, más experiencia y oro
+- **Decisión:** los enemigos dan más experiencia y más oro cuanto más alta es la dificultad: las oleadas escalan `xp_reward` y `gold_reward` como ya escalaban la vida y el daño (×1,3 de experiencia y ×1,4 de oro a dificultad 10, ×2 y ×2,2 a 20, ×2,8 y ×3 a 30).
+- **Por qué:** lo pidió el diseñador («contra más dificultad más experiencia»). Hasta ahora solo lo hacían las calaveras y las bolsitas. Es el «más riesgo, más recompensa» del GDD, y con los tiers hace que la dificultad alta compense.
+
+## 2026-11-25 · Detalles del Guerrero y del Pícaro
+- **Decisión:** el Guerrero lleva yelmo con cresta, hombreras y cinturón con hebilla; el Pícaro, capucha con pañuelo y un cinturón con bolsitas. Son piezas como las que ya había (`assets/models/props/`), puestas en los puntos del modelo con `attachments`.
+- **Por qué:** lo pidió el diseñador. El Mago ya tenía sombrero; ahora los tres se distinguen de un vistazo.
+
+## 2026-11-25 · Lo que pesa el juego
+- **Medición:** el ejecutable exportado pesa 103 MB y el `.pck` 3,7 MB (27 MB comprimido en `.7z`). Casi todo es el motor: el ejecutable es la plantilla de exportación oficial de Godot, con todos sus módulos.
+- **Hecho:** la exportación (en `export_presets.cfg`, que no se versiona) ya no mete GUT, los tests, las herramientas ni los docs.
+- **Lo que haría falta para bajar de verdad:** compilar plantillas de exportación propias (`optimize=size`, LTO y sin los módulos que no usamos). Suelen quedar en la mitad. Hace falta Python y SCons (Visual Studio 2022 ya está), así que es una decisión del diseñador.

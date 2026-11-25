@@ -93,6 +93,14 @@ func attract_all(reward: StringName) -> void:
 			pickup.speed = pickup.data.start_speed
 
 
+## Da ya todos los recogibles de recompensa [param reward] que haya, estén donde estén (al cambiar de
+## mapa).
+func collect_all(reward: StringName) -> void:
+	for index: int in range(_active.size() - 1, -1, -1):
+		if _active[index].data.reward == reward:
+			_collect(index)
+
+
 ## Retira todos los recogibles sin darlos.
 func clear() -> void:
 	for index: int in range(_active.size() - 1, -1, -1):

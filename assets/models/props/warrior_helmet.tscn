@@ -1,0 +1,49 @@
+[gd_scene format=3]
+
+[ext_resource type="Material" path="res://assets/models/props/materials/armor.tres" id="1_steel"]
+[ext_resource type="Material" path="res://assets/models/props/materials/gold.tres" id="2_gold"]
+[ext_resource type="Material" path="res://assets/models/props/materials/cloth_crimson.tres" id="3_crimson"]
+
+[sub_resource type="CylinderMesh" id="Mesh_bowl"]
+material = ExtResource("1_steel")
+top_radius = 0.3
+bottom_radius = 0.43
+height = 0.24
+radial_segments = 16
+rings = 1
+
+[sub_resource type="SphereMesh" id="Mesh_dome"]
+material = ExtResource("1_steel")
+radius = 0.31
+height = 0.62
+radial_segments = 16
+rings = 8
+
+[sub_resource type="TorusMesh" id="Mesh_rim"]
+material = ExtResource("2_gold")
+inner_radius = 0.41
+outer_radius = 0.47
+rings = 20
+ring_segments = 6
+
+[sub_resource type="BoxMesh" id="Mesh_crest"]
+material = ExtResource("3_crimson")
+size = Vector3(0.07, 0.2, 0.42)
+
+[node name="WarriorHelmet" type="Node3D"]
+
+[node name="Bowl" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.04, 0)
+mesh = SubResource("Mesh_bowl")
+
+[node name="Dome" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.5, 0, 0, 0, 1, 0, 0.07, 0)
+mesh = SubResource("Mesh_dome")
+
+[node name="Rim" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.16, 0)
+mesh = SubResource("Mesh_rim")
+
+[node name="Crest" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.26, 0.03)
+mesh = SubResource("Mesh_crest")

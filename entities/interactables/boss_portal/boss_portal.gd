@@ -28,6 +28,8 @@ extends Node3D
 @export_range(0.0, 1.0, 0.05) var ready_charge: float = 0.5
 ## Segundos que tarda en abrirse del todo al vencer al jefe.
 @export_range(0.05, 5.0, 0.05, "suffix:s") var open_time: float = 1.0
+## Escondido (sin verse ni chocar) hasta que se abre: en la arena final aparece al vencer al jefe.
+@export var hidden_until_open: bool = false
 
 var _keys: int = 0
 var _needed: int = 0
@@ -49,6 +51,9 @@ func _ready() -> void:
 	exit_area.body_entered.connect(_on_exit_entered)
 	exit_area.monitoring = false
 	_refresh()
+	if hidden_until_open and not _open:
+		visible = false
+		process_mode = Node.PROCESS_MODE_DISABLED
 
 
 ## ¿Ya sacó al jefe?
@@ -89,6 +94,8 @@ func _request(forced: bool) -> void:
 ## Se abre: el remolino se vuelve dorado poco a poco y la puerta deja pasar.
 func _open_portal() -> void:
 	_open = true
+	if hidden_until_open:
+		_appear()
 	exit_area.set_deferred(&"monitoring", true)
 	var tween := create_tween()
 	tween.tween_method(
@@ -96,6 +103,14 @@ func _open_portal() -> void:
 		ready_charge, 1.0, open_time
 	)
 	EventBus.boss_portal_opened.emit(exit_position())
+
+
+## Sale del suelo creciendo (el que estaba escondido).
+func _appear() -> void:
+	process_mode = Node.PROCESS_MODE_INHERIT
+	visible = true
+	scale = Vector3.ONE * 0.01
+	create_tween().tween_property(self, ^"scale", Vector3.ONE, open_time).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 
 
 func _on_interacted(_by: Node3D) -> void:

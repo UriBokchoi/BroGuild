@@ -9,6 +9,8 @@ var is_running: bool = false
 var character: CharacterData
 ## Nivel elegido (o [code]null[/code] si se juega un nivel ejecutado solo).
 var level: LevelData
+## Tier elegido (en un nivel con tiers): la partida pasa por los tiers del 1 a este.
+var tier: int = 1
 ## Semilla de la partida en curso (la última que empezó).
 var run_seed: int = 0
 

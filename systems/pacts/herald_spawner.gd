@@ -40,6 +40,13 @@ func get_herald() -> Herald:
 	return _herald if is_instance_valid(_herald) and not _herald.is_queued_for_deletion() else null
 
 
+## Si hay un heraldo esperando, se va (al cambiar de mapa).
+func dismiss() -> void:
+	if get_herald():
+		_herald.free()
+	_herald = null
+
+
 ## Trae al heraldo ya (si había otro esperando, se va). Lo llama la cuenta de enemigos.
 func summon() -> Herald:
 	if get_herald():
