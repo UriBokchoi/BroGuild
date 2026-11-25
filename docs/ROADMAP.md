@@ -201,7 +201,7 @@ De fácil a difícil, como pidió el diseñador.
 - [x] El detalle de una partida de los récords, en una ventana aparte
 - [x] «Volver a tirar» en el círculo de setas (10 de oro, ×1,5 por uso en la partida)
 - [x] Robo de vida que funciona (cura un % del daño hecho), en las mejoras de las pesas y con su runa, Sed de sangre
-- [ ] Al cruzar el portal: animación de entrar, los enemigos desaparecen con efecto y sonido propio
+- [x] Al cruzar el portal: el jugador entra en él (encoge, sin control), los enemigos se hunden en el suelo con su humo (sin botín ni contar) y suena el portal
 - [ ] Enemigo raro y rápido
 - [ ] Enemigo raro que vuela (para que no se pueda saltar por encima de la horda)
 - [ ] Bro-monedas: 1 por élite y 5 por jefe, guardadas entre partidas

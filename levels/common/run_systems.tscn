@@ -232,6 +232,15 @@ max_per_frame = 10
 offset = Vector3(0, 0.7, 0)
 tint_by_enemy = true
 
+[node name="VanishPuffs" type="Node3D" parent="Particles"]
+script = ExtResource("45_bursts")
+trigger = 4
+effect = ExtResource("46_death_puff")
+pool_size = 32
+max_per_frame = 12
+offset = Vector3(0, 0.4, 0)
+tint_by_enemy = true
+
 [node name="HitSparks" type="Node3D" parent="Particles"]
 script = ExtResource("45_bursts")
 trigger = 1

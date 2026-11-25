@@ -1768,6 +1768,10 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - El robo de vida (`lifesteal`, que existía como stat pero no hacía nada) cura al jugador un % del daño que hace a los enemigos (`Lifesteal`, en el jugador). Sale en las mejoras de las pesas (+1 % de base) y tiene su runa, Sed de sangre (+0,8 % por nivel de base).
 - **Por qué:** lo pidió el diseñador tras probar el juego.
 
+## 2026-11-25 · Cruzar el portal, con animación
+- **Decisión:** al cruzar el portal de un tier, el jugador se queda quieto y encoge hacia el portal (0,45 s) mientras los enemigos se hunden en el suelo con su humo, y luego la pantalla funde a negro. Los enemigos que se hunden no mueren: ni sueltan botín ni cuentan, y no se les puede dar. El portal tiene su sonido (un barrido que sube), también al cruzar el de la arena final.
+- **Por qué:** lo pidió el diseñador; antes todo desaparecía de golpe.
+
 ## 2026-11-25 · La arena final, redonda
 - **Decisión:** la arena del jefe final es un círculo de 45 m de radio.
   - Las paredes de choque son tramos rectos en círculo (`RingBounds`).

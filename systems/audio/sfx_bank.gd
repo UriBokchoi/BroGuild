@@ -26,6 +26,8 @@ extends Resource
 @export var herald_arrived: SoundCue
 ## Se sella un pacto del Gremio.
 @export var pact_sealed: SoundCue
+## Se cruza el portal abierto de un jefe.
+@export var portal_entered: SoundCue
 @export var boss_defeated: SoundCue
 
 @export_group("pickups")

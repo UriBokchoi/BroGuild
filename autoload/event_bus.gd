@@ -50,6 +50,8 @@ signal chest_denied(cost: int)
 signal enemy_died(enemy: Enemy)
 ## Salió un enemigo (del pool, ya en su sitio): empieza a salir del suelo.
 signal enemy_spawned(enemy: Enemy)
+## Un enemigo empezó a hundirse para desaparecer (al cambiar de mapa): no muere ni cuenta.
+signal enemy_vanished(enemy: Enemy)
 ## El jugador rompió un rompible (calavera, bolsita…) de [param data] en [param at].
 signal breakable_broken(data: BreakableData, at: Vector3)
 ## Se recogió un recogible que da [param reward] (p. ej. [code]experience[/code]) por [param amount].

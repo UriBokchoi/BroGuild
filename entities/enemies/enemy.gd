@@ -54,6 +54,9 @@ var _rest_scale: Vector3 = Vector3.ONE
 var _rest_visual_position: Vector3 = Vector3.ZERO
 ## Segundos que le quedan para terminar de aparecer.
 var _appear_left: float = 0.0
+## Segundos que le quedan para acabar de hundirse (al cambiar de mapa) y lo que dura.
+var _vanish_left: float = 0.0
+var _vanish_time: float = 0.0
 var _rest_mass: float = 1.0
 ## Capas y máscara de su cuerpo vivo (al morir deja de chocar con el jugador y con los demás).
 var _rest_layer: int = 0
@@ -193,6 +196,7 @@ func is_frozen() -> bool:
 ## Lo saca del juego: invisible y fuera de la física hasta el siguiente [method spawn].
 func deactivate() -> void:
 	_disarm()
+	_vanish_left = 0.0
 	_stop_appearing()
 	visible = false
 	process_mode = Node.PROCESS_MODE_DISABLED
@@ -203,8 +207,32 @@ func is_appearing() -> bool:
 	return _appear_left > 0.0
 
 
-# Solo trabaja mientras aparece; va por fotograma (no por tick de física) para que se vea suave.
+## Se hunde en el suelo y desaparece en [param seconds] (al cambiar de mapa), quieto y sin hacer
+## daño. No muere: ni suelta botín ni cuenta. Al acabar sale del juego (despawned).
+func vanish(seconds: float) -> void:
+	if not is_alive() or is_vanishing():
+		return
+	set_frozen(true)
+	# Ya no se le puede dar: si muriera mientras se hunde, soltaría botín y contaría.
+	hurtbox.set_deferred(&"monitorable", false)
+	_stop_appearing()
+	_vanish_time = maxf(seconds, 0.01)
+	_vanish_left = _vanish_time
+	set_process(true)
+	EventBus.enemy_vanished.emit(self)
+
+
+## ¿Se está hundiendo para desaparecer?
+func is_vanishing() -> bool:
+	return _vanish_left > 0.0
+
+
+# Solo trabaja mientras aparece o se hunde; va por fotograma (no por tick de física) para que se vea
+# suave.
 func _process(delta: float) -> void:
+	if _vanish_left > 0.0:
+		_sink(delta)
+		return
 	if health.is_dead():
 		_stop_appearing()
 		return
@@ -339,6 +367,17 @@ func _stop_appearing() -> void:
 	visual.position = _rest_visual_position
 	if not health.is_dead():
 		visual.scale = _rest_scale * _size
+
+
+## Se hunde como al aparecer, pero al revés; al acabar sale del juego.
+func _sink(delta: float) -> void:
+	_vanish_left -= delta
+	if _vanish_left > 0.0:
+		_show_appearing(_vanish_left / _vanish_time)
+		return
+	_vanish_left = 0.0
+	deactivate()
+	despawned.emit(self)
 
 
 ## El modelo en el punto [param progress] (0–1) de su aparición: crece con rebote y sube desde el suelo.

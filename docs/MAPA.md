@@ -289,7 +289,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
   - sus tiers (`StageData`, en `data/levels/<nivel>/`: nombre, objetivo para elegirlo, mapa y la dificultad que suma) y la arena final (`final_stage`). Los tiers están también en el `LevelData` del nivel, para la selección; un test exige que sean los mismos;
   - la partida juega los tiers del 1 al elegido (`RunState.tier`) y, si se eligió el último, la arena final después;
   - cada mapa es una escena con raíz `LevelMap` (`common/level_map.gd`): su escenario y sus oleadas, su jefe (y, en la arena, dónde sale al entrar: `boss_spawn`), su zona de juego, el punto de aparición, sus mensajes, lo que sigue al jugador (`followers`) y los materiales que cambia (`material_swaps`, con `MaterialSwap`, también en lo generado);
-  - al cruzar el portal de una fase que no es la última (`BossEncounter.stage_cleared`) funde a negro y cambia el mapa: retira enemigos, minibosses y el heraldo, da la experiencia y el oro del suelo, quita el mapa (con los cofres de élite y el heraldo, que salen en él) y pone el siguiente, lleva al jugador a su claro, sube la dificultad (un modificador `difficulty` sobre sus stats) y vuelve a empezar oleadas y jefe. El jugador conserva todo lo suyo. Avisa con `stage_started`;
+  - al cruzar el portal de una fase que no es la última (`BossEncounter.stage_cleared`) el jugador entra en él (se queda quieto y encoge, `enter_time`), los enemigos se hunden en el suelo con su humo sin morir (`EnemySwarm.vanish_all`, `Enemy.vanish`: ni botín ni cuenta) y la pantalla funde a negro; entonces cambia el mapa: retira minibosses y el heraldo, da la experiencia y el oro del suelo, quita el mapa (con los cofres de élite y el heraldo, que salen en él) y pone el siguiente, lleva al jugador a su claro, sube la dificultad (un modificador `difficulty` sobre sus stats) y vuelve a empezar oleadas y jefe. El jugador conserva todo lo suyo. Avisa con `stage_started`;
   - al ganar la partida apunta en `Save` el tier superado (abre el siguiente). `advance_now()` cambia de fase sin fundido (tests).
 - **`brosque/brosque.tscn`:** el Brosque (`data/levels/brosque.tres`): `LevelStages` con sus tres tiers (verano, otoño e invierno) y la arena final, y `RunSystems`. Los mapas:
   - **`brosque_map.tscn`** (tier 1, verano): lo de abajo;
@@ -329,6 +329,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 | `enemy_hit` (a quién, su vida, el golpe y lo que quitó) | `DamageReporter` | `OnHitEffects` |
 | `enemy_died` (el propio enemigo) | `Enemy` | `LootDropper`, `RunRecorder`, `ArchiveRecorder` |
 | `enemy_spawned` (el propio enemigo) | `Enemy` (al salir del pool) | `BurstEmitter` (el polvo) |
+| `enemy_vanished` (el propio enemigo) | `Enemy` (al hundirse para desaparecer, al cambiar de mapa) | `BurstEmitter` (su humo) |
 | `breakable_broken` (sus datos y dónde) | `Breakable` | `LootDropper` |
 | `pickup_collected` | `PickupField` (y las tragaperras y el premio del jefe) | `ExperienceComponent` (la recompensa `experience`), `WalletComponent` (`gold`), los `PickupEffect` (`heal`, `magnet`, `bomb`), `PowerUpFx` (lo que se ve) |
 | `player_xp_changed` | `Player` | `XpBar` |
@@ -363,7 +364,7 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
 | `boss_health_changed` | `BossEncounter` (de su `Boss`) | `BossBar` |
 | `boss_defeated` (título de la victoria, segundos y premio por rapidez) | `BossEncounter` | `BossPortal` (se abre), `BossBar` del jefe, `Sfx` |
 | `boss_portal_opened` (dónde está) | `BossPortal` | `PortalArrow` |
-| `level_exit_reached` | `BossPortal` (al cruzarlo abierto) | `BossEncounter` |
+| `level_exit_reached` | `BossPortal` (al cruzarlo abierto) | `BossEncounter`, `Sfx` (el sonido del portal) |
 | `run_won` (título de la victoria, segundos y premio por rapidez) | `BossEncounter` | `ResultsPanel`, `RunRecorder`, `BossBar` (las dos se van), `LevelStages` (abre el tier siguiente) |
 | `stage_started` (nombre, número desde 0 y cuántas fases) | `LevelStages` | `RunRecorder` (suma el tiempo y apunta hasta dónde llegó), `BossBar` (las dos se van), `StageLabel` |
 | `mini_boss_spawned` (nombre), `mini_boss_health_changed` | `MiniBossEncounter` (de su `Boss`) | `BossBar` del miniboss, `Sfx` (al salir) |

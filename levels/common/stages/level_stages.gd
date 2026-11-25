@@ -22,6 +22,11 @@ const GROUP := &"level_stages"
 @export var fade: CanvasItem
 ## Segundos del fundido (de ida y de vuelta).
 @export_range(0.05, 3.0, 0.05, "suffix:s") var fade_time: float = 0.0
+## Al cruzar el portal: segundos antes de fundir a negro, mientras el jugador entra en él (encoge) y
+## los enemigos se hunden en el suelo.
+@export_range(0.0, 3.0, 0.05, "suffix:s") var enter_time: float = 0.0
+## Tamaño al que encoge el jugador al entrar en el portal.
+@export_range(0.01, 1.0, 0.01) var enter_scale: float = 1.0
 
 ## Las fases de esta partida, en orden.
 var _plan: Array[StageData] = []
@@ -94,13 +99,16 @@ func advance() -> void:
 		return
 	_changing = true
 	# Diferido: se cruza el portal en plena física, y retirar cuerpos ahí no se puede.
-	_retire_stage.call_deferred()
+	_retire_stage.call_deferred(enter_time + fade_time)
 	if fade == null or fade_time <= 0.0:
-		_finish_advance()
+		# Después de retirar lo de ahora (también diferido).
+		_finish_advance.call_deferred()
 		return
+	_enter_portal()
 	fade.modulate.a = 0.0
 	fade.visible = true
 	var tween := create_tween()
+	tween.tween_interval(enter_time)
 	tween.tween_property(fade, ^"modulate:a", 1.0, fade_time)
 	tween.tween_callback(_finish_advance)
 	tween.tween_property(fade, ^"modulate:a", 0.0, fade_time)
@@ -121,14 +129,16 @@ func advance_now() -> void:
 	if _changing or _index + 1 >= _plan.size():
 		return
 	_changing = true
-	_retire_stage()
+	_retire_stage(0.0)
 	_finish_advance()
 
 
-## Retira lo de la fase que acaba: enemigos, minibosses, heraldo y recogibles (la experiencia y el
-## oro del suelo se dan).
-func _retire_stage() -> void:
-	systems.director.stop(true)
+## Retira lo de la fase que acaba: los enemigos se hunden en el suelo en [param vanish_time] (sin
+## botín), y se van los minibosses, el heraldo y los recogibles (la experiencia y el oro del suelo se
+## dan).
+func _retire_stage(vanish_time: float) -> void:
+	systems.director.stop(false)
+	systems.director.swarm.vanish_all(vanish_time)
 	systems.mini_bosses.reset()
 	systems.herald.dismiss()
 	systems.pickups.collect_all(&"experience")
@@ -138,14 +148,35 @@ func _retire_stage() -> void:
 
 func _finish_advance() -> void:
 	_index += 1
+	# Los que aún no hubieran acabado de hundirse.
+	systems.director.swarm.clear()
 	remove_child(_map)
 	_map.free()
 	_build_map(_plan[_index])
 	_configure_systems()
 	systems.apply_map_settings()
 	systems.player.teleport_to(_map.spawn_point.global_position)
+	_leave_portal()
 	_start_stage()
 	_changing = false
+
+
+## El jugador entra en el portal: se queda quieto (sin control) y encoge mientras la pantalla funde.
+func _enter_portal() -> void:
+	var player := systems.player
+	player.process_mode = Node.PROCESS_MODE_DISABLED
+	if player.model:
+		var tween := create_tween()
+		tween.tween_property(player.model, ^"scale", Vector3.ONE * enter_scale, enter_time + fade_time) \
+			.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
+
+
+## Sale del portal en el mapa nuevo: vuelve su tamaño y su control.
+func _leave_portal() -> void:
+	var player := systems.player
+	player.process_mode = Node.PROCESS_MODE_INHERIT
+	if player.model:
+		player.model.scale = Vector3.ONE
 
 
 func _build_map(stage: StageData) -> void:

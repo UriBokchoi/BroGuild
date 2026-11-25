@@ -195,3 +195,21 @@ func test_time_stop_freezes_everyone_for_a_while() -> void:
 	assert_false(_swarm.is_frozen())
 	assert_false(enemy.is_frozen())
 	assert_signal_emitted_with_parameters(EventBus, "time_stop_changed", [false])
+
+
+func test_vanishing_enemies_sink_and_leave_without_dying() -> void:
+	for index: int in 3:
+		_swarm.spawn(SWARMER, Vector3(index * 3.0, 0.0, 6.0))
+	await wait_physics_frames(2)
+	watch_signals(EventBus)
+	_swarm.vanish_all(0.2)
+	assert_signal_emit_count(EventBus, "enemy_vanished", 3)
+	for enemy: Enemy in _swarm.get_active():
+		assert_true(enemy.is_vanishing())
+		assert_true(enemy.freeze, "quietos")
+	await wait_seconds(0.35)
+	assert_eq(_swarm.active_count(), 0, "se fueron")
+	assert_signal_not_emitted(EventBus, "enemy_died", "sin morir: ni botín ni cuenta")
+	var again := _swarm.spawn(SWARMER, Vector3(1.0, 0.0, 1.0))
+	assert_false(again.is_vanishing(), "al volver del pool, como nuevo")
+	assert_false(again.freeze)
