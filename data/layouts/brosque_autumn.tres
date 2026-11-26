@@ -3,8 +3,8 @@
 [ext_resource type="Script" path="res://levels/common/layout/layout_data.gd" id="1_layout"]
 [ext_resource type="Script" path="res://levels/common/layout/layout_piece.gd" id="2_piece"]
 [ext_resource type="Script" path="res://levels/common/layout/forest_data.gd" id="3_forest"]
-[ext_resource type="PackedScene" path="res://levels/brosque/props/plateau_high.tscn" id="4_high"]
-[ext_resource type="PackedScene" path="res://levels/brosque/props/plateau_low.tscn" id="5_low"]
+[ext_resource type="PackedScene" path="res://levels/brosque/props/big_tree.tscn" id="4_tree"]
+[ext_resource type="PackedScene" path="res://levels/brosque/props/rock_hill.tscn" id="5_hill"]
 [ext_resource type="PackedScene" path="res://levels/brosque/props/dumbbell_shrine.tscn" id="6_dumbbell"]
 [ext_resource type="PackedScene" path="res://levels/brosque/props/bench_log.tscn" id="7_bench"]
 [ext_resource type="PackedScene" path="res://entities/interactables/slot_machine/slot_machine.tscn" id="8_slots"]
@@ -26,20 +26,20 @@ avoid_clearing = true
 ring = Vector2(24, 28)
 face_center = true
 
-[sub_resource type="Resource" id="Piece_high"]
+[sub_resource type="Resource" id="Piece_tree"]
 script = ExtResource("2_piece")
-scene = ExtResource("4_high")
+scene = ExtResource("4_tree")
 count = 4
-footprint = 20.0
-top_height = 5.0
+footprint = 6.0
+top_height = 6.5
 avoid_clearing = true
 
-[sub_resource type="Resource" id="Piece_low"]
+[sub_resource type="Resource" id="Piece_hill"]
 script = ExtResource("2_piece")
-scene = ExtResource("5_low")
+scene = ExtResource("5_hill")
 count = 7
-footprint = 15.0
-top_height = 3.0
+footprint = 6.5
+top_height = 4.2
 avoid_clearing = true
 
 [sub_resource type="Resource" id="Piece_ruin_temple"]
@@ -138,7 +138,7 @@ clearing_radius = 18.0
 spawn_radius = 6.0
 gap = 3.0
 attempts = 60
-pieces = Array[ExtResource("2_piece")]([SubResource("Piece_altar"), SubResource("Piece_high"), SubResource("Piece_low"), SubResource("Piece_ruin_temple"), SubResource("Piece_slots_ground"), SubResource("Piece_chest_ground"), SubResource("Piece_mushroom_ring"), SubResource("Piece_ruin_wall"), SubResource("Piece_ruin_arch"), SubResource("Piece_dumbbell"), SubResource("Piece_bench")])
+pieces = Array[ExtResource("2_piece")]([SubResource("Piece_altar"), SubResource("Piece_tree"), SubResource("Piece_hill"), SubResource("Piece_ruin_temple"), SubResource("Piece_slots_ground"), SubResource("Piece_chest_ground"), SubResource("Piece_mushroom_ring"), SubResource("Piece_ruin_wall"), SubResource("Piece_ruin_arch"), SubResource("Piece_dumbbell"), SubResource("Piece_bench")])
 top_pieces = Array[ExtResource("2_piece")]([SubResource("Piece_slots_top"), SubResource("Piece_chest_top")])
 reserved = Array[Vector3]([Vector3(0, -129.5, 9), Vector3(140, -18, 7)])
 forest = SubResource("Forest_brosque")

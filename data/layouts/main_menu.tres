@@ -7,7 +7,7 @@
 [ext_resource type="PackedScene" path="res://levels/brosque/props/ruin_wall.tscn" id="5_wall"]
 [ext_resource type="PackedScene" path="res://levels/brosque/props/dumbbell_rock.tscn" id="6_dumbbell"]
 [ext_resource type="PackedScene" path="res://levels/brosque/props/bench_log.tscn" id="7_bench"]
-[ext_resource type="PackedScene" path="res://levels/brosque/props/plateau_low.tscn" id="8_plateau"]
+[ext_resource type="PackedScene" path="res://levels/brosque/props/rock_hill.tscn" id="8_hill"]
 [ext_resource type="PackedScene" path="res://levels/brosque/props/ruin_temple.tscn" id="9_temple"]
 [ext_resource type="Material" path="res://levels/brosque/materials/bark.tres" id="10_bark"]
 [ext_resource type="Material" path="res://levels/brosque/materials/foliage.tres" id="11_foliage"]
@@ -21,11 +21,11 @@ avoid_clearing = true
 ring = Vector2(16, 20)
 face_center = true
 
-[sub_resource type="Resource" id="Piece_plateau"]
+[sub_resource type="Resource" id="Piece_hill"]
 script = ExtResource("2_piece")
-scene = ExtResource("8_plateau")
+scene = ExtResource("8_hill")
 count = 2
-footprint = 15.0
+footprint = 6.5
 avoid_clearing = true
 ring = Vector2(24, 28)
 
@@ -96,5 +96,5 @@ clearing_radius = 13.0
 spawn_radius = 4.0
 gap = 2.0
 attempts = 60
-pieces = Array[ExtResource("2_piece")]([SubResource("Piece_temple"), SubResource("Piece_plateau"), SubResource("Piece_arch"), SubResource("Piece_wall"), SubResource("Piece_dumbbell"), SubResource("Piece_bench")])
+pieces = Array[ExtResource("2_piece")]([SubResource("Piece_temple"), SubResource("Piece_hill"), SubResource("Piece_arch"), SubResource("Piece_wall"), SubResource("Piece_dumbbell"), SubResource("Piece_bench")])
 forest = SubResource("Forest_menu")

@@ -1,6 +1,7 @@
 extends GutTest
 ## Mapa generado (con los datos del Brosque): las piezas no se pisan, quedan dentro del cuadrado y
-## las mesetas fuera del claro; las tragaperras de arriba van encima de una meseta; ningún árbol
+## los árboles grandes y las montañitas fuera del claro; las tragaperras de arriba van encima de uno
+## de ellos; ningún árbol
 ## suelto pisa una pieza; el portal del jefe queda al borde del claro mirándolo; en lo reservado (la
 ## taberna) no hay ni piezas ni árboles, tampoco los del borde; con la misma semilla sale el mismo
 ## mapa y con otra, otro.
@@ -20,15 +21,18 @@ func test_pieces_do_not_overlap_and_stay_inside() -> void:
 			assert_gte(distance, zone.z + zones[other].z, "sin pisarse")
 
 
-func test_plateaus_avoid_the_clearing_and_carry_the_top_slot_machines() -> void:
+func test_tall_pieces_avoid_the_clearing_and_carry_the_top_slot_machines() -> void:
 	var layout := _make_layout(8)
 	var tops: Array[Vector3] = []
+	var tall := 0
 	for piece: Node3D in layout.get_pieces():
 		if piece is SlotMachine and piece.position.y > 0.0:
 			tops.append(piece.position)
-		elif piece.scene_file_path.contains("plateau"):
+		elif piece.scene_file_path.contains("big_tree") or piece.scene_file_path.contains("rock_hill"):
+			tall += 1
 			assert_gt(Vector2(piece.position.x, piece.position.z).length(), DATA.clearing_radius)
-	assert_eq(tops.size(), DATA.top_pieces[0].count, "una en cada meseta elegida")
+	assert_gt(tall, 0, "hay árboles grandes y montañitas")
+	assert_eq(tops.size(), DATA.top_pieces[0].count, "una encima de cada pieza alta elegida")
 
 
 func test_the_boss_portal_stands_at_the_edge_of_the_clearing_facing_it() -> void:

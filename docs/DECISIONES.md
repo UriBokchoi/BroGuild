@@ -1815,3 +1815,12 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - Lo bloqueado no sale como nuevo al subir de nivel; si ya se lleva (la armería de práctica), sí se sube.
   - Las misiones de Paladín, Bárbaro y Brujo se añaden con sus personajes.
 - **Por qué:** lo pidió el diseñador. Las condiciones están en `data/meta/quests.tres` para cambiarlas sin tocar código.
+
+## 2026-11-26 · Árboles grandes y montañitas en vez de mesetas
+- **Decisión:** las mesetas cuadradas con rampa dejan su sitio a dos piezas que se suben a saltos, sin rampa:
+  - El árbol grande (antes, la meseta alta): cuatro setas de repisa en espiral alrededor del tronco, cada una 1,3 m más alta, hasta una plataforma de tablas a 6,5 m. Sus ramas y su copa van por fuera, para no tapar lo de arriba.
+  - La montañita (antes, la baja): tres escalones de roca de 1,4 m con musgo, rocas sueltas al pie y un arbusto. La cima, a 4,2 m.
+  - Ningún apoyo está a más de un salto (2 m) del anterior; un test lo comprueba.
+  - Reutilizan los materiales del Brosque (corteza, tablas, roca y musgo, que cambia con la estación). Solo hay un material nuevo, el de las setas.
+  - Ocupan menos (6 y 6,5 m de radio, antes 20 y 15).
+- **Por qué:** lo pidió el diseñador: algo original, no una plataforma cuadrada. Que haya que hacer parkour para subir premia el movimiento.

@@ -1,0 +1,151 @@
+[gd_scene format=3]
+
+[ext_resource type="Material" path="res://levels/brosque/materials/rock.tres" id="1_rock"]
+[ext_resource type="Material" path="res://levels/brosque/materials/moss.tres" id="2_moss"]
+
+[sub_resource type="CylinderMesh" id="Mesh_rock1"]
+material = ExtResource("1_rock")
+top_radius = 5
+bottom_radius = 5
+height = 1.4
+radial_segments = 10
+rings = 1
+
+[sub_resource type="CylinderShape3D" id="Shape_rock1"]
+height = 1.4
+radius = 4.875
+
+[sub_resource type="CylinderMesh" id="Mesh_moss1"]
+material = ExtResource("2_moss")
+top_radius = 4.8
+bottom_radius = 4.95
+height = 0.14
+radial_segments = 10
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Mesh_rock2"]
+material = ExtResource("1_rock")
+top_radius = 3.7
+bottom_radius = 3.7
+height = 2.8
+radial_segments = 10
+rings = 1
+
+[sub_resource type="CylinderShape3D" id="Shape_rock2"]
+height = 2.8
+radius = 3.6075
+
+[sub_resource type="CylinderMesh" id="Mesh_moss2"]
+material = ExtResource("2_moss")
+top_radius = 3.552
+bottom_radius = 3.663
+height = 0.14
+radial_segments = 10
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Mesh_rock3"]
+material = ExtResource("1_rock")
+top_radius = 2.5
+bottom_radius = 2.5
+height = 4.2
+radial_segments = 10
+rings = 1
+
+[sub_resource type="CylinderShape3D" id="Shape_rock3"]
+height = 4.2
+radius = 2.4375
+
+[sub_resource type="CylinderMesh" id="Mesh_moss3"]
+material = ExtResource("2_moss")
+top_radius = 2.4
+bottom_radius = 2.475
+height = 0.14
+radial_segments = 10
+rings = 1
+
+[sub_resource type="SphereMesh" id="Mesh_boulder"]
+material = ExtResource("1_rock")
+radius = 1.0
+height = 1.3
+radial_segments = 7
+rings = 3
+
+[sub_resource type="SphereShape3D" id="Shape_boulder"]
+radius = 0.65
+
+[sub_resource type="SphereShape3D" id="Shape_pebble"]
+radius = 0.45
+
+[sub_resource type="SphereMesh" id="Mesh_bush"]
+material = ExtResource("2_moss")
+radius = 0.8
+height = 1.1
+radial_segments = 8
+rings = 4
+
+[node name="RockHill" type="StaticBody3D"]
+collision_mask = 0
+
+[node name="Rock1" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.9553, 0, 0.2955, 0, 1, 0, -0.2955, 0, 0.9553, 1.2, 0.7, 0.9)
+mesh = SubResource("Mesh_rock1")
+
+[node name="RockShape1" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2, 0.7, 0.9)
+shape = SubResource("Shape_rock1")
+
+[node name="Moss1" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.9553, 0, 0.2955, 0, 1, 0, -0.2955, 0, 0.9553, 1.2, 1.4, 0.9)
+mesh = SubResource("Mesh_moss1")
+
+[node name="Rock2" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.4536, 0, 0.8912, 0, 1, 0, -0.8912, 0, 0.4536, 0.6, 1.4, 0.45)
+mesh = SubResource("Mesh_rock2")
+
+[node name="RockShape2" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 1.4, 0.45)
+shape = SubResource("Shape_rock2")
+
+[node name="Moss2" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.4536, 0, 0.8912, 0, 1, 0, -0.8912, 0, 0.4536, 0.6, 2.8, 0.45)
+mesh = SubResource("Mesh_moss2")
+
+[node name="Rock3" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.4161, 0, 0.9093, 0, 1, 0, -0.9093, 0, -0.4161, 0, 2.1, 0)
+mesh = SubResource("Mesh_rock3")
+
+[node name="RockShape3" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.1, 0)
+shape = SubResource("Shape_rock3")
+
+[node name="Moss3" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.4161, 0, 0.9093, 0, 1, 0, -0.9093, 0, -0.4161, 0, 4.2, 0)
+mesh = SubResource("Mesh_moss3")
+
+[node name="Boulder1" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.9397, 0, -0.342, 0, 1, 0, 0.342, 0, 0.9397, -3.7804, 0.35, -0.9127)
+mesh = SubResource("Mesh_boulder")
+
+[node name="BoulderShape1" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.7804, 0.35, -0.9127)
+shape = SubResource("Shape_boulder")
+
+[node name="Boulder2" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.9976, 0, -0.0698, 0, 1, 0, 0.0698, 0, -0.9976, 5.26, 0.35, -2.5068)
+mesh = SubResource("Mesh_boulder")
+
+[node name="BoulderShape2" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.26, 0.35, -2.5068)
+shape = SubResource("Shape_boulder")
+
+[node name="Boulder3" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.3189, 0, 0.6231, 0, 0.7, 0, -0.6231, 0, 0.3189, 4.6341, 1.7, 3.4878)
+mesh = SubResource("Mesh_boulder")
+
+[node name="BoulderShape3" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.6341, 1.7, 3.4878)
+shape = SubResource("Shape_pebble")
+
+[node name="Bush" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8794, 4.45, -0.684)
+mesh = SubResource("Mesh_bush")
