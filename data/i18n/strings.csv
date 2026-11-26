@@ -11,9 +11,15 @@ QUESTS_TITLE,Misiones,Quests
 QUESTS_DONE,Hecha,Done
 QUESTS_PENDING,Pendiente,Pending
 QUESTS_AND,y,and
+QUESTS_TAB_PENDING,Pendientes (%d),Pending (%d)
+QUESTS_TAB_DONE,Completadas (%d),Completed (%d)
+QUESTS_DONE_AT,Completada el %s,Completed on %s
+QUESTS_EMPTY_PENDING,¡Lo has completado todo!,You've completed everything!
+QUESTS_EMPTY_DONE,Aún no has completado ninguna. Se cumplen solas al acabar una partida.,You haven't completed any yet. They complete on their own when a run ends.
 QUEST_HAMMER_DESC,Sube la espada a nivel 10 y gana una partida.,Get the sword to level 10 and win a run.
 QUEST_AXE_DESC,Llega a nivel 30 con el Guerrero.,Reach level 30 as the Warrior.
 QUEST_WARLOCK_DESC,Llega a nivel 30 con el Mago.,Reach level 30 as the Mage.
+QUEST_KEEN_EYE_DESC,Derrota a 2500 enemigos en una sola partida.,Defeat 2500 enemies in a single run.
 CHARACTER_LOCKED,Bloqueado: %s,Locked: %s
 UPGRADES_TITLE,Mejoras,Upgrades
 UPGRADES_LEVEL,Nivel %d/%d,Level %d/%d
@@ -320,6 +326,8 @@ RUNE_HASTE_NAME,Runa de Prisa,Rune of Haste
 RUNE_HASTE_DESCRIPTION,"Más velocidad de ataque.","More attack speed."
 RUNE_VIGOR_NAME,Runa de Vigor,Rune of Vigor
 RUNE_VIGOR_DESCRIPTION,"Más vida máxima.","More max health."
+RUNE_KEEN_EYE_NAME,Runa del Ojo clínico,Rune of the Keen Eye
+RUNE_KEEN_EYE_DESCRIPTION,"Probabilidad de crítico: más golpes críticos.","Crit chance: more critical hits."
 RUNE_BLOODLUST_NAME,Runa de Sed de sangre,Rune of Bloodlust
 RUNE_BLOODLUST_DESCRIPTION,"Robo de vida: cada golpe te cura parte del daño que haces.","Lifesteal: every hit heals you for part of the damage you deal."
 RUNE_MULTIPLICITY_NAME,Runa de Multiplicidad,Rune of Multiplicity

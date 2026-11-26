@@ -20,6 +20,8 @@ extends Resource
 @export_range(0, 100, 1) var item_level: int = 0
 ## Llegando a este nivel del jugador (0: el que sea).
 @export_range(0, 1000, 1) var player_level: int = 0
+## Derrotando al menos a estos enemigos en la partida (0: los que sean).
+@export_range(0, 100000, 1, "or_greater") var kills: int = 0
 ## Ganando la partida.
 @export var needs_win: bool = false
 
@@ -31,6 +33,8 @@ func is_met_by(record: RunRecord) -> bool:
 	if item and record.weapons.get(String(item.id), 0) < item_level:
 		return false
 	if record.player_level < player_level:
+		return false
+	if record.kills < kills:
 		return false
 	return record.won or not needs_win
 

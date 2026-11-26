@@ -48,7 +48,7 @@ func open(record: RunRecord) -> void:
 	if record.has_build():
 		_add_row(&"RESULTS_GOLD", str(floori(record.gold_earned)))
 		_add_row(&"RESULTS_DAMAGE", str(floori(record.damage_dealt)))
-	_add_row(&"RECORDS_DATE", _date_text(record.finished_at))
+	_add_row(&"RECORDS_DATE", DateText.format(record.finished_at))
 	_show_build(record)
 	_scroll.scroll_vertical = 0
 	UiMotion.reveal(self)
@@ -154,11 +154,6 @@ func _name(key: StringName) -> String:
 
 
 ## La fecha y hora (de este equipo) de [param unix_time].
-func _date_text(unix_time: float) -> String:
-	var bias: int = Time.get_time_zone_from_system().get("bias", 0)
-	var date := Time.get_datetime_dict_from_unix_time(floori(unix_time) + bias * 60)
-	return tr(&"RECORDS_DATE_VALUE") % [date["day"], date["month"], date["year"], date["hour"], date["minute"]]
-
 
 static func _clear(container: Node) -> void:
 	for child: Node in container.get_children():

@@ -68,3 +68,28 @@ func test_the_profile_keeps_the_completed_quests() -> void:
 	loaded.read_from(config)
 	assert_true(loaded.has_completed(&"hammer"))
 	assert_false(loaded.has_completed(&"axe"))
+
+
+func test_the_profile_keeps_when_each_quest_was_completed() -> void:
+	var profile := PlayerProfile.new()
+	profile.complete_quest(&"hammer", 1700000000.0)
+	profile.complete_quest(&"axe")
+	assert_eq(profile.completed_at(&"hammer"), 1700000000.0)
+	assert_gt(profile.completed_at(&"axe"), 1700000000.0, "sin fecha, ahora")
+	assert_eq(profile.completed_at(&"warlock"), 0.0)
+	var config := ConfigFile.new()
+	profile.write_to(config)
+	var loaded := PlayerProfile.new()
+	loaded.read_from(config)
+	assert_eq(loaded.completed_at(&"hammer"), 1700000000.0)
+
+
+func test_the_keen_eye_rune_needs_2500_kills_in_one_run() -> void:
+	var rune := preload("res://data/runes/keen_eye.tres")
+	var quest := QUESTS.quest_for(rune)
+	assert_not_null(quest)
+	var record := _record(MAGE, 0, 10, false)
+	record.kills = 2499
+	assert_false(quest.is_met_by(record))
+	record.kills = 2500
+	assert_true(quest.is_met_by(record), "con cualquier personaje y sin ganar")

@@ -86,12 +86,17 @@ func test_locked_characters_cannot_be_chosen() -> void:
 	assert_false(setup.is_locked(MAGE))
 
 
-func test_the_quests_panel_lists_them_with_their_state() -> void:
+func test_the_quests_panel_splits_pending_and_completed_with_dates() -> void:
 	Save.profile.complete_quest(QUESTS.quests[0].id)
 	var panel := QuestsPanelScene.instantiate() as QuestsPanel
 	add_child_autofree(panel)
 	panel.open()
-	var states := panel.get_states()
-	assert_eq(states.size(), QUESTS.quests.size())
-	assert_eq(states[0], tr(&"QUESTS_DONE"))
-	assert_eq(states[1], tr(&"QUESTS_PENDING"))
+	assert_false(panel.is_showing_done(), "empieza por las pendientes")
+	var waiting := panel.get_states()
+	assert_eq(waiting.size(), QUESTS.quests.size() - 1)
+	for state: String in waiting:
+		assert_eq(state, tr(&"QUESTS_PENDING"))
+	panel.show_tab(true)
+	var done := panel.get_states()
+	assert_eq(done.size(), 1, "las completadas, aparte")
+	assert_true(done[0].begins_with(tr(&"QUESTS_DONE_AT").get_slice("%", 0)), "con su fecha")

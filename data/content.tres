@@ -18,6 +18,7 @@
 [ext_resource type="Resource" uid="uid://dd167hn1w21r5" path="res://data/runes/vigor.tres" id="19_vigor"]
 [ext_resource type="Resource" uid="uid://c0xh45lit48bm" path="res://data/runes/multiplicity.tres" id="20_multiplicity"]
 [ext_resource type="Resource" path="res://data/runes/bloodlust.tres" id="50_bloodlust"]
+[ext_resource type="Resource" path="res://data/runes/keen_eye.tres" id="51_keen_eye"]
 [ext_resource type="Resource" uid="uid://cftr4ua7gn2io" path="res://data/items/cold_pizza.tres" id="21_cold_pizza"]
 [ext_resource type="Resource" uid="uid://b543ag8ww3tkn" path="res://data/items/fanny_pack.tres" id="22_fanny_pack"]
 [ext_resource type="Resource" uid="uid://c0dc8m2qrwdkn" path="res://data/items/game_controller.tres" id="23_game_controller"]
@@ -76,7 +77,7 @@ script = ExtResource("2_category")
 id = &"runes"
 name_key = &"ARCHIVE_CATEGORY_RUNES"
 hint_key = &"ARCHIVE_HINT_RUNES"
-entries = Array[Resource]([ExtResource("16_strength"), ExtResource("17_amplitude"), ExtResource("18_haste"), ExtResource("19_vigor"), ExtResource("20_multiplicity"), ExtResource("50_bloodlust")])
+entries = Array[Resource]([ExtResource("16_strength"), ExtResource("17_amplitude"), ExtResource("18_haste"), ExtResource("19_vigor"), ExtResource("20_multiplicity"), ExtResource("50_bloodlust"), ExtResource("51_keen_eye")])
 
 [sub_resource type="Resource" id="Category_items"]
 script = ExtResource("2_category")

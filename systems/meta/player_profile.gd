@@ -10,8 +10,10 @@ const SECTION := "profile"
 var bro_coins: int = 0
 ## Nivel comprado de cada mejora permanente (por id; sin entrada, 0).
 var upgrades: Dictionary[StringName, int] = {}
-## Misiones cumplidas (por id).
+## Misiones cumplidas (por id), en el orden en que se cumplieron.
 var completed_quests: Array[StringName] = []
+## Cuándo se cumplió cada una (segundos desde 1970, UTC; sin entrada, no se sabe).
+var quest_dates: Dictionary[StringName, float] = {}
 
 
 ## Suma [param amount] bro-monedas (nunca resta).
@@ -24,12 +26,19 @@ func has_completed(id: StringName) -> bool:
 	return completed_quests.has(id)
 
 
-## Apunta la misión [param id] como cumplida; si ya lo estaba, devuelve [code]false[/code].
-func complete_quest(id: StringName) -> bool:
+## Apunta la misión [param id] como cumplida en [param when] (segundos desde 1970; por defecto, ahora);
+## si ya lo estaba, devuelve [code]false[/code].
+func complete_quest(id: StringName, when: float = -1.0) -> bool:
 	if id.is_empty() or has_completed(id):
 		return false
 	completed_quests.append(id)
+	quest_dates[id] = when if when >= 0.0 else Time.get_unix_time_from_system()
 	return true
+
+
+## Cuándo se cumplió la misión [param id] (segundos desde 1970; 0 si no se cumplió o no se sabe).
+func completed_at(id: StringName) -> float:
+	return quest_dates.get(id, 0.0)
 
 
 ## Nivel comprado de [param id] (0 sin comprar).
@@ -75,6 +84,10 @@ func write_to(config: ConfigFile) -> void:
 	for id: StringName in completed_quests:
 		quests.append(id)
 	config.set_value(SECTION, "completed_quests", quests)
+	var dates := {}
+	for id: StringName in quest_dates:
+		dates[String(id)] = quest_dates[id]
+	config.set_value(SECTION, "quest_dates", dates)
 
 
 func read_from(config: ConfigFile) -> void:
@@ -88,7 +101,10 @@ func read_from(config: ConfigFile) -> void:
 			if (key is String or key is StringName) and level is int and level > 0:
 				upgrades[StringName(str(key))] = level
 	completed_quests.clear()
+	quest_dates.clear()
+	var dates: Variant = config.get_value(SECTION, "quest_dates", {})
 	var quests: Variant = config.get_value(SECTION, "completed_quests", PackedStringArray())
 	if quests is PackedStringArray:
 		for id: String in quests:
-			complete_quest(StringName(id))
+			var when: Variant = (dates as Dictionary).get(id, 0.0) if dates is Dictionary else 0.0
+			complete_quest(StringName(id), (when as float) if (when is float or when is int) else 0.0)

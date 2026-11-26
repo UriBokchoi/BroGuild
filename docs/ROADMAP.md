@@ -230,7 +230,7 @@ De fácil a difícil.
 - [x] Caminitos de tierra cortos de decorado
 - [x] Que los enemigos puedan subir al árbol grande (tronco ancho y trepable)
 - [x] Brújula abajo a la izquierda
-- [ ] Misiones: pestaña «Completadas» con su fecha
+- [x] Misiones: pestaña «Completadas» con su fecha
 - [ ] Runas que se desbloquean: Sed de sangre (Bárbaro a nivel 50) y una de crítico (2500 enemigos en una partida)
 - [ ] Saltar y vetar al subir de nivel (hasta 3 de cada, con una mejora cara del menú; saltar en verde, vetar en rojo)
 - [ ] En la taberna, un cofre que se abre con 1500 enemigos derrotados en el tier 1 y deja elegir entre 3 objetos (azules o mejores)

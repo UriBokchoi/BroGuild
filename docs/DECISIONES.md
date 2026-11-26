@@ -1866,3 +1866,10 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - En invierno, en vez de charcos helados (con su flor), hay montoncitos de nieve y algún muñeco de nieve con una mancuerna.
   - En todos los tiers hay caminitos de tierra cortos, solo de decorado.
 - **Por qué:** lo pidió el diseñador. Si el árbol no se puede trepar, arriba no te alcanza nadie.
+
+## 2026-11-26 · Las misiones hacen de logros; la runa del Ojo clínico
+- **Decisión:**
+  - No hay una sección de logros aparte. La ventana de misiones tiene dos pestañas: «Pendientes» y «Completadas». Las completadas van de la última a la primera, con la fecha en que se cumplieron, que el perfil guarda desde ahora; las de antes salen sin fecha.
+  - Runa nueva, el Ojo clínico (+1,5 de crítico por nivel de base). Se desbloquea al derrotar a 2500 enemigos en una sola partida, así que las misiones pueden pedir enemigos derrotados.
+  - Sed de sangre se desbloqueará con el Bárbaro a nivel 50, cuando exista.
+- **Por qué:** lo pidió el diseñador.

@@ -8,6 +8,7 @@
 [ext_resource type="Resource" path="res://data/characters/warrior.tres" id="6_warrior"]
 [ext_resource type="Resource" path="res://data/characters/mage.tres" id="7_mage"]
 [ext_resource type="Resource" path="res://data/weapons/evil_eye.tres" id="8_evil_eye"]
+[ext_resource type="Resource" path="res://data/runes/keen_eye.tres" id="9_keen_eye"]
 
 [sub_resource type="Resource" id="Quest_hammer"]
 script = ExtResource("2_quest")
@@ -34,6 +35,13 @@ rewards = Array[Resource]([ExtResource("8_evil_eye")])
 character = ExtResource("7_mage")
 player_level = 30
 
+[sub_resource type="Resource" id="Quest_keen_eye"]
+script = ExtResource("2_quest")
+id = &"keen_eye"
+description_key = &"QUEST_KEEN_EYE_DESC"
+rewards = Array[Resource]([ExtResource("9_keen_eye")])
+kills = 2500
+
 [resource]
 script = ExtResource("1_catalog")
-quests = Array[ExtResource("2_quest")]([SubResource("Quest_hammer"), SubResource("Quest_axe"), SubResource("Quest_warlock")])
+quests = Array[ExtResource("2_quest")]([SubResource("Quest_hammer"), SubResource("Quest_axe"), SubResource("Quest_warlock"), SubResource("Quest_keen_eye")])
