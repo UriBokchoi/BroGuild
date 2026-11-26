@@ -1881,3 +1881,10 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - Vetar se queda pulsado hasta que se elige una carta: su arma o runa ya no sale en el resto de la partida, y salen otras cartas sin coste.
   - Saltar es verde y vetar, rojo. Solo están en las cartas de subir de nivel, no en las mejoras gratis de otros sitios.
 - **Por qué:** lo pidió el diseñador. Vetar saca cartas nuevas para que el veto no cueste la elección.
+
+## 2026-11-26 · El cofre de la taberna
+- **Decisión:**
+  - Junto a la taberna hay un cofre que se abre gratis al derrotar a 1500 enemigos. Cuenta los del tier en que se está (el mapa es nuevo en cada tier), así que hay uno por tier.
+  - Deja elegir entre 3 objetos azules o mejores: improbable, legendario o mítico, con la Suerte.
+  - Encima dice cuántos van.
+- **Por qué:** lo pidió el diseñador para el tier 1. Contar por tier hace que en los siguientes también haya que ganárselo.

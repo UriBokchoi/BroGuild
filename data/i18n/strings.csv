@@ -445,6 +445,9 @@ PICKUP_STREAK_ANNOUNCE,¡En racha!,On a streak!
 HUD_STREAK,Racha ×%s · %d s,Streak ×%s · %d s
 PICKUP_TIME_STOP_ANNOUNCE,¡Tiempo detenido!,Time stop!
 INTERACT_TAVERN,"Tomar una jarra: cura la mitad (%d de oro)","Have a pint: heals half (%d gold)"
+INTERACT_KILL_CHEST,Abrir el cofre de la taberna: elige un objeto azul o mejor,Open the tavern chest: pick a blue or better item
+KILL_CHEST_LOCKED,"Cofre de la taberna: se abre con %d / %d enemigos derrotados","Tavern chest: opens at %d / %d enemies defeated"
+KILL_CHEST_PROGRESS,%d / %d,%d / %d
 TAVERN_HEALED,¡Salud!,Cheers!
 TAVERN_NO_GOLD,"Sin oro no hay jarra (%d de oro)","No gold, no pint (%d gold)"
 TAVERN_FULL,Ya estás como una rosa,You're already in top shape
