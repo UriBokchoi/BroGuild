@@ -41,6 +41,10 @@ extends Resource
 @export_range(0, 24, 1) var streak_max_semitones: int = 0
 
 @export_group("loot")
+## Al levantar unas pesas de piedra (se cargaron y ofrecen su mejora).
+@export var weights_lifted: SoundCue
+## Al coger una tarjeta de socio (las llaves del jefe).
+@export var boss_key_collected: SoundCue
 @export var breakable_broken: SoundCue
 @export var chest_opened: SoundCue
 ## Al revelarse el objeto (cuando la luz se para en su rareza).

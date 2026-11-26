@@ -4,6 +4,8 @@ class_name CardParts
 
 ## Grosor del borde de color de la rareza.
 const RARITY_BORDER := 4
+## Margen de la columna con el borde de la carta.
+const COLUMN_MARGIN := 20.0
 ## Estados del botón que llevan el borde de la rareza (también desactivado: la carta que gira en la
 ## ruleta).
 const RARITY_STATES: Array[StringName] = [&"normal", &"hover", &"pressed", &"hover_pressed", &"disabled"]
@@ -38,9 +40,17 @@ static func column(card: Button) -> VBoxContainer:
 	var lines := VBoxContainer.new()
 	lines.theme_type_variation = &"CardColumn"
 	lines.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	lines.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT, Control.PRESET_MODE_MINSIZE, 20)
+	lines.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT, Control.PRESET_MODE_MINSIZE, roundi(COLUMN_MARGIN))
 	card.add_child(lines)
 	return lines
+
+
+## Hace que [param card] crezca hasta que quepa todo el texto de su columna [param lines] (las líneas
+## largas se parten al saber su ancho), sin bajar de la altura que ya tenía.
+static func fit_height(card: Button, lines: VBoxContainer) -> void:
+	var base := card.custom_minimum_size.y
+	lines.minimum_size_changed.connect(func() -> void:
+		card.custom_minimum_size.y = maxf(base, lines.get_combined_minimum_size().y + COLUMN_MARGIN * 2.0))
 
 
 ## El icono [param texture] centrado, de [param height] de alto.

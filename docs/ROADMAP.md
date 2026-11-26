@@ -222,10 +222,10 @@ De fácil a difícil.
 - [ ] Colores sin repetir: Guerrero azul, Paladín amarillo, Bárbaro rojo, Brujo morado
 - [x] Menú: sin «Logros» (los logros serán las misiones); Opciones junto al idioma (y en la pausa, como ya estaba)
 - [x] Fondo del menú: sin personajes, con una tragaperras y un cofre
-- [ ] En la selección de tier, que diga cuánto más fuertes son los enemigos (tier 2: +20 %; tier 3: +50 %), y que lo sean
-- [ ] Más enemigos en las hordas
-- [ ] Que la descripción de las mejoras al subir de nivel no se salga de la carta
-- [ ] Sonidos: levantar las pesas y coger la tarjeta de socio
+- [x] En la selección de tier, que diga cuánto más fuertes son los enemigos (tier 2: +20 %; tier 3: +50 %), y que lo sean (escalan igual que el tier 1)
+- [x] Más enemigos en las hordas (un 60 % más)
+- [x] Que la descripción de las mejoras al subir de nivel no se salga de la carta
+- [x] Sonidos: levantar las pesas y coger la tarjeta de socio
 - [ ] Charcos de invierno cambiados
 - [ ] Caminitos de tierra cortos de decorado
 - [ ] Que los enemigos puedan subir al árbol grande

@@ -51,6 +51,8 @@ func test_the_brosque_tiers_match_its_scene_and_have_their_texts() -> void:
 		map.free()
 	for stage: StageData in brosque.tiers:
 		assert_has(_keys, String(stage.goal_key), "%s: falta su objetivo" % stage.resource_path)
-	assert_lt(brosque.tiers[0].difficulty, brosque.tiers[1].difficulty, "cada tier, más difícil")
-	assert_lt(brosque.tiers[1].difficulty, brosque.tiers[2].difficulty)
+	assert_eq(brosque.tiers[1].strength_percent(), 20, "tier 2: enemigos un 20 % más fuertes")
+	assert_eq(brosque.tiers[2].strength_percent(), 50, "tier 3: un 50 % más")
+	for stage: StageData in brosque.tiers:
+		assert_eq(stage.difficulty, 0.0, "%s: escala igual que el tier 1" % stage.resource_path)
 	level.free()

@@ -99,7 +99,7 @@ from_difficulty = 3.0
 [sub_resource type="Resource" id="Horde_minute_3"]
 script = ExtResource("9_horde")
 at_minute = 3.0
-count = 150
+count = 240
 spawn_seconds = 30.0
 warning_seconds = 3.0
 announce_key = &"HORDE_INCOMING"
@@ -108,7 +108,7 @@ announce_color = Color(0.88, 0.38, 0.28, 1)
 [sub_resource type="Resource" id="Horde_minute_6"]
 script = ExtResource("9_horde")
 at_minute = 6.0
-count = 240
+count = 380
 elites = 6
 spawn_seconds = 30.0
 warning_seconds = 3.0

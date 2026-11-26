@@ -34,6 +34,7 @@ func _init(offered: PassiveItemData, stats: StatsComponent = null) -> void:
 	CardParts.label(column, item.description_key, &"StatBaseLabel")
 	for effect: String in effects:
 		CardParts.label(column, effect, &"StatModifiedLabel")
+	CardParts.fit_height(self, column)
 
 
 func _ready() -> void:

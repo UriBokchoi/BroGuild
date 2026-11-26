@@ -51,6 +51,8 @@ func _ready() -> void:
 	EventBus.pickup_collected.connect(_on_pickup_collected)
 	EventBus.breakable_broken.connect(func(_data: BreakableData, _at: Vector3) -> void: play(bank.breakable_broken))
 	EventBus.chest_opened.connect(func() -> void: play(bank.chest_opened))
+	EventBus.stat_choice_offered.connect(func(_offers: Array[StatOffer]) -> void: play(bank.weights_lifted))
+	EventBus.boss_key_collected.connect(func() -> void: play(bank.boss_key_collected))
 	EventBus.chest_denied.connect(func(_cost: int) -> void: play(bank.chest_denied))
 	EventBus.item_revealed.connect(_on_item_revealed)
 	EventBus.slot_spun.connect(func(_data: SlotMachineData, _results: Array[SlotSymbol]) -> void: play(bank.slot_spun))

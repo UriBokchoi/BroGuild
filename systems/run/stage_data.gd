@@ -11,3 +11,11 @@ extends Resource
 @export var map: PackedScene
 ## Dificultad que suma mientras se juega, además de la que sube con el tiempo.
 @export_range(0.0, 100.0, 0.5, "or_greater") var difficulty: float = 0.0
+## Cuánto más fuertes son los enemigos de la fase: multiplica su vida, su daño y lo que sueltan
+## (1,2 = un 20 % más; ver [member WaveDirector.strength_stats]). Sale al elegir el tier.
+@export_range(1.0, 5.0, 0.05, "or_greater") var strength: float = 1.0
+
+
+## Lo que [member strength] sube a los enemigos, en % (1,2 → 20).
+func strength_percent() -> int:
+	return roundi((strength - 1.0) * 100.0)

@@ -49,6 +49,7 @@ LEVEL_BROSQUE_NAME,El Brosque,The Brorest
 LEVEL_BROSQUE_GOAL,Objetivo: vence al Ent-renador.,Goal: defeat the Ent Trainer.
 TIER_SHORT,Tier %d,Tier %d
 TIER_LOCKED,Supera el tier %d para abrirlo,Clear tier %d to unlock it
+TIER_STRENGTH,Enemigos un %d %% más fuertes (vida y daño; también sueltan más).,Enemies %d%% stronger (health and damage; they also drop more).
 BROSQUE_TIER_1,Tier 1 · Verano,Tier 1 · Summer
 BROSQUE_TIER_2,Tier 2 · Otoño,Tier 2 · Autumn
 BROSQUE_TIER_3,Tier 3 · Invierno,Tier 3 · Winter

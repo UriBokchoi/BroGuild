@@ -262,3 +262,13 @@ func test_in_a_round_map_enemies_only_spawn_inside_the_circle() -> void:
 	for enemy: Enemy in _swarm.get_active():
 		var at := enemy.global_position
 		assert_lte(Vector2(at.x, at.z).length(), 12.0 + 0.01)
+
+
+func test_the_stage_strength_makes_everything_stronger() -> void:
+	_director.strength_stats = [&"max_health", &"contact_damage"]
+	assert_null(_director.stage_boost(), "a fuerza 1, nada")
+	_director.strength = 1.5
+	var boost := _director.stage_boost()
+	assert_eq(boost.stat_modifiers.size(), 2)
+	assert_eq(boost.stat_modifiers[0].kind, StatModifier.Kind.MULTIPLIER)
+	assert_almost_eq(boost.stat_modifiers[0].value, 1.5, 0.001)

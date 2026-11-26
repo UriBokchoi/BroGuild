@@ -212,6 +212,7 @@ func _start_stage() -> void:
 	_difficulty.value = _plan[_index].difficulty
 	if _difficulty.value != 0.0:
 		stats.add_modifier(_difficulty, self)
+	systems.director.strength = _plan[_index].strength
 	# Antes de que arranque su reloj: quien cuenta el tiempo de la partida suma la fase nueva.
 	EventBus.stage_started.emit(_plan[_index].name_key, _index, _plan.size())
 	if _index > 0:

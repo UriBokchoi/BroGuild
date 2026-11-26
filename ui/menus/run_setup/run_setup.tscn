@@ -234,6 +234,13 @@ layout_mode = 2
 theme_type_variation = &"ChestEffectLabel"
 autowrap_mode = 3
 
+[node name="LevelStrength" type="Label" parent="UI/Margin/Layout/Panel/Content/LevelPanel/LevelScroll/LevelInfo"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_type_variation = &"CurseLabel"
+autowrap_mode = 3
+
 [node name="LevelLore" type="Label" parent="UI/Margin/Layout/Panel/Content/LevelPanel/LevelScroll/LevelInfo"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(500, 0)

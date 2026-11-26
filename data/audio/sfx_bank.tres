@@ -34,6 +34,8 @@
 [ext_resource type="AudioStream" uid="uid://cdopdttwtoxwr" path="res://assets/audio/sfx/herald_arrived.wav" id="45_herald_arrived"]
 [ext_resource type="AudioStream" uid="uid://bjfo0wrjtf3tk" path="res://assets/audio/sfx/pact_sealed.wav" id="46_pact_sealed"]
 [ext_resource type="AudioStream" path="res://assets/audio/sfx/portal_entered.wav" id="47_portal_entered"]
+[ext_resource type="AudioStream" uid="uid://ch5ctble471mi" path="res://assets/audio/sfx/weights_lifted.wav" id="48_weights_lifted"]
+[ext_resource type="AudioStream" uid="uid://nxop4qws82jw" path="res://assets/audio/sfx/boss_key_collected.wav" id="49_boss_key"]
 
 [sub_resource type="Resource" id="Cue_boss_defeated"]
 script = ExtResource("2_cue")
@@ -127,6 +129,16 @@ max_voices = 1
 script = ExtResource("2_cue")
 stream = ExtResource("47_portal_entered")
 max_voices = 1
+
+[sub_resource type="Resource" id="Cue_weights_lifted"]
+script = ExtResource("2_cue")
+stream = ExtResource("48_weights_lifted")
+max_voices = 1
+
+[sub_resource type="Resource" id="Cue_boss_key"]
+script = ExtResource("2_cue")
+stream = ExtResource("49_boss_key")
+max_voices = 2
 
 [sub_resource type="Resource" id="Cue_pact_sealed"]
 script = ExtResource("2_cue")
@@ -249,6 +261,8 @@ mini_boss_spawned = SubResource("Cue_mini_boss_spawned")
 herald_arrived = SubResource("Cue_herald_arrived")
 pact_sealed = SubResource("Cue_pact_sealed")
 portal_entered = SubResource("Cue_portal_entered")
+weights_lifted = SubResource("Cue_weights_lifted")
+boss_key_collected = SubResource("Cue_boss_key")
 boss_defeated = SubResource("Cue_boss_defeated")
 pickups = Dictionary[StringName, ExtResource("2_cue")]({
 &"bomb": SubResource("Cue_pickup_bomb"),

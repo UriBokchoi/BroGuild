@@ -1845,3 +1845,15 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - Opciones sube junto al idioma.
   - El fondo del menú tiene una tragaperras y un cofre en vez de los personajes.
 - **Por qué:** lo pidió el diseñador tras probar.
+
+## 2026-11-26 · Tiers: misma escala, enemigos más fuertes
+- **Decisión:**
+  - Los tiers ya no suman dificultad (antes, +10 y +20: el tier 2 empezaba con los enemigos a ×4,2 de vida).
+  - Cada tier escala igual que el primero, pero todo lo que sale es más fuerte: ×1,2 en el tier 2 y ×1,5 en el tier 3. Eso incluye hordas, refuerzos, minibosses y jefes, en vida, daño al tocar y daño de arma. También sueltan esa parte más de experiencia y oro, porque más dificultad da más recompensa.
+  - La selección de nivel lo dice en rojo: «Enemigos un 20 % más fuertes».
+  - Las oleadas de otoño, invierno y la arena final usan las curvas del tier 1.
+  - La arena final empieza en dificultad 10 (como la prórroga) con la fuerza del tier 3.
+  - Las hordas, un 60 % más grandes.
+  - Las cartas de elegir crecen hasta que cabe su texto (`CardParts.fit_height`), como ya hacían las de los pactos.
+  - Suenan las pesas al levantarse y la tarjeta de socio al cogerla.
+- **Por qué:** lo pidió el diseñador: que se entienda cuánto más duro es cada tier y que escale igual.

@@ -55,6 +55,8 @@ func _init(offered: LevelUpOption) -> void:
 	CardParts.label(column, option.item.description_key, &"StatBaseLabel")
 	for effect: String in effects:
 		_effects.append(CardParts.label(column, effect, &"StatModifiedLabel"))
+	# Una descripción larga no se sale de la carta: crece.
+	CardParts.fit_height(self, column)
 	set_process(false)
 
 

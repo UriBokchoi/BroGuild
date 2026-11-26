@@ -10,24 +10,24 @@
 [ext_resource type="Script" path="res://systems/spawning/stat_scaling.gd" id="6_scaling"]
 
 [sub_resource type="Curve" id="Curve_rate"]
-_limits = [0.0, 30.0, 0.0, 50.0]
-_data = [Vector2(30, 6), 0.0, 1.5, 1, 1, Vector2(32, 9), 1.5, 1.3333, 1, 1, Vector2(35, 13), 1.3333, 0.6, 1, 1, Vector2(40, 16), 0.6, 0.4, 1, 1, Vector2(50, 20), 0.4, 0.0, 1, 1]
-point_count = 5
+_limits = [0.0, 20.0, 0.0, 20.0]
+_data = [Vector2(0, 0.6), 0.0, 0.25, 1, 1, Vector2(2, 1.1), 0.25, 0.2666667, 1, 1, Vector2(5, 1.9), 0.2666667, 0.3666667, 1, 1, Vector2(8, 3), 0.3666667, 0.375, 1, 1, Vector2(10, 3.75), 0.375, 4.5, 1, 1, Vector2(10.5, 6), 4.5, 0.6666667, 1, 1, Vector2(15, 9), 0.6666667, 0.3, 1, 1, Vector2(20, 10.5), 0.3, 0.0, 1, 1]
+point_count = 8
 
 [sub_resource type="Curve" id="Curve_elite"]
-_limits = [0.0, 100.0, 0.0, 50.0]
-_data = [Vector2(30, 20), 0.0, 3.0, 1, 1, Vector2(35, 35), 3.0, 3.0, 1, 1, Vector2(40, 50), 3.0, 1.0, 1, 1, Vector2(50, 60), 1.0, 0.0, 1, 1]
-point_count = 4
+_limits = [0.0, 100.0, 0.0, 20.0]
+_data = [Vector2(0, 1), 0.0, 0.4, 1, 1, Vector2(5, 3), 0.4, 0.4, 1, 1, Vector2(10, 5), 0.4, 10.0, 1, 1, Vector2(11, 15), 10.0, 7.5, 1, 1, Vector2(13, 30), 7.5, 1.4285714, 1, 1, Vector2(20, 40), 1.4285714, 0.0, 1, 1]
+point_count = 6
 
 [sub_resource type="Curve" id="Curve_health"]
-_limits = [0.0, 1000.0, 0.0, 50.0]
-_data = [Vector2(30, 24), 0.0, 8.0, 1, 1, Vector2(32, 40), 8.0, 13.3333, 1, 1, Vector2(35, 80), 13.3333, 24.0, 1, 1, Vector2(40, 200), 24.0, 40.0, 1, 1, Vector2(50, 600), 40.0, 0.0, 1, 1]
-point_count = 5
+_limits = [0.0, 200.0, 0.0, 20.0]
+_data = [Vector2(0, 1), 0.0, 0.1333333, 1, 1, Vector2(3, 1.4), 0.1333333, 0.2666667, 1, 1, Vector2(6, 2.2), 0.2666667, 0.4, 1, 1, Vector2(9, 3.4), 0.4, 0.8, 1, 1, Vector2(10, 4.2), 0.8, 4.8, 1, 1, Vector2(11, 9), 4.8, 6.5, 1, 1, Vector2(13, 22), 6.5, 11.5, 1, 1, Vector2(15, 45), 11.5, 13.0, 1, 1, Vector2(20, 110), 13.0, 0.0, 1, 1]
+point_count = 9
 
 [sub_resource type="Curve" id="Curve_damage"]
-_limits = [0.0, 50.0, 0.0, 50.0]
-_data = [Vector2(30, 3.6), 0.0, 0.7, 1, 1, Vector2(32, 5), 0.7, 1.3333, 1, 1, Vector2(35, 9), 1.3333, 1.8, 1, 1, Vector2(40, 18), 1.8, 2.2, 1, 1, Vector2(50, 40), 2.2, 0.0, 1, 1]
-point_count = 5
+_limits = [0.0, 50.0, 0.0, 20.0]
+_data = [Vector2(0, 1), 0.0, 0.06, 1, 1, Vector2(5, 1.3), 0.06, 0.08, 1, 1, Vector2(10, 1.7), 0.08, 1.3, 1, 1, Vector2(11, 3), 1.3, 1.5, 1, 1, Vector2(13, 6), 1.5, 2.0, 1, 1, Vector2(15, 10), 2.0, 2.0, 1, 1, Vector2(20, 20), 2.0, 0.0, 1, 1]
+point_count = 7
 
 [sub_resource type="Resource" id="Resource_scale_health"]
 script = ExtResource("6_scaling")

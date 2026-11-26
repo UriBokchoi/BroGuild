@@ -25,6 +25,7 @@ func _init(given: StatOffer, stats: StatsComponent = null) -> void:
 	var change := ModifierFormat.change(modifier.stat, stats, modifiers)
 	if not change.is_empty():
 		CardParts.label(column, change, &"StatValueLabel")
+	CardParts.fit_height(self, column)
 
 
 func _ready() -> void:

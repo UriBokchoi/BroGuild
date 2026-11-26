@@ -39,6 +39,7 @@ var _tier_group := ButtonGroup.new()
 @onready var _level_name: Label = %LevelName
 @onready var _tier_row: HBoxContainer = %TierRow
 @onready var _level_goal: Label = %LevelGoal
+@onready var _level_strength: Label = %LevelStrength
 @onready var _level_lore: Label = %LevelLore
 @onready var _name: Label = %CharacterName
 @onready var _description: Label = %CharacterDescription
@@ -141,6 +142,8 @@ func select_tier(tier: int) -> void:
 	var stage := _selected.tiers[tier - 1]
 	_level_goal.text = stage.goal_key
 	_level_goal.visible = not stage.goal_key.is_empty()
+	_level_strength.text = tr(&"TIER_STRENGTH") % stage.strength_percent()
+	_level_strength.visible = stage.strength_percent() > 0
 
 
 ## Tier marcado.

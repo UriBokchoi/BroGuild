@@ -141,6 +141,7 @@ script = ExtResource("10_director")
 swarm = NodePath("../EnemySwarm")
 target = NodePath("../Player")
 difficulty_stats = NodePath("../Player/Stats")
+strength_stats = Array[StringName]([&"max_health", &"contact_damage", &"damage", &"xp_reward", &"gold_reward"])
 
 [node name="PickupEffects" type="Node" parent="."]
 
