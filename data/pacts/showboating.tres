@@ -1,19 +1,19 @@
-[gd_resource type="Resource" script_class="PactData" format=3]
+[gd_resource type="Resource" script_class="PactData" format=3 uid="uid://b7plmfqdho4nq"]
 
-[ext_resource type="Script" path="res://systems/pacts/pact_data.gd" id="1_pact"]
-[ext_resource type="Script" path="res://core/stats/stat_modifier.gd" id="2_modifier"]
-
-[sub_resource type="Resource" id="Reward_1"]
-script = ExtResource("2_modifier")
-stat = &"currency_gain"
-kind = 1
-value = 0.6
+[ext_resource type="Script" uid="uid://2axv53gndube" path="res://systems/pacts/pact_data.gd" id="1_pact"]
+[ext_resource type="Script" uid="uid://is4y31g1paml" path="res://core/stats/stat_modifier.gd" id="2_modifier"]
 
 [sub_resource type="Resource" id="Curse_1"]
 script = ExtResource("2_modifier")
 stat = &"damage"
 kind = 1
 value = -0.15
+
+[sub_resource type="Resource" id="Reward_1"]
+script = ExtResource("2_modifier")
+stat = &"currency_gain"
+kind = 1
+value = 0.6
 
 [resource]
 script = ExtResource("1_pact")

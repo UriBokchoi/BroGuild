@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="PassiveItemData" format=3 uid="uid://bamqrofmo7lcr"]
 
 [ext_resource type="Script" uid="uid://bxvisp1obhnj1" path="res://systems/items/passive_item_data.gd" id="1_item"]
+[ext_resource type="Script" uid="uid://c0h0hwrg5wrl" path="res://systems/items/effects/on_hit_effect.gd" id="2_6sl6w"]
 [ext_resource type="Script" uid="uid://is4y31g1paml" path="res://core/stats/stat_modifier.gd" id="2_modifier"]
 [ext_resource type="Resource" path="res://data/rarities/common.tres" id="3_rarity"]
 [ext_resource type="Texture2D" uid="uid://0swn3i7myf8h" path="res://assets/textures/icons/items/protein_shake.svg" id="4_icon"]

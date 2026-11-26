@@ -1,8 +1,8 @@
-[gd_resource type="Resource" script_class="ChestData" format=3]
+[gd_resource type="Resource" script_class="ChestData" format=3 uid="uid://d0wrnkcvs2tkn"]
 
-[ext_resource type="Script" path="res://entities/interactables/chest/chest_data.gd" id="1_chest"]
+[ext_resource type="Script" uid="uid://cg6wa1hp5ey8m" path="res://entities/interactables/chest/chest_data.gd" id="1_chest"]
 [ext_resource type="Resource" path="res://data/rarities/rarities.tres" id="2_rarities"]
-[ext_resource type="Script" path="res://systems/items/item_pool.gd" id="3_pool"]
+[ext_resource type="Script" uid="uid://bhp1418rxh0kt" path="res://systems/items/item_pool.gd" id="3_pool"]
 
 [sub_resource type="Resource" id="Resource_items"]
 script = ExtResource("3_pool")

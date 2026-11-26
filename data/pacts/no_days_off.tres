@@ -1,19 +1,19 @@
-[gd_resource type="Resource" script_class="PactData" format=3]
+[gd_resource type="Resource" script_class="PactData" format=3 uid="uid://drv4br3pki5vb"]
 
-[ext_resource type="Script" path="res://systems/pacts/pact_data.gd" id="1_pact"]
-[ext_resource type="Script" path="res://core/stats/stat_modifier.gd" id="2_modifier"]
-
-[sub_resource type="Resource" id="Reward_1"]
-script = ExtResource("2_modifier")
-stat = &"attack_speed"
-kind = 1
-value = 0.25
+[ext_resource type="Script" uid="uid://2axv53gndube" path="res://systems/pacts/pact_data.gd" id="1_pact"]
+[ext_resource type="Script" uid="uid://is4y31g1paml" path="res://core/stats/stat_modifier.gd" id="2_modifier"]
 
 [sub_resource type="Resource" id="Curse_1"]
 script = ExtResource("2_modifier")
 stat = &"invulnerability_time"
 kind = 1
 value = -0.5
+
+[sub_resource type="Resource" id="Reward_1"]
+script = ExtResource("2_modifier")
+stat = &"attack_speed"
+kind = 1
+value = 0.25
 
 [resource]
 script = ExtResource("1_pact")

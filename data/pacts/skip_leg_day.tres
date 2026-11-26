@@ -1,18 +1,18 @@
-[gd_resource type="Resource" script_class="PactData" format=3]
+[gd_resource type="Resource" script_class="PactData" format=3 uid="uid://bwwxk52bpa5gq"]
 
-[ext_resource type="Script" path="res://systems/pacts/pact_data.gd" id="1_pact"]
-[ext_resource type="Script" path="res://core/stats/stat_modifier.gd" id="2_modifier"]
-
-[sub_resource type="Resource" id="Reward_1"]
-script = ExtResource("2_modifier")
-stat = &"crit_chance"
-value = 10
+[ext_resource type="Script" uid="uid://2axv53gndube" path="res://systems/pacts/pact_data.gd" id="1_pact"]
+[ext_resource type="Script" uid="uid://is4y31g1paml" path="res://core/stats/stat_modifier.gd" id="2_modifier"]
 
 [sub_resource type="Resource" id="Curse_1"]
 script = ExtResource("2_modifier")
 stat = &"jump_height"
 kind = 1
 value = -0.2
+
+[sub_resource type="Resource" id="Reward_1"]
+script = ExtResource("2_modifier")
+stat = &"crit_chance"
+value = 10
 
 [resource]
 script = ExtResource("1_pact")
