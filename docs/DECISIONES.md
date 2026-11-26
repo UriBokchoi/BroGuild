@@ -1832,3 +1832,16 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - Se desbloquea con la misión del Mago a nivel 30, la misma que abrirá al Brujo: una misión puede dar varias cosas (`rewards`).
   - Valores de partida: 15 de daño, 1 s, 2 rebotes, persecución 5, explosión de 2 m.
 - **Por qué:** lo pidió el diseñador. Los números son provisionales, hasta probarla.
+
+## 2026-11-26 · Pedidos tras probar (3): primeros arreglos
+- **Decisión:**
+  - El robo de vida, a la mitad: +0,5 % en las pesas y +0,4 % por nivel de Sed de sangre.
+  - Los minibosses dan 3 bro-monedas: entre el élite (1) y el jefe (5).
+  - Las mejoras del menú cuestan más: 10, 20, 35, 50 y 70 las stats; 20 a 100 el oro y los niveles máximos; 60 y 120 las ranuras.
+  - El Ent-renador tiene 8000 de vida (antes 5000), para que no caiga al minuto 3.
+  - El HUD cuenta los enemigos derrotados encima de la dificultad.
+  - El Guerrero pasa a ser azul.
+  - En el menú, «Logros» desaparece: los logros serán las misiones.
+  - Opciones sube junto al idioma.
+  - El fondo del menú tiene una tragaperras y un cofre en vez de los personajes.
+- **Por qué:** lo pidió el diseñador tras probar.

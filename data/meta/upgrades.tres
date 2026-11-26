@@ -27,7 +27,7 @@ kind = 1
 values = PackedFloat32Array(0.01, 0.02, 0.03, 0.04, 0.05)
 value_key = &"UPGRADE_VALUE_PERCENT"
 display_scale = 100.0
-costs = PackedInt32Array(5, 10, 15, 20, 25)
+costs = PackedInt32Array(10, 20, 35, 50, 70)
 
 [sub_resource type="Resource" id="Upgrade_area"]
 script = ExtResource("90_upgrade")
@@ -40,7 +40,7 @@ kind = 1
 values = PackedFloat32Array(0.01, 0.02, 0.03, 0.04, 0.05)
 value_key = &"UPGRADE_VALUE_PERCENT"
 display_scale = 100.0
-costs = PackedInt32Array(5, 10, 15, 20, 25)
+costs = PackedInt32Array(10, 20, 35, 50, 70)
 
 [sub_resource type="Resource" id="Upgrade_crit_chance"]
 script = ExtResource("90_upgrade")
@@ -51,7 +51,7 @@ icon = ExtResource("4_crit")
 stats = Array[StringName]([&"crit_chance"])
 values = PackedFloat32Array(1, 2, 3, 4, 5)
 value_key = &"UPGRADE_VALUE_PERCENT"
-costs = PackedInt32Array(5, 10, 15, 20, 25)
+costs = PackedInt32Array(10, 20, 35, 50, 70)
 
 [sub_resource type="Resource" id="Upgrade_max_health"]
 script = ExtResource("90_upgrade")
@@ -64,7 +64,7 @@ kind = 1
 values = PackedFloat32Array(0.01, 0.02, 0.03, 0.04, 0.05)
 value_key = &"UPGRADE_VALUE_PERCENT"
 display_scale = 100.0
-costs = PackedInt32Array(5, 10, 15, 20, 25)
+costs = PackedInt32Array(10, 20, 35, 50, 70)
 
 [sub_resource type="Resource" id="Upgrade_armor"]
 script = ExtResource("90_upgrade")
@@ -74,7 +74,7 @@ description_key = &"UPGRADE_ARMOR_DESC"
 icon = ExtResource("6_lifting_belt")
 stats = Array[StringName]([&"armor"])
 values = PackedFloat32Array(1, 2, 3, 4, 5)
-costs = PackedInt32Array(5, 10, 15, 20, 25)
+costs = PackedInt32Array(10, 20, 35, 50, 70)
 
 [sub_resource type="Resource" id="Upgrade_speed"]
 script = ExtResource("90_upgrade")
@@ -87,7 +87,7 @@ kind = 1
 values = PackedFloat32Array(0.01, 0.02, 0.03, 0.04, 0.05)
 value_key = &"UPGRADE_VALUE_PERCENT"
 display_scale = 100.0
-costs = PackedInt32Array(5, 10, 15, 20, 25)
+costs = PackedInt32Array(10, 20, 35, 50, 70)
 
 [sub_resource type="Resource" id="Upgrade_luck"]
 script = ExtResource("90_upgrade")
@@ -97,7 +97,7 @@ description_key = &"UPGRADE_LUCK_DESC"
 icon = ExtResource("8_horseshoe")
 stats = Array[StringName]([&"luck"])
 values = PackedFloat32Array(1, 2, 3, 4, 5)
-costs = PackedInt32Array(5, 10, 15, 20, 25)
+costs = PackedInt32Array(10, 20, 35, 50, 70)
 
 [sub_resource type="Resource" id="Upgrade_difficulty"]
 script = ExtResource("90_upgrade")
@@ -107,7 +107,7 @@ description_key = &"UPGRADE_DIFFICULTY_DESC"
 icon = ExtResource("9_difficulty")
 stats = Array[StringName]([&"difficulty"])
 values = PackedFloat32Array(1, 2, 3, 4, 5)
-costs = PackedInt32Array(5, 10, 15, 20, 25)
+costs = PackedInt32Array(10, 20, 35, 50, 70)
 
 [sub_resource type="Resource" id="Upgrade_greed"]
 script = ExtResource("90_upgrade")
@@ -120,7 +120,7 @@ kind = 1
 values = PackedFloat32Array(0.1, 0.2, 0.3, 0.4, 0.5)
 value_key = &"UPGRADE_VALUE_PERCENT"
 display_scale = 100.0
-costs = PackedInt32Array(10, 20, 30, 40, 50)
+costs = PackedInt32Array(20, 40, 60, 80, 100)
 
 [sub_resource type="Resource" id="Upgrade_weapon_slots"]
 script = ExtResource("90_upgrade")
@@ -130,7 +130,7 @@ description_key = &"UPGRADE_WEAPON_SLOTS_DESC"
 icon = ExtResource("11_weapon_slot")
 stats = Array[StringName]([&"weapon_slots"])
 values = PackedFloat32Array(1, 2)
-costs = PackedInt32Array(30, 60)
+costs = PackedInt32Array(60, 120)
 
 [sub_resource type="Resource" id="Upgrade_rune_slots"]
 script = ExtResource("90_upgrade")
@@ -140,7 +140,7 @@ description_key = &"UPGRADE_RUNE_SLOTS_DESC"
 icon = ExtResource("12_rune_slot")
 stats = Array[StringName]([&"rune_slots"])
 values = PackedFloat32Array(1, 2)
-costs = PackedInt32Array(30, 60)
+costs = PackedInt32Array(60, 120)
 
 [sub_resource type="Resource" id="Upgrade_weapon_level"]
 script = ExtResource("90_upgrade")
@@ -151,7 +151,7 @@ icon = ExtResource("13_weapon_level")
 stats = Array[StringName]([&"weapon_level_bonus"])
 values = PackedFloat32Array(2, 4, 6, 8, 10)
 value_key = &"UPGRADE_VALUE_LEVELS"
-costs = PackedInt32Array(10, 20, 30, 40, 50)
+costs = PackedInt32Array(20, 40, 60, 80, 100)
 
 [sub_resource type="Resource" id="Upgrade_rune_level"]
 script = ExtResource("90_upgrade")
@@ -162,7 +162,7 @@ icon = ExtResource("14_rune_level")
 stats = Array[StringName]([&"rune_level_bonus"])
 values = PackedFloat32Array(5, 10, 15, 20)
 value_key = &"UPGRADE_VALUE_LEVELS"
-costs = PackedInt32Array(10, 20, 30, 40)
+costs = PackedInt32Array(20, 40, 60, 80)
 
 [resource]
 script = ExtResource("1_catalog")

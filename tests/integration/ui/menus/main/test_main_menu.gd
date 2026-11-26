@@ -1,6 +1,6 @@
 extends GutTest
-## Menú principal: viste a los personajes de fondo, «Jugar» lo pide, los récords están a la derecha
-## y «Opciones» y «Archivo» cambian el menú y los récords por su panel (y al cerrarlo vuelven).
+## Menú principal: de fondo, una tragaperras y un cofre; Opciones, junto al idioma; «Jugar» lo pide,
+## los récords están a la derecha y «Opciones» y «Archivo» cambian el menú y los récords por su panel (y al cerrarlo vuelven).
 
 const MenuScene := preload("res://ui/menus/main/main_menu.tscn")
 
@@ -12,9 +12,15 @@ func before_each() -> void:
 	add_child_autofree(_menu)
 
 
-func test_dresses_the_characters() -> void:
-	for index: int in _menu.models.size():
-		assert_eq(_menu.models[index].get_color(), _menu.characters[index].color)
+func test_the_background_has_a_slot_machine_and_a_chest() -> void:
+	assert_true(_menu.find_child("SlotMachine", true, false) is SlotMachine)
+	assert_true(_menu.find_child("Chest", true, false) is Chest)
+
+
+func test_options_sit_next_to_the_language() -> void:
+	var options := _menu.get_node(^"%Options") as Node
+	assert_eq(options.get_parent(), (_menu.get_node(^"%LanguagePicker") as Node).get_parent())
+	assert_null(_menu.find_child("Achievements", true, false), "los logros son las misiones")
 
 
 func test_play_asks_to_play() -> void:

@@ -1,10 +1,8 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://ui/menus/main/main_menu.gd" id="1_menu"]
-[ext_resource type="Resource" path="res://data/characters/warrior.tres" id="2_warrior"]
-[ext_resource type="Resource" path="res://data/characters/mage.tres" id="3_mage"]
-[ext_resource type="Resource" path="res://data/characters/rogue.tres" id="4_rogue"]
-[ext_resource type="PackedScene" path="res://entities/player/characters/model/character_model.tscn" id="5_model"]
+[ext_resource type="PackedScene" path="res://entities/interactables/slot_machine/slot_machine.tscn" id="2_slots"]
+[ext_resource type="PackedScene" path="res://entities/interactables/chest/chest.tscn" id="3_chest"]
 [ext_resource type="PackedScene" path="res://ui/menus/options/options_panel.tscn" id="6_options"]
 [ext_resource type="Script" path="res://ui/widgets/language_picker.gd" id="7_language"]
 [ext_resource type="Texture2D" path="res://assets/textures/icons/ui/language.svg" id="8_globe"]
@@ -23,12 +21,11 @@
 material = ExtResource("12_grass")
 size = Vector2(220, 220)
 
-[node name="MainMenu" type="Node3D" node_paths=PackedStringArray("models", "layout")]
+[node name="MainMenu" type="Node3D" node_paths=PackedStringArray("layout")]
 script = ExtResource("1_menu")
 layout = NodePath("Layout")
 layout_seed = 7
-characters = Array[Resource]([ExtResource("2_warrior"), ExtResource("3_mage"), ExtResource("4_rogue")])
-models = [NodePath("Characters/Warrior"), NodePath("Characters/Mage"), NodePath("Characters/Rogue")]
+
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = ExtResource("11_environment")
@@ -54,16 +51,14 @@ data = ExtResource("14_layout_data")
 [node name="Leaves" parent="." node_paths=PackedStringArray("target") instance=ExtResource("15_leaves")]
 target = NodePath("../Camera")
 
-[node name="Characters" type="Node3D" parent="."]
+[node name="Props" type="Node3D" parent="."]
+process_mode = 4
 
-[node name="Warrior" parent="Characters" instance=ExtResource("5_model")]
-transform = Transform3D(-0.966, 0, -0.259, 0, 1, 0, 0.259, 0, -0.966, -0.7, 0.9, 0.4)
+[node name="SlotMachine" parent="Props" instance=ExtResource("2_slots")]
+transform = Transform3D(-0.94, 0, -0.342, 0, 1, 0, 0.342, 0, -0.94, 0.1, 0, -1.8)
 
-[node name="Mage" parent="Characters" instance=ExtResource("5_model")]
-transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0.2, 0.9, -0.4)
-
-[node name="Rogue" parent="Characters" instance=ExtResource("5_model")]
-transform = Transform3D(-0.966, 0, 0.259, 0, 1, 0, -0.259, 0, -0.966, 1.1, 0.9, 0.4)
+[node name="Chest" parent="Props" instance=ExtResource("3_chest")]
+transform = Transform3D(0.906, 0, -0.423, 0, 1, 0, 0.423, 0, 0.906, 1.55, 0, -0.9)
 
 [node name="UI" type="CanvasLayer" parent="."]
 
@@ -103,20 +98,12 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "MENU_QUESTS"
 
-[node name="Options" type="Button" parent="UI/Margin/Menu"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "MENU_OPTIONS"
 
 [node name="Archive" type="Button" parent="UI/Margin/Menu"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "MENU_ARCHIVE"
 
-[node name="Achievements" type="Button" parent="UI/Margin/Menu"]
-layout_mode = 2
-disabled = true
-text = "MENU_ACHIEVEMENTS"
 
 [node name="Quit" type="Button" parent="UI/Margin/Menu"]
 unique_name_in_owner = true
@@ -154,10 +141,20 @@ layout_mode = 2
 size_flags_horizontal = 8
 theme_type_variation = &"MenuList"
 
-[node name="LanguagePicker" type="OptionButton" parent="UI/Margin/Right"]
-unique_name_in_owner = true
+[node name="TopBar" type="HBoxContainer" parent="UI/Margin/Right"]
 layout_mode = 2
 size_flags_horizontal = 8
+theme_type_variation = &"GoldRow"
+
+[node name="Options" type="Button" parent="UI/Margin/Right/TopBar"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"SmallButton"
+text = "MENU_OPTIONS"
+
+[node name="LanguagePicker" type="OptionButton" parent="UI/Margin/Right/TopBar"]
+unique_name_in_owner = true
+layout_mode = 2
 theme_type_variation = &"SmallOptionButton"
 icon = ExtResource("8_globe")
 expand_icon = true

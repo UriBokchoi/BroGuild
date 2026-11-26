@@ -101,9 +101,12 @@ func test_elites_and_bosses_give_bro_coins() -> void:
 	elite.promote(ELITE)
 	_kill(elite)
 	assert_eq(_recorder.stats.bro_coins, _recorder.bro_coin_data.per_elite, "solo el élite")
-	EventBus.boss_defeated.emit(&"BROSQUE_VICTORY", 60.0, 1.0)
+	EventBus.mini_boss_defeated.emit(&"TROLLEADOR_NAME")
 	assert_eq(_recorder.stats.bro_coins,
-		_recorder.bro_coin_data.per_elite + _recorder.bro_coin_data.per_boss, "y el jefe")
+		_recorder.bro_coin_data.per_elite + _recorder.bro_coin_data.per_mini_boss, "y el miniboss")
+	EventBus.boss_defeated.emit(&"BROSQUE_VICTORY", 60.0, 1.0)
+	var data := _recorder.bro_coin_data
+	assert_eq(_recorder.stats.bro_coins, data.per_elite + data.per_mini_boss + data.per_boss, "y el jefe")
 
 
 func test_without_data_there_are_no_bro_coins() -> void:

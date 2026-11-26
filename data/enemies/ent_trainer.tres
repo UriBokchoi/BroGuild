@@ -9,7 +9,7 @@
 
 [sub_resource type="Resource" id="Resource_health"]
 script = ExtResource("2_health")
-max_health = 5000.0
+max_health = 8000.0
 
 [sub_resource type="Resource" id="Resource_stats"]
 script = ExtResource("3_stats")

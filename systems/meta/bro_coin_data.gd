@@ -5,5 +5,7 @@ extends Resource
 
 ## Por cada élite derrotado.
 @export_range(0, 100, 1) var per_elite: int = 0
-## Por cada jefe vencido (no los minibosses).
+## Por cada miniboss vencido.
+@export_range(0, 1000, 1) var per_mini_boss: int = 0
+## Por cada jefe vencido.
 @export_range(0, 1000, 1) var per_boss: int = 0

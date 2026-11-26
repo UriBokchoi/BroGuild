@@ -1,17 +1,14 @@
 class_name MainMenu
 extends Node3D
-## Menú principal: Jugar, Mejoras, Misiones, Opciones, Archivo, Logros (aún sin hacer: desactivado) y
-## Abandonar, y a la derecha, fijos, los récords. Cada panel sustituye a la lista y a los récords y,
-## al cerrarse, vuelven. Detrás, los personajes con su aspecto en un claro del Brosque (el mapa
-## generado, siempre el mismo) con hojas que caen. Lo muestra Game, que escucha play_requested.
+## Menú principal: Jugar, Mejoras, Misiones (también los logros), Archivo y Abandonar; arriba a la
+## derecha, Opciones y el idioma, y debajo, fijos, los récords. Cada panel sustituye a la lista y a
+## los récords y, al cerrarse, vuelven. Detrás, un claro del Brosque (el mapa generado, siempre el
+## mismo) con una tragaperras, un cofre y hojas que caen. Lo muestra Game, que escucha play_requested.
 
 ## Se pulsó «Jugar».
 signal play_requested
 
-## Personajes que se ven detrás, en el orden de [member models].
-@export var characters: Array[CharacterData] = []
-## Modelos que visten esos personajes.
-@export var models: Array[CharacterModel] = []
+
 ## El claro del fondo y su semilla (siempre la misma: así queda bien encuadrado).
 @export var layout: LevelLayout
 @export var layout_seed: int = 0
@@ -40,8 +37,6 @@ func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	# Al cargar el menú: la selección de personaje enseña sus stats con unidades.
 	StatFormat.warm_up()
-	for index: int in mini(characters.size(), models.size()):
-		models[index].dress(characters[index])
 	_play.pressed.connect(play_requested.emit)
 	_wire(%Options as Button, _options.open, _options.closed)
 	_wire(%Archive as Button, _archive.open, _archive.closed)

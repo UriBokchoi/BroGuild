@@ -7,7 +7,7 @@
 [sub_resource type="Resource" id="Upgrade_lifesteal"]
 script = ExtResource("90_upgrade")
 stat = &"lifesteal"
-value = 0.8
+value = 0.4
 step = 0.1
 
 [resource]

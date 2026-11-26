@@ -49,6 +49,7 @@ func _enter_tree() -> void:
 	_connect(EventBus.run_won, _on_run_won)
 	_connect(EventBus.stage_started, _on_stage_started)
 	_connect(EventBus.boss_defeated, _on_boss_defeated)
+	_connect(EventBus.mini_boss_defeated, _on_mini_boss_defeated)
 
 
 func _physics_process(delta: float) -> void:
@@ -74,6 +75,11 @@ func _on_enemy_died(enemy: Enemy) -> void:
 		stats.elite_kills += 1
 		if bro_coin_data:
 			_add_bro_coins(bro_coin_data.per_elite)
+
+
+func _on_mini_boss_defeated(_name_key: StringName) -> void:
+	if not _stopped and bro_coin_data:
+		_add_bro_coins(bro_coin_data.per_mini_boss)
 
 
 func _on_boss_defeated(_victory_key: StringName, _seconds: float, _bonus: float) -> void:

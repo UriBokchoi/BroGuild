@@ -212,6 +212,31 @@ De fácil a difícil, como pidió el diseñador.
 - [ ] Personajes nuevos: Paladín, Bárbaro y Brujo
 - [ ] Habilidades únicas (una por personaje, 3 min de recarga, 2:30 con mejora; icono abajo a la derecha con su indicador sin números)
 
+## Pedidos tras probar (3) (2026-11-26)
+De fácil a difícil.
+- [x] El robo de vida, a la mitad (pesas: 0,5 %; Sed de sangre: 0,4 % por nivel)
+- [x] Los minibosses también dan bro-monedas (3)
+- [x] Mejoras del menú más caras (unas el doble)
+- [x] El Ent-renador, con más vida de base: 8000 (antes 5000)
+- [x] Contador de enemigos derrotados encima de la dificultad
+- [ ] Colores sin repetir: Guerrero azul, Paladín amarillo, Bárbaro rojo, Brujo morado
+- [x] Menú: sin «Logros» (los logros serán las misiones); Opciones junto al idioma (y en la pausa, como ya estaba)
+- [x] Fondo del menú: sin personajes, con una tragaperras y un cofre
+- [ ] En la selección de tier, que diga cuánto más fuertes son los enemigos (tier 2: +20 %; tier 3: +50 %), y que lo sean
+- [ ] Más enemigos en las hordas
+- [ ] Que la descripción de las mejoras al subir de nivel no se salga de la carta
+- [ ] Sonidos: levantar las pesas y coger la tarjeta de socio
+- [ ] Charcos de invierno cambiados
+- [ ] Caminitos de tierra cortos de decorado
+- [ ] Que los enemigos puedan subir al árbol grande
+- [ ] Brújula abajo a la izquierda
+- [ ] Misiones: pestaña «Completadas» con su fecha
+- [ ] Runas que se desbloquean: Sed de sangre (Bárbaro a nivel 50) y una de crítico (2500 enemigos en una partida)
+- [ ] Saltar y vetar al subir de nivel (hasta 3 de cada, con una mejora cara del menú; saltar en verde, vetar en rojo)
+- [ ] En la taberna, un cofre que se abre con 1500 enemigos derrotados en el tier 1 y deja elegir entre 3 objetos (azules o mejores)
+- [ ] El burpee de los jefes, cambiado: una bola roja que se carga donde va el jugador y da tiempo a esquivarla
+- [ ] Personajes nuevos (ver arriba), con la pasiva del Bárbaro: la primera vez que iba a morir se queda a 1 de vida 10 s sin poder morir, rojo de rabia y con +30 % en sus stats
+
 ## Backlog (sin orden)
 - Física de la horda: con 180 esbirros apretados, la física se lleva unos 4–6 ms por tick (el rumbo del enjambre, 1 ms; el resto, el motor). Mirar con el profiler del editor si hiciera falta (formas más simples, menos contactos)
 - Raíles/ziplines y plataformas de salto

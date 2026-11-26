@@ -23,6 +23,8 @@
 [ext_resource type="Script" path="res://ui/hud/crosshair.gd" id="21_crosshair"]
 [ext_resource type="Script" path="res://ui/hud/streak_meter.gd" id="22_streak"]
 [ext_resource type="Script" path="res://ui/hud/stage_label.gd" id="23_stage"]
+[ext_resource type="Script" path="res://ui/hud/kill_counter.gd" id="24_kills"]
+[ext_resource type="Texture2D" path="res://assets/textures/icons/ui/kills.svg" id="25_kills_icon"]
 
 [node name="HUD" type="CanvasLayer"]
 layer = 10
@@ -75,16 +77,44 @@ text = "0:00"
 horizontal_alignment = 1
 script = ExtResource("6_clock")
 
-[node name="DifficultyCounter" type="HBoxContainer" parent="Margin/Top/InfoRow"]
-unique_name_in_owner = true
+[node name="Right" type="VBoxContainer" parent="Margin/Top/InfoRow"]
 layout_mode = 2
 size_flags_horizontal = 3
+mouse_filter = 2
+theme_type_variation = &"HudRight"
+
+[node name="KillCounter" type="HBoxContainer" parent="Margin/Top/InfoRow/Right"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"GoldRow"
+alignment = 2
+script = ExtResource("24_kills")
+
+[node name="KillsIcon" type="TextureRect" parent="Margin/Top/InfoRow/Right/KillCounter"]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+texture = ExtResource("25_kills_icon")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="KillsLabel" type="Label" parent="Margin/Top/InfoRow/Right/KillCounter"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"KillsLabel"
+text = "0"
+
+[node name="DifficultyCounter" type="HBoxContainer" parent="Margin/Top/InfoRow/Right"]
+unique_name_in_owner = true
+layout_mode = 2
 mouse_filter = 2
 theme_type_variation = &"GoldRow"
 alignment = 2
 script = ExtResource("10_difficulty")
 
-[node name="DifficultyIcon" type="TextureRect" parent="Margin/Top/InfoRow/DifficultyCounter"]
+[node name="DifficultyIcon" type="TextureRect" parent="Margin/Top/InfoRow/Right/DifficultyCounter"]
 custom_minimum_size = Vector2(24, 24)
 layout_mode = 2
 size_flags_vertical = 4
@@ -93,7 +123,7 @@ texture = ExtResource("11_skull")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="DifficultyLabel" type="Label" parent="Margin/Top/InfoRow/DifficultyCounter"]
+[node name="DifficultyLabel" type="Label" parent="Margin/Top/InfoRow/Right/DifficultyCounter"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"DifficultyLabel"

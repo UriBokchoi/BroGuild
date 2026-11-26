@@ -5,4 +5,5 @@
 [resource]
 script = ExtResource("1_data")
 per_elite = 1
+per_mini_boss = 3
 per_boss = 5
