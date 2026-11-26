@@ -1895,3 +1895,12 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - Durante 0,6 s la bola le sigue. Luego se queda quieta 1,2 s, crece y revienta en un radio de 5 m (7 m la de Mr. Brolympia), con un aro que marca hasta dónde llega.
   - El salto del Trolleador (un miniboss) sigue igual.
 - **Por qué:** lo pidió el diseñador: un ataque que castigue ir en línea recta pero que dé tiempo a esquivar.
+
+## 2026-11-26 · Paladín, Bárbaro y Brujo
+- **Decisión:** tres personajes nuevos, que se desbloquean con misiones. Las stats y las pasivas las elegí siguiendo a los tres iniciales: unas pocas diferencias, un rasgo de movimiento y una regeneración distinta en cada uno.
+  - **Paladín** (amarillo, con aureola). Empieza con el martillo de guerra. +25 vida, +8 defensa, +1 de regeneración, −8 % de velocidad y salta 0,3 m más. Su pasiva, Devoción: +1 % de vida máxima por nivel. Se desbloquea con el martillo a nivel 10 y ganando.
+  - **Bárbaro** (rojo, casco con cuernos). Empieza con el hacha. +40 vida, +10 % de daño, +5 % de velocidad y +12 % de sprint. Su pasiva, Furia (la que pidió el diseñador): la primera vez que iba a morir se queda a 1 de vida y no puede morir durante 10 s, brilla en rojo y su daño, velocidad de ataque, velocidad y defensa suben un 30 %. Se desbloquea con el hacha a nivel 10 y ganando. Con él a nivel 50 se desbloquea la runa Sed de sangre.
+  - **Brujo** (morado, con cuernos y el ojo en la mano). Empieza con el Mal de ojo. −15 vida, +5 de crítico, +20 % de daño crítico, +10 % de área y un dash más en el aire. Su pasiva, Maleficio: +2 % de daño crítico por nivel. Se desbloquea con el Mago a nivel 30, junto con su arma.
+  - El Guerrero pasa a azul. El Mago se queda lavanda, más claro que el morado del Brujo.
+  - Para que la Furia no lo deje morir, la vida acepta un `death_guard` (quien decide si un golpe mortal no mata) y un `floor_health` (de qué vida no baja mientras le quede).
+- **Por qué:** lo pidió el diseñador. Las stats y las pasivas de Paladín y Brujo son mías, a falta de que las pruebe.

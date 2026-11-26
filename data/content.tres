@@ -5,6 +5,9 @@
 [ext_resource type="Resource" uid="uid://bo1h0wxfvqesi" path="res://data/characters/warrior.tres" id="10_warrior"]
 [ext_resource type="Resource" uid="uid://bnbf3vkh7m48a" path="res://data/characters/mage.tres" id="11_mage"]
 [ext_resource type="Resource" uid="uid://cans4rvkhs48i" path="res://data/characters/rogue.tres" id="12_rogue"]
+[ext_resource type="Resource" path="res://data/characters/paladin.tres" id="12a_paladin"]
+[ext_resource type="Resource" path="res://data/characters/barbarian.tres" id="12b_barbarian"]
+[ext_resource type="Resource" path="res://data/characters/warlock.tres" id="12c_warlock"]
 [ext_resource type="Resource" uid="uid://d3gftqdyp8ot8" path="res://data/weapons/sword.tres" id="13_sword"]
 [ext_resource type="Resource" uid="uid://dmx62swsas3tv" path="res://data/weapons/staff.tres" id="14_staff"]
 [ext_resource type="Resource" uid="uid://b5j3k1spgipqb" path="res://data/weapons/axe.tres" id="15a_axe"]
@@ -62,7 +65,7 @@ script = ExtResource("2_category")
 id = &"characters"
 name_key = &"ARCHIVE_CATEGORY_CHARACTERS"
 hint_key = &"ARCHIVE_HINT_CHARACTERS"
-entries = Array[Resource]([ExtResource("10_warrior"), ExtResource("11_mage"), ExtResource("12_rogue")])
+entries = Array[Resource]([ExtResource("10_warrior"), ExtResource("11_mage"), ExtResource("12_rogue"), ExtResource("12a_paladin"), ExtResource("12b_barbarian"), ExtResource("12c_warlock")])
 
 [sub_resource type="Resource" id="Category_weapons"]
 script = ExtResource("2_category")

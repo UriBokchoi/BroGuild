@@ -160,11 +160,23 @@ WASD mover · Ratón cámara · Espacio saltar · Shift dash · Ctrl slide (dobl
 
   | | Guerrero | Mago | Pícaro |
   |---|---|---|---|
+  | Color | Azul | Lavanda | Verde |
   | Arma inicial | Espada | Bastón de mago | Daga |
   | Stats | +30 vida, +5 defensa, −5 % velocidad | −20 vida, +15 % área, +10 % experiencia | −10 vida, +10 % velocidad, +10 % crítico, +1 carga de stamina |
   | Movimiento | Dash un 30 % más largo | Planea manteniendo el salto (cae como mucho a 3 m/s) | +1 salto en el aire, con un mortal hacia delante |
   | Regeneración | 0,8 de vida/s | 0,4 de vida/s | 0,5 de vida/s |
   | Pasiva (crece con cada nivel) | **Veterano**: +1 % de daño por cada nivel | **Expansión arcana**: +1 % de área por cada nivel | **Letal**: +1 % de probabilidad de crítico por cada nivel |
+
+  Los que se desbloquean con misiones (ver «Misiones»):
+
+  | | Paladín | Bárbaro | Brujo |
+  |---|---|---|---|
+  | Color | Amarillo | Rojo | Morado |
+  | Arma inicial | Martillo de guerra | Hacha arrojadiza | Mal de ojo |
+  | Stats | +25 vida, +8 defensa, −8 % velocidad | +40 vida, +10 % daño, +5 % velocidad | −15 vida, +5 % crítico, +20 % daño crítico, +10 % área |
+  | Movimiento | Salta 0,3 m más | Esprinta un 12 % más rápido | +1 dash en el aire |
+  | Regeneración | 1 de vida/s | 0,3 de vida/s | 0,25 de vida/s |
+  | Pasiva | **Devoción**: +1 % de vida máxima por cada nivel | **Furia**: la primera vez que iba a morir, se queda a 1 de vida y no puede morir durante 10 s; se pone rojo de rabia y sus stats (daño, velocidad de ataque, velocidad y defensa) suben un 30 % | **Maleficio**: +2 % de daño crítico por cada nivel |
 
 - **Menús**: al iniciar, menú principal con Jugar, Opciones, Récords, Archivo y Abandonar (cierra el juego). En Opciones, además del sonido y la pantalla, un límite de FPS (de serie, 60): el juego no dibuja más fotogramas de los que hacen falta.
   - *Récords:* las 10 mejores partidas jugadas en este equipo, ordenadas por enemigos derrotados: con qué personaje, enemigos, tiempo, nivel alcanzado, mapa y si fue victoria o derrota. La última partida sale en azul y, al acabar una, los resultados dicen su puesto si entró.

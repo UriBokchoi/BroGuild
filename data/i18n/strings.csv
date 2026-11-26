@@ -19,6 +19,9 @@ QUESTS_EMPTY_DONE,Aún no has completado ninguna. Se cumplen solas al acabar una
 QUEST_HAMMER_DESC,Sube la espada a nivel 10 y gana una partida.,Get the sword to level 10 and win a run.
 QUEST_AXE_DESC,Llega a nivel 30 con el Guerrero.,Reach level 30 as the Warrior.
 QUEST_WARLOCK_DESC,Llega a nivel 30 con el Mago.,Reach level 30 as the Mage.
+QUEST_PALADIN_DESC,Sube el martillo a nivel 10 y gana una partida.,Get the hammer to level 10 and win a run.
+QUEST_BARBARIAN_DESC,Sube el hacha a nivel 10 y gana una partida.,Get the axe to level 10 and win a run.
+QUEST_BLOODLUST_DESC,Llega a nivel 50 con el Bárbaro.,Reach level 50 as the Barbarian.
 QUEST_KEEN_EYE_DESC,Derrota a 2500 enemigos en una sola partida.,Defeat 2500 enemies in a single run.
 CHARACTER_LOCKED,Bloqueado: %s,Locked: %s
 UPGRADES_TITLE,Mejoras,Upgrades
@@ -430,6 +433,19 @@ CHARACTER_MAGE_NAME,Mago,Mage
 CHARACTER_MAGE_DESCRIPTION,"Frágil pero arrollador: más área y experiencia, y planea manteniendo el salto.","Frail but overwhelming: more area and experience, and glides while holding jump."
 CHARACTER_ROGUE_NAME,Pícaro,Rogue
 CHARACTER_ROGUE_DESCRIPTION,"Rápido y escurridizo: más velocidad, crítico y stamina, y un salto más en el aire.","Fast and slippery: more speed, crit and stamina, and an extra air jump."
+CHARACTER_PALADIN_NAME,Paladín,Paladin
+CHARACTER_PALADIN_DESCRIPTION,"Fe y acero: más vida, defensa y regeneración; salta un poco más y va algo más lento.","Faith and steel: more health, armor and regen; jumps a bit higher and is a bit slower."
+CHARACTER_BARBARIAN_NAME,Bárbaro,Barbarian
+CHARACTER_BARBARIAN_DESCRIPTION,"Mucha vida y más daño; esprinta más rápido que nadie.","Lots of health and more damage; sprints faster than anyone."
+CHARACTER_WARLOCK_NAME,Brujo,Warlock
+CHARACTER_WARLOCK_DESCRIPTION,"Frágil pero letal: más crítico, daño crítico y área, y un dash más en el aire.","Fragile but deadly: more crit, crit damage and area, and one more air dash."
+PASSIVE_DEVOTION_NAME,Devoción,Devotion
+PASSIVE_DEVOTION_DESCRIPTION,"+1 % de vida máxima por cada nivel.","+1% max health per level."
+PASSIVE_FURY_NAME,Furia,Fury
+PASSIVE_FURY_DESCRIPTION,"La primera vez que fueras a morir, te quedas a 1 de vida y no puedes morir durante 10 s: te pones rojo de rabia y tus stats suben un 30 %.","The first time you would die, you stay at 1 health and can't die for 10 s: you go red with rage and your stats rise 30%."
+PASSIVE_HEX_NAME,Maleficio,Hex
+PASSIVE_HEX_DESCRIPTION,"+2 % de daño crítico por cada nivel.","+2% crit damage per level."
+FURY_STARTED,¡FURIA! No puedes morir durante 10 s,FURY! You can't die for 10 s
 PASSIVE_VETERAN_NAME,Veterano,Veteran
 PASSIVE_VETERAN_DESCRIPTION,"+1 % de daño por cada nivel.","+1% damage per level."
 PASSIVE_ARCANE_EXPANSION_NAME,Expansión arcana,Arcane expansion

@@ -45,6 +45,19 @@ func get_color() -> Color:
 	return _skin.albedo_color
 
 
+## Hace brillar el cuerpo de [param color] con [param energy] (la rabia del Bárbaro); con energía 0,
+## deja de brillar.
+func set_glow(color: Color, energy: float) -> void:
+	_skin.emission_enabled = energy > 0.0
+	_skin.emission = color
+	_skin.emission_energy_multiplier = energy
+
+
+## ¿Brilla?
+func is_glowing() -> bool:
+	return _skin.emission_enabled
+
+
 ## Piezas que lleva puestas.
 func get_pieces() -> Array[Node3D]:
 	return _pieces.duplicate()

@@ -9,6 +9,10 @@
 [ext_resource type="Resource" path="res://data/characters/mage.tres" id="7_mage"]
 [ext_resource type="Resource" path="res://data/weapons/evil_eye.tres" id="8_evil_eye"]
 [ext_resource type="Resource" path="res://data/runes/keen_eye.tres" id="9_keen_eye"]
+[ext_resource type="Resource" path="res://data/characters/paladin.tres" id="10_paladin"]
+[ext_resource type="Resource" path="res://data/characters/barbarian.tres" id="11_barbarian"]
+[ext_resource type="Resource" path="res://data/characters/warlock.tres" id="12_warlock"]
+[ext_resource type="Resource" path="res://data/runes/bloodlust.tres" id="13_bloodlust"]
 
 [sub_resource type="Resource" id="Quest_hammer"]
 script = ExtResource("2_quest")
@@ -31,7 +35,7 @@ player_level = 30
 script = ExtResource("2_quest")
 id = &"warlock"
 description_key = &"QUEST_WARLOCK_DESC"
-rewards = Array[Resource]([ExtResource("8_evil_eye")])
+rewards = Array[Resource]([ExtResource("12_warlock"), ExtResource("8_evil_eye")])
 character = ExtResource("7_mage")
 player_level = 30
 
@@ -42,6 +46,32 @@ description_key = &"QUEST_KEEN_EYE_DESC"
 rewards = Array[Resource]([ExtResource("9_keen_eye")])
 kills = 2500
 
+[sub_resource type="Resource" id="Quest_paladin"]
+script = ExtResource("2_quest")
+id = &"paladin"
+description_key = &"QUEST_PALADIN_DESC"
+rewards = Array[Resource]([ExtResource("10_paladin")])
+item = ExtResource("4_hammer")
+item_level = 10
+needs_win = true
+
+[sub_resource type="Resource" id="Quest_barbarian"]
+script = ExtResource("2_quest")
+id = &"barbarian"
+description_key = &"QUEST_BARBARIAN_DESC"
+rewards = Array[Resource]([ExtResource("11_barbarian")])
+item = ExtResource("5_axe")
+item_level = 10
+needs_win = true
+
+[sub_resource type="Resource" id="Quest_bloodlust"]
+script = ExtResource("2_quest")
+id = &"bloodlust"
+description_key = &"QUEST_BLOODLUST_DESC"
+rewards = Array[Resource]([ExtResource("13_bloodlust")])
+character = ExtResource("11_barbarian")
+player_level = 50
+
 [resource]
 script = ExtResource("1_catalog")
-quests = Array[ExtResource("2_quest")]([SubResource("Quest_hammer"), SubResource("Quest_axe"), SubResource("Quest_warlock"), SubResource("Quest_keen_eye")])
+quests = Array[ExtResource("2_quest")]([SubResource("Quest_hammer"), SubResource("Quest_axe"), SubResource("Quest_paladin"), SubResource("Quest_barbarian"), SubResource("Quest_warlock"), SubResource("Quest_keen_eye"), SubResource("Quest_bloodlust")])

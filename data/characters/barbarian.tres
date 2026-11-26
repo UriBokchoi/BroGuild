@@ -1,0 +1,70 @@
+[gd_resource type="Resource" script_class="CharacterData" format=3]
+
+[ext_resource type="Script" path="res://entities/player/characters/character_data.gd" id="1_data"]
+[ext_resource type="Script" path="res://core/stats/stat_modifier.gd" id="2_modifier"]
+[ext_resource type="Resource" path="res://data/weapons/axe.tres" id="3_weapon"]
+[ext_resource type="PackedScene" path="res://entities/player/characters/passives/fury.tscn" id="4_passive"]
+[ext_resource type="Script" path="res://entities/player/characters/model/model_attachment.gd" id="5_attachment"]
+[ext_resource type="PackedScene" path="res://assets/models/props/battle_axe.tscn" id="6_battle_axe"]
+[ext_resource type="PackedScene" path="res://assets/models/props/horned_helmet.tscn" id="7_horned_helmet"]
+[ext_resource type="PackedScene" path="res://assets/models/props/fur_pelt.tscn" id="8_fur_pelt"]
+[ext_resource type="Texture2D" path="res://assets/textures/icons/characters/barbarian.svg" id="98_icon"]
+
+[sub_resource type="Resource" id="Resource_axe"]
+script = ExtResource("5_attachment")
+scene = ExtResource("6_battle_axe")
+socket = &"HandRight"
+transform = Transform3D(1.1, 0, 0, 0, 0.953, 0.55, 0, -0.55, 0.953, 0, 0, 0)
+
+[sub_resource type="Resource" id="Resource_helmet"]
+script = ExtResource("5_attachment")
+scene = ExtResource("7_horned_helmet")
+socket = &"Head"
+
+[sub_resource type="Resource" id="Resource_pelt"]
+script = ExtResource("5_attachment")
+scene = ExtResource("8_fur_pelt")
+socket = &"Back"
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.15, -0.36)
+
+[sub_resource type="Resource" id="Modifier_max_health"]
+script = ExtResource("2_modifier")
+stat = &"max_health"
+value = 40.0
+
+[sub_resource type="Resource" id="Modifier_damage"]
+script = ExtResource("2_modifier")
+stat = &"damage"
+kind = 1
+value = 0.1
+
+[sub_resource type="Resource" id="Modifier_run_speed"]
+script = ExtResource("2_modifier")
+stat = &"run_speed"
+kind = 1
+value = 0.05
+
+[sub_resource type="Resource" id="Modifier_sprint_speed"]
+script = ExtResource("2_modifier")
+stat = &"sprint_speed"
+kind = 1
+value = 0.12
+
+[sub_resource type="Resource" id="Modifier_health_regen"]
+script = ExtResource("2_modifier")
+stat = &"health_regen"
+value = 0.3
+
+[resource]
+script = ExtResource("1_data")
+id = &"barbarian"
+name_key = &"CHARACTER_BARBARIAN_NAME"
+description_key = &"CHARACTER_BARBARIAN_DESCRIPTION"
+color = Color(0.86, 0.2, 0.17, 1)
+icon = ExtResource("98_icon")
+starting_weapon = ExtResource("3_weapon")
+passive = ExtResource("4_passive")
+passive_name_key = &"PASSIVE_FURY_NAME"
+passive_description_key = &"PASSIVE_FURY_DESCRIPTION"
+attachments = Array[ExtResource("5_attachment")]([SubResource("Resource_axe"), SubResource("Resource_helmet"), SubResource("Resource_pelt")])
+stat_modifiers = Array[ExtResource("2_modifier")]([SubResource("Modifier_max_health"), SubResource("Modifier_damage"), SubResource("Modifier_run_speed"), SubResource("Modifier_sprint_speed"), SubResource("Modifier_health_regen")])

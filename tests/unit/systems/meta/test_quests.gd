@@ -45,7 +45,10 @@ func test_the_starting_weapons_are_open() -> void:
 		assert_false(QUESTS.is_locked(weapon, profile), "%s abierta" % weapon.id)
 	assert_true(QUESTS.is_locked(HAMMER, profile))
 	assert_true(QUESTS.is_locked(AXE, profile))
-	assert_eq(QUESTS.locked_content(profile).size(), QUESTS.quests.size())
+	var rewards := 0
+	for quest: QuestData in QUESTS.quests:
+		rewards += quest.rewards.size()
+	assert_eq(QUESTS.locked_content(profile).size(), rewards, "todo lo que dan las misiones")
 
 
 func test_completing_a_quest_unlocks_its_reward() -> void:
@@ -93,3 +96,18 @@ func test_the_keen_eye_rune_needs_2500_kills_in_one_run() -> void:
 	assert_false(quest.is_met_by(record))
 	record.kills = 2500
 	assert_true(quest.is_met_by(record), "con cualquier personaje y sin ganar")
+
+
+func test_the_new_characters_have_their_quests() -> void:
+	var paladin := QUESTS.quest_for(preload("res://data/characters/paladin.tres"))
+	var barbarian := QUESTS.quest_for(preload("res://data/characters/barbarian.tres"))
+	var warlock := QUESTS.quest_for(preload("res://data/characters/warlock.tres"))
+	assert_eq(paladin.item, HAMMER)
+	assert_true(paladin.needs_win)
+	assert_eq(barbarian.item, AXE)
+	assert_eq(warlock.character, MAGE)
+	assert_eq(warlock.player_level, 30)
+	assert_true(warlock.unlocks(preload("res://data/weapons/evil_eye.tres")), "con su arma")
+	var bloodlust := QUESTS.quest_for(preload("res://data/runes/bloodlust.tres"))
+	assert_eq(bloodlust.character, preload("res://data/characters/barbarian.tres"))
+	assert_eq(bloodlust.player_level, 50)
