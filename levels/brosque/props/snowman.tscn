@@ -1,0 +1,118 @@
+[gd_scene format=3]
+
+[ext_resource type="Material" path="res://levels/brosque/materials/snow.tres" id="1_snow"]
+[ext_resource type="Material" path="res://levels/brosque/materials/bark.tres" id="2_bark"]
+[ext_resource type="Material" path="res://levels/brosque/materials/iron.tres" id="3_iron"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_snow"]
+material = ExtResource("1_snow")
+radial_segments = 12
+rings = 6
+
+[sub_resource type="StandardMaterial3D" id="Mat_carrot"]
+albedo_color = Color(0.95, 0.5, 0.12, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_nose"]
+material = SubResource("Mat_carrot")
+top_radius = 0.0
+bottom_radius = 0.045
+height = 0.22
+radial_segments = 6
+rings = 1
+
+[sub_resource type="StandardMaterial3D" id="Mat_coal"]
+albedo_color = Color(0.08, 0.08, 0.1, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_coal"]
+material = SubResource("Mat_coal")
+radius = 0.035
+height = 0.07
+radial_segments = 6
+rings = 3
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_arm"]
+material = ExtResource("2_bark")
+top_radius = 0.015
+bottom_radius = 0.025
+height = 0.55
+radial_segments = 5
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_bar"]
+material = ExtResource("3_iron")
+top_radius = 0.02
+bottom_radius = 0.02
+height = 0.42
+radial_segments = 6
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_plate"]
+material = ExtResource("3_iron")
+top_radius = 0.08
+bottom_radius = 0.08
+height = 0.05
+radial_segments = 10
+rings = 1
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_body"]
+height = 1.3
+radius = 0.4
+
+[node name="Snowman" type="StaticBody3D"]
+collision_mask = 0
+
+[node name="Bottom" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.9, 0, 0, 0, 0.85, 0, 0, 0, 0.9, 0, 0.35, 0)
+mesh = SubResource("SphereMesh_snow")
+
+[node name="Middle" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.65, 0, 0, 0, 0.62, 0, 0, 0, 0.65, 0, 0.9, 0)
+mesh = SubResource("SphereMesh_snow")
+
+[node name="Head" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.45, 0, 0, 0, 0.45, 0, 0, 0, 0.45, 0, 1.3, 0)
+mesh = SubResource("SphereMesh_snow")
+
+[node name="Nose" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 1.3, -0.3)
+cast_shadow = 0
+mesh = SubResource("CylinderMesh_nose")
+
+[node name="EyeLeft" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.08, 1.38, -0.2)
+cast_shadow = 0
+mesh = SubResource("SphereMesh_coal")
+
+[node name="EyeRight" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.08, 1.38, -0.2)
+cast_shadow = 0
+mesh = SubResource("SphereMesh_coal")
+
+[node name="ArmLeft" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.5, 0.866, 0, -0.866, 0.5, 0, 0, 0, 1, -0.5, 1.05, 0)
+cast_shadow = 0
+mesh = SubResource("CylinderMesh_arm")
+
+[node name="ArmRight" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.5, -0.866, 0, 0.866, 0.5, 0, 0, 0, 1, 0.5, 1.05, 0)
+cast_shadow = 0
+mesh = SubResource("CylinderMesh_arm")
+
+[node name="DumbbellBar" type="MeshInstance3D" parent="."]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0.74, 1.2, 0)
+cast_shadow = 0
+mesh = SubResource("CylinderMesh_bar")
+
+[node name="PlateTop" type="MeshInstance3D" parent="."]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0.56, 1.2, 0)
+cast_shadow = 0
+mesh = SubResource("CylinderMesh_plate")
+
+[node name="PlateBottom" type="MeshInstance3D" parent="."]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0.92, 1.2, 0)
+cast_shadow = 0
+mesh = SubResource("CylinderMesh_plate")
+
+[node name="BodyShape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.65, 0)
+shape = SubResource("CylinderShape3D_body")

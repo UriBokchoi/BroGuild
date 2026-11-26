@@ -1857,3 +1857,12 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - Las cartas de elegir crecen hasta que cabe su texto (`CardParts.fit_height`), como ya hacían las de los pactos.
   - Suenan las pesas al levantarse y la tarjeta de socio al cogerla.
 - **Por qué:** lo pidió el diseñador: que se entienda cuánto más duro es cada tier y que escale igual.
+
+## 2026-11-26 · Árbol trepable, brújula y decorado de estación
+- **Decisión:**
+  - El árbol grande tiene el tronco ancho, con la plataforma a ras, y está en el grupo `climbable`. Los enemigos trepan por él sin pausas, mirando a la altura de los pies, hasta que pasan el borde. Por lo demás siguen como antes: unos 2,8 m de un tirón.
+  - El jugador sigue subiendo por las setas.
+  - El HUD tiene una brújula abajo a la izquierda: N, E, S y O giran con la cámara y el norte es −Z.
+  - En invierno, en vez de charcos helados (con su flor), hay montoncitos de nieve y algún muñeco de nieve con una mancuerna.
+  - En todos los tiers hay caminitos de tierra cortos, solo de decorado.
+- **Por qué:** lo pidió el diseñador. Si el árbol no se puede trepar, arriba no te alcanza nadie.

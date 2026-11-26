@@ -7,6 +7,7 @@ extends GutTest
 const SWARMER := preload("res://data/enemies/swarmer.tres")
 const ELITE := preload("res://data/enemies/elite.tres")
 const DUMBBELL := preload("res://levels/brosque/props/dumbbell_rock.tscn")
+const BIG_TREE := preload("res://levels/brosque/props/big_tree.tscn")
 const ENT_TRAINER := preload("res://data/enemies/ent_trainer.tres")
 
 var _swarm: EnemySwarm
@@ -89,6 +90,18 @@ func test_a_boss_climbs_over_the_dumbbells_too() -> void:
 	boss.set(&"_until_attack", 1000.0)
 	await wait_seconds(8.0)
 	assert_lt(boss.global_position.x, 1.5, "ha pasado al otro lado")
+
+
+func test_an_enemy_climbs_the_big_tree_up_to_its_target() -> void:
+	# El árbol grande es trepable: sube entero, sin pausas, hasta la plataforma.
+	var tree := BIG_TREE.instantiate() as Node3D
+	add_child_autofree(tree)
+	_target.position = Vector3(0.0, 6.5, 0.0)
+	_swarm.target = _target
+	var enemy := _swarm.spawn(SWARMER, Vector3(7.0, 0.0, 0.0))
+	await wait_seconds(8.0)
+	assert_gt(enemy.global_position.y, 6.0, "ha subido a la plataforma")
+	assert_lt(Vector2(enemy.global_position.x, enemy.global_position.z).length(), 2.8, "y está encima")
 
 
 func test_an_enemy_on_open_ground_does_not_climb() -> void:

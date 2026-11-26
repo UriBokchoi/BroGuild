@@ -14,6 +14,8 @@ signal despawned(enemy: Enemy)
 
 ## Uno que vuela corrige su altura así de rápido (por segundo, por metro que le falta).
 const FLY_RESPONSE := 3.0
+## Grupo de lo que se trepa entero, sin pausas (el árbol grande): como una enredadera.
+const CLIMBABLE_GROUP := &"climbable"
 
 @export var stats: StatsComponent
 @export var health: HealthComponent
@@ -41,6 +43,9 @@ const FLY_RESPONSE := 3.0
 @export_range(0.05, 2.0, 0.01, "suffix:m") var wall_probe_radius: float = 0.3
 @export_range(0.0, 3.0, 0.01, "suffix:m") var wall_probe_height: float = 0.75
 @export_range(0.0, 3.0, 0.01, "suffix:m") var wall_probe_reach: float = 0.55
+## Altura sobre los pies a la que mira si tiene delante algo trepable ([constant CLIMBABLE_GROUP]):
+## baja, para seguir trepando hasta que los pies pasen el borde.
+@export_range(0.0, 3.0, 0.01, "suffix:m") var climbable_probe_height: float = 0.15
 
 ## Tipo de enemigo.
 var data: EnemyData
@@ -299,7 +304,8 @@ func physics_step(
 	if _stats.fly_height > 0.0:
 		vertical = _fly_vertical(target if has_target else global_position)
 	# Primero el mundo: así su espera cuenta aunque luego trepe por encima de otro enemigo.
-	elif _climbs_obstacle(delta, current, chase) or _is_stuck_behind(current, chase, target, footholds):
+	elif _climbs_climbable(current, chase) or _climbs_obstacle(delta, current, chase) \
+			or _is_stuck_behind(current, chase, target, footholds):
 		vertical = maxf(vertical, _stats.climb_speed)
 	var horizontal := current.move_toward(desired, _stats.acceleration * delta)
 	linear_velocity = Vector3(horizontal.x, vertical, horizontal.z)
@@ -344,16 +350,34 @@ func _climbs_obstacle(delta: float, current: Vector3, chase: Vector3) -> bool:
 	return _wall_ahead(chase.normalized())
 
 
+## ¿Quiere avanzar, va frenado y tiene delante, a la altura de los pies, algo trepable? Entonces
+## trepa sin pausas hasta que sus pies pasan el borde (y sigue andando por arriba).
+func _climbs_climbable(current: Vector3, chase: Vector3) -> bool:
+	if _stats.climb_speed <= 0.0 or chase.is_zero_approx():
+		return false
+	if current.length() > _stats.move_speed * EnemySteering.STUCK_SPEED:
+		return false
+	var found := _world_ahead(chase.normalized(), climbable_probe_height)
+	return found is Node and (found as Node).is_in_group(CLIMBABLE_GROUP)
+
+
 ## ¿Hay mundo (capa [code]world[/code]) justo delante, hacia [param direction], a la altura del cuerpo?
 func _wall_ahead(direction: Vector3) -> bool:
+	return _world_ahead(direction, wall_probe_height) != null
+
+
+## Lo primero del mundo justo delante, hacia [param direction], a [param height] sobre los pies (o
+## [code]null[/code]).
+func _world_ahead(direction: Vector3, height: float) -> Object:
 	_probe_shape.radius = wall_probe_radius * _size
 	_probe_query.shape = _probe_shape
 	_probe_query.collision_mask = PhysicsLayers.mask(PhysicsLayers.WORLD)
 	_probe_query.transform = Transform3D(
 		Basis.IDENTITY,
-		global_position + (Vector3.UP * wall_probe_height + direction * wall_probe_reach) * _size
+		global_position + (Vector3.UP * height + direction * wall_probe_reach) * _size
 	)
-	return not get_world_3d().direct_space_state.intersect_shape(_probe_query, 1).is_empty()
+	var hits := get_world_3d().direct_space_state.intersect_shape(_probe_query, 1)
+	return hits[0]["collider"] if not hits.is_empty() else null
 
 
 func _face(direction: Vector3, delta: float) -> void:

@@ -25,6 +25,7 @@
 [ext_resource type="Script" path="res://ui/hud/stage_label.gd" id="23_stage"]
 [ext_resource type="Script" path="res://ui/hud/kill_counter.gd" id="24_kills"]
 [ext_resource type="Texture2D" path="res://assets/textures/icons/ui/kills.svg" id="25_kills_icon"]
+[ext_resource type="Script" path="res://ui/hud/compass.gd" id="26_compass"]
 
 [node name="HUD" type="CanvasLayer"]
 layer = 10
@@ -450,6 +451,19 @@ mouse_filter = 2
 theme_type_variation = &"XpBar"
 step = 0.0
 show_percentage = false
+
+[node name="Compass" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 28.0
+offset_top = -158.0
+offset_right = 120.0
+offset_bottom = -66.0
+grow_vertical = 0
+mouse_filter = 2
+script = ExtResource("26_compass")
 
 [node name="Crosshair" type="Control" parent="."]
 layout_mode = 3

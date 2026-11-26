@@ -13,6 +13,7 @@
 [ext_resource type="Material" path="res://levels/brosque/materials/grass_autumn.tres" id="11_grass_season"]
 [ext_resource type="Material" path="res://levels/brosque/materials/moss.tres" id="12_moss"]
 [ext_resource type="Material" path="res://levels/brosque/materials/moss_autumn.tres" id="13_moss_season"]
+[ext_resource type="PackedScene" path="res://levels/brosque/props/dirt_path.tscn" id="14_dirt_path"]
 
 [sub_resource type="BoxShape3D" id="Shape_ground"]
 size = Vector3(300, 1, 300)
@@ -37,6 +38,11 @@ count = 53
 script = ExtResource("6_entry")
 scene = ExtResource("9_puddle")
 count = 36
+
+[sub_resource type="Resource" id="Entry_dirt_paths"]
+script = ExtResource("6_entry")
+scene = ExtResource("14_dirt_path")
+count = 18
 
 [node name="BrosqueMap" node_paths=PackedStringArray("followers") instance=ExtResource("1_base")]
 waves = ExtResource("2_waves")
@@ -96,7 +102,7 @@ min_spacing = 40.0
 min_center_distance = 40.0
 
 [node name="Puddles" parent="."]
-entries = Array[ExtResource("6_entry")]([SubResource("Entry_puddles")])
+entries = Array[ExtResource("6_entry")]([SubResource("Entry_puddles"), SubResource("Entry_dirt_paths")])
 half_extent = Vector2(116, 116)
 
 [node name="Weather" parent="." instance=ExtResource("5_weather")]

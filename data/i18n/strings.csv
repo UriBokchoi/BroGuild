@@ -96,6 +96,10 @@ RESULTS_TIME,Tiempo,Time
 RESULTS_BRO_COINS,Bro-monedas,Bro coins
 RESULTS_BRO_COINS_VALUE,+%d,+%d
 RESULTS_UNLOCKED,¡Desbloqueado!,Unlocked!
+COMPASS_N,N,N
+COMPASS_E,E,E
+COMPASS_S,S,S
+COMPASS_W,O,W
 STAT_BRO_COIN_GAIN,Bro-monedas ganadas,Bro coins gained
 STAT_WEAPON_LEVEL_BONUS,Niveles de más en las armas,Extra weapon levels
 STAT_RUNE_LEVEL_BONUS,Niveles de más en las runas,Extra rune levels

@@ -226,10 +226,10 @@ De fácil a difícil.
 - [x] Más enemigos en las hordas (un 60 % más)
 - [x] Que la descripción de las mejoras al subir de nivel no se salga de la carta
 - [x] Sonidos: levantar las pesas y coger la tarjeta de socio
-- [ ] Charcos de invierno cambiados
-- [ ] Caminitos de tierra cortos de decorado
-- [ ] Que los enemigos puedan subir al árbol grande
-- [ ] Brújula abajo a la izquierda
+- [x] Charcos de invierno cambiados (montoncitos de nieve y muñecos de nieve)
+- [x] Caminitos de tierra cortos de decorado
+- [x] Que los enemigos puedan subir al árbol grande (tronco ancho y trepable)
+- [x] Brújula abajo a la izquierda
 - [ ] Misiones: pestaña «Completadas» con su fecha
 - [ ] Runas que se desbloquean: Sed de sangre (Bárbaro a nivel 50) y una de crítico (2500 enemigos en una partida)
 - [ ] Saltar y vetar al subir de nivel (hasta 3 de cada, con una mejora cara del menú; saltar en verde, vetar en rojo)
