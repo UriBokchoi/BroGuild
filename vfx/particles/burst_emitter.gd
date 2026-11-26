@@ -7,7 +7,7 @@ extends Node3D
 ## fotograma para que una bomba que mata a cien no dispare cien a la vez.
 
 ## Qué lo dispara.
-enum Trigger { ENEMY_DIED, ENEMY_HIT, BREAKABLE_BROKEN, ENEMY_SPAWNED }
+enum Trigger { ENEMY_DIED, ENEMY_HIT, BREAKABLE_BROKEN, ENEMY_SPAWNED, ENEMY_VANISHED }
 
 @export var trigger: Trigger = Trigger.ENEMY_DIED
 ## Escena del estallido: un [GPUParticles3D] de un solo disparo, sin emitir.
@@ -47,6 +47,8 @@ func _ready() -> void:
 			EventBus.breakable_broken.connect(_on_breakable_broken)
 		Trigger.ENEMY_SPAWNED:
 			EventBus.enemy_spawned.connect(_on_enemy_spawned)
+		Trigger.ENEMY_VANISHED:
+			EventBus.enemy_vanished.connect(_on_enemy_died)
 
 
 ## Lanza un estallido en [param at] (más [member offset]) con el color [param color]. Devuelve el

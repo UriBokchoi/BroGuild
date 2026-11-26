@@ -1,0 +1,21 @@
+[gd_scene format=3]
+
+[ext_resource type="Material" path="res://assets/models/props/materials/shadow.tres" id="1_shadow"]
+
+[sub_resource type="CylinderMesh" id="Mesh_horn"]
+material = ExtResource("1_shadow")
+top_radius = 0.0
+bottom_radius = 0.07
+height = 0.38
+radial_segments = 8
+rings = 2
+
+[node name="WarlockHorns" type="Node3D"]
+
+[node name="HornLeft" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.94, 0.34, 0, -0.34, 0.94, 0, 0, 0, 1, -0.2, 0.32, 0.05)
+mesh = SubResource("Mesh_horn")
+
+[node name="HornRight" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.94, -0.34, 0, 0.34, 0.94, 0, 0, 0, 1, 0.2, 0.32, 0.05)
+mesh = SubResource("Mesh_horn")

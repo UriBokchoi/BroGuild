@@ -1,9 +1,10 @@
 extends Node
 ## Lo que se guarda entre partidas (en user://): las opciones, los récords, lo descubierto para el
-## Archivo y los tiers superados de cada nivel. Al arrancar carga las opciones y las aplica.
+## Archivo, los tiers superados de cada nivel y el perfil (las bro-monedas). Al arrancar carga las
+## opciones y las aplica.
 ##
 ## Con «-- --no-save» (lo usa tools/validate.sh) los récords y el Archivo van a archivos de prueba:
-## probar el juego no ensucia lo de verdad.
+## probar el juego no ensucia lo de verdad. Esos archivos se borran al cerrar.
 
 const SETTINGS_DATA := preload("res://data/settings/settings.tres")
 ## Argumento de línea de órdenes (tras [code]--[/code]) para no tocar récords ni Archivo.
@@ -25,6 +26,12 @@ var discoveries: Discoveries
 var progress_path: String = "user://progress.cfg"
 ## Tiers superados de cada nivel. Para apuntar uno, [method complete_tier].
 var progress: LevelProgress
+## Archivo del perfil (los tests usan otro).
+var profile_path: String = "user://profile.cfg"
+## Bro-monedas y lo que se compra con ellas. Para sumar monedas, [method add_bro_coins].
+var profile: PlayerProfile
+## Si se usan archivos de prueba (se borran al cerrar).
+var _scratch: bool = false
 
 
 func _ready() -> void:
@@ -38,6 +45,12 @@ func _ready() -> void:
 		load_leaderboard()
 		load_discoveries()
 		load_progress()
+		load_profile()
+
+
+func _exit_tree() -> void:
+	if _scratch:
+		_remove_scratch_files()
 
 
 ## Lleva récords, Archivo y tiers a [code]user://<prefix>_leaderboard.cfg[/code],
@@ -47,12 +60,13 @@ func use_scratch_files(prefix: String) -> void:
 	leaderboard_path = "user://%s_leaderboard.cfg" % prefix
 	archive_path = "user://%s_archive.cfg" % prefix
 	progress_path = "user://%s_progress.cfg" % prefix
-	for path: String in [leaderboard_path, archive_path, progress_path]:
-		if FileAccess.file_exists(path):
-			DirAccess.remove_absolute(ProjectSettings.globalize_path(path))
+	profile_path = "user://%s_profile.cfg" % prefix
+	_scratch = true
+	_remove_scratch_files()
 	load_leaderboard()
 	load_discoveries()
 	load_progress()
+	load_profile()
 
 
 ## Carga las opciones de [member settings_path]; sin archivo, las de un juego recién estrenado.
@@ -137,6 +151,72 @@ func complete_tier(level_id: StringName, tier: int) -> bool:
 	progress.write_to(config)
 	_save(config, progress_path, "los tiers superados")
 	return true
+
+
+## Carga el perfil de [member profile_path] (sin archivo, vacío).
+func load_profile() -> void:
+	profile = PlayerProfile.new()
+	var config := ConfigFile.new()
+	if config.load(profile_path) == OK:
+		profile.read_from(config)
+
+
+## Suma [param amount] bro-monedas al perfil y lo guarda.
+func add_bro_coins(amount: int) -> void:
+	if profile == null:
+		load_profile()
+	if amount <= 0:
+		return
+	profile.add_bro_coins(amount)
+	save_profile()
+
+
+## Compra el siguiente nivel de [param upgrade] con las bro-monedas del perfil y lo guarda. Si no
+## puede (al máximo o sin monedas), no hace nada y devuelve [code]false[/code].
+func buy_upgrade(upgrade: MetaUpgradeData) -> bool:
+	if profile == null:
+		load_profile()
+	if not profile.buy(upgrade):
+		return false
+	save_profile()
+	return true
+
+
+## Deshace las mejoras de [param catalog], devuelve sus bro-monedas al perfil y lo guarda. Devuelve
+## cuántas.
+func refund_upgrades(catalog: MetaUpgradeCatalog) -> int:
+	if profile == null:
+		load_profile()
+	var refunded := profile.refund(catalog)
+	if refunded > 0:
+		save_profile()
+	return refunded
+
+
+## Apunta en el perfil las misiones de [param catalog] que cumple la partida [param record] y aún no
+## tenía, y lo guarda. Devuelve las nuevas (lo que desbloquean ya está abierto).
+func complete_quests(catalog: QuestCatalog, record: RunRecord) -> Array[QuestData]:
+	if profile == null:
+		load_profile()
+	var met := catalog.newly_met(record, profile)
+	for quest: QuestData in met:
+		profile.complete_quest(quest.id)
+	if not met.is_empty():
+		save_profile()
+	return met
+
+
+## Guarda el perfil en [member profile_path].
+func save_profile() -> Error:
+	var config := ConfigFile.new()
+	profile.write_to(config)
+	return _save(config, profile_path, "el perfil")
+
+
+func _remove_scratch_files() -> void:
+	for path: String in [leaderboard_path, archive_path, progress_path, profile_path]:
+		if FileAccess.file_exists(path):
+			DirAccess.remove_absolute(ProjectSettings.globalize_path(path))
 
 
 func _save(config: ConfigFile, path: String, what: String) -> Error:

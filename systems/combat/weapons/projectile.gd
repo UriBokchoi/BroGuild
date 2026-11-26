@@ -13,6 +13,10 @@ signal finished
 ## Arma que lo lanzó (su daño, sus stats y las de quien la lleva).
 var weapon: ProjectileWeapon
 var velocity: Vector3 = Vector3.ZERO
+## A quién se lanzó (para los que lo persiguen). Puede quedarse vacío o dejar de valer.
+var chase_target: Node3D
+## ¿Fue crítico su último golpe ([method strike])?
+var last_critical: bool = false
 
 var _life: float = 0.0
 var _query := PhysicsRayQueryParameters3D.new()
@@ -71,7 +75,9 @@ func launch(from_weapon: ProjectileWeapon, origin: Vector3, direction: Vector3) 
 func strike(hurtbox: HurtboxComponent, origin: Vector3 = Vector3.INF) -> float:
 	var from := global_position if origin == Vector3.INF else origin
 	var push := DamageCalc.push(from, hurtbox.get_center(), weapon.knockback())
-	return hurtbox.receive(DamageCalc.attack(weapon.damage(), weapon.offense(), _rng, self, push))
+	var info := DamageCalc.attack(weapon.damage(), weapon.offense(), _rng, self, push)
+	last_critical = info.critical
+	return hurtbox.receive(info)
 
 
 ## A partir de ahora, el rayo ya no se para en [param hurtbox] (ya le dio).

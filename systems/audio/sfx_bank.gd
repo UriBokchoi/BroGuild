@@ -24,6 +24,10 @@ extends Resource
 @export var mini_boss_spawned: SoundCue
 ## Llega un heraldo del Gremio.
 @export var herald_arrived: SoundCue
+## Se sella un pacto del Gremio.
+@export var pact_sealed: SoundCue
+## Se cruza el portal abierto de un jefe.
+@export var portal_entered: SoundCue
 @export var boss_defeated: SoundCue
 
 @export_group("pickups")
@@ -37,6 +41,10 @@ extends Resource
 @export_range(0, 24, 1) var streak_max_semitones: int = 0
 
 @export_group("loot")
+## Al levantar unas pesas de piedra (se cargaron y ofrecen su mejora).
+@export var weights_lifted: SoundCue
+## Al coger una tarjeta de socio (las llaves del jefe).
+@export var boss_key_collected: SoundCue
 @export var breakable_broken: SoundCue
 @export var chest_opened: SoundCue
 ## Al revelarse el objeto (cuando la luz se para en su rareza).

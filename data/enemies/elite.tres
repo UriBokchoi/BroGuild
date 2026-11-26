@@ -53,6 +53,6 @@ stat_modifiers = SubResource("Resource_set")
 size = 1.6
 overlay = ExtResource("4_glow")
 drop_chance_multiplier = 8.0
+drop_table = ExtResource("20_drops")
 chest_chance = 10.0
 chest = ExtResource("21_chest")
-drop_table = ExtResource("20_drops")

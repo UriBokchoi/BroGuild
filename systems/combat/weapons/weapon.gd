@@ -79,13 +79,18 @@ func _physics_process(delta: float) -> void:
 ## Le suma una mejora (un nivel más): sus modificadores van a las stats del arma. Al máximo, no
 ## hace nada.
 func add_upgrade(upgrade: ItemUpgrade) -> void:
-	if level >= data.max_level():
+	if level >= max_level():
 		return
 	for modifier: StatModifier in upgrade.stat_modifiers:
 		stats.add_modifier(modifier, upgrade)
 	_upgrades.append(upgrade)
 	level += 1
 	level_changed.emit(level)
+
+
+## Nivel máximo de esta arma para quien la lleva (con los niveles de más de sus stats).
+func max_level() -> int:
+	return data.max_level_with(wielder_stats)
 
 
 ## Mejoras que lleva, de la primera a la última.
@@ -97,7 +102,7 @@ func get_upgrades() -> Array[ItemUpgrade]:
 ## estándar ([method ItemData.default_upgrade]; la armería de práctica); para bajar, quita las
 ## últimas.
 func set_level(new_level: int) -> void:
-	new_level = clampi(new_level, 1, data.max_level())
+	new_level = clampi(new_level, 1, max_level())
 	while level < new_level:
 		add_upgrade(data.default_upgrade())
 	while level > new_level:

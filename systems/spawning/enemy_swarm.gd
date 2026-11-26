@@ -120,6 +120,14 @@ func clear(keep_dying: bool = false) -> void:
 	projectiles.clear()
 
 
+## Hace que todos los enemigos vivos se hundan en el suelo y desaparezcan en [param seconds] (al
+## cambiar de mapa), y retira sus proyectiles. No mueren: ni sueltan botín ni cuentan.
+func vanish_all(seconds: float) -> void:
+	for enemy: Enemy in _active.duplicate():
+		enemy.vanish(seconds)
+	projectiles.clear()
+
+
 ## Para el tiempo [param seconds] segundos (o lo alarga): los enemigos, también los que salgan, se
 ## quedan quietos sin dañar ni atacar, y sus disparos se paran en el aire. Avisa al empezar y al
 ## acabar por [code]EventBus.time_stop_changed[/code].

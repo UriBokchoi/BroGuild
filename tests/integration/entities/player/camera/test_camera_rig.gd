@@ -62,3 +62,19 @@ func test_fov_stays_with_a_target_that_does_not_move() -> void:
 	var camera := _rig.get_node(^"%Camera3D") as Camera3D
 	await wait_process_frames(10)
 	assert_almost_eq(camera.fov, _rig.data.fov, 1e-3)
+
+
+func test_the_options_scale_and_invert_the_mouse() -> void:
+	var settings := Save.settings
+	var sensitivity := settings.mouse_sensitivity
+	var invert := settings.invert_y
+	settings.mouse_sensitivity = 2.0
+	settings.invert_y = true
+	var pitch := _rig.rotation.x
+	_rig.rotate_view(Vector2(10.0, 0.0))
+	var expected := TARGET_YAW - deg_to_rad(_rig.data.mouse_sensitivity) * 2.0 * 10.0
+	assert_almost_eq(_rig.rotation.y, expected, 1e-6, "el doble de rápido")
+	_rig.rotate_view(Vector2(0.0, -1.0))
+	assert_lt(_rig.rotation.x, pitch, "ratón arriba con el eje invertido: mira abajo")
+	settings.mouse_sensitivity = sensitivity
+	settings.invert_y = invert

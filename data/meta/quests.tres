@@ -1,0 +1,77 @@
+[gd_resource type="Resource" script_class="QuestCatalog" format=3]
+
+[ext_resource type="Script" path="res://systems/meta/quest_catalog.gd" id="1_catalog"]
+[ext_resource type="Script" path="res://systems/meta/quest_data.gd" id="2_quest"]
+[ext_resource type="Resource" path="res://data/weapons/sword.tres" id="3_sword"]
+[ext_resource type="Resource" path="res://data/weapons/hammer.tres" id="4_hammer"]
+[ext_resource type="Resource" path="res://data/weapons/axe.tres" id="5_axe"]
+[ext_resource type="Resource" path="res://data/characters/warrior.tres" id="6_warrior"]
+[ext_resource type="Resource" path="res://data/characters/mage.tres" id="7_mage"]
+[ext_resource type="Resource" path="res://data/weapons/evil_eye.tres" id="8_evil_eye"]
+[ext_resource type="Resource" path="res://data/runes/keen_eye.tres" id="9_keen_eye"]
+[ext_resource type="Resource" path="res://data/characters/paladin.tres" id="10_paladin"]
+[ext_resource type="Resource" path="res://data/characters/barbarian.tres" id="11_barbarian"]
+[ext_resource type="Resource" path="res://data/characters/warlock.tres" id="12_warlock"]
+[ext_resource type="Resource" path="res://data/runes/bloodlust.tres" id="13_bloodlust"]
+
+[sub_resource type="Resource" id="Quest_hammer"]
+script = ExtResource("2_quest")
+id = &"hammer"
+description_key = &"QUEST_HAMMER_DESC"
+rewards = Array[Resource]([ExtResource("4_hammer")])
+item = ExtResource("3_sword")
+item_level = 10
+needs_win = true
+
+[sub_resource type="Resource" id="Quest_axe"]
+script = ExtResource("2_quest")
+id = &"axe"
+description_key = &"QUEST_AXE_DESC"
+rewards = Array[Resource]([ExtResource("5_axe")])
+character = ExtResource("6_warrior")
+player_level = 30
+
+[sub_resource type="Resource" id="Quest_warlock"]
+script = ExtResource("2_quest")
+id = &"warlock"
+description_key = &"QUEST_WARLOCK_DESC"
+rewards = Array[Resource]([ExtResource("12_warlock"), ExtResource("8_evil_eye")])
+character = ExtResource("7_mage")
+player_level = 30
+
+[sub_resource type="Resource" id="Quest_keen_eye"]
+script = ExtResource("2_quest")
+id = &"keen_eye"
+description_key = &"QUEST_KEEN_EYE_DESC"
+rewards = Array[Resource]([ExtResource("9_keen_eye")])
+kills = 2500
+
+[sub_resource type="Resource" id="Quest_paladin"]
+script = ExtResource("2_quest")
+id = &"paladin"
+description_key = &"QUEST_PALADIN_DESC"
+rewards = Array[Resource]([ExtResource("10_paladin")])
+item = ExtResource("4_hammer")
+item_level = 10
+needs_win = true
+
+[sub_resource type="Resource" id="Quest_barbarian"]
+script = ExtResource("2_quest")
+id = &"barbarian"
+description_key = &"QUEST_BARBARIAN_DESC"
+rewards = Array[Resource]([ExtResource("11_barbarian")])
+item = ExtResource("5_axe")
+item_level = 10
+needs_win = true
+
+[sub_resource type="Resource" id="Quest_bloodlust"]
+script = ExtResource("2_quest")
+id = &"bloodlust"
+description_key = &"QUEST_BLOODLUST_DESC"
+rewards = Array[Resource]([ExtResource("13_bloodlust")])
+character = ExtResource("11_barbarian")
+player_level = 50
+
+[resource]
+script = ExtResource("1_catalog")
+quests = Array[ExtResource("2_quest")]([SubResource("Quest_hammer"), SubResource("Quest_axe"), SubResource("Quest_paladin"), SubResource("Quest_barbarian"), SubResource("Quest_warlock"), SubResource("Quest_keen_eye"), SubResource("Quest_bloodlust")])

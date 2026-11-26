@@ -22,6 +22,10 @@
 [ext_resource type="Script" path="res://ui/hud/announcement_feed.gd" id="20_feed"]
 [ext_resource type="Script" path="res://ui/hud/crosshair.gd" id="21_crosshair"]
 [ext_resource type="Script" path="res://ui/hud/streak_meter.gd" id="22_streak"]
+[ext_resource type="Script" path="res://ui/hud/stage_label.gd" id="23_stage"]
+[ext_resource type="Script" path="res://ui/hud/kill_counter.gd" id="24_kills"]
+[ext_resource type="Texture2D" path="res://assets/textures/icons/ui/kills.svg" id="25_kills_icon"]
+[ext_resource type="Script" path="res://ui/hud/compass.gd" id="26_compass"]
 
 [node name="HUD" type="CanvasLayer"]
 layer = 10
@@ -74,16 +78,44 @@ text = "0:00"
 horizontal_alignment = 1
 script = ExtResource("6_clock")
 
-[node name="DifficultyCounter" type="HBoxContainer" parent="Margin/Top/InfoRow"]
-unique_name_in_owner = true
+[node name="Right" type="VBoxContainer" parent="Margin/Top/InfoRow"]
 layout_mode = 2
 size_flags_horizontal = 3
+mouse_filter = 2
+theme_type_variation = &"HudRight"
+
+[node name="KillCounter" type="HBoxContainer" parent="Margin/Top/InfoRow/Right"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"GoldRow"
+alignment = 2
+script = ExtResource("24_kills")
+
+[node name="KillsIcon" type="TextureRect" parent="Margin/Top/InfoRow/Right/KillCounter"]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+texture = ExtResource("25_kills_icon")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="KillsLabel" type="Label" parent="Margin/Top/InfoRow/Right/KillCounter"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"KillsLabel"
+text = "0"
+
+[node name="DifficultyCounter" type="HBoxContainer" parent="Margin/Top/InfoRow/Right"]
+unique_name_in_owner = true
+layout_mode = 2
 mouse_filter = 2
 theme_type_variation = &"GoldRow"
 alignment = 2
 script = ExtResource("10_difficulty")
 
-[node name="DifficultyIcon" type="TextureRect" parent="Margin/Top/InfoRow/DifficultyCounter"]
+[node name="DifficultyIcon" type="TextureRect" parent="Margin/Top/InfoRow/Right/DifficultyCounter"]
 custom_minimum_size = Vector2(24, 24)
 layout_mode = 2
 size_flags_vertical = 4
@@ -92,11 +124,18 @@ texture = ExtResource("11_skull")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="DifficultyLabel" type="Label" parent="Margin/Top/InfoRow/DifficultyCounter"]
+[node name="DifficultyLabel" type="Label" parent="Margin/Top/InfoRow/Right/DifficultyCounter"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"DifficultyLabel"
 text = "0.0"
+
+[node name="StageLabel" type="Label" parent="Margin/Top"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 8
+theme_type_variation = &"StatBaseLabel"
+script = ExtResource("23_stage")
 
 [node name="BossKeyCounter" type="HBoxContainer" parent="Margin/Top"]
 unique_name_in_owner = true
@@ -412,6 +451,19 @@ mouse_filter = 2
 theme_type_variation = &"XpBar"
 step = 0.0
 show_percentage = false
+
+[node name="Compass" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 28.0
+offset_top = -158.0
+offset_right = 120.0
+offset_bottom = -66.0
+grow_vertical = 0
+mouse_filter = 2
+script = ExtResource("26_compass")
 
 [node name="Crosshair" type="Control" parent="."]
 layout_mode = 3

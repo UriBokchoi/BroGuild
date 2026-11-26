@@ -4,13 +4,61 @@ NUMBER_DECIMAL_SEPARATOR,",",.
 LANGUAGE_NAME,Español,English
 MENU_PLAY,Jugar,Play
 MENU_OPTIONS,Opciones,Options
-MENU_RECORDS,Récords,Records
 MENU_ARCHIVE,Archivo,Archive
+MENU_UPGRADES,Mejoras,Upgrades
+MENU_QUESTS,Misiones,Quests
+QUESTS_TITLE,Misiones,Quests
+QUESTS_DONE,Hecha,Done
+QUESTS_PENDING,Pendiente,Pending
+QUESTS_AND,y,and
+QUESTS_TAB_PENDING,Pendientes (%d),Pending (%d)
+QUESTS_TAB_DONE,Completadas (%d),Completed (%d)
+QUESTS_DONE_AT,Completada el %s,Completed on %s
+QUESTS_EMPTY_PENDING,¡Lo has completado todo!,You've completed everything!
+QUESTS_EMPTY_DONE,Aún no has completado ninguna. Se cumplen solas al acabar una partida.,You haven't completed any yet. They complete on their own when a run ends.
+QUEST_HAMMER_DESC,Sube la espada a nivel 10 y gana una partida.,Get the sword to level 10 and win a run.
+QUEST_AXE_DESC,Llega a nivel 30 con el Guerrero.,Reach level 30 as the Warrior.
+QUEST_WARLOCK_DESC,Llega a nivel 30 con el Mago.,Reach level 30 as the Mage.
+QUEST_PALADIN_DESC,Sube el martillo a nivel 10 y gana una partida.,Get the hammer to level 10 and win a run.
+QUEST_BARBARIAN_DESC,Sube el hacha a nivel 10 y gana una partida.,Get the axe to level 10 and win a run.
+QUEST_BLOODLUST_DESC,Llega a nivel 50 con el Bárbaro.,Reach level 50 as the Barbarian.
+QUEST_KEEN_EYE_DESC,Derrota a 2500 enemigos en una sola partida.,Defeat 2500 enemies in a single run.
+CHARACTER_LOCKED,Bloqueado: %s,Locked: %s
+UPGRADES_TITLE,Mejoras,Upgrades
+UPGRADES_LEVEL,Nivel %d/%d,Level %d/%d
+UPGRADES_BUY,Comprar (%d),Buy (%d)
+UPGRADES_MAXED,Al máximo,Maxed
+UPGRADES_NONE,Nada,None
+UPGRADES_NEXT,%s → %s,%s → %s
+UPGRADES_REFUND,Reembolsar todo,Refund all
+UPGRADES_REFUNDED,Te devuelven %d bro-monedas,%d bro coins refunded
+UPGRADE_VALUE_PERCENT,+%s %%,+%s%%
+UPGRADE_VALUE_FLAT,+%s,+%s
+UPGRADE_VALUE_LEVELS,+%s niveles,+%s levels
+UPGRADE_SPEED_NAME,Velocidad,Speed
+UPGRADE_GREED_NAME,Oro y bro-monedas,Gold and bro coins
+UPGRADE_WEAPON_LEVEL_NAME,Nivel máximo de las armas,Weapon max level
+UPGRADE_RUNE_LEVEL_NAME,Nivel máximo de las runas,Rune max level
+UPGRADE_DAMAGE_DESC,Todo tu daño pega un poco más.,All your damage hits a bit harder.
+UPGRADE_AREA_DESC,"Ataques y efectos, un poco más grandes.","Attacks and effects, a bit bigger."
+UPGRADE_CRIT_CHANCE_DESC,Más probabilidad de crítico.,Higher crit chance.
+UPGRADE_MAX_HEALTH_DESC,Más vida máxima.,More max health.
+UPGRADE_ARMOR_DESC,"Más defensa: los golpes duelen menos.","More armor: hits hurt less."
+UPGRADE_SPEED_DESC,Corres y esprintas más rápido.,You run and sprint faster.
+UPGRADE_LUCK_DESC,"Rarezas más altas en mejoras, cofres y tragaperras.","Higher rarities in upgrades, chests and slots."
+UPGRADE_DIFFICULTY_DESC,"Más enemigos y más fuertes, pero más experiencia y oro.","More and stronger enemies, but more XP and gold."
+UPGRADE_GREED_DESC,Más oro en la partida y más bro-monedas al acabar.,More gold in the run and more bro coins at the end.
+UPGRADE_WEAPON_SLOTS_DESC,Empiezas con más ranuras de armas abiertas.,You start with more weapon slots open.
+UPGRADE_RUNE_SLOTS_DESC,Empiezas con más ranuras de runas abiertas.,You start with more rune slots open.
+UPGRADE_WEAPON_LEVEL_DESC,Tus armas suben más niveles.,Your weapons go up more levels.
+UPGRADE_RUNE_LEVEL_DESC,Tus runas suben más niveles.,Your runes go up more levels.
+MENU_ACHIEVEMENTS,Logros (WIP),Achievements (WIP)
 MENU_QUIT,Abandonar,Quit game
 LEVEL_BROSQUE_NAME,El Brosque,The Brorest
 LEVEL_BROSQUE_GOAL,Objetivo: vence al Ent-renador.,Goal: defeat the Ent Trainer.
 TIER_SHORT,Tier %d,Tier %d
 TIER_LOCKED,Supera el tier %d para abrirlo,Clear tier %d to unlock it
+TIER_STRENGTH,Enemigos un %d %% más fuertes (vida y daño; también sueltan más).,Enemies %d%% stronger (health and damage; they also drop more).
 BROSQUE_TIER_1,Tier 1 · Verano,Tier 1 · Summer
 BROSQUE_TIER_2,Tier 2 · Otoño,Tier 2 · Autumn
 BROSQUE_TIER_3,Tier 3 · Invierno,Tier 3 · Winter
@@ -52,7 +100,25 @@ DEATH_LINE_QUITTERS,El 99 % se rinde justo antes de conseguirlo,99% quit right b
 DEATH_LINE_TRY,A la próxima inténtalo al menos,Next time at least try
 DEATH_LINE_COUSIN,Mi primo pequeño lo haría mejor,My little cousin would do better
 DEATH_LINE_DIED,Has muerto,You died
+RESULTS_STAGE,Llegaste a,Reached
 RESULTS_TIME,Tiempo,Time
+RESULTS_BRO_COINS,Bro-monedas,Bro coins
+RESULTS_BRO_COINS_VALUE,+%d,+%d
+RESULTS_UNLOCKED,¡Desbloqueado!,Unlocked!
+COMPASS_N,N,N
+COMPASS_E,E,E
+COMPASS_S,S,S
+COMPASS_W,O,W
+STAT_BRO_COIN_GAIN,Bro-monedas ganadas,Bro coins gained
+STAT_SKIPS,Saltos al subir de nivel,Level-up skips
+STAT_BANS,Vetos al subir de nivel,Level-up bans
+STAT_WEAPON_LEVEL_BONUS,Niveles de más en las armas,Extra weapon levels
+LEVEL_UP_SKIP,Saltar (%d),Skip (%d)
+LEVEL_UP_BAN,Vetar (%d),Ban (%d)
+LEVEL_UP_BAN_PICK,Elige la carta que vetas: no volverá a salir en esta partida.,Pick the card to ban: it won't show up again this run.
+UPGRADE_SKIPS_BANS_NAME,Saltar y vetar,Skip and ban
+UPGRADE_SKIPS_BANS_DESC,"Al subir de nivel, saltarte una elección (verde) o vetar una carta para el resto de la partida (rojo). Veces por partida.","On level up, skip a choice (green) or ban a card for the rest of the run (red). Uses per run."
+STAT_RUNE_LEVEL_BONUS,Niveles de más en las runas,Extra rune levels
 RESULTS_LEVEL,Nivel,Level
 RESULTS_KILLS,Enemigos derrotados,Enemies defeated
 RESULTS_ELITE_KILLS,Élites derrotados,Elites defeated
@@ -99,6 +165,9 @@ OPTIONS_VSYNC,VSync,VSync
 OPTIONS_FPS_LIMIT,Límite de FPS,FPS limit
 OPTIONS_FPS_UNLIMITED,Sin límite,Unlimited
 OPTIONS_SCREEN_SHAKE,Temblor de pantalla,Screen shake
+OPTIONS_GROUP_CONTROLS,Controles,Controls
+OPTIONS_MOUSE_SENSITIVITY,Sensibilidad del ratón,Mouse sensitivity
+OPTIONS_INVERT_Y,Invertir eje vertical,Invert vertical axis
 OPTIONS_APPLY,Aplicar,Apply
 OPTIONS_BACK,Volver,Back
 OPTIONS_WINDOW_LOCKED,"Dentro del editor (pestaña Juego), la ventana es del editor: para cambiar pantalla completa o resolución, ejecuta el juego en su propia ventana.","Inside the editor (Game tab) the window belongs to the editor: run the game in its own window to change fullscreen or resolution."
@@ -223,8 +292,13 @@ STAT_WALL_CLIMB_DELAY,Espera para trepar muros,Wait before climbing walls
 STAT_WALL_CLIMB_TIME,Tiempo trepando muros,Wall climbing time
 STAT_APPROACH_SPREAD,Desvío al acercarse,Approach spread
 STAT_KEEP_DISTANCE,Distancia que guarda,Distance kept
+STAT_FLY_HEIGHT,Altura a la que vuela,Flying height
 ENEMY_SWARMER_NAME,Esbirro,Minion
 ENEMY_SWARMER_DESCRIPTION,"Rápido y frágil; llega en enjambre.","Fast and frail; comes in swarms."
+ENEMY_CARDIO_NAME,Cardioadicto,Cardio Junkie
+ENEMY_CARDIO_DESCRIPTION,"Solo hace cardio: pega flojo y aguanta poco, pero no hay quien lo pille. Sale poco.","Only does cardio: weak hits and frail, but nobody can catch him. Rare."
+ENEMY_BAT_NAME,Murciébro,Bro Bat
+ENEMY_BAT_DESCRIPTION,"Vuela a la altura de tu cabeza con su cadena de oro: saltar por encima de la horda ya no es tan fácil. Sale poco.","Flies at head height wearing a gold chain: jumping over the horde is no longer that easy. Rare."
 ENEMY_SHOOTER_NAME,Tirador,Shooter
 ENEMY_SHOOTER_DESCRIPTION,"Se queda a distancia y dispara bolas de fuego lentas; no te quedes quieto.","Keeps its distance and shoots slow fireballs; don't stand still."
 ENEMY_SAPLING_NAME,Bro-te,Sprout Bro
@@ -262,6 +336,10 @@ RUNE_HASTE_NAME,Runa de Prisa,Rune of Haste
 RUNE_HASTE_DESCRIPTION,"Más velocidad de ataque.","More attack speed."
 RUNE_VIGOR_NAME,Runa de Vigor,Rune of Vigor
 RUNE_VIGOR_DESCRIPTION,"Más vida máxima.","More max health."
+RUNE_KEEN_EYE_NAME,Runa del Ojo clínico,Rune of the Keen Eye
+RUNE_KEEN_EYE_DESCRIPTION,"Probabilidad de crítico: más golpes críticos.","Crit chance: more critical hits."
+RUNE_BLOODLUST_NAME,Runa de Sed de sangre,Rune of Bloodlust
+RUNE_BLOODLUST_DESCRIPTION,"Robo de vida: cada golpe te cura parte del daño que haces.","Lifesteal: every hit heals you for part of the damage you deal."
 RUNE_MULTIPLICITY_NAME,Runa de Multiplicidad,Rune of Multiplicity
 RUNE_MULTIPLICITY_DESCRIPTION,"Más proyectiles (también más tajos con la espada). Con decimales, a veces sale uno más.","More projectiles (also more sword slashes). With decimals, sometimes one more comes out."
 ARMORY_WEAPONS,Armas,Weapons
@@ -327,6 +405,10 @@ ITEM_KIND_WEAPON,Arma,Weapon
 ITEM_KIND_RUNE,Runa,Rune
 WEAPON_STAFF_NAME,Bastón de mago,Mage staff
 WEAPON_STAFF_DESCRIPTION,"Orbes que explotan al tocar algo y dañan a todos los enemigos cercanos.","Orbs that explode on contact and hit every nearby enemy."
+WEAPON_EVIL_EYE_NAME,Mal de ojo,Evil eye
+WEAPON_EVIL_EYE_DESCRIPTION,"Un ojo rojo que persigue a los enemigos y rebota de uno a otro. Si hace crítico, revienta y daña a los de alrededor.","A red eye that chases enemies and bounces between them. On a crit, it bursts and hits the ones around."
+STAT_GROUP_EVIL_EYE,Mal de ojo,Evil eye
+STAT_HOMING,Persecución,Homing
 WEAPON_DAGGER_NAME,Daga,Dagger
 WEAPON_DAGGER_DESCRIPTION,"Dagas rápidas a un solo enemigo; al mejorarla rebotan al más cercano con todo su daño.","Fast daggers at a single enemy; upgraded, they bounce to the nearest one with full damage."
 WEAPON_AXE_NAME,Hacha arrojadiza,Throwing axe
@@ -351,6 +433,19 @@ CHARACTER_MAGE_NAME,Mago,Mage
 CHARACTER_MAGE_DESCRIPTION,"Frágil pero arrollador: más área y experiencia, y planea manteniendo el salto.","Frail but overwhelming: more area and experience, and glides while holding jump."
 CHARACTER_ROGUE_NAME,Pícaro,Rogue
 CHARACTER_ROGUE_DESCRIPTION,"Rápido y escurridizo: más velocidad, crítico y stamina, y un salto más en el aire.","Fast and slippery: more speed, crit and stamina, and an extra air jump."
+CHARACTER_PALADIN_NAME,Paladín,Paladin
+CHARACTER_PALADIN_DESCRIPTION,"Fe y acero: más vida, defensa y regeneración; salta un poco más y va algo más lento.","Faith and steel: more health, armor and regen; jumps a bit higher and is a bit slower."
+CHARACTER_BARBARIAN_NAME,Bárbaro,Barbarian
+CHARACTER_BARBARIAN_DESCRIPTION,"Mucha vida y más daño; esprinta más rápido que nadie.","Lots of health and more damage; sprints faster than anyone."
+CHARACTER_WARLOCK_NAME,Brujo,Warlock
+CHARACTER_WARLOCK_DESCRIPTION,"Frágil pero letal: más crítico, daño crítico y área, y un dash más en el aire.","Fragile but deadly: more crit, crit damage and area, and one more air dash."
+PASSIVE_DEVOTION_NAME,Devoción,Devotion
+PASSIVE_DEVOTION_DESCRIPTION,"+1 % de vida máxima por cada nivel.","+1% max health per level."
+PASSIVE_FURY_NAME,Furia,Fury
+PASSIVE_FURY_DESCRIPTION,"La primera vez que fueras a morir, te quedas a 1 de vida y no puedes morir durante 10 s: te pones rojo de rabia y tus stats suben un 30 %.","The first time you would die, you stay at 1 health and can't die for 10 s: you go red with rage and your stats rise 30%."
+PASSIVE_HEX_NAME,Maleficio,Hex
+PASSIVE_HEX_DESCRIPTION,"+2 % de daño crítico por cada nivel.","+2% crit damage per level."
+FURY_STARTED,¡FURIA! No puedes morir durante 10 s,FURY! You can't die for 10 s
 PASSIVE_VETERAN_NAME,Veterano,Veteran
 PASSIVE_VETERAN_DESCRIPTION,"+1 % de daño por cada nivel.","+1% damage per level."
 PASSIVE_ARCANE_EXPANSION_NAME,Expansión arcana,Arcane expansion
@@ -366,6 +461,9 @@ PICKUP_STREAK_ANNOUNCE,¡En racha!,On a streak!
 HUD_STREAK,Racha ×%s · %d s,Streak ×%s · %d s
 PICKUP_TIME_STOP_ANNOUNCE,¡Tiempo detenido!,Time stop!
 INTERACT_TAVERN,"Tomar una jarra: cura la mitad (%d de oro)","Have a pint: heals half (%d gold)"
+INTERACT_KILL_CHEST,Abrir el cofre de la taberna: elige un objeto azul o mejor,Open the tavern chest: pick a blue or better item
+KILL_CHEST_LOCKED,"Cofre de la taberna: se abre con %d / %d enemigos derrotados","Tavern chest: opens at %d / %d enemies defeated"
+KILL_CHEST_PROGRESS,%d / %d,%d / %d
 TAVERN_HEALED,¡Salud!,Cheers!
 TAVERN_NO_GOLD,"Sin oro no hay jarra (%d de oro)","No gold, no pint (%d gold)"
 TAVERN_FULL,Ya estás como una rosa,You're already in top shape
@@ -404,6 +502,7 @@ PACT_REWARD,Premio,Reward
 PACT_CURSE,Maldición,Curse
 PACT_REJECT,Rechazar,Decline
 PACT_REROLL,Volver a tirar (%d oro),Reroll (%d gold)
+ITEM_CHOICE_REROLL,Volver a tirar (%d oro),Reroll (%d gold)
 PACT_SEALED,Pacto sellado: %s,Pact sealed: %s
 PACT_EGO_LIFTING_NAME,Ego lifting,Ego lifting
 PACT_EGO_LIFTING_FLAVOR,Más peso del que puedes. ¿Qué puede salir mal?,More weight than you can lift. What could go wrong?
@@ -418,14 +517,14 @@ PACT_NO_DAYS_OFF_FLAVOR,El descanso es para los débiles.,Rest is for the weak.
 PACT_SKIP_LEG_DAY_NAME,Saltarse pierna,Skip leg day
 PACT_SKIP_LEG_DAY_FLAVOR,"Total, nadie mira las piernas.","Nobody looks at legs anyway."
 RECORDS_TITLE,Récords,Records
-RECORDS_SUBTITLE,"Tus mejores partidas en este equipo, por enemigos derrotados. En azul, la última.","Your best runs on this computer, by enemies defeated. In blue, the latest one."
+RECORDS_SUBTITLE,"Tus mejores partidas, por enemigos derrotados. En azul, la última. Haz clic en una para ver su detalle.","Your best runs, by enemies defeated. In blue, the latest one. Click one to see its details."
 RECORDS_EMPTY,Aún no hay partidas. ¡A repartir!,No runs yet. Go get 'em!
-RECORDS_RANK,#,#
-RECORDS_CHARACTER,Personaje,Character
-RECORDS_KILLS,Enemigos,Enemies
-RECORDS_TIME,Tiempo,Time
-RECORDS_LEVEL,Nivel,Level
+RECORDS_ROW,#%d  %s — %d,#%d  %s — %d
 RECORDS_MAP,Mapa,Map
+RECORDS_DATE,Fecha,Date
+RECORDS_DATE_VALUE,%02d/%02d/%d %02d:%02d,%02d/%02d/%d %02d:%02d
+RECORDS_PACTS,Pactos,Pacts
+RECORDS_NO_BUILD,"Esta partida es de antes de que se guardara la build.","This run is from before builds were saved."
 RECORDS_LEVEL_TIER,%s · T%d,%s · T%d
 RECORDS_RESULT,Resultado,Result
 RECORDS_WON,Victoria,Victory

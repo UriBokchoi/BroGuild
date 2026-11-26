@@ -200,3 +200,48 @@ func _upgrade_card() -> LevelUpCard:
 	_panel.open([option], 2, &"", 10, false, 0.5)
 	_panel.stop_spins()
 	return _panel.get_cards()[0]
+
+
+func test_without_the_upgrade_there_is_no_skip_or_ban() -> void:
+	EventBus.player_leveled_up.emit(2)
+	assert_false(_panel.can_skip())
+	assert_false(_panel.can_ban())
+	assert_false((_panel.get_node(^"%Skip") as Button).visible, "ni se ven")
+
+
+func test_skipping_takes_nothing_and_uses_a_skip() -> void:
+	_player.stats.add_modifier(StatModifier.create(&"skips", StatModifier.Kind.FLAT, 1.0), self)
+	EventBus.player_leveled_up.emit(2)
+	_panel.stop_spins()
+	await wait_process_frames(1)
+	assert_true(_panel.can_skip())
+	var weapons := _player.weapons.get_weapons().size()
+	var runes := _player.runes.get_runes().size()
+	(_panel.get_node(^"%Skip") as Button).pressed.emit()
+	assert_false(_panel.is_open(), "se salta la elección")
+	assert_eq(_player.weapons.get_weapons().size(), weapons, "sin coger nada")
+	assert_eq(_player.runes.get_runes().size(), runes)
+	assert_eq(_controller.skips_left(), 0)
+	EventBus.player_leveled_up.emit(3)
+	_panel.stop_spins()
+	await wait_process_frames(1)
+	assert_false(_panel.can_skip(), "ya no le quedan")
+
+
+func test_banning_a_card_removes_it_for_the_run() -> void:
+	_player.stats.add_modifier(StatModifier.create(&"bans", StatModifier.Kind.FLAT, 2.0), self)
+	EventBus.player_leveled_up.emit(2)
+	_panel.stop_spins()
+	await wait_process_frames(1)
+	assert_true(_panel.can_ban())
+	(_panel.get_node(^"%Ban") as Button).pressed.emit()
+	assert_true(_panel.is_banning())
+	var card := _panel.get_cards()[0]
+	var banned := card.option.item
+	card.pressed.emit()
+	await wait_process_frames(2)
+	assert_true(_panel.is_open(), "la misma elección, con otras cartas")
+	assert_false(_controller.get_offerable().has(banned), "ya no sale en la partida")
+	for other: LevelUpCard in _panel.get_cards():
+		assert_ne(other.option.item, banned)
+	assert_eq(_controller.bans_left(), 1)

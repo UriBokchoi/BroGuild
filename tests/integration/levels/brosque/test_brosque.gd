@@ -1,6 +1,6 @@
 extends GutTest
 ## El Brosque: las oleadas empiezan solas, el jugador aparece en el claro, el mapa se genera al
-## cargar (mesetas, tragaperras, cofres, props y bosque; dentro de las paredes los árboles chocan y
+## cargar (árboles grandes y montañitas, tragaperras, cofres, props y bosque; dentro de las paredes los árboles chocan y
 ## fuera una banda tapa el borde), los enemigos salen solo dentro, el nivel da la bienvenida y tiene
 ## su jefe: el portal al borde del claro y las tarjetas de socio justas, lejos del punto de aparición; y
 ## unas ruinas pequeñas fuera del claro.
@@ -65,16 +65,16 @@ func test_the_player_appears_in_the_clearing() -> void:
 func test_the_map_is_generated_with_its_slot_machines() -> void:
 	var layout := _map().get_node(^"Layout") as LevelLayout
 	var slots := layout.get_pieces().filter(func(piece: Node3D) -> bool: return piece is SlotMachine)
-	assert_eq(slots.size(), _count_in_data("SlotMachine"), "en el suelo y encima de mesetas, las de los datos")
+	assert_eq(slots.size(), _count_in_data("SlotMachine"), "en el suelo y en lo alto, las de los datos")
 	assert_gt(layout.get_pieces().size(), slots.size())
 
 
-func test_the_map_has_chests_on_the_ground_and_on_plateaus() -> void:
+func test_the_map_has_chests_on_the_ground_and_up_high() -> void:
 	var layout := _map().get_node(^"Layout") as LevelLayout
 	var chests := layout.get_pieces().filter(func(piece: Node3D) -> bool: return piece is Chest)
-	assert_eq(chests.size(), _count_in_data("Chest"), "en el suelo y en las mesetas, los de los datos")
+	assert_eq(chests.size(), _count_in_data("Chest"), "en el suelo y en lo alto, los de los datos")
 	var high := chests.filter(func(chest: Node3D) -> bool: return chest.position.y > 0.0)
-	assert_gt(high.size(), 0, "alguno encima de una meseta")
+	assert_gt(high.size(), 0, "alguno en lo alto de un árbol o una montañita")
 
 
 func test_the_trees_inside_the_walls_collide_and_the_outer_forest_hides_the_edge() -> void:

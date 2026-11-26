@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="SfxRecipe" format=3]
+
+[ext_resource type="Script" path="res://systems/audio/sfx_recipe.gd" id="1_recipe"]
+
+[resource]
+script = ExtResource("1_recipe")
+wave = 2
+start_frequency = 180.0
+end_frequency = 1300.0
+partials = PackedVector2Array(1, 1, 1.5, 0.4, 2.01, 0.3)
+vibrato_depth = 0.06
+vibrato_speed = 14.0
+attack = 0.08
+sustain = 0.45
+punch = 0.1
+decay = 0.45
+decay_curve = 1.6
+noise = 0.12
+low_pass = 3200.0
+volume = 0.42
+noise_seed = 41

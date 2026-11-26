@@ -45,6 +45,9 @@ func _enter_tree() -> void:
 		character = RunState.character
 	if character and not stats.base_sets.has(character):
 		stats.base_sets.append(character)
+	# Las mejoras permanentes del menú también son base: no salen como mejoras de la partida.
+	if RunState.bonuses and not stats.base_sets.has(RunState.bonuses):
+		stats.base_sets.append(RunState.bonuses)
 
 
 func _ready() -> void:
@@ -63,8 +66,8 @@ func _ready() -> void:
 	experience.xp_changed.connect(EventBus.player_xp_changed.emit)
 	experience.leveled_up.connect(_on_leveled_up)
 	wallet.gold_changed.connect(EventBus.player_gold_changed.emit)
-	weapons.weapon_changed.connect(EventBus.player_item_changed.emit)
-	runes.rune_changed.connect(EventBus.player_item_changed.emit)
+	weapons.weapon_changed.connect(_announce_item)
+	runes.rune_changed.connect(_announce_item)
 	items.item_changed.connect(EventBus.player_passive_changed.emit)
 	stats.stat_changed.connect(_on_stat_changed)
 	# Vida, experiencia y armas iniciales avisaron en su _ready, antes de estas conexiones: se repite
@@ -142,11 +145,16 @@ func _unequip(data: CharacterData) -> void:
 func _announce_loadout() -> void:
 	EventBus.player_slots_changed.emit(stats.get_int(&"weapon_slots"), stats.get_int(&"rune_slots"))
 	for weapon: Weapon in weapons.get_weapons():
-		EventBus.player_item_changed.emit(weapon.data, weapon.level)
+		_announce_item(weapon.data, weapon.level)
 	for rune: RuneData in runes.get_runes():
-		EventBus.player_item_changed.emit(rune, runes.get_level(rune))
+		_announce_item(rune, runes.get_level(rune))
 	for item: PassiveItemData in items.get_items():
 		EventBus.player_passive_changed.emit(item, items.count(item))
+
+
+## Avisa de que [param item] está a [param level], con su máximo para él.
+func _announce_item(item: ItemData, level: int) -> void:
+	EventBus.player_item_changed.emit(item, level, item.max_level_with(stats))
 
 
 func _on_stat_changed(stat: StringName, value: float, _previous: float) -> void:

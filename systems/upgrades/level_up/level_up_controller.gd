@@ -5,7 +5,9 @@ extends Node
 ## cola; si no queda nada que ofrecer o el jugador ha muerto, no pregunta.
 ##
 ## Volver a tirar cuesta oro, cada vez más. En el doble o nada, la mejora apostada sube a la rareza
-## siguiente con una probabilidad que mejora la Suerte; si sale mal, esa subida se pierde.
+## siguiente con una probabilidad que mejora la Suerte; si sale mal, esa subida se pierde. Con la
+## mejora del menú, saltar se salta la elección y vetar quita una carta del resto de la partida (las
+## stats skips y bans: cuántas veces por partida).
 
 @export var data: LevelUpData
 @export var player: Player
@@ -22,6 +24,10 @@ var _catalog: Array[ItemData] = []
 var _queue: Array[bool] = []
 ## Veces que ha vuelto a tirar en la partida (sube el coste).
 var _rerolls: int = 0
+## Saltos y vetos usados en la partida, y lo vetado (ya no sale).
+var _skips_used: int = 0
+var _bans_used: int = 0
+var _banned: Array[ItemData] = []
 
 
 func _ready() -> void:
@@ -33,8 +39,33 @@ func _ready() -> void:
 	EventBus.upgrade_choice_requested.connect(_on_choice_requested)
 	panel.chosen.connect(_on_chosen)
 	panel.reroll_requested.connect(_on_reroll_requested)
+	panel.skip_requested.connect(_on_skip_requested)
+	panel.ban_requested.connect(_on_ban_requested)
 	panel.double_requested.connect(_on_double_requested)
 	_warm_up_panel.call_deferred()
+
+
+## Lo que puede ofrecer ahora: armas y runas, sin lo que aún no se ha desbloqueado con misiones (si
+## ya lo lleva, sí: se puede subir).
+func get_offerable() -> Array[ItemData]:
+	var owned := _owned_levels()
+	var offerable: Array[ItemData] = []
+	for item: ItemData in _catalog:
+		if _banned.has(item):
+			continue
+		if owned.has(item.id) or not RunState.locked.has(item):
+			offerable.append(item)
+	return offerable
+
+
+## Saltos que le quedan en la partida.
+func skips_left() -> int:
+	return maxi(player.stats.get_int(&"skips") - _skips_used, 0)
+
+
+## Vetos que le quedan en la partida.
+func bans_left() -> int:
+	return maxi(player.stats.get_int(&"bans") - _bans_used, 0)
 
 
 ## Elecciones que quedan por hacer.
@@ -103,7 +134,8 @@ func _offer() -> void:
 	var rune_slots := data.clamp_rune_slots(player.stats.get_int(&"rune_slots"))
 	var luck := player.stats.get_value(&"luck")
 	var options := LevelUpOffer.build(
-		_catalog, _owned_levels(), data.choices, weapon_slots, rune_slots, data.rarities, rng, luck
+		get_offerable(), _owned_levels(), data.choices, weapon_slots, rune_slots, data.rarities, rng,
+		luck, player.stats
 	)
 	if options.is_empty():
 		_queue.clear()
@@ -115,6 +147,8 @@ func _offer() -> void:
 	var title := free_choice_title_key if free else &""
 	var cost := reroll_cost()
 	var affordable := player.wallet.get_gold() >= cost
+	var has_skip_ban := player.stats.get_int(&"skips") > 0 or player.stats.get_int(&"bans") > 0
+	panel.set_skip_ban(skips_left(), bans_left(), has_skip_ban)
 	panel.open(options, player.experience.get_level(), title, cost, affordable, double_chance())
 
 
@@ -123,6 +157,23 @@ func _on_reroll_requested() -> void:
 		return
 	_rerolls += 1
 	_offer()
+
+
+## Se salta la elección: no coge nada y pasa a la siguiente (o cierra).
+func _on_skip_requested() -> void:
+	if _queue.is_empty() or skips_left() <= 0:
+		return
+	_skips_used += 1
+	_on_chosen(null)
+
+
+## Veta lo de [param option] para el resto de la partida y ofrece otras cartas (sin coste).
+func _on_ban_requested(option: LevelUpOption) -> void:
+	if _queue.is_empty() or bans_left() <= 0 or option == null:
+		return
+	_bans_used += 1
+	_banned.append(option.item)
+	_offer.call_deferred()
 
 
 func _on_double_requested(option: LevelUpOption) -> void:

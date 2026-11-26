@@ -6,6 +6,8 @@
 script = ExtResource("1_stages")
 fade = NodePath("FadeLayer/Fade")
 fade_time = 0.4
+enter_time = 0.45
+enter_scale = 0.05
 
 [node name="FadeLayer" type="CanvasLayer" parent="."]
 layer = 60

@@ -17,6 +17,7 @@
 [ext_resource type="Environment" path="res://levels/brosque/environment.tres" id="23_environment"]
 [ext_resource type="PackedScene" path="res://levels/common/boundary/map_boundary.tscn" id="24_boundary"]
 [ext_resource type="PackedScene" path="res://vfx/juice/canopy_leaves/canopy_leaves.tscn" id="25_leaves"]
+[ext_resource type="PackedScene" path="res://levels/brosque/props/dirt_path.tscn" id="26_dirt_path"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_ground"]
 material = ExtResource("1_grass")
@@ -45,6 +46,11 @@ count = 38
 script = ExtResource("12_entry")
 scene = ExtResource("21_puddle")
 count = 26
+
+[sub_resource type="Resource" id="Resource_dirt_paths"]
+script = ExtResource("12_entry")
+scene = ExtResource("26_dirt_path")
+count = 14
 
 [sub_resource type="Resource" id="Resource_keys"]
 script = ExtResource("12_entry")
@@ -132,7 +138,7 @@ min_center_distance = 34.0
 
 [node name="Puddles" type="Node3D" parent="."]
 script = ExtResource("11_scatter")
-entries = Array[ExtResource("12_entry")]([SubResource("Resource_puddles")])
+entries = Array[ExtResource("12_entry")]([SubResource("Resource_puddles"), SubResource("Resource_dirt_paths")])
 half_extent = Vector2(96, 96)
 clearance = 1.2
 min_spacing = 8.0

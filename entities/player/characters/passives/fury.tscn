@@ -1,0 +1,8 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://entities/player/characters/passives/fury_passive.gd" id="1_passive"]
+
+[node name="Fury" type="Node"]
+script = ExtResource("1_passive")
+boosted_stats = Array[StringName]([&"damage", &"attack_speed", &"run_speed", &"sprint_speed", &"armor"])
+announce_key = &"FURY_STARTED"

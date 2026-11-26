@@ -5,17 +5,23 @@
 [ext_resource type="Resource" uid="uid://bo1h0wxfvqesi" path="res://data/characters/warrior.tres" id="10_warrior"]
 [ext_resource type="Resource" uid="uid://bnbf3vkh7m48a" path="res://data/characters/mage.tres" id="11_mage"]
 [ext_resource type="Resource" uid="uid://cans4rvkhs48i" path="res://data/characters/rogue.tres" id="12_rogue"]
+[ext_resource type="Resource" path="res://data/characters/paladin.tres" id="12a_paladin"]
+[ext_resource type="Resource" path="res://data/characters/barbarian.tres" id="12b_barbarian"]
+[ext_resource type="Resource" path="res://data/characters/warlock.tres" id="12c_warlock"]
 [ext_resource type="Resource" uid="uid://d3gftqdyp8ot8" path="res://data/weapons/sword.tres" id="13_sword"]
 [ext_resource type="Resource" uid="uid://dmx62swsas3tv" path="res://data/weapons/staff.tres" id="14_staff"]
+[ext_resource type="Resource" uid="uid://b5j3k1spgipqb" path="res://data/weapons/axe.tres" id="15a_axe"]
+[ext_resource type="Resource" uid="uid://cd8sbwhik0cd" path="res://data/weapons/cologne.tres" id="15b_cologne"]
+[ext_resource type="Resource" uid="uid://bi83gvtxk11fx" path="res://data/weapons/hammer.tres" id="15c_hammer"]
 [ext_resource type="Resource" uid="uid://bgr8qck2uon1n" path="res://data/weapons/dagger.tres" id="15_dagger"]
-[ext_resource type="Resource" path="res://data/weapons/axe.tres" id="15a_axe"]
-[ext_resource type="Resource" path="res://data/weapons/cologne.tres" id="15b_cologne"]
-[ext_resource type="Resource" path="res://data/weapons/hammer.tres" id="15c_hammer"]
+[ext_resource type="Resource" path="res://data/weapons/evil_eye.tres" id="15d_evil_eye"]
 [ext_resource type="Resource" uid="uid://chu8r7o3b5arl" path="res://data/runes/strength.tres" id="16_strength"]
 [ext_resource type="Resource" uid="uid://ci1nk4q4cpleo" path="res://data/runes/amplitude.tres" id="17_amplitude"]
 [ext_resource type="Resource" uid="uid://xuxj6iplgu0e" path="res://data/runes/haste.tres" id="18_haste"]
 [ext_resource type="Resource" uid="uid://dd167hn1w21r5" path="res://data/runes/vigor.tres" id="19_vigor"]
 [ext_resource type="Resource" uid="uid://c0xh45lit48bm" path="res://data/runes/multiplicity.tres" id="20_multiplicity"]
+[ext_resource type="Resource" path="res://data/runes/bloodlust.tres" id="50_bloodlust"]
+[ext_resource type="Resource" path="res://data/runes/keen_eye.tres" id="51_keen_eye"]
 [ext_resource type="Resource" uid="uid://cftr4ua7gn2io" path="res://data/items/cold_pizza.tres" id="21_cold_pizza"]
 [ext_resource type="Resource" uid="uid://b543ag8ww3tkn" path="res://data/items/fanny_pack.tres" id="22_fanny_pack"]
 [ext_resource type="Resource" uid="uid://c0dc8m2qrwdkn" path="res://data/items/game_controller.tres" id="23_game_controller"]
@@ -38,26 +44,28 @@
 [ext_resource type="Resource" uid="uid://c0adav7t7wn6u" path="res://data/items/golden_dumbbell.tres" id="40_golden_dumbbell"]
 [ext_resource type="Resource" uid="uid://5xd5ycbhgp55" path="res://data/items/shady_shake.tres" id="41_shady_shake"]
 [ext_resource type="Resource" uid="uid://cgpf22sjmbq0" path="res://data/items/bro_crown.tres" id="42_bro_crown"]
+[ext_resource type="Resource" uid="uid://bolggfqwjtp73" path="res://data/items/flaming_sneakers.tres" id="43a_flaming_sneakers"]
+[ext_resource type="Resource" uid="uid://bqlfo64t6i1h2" path="res://data/items/air_horn.tres" id="43b_air_horn"]
+[ext_resource type="Resource" uid="uid://bmtvoxlnf4hfe" path="res://data/items/championship_belt.tres" id="43c_championship_belt"]
+[ext_resource type="Resource" uid="uid://bdkjf7uewor4n" path="res://data/items/cold_spray.tres" id="43d_cold_spray"]
+[ext_resource type="Resource" uid="uid://dm7m8toh317f1" path="res://data/items/expired_preworkout.tres" id="43e_expired_preworkout"]
+[ext_resource type="Resource" uid="uid://w75io85nwcub" path="res://data/items/frayed_cable.tres" id="43f_frayed_cable"]
 [ext_resource type="Resource" uid="uid://da5nl47fyaii3" path="res://data/items/excalibro.tres" id="43_excalibro"]
-[ext_resource type="Resource" path="res://data/items/flaming_sneakers.tres" id="43a_flaming_sneakers"]
-[ext_resource type="Resource" path="res://data/items/air_horn.tres" id="43b_air_horn"]
-[ext_resource type="Resource" path="res://data/items/championship_belt.tres" id="43c_championship_belt"]
-[ext_resource type="Resource" path="res://data/items/cold_spray.tres" id="43d_cold_spray"]
-[ext_resource type="Resource" path="res://data/items/expired_preworkout.tres" id="43e_expired_preworkout"]
-[ext_resource type="Resource" path="res://data/items/frayed_cable.tres" id="43f_frayed_cable"]
 [ext_resource type="Resource" uid="uid://cw41qak0yntfj" path="res://data/enemies/swarmer.tres" id="44_swarmer"]
 [ext_resource type="Resource" uid="uid://ctcnxdbqncola" path="res://data/enemies/shooter.tres" id="45_shooter"]
 [ext_resource type="Resource" uid="uid://dwbaq02li0bkq" path="res://data/enemies/sapling.tres" id="46_sapling"]
 [ext_resource type="Resource" uid="uid://blk8526gq2u3k" path="res://data/enemies/ent_trainer.tres" id="47_ent_trainer"]
-[ext_resource type="Resource" path="res://data/enemies/trolleador.tres" id="48_trolleador"]
-[ext_resource type="Resource" path="res://data/enemies/mr_brolympia.tres" id="49_mr_brolympia"]
+[ext_resource type="Resource" uid="uid://dwoe6h1xr8hfu" path="res://data/enemies/trolleador.tres" id="48_trolleador"]
+[ext_resource type="Resource" uid="uid://1ybatd32uk8r" path="res://data/enemies/mr_brolympia.tres" id="49_mr_brolympia"]
+[ext_resource type="Resource" path="res://data/enemies/cardio.tres" id="51_cardio"]
+[ext_resource type="Resource" path="res://data/enemies/bat.tres" id="52_bat"]
 
 [sub_resource type="Resource" id="Category_characters"]
 script = ExtResource("2_category")
 id = &"characters"
 name_key = &"ARCHIVE_CATEGORY_CHARACTERS"
 hint_key = &"ARCHIVE_HINT_CHARACTERS"
-entries = Array[Resource]([ExtResource("10_warrior"), ExtResource("11_mage"), ExtResource("12_rogue")])
+entries = Array[Resource]([ExtResource("10_warrior"), ExtResource("11_mage"), ExtResource("12_rogue"), ExtResource("12a_paladin"), ExtResource("12b_barbarian"), ExtResource("12c_warlock")])
 
 [sub_resource type="Resource" id="Category_weapons"]
 script = ExtResource("2_category")
@@ -65,14 +73,14 @@ id = &"weapons"
 name_key = &"ARCHIVE_CATEGORY_WEAPONS"
 hint_key = &"ARCHIVE_HINT_WEAPONS"
 shown_stats = Array[StringName]([&"damage", &"cooldown", &"projectiles", &"area", &"reach"])
-entries = Array[Resource]([ExtResource("13_sword"), ExtResource("14_staff"), ExtResource("15_dagger"), ExtResource("15a_axe"), ExtResource("15b_cologne"), ExtResource("15c_hammer")])
+entries = Array[Resource]([ExtResource("13_sword"), ExtResource("14_staff"), ExtResource("15_dagger"), ExtResource("15a_axe"), ExtResource("15b_cologne"), ExtResource("15c_hammer"), ExtResource("15d_evil_eye")])
 
 [sub_resource type="Resource" id="Category_runes"]
 script = ExtResource("2_category")
 id = &"runes"
 name_key = &"ARCHIVE_CATEGORY_RUNES"
 hint_key = &"ARCHIVE_HINT_RUNES"
-entries = Array[Resource]([ExtResource("16_strength"), ExtResource("17_amplitude"), ExtResource("18_haste"), ExtResource("19_vigor"), ExtResource("20_multiplicity")])
+entries = Array[Resource]([ExtResource("16_strength"), ExtResource("17_amplitude"), ExtResource("18_haste"), ExtResource("19_vigor"), ExtResource("20_multiplicity"), ExtResource("50_bloodlust"), ExtResource("51_keen_eye")])
 
 [sub_resource type="Resource" id="Category_items"]
 script = ExtResource("2_category")
@@ -87,7 +95,7 @@ id = &"enemies"
 name_key = &"ARCHIVE_CATEGORY_ENEMIES"
 hint_key = &"ARCHIVE_HINT_ENEMIES"
 shown_stats = Array[StringName]([&"max_health", &"contact_damage", &"move_speed"])
-entries = Array[Resource]([ExtResource("44_swarmer"), ExtResource("45_shooter"), ExtResource("46_sapling"), ExtResource("48_trolleador"), ExtResource("47_ent_trainer"), ExtResource("49_mr_brolympia")])
+entries = Array[Resource]([ExtResource("44_swarmer"), ExtResource("51_cardio"), ExtResource("52_bat"), ExtResource("45_shooter"), ExtResource("46_sapling"), ExtResource("48_trolleador"), ExtResource("47_ent_trainer"), ExtResource("49_mr_brolympia")])
 
 [resource]
 script = ExtResource("1_catalog")

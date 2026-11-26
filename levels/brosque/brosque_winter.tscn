@@ -8,7 +8,9 @@
 [ext_resource type="Script" path="res://systems/spawning/scatter_entry.gd" id="6_entry"]
 [ext_resource type="PackedScene" path="res://entities/breakables/skull/skull.tscn" id="7_skull"]
 [ext_resource type="PackedScene" path="res://entities/breakables/pouch/pouch.tscn" id="8_pouch"]
-[ext_resource type="PackedScene" path="res://levels/brosque/props/puddle.tscn" id="9_puddle"]
+[ext_resource type="PackedScene" path="res://levels/brosque/props/snow_pile.tscn" id="9_snow_pile"]
+[ext_resource type="PackedScene" path="res://levels/brosque/props/snowman.tscn" id="18_snowman"]
+[ext_resource type="PackedScene" path="res://levels/brosque/props/dirt_path.tscn" id="19_dirt_path"]
 [ext_resource type="Material" path="res://levels/brosque/materials/grass.tres" id="10_grass"]
 [ext_resource type="Material" path="res://levels/brosque/materials/grass_winter.tres" id="11_grass_season"]
 [ext_resource type="Material" path="res://levels/brosque/materials/moss.tres" id="12_moss"]
@@ -35,10 +37,20 @@ script = ExtResource("6_entry")
 scene = ExtResource("8_pouch")
 count = 71
 
-[sub_resource type="Resource" id="Entry_puddles"]
+[sub_resource type="Resource" id="Entry_snow_piles"]
 script = ExtResource("6_entry")
-scene = ExtResource("9_puddle")
-count = 48
+scene = ExtResource("9_snow_pile")
+count = 40
+
+[sub_resource type="Resource" id="Entry_snowmen"]
+script = ExtResource("6_entry")
+scene = ExtResource("18_snowman")
+count = 8
+
+[sub_resource type="Resource" id="Entry_dirt_paths"]
+script = ExtResource("6_entry")
+scene = ExtResource("19_dirt_path")
+count = 20
 
 [node name="BrosqueMap" node_paths=PackedStringArray("followers") instance=ExtResource("1_base")]
 waves = ExtResource("2_waves")
@@ -98,7 +110,7 @@ min_spacing = 40.0
 min_center_distance = 40.0
 
 [node name="Puddles" parent="."]
-entries = Array[ExtResource("6_entry")]([SubResource("Entry_puddles")])
+entries = Array[ExtResource("6_entry")]([SubResource("Entry_snow_piles"), SubResource("Entry_snowmen"), SubResource("Entry_dirt_paths")])
 half_extent = Vector2(136, 136)
 
 [node name="Weather" parent="." instance=ExtResource("5_weather")]

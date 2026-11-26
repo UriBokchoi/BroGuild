@@ -1,0 +1,80 @@
+[gd_resource type="Resource" script_class="CharacterData" format=3]
+
+[ext_resource type="Script" path="res://entities/player/characters/character_data.gd" id="1_data"]
+[ext_resource type="Script" path="res://core/stats/stat_modifier.gd" id="2_modifier"]
+[ext_resource type="Resource" path="res://data/weapons/hammer.tres" id="3_weapon"]
+[ext_resource type="PackedScene" path="res://entities/player/characters/passives/devotion.tscn" id="4_passive"]
+[ext_resource type="Script" path="res://entities/player/characters/model/model_attachment.gd" id="5_attachment"]
+[ext_resource type="PackedScene" path="res://assets/models/props/war_hammer.tscn" id="6_war_hammer"]
+[ext_resource type="PackedScene" path="res://assets/models/props/shield.tscn" id="7_shield"]
+[ext_resource type="PackedScene" path="res://assets/models/props/warrior_helmet.tscn" id="8_warrior_helmet"]
+[ext_resource type="PackedScene" path="res://assets/models/props/halo.tscn" id="9_halo"]
+[ext_resource type="Texture2D" path="res://assets/textures/icons/characters/paladin.svg" id="98_icon"]
+
+[sub_resource type="Resource" id="Resource_hammer"]
+script = ExtResource("5_attachment")
+scene = ExtResource("6_war_hammer")
+socket = &"HandRight"
+transform = Transform3D(1.1, 0, 0, 0, 0.953, 0.55, 0, -0.55, 0.953, 0, 0, 0)
+
+[sub_resource type="Resource" id="Resource_shield"]
+script = ExtResource("5_attachment")
+scene = ExtResource("7_shield")
+socket = &"HandLeft"
+transform = Transform3D(0.906, 0, 0.423, 0, 1, 0, -0.423, 0, 0.906, 0, 0, -0.15)
+
+[sub_resource type="Resource" id="Resource_helmet"]
+script = ExtResource("5_attachment")
+scene = ExtResource("8_warrior_helmet")
+socket = &"Head"
+
+[sub_resource type="Resource" id="Resource_halo"]
+script = ExtResource("5_attachment")
+scene = ExtResource("9_halo")
+socket = &"Head"
+
+[sub_resource type="Resource" id="Modifier_max_health"]
+script = ExtResource("2_modifier")
+stat = &"max_health"
+value = 25.0
+
+[sub_resource type="Resource" id="Modifier_armor"]
+script = ExtResource("2_modifier")
+stat = &"armor"
+value = 8.0
+
+[sub_resource type="Resource" id="Modifier_health_regen"]
+script = ExtResource("2_modifier")
+stat = &"health_regen"
+value = 1.0
+
+[sub_resource type="Resource" id="Modifier_run_speed"]
+script = ExtResource("2_modifier")
+stat = &"run_speed"
+kind = 1
+value = -0.08
+
+[sub_resource type="Resource" id="Modifier_sprint_speed"]
+script = ExtResource("2_modifier")
+stat = &"sprint_speed"
+kind = 1
+value = -0.08
+
+[sub_resource type="Resource" id="Modifier_jump_height"]
+script = ExtResource("2_modifier")
+stat = &"jump_height"
+value = 0.3
+
+[resource]
+script = ExtResource("1_data")
+id = &"paladin"
+name_key = &"CHARACTER_PALADIN_NAME"
+description_key = &"CHARACTER_PALADIN_DESCRIPTION"
+color = Color(0.98, 0.82, 0.22, 1)
+icon = ExtResource("98_icon")
+starting_weapon = ExtResource("3_weapon")
+passive = ExtResource("4_passive")
+passive_name_key = &"PASSIVE_DEVOTION_NAME"
+passive_description_key = &"PASSIVE_DEVOTION_DESCRIPTION"
+attachments = Array[ExtResource("5_attachment")]([SubResource("Resource_hammer"), SubResource("Resource_shield"), SubResource("Resource_helmet"), SubResource("Resource_halo")])
+stat_modifiers = Array[ExtResource("2_modifier")]([SubResource("Modifier_max_health"), SubResource("Modifier_armor"), SubResource("Modifier_health_regen"), SubResource("Modifier_run_speed"), SubResource("Modifier_sprint_speed"), SubResource("Modifier_jump_height")])

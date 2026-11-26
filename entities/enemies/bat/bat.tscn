@@ -1,0 +1,182 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://entities/enemies/enemy.gd" id="1_enemy"]
+[ext_resource type="Script" path="res://core/stats/stats_component.gd" id="2_stats"]
+[ext_resource type="Script" path="res://core/components/health/health_component.gd" id="3_health"]
+[ext_resource type="Resource" path="res://data/combat/rules.tres" id="4_rules"]
+[ext_resource type="Script" path="res://core/components/hurtbox_component.gd" id="5_hurtbox"]
+[ext_resource type="Script" path="res://core/components/hitbox_component.gd" id="6_hitbox"]
+[ext_resource type="Script" path="res://entities/enemies/damage_reporter.gd" id="7_reporter"]
+[ext_resource type="Script" path="res://entities/enemies/bat/wing_flap.gd" id="8_flap"]
+[ext_resource type="Script" path="res://vfx/juice/hit_flash/hit_flash.gd" id="90_hit_flash"]
+[ext_resource type="Material" path="res://vfx/juice/hit_flash/hit_flash_material.tres" id="91_hit_flash_material"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_body"]
+friction = 0.0
+
+[sub_resource type="SphereShape3D" id="Shape_body"]
+radius = 0.4
+
+[sub_resource type="SphereShape3D" id="Shape_hurtbox"]
+radius = 0.55
+
+[sub_resource type="SphereShape3D" id="Shape_contact"]
+radius = 0.55
+
+[sub_resource type="StandardMaterial3D" id="Mat_skin"]
+albedo_color = Color(0.36, 0.2, 0.5, 1)
+roughness = 0.7
+
+[sub_resource type="StandardMaterial3D" id="Mat_wing"]
+albedo_color = Color(0.24, 0.12, 0.34, 1)
+roughness = 0.8
+
+[sub_resource type="StandardMaterial3D" id="Mat_eye"]
+albedo_color = Color(1, 0.85, 0.3, 1)
+emission_enabled = true
+emission = Color(1, 0.75, 0.2, 1)
+emission_energy_multiplier = 0.6
+
+[sub_resource type="StandardMaterial3D" id="Mat_chain"]
+albedo_color = Color(1, 0.8, 0.25, 1)
+metallic = 0.6
+roughness = 0.3
+
+[sub_resource type="SphereMesh" id="Mesh_body"]
+material = SubResource("Mat_skin")
+radius = 0.36
+height = 0.66
+radial_segments = 12
+rings = 6
+
+[sub_resource type="PrismMesh" id="Mesh_wing"]
+material = SubResource("Mat_wing")
+left_to_right = 0.0
+size = Vector3(0.75, 0.42, 0.05)
+
+[sub_resource type="CylinderMesh" id="Mesh_ear"]
+material = SubResource("Mat_skin")
+top_radius = 0.0
+bottom_radius = 0.09
+height = 0.24
+radial_segments = 6
+rings = 1
+
+[sub_resource type="SphereMesh" id="Mesh_eye"]
+material = SubResource("Mat_eye")
+radius = 0.07
+height = 0.14
+radial_segments = 8
+rings = 4
+
+[sub_resource type="TorusMesh" id="Mesh_chain"]
+material = SubResource("Mat_chain")
+inner_radius = 0.2
+outer_radius = 0.25
+rings = 12
+ring_segments = 4
+
+[node name="Bat" type="RigidBody3D" node_paths=PackedStringArray("stats", "health", "hurtbox", "contact_hitbox", "visual")]
+collision_layer = 4
+collision_mask = 7
+gravity_scale = 0.0
+physics_material_override = SubResource("PhysicsMaterial_body")
+can_sleep = false
+lock_rotation = true
+script = ExtResource("1_enemy")
+stats = NodePath("Stats")
+health = NodePath("Health")
+hurtbox = NodePath("Hurtbox")
+contact_hitbox = NodePath("ContactHitbox")
+visual = NodePath("Visual")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
+shape = SubResource("Shape_body")
+
+[node name="Visual" type="Node3D" parent="."]
+
+[node name="Body" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
+mesh = SubResource("Mesh_body")
+
+[node name="WingLeft" type="Node3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.28, 0.5, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="Visual/WingLeft"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.36, 0, 0)
+mesh = SubResource("Mesh_wing")
+
+[node name="WingRight" type="Node3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.28, 0.5, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="Visual/WingRight"]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0.36, 0, 0)
+mesh = SubResource("Mesh_wing")
+
+[node name="EarLeft" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(0.94, -0.342, 0, 0.342, 0.94, 0, 0, 0, 1, -0.14, 0.82, 0)
+mesh = SubResource("Mesh_ear")
+
+[node name="EarRight" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(0.94, 0.342, 0, -0.342, 0.94, 0, 0, 0, 1, 0.14, 0.82, 0)
+mesh = SubResource("Mesh_ear")
+
+[node name="EyeLeft" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.12, 0.55, -0.3)
+mesh = SubResource("Mesh_eye")
+
+[node name="EyeRight" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.12, 0.55, -0.3)
+mesh = SubResource("Mesh_eye")
+
+[node name="Chain" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 0.7, 0.714, 0, -0.714, 0.7, 0, 0.25, -0.12)
+mesh = SubResource("Mesh_chain")
+
+[node name="WingFlap" type="Node" parent="." node_paths=PackedStringArray("left", "right")]
+script = ExtResource("8_flap")
+left = NodePath("../Visual/WingLeft")
+right = NodePath("../Visual/WingRight")
+speed = 4.0
+angle = 0.6
+
+[node name="Stats" type="Node" parent="."]
+script = ExtResource("2_stats")
+
+[node name="Health" type="Node" parent="." node_paths=PackedStringArray("stats")]
+script = ExtResource("3_health")
+stats = NodePath("../Stats")
+rules = ExtResource("4_rules")
+
+[node name="Hurtbox" type="Area3D" parent="." node_paths=PackedStringArray("health")]
+collision_layer = 16
+collision_mask = 0
+script = ExtResource("5_hurtbox")
+health = NodePath("../Health")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hurtbox"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
+shape = SubResource("Shape_hurtbox")
+
+[node name="ContactHitbox" type="Area3D" parent="."]
+collision_layer = 64
+collision_mask = 8
+monitorable = false
+script = ExtResource("6_hitbox")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ContactHitbox"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
+shape = SubResource("Shape_contact")
+
+[node name="DamageReporter" type="Node3D" parent="." node_paths=PackedStringArray("health")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)
+script = ExtResource("7_reporter")
+health = NodePath("../Health")
+
+[node name="HitFlash" type="Node" parent="." node_paths=PackedStringArray("health", "visual", "meshes")]
+script = ExtResource("90_hit_flash")
+health = NodePath("../Health")
+visual = NodePath("../Visual")
+material = ExtResource("91_hit_flash_material")
+meshes = [NodePath("../Visual/Body")]

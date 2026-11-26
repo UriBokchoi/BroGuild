@@ -126,6 +126,9 @@ func test_a_level_with_tiers_only_lets_you_choose_the_open_ones() -> void:
 	_setup.select_tier(2)
 	assert_eq(_setup.get_tier(), 2)
 	assert_eq((_setup.get_node(^"%LevelGoal") as Label).text, String(BROSQUE.tiers[1].goal_key), "su objetivo")
+	var strength := _setup.get_node(^"%LevelStrength") as Label
+	assert_true(strength.visible, "dice cuánto más fuertes son")
+	assert_true(strength.text.contains("20"), "un 20 %")
 	_setup.play(BROSQUE)
 	assert_eq(_played, [[ROGUE, BROSQUE, 2]])
 	Save.progress = saved

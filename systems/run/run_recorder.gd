@@ -8,6 +8,12 @@ extends Node
 
 ## Jugador de la partida (su personaje, para la clasificación).
 @export var player: Player
+## Pactos sellados en la partida (para apuntarlos con la build). Vacío: ninguno.
+@export var pact_panel: PactPanel
+## Cuántas bro-monedas dan élites y jefes (vacío: ninguna). Se suman al perfil al acabar.
+@export var bro_coin_data: BroCoinData
+## Misiones que se miran al apuntar la partida (vacío: ninguna).
+@export var quests: QuestCatalog
 ## Si al acabar apunta la partida en la clasificación (sí el de las partidas de verdad, en
 ## [code]run_systems.tscn[/code]; los tests la llevan a otro archivo: [code]tests/hooks/pre_run.gd[/code]).
 @export var record_runs: bool = false
@@ -16,6 +22,8 @@ extends Node
 var stats := RunStats.new()
 ## Puesto que sacó en la clasificación (desde 0), o −1 si no entró o aún no se apuntó.
 var place: int = -1
+## Misiones que cumplió la partida (al apuntarla), con lo que desbloquean.
+var completed_quests: Array[QuestData] = []
 
 ## Último oro conocido del jugador, para sumar solo lo que gana.
 var _gold: float = 0.0
@@ -25,6 +33,8 @@ var _round_running: bool = false
 var _banked: float = 0.0
 ## Empezó otra fase: la próxima ronda suma a lo que ya se llevaba.
 var _bank_next_round: bool = false
+## Bro-monedas ganadas, con sus fracciones (las enteras van a stats).
+var _bro_coins: float = 0.0
 var _stopped: bool = false
 
 
@@ -38,6 +48,8 @@ func _enter_tree() -> void:
 	_connect(EventBus.player_died, _on_player_died)
 	_connect(EventBus.run_won, _on_run_won)
 	_connect(EventBus.stage_started, _on_stage_started)
+	_connect(EventBus.boss_defeated, _on_boss_defeated)
+	_connect(EventBus.mini_boss_defeated, _on_mini_boss_defeated)
 
 
 func _physics_process(delta: float) -> void:
@@ -61,6 +73,29 @@ func _on_enemy_died(enemy: Enemy) -> void:
 	stats.kills += 1
 	if enemy.is_elite():
 		stats.elite_kills += 1
+		if bro_coin_data:
+			_add_bro_coins(bro_coin_data.per_elite)
+
+
+func _on_mini_boss_defeated(_name_key: StringName) -> void:
+	if not _stopped and bro_coin_data:
+		_add_bro_coins(bro_coin_data.per_mini_boss)
+
+
+func _on_boss_defeated(_victory_key: StringName, _seconds: float, _bonus: float) -> void:
+	if not _stopped and bro_coin_data:
+		_add_bro_coins(bro_coin_data.per_boss)
+
+
+## Suma [param amount] bro-monedas con lo que las multiplique el jugador (bro_coin_gain); las
+## fracciones se acumulan hasta hacer una entera.
+func _add_bro_coins(amount: int) -> void:
+	var gain := 1.0
+	if is_instance_valid(player) and player.stats.has_stat(&"bro_coin_gain"):
+		gain = player.stats.get_value(&"bro_coin_gain") / 100.0
+	_bro_coins += amount * gain
+	# Un pelín de margen: 1,1 × 10 no siempre da 11 justo.
+	stats.bro_coins = floori(_bro_coins + 0.001)
 
 
 func _on_enemy_damaged(_position: Vector3, amount: float, _info: DamageInfo) -> void:
@@ -112,7 +147,10 @@ func _on_run_won(_victory_key: StringName, seconds: float, bonus: float) -> void
 	_record()
 
 
-func _on_stage_started(_name_key: StringName, index: int, _count: int) -> void:
+func _on_stage_started(name_key: StringName, index: int, _count: int) -> void:
+	if _stopped:
+		return
+	stats.stage_key = name_key
 	if index > 0:
 		_bank_next_round = true
 
@@ -122,4 +160,25 @@ func _record() -> void:
 	if not record_runs:
 		return
 	var character: CharacterData = player.character if is_instance_valid(player) else null
-	place = Save.record_run(RunRecord.create(stats, character, RunState.level, RunState.tier))
+	var record := RunRecord.create(stats, character, RunState.level, RunState.tier)
+	_add_build(record)
+	place = Save.record_run(record)
+	Save.add_bro_coins(stats.bro_coins)
+	if quests:
+		completed_quests = Save.complete_quests(quests, record)
+
+
+## Apunta en [param record] la build del jugador: armas y runas con su nivel, objetos con sus copias
+## y pactos sellados.
+func _add_build(record: RunRecord) -> void:
+	if not is_instance_valid(player):
+		return
+	for weapon: Weapon in player.weapons.get_weapons():
+		record.weapons[String(weapon.data.id)] = weapon.level
+	for rune: RuneData in player.runes.get_runes():
+		record.runes[String(rune.id)] = player.runes.get_level(rune)
+	for item: PassiveItemData in player.items.get_items():
+		record.items[String(item.id)] = player.items.count(item)
+	if is_instance_valid(pact_panel):
+		for pact: PactData in pact_panel.get_sealed():
+			record.pacts.append(String(pact.name_key))

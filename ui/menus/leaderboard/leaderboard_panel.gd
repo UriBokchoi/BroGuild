@@ -1,113 +1,76 @@
 class_name LeaderboardPanel
 extends PanelContainer
-## Récords: las partidas de la clasificación ([code]Save.leaderboard[/code]), de la mejor a la peor,
-## con puesto, personaje, enemigos derrotados, tiempo, nivel alcanzado, mapa y resultado. La última
-## partida jugada sale resaltada. «Volver» o Esc lo cierran. Lo abre el menú principal.
+## Récords, fijos a la derecha del menú principal: las mejores partidas de Save.leaderboard, de la
+## mejor a la peor, con el personaje y los enemigos derrotados; la última jugada, en azul. Al hacer
+## clic en una avisa (run_chosen) y el menú abre su detalle en una ventana aparte (RunDetailPanel).
 
-## Se cerró.
-signal closed
+## Se hizo clic en una partida.
+signal run_chosen(record: RunRecord)
 
-## Cabeceras de las columnas, en orden.
-const COLUMNS: Array[StringName] = [
-	&"RECORDS_RANK", &"RECORDS_CHARACTER", &"RECORDS_KILLS", &"RECORDS_TIME",
-	&"RECORDS_LEVEL", &"RECORDS_MAP", &"RECORDS_RESULT",
-]
-## Texto de una celda sin dato (personaje o mapa desconocidos).
+## Texto de un dato que falta (personaje desconocido).
 const UNKNOWN := "—"
 
-@onready var _rows: GridContainer = %Rows
-@onready var _scroll: ScrollContainer = %Scroll
+## De dónde salen los iconos de los personajes.
+@export var catalog: ContentCatalog
+
+var _entries: Array[RunRecord] = []
+
+@onready var _list: VBoxContainer = %List
+@onready var _list_scroll: ScrollContainer = %ListScroll
 @onready var _empty: Label = %Empty
-@onready var _back: Button = %Back
 
 
 func _ready() -> void:
-	_rows.columns = COLUMNS.size()
-	_back.pressed.connect(close)
-	visible = false
+	refresh()
 
 
-func _unhandled_input(event: InputEvent) -> void:
-	if visible and event.is_action_pressed(InputActions.PAUSE):
-		close()
-		get_viewport().set_input_as_handled()
+## Vuelve a leer los récords guardados.
+func refresh() -> void:
+	_entries = Save.leaderboard.get_entries() if Save.leaderboard else []
+	for child: Node in _list.get_children():
+		_list.remove_child(child)
+		child.queue_free()
+	var latest := _latest()
+	for index: int in _entries.size():
+		_list.add_child(_row(index, index == latest))
+	_empty.visible = _entries.is_empty()
+	_list_scroll.visible = not _entries.is_empty()
 
 
-## Muestra la clasificación guardada y deja el foco en «Volver».
-func open() -> void:
-	var entries: Array[RunRecord] = []
-	if Save.leaderboard:
-		entries = Save.leaderboard.get_entries()
-	_fill(entries)
-	UiMotion.reveal(self)
-	_back.grab_focus()
+## Elige la partida [param index] (desde 0): avisa para que se abra su detalle.
+func choose(index: int) -> void:
+	if index >= 0 and index < _entries.size():
+		run_chosen.emit(_entries[index])
 
 
-func close() -> void:
-	if not visible:
-		return
-	visible = false
-	closed.emit()
+## El texto de cada partida de la lista, en orden.
+func get_row_texts() -> PackedStringArray:
+	var texts := PackedStringArray()
+	for row: Node in _list.get_children():
+		texts.append((row as Button).text)
+	return texts
 
 
-## El texto de cada celda, fila a fila (la primera, las cabeceras). Vacío si no hay partidas.
-func get_rows() -> Array[PackedStringArray]:
-	var rows: Array[PackedStringArray] = []
-	var cells := _rows.get_children()
-	for start: int in range(0, cells.size(), COLUMNS.size()):
-		var row := PackedStringArray()
-		for cell: Node in cells.slice(start, start + COLUMNS.size()):
-			row.append((cell as Label).text)
-		rows.append(row)
-	return rows
+func _row(index: int, latest: bool) -> Button:
+	var record := _entries[index]
+	var button := Button.new()
+	button.theme_type_variation = &"RecordRowLatest" if latest else &"RecordRow"
+	button.alignment = HORIZONTAL_ALIGNMENT_LEFT
+	# Que la fila no ensanche la columna: lo que no quepa, con puntos suspensivos.
+	button.clip_text = true
+	button.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	var character := catalog.find(&"characters", record.character_id) if catalog else null
+	button.icon = character.get(&"icon") as Texture2D if character else null
+	var character_name := UNKNOWN if record.character_name_key.is_empty() else tr(record.character_name_key)
+	button.text = tr(&"RECORDS_ROW") % [index + 1, character_name, record.kills]
+	button.pressed.connect(choose.bind(index))
+	return button
 
 
-func _fill(entries: Array[RunRecord]) -> void:
-	for cell: Node in _rows.get_children():
-		cell.free()
-	_empty.visible = entries.is_empty()
-	_scroll.visible = not entries.is_empty()
-	if entries.is_empty():
-		return
-	for key: StringName in COLUMNS:
-		_add_cell(String(key), &"StatGroupLabel")
-	var latest := _latest(entries)
-	for index: int in entries.size():
-		var record := entries[index]
-		var style := &"StatModifiedLabel" if index == latest else &"StatValueLabel"
-		_add_cell(str(index + 1), style)
-		_add_cell(_key_or_unknown(record.character_name_key), style)
-		_add_cell(str(record.kills), style)
-		_add_cell(RunClock.format(record.seconds), style)
-		_add_cell(str(record.player_level), style)
-		_add_cell(_level_text(record), style)
-		_add_cell("RECORDS_WON" if record.won else "RECORDS_LOST", style)
-
-
-## Puesto de la partida que acabó más tarde.
-static func _latest(entries: Array[RunRecord]) -> int:
-	var latest := 0
-	for index: int in entries.size():
-		if entries[index].finished_at > entries[latest].finished_at:
+## Puesto de la partida que acabó más tarde (−1 sin partidas).
+func _latest() -> int:
+	var latest := -1
+	for index: int in _entries.size():
+		if latest < 0 or _entries[index].finished_at > _entries[latest].finished_at:
 			latest = index
 	return latest
-
-
-## Las claves se traducen solas en la etiqueta.
-static func _key_or_unknown(key: StringName) -> String:
-	return UNKNOWN if key.is_empty() else String(key)
-
-
-## El mapa de [param record] y, si tiene, su tier («Brosque · T2»).
-func _level_text(record: RunRecord) -> String:
-	var level := _key_or_unknown(record.level_name_key)
-	if record.tier <= 0 or record.level_name_key.is_empty():
-		return level
-	return tr(&"RECORDS_LEVEL_TIER") % [tr(level), record.tier]
-
-
-func _add_cell(text: String, style: StringName) -> void:
-	var cell := Label.new()
-	cell.theme_type_variation = style
-	cell.text = text
-	_rows.add_child(cell)

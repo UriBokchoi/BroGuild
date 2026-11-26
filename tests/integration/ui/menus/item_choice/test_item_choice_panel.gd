@@ -52,3 +52,24 @@ func test_shows_the_offer_and_gives_the_chosen_one() -> void:
 	assert_false(_panel.is_open())
 	assert_false(get_tree().paused)
 	assert_eq(_inventory.get_items(), [EXCALIBRO] as Array[PassiveItemData])
+
+
+func test_reroll_costs_gold_more_each_time_and_brings_other_items() -> void:
+	var wallet := WalletComponent.new()
+	add_child_autofree(wallet)
+	_panel.wallet = wallet
+	var first := _panel.reroll_cost
+	var second := roundi(_panel.reroll_cost * _panel.reroll_growth)
+	wallet.add(float(first + second))
+	EventBus.item_choice_offered.emit([HORSESHOE, TORCH, EXCALIBRO] as Array[PassiveItemData])
+	assert_eq(_panel.current_reroll_cost(), first)
+	assert_true(_panel.can_reroll())
+	assert_true(_panel.reroll())
+	var cards := _panel.get_cards()
+	assert_eq(cards.size(), 3, "otros tres")
+	for card: ItemChoiceCard in cards:
+		assert_false([HORSESHOE, TORCH, EXCALIBRO].has(card.item), "distintos de los de antes")
+	assert_eq(_panel.current_reroll_cost(), second, "más caro")
+	assert_true(_panel.reroll())
+	assert_false(_panel.can_reroll(), "sin oro, no")
+	assert_false(_panel.reroll())

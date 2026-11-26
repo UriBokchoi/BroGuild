@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="PassiveItemData" format=3 uid="uid://baucyfbc6kj7d"]
 
 [ext_resource type="Script" uid="uid://bxvisp1obhnj1" path="res://systems/items/passive_item_data.gd" id="1_item"]
+[ext_resource type="Script" uid="uid://c0h0hwrg5wrl" path="res://systems/items/effects/on_hit_effect.gd" id="2_kfkhk"]
 [ext_resource type="Script" uid="uid://is4y31g1paml" path="res://core/stats/stat_modifier.gd" id="2_modifier"]
 [ext_resource type="Resource" path="res://data/rarities/common.tres" id="3_rarity"]
 [ext_resource type="Texture2D" uid="uid://b11ixo600vd83" path="res://assets/textures/icons/items/mead.svg" id="4_icon"]

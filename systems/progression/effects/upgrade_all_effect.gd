@@ -29,12 +29,12 @@ func _ready() -> void:
 func apply(amount: float) -> void:
 	for _round: int in maxi(roundi(amount), 1):
 		for weapon: Weapon in weapons.get_weapons():
-			if weapon.level < weapon.data.max_level():
+			if weapon.level < weapon.max_level():
 				var upgrade := _roll(weapon.data)
 				weapon.add_upgrade(upgrade)
 				_announce(weapon.data, weapon.level, upgrade)
 		for rune: RuneData in runes.get_runes():
-			if runes.get_level(rune) < rune.max_level():
+			if runes.get_level(rune) < rune.max_level_with(stats):
 				var upgrade := _roll(rune)
 				runes.upgrade(rune, upgrade)
 				_announce(rune, runes.get_level(rune), upgrade)

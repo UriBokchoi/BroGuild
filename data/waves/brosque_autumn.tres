@@ -4,6 +4,8 @@
 [ext_resource type="Script" path="res://systems/spawning/wave_enemy.gd" id="2_entry"]
 [ext_resource type="Resource" path="res://data/enemies/swarmer.tres" id="3_swarmer"]
 [ext_resource type="Resource" path="res://data/enemies/shooter.tres" id="4_shooter"]
+[ext_resource type="Resource" path="res://data/enemies/cardio.tres" id="18_cardio"]
+[ext_resource type="Resource" path="res://data/enemies/bat.tres" id="19_bat"]
 [ext_resource type="Resource" path="res://data/enemies/elite.tres" id="5_elite"]
 [ext_resource type="Script" path="res://systems/spawning/stat_scaling.gd" id="6_scaling"]
 [ext_resource type="Script" path="res://systems/spawning/horde_data.gd" id="9_horde"]
@@ -17,23 +19,23 @@
 [ext_resource type="Resource" path="res://data/rarities/legendary.tres" id="17_legendary"]
 
 [sub_resource type="Curve" id="Curve_rate"]
-_limits = [0.0, 20.0, 0.0, 40.0]
-_data = [Vector2(10, 2.8), 0.0, 0.15, 1, 1, Vector2(14, 3.4), 0.15, 0.15, 1, 1, Vector2(18, 4), 0.15, 0.2, 1, 1, Vector2(20, 4.4), 0.2, 4.2, 1, 1, Vector2(20.5, 6.5), 4.2, 0.6667, 1, 1, Vector2(25, 9.5), 0.6667, 0.3, 1, 1, Vector2(30, 11), 0.3, 0.0, 1, 1]
-point_count = 7
+_limits = [0.0, 20.0, 0.0, 20.0]
+_data = [Vector2(0, 0.6), 0.0, 0.25, 1, 1, Vector2(2, 1.1), 0.25, 0.2666667, 1, 1, Vector2(5, 1.9), 0.2666667, 0.3666667, 1, 1, Vector2(8, 3), 0.3666667, 0.375, 1, 1, Vector2(10, 3.75), 0.375, 4.5, 1, 1, Vector2(10.5, 6), 4.5, 0.6666667, 1, 1, Vector2(15, 9), 0.6666667, 0.3, 1, 1, Vector2(20, 10.5), 0.3, 0.0, 1, 1]
+point_count = 8
 
 [sub_resource type="Curve" id="Curve_elite"]
-_limits = [0.0, 100.0, 0.0, 40.0]
-_data = [Vector2(10, 5), 0.0, 0.4, 1, 1, Vector2(15, 7), 0.4, 0.4, 1, 1, Vector2(20, 9), 0.4, 11.0, 1, 1, Vector2(21, 20), 11.0, 7.0, 1, 1, Vector2(23, 34), 7.0, 1.5714, 1, 1, Vector2(30, 45), 1.5714, 0.0, 1, 1]
+_limits = [0.0, 100.0, 0.0, 20.0]
+_data = [Vector2(0, 1), 0.0, 0.4, 1, 1, Vector2(5, 3), 0.4, 0.4, 1, 1, Vector2(10, 5), 0.4, 10.0, 1, 1, Vector2(11, 15), 10.0, 7.5, 1, 1, Vector2(13, 30), 7.5, 1.4285714, 1, 1, Vector2(20, 40), 1.4285714, 0.0, 1, 1]
 point_count = 6
 
 [sub_resource type="Curve" id="Curve_health"]
-_limits = [0.0, 300.0, 0.0, 40.0]
-_data = [Vector2(10, 4.2), 0.0, 0.4, 1, 1, Vector2(13, 5.4), 0.4, 0.5333, 1, 1, Vector2(16, 7), 0.5333, 0.7333, 1, 1, Vector2(19, 9.2), 0.7333, 1.0, 1, 1, Vector2(20, 10.2), 1.0, 10.8, 1, 1, Vector2(21, 21), 10.8, 13.5, 1, 1, Vector2(23, 48), 13.5, 23.5, 1, 1, Vector2(25, 95), 23.5, 27.0, 1, 1, Vector2(30, 230), 27.0, 0.0, 1, 1]
+_limits = [0.0, 200.0, 0.0, 20.0]
+_data = [Vector2(0, 1), 0.0, 0.1333333, 1, 1, Vector2(3, 1.4), 0.1333333, 0.2666667, 1, 1, Vector2(6, 2.2), 0.2666667, 0.4, 1, 1, Vector2(9, 3.4), 0.4, 0.8, 1, 1, Vector2(10, 4.2), 0.8, 4.8, 1, 1, Vector2(11, 9), 4.8, 6.5, 1, 1, Vector2(13, 22), 6.5, 11.5, 1, 1, Vector2(15, 45), 11.5, 13.0, 1, 1, Vector2(20, 110), 13.0, 0.0, 1, 1]
 point_count = 9
 
 [sub_resource type="Curve" id="Curve_damage"]
-_limits = [0.0, 50.0, 0.0, 40.0]
-_data = [Vector2(10, 1.7), 0.0, 0.08, 1, 1, Vector2(15, 2.1), 0.08, 0.1, 1, 1, Vector2(20, 2.6), 0.1, 1.8, 1, 1, Vector2(21, 4.4), 1.8, 2.05, 1, 1, Vector2(23, 8.5), 2.05, 2.75, 1, 1, Vector2(25, 14), 2.75, 2.8, 1, 1, Vector2(30, 28), 2.8, 0.0, 1, 1]
+_limits = [0.0, 50.0, 0.0, 20.0]
+_data = [Vector2(0, 1), 0.0, 0.06, 1, 1, Vector2(5, 1.3), 0.06, 0.08, 1, 1, Vector2(10, 1.7), 0.08, 1.3, 1, 1, Vector2(11, 3), 1.3, 1.5, 1, 1, Vector2(13, 6), 1.5, 2.0, 1, 1, Vector2(15, 10), 2.0, 2.0, 1, 1, Vector2(20, 20), 2.0, 0.0, 1, 1]
 point_count = 7
 
 [sub_resource type="Resource" id="Resource_scale_health"]
@@ -82,10 +84,22 @@ enemy = ExtResource("4_shooter")
 weight = 0.12
 from_difficulty = 0.5
 
+[sub_resource type="Resource" id="Resource_cardio"]
+script = ExtResource("2_entry")
+enemy = ExtResource("18_cardio")
+weight = 0.06
+from_difficulty = 2.0
+
+[sub_resource type="Resource" id="Resource_bat"]
+script = ExtResource("2_entry")
+enemy = ExtResource("19_bat")
+weight = 0.05
+from_difficulty = 3.0
+
 [sub_resource type="Resource" id="Horde_minute_3"]
 script = ExtResource("9_horde")
 at_minute = 3.0
-count = 190
+count = 300
 elites = 3
 spawn_seconds = 30.0
 warning_seconds = 3.0
@@ -95,7 +109,7 @@ announce_color = Color(0.88, 0.38, 0.28, 1)
 [sub_resource type="Resource" id="Horde_minute_6"]
 script = ExtResource("9_horde")
 at_minute = 6.0
-count = 300
+count = 480
 elites = 10
 spawn_seconds = 30.0
 warning_seconds = 3.0
@@ -155,7 +169,7 @@ peak_multiplier = 2.0
 max_alive = 180
 min_spawn_distance = 16.0
 max_spawn_distance = 24.0
-enemies = Array[ExtResource("2_entry")]([SubResource("Resource_swarmer"), SubResource("Resource_shooter")])
+enemies = Array[ExtResource("2_entry")]([SubResource("Resource_swarmer"), SubResource("Resource_shooter"), SubResource("Resource_cardio"), SubResource("Resource_bat")])
 elite_chance = SubResource("Curve_elite")
 elite = ExtResource("5_elite")
 stat_scaling = Array[ExtResource("6_scaling")]([SubResource("Resource_scale_health"), SubResource("Resource_scale_contact"), SubResource("Resource_scale_weapon"), SubResource("Resource_scale_xp"), SubResource("Resource_scale_gold")])

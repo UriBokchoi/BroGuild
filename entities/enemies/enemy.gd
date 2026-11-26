@@ -12,6 +12,11 @@ signal died(enemy: Enemy)
 ## Terminó de desaparecer: puede volver al pool.
 signal despawned(enemy: Enemy)
 
+## Uno que vuela corrige su altura así de rápido (por segundo, por metro que le falta).
+const FLY_RESPONSE := 3.0
+## Grupo de lo que se trepa entero, sin pausas (el árbol grande): como una enredadera.
+const CLIMBABLE_GROUP := &"climbable"
+
 @export var stats: StatsComponent
 @export var health: HealthComponent
 @export var hurtbox: HurtboxComponent
@@ -38,6 +43,9 @@ signal despawned(enemy: Enemy)
 @export_range(0.05, 2.0, 0.01, "suffix:m") var wall_probe_radius: float = 0.3
 @export_range(0.0, 3.0, 0.01, "suffix:m") var wall_probe_height: float = 0.75
 @export_range(0.0, 3.0, 0.01, "suffix:m") var wall_probe_reach: float = 0.55
+## Altura sobre los pies a la que mira si tiene delante algo trepable ([constant CLIMBABLE_GROUP]):
+## baja, para seguir trepando hasta que los pies pasen el borde.
+@export_range(0.0, 3.0, 0.01, "suffix:m") var climbable_probe_height: float = 0.15
 
 ## Tipo de enemigo.
 var data: EnemyData
@@ -54,6 +62,9 @@ var _rest_scale: Vector3 = Vector3.ONE
 var _rest_visual_position: Vector3 = Vector3.ZERO
 ## Segundos que le quedan para terminar de aparecer.
 var _appear_left: float = 0.0
+## Segundos que le quedan para acabar de hundirse (al cambiar de mapa) y lo que dura.
+var _vanish_left: float = 0.0
+var _vanish_time: float = 0.0
 var _rest_mass: float = 1.0
 ## Capas y máscara de su cuerpo vivo (al morir deja de chocar con el jugador y con los demás).
 var _rest_layer: int = 0
@@ -193,6 +204,7 @@ func is_frozen() -> bool:
 ## Lo saca del juego: invisible y fuera de la física hasta el siguiente [method spawn].
 func deactivate() -> void:
 	_disarm()
+	_vanish_left = 0.0
 	_stop_appearing()
 	visible = false
 	process_mode = Node.PROCESS_MODE_DISABLED
@@ -203,8 +215,32 @@ func is_appearing() -> bool:
 	return _appear_left > 0.0
 
 
-# Solo trabaja mientras aparece; va por fotograma (no por tick de física) para que se vea suave.
+## Se hunde en el suelo y desaparece en [param seconds] (al cambiar de mapa), quieto y sin hacer
+## daño. No muere: ni suelta botín ni cuenta. Al acabar sale del juego (despawned).
+func vanish(seconds: float) -> void:
+	if not is_alive() or is_vanishing():
+		return
+	set_frozen(true)
+	# Ya no se le puede dar: si muriera mientras se hunde, soltaría botín y contaría.
+	hurtbox.set_deferred(&"monitorable", false)
+	_stop_appearing()
+	_vanish_time = maxf(seconds, 0.01)
+	_vanish_left = _vanish_time
+	set_process(true)
+	EventBus.enemy_vanished.emit(self)
+
+
+## ¿Se está hundiendo para desaparecer?
+func is_vanishing() -> bool:
+	return _vanish_left > 0.0
+
+
+# Solo trabaja mientras aparece o se hunde; va por fotograma (no por tick de física) para que se vea
+# suave.
 func _process(delta: float) -> void:
+	if _vanish_left > 0.0:
+		_sink(delta)
+		return
 	if health.is_dead():
 		_stop_appearing()
 		return
@@ -265,14 +301,23 @@ func physics_step(
 	var desired := (chase + push * _stats.separation_weight * _stats.move_speed).limit_length(_stats.move_speed)
 	var current := Vector3(linear_velocity.x, 0.0, linear_velocity.z)
 	var vertical := linear_velocity.y
+	if _stats.fly_height > 0.0:
+		vertical = _fly_vertical(target if has_target else global_position)
 	# Primero el mundo: así su espera cuenta aunque luego trepe por encima de otro enemigo.
-	var over_obstacle := _climbs_obstacle(delta, current, chase)
-	if over_obstacle or _is_stuck_behind(current, chase, target, footholds):
+	elif _climbs_climbable(current, chase) or _climbs_obstacle(delta, current, chase) \
+			or _is_stuck_behind(current, chase, target, footholds):
 		vertical = maxf(vertical, _stats.climb_speed)
 	var horizontal := current.move_toward(desired, _stats.acceleration * delta)
 	linear_velocity = Vector3(horizontal.x, vertical, horizontal.z)
 	# Uno que guarda la distancia mira siempre a su objetivo (también al retroceder).
 	_face(target - global_position if has_target and keeps_range else horizontal, delta)
+
+
+## Velocidad vertical de uno que vuela: hacia su altura sobre los pies de [param target], más rápido
+## cuanto más lejos está y como mucho a su velocidad de trepar.
+func _fly_vertical(target: Vector3) -> float:
+	var goal := target.y + _stats.fly_height
+	return clampf((goal - global_position.y) * FLY_RESPONSE, -_stats.climb_speed, _stats.climb_speed)
 
 
 ## ¿Quiere avanzar pero va frenado porque un enemigo apoyado le tapa el paso, y aún no está más alto
@@ -305,16 +350,34 @@ func _climbs_obstacle(delta: float, current: Vector3, chase: Vector3) -> bool:
 	return _wall_ahead(chase.normalized())
 
 
+## ¿Quiere avanzar, va frenado y tiene delante, a la altura de los pies, algo trepable? Entonces
+## trepa sin pausas hasta que sus pies pasan el borde (y sigue andando por arriba).
+func _climbs_climbable(current: Vector3, chase: Vector3) -> bool:
+	if _stats.climb_speed <= 0.0 or chase.is_zero_approx():
+		return false
+	if current.length() > _stats.move_speed * EnemySteering.STUCK_SPEED:
+		return false
+	var found := _world_ahead(chase.normalized(), climbable_probe_height)
+	return found is Node and (found as Node).is_in_group(CLIMBABLE_GROUP)
+
+
 ## ¿Hay mundo (capa [code]world[/code]) justo delante, hacia [param direction], a la altura del cuerpo?
 func _wall_ahead(direction: Vector3) -> bool:
+	return _world_ahead(direction, wall_probe_height) != null
+
+
+## Lo primero del mundo justo delante, hacia [param direction], a [param height] sobre los pies (o
+## [code]null[/code]).
+func _world_ahead(direction: Vector3, height: float) -> Object:
 	_probe_shape.radius = wall_probe_radius * _size
 	_probe_query.shape = _probe_shape
 	_probe_query.collision_mask = PhysicsLayers.mask(PhysicsLayers.WORLD)
 	_probe_query.transform = Transform3D(
 		Basis.IDENTITY,
-		global_position + (Vector3.UP * wall_probe_height + direction * wall_probe_reach) * _size
+		global_position + (Vector3.UP * height + direction * wall_probe_reach) * _size
 	)
-	return not get_world_3d().direct_space_state.intersect_shape(_probe_query, 1).is_empty()
+	var hits := get_world_3d().direct_space_state.intersect_shape(_probe_query, 1)
+	return hits[0]["collider"] if not hits.is_empty() else null
 
 
 func _face(direction: Vector3, delta: float) -> void:
@@ -339,6 +402,17 @@ func _stop_appearing() -> void:
 	visual.position = _rest_visual_position
 	if not health.is_dead():
 		visual.scale = _rest_scale * _size
+
+
+## Se hunde como al aparecer, pero al revés; al acabar sale del juego.
+func _sink(delta: float) -> void:
+	_vanish_left -= delta
+	if _vanish_left > 0.0:
+		_show_appearing(_vanish_left / _vanish_time)
+		return
+	_vanish_left = 0.0
+	deactivate()
+	despawned.emit(self)
 
 
 ## El modelo en el punto [param progress] (0–1) de su aparición: crece con rebote y sube desde el suelo.

@@ -12,3 +12,7 @@ extends ItemData
 
 func kind_key() -> StringName:
 	return &"ITEM_KIND_WEAPON"
+
+
+func level_bonus_stat() -> StringName:
+	return &"weapon_level_bonus"

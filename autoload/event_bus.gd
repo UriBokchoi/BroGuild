@@ -50,6 +50,8 @@ signal chest_denied(cost: int)
 signal enemy_died(enemy: Enemy)
 ## Salió un enemigo (del pool, ya en su sitio): empieza a salir del suelo.
 signal enemy_spawned(enemy: Enemy)
+## Un enemigo empezó a hundirse para desaparecer (al cambiar de mapa): no muere ni cuenta.
+signal enemy_vanished(enemy: Enemy)
 ## El jugador rompió un rompible (calavera, bolsita…) de [param data] en [param at].
 signal breakable_broken(data: BreakableData, at: Vector3)
 ## Se recogió un recogible que da [param reward] (p. ej. [code]experience[/code]) por [param amount].
@@ -63,7 +65,7 @@ signal player_gold_changed(gold: float)
 ## Cambió la dificultad (la stat [code]difficulty[/code] del jugador; sube con el tiempo y con objetos).
 signal difficulty_changed(difficulty: float)
 ## Cambió el nivel de un arma o runa del jugador: al conseguirla (1), al subirla y al perderla (0).
-signal player_item_changed(item: ItemData, level: int)
+signal player_item_changed(item: ItemData, level: int, max_level: int)
 ## Cambió cuántas copias lleva el jugador de un objeto pasivo (0 = ya no lo lleva).
 signal player_passive_changed(item: PassiveItemData, count: int)
 ## Cambiaron las ranuras abiertas del jugador (sin limitar a las que hay: eso lo hace [LevelUpData]).
@@ -139,3 +141,5 @@ signal stat_choice_offered(offers: Array[StatOffer])
 signal herald_arrived(at: Vector3)
 ## El heraldo ofrece elegir uno de [param pacts] o rechazarlos: lo atiende el [PactPanel].
 signal pact_offered(pacts: Array[PactData])
+## Se selló un pacto (el elegido).
+signal pact_sealed(pact: PactData)

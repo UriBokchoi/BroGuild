@@ -135,7 +135,7 @@ Lo que salió en la segunda tanda de pruebas; va antes que el resto.
 - [x] Tiers de nivel: cada nivel tiene 3. Superar uno abre el siguiente en la selección de nivel; elegir el 2 es jugar el 1 y, al cruzar su portal, pasar al 2 conservando todo (y así con el 3). Más grande y más difícil cada uno. El Brosque: verano, otoño (130 m) e invierno (150 m), con sus colores y su clima y las mismas piezas
 - [x] Tras el tier 3, la arena del jefe final (la misma para todos los niveles): solo el jefe, Mr. Brolympia; al vencerlo aparece el portal y ya es victoria, pero sigue la oleada infinita hasta morir o cruzarlo
 - [x] Más dificultad, más experiencia y oro: los enemigos sueltan más cuanto más alta es
-- [x] Detalles del Guerrero (yelmo, hombreras y cinturón) y del Pícaro (capucha con pañuelo y cinturón con bolsitas)
+- [x] Detalles del Guerrero (yelmo, hombreras y cinturón) y del Pícaro (pañuelo y cinturón con bolsitas)
 - [ ] Élites con afijos (rápido, vampiro, explosivo…), solo en tier 2 o más; con más probabilidad de soltar cofre que un élite normal
 
 ## Hito 7 — El torneo
@@ -171,6 +171,71 @@ Lo que salió en la segunda tanda de pruebas; va antes que el resto.
 10. Hito 7 (2026-11-24): cofres de élite, apuntar y fijar al jefe, racha como power-up y pactos con el heraldo. Los afijos y los tiers, más adelante (Hito 6).
 
 11. Hito 6 (2026-11-25): tiers con desbloqueo, arena del jefe final, más recompensa con la dificultad y detalles del Guerrero y el Pícaro. Todo en un solo PR junto con el Hito 7. Los afijos de los élites, después.
+
+## Pulido antes de la Torre del Mago (2026-11-25)
+Lo que pidió el diseñador antes de seguir con niveles nuevos, de fácil a difícil.
+- [x] El Pícaro, sin capucha: pañuelo al cuello y cinturón con bolsitas
+- [x] «Logros (WIP)» en el menú principal, desactivado hasta que se diseñen
+- [x] Selección de nivel y opciones con scroll: ya no se salen de la pantalla
+- [x] Los archivos de prueba (tests, validación, capturas) se borran solos al cerrar
+- [x] El tier en partida (pequeño, bajo la dificultad) y en los resultados
+- [x] Opciones: sensibilidad del ratón e invertir el eje vertical
+- [x] Icono propio de Mr. Brolympia en el Archivo
+- [x] Fondo del menú principal: un claro del Brosque con ruinas, pesas, bosque y hojas que caen
+- [x] Récords fijos a la derecha del menú: cada partida con su personaje y sus enemigos; al hacer clic, su detalle y su build
+- [x] Repaso del resto de menús y paneles en ventana pequeña (Archivo, pausa y resultados caben; los paneles de elegir se ajustan solos)
+- [x] Arena final redonda: paredes, borde y bosque en círculo, y los enemigos salen dentro
+- [x] «God mode» en F3 (con «next stage», para recorrer los tiers y el jefe final)
+- [ ] Ajuste de los tiers 2 y 3 y del jefe final (jugando)
+- [x] Economía de los tiers altos: revisada, proporcional (ver DECISIONES); sin cambios
+- [x] Rendimiento en el invierno: unos 300 FPS con 180 enemigos, como el otoño
+- [x] Sonidos propios del heraldo y del sello de un pacto (Mr. Brolympia usa el de los jefes)
+- [ ] Plantilla de exportación ligera (cuando estén Python y SCons)
+- Pendiente de diseño: los logros y la música
+
+## Pedidos tras probar (2) (2026-11-25)
+De fácil a difícil, como pidió el diseñador.
+- [x] Récords: solo los 10 mejores
+- [x] Enemigos un 10 % más lentos de base (esbirros, tiradores y Bro-tes)
+- [x] El oro a la vista al subir de nivel, en el círculo de setas y en los pactos
+- [x] El detalle de una partida de los récords, en una ventana aparte
+- [x] «Volver a tirar» en el círculo de setas (10 de oro, ×1,5 por uso en la partida)
+- [x] Robo de vida que funciona (cura un % del daño hecho), en las mejoras de las pesas y con su runa, Sed de sangre
+- [x] Al cruzar el portal: el jugador entra en él (encoge, sin control), los enemigos se hunden en el suelo con su humo (sin botín ni contar) y suena el portal
+- [x] Enemigo raro y rápido: el Cardioadicto (frágil, casi el doble de rápido)
+- [x] Enemigo raro que vuela: el Murciébro, a la altura de la cabeza (para que no se pueda saltar por encima de la horda)
+- [x] Bro-monedas: 1 por élite y 5 por jefe, guardadas entre partidas (se ven en los resultados)
+- [x] Pestaña «Mejoras» en el menú, con bro-monedas y reembolso: daño, área, crítico, vida, armadura, velocidad, Suerte y dificultad; más oro y bro-monedas; ranuras de armas y runas; nivel máximo de armas (12 a 20) y de runas (25 a 40). Precios provisionales; la recarga de las habilidades, cuando existan
+- [x] Misiones y desbloqueos: espada, bastón y daga abiertos; martillo (espada a 10 y ganar) y hacha (Guerrero a nivel 30). Pestaña «Misiones» en el menú. Las de Paladín, Bárbaro y Brujo, con sus personajes
+- [x] En vez de las mesetas cuadradas, montañitas o árboles grandes con parkour para subir (árbol con setas de repisa en espiral y montañita de rocas escalonadas)
+- [x] El arma del Brujo: proyectil dirigido que rebota, rojo con estela, que explota en área al hacer crítico (el Mal de ojo; se desbloquea con la misión del Mago a nivel 30)
+- [x] Personajes nuevos: Paladín, Bárbaro y Brujo
+- [ ] Habilidades únicas (una por personaje, 3 min de recarga, 2:30 con mejora; icono abajo a la derecha con su indicador sin números)
+
+## Pedidos tras probar (3) (2026-11-26)
+De fácil a difícil.
+- [x] El robo de vida, a la mitad (pesas: 0,5 %; Sed de sangre: 0,4 % por nivel)
+- [x] Los minibosses también dan bro-monedas (3)
+- [x] Mejoras del menú más caras (unas el doble)
+- [x] El Ent-renador, con más vida de base: 8000 (antes 5000)
+- [x] Contador de enemigos derrotados encima de la dificultad
+- [x] Colores sin repetir: Guerrero azul, Paladín amarillo, Bárbaro rojo, Brujo morado
+- [x] Menú: sin «Logros» (los logros serán las misiones); Opciones junto al idioma (y en la pausa, como ya estaba)
+- [x] Fondo del menú: sin personajes, con una tragaperras y un cofre
+- [x] En la selección de tier, que diga cuánto más fuertes son los enemigos (tier 2: +20 %; tier 3: +50 %), y que lo sean (escalan igual que el tier 1)
+- [x] Más enemigos en las hordas (un 60 % más)
+- [x] Que la descripción de las mejoras al subir de nivel no se salga de la carta
+- [x] Sonidos: levantar las pesas y coger la tarjeta de socio
+- [x] Charcos de invierno cambiados (montoncitos de nieve y muñecos de nieve)
+- [x] Caminitos de tierra cortos de decorado
+- [x] Que los enemigos puedan subir al árbol grande (tronco ancho y trepable)
+- [x] Brújula abajo a la izquierda
+- [x] Misiones: pestaña «Completadas» con su fecha
+- [x] Runas que se desbloquean: Sed de sangre (Bárbaro a nivel 50) y una de crítico, el Ojo clínico (2500 enemigos en una partida)
+- [x] Saltar y vetar al subir de nivel (hasta 3 de cada, con una mejora cara del menú; saltar en verde, vetar en rojo)
+- [x] En la taberna, un cofre que se abre con 1500 enemigos derrotados en el tier 1 y deja elegir entre 3 objetos (azules o mejores); cuenta los de cada tier
+- [x] El burpee de los jefes, cambiado: una bola roja que se carga donde va el jugador y da tiempo a esquivarla
+- [x] Personajes nuevos (ver arriba), con la pasiva del Bárbaro: la primera vez que iba a morir se queda a 1 de vida 10 s sin poder morir, rojo de rabia y con +30 % en sus stats
 
 ## Backlog (sin orden)
 - Física de la horda: con 180 esbirros apretados, la física se lleva unos 4–6 ms por tick (el rumbo del enjambre, 1 ms; el resto, el motor). Mirar con el profiler del editor si hiciera falta (formas más simples, menos contactos)

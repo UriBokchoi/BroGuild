@@ -52,3 +52,18 @@ func _press(action: StringName) -> InputEventAction:
 	event.action = action
 	event.pressed = true
 	return event
+
+
+func test_god_mode_makes_the_player_immortal() -> void:
+	var section := _panel.get_node(^"Panel/Scroll/Sections/Run") as RunDebugSection
+	section.set_god_mode(true)
+	assert_true(_player.health.immortal)
+	_player.health.take_damage(DamageInfo.create(_player.health.get_maximum() * 10.0))
+	assert_false(_player.health.is_dead(), "no muere")
+	section.set_god_mode(false)
+	assert_false(_player.health.immortal)
+
+
+func test_without_tiers_the_stages_section_hides() -> void:
+	var section := _panel.get_node(^"Panel/Scroll/Sections/Stages") as Control
+	assert_false(section.visible)

@@ -13,6 +13,7 @@ extends VBoxContainer
 var _weapons: Array[ItemData] = []
 var _runes: Array[ItemData] = []
 var _levels: Dictionary[StringName, int] = {}
+var _max_levels: Dictionary[StringName, int] = {}
 var _open_weapons: int = 0
 var _open_runes: int = 0
 
@@ -28,18 +29,21 @@ func _ready() -> void:
 	_refresh()
 
 
-## Muestra [param item] a [param level]; a nivel 0, lo quita (las demás se corren).
-func show_item(item: ItemData, level: int) -> void:
+## Muestra [param item] a [param level], con su máximo [param max_level] (0: el de serie); a nivel 0,
+## lo quita (las demás se corren).
+func show_item(item: ItemData, level: int, max_level: int = 0) -> void:
 	var row := _weapons if item is WeaponData else _runes
 	var index := row.find_custom(func(owned: ItemData) -> bool: return owned.id == item.id)
 	if level <= 0:
 		if index >= 0:
 			row.remove_at(index)
 		_levels.erase(item.id)
+		_max_levels.erase(item.id)
 	else:
 		if index < 0:
 			row.append(item)
 		_levels[item.id] = level
+		_max_levels[item.id] = max_level if max_level > 0 else item.max_level()
 	_refresh()
 
 
@@ -72,7 +76,7 @@ func _fill(row: HBoxContainer, items: Array[ItemData], open: int, total: int) ->
 	for index: int in total:
 		var slot := row.get_child(index) as LoadoutSlot
 		if index < items.size():
-			slot.show_item(items[index], _levels[items[index].id])
+			slot.show_item(items[index], _levels[items[index].id], _max_levels[items[index].id])
 		elif index < open:
 			slot.show_empty()
 		else:

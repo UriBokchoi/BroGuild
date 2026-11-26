@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" path="res://entities/player/characters/passives/lethal.tscn" id="4_passive"]
 [ext_resource type="Script" uid="uid://0j8d013ejauu" path="res://entities/player/characters/model/model_attachment.gd" id="5_attachment"]
 [ext_resource type="PackedScene" path="res://assets/models/props/dagger.tscn" id="6_dagger"]
-[ext_resource type="PackedScene" path="res://assets/models/props/rogue_hood.tscn" id="7_hood"]
+[ext_resource type="PackedScene" path="res://assets/models/props/rogue_scarf.tscn" id="7_scarf"]
 [ext_resource type="PackedScene" path="res://assets/models/props/rogue_belt.tscn" id="8_belt"]
 [ext_resource type="Texture2D" uid="uid://bcqbknd6ebwno" path="res://assets/textures/icons/characters/rogue.svg" id="98_icon"]
 
@@ -22,9 +22,9 @@ scene = ExtResource("6_dagger")
 socket = &"HandLeft"
 transform = Transform3D(1.35, 0, 0, 0, 1.106, 0.775, 0, -0.775, 1.106, 0, 0, 0)
 
-[sub_resource type="Resource" id="Resource_hood"]
+[sub_resource type="Resource" id="Resource_scarf"]
 script = ExtResource("5_attachment")
-scene = ExtResource("7_hood")
+scene = ExtResource("7_scarf")
 socket = &"Head"
 
 [sub_resource type="Resource" id="Resource_belt"]
@@ -81,6 +81,6 @@ starting_weapon = ExtResource("3_weapon")
 passive = ExtResource("4_passive")
 passive_name_key = &"PASSIVE_LETHAL_NAME"
 passive_description_key = &"PASSIVE_LETHAL_DESCRIPTION"
-attachments = Array[ExtResource("5_attachment")]([SubResource("Resource_dagger_right"), SubResource("Resource_dagger_left"), SubResource("Resource_hood"), SubResource("Resource_belt")])
+attachments = Array[ExtResource("5_attachment")]([SubResource("Resource_dagger_right"), SubResource("Resource_dagger_left"), SubResource("Resource_scarf"), SubResource("Resource_belt")])
 air_jump_flip = true
 stat_modifiers = Array[ExtResource("2_modifier")]([SubResource("Resource_health"), SubResource("Resource_run"), SubResource("Resource_sprint"), SubResource("Resource_crit"), SubResource("Resource_stamina"), SubResource("Resource_air_jumps"), SubResource("Resource_regen")])

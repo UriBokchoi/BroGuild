@@ -10,6 +10,8 @@ extends Resource
 @export_range(0.0, 1000.0, 1.0, "or_greater", "suffix:%") var xp_gain: float = 0.0
 ## Multiplica el oro que ganas.
 @export_range(0.0, 1000.0, 1.0, "or_greater", "suffix:%") var currency_gain: float = 0.0
+## Multiplica las bro-monedas que ganas (las de fuera de la partida).
+@export_range(0.0, 1000.0, 1.0, "or_greater", "suffix:%") var bro_coin_gain: float = 0.0
 ## Suerte: desplaza los pesos de las rarezas hacia arriba (GDD §5).
 @export_range(0.0, 100.0, 1.0, "or_greater") var luck: float = 0.0
 ## Distancia desde la que se recogen experiencia y objetos (el oro llega solo).
@@ -29,3 +31,11 @@ extends Resource
 @export_range(1, 4, 1, "or_greater") var weapon_slots: int = 0
 ## Runas que puede llevar a la vez (como [member weapon_slots]).
 @export_range(1, 4, 1, "or_greater") var rune_slots: int = 0
+## Veces por partida que puede saltarse una elección al subir de nivel (sin coger nada).
+@export_range(0, 10, 1, "or_greater") var skips: int = 0
+## Veces por partida que puede vetar una carta al subir de nivel (no vuelve a salir; salen otras).
+@export_range(0, 10, 1, "or_greater") var bans: int = 0
+## Niveles de más sobre el máximo de cada arma ([method ItemData.max_level_with]).
+@export_range(0, 20, 1, "or_greater") var weapon_level_bonus: int = 0
+## Niveles de más sobre el máximo de cada runa.
+@export_range(0, 40, 1, "or_greater") var rune_level_bonus: int = 0

@@ -1,6 +1,7 @@
 extends GutTest
 ## El Ent-renador (jefe del Brosque, raíz Boss): sale de un enjambre, es jefe y recalcula su rumbo en
-## cada tick. El Burpee marca dónde va a caer (a lo sumo a su distancia máxima) y salta hacia ahí;
+## cada tick. La bola roja (antes, el Burpee) se carga donde va el objetivo (a lo sumo a su distancia
+## máxima), le sigue mientras apunta, se queda quieta para esquivarla y revienta;
 ## las Series apuntan con su franja, embisten en línea recta con más daño y repiten; los Bro-tes
 ## piden refuerzos tras llamarlos (más con rabia). Por debajo de la mitad de su vida entra en rabia
 ## una sola vez (más rápido) sin rellenarse la vida; al volver a salir es el de siempre.
@@ -26,23 +27,32 @@ func test_is_a_boss_with_its_three_attacks() -> void:
 	assert_not_null(_boss, "su escena tiene raíz Boss")
 	assert_true(_boss.is_boss())
 	assert_true(_boss.steer_every_tick)
-	assert_true(_boss.get_node(^"Burpee") is LeapAttack)
+	assert_true(_boss.get_node(^"Burpee") is ChargedOrbAttack)
 	assert_true(_boss.get_node(^"Series") is ChargeAttack)
 	assert_true(_boss.get_node(^"BroTes") is SummonAttack)
 
 
-func test_the_burpee_marks_where_it_lands_and_jumps_there() -> void:
-	var burpee := _boss.get_node(^"Burpee") as LeapAttack
-	var far := _boss.global_position + Vector3(100.0, 0.0, 0.0)
-	burpee.begin(far)
-	assert_true(burpee.landing_marker.visible)
-	var reach := burpee.landing_marker.global_position.x - _boss.global_position.x
-	assert_almost_eq(reach, burpee.max_distance, 0.01, "a lo sumo a su distancia máxima")
-	assert_false(burpee.step(burpee.windup + 0.01, far))
-	assert_gt(_boss.linear_velocity.y, 0.0, "salta")
-	assert_gt(_boss.linear_velocity.x, 0.0, "hacia donde marcó")
-	burpee.cancel()
-	assert_false(burpee.landing_marker.visible)
+func test_the_red_orb_aims_where_the_target_goes_then_waits_and_bursts() -> void:
+	var orb := _boss.get_node(^"Burpee") as ChargedOrbAttack
+	var target := _boss.global_position + Vector3(6.0, 0.0, 0.0)
+	orb.begin(target)
+	assert_true(orb.orb.visible, "la bola sale")
+	# El objetivo corre hacia +Z: la bola se adelanta hacia allí.
+	for _tick: int in 6:
+		target += Vector3(0.0, 0.0, 0.5)
+		orb.step(0.05, target)
+	assert_gt(orb.get_point().z, target.z, "va adonde se dirige")
+	var reach := Vector2(orb.get_point().x - _boss.global_position.x, orb.get_point().z - _boss.global_position.z)
+	assert_lte(reach.length(), orb.max_distance + 0.01, "a lo sumo a su distancia máxima")
+	orb.step(orb.aim_time, target)
+	assert_eq(orb.get_phase(), ChargedOrbAttack.Phase.LOCKED)
+	var locked := orb.get_point()
+	orb.step(0.1, target + Vector3(5.0, 0.0, 0.0))
+	assert_eq(orb.get_point(), locked, "quieta: da tiempo a salir")
+	orb.step(orb.lock_time, target)
+	assert_false(orb.orb.visible, "revienta")
+	assert_true(orb.shockwave.is_running())
+	orb.cancel()
 
 
 func test_the_sets_aim_charge_harder_and_repeat() -> void:

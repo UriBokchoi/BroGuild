@@ -52,6 +52,7 @@ spacing = 7.0
 piece_margin = 2.0
 attempts = 400
 border = 39.0
+circular = true
 border_depth = 5.0
 border_step = 4.0
 outer_start = 48.0

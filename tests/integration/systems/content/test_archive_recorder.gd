@@ -38,8 +38,8 @@ func after_each() -> void:
 
 
 func test_weapons_and_runes_when_gained() -> void:
-	EventBus.player_item_changed.emit(SWORD, 1)
-	EventBus.player_item_changed.emit(VIGOR, 0)
+	EventBus.player_item_changed.emit(SWORD, 1, SWORD.max_level())
+	EventBus.player_item_changed.emit(VIGOR, 0, VIGOR.max_level())
 	assert_true(Save.discoveries.has(&"weapons", &"sword"))
 	assert_false(Save.discoveries.has(&"runes", &"vigor"), "perderla no la descubre")
 
@@ -72,7 +72,7 @@ func test_ignores_what_is_not_in_the_catalog() -> void:
 
 func test_does_nothing_unless_asked() -> void:
 	_recorder.record = false
-	EventBus.player_item_changed.emit(SWORD, 1)
+	EventBus.player_item_changed.emit(SWORD, 1, SWORD.max_level())
 	assert_false(Save.discoveries.has(&"weapons", &"sword"))
 
 

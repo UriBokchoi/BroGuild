@@ -14,6 +14,8 @@ signal back_requested
 
 ## Personajes que se pueden elegir, en orden.
 @export var characters: Array[CharacterData] = []
+## Misiones: los personajes que da una aún sin cumplir salen sin poder elegirse (dicen cuál).
+@export var quests: QuestCatalog
 ## Niveles, en orden.
 @export var levels: Array[LevelData] = []
 ## Modelo del personaje que se mira.
@@ -37,6 +39,7 @@ var _tier_group := ButtonGroup.new()
 @onready var _level_name: Label = %LevelName
 @onready var _tier_row: HBoxContainer = %TierRow
 @onready var _level_goal: Label = %LevelGoal
+@onready var _level_strength: Label = %LevelStrength
 @onready var _level_lore: Label = %LevelLore
 @onready var _name: Label = %CharacterName
 @onready var _description: Label = %CharacterDescription
@@ -88,10 +91,14 @@ func show_character(character: CharacterData) -> void:
 	_weapon_name.text = weapon.name_key if weapon else &""
 	_passive_name.text = character.passive_name_key
 	_passive_description.text = character.passive_description_key
+	(%Choose as Button).disabled = is_locked(character)
 
 
-## Elige a [param character]: la ficha se cambia por la lista de niveles, sin ninguno marcado.
+## Elige a [param character]: la ficha se cambia por la lista de niveles, sin ninguno marcado. Si
+## está bloqueado, no hace nada.
 func choose(character: CharacterData) -> void:
+	if is_locked(character):
+		return
 	show_character(character)
 	_chosen = character
 	_show_levels(true)
@@ -135,6 +142,8 @@ func select_tier(tier: int) -> void:
 	var stage := _selected.tiers[tier - 1]
 	_level_goal.text = stage.goal_key
 	_level_goal.visible = not stage.goal_key.is_empty()
+	_level_strength.text = tr(&"TIER_STRENGTH") % stage.strength_percent()
+	_level_strength.visible = stage.strength_percent() > 0
 
 
 ## Tier marcado.
@@ -173,7 +182,20 @@ func _character_button(character: CharacterData) -> Button:
 	button.mouse_entered.connect(show_character.bind(character))
 	button.focus_entered.connect(show_character.bind(character))
 	button.pressed.connect(choose.bind(character))
+	if is_locked(character):
+		button.disabled = true
+		button.text = tr(&"CHARACTER_LOCKED") % tr(character.name_key)
+		button.tooltip_text = tr(quests.quest_for(character).description_key)
 	return button
+
+
+## ¿Falta cumplir la misión que da [param character]?
+func is_locked(character: CharacterData) -> bool:
+	if quests == null:
+		return false
+	if Save.profile == null:
+		Save.load_profile()
+	return quests.is_locked(character, Save.profile)
 
 
 ## Muestra la ficha de [param level]: su nombre, sus tiers, cómo se gana y su lore (lo que no tenga,

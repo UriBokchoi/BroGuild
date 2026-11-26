@@ -116,6 +116,18 @@ func _add_small_buttons(theme: Theme) -> void:
 	_button_boxes(theme, &"SmallOptionButton", Vector2(12, 6), 8)
 	theme.set_font_size(&"font_size", &"SmallOptionButton", 18)
 	theme.set_constant(&"icon_max_width", &"SmallOptionButton", 26)
+	# Las partidas de los récords: compactas, con el icono del personaje.
+	theme.set_type_variation(&"RecordRow", &"Button")
+	_button_boxes(theme, &"RecordRow", Vector2(12, 6), 8)
+	theme.set_font_size(&"font_size", &"RecordRow", 18)
+	theme.set_constant(&"icon_max_width", &"RecordRow", 30)
+	theme.set_constant(&"h_separation", &"RecordRow", 10)
+	# La última partida jugada, en azul (como lo que cambia en las stats).
+	theme.set_type_variation(&"RecordRowLatest", &"RecordRow")
+	theme.set_color(&"font_color", &"RecordRowLatest", MODIFIED)
+	# Saltar (verde) y vetar (rojo) al subir de nivel.
+	_colored_button(theme, &"SkipButton", BOON)
+	_colored_button(theme, &"BanButton", CURSE)
 
 
 ## Cartas de la elección al subir de nivel: un botón grande con su contenido en columna.
@@ -200,8 +212,10 @@ func _add_hud(theme: Theme) -> void:
 	# Reloj de la ronda, arriba en el centro; en rojo pasada la ronda.
 	_label_variation(theme, &"ClockLabel", 28, INK)
 	_label_variation(theme, &"ClockLabelOvertime", 28, HEALTH)
-	# Dificultad, arriba a la derecha: una calavera y su valor.
+	# Dificultad, arriba a la derecha: una calavera y su valor. Encima, los enemigos derrotados.
 	_label_variation(theme, &"DifficultyLabel", 22, DIFFICULTY)
+	_label_variation(theme, &"KillsLabel", 22, INK)
+	_separation(theme, &"HudRight", &"VBoxContainer", 2)
 	_add_slots(theme)
 	# Bienvenida al nivel, en el centro: el título y unas líneas.
 	_label_variation(theme, &"IntroTitleLabel", 56, GOLD)
@@ -257,6 +271,20 @@ func _button_boxes(theme: Theme, type: StringName, margin: Vector2, radius: int)
 	var focus := _box(Color.TRANSPARENT, radius, margin, GOLD, 2, 2)
 	focus.draw_center = false
 	theme.set_stylebox(&"focus", type, focus)
+
+
+## Botón pequeño de un color (verde, rojo…), con el texto oscuro encima.
+func _colored_button(theme: Theme, variation: StringName, color: Color) -> void:
+	theme.set_type_variation(variation, &"SmallButton")
+	var margin := Vector2(16, 6)
+	theme.set_stylebox(&"normal", variation, _box(color.darkened(0.15), 8, margin, color.darkened(0.45), 0, 3))
+	theme.set_stylebox(&"hover", variation, _box(color, 8, margin, GOLD, 2, 3))
+	theme.set_stylebox(&"pressed", variation, _box(color.lightened(0.2), 8, margin, color.darkened(0.45), 2, 3))
+	theme.set_stylebox(&"hover_pressed", variation, _box(color.lightened(0.2), 8, margin, GOLD, 2, 3))
+	theme.set_stylebox(&"disabled", variation, _box(Color(color, 0.3), 8, margin, SLATE, 0, 3))
+	for state: StringName in [&"font_color", &"font_hover_color", &"font_focus_color", &"font_pressed_color",
+			&"font_hover_pressed_color"]:
+		theme.set_color(state, variation, SLATE)
 
 
 func _label_variation(theme: Theme, variation: StringName, size: int, color: Color) -> void:
@@ -318,6 +346,10 @@ func _add_chests(theme: Theme) -> void:
 	theme.set_type_variation(&"PassiveBar", &"HFlowContainer")
 	theme.set_constant(&"h_separation", &"PassiveBar", 6)
 	theme.set_constant(&"v_separation", &"PassiveBar", 6)
+	# La build de una partida en los récords: cada pieza (icono y número), bien separada de la siguiente.
+	theme.set_type_variation(&"BuildFlow", &"HFlowContainer")
+	theme.set_constant(&"h_separation", &"BuildFlow", 22)
+	theme.set_constant(&"v_separation", &"BuildFlow", 8)
 
 
 ## Jefe: arriba en el centro (bajo el reloj), su nombre, su barra de vida y lo que grita; debajo

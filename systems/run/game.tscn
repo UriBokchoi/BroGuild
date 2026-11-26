@@ -4,9 +4,13 @@
 [ext_resource type="PackedScene" path="res://ui/menus/main/main_menu.tscn" id="2_menu"]
 [ext_resource type="Resource" path="res://data/levels/brosque.tres" id="3_level"]
 [ext_resource type="PackedScene" path="res://ui/menus/run_setup/run_setup.tscn" id="4_setup"]
+[ext_resource type="Resource" path="res://data/meta/upgrades.tres" id="5_upgrades"]
+[ext_resource type="Resource" path="res://data/meta/quests.tres" id="6_quests"]
 
 [node name="Game" type="Node"]
 script = ExtResource("1_game")
 main_menu = ExtResource("2_menu")
 run_setup = ExtResource("4_setup")
 default_level = ExtResource("3_level")
+upgrades = ExtResource("5_upgrades")
+quests = ExtResource("6_quests")

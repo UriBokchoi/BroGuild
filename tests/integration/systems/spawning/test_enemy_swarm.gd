@@ -7,6 +7,7 @@ extends GutTest
 const SWARMER := preload("res://data/enemies/swarmer.tres")
 const ELITE := preload("res://data/enemies/elite.tres")
 const DUMBBELL := preload("res://levels/brosque/props/dumbbell_rock.tscn")
+const BIG_TREE := preload("res://levels/brosque/props/big_tree.tscn")
 const ENT_TRAINER := preload("res://data/enemies/ent_trainer.tres")
 
 var _swarm: EnemySwarm
@@ -89,6 +90,18 @@ func test_a_boss_climbs_over_the_dumbbells_too() -> void:
 	boss.set(&"_until_attack", 1000.0)
 	await wait_seconds(8.0)
 	assert_lt(boss.global_position.x, 1.5, "ha pasado al otro lado")
+
+
+func test_an_enemy_climbs_the_big_tree_up_to_its_target() -> void:
+	# El árbol grande es trepable: sube entero, sin pausas, hasta la plataforma.
+	var tree := BIG_TREE.instantiate() as Node3D
+	add_child_autofree(tree)
+	_target.position = Vector3(0.0, 6.5, 0.0)
+	_swarm.target = _target
+	var enemy := _swarm.spawn(SWARMER, Vector3(7.0, 0.0, 0.0))
+	await wait_seconds(8.0)
+	assert_gt(enemy.global_position.y, 6.0, "ha subido a la plataforma")
+	assert_lt(Vector2(enemy.global_position.x, enemy.global_position.z).length(), 2.8, "y está encima")
 
 
 func test_an_enemy_on_open_ground_does_not_climb() -> void:
@@ -195,3 +208,31 @@ func test_time_stop_freezes_everyone_for_a_while() -> void:
 	assert_false(_swarm.is_frozen())
 	assert_false(enemy.is_frozen())
 	assert_signal_emitted_with_parameters(EventBus, "time_stop_changed", [false])
+
+
+func test_vanishing_enemies_sink_and_leave_without_dying() -> void:
+	for index: int in 3:
+		_swarm.spawn(SWARMER, Vector3(index * 3.0, 0.0, 6.0))
+	await wait_physics_frames(2)
+	watch_signals(EventBus)
+	_swarm.vanish_all(0.2)
+	assert_signal_emit_count(EventBus, "enemy_vanished", 3)
+	for enemy: Enemy in _swarm.get_active():
+		assert_true(enemy.is_vanishing())
+		assert_true(enemy.freeze, "quietos")
+	await wait_seconds(0.35)
+	assert_eq(_swarm.active_count(), 0, "se fueron")
+	assert_signal_not_emitted(EventBus, "enemy_died", "sin morir: ni botín ni cuenta")
+	var again := _swarm.spawn(SWARMER, Vector3(1.0, 0.0, 1.0))
+	assert_false(again.is_vanishing(), "al volver del pool, como nuevo")
+	assert_false(again.freeze)
+
+
+func test_a_flying_enemy_keeps_its_height_over_the_target() -> void:
+	var bat_data: EnemyData = load("res://data/enemies/bat.tres")
+	var height := (bat_data.stat_sources[1] as EnemyStats).fly_height
+	_swarm.target = _target
+	var bat := _swarm.spawn(bat_data, Vector3(6.0, 0.0, 0.0))
+	await wait_seconds(1.5)
+	assert_almost_eq(bat.global_position.y, _target.global_position.y + height, 0.3, "vuela a su altura")
+	assert_lt(bat.global_position.distance_to(_target.global_position), 6.0, "y va a por él")

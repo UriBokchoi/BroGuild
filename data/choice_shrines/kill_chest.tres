@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="ItemPool" format=3]
+
+[ext_resource type="Script" path="res://systems/items/item_pool.gd" id="1_pool"]
+[ext_resource type="Resource" path="res://data/rarities/improbable_or_better.tres" id="2_rarities"]
+
+[resource]
+script = ExtResource("1_pool")
+rarities = ExtResource("2_rarities")
+items_dir = "res://data/items"

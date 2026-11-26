@@ -1,0 +1,36 @@
+[gd_scene format=3]
+
+[sub_resource type="StandardMaterial3D" id="Mat_eye"]
+albedo_color = Color(1, 0.2, 0.15, 1)
+emission_enabled = true
+emission = Color(1, 0.12, 0.08, 1)
+emission_energy_multiplier = 2.5
+
+[sub_resource type="StandardMaterial3D" id="Mat_pupil"]
+albedo_color = Color(0.08, 0.02, 0.02, 1)
+
+[sub_resource type="SphereMesh" id="Mesh_eye"]
+material = SubResource("Mat_eye")
+radius = 0.14
+height = 0.28
+radial_segments = 14
+rings = 7
+
+[sub_resource type="SphereMesh" id="Mesh_pupil"]
+material = SubResource("Mat_pupil")
+radius = 0.06
+height = 0.12
+radial_segments = 8
+rings = 4
+
+[node name="EyeOrb" type="Node3D"]
+
+[node name="Eye" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.16, 0)
+cast_shadow = 0
+mesh = SubResource("Mesh_eye")
+
+[node name="Pupil" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.16, -0.1)
+cast_shadow = 0
+mesh = SubResource("Mesh_pupil")

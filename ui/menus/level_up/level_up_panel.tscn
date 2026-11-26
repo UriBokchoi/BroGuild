@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://ui/menus/level_up/level_up_panel.gd" id="1_panel"]
 [ext_resource type="Shader" path="res://vfx/shaders/screen_blur.gdshader" id="2_blur"]
 [ext_resource type="Resource" path="res://data/progression/level_up.tres" id="3_data"]
+[ext_resource type="PackedScene" path="res://ui/widgets/gold_counter.tscn" id="4_gold"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_blur"]
 shader = ExtResource("2_blur")
@@ -75,12 +76,38 @@ layout_mode = 2
 focus_mode = 0
 text = "LEVEL_UP_DOUBLE"
 
-[node name="Reroll" type="Button" parent="Center/Content"]
+[node name="Gold" parent="Center/Content" instance=ExtResource("4_gold")]
+layout_mode = 2
+
+[node name="Actions" type="HBoxContainer" parent="Center/Content"]
+layout_mode = 2
+theme_type_variation = &"ResultsButtons"
+alignment = 1
+
+[node name="Skip" type="Button" parent="Center/Content/Actions"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_vertical = 4
+focus_mode = 0
+theme_type_variation = &"SkipButton"
+text = "LEVEL_UP_SKIP"
+
+[node name="Reroll" type="Button" parent="Center/Content/Actions"]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 4
 focus_mode = 0
 text = "LEVEL_UP_REROLL"
+
+[node name="Ban" type="Button" parent="Center/Content/Actions"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_vertical = 4
+focus_mode = 0
+theme_type_variation = &"BanButton"
+toggle_mode = true
+text = "LEVEL_UP_BAN"
 
 [node name="StatsHint" type="Label" parent="Center/Content"]
 layout_mode = 2

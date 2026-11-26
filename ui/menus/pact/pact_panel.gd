@@ -79,6 +79,7 @@ func choose(pact: PactData) -> void:
 			stats.add_modifier(modifier, source)
 	_sealed.append(pact)
 	EventBus.announced.emit(sealed_key, [pact.name_key], sealed_color)
+	EventBus.pact_sealed.emit(pact)
 	_set_open(false)
 
 

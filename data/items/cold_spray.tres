@@ -1,10 +1,11 @@
-[gd_resource type="Resource" script_class="PassiveItemData" format=3]
+[gd_resource type="Resource" script_class="PassiveItemData" format=3 uid="uid://bdkjf7uewor4n"]
 
-[ext_resource type="Script" path="res://systems/items/passive_item_data.gd" id="1_item"]
-[ext_resource type="Script" path="res://systems/items/effects/on_hit_effect.gd" id="2_effect"]
-[ext_resource type="Script" path="res://systems/items/effects/slow_on_hit.gd" id="3_slow"]
+[ext_resource type="Script" uid="uid://bxvisp1obhnj1" path="res://systems/items/passive_item_data.gd" id="1_item"]
+[ext_resource type="Script" uid="uid://c0h0hwrg5wrl" path="res://systems/items/effects/on_hit_effect.gd" id="2_effect"]
+[ext_resource type="Script" uid="uid://bhp5yj4oqybqk" path="res://systems/items/effects/slow_on_hit.gd" id="3_slow"]
 [ext_resource type="Resource" path="res://data/rarities/rare.tres" id="4_rarity"]
-[ext_resource type="Texture2D" path="res://assets/textures/icons/items/cold_spray.svg" id="5_icon"]
+[ext_resource type="Texture2D" uid="uid://5kdjwrojv0gw" path="res://assets/textures/icons/items/cold_spray.svg" id="5_icon"]
+[ext_resource type="Script" uid="uid://is4y31g1paml" path="res://core/stats/stat_modifier.gd" id="6_hunxk"]
 
 [sub_resource type="Resource" id="Effect_slow"]
 script = ExtResource("3_slow")

@@ -106,3 +106,13 @@ func _has_label(card: Node, text: String) -> bool:
 		if (label as Label).text == text:
 			return true
 	return false
+
+
+func test_a_long_description_never_spills_out_of_the_card() -> void:
+	var item := (preload("res://data/weapons/sword.tres") as WeaponData).duplicate() as WeaponData
+	item.description_key = "Una descripción muy larga que no cabe en una carta de subir de nivel, ni de lejos: sigue y sigue y sigue con más palabras, más frases y más líneas de las que caben en la altura de serie de la carta."
+	var card := LevelUpCard.new(LevelUpOption.create(item, 1))
+	add_child_autofree(card)
+	await wait_process_frames(3)
+	var column := card.get_child(0) as Control
+	assert_lte(column.get_combined_minimum_size().y, card.size.y, "la carta crece hasta que cabe")

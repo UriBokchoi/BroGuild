@@ -92,6 +92,14 @@ func test_a_horde_sounds_its_horn() -> void:
 	assert_eq(Sfx.last_cue, _bank.horde_incoming)
 
 
+func test_lifting_weights_and_taking_a_card_sound() -> void:
+	var offers: Array[StatOffer] = []
+	EventBus.stat_choice_offered.emit(offers)
+	assert_eq(Sfx.last_cue, _bank.weights_lifted)
+	EventBus.boss_key_collected.emit()
+	assert_eq(Sfx.last_cue, _bank.boss_key_collected)
+
+
 func test_double_or_nothing_sounds_win_or_loss() -> void:
 	EventBus.double_or_nothing_resolved.emit(true)
 	assert_eq(Sfx.last_cue, _bank.double_won)

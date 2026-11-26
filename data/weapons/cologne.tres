@@ -1,10 +1,10 @@
-[gd_resource type="Resource" script_class="WeaponData" format=3]
+[gd_resource type="Resource" script_class="WeaponData" format=3 uid="uid://cd8sbwhik0cd"]
 
-[ext_resource type="Script" path="res://systems/combat/weapons/weapon_data.gd" id="1_data"]
-[ext_resource type="Script" path="res://systems/combat/weapons/weapon_stats.gd" id="2_stats"]
+[ext_resource type="Script" uid="uid://dym5cqjgo8xu4" path="res://systems/combat/weapons/weapon_data.gd" id="1_data"]
+[ext_resource type="Script" uid="uid://cbsky1m07t2ia" path="res://systems/combat/weapons/weapon_stats.gd" id="2_stats"]
 [ext_resource type="PackedScene" path="res://systems/combat/weapons/cologne/cologne.tscn" id="5_scene"]
-[ext_resource type="Script" path="res://systems/upgrades/upgrade_stat.gd" id="90_upgrade"]
-[ext_resource type="Texture2D" path="res://assets/textures/icons/weapons/cologne.svg" id="99_icon"]
+[ext_resource type="Script" uid="uid://dyvb1ciy45s8b" path="res://systems/upgrades/upgrade_stat.gd" id="90_upgrade"]
+[ext_resource type="Texture2D" uid="uid://blnst230ewp65" path="res://assets/textures/icons/weapons/cologne.svg" id="99_icon"]
 
 [sub_resource type="Resource" id="Resource_stats"]
 script = ExtResource("2_stats")

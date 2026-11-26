@@ -1723,10 +1723,184 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
 - **Por qué:** lo pidió el diseñador («contra más dificultad más experiencia»). Hasta ahora solo lo hacían las calaveras y las bolsitas. Es el «más riesgo, más recompensa» del GDD, y con los tiers hace que la dificultad alta compense.
 
 ## 2026-11-25 · Detalles del Guerrero y del Pícaro
-- **Decisión:** el Guerrero lleva yelmo con cresta, hombreras y cinturón con hebilla; el Pícaro, capucha con pañuelo y un cinturón con bolsitas. Son piezas como las que ya había (`assets/models/props/`), puestas en los puntos del modelo con `attachments`.
+- **Decisión:** el Guerrero lleva yelmo con cresta, hombreras y cinturón con hebilla; el Pícaro, un pañuelo rojo al cuello y un cinturón con bolsitas. (Llevó también una capucha, pero al diseñador no le gustó y se quitó.) Son piezas como las que ya había (`assets/models/props/`), puestas en los puntos del modelo con `attachments`.
 - **Por qué:** lo pidió el diseñador. El Mago ya tenía sombrero; ahora los tres se distinguen de un vistazo.
 
 ## 2026-11-25 · Lo que pesa el juego
 - **Medición:** el ejecutable exportado pesa 103 MB y el `.pck` 3,7 MB (27 MB comprimido en `.7z`). Casi todo es el motor: el ejecutable es la plantilla de exportación oficial de Godot, con todos sus módulos.
 - **Hecho:** la exportación (en `export_presets.cfg`, que no se versiona) ya no mete GUT, los tests, las herramientas ni los docs.
 - **Lo que haría falta para bajar de verdad:** compilar plantillas de exportación propias (`optimize=size`, LTO y sin los módulos que no usamos). Suelen quedar en la mitad. Hace falta Python y SCons (Visual Studio 2022 ya está), así que es una decisión del diseñador.
+
+## 2026-11-25 · Récords fijos en el menú principal, con la build
+- **Decisión:** los récords dejan de ser un botón: están siempre a la derecha del menú principal, con scroll. Cada partida sale con el icono del personaje y sus enemigos derrotados; al hacer clic, debajo sale su detalle (mapa y tier, hasta dónde llegó, resultado, tiempo, nivel, enemigos, élites, oro, daño y fecha) y la build con la que acabó (armas, runas y objetos con su icono y nivel o copias, y los pactos).
+  - Para eso cada partida guarda ahora su build, el oro y el daño (`RunRecord`). Las de antes no la tienen y lo dicen.
+  - Los iconos y nombres salen del catálogo del Archivo (`ContentCatalog.find`), así que la build se guarda solo con ids.
+- **Por qué:** lo pidió el diseñador. Con la build a la vista, los récords sirven para comparar qué funcionó.
+
+## 2026-11-25 · El fondo del menú principal, un claro del Brosque
+- **Decisión:** el fondo del menú deja el disco de hierba y es un claro del Brosque generado con las mismas piezas (ruinas, pesas, bancos y el bosque), siempre con la misma semilla para que quede bien encuadrado, y hojas que caen. Los personajes se quedan en el centro, entre el menú y los récords.
+- **Por qué:** el diseñador lo veía muy plano. Reutilizar el generador del mapa no añade assets.
+
+## 2026-11-25 · Pulido de menús y opciones
+- **Decisión:**
+  - La selección de nivel y las opciones tienen scroll; sus botones de abajo siempre se ven.
+  - Opciones nuevas: sensibilidad del ratón (de 20 a 300 %) e invertir el eje vertical, que se aplican al momento.
+  - El tier se ve en el HUD (pequeño, bajo la dificultad) y en los resultados («Llegaste a»).
+  - «Logros (WIP)» en el menú, desactivado, hasta que se diseñen.
+  - Los archivos de prueba que usan los tests, la validación y las capturas se borran al cerrar, para no dejar basura en `%APPDATA%\bro_guild`.
+- **Por qué:** lo pidió el diseñador antes de seguir con niveles nuevos. La interfaz trabaja en 1152 × 648, así que lo que no cabía en esa altura se salía.
+
+## 2026-11-25 · Economía de los tiers y rendimiento del invierno
+- **Economía:** revisada, sin cambios.
+  - El oro de los enemigos sube con la dificultad casi al mismo ritmo que el precio de cofres, tragaperras y taberna. Un cofre cuesta unos 15 enemigos en el tier 1 y unos 35 en los tiers 2 y 3, donde salen más por minuto.
+  - El encarecimiento por cofre abierto y por cura en la taberna vuelve a empezar en cada tier: son los de un mapa nuevo. Si se quiere que cuente toda la partida, habría que guardar la cuenta fuera del mapa.
+- **Rendimiento** (180 esbirros alrededor del jugador, sin límite de FPS, en el equipo de desarrollo): el otoño y el invierno van a unos 300 FPS. La física se lleva unos 7 ms por tick, como antes.
+- **Herramientas de prueba:** en F3, «god mode» (el jugador no pierde vida) y «next stage», para recorrer los tiers y el jefe final.
+- **Sonidos:** el heraldo tiene su fanfarria y sellar un pacto, un golpe grave y metálico (antes, el de subir de nivel).
+
+## 2026-11-25 · Pedidos tras probar (2): primeros arreglos
+- **Decisión:**
+  - Los récords guardan las 10 mejores partidas (antes, 20).
+  - El detalle de una partida se abre en una ventana aparte, en el centro del menú, en vez de debajo de la lista.
+  - Los enemigos van un 10 % más lentos de base (esbirros 4,1 m/s, tiradores 2,8 y Bro-tes 5,0); los jefes, igual.
+  - El oro se ve en los paneles que cobran por volver a tirar: subir de nivel, círculo de setas y pactos.
+  - El círculo de setas deja volver a tirar: 10 de oro, ×1,5 por uso en la partida, como los pactos.
+  - El robo de vida (`lifesteal`, que existía como stat pero no hacía nada) cura al jugador un % del daño que hace a los enemigos (`Lifesteal`, en el jugador). Sale en las mejoras de las pesas (+1 % de base) y tiene su runa, Sed de sangre (+0,8 % por nivel de base).
+- **Por qué:** lo pidió el diseñador tras probar el juego.
+
+## 2026-11-26 · Dos enemigos raros: el Cardioadicto y el Murciébro
+- **Decisión:**
+  - **Cardioadicto:** variante del esbirro (escena heredada, verde neón con muñequera), frágil (35 de vida) y casi el doble de rápido (7 m/s).
+  - **Murciébro:** un murciélago bro con cadena de oro que vuela a 1,6 m sobre los pies del jugador, a la altura de su cabeza. Choca y daña al tocar como los demás, así que saltar por encima de la horda deja de ser gratis.
+  - Volar es una stat de los enemigos (`fly_height`): sin gravedad ni trepar, sube o baja hasta su altura. Cualquier enemigo nuevo puede volar con datos.
+  - Los dos salen poco: peso 0,06 y 0,05 en las oleadas (el esbirro, 1), desde dificultad 2 y 3. Dan algo más de experiencia y oro.
+- **Por qué:** lo pidió el diseñador: «una variante algo más rara que vaya más rápido y una que vuele que también sea rara, para dificultar el pasar por encima de los enemigos».
+
+## 2026-11-25 · Cruzar el portal, con animación
+- **Decisión:** al cruzar el portal de un tier, el jugador se queda quieto y encoge hacia el portal (0,45 s) mientras los enemigos se hunden en el suelo con su humo, y luego la pantalla funde a negro. Los enemigos que se hunden no mueren: ni sueltan botín ni cuentan, y no se les puede dar. El portal tiene su sonido (un barrido que sube), también al cruzar el de la arena final.
+- **Por qué:** lo pidió el diseñador; antes todo desaparecía de golpe.
+
+## 2026-11-25 · La arena final, redonda
+- **Decisión:** la arena del jefe final es un círculo de 45 m de radio.
+  - Las paredes de choque son tramos rectos en círculo (`RingBounds`).
+  - El borde que se ve al acercarse también (`MapBoundary.radius`, tramos de la misma malla).
+  - El bosque del contorno y la banda de fuera se reparten en círculo (`ForestData.circular`).
+  - Los enemigos solo salen dentro del círculo (`play_radius` del mapa, que llega al director de oleadas).
+  - Los mapas cuadrados siguen igual: todo es opcional y de serie está apagado.
+- **Por qué:** desde arriba se notaba que era un cuadrado; un claro redondo encaja con las ruinas en círculo y con la idea de arena.
+
+## 2026-11-26 · Bro-monedas
+- **Decisión:** la moneda de fuera de la partida son las bro-monedas: 1 por élite y 5 por jefe (`data/meta/bro_coins.tres`). Los minibosses no dan, porque no se pidió. Se suman al perfil (`user://profile.cfg`) al acabar la partida, se gane o se pierda, y en los resultados sale cuántas se ganaron. Se gastarán en la pestaña «Mejoras» del menú.
+- **Por qué:** lo pidió el diseñador. Guardarlas al acabar (y no al matar) hace que el juego escriba en disco una sola vez por partida, como los récords.
+
+## 2026-11-26 · Mejoras permanentes con bro-monedas
+- **Decisión:**
+  - Cada mejora tiene niveles; el valor de cada nivel es el total, no lo que se suma (daño: +1 %, +2 %… hasta +5 %), igual que el nivel máximo de las armas (12, 14… 20).
+  - Las stats en % (daño, área, vida y velocidad, que sube carrera y sprint) suben un %; las que son puntos (crítico, defensa, Suerte y dificultad), puntos.
+  - Oro y bro-monedas van juntas en una mejora: +10 % a +50 %.
+  - Las ranuras abren 1 y 2 más al empezar (de 2 a 4, las que hay).
+  - Los niveles máximos de más son stats del jugador (`weapon_level_bonus`, `rune_level_bonus`) que suman al `level_cap` de cada arma o runa.
+  - Precios provisionales: 5/10/15/20/25 las stats, 10 a 50 el oro y los niveles máximos, 30 y 60 las ranuras.
+  - Lo comprado va a la base del jugador al empezar la partida, como el personaje.
+  - «Reembolsar todo» devuelve todo lo gastado, sin perder nada.
+  - La mejora de la recarga de las habilidades (3:00 → 2:30) llegará con las habilidades.
+- **Por qué:** lo pidió el diseñador. Lo que no dijo (precios, si los % son totales, cuánto oro y bro-monedas) está en `data/meta/upgrades.tres` para cambiarlo sin tocar código.
+
+## 2026-11-26 · Misiones y desbloqueos
+- **Decisión:**
+  - Una misión dice qué hay que hacer en una partida y qué desbloquea (un arma o un personaje). Se mira con el récord al acabar la partida (al morir o al ganar), no durante.
+  - «Ganar» es ganar la partida, en cualquier tier.
+  - «Subir el hacha» para el Bárbaro se lee como el martillo para el Paladín: hacha a nivel 10 y ganar.
+  - La colonia no se nombró: se queda abierta, como ahora.
+  - Lo bloqueado no sale como nuevo al subir de nivel; si ya se lleva (la armería de práctica), sí se sube.
+  - Las misiones de Paladín, Bárbaro y Brujo se añaden con sus personajes.
+- **Por qué:** lo pidió el diseñador. Las condiciones están en `data/meta/quests.tres` para cambiarlas sin tocar código.
+
+## 2026-11-26 · Árboles grandes y montañitas en vez de mesetas
+- **Decisión:** las mesetas cuadradas con rampa dejan su sitio a dos piezas que se suben a saltos, sin rampa:
+  - El árbol grande (antes, la meseta alta): cuatro setas de repisa en espiral alrededor del tronco, cada una 1,3 m más alta, hasta una plataforma de tablas a 6,5 m. Sus ramas y su copa van por fuera, para no tapar lo de arriba.
+  - La montañita (antes, la baja): tres escalones de roca de 1,4 m con musgo, rocas sueltas al pie y un arbusto. La cima, a 4,2 m.
+  - Ningún apoyo está a más de un salto (2 m) del anterior; un test lo comprueba.
+  - Reutilizan los materiales del Brosque (corteza, tablas, roca y musgo, que cambia con la estación). Solo hay un material nuevo, el de las setas.
+  - Ocupan menos (6 y 6,5 m de radio, antes 20 y 15).
+- **Por qué:** lo pidió el diseñador: algo original, no una plataforma cuadrada. Que haya que hacer parkour para subir premia el movimiento.
+
+## 2026-11-26 · El Mal de ojo, el arma del Brujo
+- **Decisión:**
+  - Se llama Mal de ojo: un ojo rojo con estela que persigue a su objetivo (gira hacia él, no lo sigue en línea recta) y rebota como la daga.
+  - Un crítico lo hace reventar en área (radio × área), pero sigue rebotando; los golpes de la explosión no revientan otra vez.
+  - Se desbloquea con la misión del Mago a nivel 30, la misma que abrirá al Brujo: una misión puede dar varias cosas (`rewards`).
+  - Valores de partida: 15 de daño, 1 s, 2 rebotes, persecución 5, explosión de 2 m.
+- **Por qué:** lo pidió el diseñador. Los números son provisionales, hasta probarla.
+
+## 2026-11-26 · Pedidos tras probar (3): primeros arreglos
+- **Decisión:**
+  - El robo de vida, a la mitad: +0,5 % en las pesas y +0,4 % por nivel de Sed de sangre.
+  - Los minibosses dan 3 bro-monedas: entre el élite (1) y el jefe (5).
+  - Las mejoras del menú cuestan más: 10, 20, 35, 50 y 70 las stats; 20 a 100 el oro y los niveles máximos; 60 y 120 las ranuras.
+  - El Ent-renador tiene 8000 de vida (antes 5000), para que no caiga al minuto 3.
+  - El HUD cuenta los enemigos derrotados encima de la dificultad.
+  - El Guerrero pasa a ser azul.
+  - En el menú, «Logros» desaparece: los logros serán las misiones.
+  - Opciones sube junto al idioma.
+  - El fondo del menú tiene una tragaperras y un cofre en vez de los personajes.
+- **Por qué:** lo pidió el diseñador tras probar.
+
+## 2026-11-26 · Tiers: misma escala, enemigos más fuertes
+- **Decisión:**
+  - Los tiers ya no suman dificultad (antes, +10 y +20: el tier 2 empezaba con los enemigos a ×4,2 de vida).
+  - Cada tier escala igual que el primero, pero todo lo que sale es más fuerte: ×1,2 en el tier 2 y ×1,5 en el tier 3. Eso incluye hordas, refuerzos, minibosses y jefes, en vida, daño al tocar y daño de arma. También sueltan esa parte más de experiencia y oro, porque más dificultad da más recompensa.
+  - La selección de nivel lo dice en rojo: «Enemigos un 20 % más fuertes».
+  - Las oleadas de otoño, invierno y la arena final usan las curvas del tier 1.
+  - La arena final empieza en dificultad 10 (como la prórroga) con la fuerza del tier 3.
+  - Las hordas, un 60 % más grandes.
+  - Las cartas de elegir crecen hasta que cabe su texto (`CardParts.fit_height`), como ya hacían las de los pactos.
+  - Suenan las pesas al levantarse y la tarjeta de socio al cogerla.
+- **Por qué:** lo pidió el diseñador: que se entienda cuánto más duro es cada tier y que escale igual.
+
+## 2026-11-26 · Árbol trepable, brújula y decorado de estación
+- **Decisión:**
+  - El árbol grande tiene el tronco ancho, con la plataforma a ras, y está en el grupo `climbable`. Los enemigos trepan por él sin pausas, mirando a la altura de los pies, hasta que pasan el borde. Por lo demás siguen como antes: unos 2,8 m de un tirón.
+  - El jugador sigue subiendo por las setas.
+  - El HUD tiene una brújula abajo a la izquierda: N, E, S y O giran con la cámara y el norte es −Z.
+  - En invierno, en vez de charcos helados (con su flor), hay montoncitos de nieve y algún muñeco de nieve con una mancuerna.
+  - En todos los tiers hay caminitos de tierra cortos, solo de decorado.
+- **Por qué:** lo pidió el diseñador. Si el árbol no se puede trepar, arriba no te alcanza nadie.
+
+## 2026-11-26 · Las misiones hacen de logros; la runa del Ojo clínico
+- **Decisión:**
+  - No hay una sección de logros aparte. La ventana de misiones tiene dos pestañas: «Pendientes» y «Completadas». Las completadas van de la última a la primera, con la fecha en que se cumplieron, que el perfil guarda desde ahora; las de antes salen sin fecha.
+  - Runa nueva, el Ojo clínico (+1,5 de crítico por nivel de base). Se desbloquea al derrotar a 2500 enemigos en una sola partida, así que las misiones pueden pedir enemigos derrotados.
+  - Sed de sangre se desbloqueará con el Bárbaro a nivel 50, cuando exista.
+- **Por qué:** lo pidió el diseñador.
+
+## 2026-11-26 · Saltar y vetar
+- **Decisión:**
+  - Una mejora del menú, «Saltar y vetar», da 1, 2 o 3 saltos y vetos por partida (stats `skips` y `bans`). Cuesta 100, 200 y 400 bro-monedas, la más cara.
+  - Saltar se salta la elección de subir de nivel sin coger nada.
+  - Vetar se queda pulsado hasta que se elige una carta: su arma o runa ya no sale en el resto de la partida, y salen otras cartas sin coste.
+  - Saltar es verde y vetar, rojo. Solo están en las cartas de subir de nivel, no en las mejoras gratis de otros sitios.
+- **Por qué:** lo pidió el diseñador. Vetar saca cartas nuevas para que el veto no cueste la elección.
+
+## 2026-11-26 · El cofre de la taberna
+- **Decisión:**
+  - Junto a la taberna hay un cofre que se abre gratis al derrotar a 1500 enemigos. Cuenta los del tier en que se está (el mapa es nuevo en cada tier), así que hay uno por tier.
+  - Deja elegir entre 3 objetos azules o mejores: improbable, legendario o mítico, con la Suerte.
+  - Encima dice cuántos van.
+- **Por qué:** lo pidió el diseñador para el tier 1. Contar por tier hace que en los siguientes también haya que ganárselo.
+
+## 2026-11-26 · La bola roja de los jefes
+- **Decisión:**
+  - El Burpee del Ent-renador y de Mr. Brolympia pasa a ser una bola roja que se carga en el suelo hacia donde va el jugador. Apunta a su posición más lo que se mueve en 0,8 s, con la velocidad estimada de un tick a otro.
+  - Durante 0,6 s la bola le sigue. Luego se queda quieta 1,2 s, crece y revienta en un radio de 5 m (7 m la de Mr. Brolympia), con un aro que marca hasta dónde llega.
+  - El salto del Trolleador (un miniboss) sigue igual.
+- **Por qué:** lo pidió el diseñador: un ataque que castigue ir en línea recta pero que dé tiempo a esquivar.
+
+## 2026-11-26 · Paladín, Bárbaro y Brujo
+- **Decisión:** tres personajes nuevos, que se desbloquean con misiones. Las stats y las pasivas las elegí siguiendo a los tres iniciales: unas pocas diferencias, un rasgo de movimiento y una regeneración distinta en cada uno.
+  - **Paladín** (amarillo, con aureola). Empieza con el martillo de guerra. +25 vida, +8 defensa, +1 de regeneración, −8 % de velocidad y salta 0,3 m más. Su pasiva, Devoción: +1 % de vida máxima por nivel. Se desbloquea con el martillo a nivel 10 y ganando.
+  - **Bárbaro** (rojo, casco con cuernos). Empieza con el hacha. +40 vida, +10 % de daño, +5 % de velocidad y +12 % de sprint. Su pasiva, Furia (la que pidió el diseñador): la primera vez que iba a morir se queda a 1 de vida y no puede morir durante 10 s, brilla en rojo y su daño, velocidad de ataque, velocidad y defensa suben un 30 %. Se desbloquea con el hacha a nivel 10 y ganando. Con él a nivel 50 se desbloquea la runa Sed de sangre.
+  - **Brujo** (morado, con cuernos y el ojo en la mano). Empieza con el Mal de ojo. −15 vida, +5 de crítico, +20 % de daño crítico, +10 % de área y un dash más en el aire. Su pasiva, Maleficio: +2 % de daño crítico por nivel. Se desbloquea con el Mago a nivel 30, junto con su arma.
+  - El Guerrero pasa a azul. El Mago se queda lavanda, más claro que el morado del Brujo.
+  - Para que la Furia no lo deje morir, la vida acepta un `death_guard` (quien decide si un golpe mortal no mata) y un `floor_health` (de qué vida no baja mientras le quede).
+- **Por qué:** lo pidió el diseñador. Las stats y las pasivas de Paladín y Brujo son mías, a falta de que las pruebe.

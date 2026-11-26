@@ -8,3 +8,7 @@ extends ItemData
 
 func kind_key() -> StringName:
 	return &"ITEM_KIND_RUNE"
+
+
+func level_bonus_stat() -> StringName:
+	return &"rune_level_bonus"

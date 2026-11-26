@@ -51,7 +51,7 @@ func _on_enemy_died(enemy: Enemy) -> void:
 	discover(enemy.data)
 
 
-func _on_item_changed(item: ItemData, level: int) -> void:
+func _on_item_changed(item: ItemData, level: int, _max_level: int) -> void:
 	if level > 0:
 		discover(item)
 

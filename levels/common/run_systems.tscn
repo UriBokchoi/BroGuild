@@ -53,6 +53,8 @@
 [ext_resource type="Script" path="res://systems/progression/effects/streak_effect.gd" id="55_streak"]
 [ext_resource type="Resource" path="res://data/progression/streak.tres" id="56_streak_data"]
 [ext_resource type="Script" path="res://systems/pacts/herald_spawner.gd" id="57_herald_spawner"]
+[ext_resource type="Resource" path="res://data/meta/bro_coins.tres" id="61_bro_coins"]
+[ext_resource type="Resource" path="res://data/meta/quests.tres" id="62_quests"]
 [ext_resource type="Resource" path="res://data/pacts/herald.tres" id="58_herald_data"]
 [ext_resource type="PackedScene" path="res://entities/interactables/herald/herald.tscn" id="59_herald"]
 [ext_resource type="PackedScene" path="res://ui/menus/pact/pact_panel.tscn" id="60_pact_panel"]
@@ -117,9 +119,12 @@ data = ExtResource("16_level_up_data")
 player = NodePath("../Player")
 panel = NodePath("../LevelUpPanel")
 
-[node name="RunRecorder" type="Node" parent="." node_paths=PackedStringArray("player")]
+[node name="RunRecorder" type="Node" parent="." node_paths=PackedStringArray("player", "pact_panel")]
 script = ExtResource("18_recorder")
 player = NodePath("../Player")
+pact_panel = NodePath("../PactPanel")
+bro_coin_data = ExtResource("61_bro_coins")
+quests = ExtResource("62_quests")
 record_runs = true
 
 [node name="ArchiveRecorder" type="Node" parent="." node_paths=PackedStringArray("player")]
@@ -136,6 +141,7 @@ script = ExtResource("10_director")
 swarm = NodePath("../EnemySwarm")
 target = NodePath("../Player")
 difficulty_stats = NodePath("../Player/Stats")
+strength_stats = Array[StringName]([&"max_health", &"contact_damage", &"damage", &"xp_reward", &"gold_reward"])
 
 [node name="PickupEffects" type="Node" parent="."]
 
@@ -217,8 +223,9 @@ items = NodePath("../Player/Items")
 
 [node name="DamageVignette" parent="." instance=ExtResource("42_vignette")]
 
-[node name="ItemChoicePanel" parent="." node_paths=PackedStringArray("inventory") instance=ExtResource("35_item_choice")]
+[node name="ItemChoicePanel" parent="." node_paths=PackedStringArray("inventory", "wallet") instance=ExtResource("35_item_choice")]
 inventory = NodePath("../Player/Items")
+wallet = NodePath("../Player/Wallet")
 
 [node name="Particles" type="Node3D" parent="."]
 
@@ -228,6 +235,15 @@ effect = ExtResource("46_death_puff")
 pool_size = 32
 max_per_frame = 10
 offset = Vector3(0, 0.7, 0)
+tint_by_enemy = true
+
+[node name="VanishPuffs" type="Node3D" parent="Particles"]
+script = ExtResource("45_bursts")
+trigger = 4
+effect = ExtResource("46_death_puff")
+pool_size = 32
+max_per_frame = 12
+offset = Vector3(0, 0.4, 0)
 tint_by_enemy = true
 
 [node name="HitSparks" type="Node3D" parent="Particles"]

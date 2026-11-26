@@ -1,30 +1,31 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://ui/menus/main/main_menu.gd" id="1_menu"]
-[ext_resource type="Resource" path="res://data/characters/warrior.tres" id="2_warrior"]
-[ext_resource type="Resource" path="res://data/characters/mage.tres" id="3_mage"]
-[ext_resource type="Resource" path="res://data/characters/rogue.tres" id="4_rogue"]
-[ext_resource type="PackedScene" path="res://entities/player/characters/model/character_model.tscn" id="5_model"]
+[ext_resource type="PackedScene" path="res://entities/interactables/slot_machine/slot_machine.tscn" id="2_slots"]
+[ext_resource type="PackedScene" path="res://entities/interactables/chest/chest.tscn" id="3_chest"]
 [ext_resource type="PackedScene" path="res://ui/menus/options/options_panel.tscn" id="6_options"]
 [ext_resource type="Script" path="res://ui/widgets/language_picker.gd" id="7_language"]
 [ext_resource type="Texture2D" path="res://assets/textures/icons/ui/language.svg" id="8_globe"]
 [ext_resource type="PackedScene" path="res://ui/menus/leaderboard/leaderboard_panel.tscn" id="9_records"]
 [ext_resource type="PackedScene" path="res://ui/menus/archive/archive_panel.tscn" id="10_archive"]
+[ext_resource type="PackedScene" path="res://ui/menus/leaderboard/run_detail_panel.tscn" id="16_run_detail"]
+[ext_resource type="PackedScene" path="res://ui/menus/upgrades/upgrades_panel.tscn" id="17_upgrades"]
+[ext_resource type="PackedScene" path="res://ui/menus/quests/quests_panel.tscn" id="18_quests"]
 [ext_resource type="Environment" path="res://levels/brosque/environment.tres" id="11_environment"]
 [ext_resource type="Material" path="res://levels/brosque/materials/grass.tres" id="12_grass"]
+[ext_resource type="Script" path="res://levels/common/layout/level_layout.gd" id="13_layout"]
+[ext_resource type="Resource" path="res://data/layouts/main_menu.tres" id="14_layout_data"]
+[ext_resource type="PackedScene" path="res://vfx/weather/falling_leaves.tscn" id="15_leaves"]
 
-[sub_resource type="CylinderMesh" id="CylinderMesh_ground"]
+[sub_resource type="PlaneMesh" id="PlaneMesh_ground"]
 material = ExtResource("12_grass")
-top_radius = 9.0
-bottom_radius = 9.0
-height = 0.2
-radial_segments = 48
-rings = 1
+size = Vector2(220, 220)
 
-[node name="MainMenu" type="Node3D" node_paths=PackedStringArray("models")]
+[node name="MainMenu" type="Node3D" node_paths=PackedStringArray("layout")]
 script = ExtResource("1_menu")
-characters = Array[Resource]([ExtResource("2_warrior"), ExtResource("3_mage"), ExtResource("4_rogue")])
-models = [NodePath("Characters/Warrior"), NodePath("Characters/Mage"), NodePath("Characters/Rogue")]
+layout = NodePath("Layout")
+layout_seed = 7
+
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = ExtResource("11_environment")
@@ -36,24 +37,28 @@ light_energy = 1.25
 shadow_enabled = true
 
 [node name="Camera" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.995, 0.1, 0, -0.1, 0.995, 0, 1.7, 6.5)
+transform = Transform3D(1, 0, 0, 0, 0.999, 0.04, 0, -0.04, 0.999, 0.5, 1.4, 7.8)
 fov = 50.0
 current = true
 
 [node name="Ground" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, -0.1, 0)
-mesh = SubResource("CylinderMesh_ground")
+mesh = SubResource("PlaneMesh_ground")
 
-[node name="Characters" type="Node3D" parent="."]
+[node name="Layout" type="Node3D" parent="."]
+script = ExtResource("13_layout")
+data = ExtResource("14_layout_data")
 
-[node name="Warrior" parent="Characters" instance=ExtResource("5_model")]
-transform = Transform3D(-0.966, 0, -0.259, 0, 1, 0, 0.259, 0, -0.966, 0.6, 0.9, 0.4)
+[node name="Leaves" parent="." node_paths=PackedStringArray("target") instance=ExtResource("15_leaves")]
+target = NodePath("../Camera")
 
-[node name="Mage" parent="Characters" instance=ExtResource("5_model")]
-transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 2.2, 0.9, -0.4)
+[node name="Props" type="Node3D" parent="."]
+process_mode = 4
 
-[node name="Rogue" parent="Characters" instance=ExtResource("5_model")]
-transform = Transform3D(-0.966, 0, 0.259, 0, 1, 0, -0.259, 0, -0.966, 3.8, 0.9, 0.4)
+[node name="SlotMachine" parent="Props" instance=ExtResource("2_slots")]
+transform = Transform3D(-0.94, 0, -0.342, 0, 1, 0, 0.342, 0, -0.94, 0.1, 0, -1.8)
+
+[node name="Chest" parent="Props" instance=ExtResource("3_chest")]
+transform = Transform3D(0.906, 0, -0.423, 0, 1, 0, 0.423, 0, 0.906, 1.55, 0, -0.9)
 
 [node name="UI" type="CanvasLayer" parent="."]
 
@@ -83,20 +88,22 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "MENU_PLAY"
 
-[node name="Options" type="Button" parent="UI/Margin/Menu"]
+[node name="Upgrades" type="Button" parent="UI/Margin/Menu"]
 unique_name_in_owner = true
 layout_mode = 2
-text = "MENU_OPTIONS"
+text = "MENU_UPGRADES"
 
-[node name="Records" type="Button" parent="UI/Margin/Menu"]
+[node name="Quests" type="Button" parent="UI/Margin/Menu"]
 unique_name_in_owner = true
 layout_mode = 2
-text = "MENU_RECORDS"
+text = "MENU_QUESTS"
+
 
 [node name="Archive" type="Button" parent="UI/Margin/Menu"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "MENU_ARCHIVE"
+
 
 [node name="Quit" type="Button" parent="UI/Margin/Menu"]
 unique_name_in_owner = true
@@ -108,23 +115,52 @@ unique_name_in_owner = true
 visible = false
 layout_mode = 2
 
-[node name="LeaderboardPanel" parent="UI/Margin" instance=ExtResource("9_records")]
-unique_name_in_owner = true
-visible = false
-layout_mode = 2
-
 [node name="ArchivePanel" parent="UI/Margin" instance=ExtResource("10_archive")]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 
-[node name="LanguagePicker" type="OptionButton" parent="UI/Margin"]
+[node name="UpgradesPanel" parent="UI/Margin" instance=ExtResource("17_upgrades")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="QuestsPanel" parent="UI/Margin" instance=ExtResource("18_quests")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="RunDetailPanel" parent="UI/Margin" instance=ExtResource("16_run_detail")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="Right" type="VBoxContainer" parent="UI/Margin"]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 8
+size_flags_horizontal = 8
+theme_type_variation = &"MenuList"
+
+[node name="TopBar" type="HBoxContainer" parent="UI/Margin/Right"]
+layout_mode = 2
+size_flags_horizontal = 8
+theme_type_variation = &"GoldRow"
+
+[node name="Options" type="Button" parent="UI/Margin/Right/TopBar"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"SmallButton"
+text = "MENU_OPTIONS"
+
+[node name="LanguagePicker" type="OptionButton" parent="UI/Margin/Right/TopBar"]
+unique_name_in_owner = true
+layout_mode = 2
 theme_type_variation = &"SmallOptionButton"
 icon = ExtResource("8_globe")
 expand_icon = true
 script = ExtResource("7_language")
 name_key = &"LANGUAGE_NAME"
+
+[node name="LeaderboardPanel" parent="UI/Margin/Right" instance=ExtResource("9_records")]
+unique_name_in_owner = true
+layout_mode = 2

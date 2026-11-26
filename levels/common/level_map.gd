@@ -13,6 +13,8 @@ extends Node3D
 @export var waves_after_boss: bool = false
 ## Zona del suelo (x, z) dentro de las paredes: los enemigos solo salen dentro.
 @export var play_area: Rect2 = Rect2()
+## En un mapa redondo, el radio donde pueden salir (0: sin círculo).
+@export_range(0.0, 1000.0, 0.5, "suffix:m") var play_radius: float = 0.0
 ## Dónde aparece el jugador.
 @export var spawn_point: Node3D
 ## Mensajes al entrar (claves de traducción), detrás del nombre de la fase.

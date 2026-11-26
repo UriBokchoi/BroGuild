@@ -38,3 +38,20 @@ func test_hidden_far_from_the_edges_and_shown_close() -> void:
 	var center: Vector3 = _boundary.material.get_shader_parameter(&"reveal_center")
 	var expected := _target.global_position + Vector3.UP * _boundary.reveal_height
 	assert_almost_eq(center, expected, Vector3.ONE * 0.001, "brilla alrededor del objetivo")
+
+
+func test_a_round_boundary_is_a_ring_of_walls() -> void:
+	var ring := BoundaryScene.instantiate() as MapBoundary
+	ring.radius = 25.0
+	ring.segments = 24
+	ring.target = _target
+	add_child_autofree(ring)
+	var walls := ring.get_walls()
+	assert_eq(walls.size(), 24)
+	for wall: MeshInstance3D in walls:
+		assert_almost_eq(Vector2(wall.position.x, wall.position.z).length(), 25.0 - ring.inset, 0.001)
+	await wait_process_frames(1)
+	assert_false(walls[0].visible, "en el centro no se dibuja")
+	_target.position = Vector3(0.0, 0.0, 25.0 - ring.reveal_far * 0.5)
+	await wait_process_frames(1)
+	assert_true(walls[0].visible, "cerca del círculo, sí")

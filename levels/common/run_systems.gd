@@ -12,6 +12,8 @@ extends Node3D
 ## Zona del suelo (x, z) dentro de las paredes del nivel: los enemigos solo salen dentro. Vacía: en
 ## cualquier sitio con suelo.
 @export var play_area: Rect2 = Rect2()
+## En un mapa redondo, el radio donde pueden salir (0: sin círculo).
+@export_range(0.0, 1000.0, 0.5, "suffix:m") var play_radius: float = 0.0
 ## Personaje si no se eligió otro ([code]RunState.character[/code]).
 @export var default_character: CharacterData
 ## Dónde aparece el jugador (vacío: en el origen de esta escena).
@@ -53,4 +55,5 @@ func apply_map_settings() -> void:
 		director.data = waves
 	director.autostart = autostart_waves
 	director.play_area = play_area
+	director.play_radius = play_radius
 	encounter.data = boss

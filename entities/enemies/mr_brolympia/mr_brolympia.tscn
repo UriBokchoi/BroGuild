@@ -185,10 +185,10 @@ max_distance = 26.0
 damage_factor = 1.4
 
 [node name="Shockwave" parent="Burpee"]
-radius = 18.0
+radius = 7.0
 
 [node name="LandingMarker" parent="Burpee"]
-transform = Transform3D(3.6, 0, 0, 0, 3.6, 0, 0, 0, 3.6, 0, 0, 0)
+transform = Transform3D(7, 0, 0, 0, 7, 0, 0, 0, 7, 0, 0, 0)
 
 [node name="Series" parent="."]
 reps = 4

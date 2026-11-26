@@ -9,6 +9,10 @@
 [ext_resource type="Resource" path="res://data/levels/dungeon.tres" id="7_dungeon"]
 [ext_resource type="PackedScene" path="res://entities/player/characters/model/character_model.tscn" id="8_model"]
 [ext_resource type="Script" path="res://vfx/juice/spin_bob.gd" id="9_spin"]
+[ext_resource type="Resource" path="res://data/meta/quests.tres" id="10_quests"]
+[ext_resource type="Resource" path="res://data/characters/paladin.tres" id="11_paladin"]
+[ext_resource type="Resource" path="res://data/characters/barbarian.tres" id="12_barbarian"]
+[ext_resource type="Resource" path="res://data/characters/warlock.tres" id="13_warlock"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_sky"]
 sky_top_color = Color(0.32, 0.45, 0.68, 1)
@@ -40,7 +44,8 @@ rings = 1
 
 [node name="RunSetup" type="Node3D" node_paths=PackedStringArray("model")]
 script = ExtResource("1_setup")
-characters = Array[Resource]([ExtResource("2_warrior"), ExtResource("3_mage"), ExtResource("4_rogue")])
+characters = Array[Resource]([ExtResource("2_warrior"), ExtResource("3_mage"), ExtResource("4_rogue"), ExtResource("11_paladin"), ExtResource("12_barbarian"), ExtResource("13_warlock")])
+quests = ExtResource("10_quests")
 levels = Array[Resource]([ExtResource("5_brosque"), ExtResource("6_tower"), ExtResource("7_dungeon")])
 model = NodePath("Model")
 
@@ -114,10 +119,11 @@ mouse_filter = 2
 [node name="Panel" type="PanelContainer" parent="UI/Margin/Layout"]
 custom_minimum_size = Vector2(460, 0)
 layout_mode = 2
-size_flags_vertical = 4
+size_flags_vertical = 3
 
 [node name="Content" type="VBoxContainer" parent="UI/Margin/Layout/Panel"]
 layout_mode = 2
+size_flags_vertical = 3
 
 [node name="Info" type="VBoxContainer" parent="UI/Margin/Layout/Panel/Content"]
 unique_name_in_owner = true
@@ -191,6 +197,7 @@ text = "SELECT_CHOOSE"
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
+size_flags_vertical = 3
 theme_type_variation = &"MenuList"
 
 [node name="LevelTitle" type="Label" parent="UI/Margin/Layout/Panel/Content/LevelPanel"]
@@ -203,28 +210,41 @@ unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"MenuList"
 
-[node name="LevelInfo" type="VBoxContainer" parent="UI/Margin/Layout/Panel/Content/LevelPanel"]
+[node name="LevelScroll" type="ScrollContainer" parent="UI/Margin/Layout/Panel/Content/LevelPanel"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="LevelInfo" type="VBoxContainer" parent="UI/Margin/Layout/Panel/Content/LevelPanel/LevelScroll"]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 3
 theme_type_variation = &"CardColumn"
 
-[node name="LevelName" type="Label" parent="UI/Margin/Layout/Panel/Content/LevelPanel/LevelInfo"]
+[node name="LevelName" type="Label" parent="UI/Margin/Layout/Panel/Content/LevelPanel/LevelScroll/LevelInfo"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"CardTitleLabel"
 
-[node name="TierRow" type="HBoxContainer" parent="UI/Margin/Layout/Panel/Content/LevelPanel/LevelInfo"]
+[node name="TierRow" type="HBoxContainer" parent="UI/Margin/Layout/Panel/Content/LevelPanel/LevelScroll/LevelInfo"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"CardRow"
 
-[node name="LevelGoal" type="Label" parent="UI/Margin/Layout/Panel/Content/LevelPanel/LevelInfo"]
+[node name="LevelGoal" type="Label" parent="UI/Margin/Layout/Panel/Content/LevelPanel/LevelScroll/LevelInfo"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"ChestEffectLabel"
 autowrap_mode = 3
 
-[node name="LevelLore" type="Label" parent="UI/Margin/Layout/Panel/Content/LevelPanel/LevelInfo"]
+[node name="LevelStrength" type="Label" parent="UI/Margin/Layout/Panel/Content/LevelPanel/LevelScroll/LevelInfo"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_type_variation = &"CurseLabel"
+autowrap_mode = 3
+
+[node name="LevelLore" type="Label" parent="UI/Margin/Layout/Panel/Content/LevelPanel/LevelScroll/LevelInfo"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(500, 0)
 layout_mode = 2

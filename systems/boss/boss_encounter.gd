@@ -103,6 +103,7 @@ func summon(at: Vector3) -> bool:
 	_boss.died.connect(_on_boss_died, CONNECT_ONE_SHOT)
 	EventBus.boss_spawned.emit(data.enemy.name_key)
 	_boss.boost(data.scaling_at(director.get_difficulty()))
+	_boss.boost(director.stage_boost())
 	if not data.arrival_keys.is_empty():
 		EventBus.level_intro.emit(data.arrival_keys)
 	return true

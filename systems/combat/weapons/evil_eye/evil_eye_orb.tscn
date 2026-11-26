@@ -1,0 +1,94 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://systems/combat/weapons/evil_eye/evil_eye_orb.gd" id="1_orb"]
+[ext_resource type="Shader" path="res://systems/combat/weapons/staff/staff_blast.gdshader" id="2_blast"]
+[ext_resource type="QuadMesh" path="res://vfx/particles/soft_dot_quad.tres" id="3_dot"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_orb"]
+albedo_color = Color(1, 0.2, 0.15, 1)
+emission_enabled = true
+emission = Color(1, 0.12, 0.08, 1)
+emission_energy_multiplier = 3.5
+
+[sub_resource type="SphereMesh" id="SphereMesh_orb"]
+material = SubResource("StandardMaterial3D_orb")
+radius = 0.18
+height = 0.36
+radial_segments = 12
+rings = 6
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pupil"]
+albedo_color = Color(0.08, 0.02, 0.02, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_pupil"]
+material = SubResource("StandardMaterial3D_pupil")
+radius = 0.08
+height = 0.16
+radial_segments = 8
+rings = 4
+
+[sub_resource type="Gradient" id="Gradient_trail"]
+colors = PackedColorArray(1, 0.25, 0.15, 0.9, 0.6, 0.02, 0.02, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_trail"]
+gradient = SubResource("Gradient_trail")
+
+[sub_resource type="Curve" id="Curve_trail"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.2), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_trail"]
+curve = SubResource("Curve_trail")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_trail"]
+direction = Vector3(0, 0, 0)
+spread = 180.0
+initial_velocity_min = 0.0
+initial_velocity_max = 0.3
+gravity = Vector3(0, 0, 0)
+scale_min = 0.35
+scale_max = 0.5
+scale_curve = SubResource("CurveTexture_trail")
+color_ramp = SubResource("GradientTexture1D_trail")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_blast"]
+shader = ExtResource("2_blast")
+shader_parameter/core_color = Color(1, 0.32, 0.22, 1)
+shader_parameter/rim_color = Color(0.7, 0.02, 0.04, 1)
+shader_parameter/intensity = 1.6
+
+[sub_resource type="SphereMesh" id="SphereMesh_blast"]
+material = SubResource("ShaderMaterial_blast")
+radial_segments = 16
+rings = 8
+
+[node name="EvilEyeOrb" type="Node3D" node_paths=PackedStringArray("orb", "trail", "blast")]
+script = ExtResource("1_orb")
+hit_mask = 17
+orb = NodePath("Orb")
+trail = NodePath("Trail")
+blast = NodePath("Blast")
+
+[node name="Orb" type="MeshInstance3D" parent="."]
+cast_shadow = 0
+mesh = SubResource("SphereMesh_orb")
+
+[node name="Pupil" type="MeshInstance3D" parent="Orb"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.13)
+cast_shadow = 0
+mesh = SubResource("SphereMesh_pupil")
+
+[node name="Trail" type="GPUParticles3D" parent="."]
+cast_shadow = 0
+emitting = false
+amount = 32
+lifetime = 0.35
+local_coords = false
+process_material = SubResource("ParticleProcessMaterial_trail")
+draw_pass_1 = ExtResource("3_dot")
+
+[node name="Blast" type="MeshInstance3D" parent="."]
+top_level = true
+visible = false
+cast_shadow = 0
+mesh = SubResource("SphereMesh_blast")

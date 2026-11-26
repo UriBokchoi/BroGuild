@@ -1,0 +1,65 @@
+[gd_resource type="Resource" script_class="CharacterData" format=3]
+
+[ext_resource type="Script" path="res://entities/player/characters/character_data.gd" id="1_data"]
+[ext_resource type="Script" path="res://core/stats/stat_modifier.gd" id="2_modifier"]
+[ext_resource type="Resource" path="res://data/weapons/evil_eye.tres" id="3_weapon"]
+[ext_resource type="PackedScene" path="res://entities/player/characters/passives/hex.tscn" id="4_passive"]
+[ext_resource type="Script" path="res://entities/player/characters/model/model_attachment.gd" id="5_attachment"]
+[ext_resource type="PackedScene" path="res://assets/models/props/eye_orb.tscn" id="6_eye_orb"]
+[ext_resource type="PackedScene" path="res://assets/models/props/warlock_horns.tscn" id="7_warlock_horns"]
+[ext_resource type="Texture2D" path="res://assets/textures/icons/characters/warlock.svg" id="98_icon"]
+
+[sub_resource type="Resource" id="Resource_eye"]
+script = ExtResource("5_attachment")
+scene = ExtResource("6_eye_orb")
+socket = &"HandRight"
+
+[sub_resource type="Resource" id="Resource_horns"]
+script = ExtResource("5_attachment")
+scene = ExtResource("7_warlock_horns")
+socket = &"Head"
+
+[sub_resource type="Resource" id="Modifier_max_health"]
+script = ExtResource("2_modifier")
+stat = &"max_health"
+value = -15.0
+
+[sub_resource type="Resource" id="Modifier_crit_chance"]
+script = ExtResource("2_modifier")
+stat = &"crit_chance"
+value = 5.0
+
+[sub_resource type="Resource" id="Modifier_crit_damage"]
+script = ExtResource("2_modifier")
+stat = &"crit_damage"
+value = 20.0
+
+[sub_resource type="Resource" id="Modifier_area"]
+script = ExtResource("2_modifier")
+stat = &"area"
+kind = 1
+value = 0.1
+
+[sub_resource type="Resource" id="Modifier_air_dashes"]
+script = ExtResource("2_modifier")
+stat = &"air_dashes"
+value = 1.0
+
+[sub_resource type="Resource" id="Modifier_health_regen"]
+script = ExtResource("2_modifier")
+stat = &"health_regen"
+value = 0.25
+
+[resource]
+script = ExtResource("1_data")
+id = &"warlock"
+name_key = &"CHARACTER_WARLOCK_NAME"
+description_key = &"CHARACTER_WARLOCK_DESCRIPTION"
+color = Color(0.55, 0.13, 0.66, 1)
+icon = ExtResource("98_icon")
+starting_weapon = ExtResource("3_weapon")
+passive = ExtResource("4_passive")
+passive_name_key = &"PASSIVE_HEX_NAME"
+passive_description_key = &"PASSIVE_HEX_DESCRIPTION"
+attachments = Array[ExtResource("5_attachment")]([SubResource("Resource_eye"), SubResource("Resource_horns")])
+stat_modifiers = Array[ExtResource("2_modifier")]([SubResource("Modifier_max_health"), SubResource("Modifier_crit_chance"), SubResource("Modifier_crit_damage"), SubResource("Modifier_area"), SubResource("Modifier_air_dashes"), SubResource("Modifier_health_regen")])

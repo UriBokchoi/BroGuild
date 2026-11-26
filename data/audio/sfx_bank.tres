@@ -28,9 +28,14 @@
 [ext_resource type="AudioStream" uid="uid://dy3xs4el1mwpw" path="res://assets/audio/sfx/slot_won.wav" id="33_slot_won"]
 [ext_resource type="AudioStream" uid="uid://bc0aaxwphpo1a" path="res://assets/audio/sfx/upgrade_spin_tick.wav" id="40_upgrade_spin_tick"]
 [ext_resource type="AudioStream" uid="uid://fhesjvrxn2st" path="res://assets/audio/sfx/upgrade_revealed.wav" id="41_upgrade_revealed"]
-[ext_resource type="AudioStream" path="res://assets/audio/sfx/horde_incoming.wav" id="42_horde_incoming"]
-[ext_resource type="AudioStream" path="res://assets/audio/sfx/synergy_dash_wave.wav" id="43_synergy_dash_wave"]
-[ext_resource type="AudioStream" path="res://assets/audio/sfx/synergy_slam.wav" id="44_synergy_slam"]
+[ext_resource type="AudioStream" uid="uid://do6u8oj2ub4f3" path="res://assets/audio/sfx/horde_incoming.wav" id="42_horde_incoming"]
+[ext_resource type="AudioStream" uid="uid://b2v3p8rxxpxyr" path="res://assets/audio/sfx/synergy_dash_wave.wav" id="43_synergy_dash_wave"]
+[ext_resource type="AudioStream" uid="uid://xxfu675664yk" path="res://assets/audio/sfx/synergy_slam.wav" id="44_synergy_slam"]
+[ext_resource type="AudioStream" uid="uid://cdopdttwtoxwr" path="res://assets/audio/sfx/herald_arrived.wav" id="45_herald_arrived"]
+[ext_resource type="AudioStream" uid="uid://bjfo0wrjtf3tk" path="res://assets/audio/sfx/pact_sealed.wav" id="46_pact_sealed"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/portal_entered.wav" id="47_portal_entered"]
+[ext_resource type="AudioStream" uid="uid://ch5ctble471mi" path="res://assets/audio/sfx/weights_lifted.wav" id="48_weights_lifted"]
+[ext_resource type="AudioStream" uid="uid://nxop4qws82jw" path="res://assets/audio/sfx/boss_key_collected.wav" id="49_boss_key"]
 
 [sub_resource type="Resource" id="Cue_boss_defeated"]
 script = ExtResource("2_cue")
@@ -40,12 +45,6 @@ max_voices = 1
 [sub_resource type="Resource" id="Cue_boss_spawned"]
 script = ExtResource("2_cue")
 stream = ExtResource("11_boss_spawned")
-max_voices = 1
-
-[sub_resource type="Resource" id="Cue_mini_boss_spawned"]
-script = ExtResource("2_cue")
-stream = ExtResource("11_boss_spawned")
-volume_db = -3.0
 max_voices = 1
 
 [sub_resource type="Resource" id="Cue_breakable_broken"]
@@ -74,6 +73,16 @@ script = ExtResource("2_cue")
 stream = ExtResource("14_chest_opened")
 max_voices = 1
 
+[sub_resource type="Resource" id="Cue_double_lost"]
+script = ExtResource("2_cue")
+stream = ExtResource("31_slot_lost")
+max_voices = 1
+
+[sub_resource type="Resource" id="Cue_double_won"]
+script = ExtResource("2_cue")
+stream = ExtResource("30_slot_jackpot")
+max_voices = 1
+
 [sub_resource type="Resource" id="Cue_enemy_died"]
 script = ExtResource("2_cue")
 stream = ExtResource("17_enemy_died")
@@ -90,6 +99,16 @@ pitch_variation = 0.15
 max_voices = 4
 min_interval = 0.03
 
+[sub_resource type="Resource" id="Cue_herald_arrived"]
+script = ExtResource("2_cue")
+stream = ExtResource("45_herald_arrived")
+max_voices = 1
+
+[sub_resource type="Resource" id="Cue_horde_incoming"]
+script = ExtResource("2_cue")
+stream = ExtResource("42_horde_incoming")
+max_voices = 1
+
 [sub_resource type="Resource" id="Cue_item_revealed"]
 script = ExtResource("2_cue")
 stream = ExtResource("19_item_revealed")
@@ -98,6 +117,42 @@ max_voices = 1
 [sub_resource type="Resource" id="Cue_level_up"]
 script = ExtResource("2_cue")
 stream = ExtResource("20_level_up")
+max_voices = 1
+
+[sub_resource type="Resource" id="Cue_mini_boss_spawned"]
+script = ExtResource("2_cue")
+stream = ExtResource("11_boss_spawned")
+volume_db = -3.0
+max_voices = 1
+
+[sub_resource type="Resource" id="Cue_portal_entered"]
+script = ExtResource("2_cue")
+stream = ExtResource("47_portal_entered")
+max_voices = 1
+
+[sub_resource type="Resource" id="Cue_weights_lifted"]
+script = ExtResource("2_cue")
+stream = ExtResource("48_weights_lifted")
+max_voices = 1
+
+[sub_resource type="Resource" id="Cue_boss_key"]
+script = ExtResource("2_cue")
+stream = ExtResource("49_boss_key")
+max_voices = 2
+
+[sub_resource type="Resource" id="Cue_pact_sealed"]
+script = ExtResource("2_cue")
+stream = ExtResource("46_pact_sealed")
+max_voices = 1
+
+[sub_resource type="Resource" id="Cue_pickup_bomb"]
+script = ExtResource("2_cue")
+stream = ExtResource("21_pickup_bomb")
+max_voices = 1
+
+[sub_resource type="Resource" id="Cue_pickup_energy"]
+script = ExtResource("2_cue")
+stream = ExtResource("22_pickup_energy")
 max_voices = 1
 
 [sub_resource type="Resource" id="Cue_pickup_experience"]
@@ -125,16 +180,6 @@ script = ExtResource("2_cue")
 stream = ExtResource("26_pickup_magnet")
 max_voices = 1
 
-[sub_resource type="Resource" id="Cue_pickup_bomb"]
-script = ExtResource("2_cue")
-stream = ExtResource("21_pickup_bomb")
-max_voices = 1
-
-[sub_resource type="Resource" id="Cue_pickup_energy"]
-script = ExtResource("2_cue")
-stream = ExtResource("22_pickup_energy")
-max_voices = 1
-
 [sub_resource type="Resource" id="Cue_pickup_time_stop"]
 script = ExtResource("2_cue")
 stream = ExtResource("27_pickup_time_stop")
@@ -157,14 +202,14 @@ script = ExtResource("2_cue")
 stream = ExtResource("30_slot_jackpot")
 max_voices = 1
 
-[sub_resource type="Resource" id="Cue_slot_lost"]
-script = ExtResource("2_cue")
-stream = ExtResource("31_slot_lost")
-max_voices = 1
-
 [sub_resource type="Resource" id="Cue_curse"]
 script = ExtResource("2_cue")
 stream = ExtResource("15_curse")
+max_voices = 1
+
+[sub_resource type="Resource" id="Cue_slot_lost"]
+script = ExtResource("2_cue")
+stream = ExtResource("31_slot_lost")
 max_voices = 1
 
 [sub_resource type="Resource" id="Cue_slot_spun"]
@@ -175,23 +220,6 @@ max_voices = 2
 [sub_resource type="Resource" id="Cue_slot_won"]
 script = ExtResource("2_cue")
 stream = ExtResource("33_slot_won")
-max_voices = 1
-
-[sub_resource type="Resource" id="Cue_upgrade_revealed"]
-script = ExtResource("2_cue")
-stream = ExtResource("41_upgrade_revealed")
-max_voices = 3
-
-[sub_resource type="Resource" id="Cue_upgrade_spin_tick"]
-script = ExtResource("2_cue")
-stream = ExtResource("40_upgrade_spin_tick")
-volume_db = -6.0
-max_voices = 3
-min_interval = 0.02
-
-[sub_resource type="Resource" id="Cue_horde_incoming"]
-script = ExtResource("2_cue")
-stream = ExtResource("42_horde_incoming")
 max_voices = 1
 
 [sub_resource type="Resource" id="Cue_synergy_dash_wave"]
@@ -208,15 +236,17 @@ stream = ExtResource("44_synergy_slam")
 pitch_variation = 0.05
 max_voices = 1
 
-[sub_resource type="Resource" id="Cue_double_won"]
+[sub_resource type="Resource" id="Cue_upgrade_revealed"]
 script = ExtResource("2_cue")
-stream = ExtResource("30_slot_jackpot")
-max_voices = 1
+stream = ExtResource("41_upgrade_revealed")
+max_voices = 3
 
-[sub_resource type="Resource" id="Cue_double_lost"]
+[sub_resource type="Resource" id="Cue_upgrade_spin_tick"]
 script = ExtResource("2_cue")
-stream = ExtResource("31_slot_lost")
-max_voices = 1
+stream = ExtResource("40_upgrade_spin_tick")
+volume_db = -6.0
+max_voices = 3
+min_interval = 0.02
 
 [resource]
 script = ExtResource("1_bank")
@@ -228,7 +258,11 @@ enemy_hit = SubResource("Cue_enemy_hit")
 enemy_died = SubResource("Cue_enemy_died")
 boss_spawned = SubResource("Cue_boss_spawned")
 mini_boss_spawned = SubResource("Cue_mini_boss_spawned")
-herald_arrived = SubResource("Cue_level_up")
+herald_arrived = SubResource("Cue_herald_arrived")
+pact_sealed = SubResource("Cue_pact_sealed")
+portal_entered = SubResource("Cue_portal_entered")
+weights_lifted = SubResource("Cue_weights_lifted")
+boss_key_collected = SubResource("Cue_boss_key")
 boss_defeated = SubResource("Cue_boss_defeated")
 pickups = Dictionary[StringName, ExtResource("2_cue")]({
 &"bomb": SubResource("Cue_pickup_bomb"),
@@ -256,6 +290,13 @@ slot_results = Dictionary[StringName, ExtResource("2_cue")]({
 })
 slot_won = SubResource("Cue_slot_won")
 slot_jackpot = SubResource("Cue_slot_jackpot")
+horde_incoming = SubResource("Cue_horde_incoming")
+synergies = Dictionary[StringName, ExtResource("2_cue")]({
+&"dash_wave_damage": SubResource("Cue_synergy_dash_wave"),
+&"slam_damage": SubResource("Cue_synergy_slam")
+})
+double_won = SubResource("Cue_double_won")
+double_lost = SubResource("Cue_double_lost")
 upgrade_spin_tick = SubResource("Cue_upgrade_spin_tick")
 upgrade_revealed = SubResource("Cue_upgrade_revealed")
 reveal_pitches = Dictionary[StringName, float]({
@@ -266,10 +307,3 @@ reveal_pitches = Dictionary[StringName, float]({
 &"rare": 1.1225
 })
 button_pressed = SubResource("Cue_button_pressed")
-horde_incoming = SubResource("Cue_horde_incoming")
-synergies = Dictionary[StringName, ExtResource("2_cue")]({
-&"dash_wave_damage": SubResource("Cue_synergy_dash_wave"),
-&"slam_damage": SubResource("Cue_synergy_slam")
-})
-double_won = SubResource("Cue_double_won")
-double_lost = SubResource("Cue_double_lost")

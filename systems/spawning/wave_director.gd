@@ -26,8 +26,20 @@ signal stopped
 ## Zona del suelo (x, z) donde pueden salir (dentro de las paredes del nivel). Vacía: en cualquier
 ## sitio con suelo.
 @export var play_area: Rect2 = Rect2()
+## Radio del círculo (con centro en el origen) donde pueden salir, en un mapa redondo. 0: sin círculo.
+@export_range(0.0, 1000.0, 0.5, "suffix:m") var play_radius: float = 0.0
 ## Puntos que prueba para cada enemigo antes de dejarlo para el siguiente tick.
 @export_range(1, 32, 1) var placement_attempts: int = 6
+## Stats de los enemigos que multiplica la fuerza de la fase ([member strength]): vida, daño y lo que
+## sueltan.
+@export var strength_stats: Array[StringName] = []
+
+## Cuánto más fuertes salen los enemigos (la fuerza del tier que se juega; 1: como siempre). Se
+## aplica a todo lo que sale por aquí y al jefe ([method stage_boost]).
+var strength: float = 1.0:
+	set(value):
+		strength = value
+		_stage_boost = null
 
 ## Azar de las oleadas. Si no se asigna antes de entrar en el árbol, el flujo de oleadas de
 ## [code]Rng[/code].
@@ -35,6 +47,8 @@ var rng: RandomNumberGenerator
 
 var _running: bool = false
 var _elapsed: float = 0.0
+## Las mejoras de [member strength] (se arman la primera vez que hacen falta).
+var _stage_boost: StatModifierSet
 ## Enemigos que ya tocaba sacar y aún no han salido (fracción acumulada).
 var _pending: float = 0.0
 ## Parte de la dificultad que sube con el tiempo (1 por minuto), sobre [member difficulty_stats].
@@ -157,7 +171,21 @@ func spawn_one_around(
 		return null
 	var spawned := swarm.spawn(enemy, feet)
 	spawned.boost(modifiers)
+	spawned.boost(stage_boost())
 	return spawned
+
+
+## Lo que suma la fuerza de la fase a cada enemigo: un multiplicador de [member strength] por cada
+## stat de [member strength_stats] (vacío si es 1).
+func stage_boost() -> StatModifierSet:
+	if is_equal_approx(strength, 1.0):
+		return null
+	if _stage_boost == null:
+		_stage_boost = StatModifierSet.new()
+		for stat: StringName in strength_stats:
+			var multiplier := StatModifier.create(stat, StatModifier.Kind.MULTIPLIER, strength)
+			_stage_boost.stat_modifiers.append(multiplier)
+	return _stage_boost
 
 
 ## Avisa de la siguiente horda a su hora y la saca repartida en su tiempo.
@@ -216,6 +244,7 @@ func _spawn_at_difficulty(difficulty: float) -> Enemy:
 		return null
 	var spawned := swarm.spawn(enemy, feet)
 	spawned.boost(data.scaling_at(difficulty))
+	spawned.boost(stage_boost())
 	return spawned
 
 
@@ -242,6 +271,8 @@ func _find_ground(center: Vector3, min_distance: float, max_distance: float) -> 
 		var distance := rng.randf_range(min_distance, max_distance)
 		var spot := center + Vector3(cos(angle), 0.0, sin(angle)) * distance
 		if play_area.has_area() and not play_area.has_point(Vector2(spot.x, spot.z)):
+			continue
+		if play_radius > 0.0 and Vector2(spot.x, spot.z).length() > play_radius:
 			continue
 		var from := spot + Vector3.UP * probe_height
 		var to := spot + Vector3.DOWN * probe_height

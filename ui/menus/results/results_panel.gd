@@ -113,6 +113,8 @@ func _show(title: String, style: StringName, tint: Color) -> void:
 func _fill(stats: RunStats) -> void:
 	for cell: Node in _rows.get_children():
 		cell.free()
+	if not stats.stage_key.is_empty():
+		_add_row(&"RESULTS_STAGE", tr(stats.stage_key))
 	_add_row(&"RESULTS_TIME", RunClock.format(stats.seconds))
 	if stats.won:
 		_add_row(&"RESULTS_BOSS_BONUS", tr(&"RESULTS_BOSS_BONUS_VALUE") % StatFormat.number(stats.boss_bonus))
@@ -121,8 +123,11 @@ func _fill(stats: RunStats) -> void:
 	_add_row(&"RESULTS_ELITE_KILLS", str(stats.elite_kills))
 	_add_row(&"RESULTS_GOLD", str(floori(stats.gold_earned)))
 	_add_row(&"RESULTS_DAMAGE", str(floori(stats.damage_dealt)))
+	_add_row(&"RESULTS_BRO_COINS", tr(&"RESULTS_BRO_COINS_VALUE") % stats.bro_coins)
 	if recorder and recorder.place >= 0:
 		_add_row(&"RESULTS_RECORD_PLACE", tr(&"RESULTS_RECORD_PLACE_VALUE") % (recorder.place + 1))
+	for quest: QuestData in recorder.completed_quests if recorder else []:
+		_add_row(&"RESULTS_UNLOCKED", quest.reward_names())
 
 
 func _add_row(name_key: StringName, value: String) -> void:
