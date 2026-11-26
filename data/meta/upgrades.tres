@@ -15,6 +15,7 @@
 [ext_resource type="Texture2D" path="res://assets/textures/icons/upgrades/rune_slot.svg" id="12_rune_slot"]
 [ext_resource type="Texture2D" path="res://assets/textures/icons/upgrades/weapon_level.svg" id="13_weapon_level"]
 [ext_resource type="Texture2D" path="res://assets/textures/icons/upgrades/rune_level.svg" id="14_rune_level"]
+[ext_resource type="Texture2D" path="res://assets/textures/icons/upgrades/skip_ban.svg" id="15_skip_ban"]
 
 [sub_resource type="Resource" id="Upgrade_damage"]
 script = ExtResource("90_upgrade")
@@ -164,6 +165,16 @@ values = PackedFloat32Array(5, 10, 15, 20)
 value_key = &"UPGRADE_VALUE_LEVELS"
 costs = PackedInt32Array(20, 40, 60, 80)
 
+[sub_resource type="Resource" id="Upgrade_skips_bans"]
+script = ExtResource("90_upgrade")
+id = &"skips_bans"
+name_key = &"UPGRADE_SKIPS_BANS_NAME"
+description_key = &"UPGRADE_SKIPS_BANS_DESC"
+icon = ExtResource("15_skip_ban")
+stats = Array[StringName]([&"skips", &"bans"])
+values = PackedFloat32Array(1, 2, 3)
+costs = PackedInt32Array(100, 200, 400)
+
 [resource]
 script = ExtResource("1_catalog")
-upgrades = Array[ExtResource("90_upgrade")]([SubResource("Upgrade_damage"), SubResource("Upgrade_area"), SubResource("Upgrade_crit_chance"), SubResource("Upgrade_max_health"), SubResource("Upgrade_armor"), SubResource("Upgrade_speed"), SubResource("Upgrade_luck"), SubResource("Upgrade_difficulty"), SubResource("Upgrade_greed"), SubResource("Upgrade_weapon_slots"), SubResource("Upgrade_rune_slots"), SubResource("Upgrade_weapon_level"), SubResource("Upgrade_rune_level")])
+upgrades = Array[ExtResource("90_upgrade")]([SubResource("Upgrade_damage"), SubResource("Upgrade_area"), SubResource("Upgrade_crit_chance"), SubResource("Upgrade_max_health"), SubResource("Upgrade_armor"), SubResource("Upgrade_speed"), SubResource("Upgrade_luck"), SubResource("Upgrade_difficulty"), SubResource("Upgrade_greed"), SubResource("Upgrade_weapon_slots"), SubResource("Upgrade_rune_slots"), SubResource("Upgrade_weapon_level"), SubResource("Upgrade_rune_level"), SubResource("Upgrade_skips_bans")])

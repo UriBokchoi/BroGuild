@@ -21,7 +21,7 @@ func before_all() -> void:
 func test_the_requested_upgrades_exist() -> void:
 	for id: StringName in [&"damage", &"area", &"crit_chance", &"max_health", &"armor", &"speed",
 			&"luck", &"difficulty", &"greed", &"weapon_slots", &"rune_slots", &"weapon_level",
-			&"rune_level"]:
+			&"rune_level", &"skips_bans"]:
 		assert_not_null(UPGRADES.find(id), "falta «%s»" % id)
 
 

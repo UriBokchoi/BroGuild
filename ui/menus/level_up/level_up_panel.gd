@@ -7,10 +7,17 @@ extends ModalPanel
 ## «Volver a tirar» pide cartas nuevas. Al elegir una mejora que aún puede subir de rareza se puede
 ## apostar a doble o nada: el controlador decide y el panel lo enseña con resolve_double. Antes de
 ## decidir, el clic derecho deshace la elección y deja escoger otra carta.
+##
+## Con la mejora del menú, «Saltar» (verde) se salta la elección y «Vetar» (rojo) espera a que se
+## pulse una carta para vetarla (el controlador la quita del resto de la partida y saca otras).
 
 signal chosen(option: LevelUpOption)
 ## Se pulsó «volver a tirar».
 signal reroll_requested
+## Se pulsó «Saltar».
+signal skip_requested
+## Se vetó la carta de [param option].
+signal ban_requested(option: LevelUpOption)
 ## Se apuesta [param option] al doble o nada.
 signal double_requested(option: LevelUpOption)
 
@@ -24,6 +31,12 @@ const WARM_UP_ALPHA := 0.01
 @export var data: LevelUpData
 
 var _can_reroll: bool = false
+## Saltos y vetos que le quedan; con [member _skip_ban_shown] a false, ni se ven.
+var _skips_left: int = 0
+var _bans_left: int = 0
+var _skip_ban_shown: bool = false
+## Pulsó «Vetar»: la siguiente carta que pulse se veta.
+var _banning: bool = false
 var _double_chance: float = 0.0
 var _phase: Phase = Phase.CHOOSING
 ## La carta elegida en el doble o nada, y lo que sale de la apuesta (null: perdida).
@@ -38,6 +51,8 @@ var _warming: bool = false
 @onready var _subtitle: Label = %Subtitle
 @onready var _cards: HBoxContainer = %Cards
 @onready var _reroll: Button = %Reroll
+@onready var _skip: Button = %Skip
+@onready var _ban: Button = %Ban
 @onready var _bet_row: HBoxContainer = %Bet
 @onready var _keep: Button = %Keep
 @onready var _double: Button = %Double
@@ -46,6 +61,8 @@ var _warming: bool = false
 func _ready() -> void:
 	super()
 	_reroll.pressed.connect(reroll_requested.emit)
+	_skip.pressed.connect(_on_skip_pressed)
+	_ban.pressed.connect(_on_ban_pressed)
 	_keep.pressed.connect(_on_keep_pressed)
 	_double.pressed.connect(_on_double_pressed)
 	set_process(false)
@@ -108,9 +125,32 @@ func open(
 	_double.text = tr(&"LEVEL_UP_DOUBLE") % roundi(double_chance * 100.0)
 	_phase = Phase.CHOOSING
 	_bet = null
+	_banning = false
 	_refresh()
 	_set_open(true)
 	set_process(true)
+
+
+## Cuántos saltos y vetos le quedan ([param skips_left], [param bans_left]); con [param shown] a
+## false (sin la mejora), los botones no se ven. Llamar antes de [method open].
+func set_skip_ban(skips_left: int, bans_left: int, shown: bool) -> void:
+	_skips_left = skips_left
+	_bans_left = bans_left
+	_skip_ban_shown = shown
+
+
+## ¿Está esperando la carta que vetar?
+func is_banning() -> bool:
+	return _banning
+
+
+## ¿Se ven y se pueden usar «Saltar» y «Vetar»?
+func can_skip() -> bool:
+	return _skip.visible and not _skip.disabled
+
+
+func can_ban() -> bool:
+	return _ban.visible and not _ban.disabled
 
 
 ## El resultado del doble o nada de la carta apostada: [param result] es la mejora que sale al ganar
@@ -228,6 +268,13 @@ func _refresh() -> void:
 	var spinning := is_spinning()
 	_reroll.visible = _phase == Phase.CHOOSING
 	_reroll.disabled = spinning or not _can_reroll
+	_skip.visible = _skip_ban_shown and _phase == Phase.CHOOSING
+	_skip.disabled = spinning or _skips_left <= 0
+	_skip.text = tr(&"LEVEL_UP_SKIP") % _skips_left
+	_ban.visible = _skip_ban_shown and _phase == Phase.CHOOSING
+	_ban.disabled = spinning or _bans_left <= 0
+	_ban.text = tr(&"LEVEL_UP_BAN") % _bans_left
+	_ban.set_pressed_no_signal(_banning)
 	_bet_row.visible = _phase == Phase.BETTING
 	match _phase:
 		Phase.BETTING:
@@ -235,7 +282,10 @@ func _refresh() -> void:
 		Phase.RESOLVING:
 			_subtitle.text = "LEVEL_UP_SPINNING"
 		_:
-			_subtitle.text = "LEVEL_UP_SPINNING" if spinning else "LEVEL_UP_CHOOSE"
+			if _banning:
+				_subtitle.text = "LEVEL_UP_BAN_PICK"
+			else:
+				_subtitle.text = "LEVEL_UP_SPINNING" if spinning else "LEVEL_UP_CHOOSE"
 
 
 ## Las rarezas en el orden de la tabla.
@@ -270,6 +320,11 @@ static func _skips_spin(event: InputEvent) -> bool:
 func _on_card_pressed(card: LevelUpCard) -> void:
 	if _phase != Phase.CHOOSING:
 		return
+	if _banning:
+		_banning = false
+		_refresh()
+		ban_requested.emit(card.option)
+		return
 	if not can_double(card.option):
 		chosen.emit(card.option)
 		return
@@ -279,6 +334,18 @@ func _on_card_pressed(card: LevelUpCard) -> void:
 		if other != card:
 			other.disabled = true
 			other.modulate = DIMMED
+	_refresh()
+
+
+func _on_skip_pressed() -> void:
+	if _phase == Phase.CHOOSING and _skips_left > 0:
+		_banning = false
+		skip_requested.emit()
+
+
+## «Vetar» se queda pulsado hasta que se elige la carta; pulsarlo otra vez lo deja.
+func _on_ban_pressed() -> void:
+	_banning = _phase == Phase.CHOOSING and _bans_left > 0 and not _banning
 	_refresh()
 
 

@@ -107,7 +107,14 @@ COMPASS_E,E,E
 COMPASS_S,S,S
 COMPASS_W,O,W
 STAT_BRO_COIN_GAIN,Bro-monedas ganadas,Bro coins gained
+STAT_SKIPS,Saltos al subir de nivel,Level-up skips
+STAT_BANS,Vetos al subir de nivel,Level-up bans
 STAT_WEAPON_LEVEL_BONUS,Niveles de más en las armas,Extra weapon levels
+LEVEL_UP_SKIP,Saltar (%d),Skip (%d)
+LEVEL_UP_BAN,Vetar (%d),Ban (%d)
+LEVEL_UP_BAN_PICK,Elige la carta que vetas: no volverá a salir en esta partida.,Pick the card to ban: it won't show up again this run.
+UPGRADE_SKIPS_BANS_NAME,Saltar y vetar,Skip and ban
+UPGRADE_SKIPS_BANS_DESC,"Al subir de nivel, saltarte una elección (verde) o vetar una carta para el resto de la partida (rojo). Veces por partida.","On level up, skip a choice (green) or ban a card for the rest of the run (red). Uses per run."
 STAT_RUNE_LEVEL_BONUS,Niveles de más en las runas,Extra rune levels
 RESULTS_LEVEL,Nivel,Level
 RESULTS_KILLS,Enemigos derrotados,Enemies defeated

@@ -79,12 +79,35 @@ text = "LEVEL_UP_DOUBLE"
 [node name="Gold" parent="Center/Content" instance=ExtResource("4_gold")]
 layout_mode = 2
 
-[node name="Reroll" type="Button" parent="Center/Content"]
+[node name="Actions" type="HBoxContainer" parent="Center/Content"]
+layout_mode = 2
+theme_type_variation = &"ResultsButtons"
+alignment = 1
+
+[node name="Skip" type="Button" parent="Center/Content/Actions"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_vertical = 4
+focus_mode = 0
+theme_type_variation = &"SkipButton"
+text = "LEVEL_UP_SKIP"
+
+[node name="Reroll" type="Button" parent="Center/Content/Actions"]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 4
 focus_mode = 0
 text = "LEVEL_UP_REROLL"
+
+[node name="Ban" type="Button" parent="Center/Content/Actions"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_vertical = 4
+focus_mode = 0
+theme_type_variation = &"BanButton"
+toggle_mode = true
+text = "LEVEL_UP_BAN"
 
 [node name="StatsHint" type="Label" parent="Center/Content"]
 layout_mode = 2

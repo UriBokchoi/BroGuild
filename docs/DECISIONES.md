@@ -1873,3 +1873,11 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - Runa nueva, el Ojo clínico (+1,5 de crítico por nivel de base). Se desbloquea al derrotar a 2500 enemigos en una sola partida, así que las misiones pueden pedir enemigos derrotados.
   - Sed de sangre se desbloqueará con el Bárbaro a nivel 50, cuando exista.
 - **Por qué:** lo pidió el diseñador.
+
+## 2026-11-26 · Saltar y vetar
+- **Decisión:**
+  - Una mejora del menú, «Saltar y vetar», da 1, 2 o 3 saltos y vetos por partida (stats `skips` y `bans`). Cuesta 100, 200 y 400 bro-monedas, la más cara.
+  - Saltar se salta la elección de subir de nivel sin coger nada.
+  - Vetar se queda pulsado hasta que se elige una carta: su arma o runa ya no sale en el resto de la partida, y salen otras cartas sin coste.
+  - Saltar es verde y vetar, rojo. Solo están en las cartas de subir de nivel, no en las mejoras gratis de otros sitios.
+- **Por qué:** lo pidió el diseñador. Vetar saca cartas nuevas para que el veto no cueste la elección.
