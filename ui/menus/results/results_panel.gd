@@ -127,7 +127,7 @@ func _fill(stats: RunStats) -> void:
 	if recorder and recorder.place >= 0:
 		_add_row(&"RESULTS_RECORD_PLACE", tr(&"RESULTS_RECORD_PLACE_VALUE") % (recorder.place + 1))
 	for quest: QuestData in recorder.completed_quests if recorder else []:
-		_add_row(&"RESULTS_UNLOCKED", tr(quest.reward.get(&"name_key") as StringName))
+		_add_row(&"RESULTS_UNLOCKED", quest.reward_names())
 
 
 func _add_row(name_key: StringName, value: String) -> void:

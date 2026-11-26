@@ -1,6 +1,6 @@
 class_name QuestData
 extends Resource
-## Una misión: lo que hay que hacer en una partida para desbloquear algo (un arma o un personaje).
+## Una misión: lo que hay que hacer en una partida para desbloquear algo (armas o personajes).
 ## Se mira al acabar cada partida con lo que apuntó el récord (is_met_by); hasta cumplirla, lo que da
 ## no sale (el arma, al subir de nivel; el personaje, sin poder elegirse). Los valores viven en
 ## data/meta/quests.tres.
@@ -9,8 +9,8 @@ extends Resource
 @export var id: StringName = &""
 ## Clave de traducción de lo que hay que hacer.
 @export var description_key: StringName = &""
-## Lo que desbloquea: un [WeaponData] o un [CharacterData].
-@export var reward: Resource
+## Lo que desbloquea: [WeaponData] o [CharacterData] (el primero es el que se ve en «Misiones»).
+@export var rewards: Array[Resource] = []
 
 @export_group("condition")
 ## Con este personaje (vacío: cualquiera).
@@ -37,8 +37,21 @@ func is_met_by(record: RunRecord) -> bool:
 
 ## ¿Desbloquea [param content]? (El mismo recurso o uno del mismo tipo con su id.)
 func unlocks(content: Resource) -> bool:
-	if reward == null or content == null:
+	if content == null:
 		return false
-	if reward == content:
-		return true
-	return reward.get_script() == content.get_script() and reward.get(&"id") == content.get(&"id")
+	for reward: Resource in rewards:
+		if reward == content:
+			return true
+		var same_kind: bool = reward != null and reward.get_script() == content.get_script()
+		if same_kind and reward.get(&"id") == content.get(&"id"):
+			return true
+	return false
+
+
+## Los nombres de lo que desbloquea, traducidos y juntos («Brujo y Mal de ojo»).
+func reward_names() -> String:
+	var names := PackedStringArray()
+	for reward: Resource in rewards:
+		if reward:
+			names.append(tr(reward.get(&"name_key") as StringName))
+	return (" %s " % tr(&"QUESTS_AND")).join(names)

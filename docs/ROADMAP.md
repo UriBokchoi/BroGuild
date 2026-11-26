@@ -208,7 +208,7 @@ De fácil a difícil, como pidió el diseñador.
 - [x] Pestaña «Mejoras» en el menú, con bro-monedas y reembolso: daño, área, crítico, vida, armadura, velocidad, Suerte y dificultad; más oro y bro-monedas; ranuras de armas y runas; nivel máximo de armas (12 a 20) y de runas (25 a 40). Precios provisionales; la recarga de las habilidades, cuando existan
 - [x] Misiones y desbloqueos: espada, bastón y daga abiertos; martillo (espada a 10 y ganar) y hacha (Guerrero a nivel 30). Pestaña «Misiones» en el menú. Las de Paladín, Bárbaro y Brujo, con sus personajes
 - [x] En vez de las mesetas cuadradas, montañitas o árboles grandes con parkour para subir (árbol con setas de repisa en espiral y montañita de rocas escalonadas)
-- [ ] El arma del Brujo: proyectil dirigido que rebota, rojo con estela, que explota en área al hacer crítico
+- [x] El arma del Brujo: proyectil dirigido que rebota, rojo con estela, que explota en área al hacer crítico (el Mal de ojo; se desbloquea con la misión del Mago a nivel 30)
 - [ ] Personajes nuevos: Paladín, Bárbaro y Brujo
 - [ ] Habilidades únicas (una por personaje, 3 min de recarga, 2:30 con mejora; icono abajo a la derecha con su indicador sin números)
 

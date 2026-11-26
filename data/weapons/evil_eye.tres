@@ -1,0 +1,69 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3]
+
+[ext_resource type="Script" path="res://systems/combat/weapons/weapon_data.gd" id="1_data"]
+[ext_resource type="Script" path="res://systems/combat/weapons/evil_eye/evil_eye_stats.gd" id="2_stats"]
+[ext_resource type="PackedScene" path="res://systems/combat/weapons/evil_eye/evil_eye.tscn" id="5_scene"]
+[ext_resource type="Script" path="res://systems/upgrades/upgrade_stat.gd" id="90_upgrade"]
+[ext_resource type="Texture2D" path="res://assets/textures/icons/weapons/evil_eye.svg" id="99_icon"]
+
+[sub_resource type="Resource" id="Resource_stats"]
+script = ExtResource("2_stats")
+bounces = 2
+bounce_range = 8.0
+homing = 5.0
+explosion_radius = 2.0
+projectile_speed = 16.0
+damage = 15.0
+cooldown = 1.0
+projectiles = 1
+burst_interval = 0.15
+area = 100.0
+duration = 2.0
+reach = 16.0
+knockback = 2.0
+
+[sub_resource type="Resource" id="Upgrade_damage"]
+script = ExtResource("90_upgrade")
+stat = &"damage"
+value = 3.5
+
+[sub_resource type="Resource" id="Upgrade_projectiles"]
+script = ExtResource("90_upgrade")
+stat = &"projectiles"
+value = 1.0
+whole_numbers = true
+
+[sub_resource type="Resource" id="Upgrade_bounces"]
+script = ExtResource("90_upgrade")
+stat = &"bounces"
+value = 1.0
+whole_numbers = true
+
+[sub_resource type="Resource" id="Upgrade_explosion_radius"]
+script = ExtResource("90_upgrade")
+stat = &"explosion_radius"
+kind = 1
+value = 0.12
+
+[sub_resource type="Resource" id="Upgrade_projectile_speed"]
+script = ExtResource("90_upgrade")
+stat = &"projectile_speed"
+kind = 1
+value = 0.12
+
+[sub_resource type="Resource" id="Upgrade_cooldown"]
+script = ExtResource("90_upgrade")
+stat = &"cooldown"
+kind = 2
+value = 0.92
+
+[resource]
+script = ExtResource("1_data")
+scene = ExtResource("5_scene")
+stats = SubResource("Resource_stats")
+id = &"evil_eye"
+name_key = &"WEAPON_EVIL_EYE_NAME"
+description_key = &"WEAPON_EVIL_EYE_DESCRIPTION"
+icon = ExtResource("99_icon")
+level_cap = 10
+upgrade_stats = Array[ExtResource("90_upgrade")]([SubResource("Upgrade_damage"), SubResource("Upgrade_projectiles"), SubResource("Upgrade_bounces"), SubResource("Upgrade_explosion_radius"), SubResource("Upgrade_projectile_speed"), SubResource("Upgrade_cooldown")])

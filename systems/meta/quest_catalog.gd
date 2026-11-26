@@ -25,8 +25,10 @@ func quest_for(content: Resource) -> QuestData:
 func locked_content(profile: PlayerProfile) -> Array[Resource]:
 	var locked: Array[Resource] = []
 	for quest: QuestData in quests:
-		if quest.reward and not profile.has_completed(quest.id):
-			locked.append(quest.reward)
+		if not profile.has_completed(quest.id):
+			for reward: Resource in quest.rewards:
+				if reward:
+					locked.append(reward)
 	return locked
 
 

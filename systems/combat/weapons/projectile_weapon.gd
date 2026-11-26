@@ -38,6 +38,7 @@ func _fire(target: Node3D, _index: int) -> void:
 		# El pool compartido está en su máximo: este golpe se pierde.
 		return
 	var origin := aim_origin()
+	projectile.chase_target = target
 	projectile.launch(self, origin, (TargetFinder.aim_point(target) - origin).normalized())
 
 

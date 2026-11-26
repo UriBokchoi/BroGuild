@@ -10,8 +10,10 @@ MENU_QUESTS,Misiones,Quests
 QUESTS_TITLE,Misiones,Quests
 QUESTS_DONE,Hecha,Done
 QUESTS_PENDING,Pendiente,Pending
+QUESTS_AND,y,and
 QUEST_HAMMER_DESC,Sube la espada a nivel 10 y gana una partida.,Get the sword to level 10 and win a run.
 QUEST_AXE_DESC,Llega a nivel 30 con el Guerrero.,Reach level 30 as the Warrior.
+QUEST_WARLOCK_DESC,Llega a nivel 30 con el Mago.,Reach level 30 as the Mage.
 CHARACTER_LOCKED,Bloqueado: %s,Locked: %s
 UPGRADES_TITLE,Mejoras,Upgrades
 UPGRADES_LEVEL,Nivel %d/%d,Level %d/%d
@@ -380,6 +382,10 @@ ITEM_KIND_WEAPON,Arma,Weapon
 ITEM_KIND_RUNE,Runa,Rune
 WEAPON_STAFF_NAME,Bastón de mago,Mage staff
 WEAPON_STAFF_DESCRIPTION,"Orbes que explotan al tocar algo y dañan a todos los enemigos cercanos.","Orbs that explode on contact and hit every nearby enemy."
+WEAPON_EVIL_EYE_NAME,Mal de ojo,Evil eye
+WEAPON_EVIL_EYE_DESCRIPTION,"Un ojo rojo que persigue a los enemigos y rebota de uno a otro. Si hace crítico, revienta y daña a los de alrededor.","A red eye that chases enemies and bounces between them. On a crit, it bursts and hits the ones around."
+STAT_GROUP_EVIL_EYE,Mal de ojo,Evil eye
+STAT_HOMING,Persecución,Homing
 WEAPON_DAGGER_NAME,Daga,Dagger
 WEAPON_DAGGER_DESCRIPTION,"Dagas rápidas a un solo enemigo; al mejorarla rebotan al más cercano con todo su daño.","Fast daggers at a single enemy; upgraded, they bounce to the nearest one with full damage."
 WEAPON_AXE_NAME,Hacha arrojadiza,Throwing axe

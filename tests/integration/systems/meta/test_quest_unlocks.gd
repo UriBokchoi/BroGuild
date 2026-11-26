@@ -74,7 +74,7 @@ func test_locked_characters_cannot_be_chosen() -> void:
 	var quest := QuestData.new()
 	quest.id = &"mage_test"
 	quest.description_key = &"QUEST_AXE_DESC"
-	quest.reward = MAGE
+	quest.rewards = [MAGE]
 	catalog.quests = [quest]
 	var setup := SetupScene.instantiate() as RunSetup
 	setup.quests = catalog

@@ -1824,3 +1824,11 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - Reutilizan los materiales del Brosque (corteza, tablas, roca y musgo, que cambia con la estación). Solo hay un material nuevo, el de las setas.
   - Ocupan menos (6 y 6,5 m de radio, antes 20 y 15).
 - **Por qué:** lo pidió el diseñador: algo original, no una plataforma cuadrada. Que haya que hacer parkour para subir premia el movimiento.
+
+## 2026-11-26 · El Mal de ojo, el arma del Brujo
+- **Decisión:**
+  - Se llama Mal de ojo: un ojo rojo con estela que persigue a su objetivo (gira hacia él, no lo sigue en línea recta) y rebota como la daga.
+  - Un crítico lo hace reventar en área (radio × área), pero sigue rebotando; los golpes de la explosión no revientan otra vez.
+  - Se desbloquea con la misión del Mago a nivel 30, la misma que abrirá al Brujo: una misión puede dar varias cosas (`rewards`).
+  - Valores de partida: 15 de daño, 1 s, 2 rebotes, persecución 5, explosión de 2 m.
+- **Por qué:** lo pidió el diseñador. Los números son provisionales, hasta probarla.

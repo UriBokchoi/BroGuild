@@ -65,7 +65,8 @@ func _row(quest: QuestData, alternate: bool) -> PanelContainer:
 	layout.theme_type_variation = &"CardRow"
 	row.add_child(layout)
 	var icon := TextureRect.new()
-	icon.texture = quest.reward.get(&"icon") as Texture2D if quest.reward else null
+	var first: Resource = quest.rewards[0] if not quest.rewards.is_empty() else null
+	icon.texture = first.get(&"icon") as Texture2D if first else null
 	icon.custom_minimum_size = Vector2.ONE * ICON_SIZE
 	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
@@ -74,8 +75,7 @@ func _row(quest: QuestData, alternate: bool) -> PanelContainer:
 	var text := VBoxContainer.new()
 	text.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	layout.add_child(text)
-	var reward_name := str(quest.reward.get(&"name_key")) if quest.reward else ""
-	text.add_child(_label(reward_name, &"StatNameLabel"))
+	text.add_child(_label(quest.reward_names(), &"StatNameLabel"))
 	var description := _label(String(quest.description_key), &"StatBaseLabel")
 	description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	text.add_child(description)

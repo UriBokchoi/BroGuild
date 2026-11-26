@@ -6,12 +6,14 @@
 [ext_resource type="Resource" path="res://data/weapons/hammer.tres" id="4_hammer"]
 [ext_resource type="Resource" path="res://data/weapons/axe.tres" id="5_axe"]
 [ext_resource type="Resource" path="res://data/characters/warrior.tres" id="6_warrior"]
+[ext_resource type="Resource" path="res://data/characters/mage.tres" id="7_mage"]
+[ext_resource type="Resource" path="res://data/weapons/evil_eye.tres" id="8_evil_eye"]
 
 [sub_resource type="Resource" id="Quest_hammer"]
 script = ExtResource("2_quest")
 id = &"hammer"
 description_key = &"QUEST_HAMMER_DESC"
-reward = ExtResource("4_hammer")
+rewards = Array[Resource]([ExtResource("4_hammer")])
 item = ExtResource("3_sword")
 item_level = 10
 needs_win = true
@@ -20,10 +22,18 @@ needs_win = true
 script = ExtResource("2_quest")
 id = &"axe"
 description_key = &"QUEST_AXE_DESC"
-reward = ExtResource("5_axe")
+rewards = Array[Resource]([ExtResource("5_axe")])
 character = ExtResource("6_warrior")
+player_level = 30
+
+[sub_resource type="Resource" id="Quest_warlock"]
+script = ExtResource("2_quest")
+id = &"warlock"
+description_key = &"QUEST_WARLOCK_DESC"
+rewards = Array[Resource]([ExtResource("8_evil_eye")])
+character = ExtResource("7_mage")
 player_level = 30
 
 [resource]
 script = ExtResource("1_catalog")
-quests = Array[ExtResource("2_quest")]([SubResource("Quest_hammer"), SubResource("Quest_axe")])
+quests = Array[ExtResource("2_quest")]([SubResource("Quest_hammer"), SubResource("Quest_axe"), SubResource("Quest_warlock")])
