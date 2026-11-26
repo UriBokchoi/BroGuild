@@ -132,7 +132,8 @@ Se actualiza al crear, mover o quitar un sistema o una carpeta, no al cambiar de
   - No habla (sin gritos). Pide refuerzos con `summon_requested`.
   - La bomba no le hace nada.
 - **Ataques** (`attacks/`, cada uno con sus números en `@export` de la escena del jefe):
-  - `LeapAttack` (salta y, al caer, suelta una `Shockwave` por el suelo; un aro marca dónde caerá);
+  - `LeapAttack` (salta y, al caer, suelta una `Shockwave` por el suelo; un aro marca dónde caerá; el salto del Trolleador);
+  - `ChargedOrbAttack` (la bola roja del Ent-renador y Mr. Brolympia, que sustituye al Burpee: se planta y pone una bola roja en el suelo donde va el objetivo —su posición más su movimiento en `lead_time`, estimado de un tick a otro—; la bola le sigue `aim_time`, se queda quieta `lock_time` mientras crece y revienta con una `Shockwave` rápida de su radio);
   - `ChargeAttack` (apunta con una franja en el suelo y embiste en línea recta, varias veces, con más daño al tocar);
   - `SummonAttack` (pide refuerzos de un `EnemyData`, más con rabia);
   - `SlamAttack` (porrazo en área: se planta y levanta el arma —gira su `arm`— mientras un aro fijo marca hasta dónde llega y otro se abre desde sus pies; al llegar al borde cae el golpe, una `Shockwave` rápida que daña a todo lo de dentro).

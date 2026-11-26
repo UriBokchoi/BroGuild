@@ -234,7 +234,7 @@ De fácil a difícil.
 - [ ] Runas que se desbloquean: Sed de sangre (Bárbaro a nivel 50) y una de crítico (2500 enemigos en una partida)
 - [x] Saltar y vetar al subir de nivel (hasta 3 de cada, con una mejora cara del menú; saltar en verde, vetar en rojo)
 - [x] En la taberna, un cofre que se abre con 1500 enemigos derrotados en el tier 1 y deja elegir entre 3 objetos (azules o mejores); cuenta los de cada tier
-- [ ] El burpee de los jefes, cambiado: una bola roja que se carga donde va el jugador y da tiempo a esquivarla
+- [x] El burpee de los jefes, cambiado: una bola roja que se carga donde va el jugador y da tiempo a esquivarla
 - [ ] Personajes nuevos (ver arriba), con la pasiva del Bárbaro: la primera vez que iba a morir se queda a 1 de vida 10 s sin poder morir, rojo de rabia y con +30 % en sus stats
 
 ## Backlog (sin orden)

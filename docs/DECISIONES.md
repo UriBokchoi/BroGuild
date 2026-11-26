@@ -1888,3 +1888,10 @@ Las nuevas van al final. Si una decisión se revierte, se añade otra que lo dig
   - Deja elegir entre 3 objetos azules o mejores: improbable, legendario o mítico, con la Suerte.
   - Encima dice cuántos van.
 - **Por qué:** lo pidió el diseñador para el tier 1. Contar por tier hace que en los siguientes también haya que ganárselo.
+
+## 2026-11-26 · La bola roja de los jefes
+- **Decisión:**
+  - El Burpee del Ent-renador y de Mr. Brolympia pasa a ser una bola roja que se carga en el suelo hacia donde va el jugador. Apunta a su posición más lo que se mueve en 0,8 s, con la velocidad estimada de un tick a otro.
+  - Durante 0,6 s la bola le sigue. Luego se queda quieta 1,2 s, crece y revienta en un radio de 5 m (7 m la de Mr. Brolympia), con un aro que marca hasta dónde llega.
+  - El salto del Trolleador (un miniboss) sigue igual.
+- **Por qué:** lo pidió el diseñador: un ataque que castigue ir en línea recta pero que dé tiempo a esquivar.
